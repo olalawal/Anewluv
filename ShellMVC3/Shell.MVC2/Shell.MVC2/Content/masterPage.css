@@ -1,0 +1,894 @@
+
+
+html, body {
+	
+	font-size: 100.0%;
+	margin: 0;
+	padding: 0;
+	margin:0px; /* FF hack: or we'll have double scrollbar showing on the browser */
+	 /* hide browser's main scrollbar */
+}
+body * {
+	font-size: 100%;
+}
+
+
+#main_container {
+	width:100%;
+	background-color:#ffffff; /* DO NOT REMOVE THIS; or you'll have issue w/ the scrollbar, when the mouse pointer is on a white space */
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height:100%;	/* this will make sure that the height will extend at the bottom */
+	position:absolute; /* container div must be absolute, for our fixed bar to work */
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 0;
+}
+#mainmasterpage p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}
+li.clearFloat {
+	clear: both;
+}
+ul.symbolListmasterpage {
+	display: inline;
+	float: none;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#mainmasterpage {
+	margin: 0 auto;
+	width: 1024px;
+}
+#headerDivmasterpage {
+	margin-left: 0px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px none #000;
+	width: 1022px;
+	padding-top: 0px;
+	height: 110px;
+	background-image: url(images/headerPngClear.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+html > body #headerDivmasterpage {
+	height: auto;
+	min-height: 109px;
+}
+.Link:link, .Link:visited {
+	margin-right: 14px;
+	margin-top: 57px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link:hover, .Link:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.Link2:link, .Link2:visited {
+	margin-right: 9px;
+	margin-top: 58px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link2:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link2:hover, .Link2:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link2:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.Link3:link, .Link3:visited {
+	margin-right: 9px;
+	margin-top: 58px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link3:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link3:hover, .Link3:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link3:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.Link4:link, .Link4:visited {
+	margin-right: 9px;
+	margin-top: 58px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link4:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link4:hover, .Link4:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link4:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.Txt_Hi {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-style: italic;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 16px;
+	margin-top: 11px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Link5:link, .Link5:visited {
+	margin-right: 15px;
+	margin-top: 11px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link5:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link5:hover, .Link5:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link5:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.Link6:link, .Link6:visited {
+	margin-right: 9px;
+	margin-top: 11px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link6:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link6:hover, .Link6:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link6:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.Link7:link, .Link7:visited {
+	margin-right: 9px;
+	margin-top: 11px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link7:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link7:hover, .Link7:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link7:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.Link8:link, .Link8:visited {
+	margin-right: 9px;
+	margin-top: 11px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link8:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link8:hover, .Link8:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link8:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.Link9:link, .Link9:visited {
+	margin-right: 9px;
+	margin-top: 11px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link9:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link9:hover, .Link9:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link9:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.Link10:link, .Link10:visited {
+	margin-right: 9px;
+	margin-top: 11px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link10:visited {
+	color: #551a8b;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link10:hover, .Link10:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link10:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+.Link11:link, .Link11:visited {
+	margin-right: 17px;
+	margin-top: 11px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	color: #4c8acb;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link11:visited {
+	color: #551a8b;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link11:hover, .Link11:focus {
+	color: #fb6767;
+	font-weight: bold;
+	text-decoration: none;
+}
+.Link11:active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#bodyDivmasterpage {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px none #000;
+	width: 1022px;
+	padding-top: 0px;
+	height: auto;
+}
+html > body #bodyDivmasterpage {
+	height: auto;
+	min-height: 400px;
+}
+
+/* addded a wierd marge an changed with from 1022 */
+#footerDivmasterpage {
+	margin-left: 20px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px none #000;
+/* width: 1022px; */
+	width: 1024px;
+	padding-top: 0px;
+	/* height: 99px; */
+	height: auto;
+}
+html > body #footerDivmasterpage {
+	height: auto;
+	min-height: 98px;
+}
+#List_Itemmasterpage {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 159px;
+	margin-top: 25px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage :link, #List_Itemmasterpage :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage :hover, #List_Itemmasterpage :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage2 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 52px;
+	margin-top: 25px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage2 :link, #List_Itemmasterpage2 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage2 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage2 :hover, #List_Itemmasterpage2 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage2 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage3 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 48px;
+	margin-top: 25px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage3 :link, #List_Itemmasterpage3 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage3 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage3 :hover, #List_Itemmasterpage3 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage3 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage4 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 53px;
+	margin-top: 25px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage4 :link, #List_Itemmasterpage4 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage4 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage4 :hover, #List_Itemmasterpage4 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage4 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage5 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 97px;
+	margin-top: 25px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage5 :link, #List_Itemmasterpage5 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage5 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage5 :hover, #List_Itemmasterpage5 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage5 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage6 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 159px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage6 :link, #List_Itemmasterpage6 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage6 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage6 :hover, #List_Itemmasterpage6 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage6 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage7 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 91px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage7 :link, #List_Itemmasterpage7 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage7 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage7 :hover, #List_Itemmasterpage7 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage7 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage8 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 94px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage8 :link, #List_Itemmasterpage8 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage8 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage8 :hover, #List_Itemmasterpage8 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage8 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage9 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 80px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage9 :link, #List_Itemmasterpage9 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage9 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage9 :hover, #List_Itemmasterpage9 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage9 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage10 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 117px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage10 :link, #List_Itemmasterpage10 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage10 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage10 :hover, #List_Itemmasterpage10 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage10 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage11 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 159px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage11 :link, #List_Itemmasterpage11 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage11 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage11 :hover, #List_Itemmasterpage11 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage11 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage12 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 89px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage12 :link, #List_Itemmasterpage12 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage12 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage12 :hover, #List_Itemmasterpage12 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage12 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage13 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 80px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage13 :link, #List_Itemmasterpage13 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage13 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage13 :hover, #List_Itemmasterpage13 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage13 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage14 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 45px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage14 :link, #List_Itemmasterpage14 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage14 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage14 :hover, #List_Itemmasterpage14 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage14 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage15 {
+	color: #000;
+	font-weight: bold;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	font-size: 100%;
+	margin-left: 76px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#List_Itemmasterpage15 :link, #List_Itemmasterpage15 :visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: underline;
+}
+#List_Itemmasterpage15 :visited {
+	color: #551a8b;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage15 :hover, #List_Itemmasterpage15 :focus {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#List_Itemmasterpage15 :active {
+	color: #00e;
+	font-weight: normal;
+	text-decoration: underline;
+}

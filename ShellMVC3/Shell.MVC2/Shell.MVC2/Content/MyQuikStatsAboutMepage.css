@@ -1,0 +1,427 @@
+@charset "utf-8";
+
+body {
+	background-color: #f5f6f7;
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+}
+body * {
+	font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 0;
+}
+#main p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}
+li.clearFloat {
+	clear: both;
+}
+ul.symbolList {
+	display: inline;
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#main {
+	margin: 0 auto;
+	width: 1024px;
+}
+#aboutEditHeaderDiv {
+	margin-left: 0px;
+	margin-top: 20px;
+	 text-align :center;
+	margin-bottom: 0;
+	padding-top: 20px;
+	height: 90px;
+}
+html > body #aboutEditHeaderDiv {
+	height: auto;
+	min-height: 90px;
+}
+#aboutEditHeader2Div {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 40px;
+}
+html > body #aboutEditHeader2Div {
+	height: auto;
+	min-height: 40px;
+}
+.My_Quik_Stats_EditsaboutEdit {
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-size: 250%;
+	font-weight: bold;
+	
+	color: #115eb3;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	 text-align :center;
+	
+	
+	margin-bottom: 0;
+}
+#aboutEditLeftDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 201px;
+	padding-top: 0px;
+	height: auto;
+}
+html > body #aboutEditLeftDiv {
+	height: auto;
+	min-height: 10px;
+}
+#aboutEditBodyDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 622px;
+	padding-top: 0px;
+	height: 0px;
+}
+html > body #aboutEditBodyDiv {
+	height: auto;
+	min-height: 0px;
+}
+#aboutEditBox3SliceContainer {
+	margin-left: 9px;
+margin-top: 30px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 602px;
+	background-image: url(images/aboutEditMid.png);
+	background-repeat: repeat;
+}
+#aboutEditBox3SliceContainer_top_1 {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(images/aboutEditTop2.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 62px;
+	margin-bottom: 0;
+	width: 602px;
+}
+
+.BasicSettingsNavigationLinks
+{
+   
+ text-align : center;   
+float:left;    
+}
+
+
+.Describe_what_makes_aboutEdit {
+	
+	
+	   font-family: "Trebuchet MS", Verdana, Helvetica, Sans-Serif;
+	font-size: 120%;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 101px;
+	margin-top: 20px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 396px;
+}
+#describeInputTextArea_win_aboutEdit {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 25px;
+	margin-top: 21px;
+	display: inline;
+	float: left;
+	 max-width : 550px;
+	margin-bottom: 0;
+	width: 550px;
+}
+.SeekingaboutEdit {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 10px;
+	margin-left: 263px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+
+
+
+
+
+
+#genderComboBox_win_aboutEdit {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 260px;
+	margin-top: 4px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 100px;
+}
+#age1ComboBox_win_aboutEdit {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 155px;
+	margin-top: 13px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 100px;
+}
+.Txt_toaboutEdit {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	padding-left: 25px;
+	margin-top: 14px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#Age2ComboBox_win_aboutEdit {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 50px;
+	margin-top: 13px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 100px;
+}
+.My_Catchy_Intro_LineaboutEdit {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 220px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#introLineTextField_win_aboutEdit {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 115px;
+	margin-top: 8px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 360px;
+}
+
+.BackaboutEdit {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 40px;
+	margin-top: 30px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+
+.NextaboutEdit {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 43px;
+	margin-top: 29px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+}
+#aboutEditFinishButtonDiv {
+	margin-right: 252px;
+	margin-top: 14px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 124px;
+	padding-top: 0px;
+	height: 41px;
+}
+html > body #aboutEditFinishButtonDiv {
+	height: auto;
+	min-height: 42px;
+}
+#aboutEditBox3SliceContainer_bottom_1 {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(images/aboutEditBottom.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 62px;
+	margin-bottom: 0;
+	width: 602px;
+	background-position: bottom;
+}
+#abouteditRightDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 201px;
+	padding-top: 0px;
+	height: auto;
+}
+html > body #abouteditRightDiv {
+	height: auto;
+	min-height: 10px;
+}
+#aboutEditFooterDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: auto;
+}
+html > body #aboutEditFooterDiv {
+	height: auto;
+	min-height: 10px;
+}
+
+
+.CheckboxLabelText {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	 line-height : 20px;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-right: 0px;
+	margin-top: 5px;
+	 text-align :left;
+	float: right;
+	height: auto;
+	margin-bottom: 0;
+}
+
+
+.MiddleCheckBoxHeaderEdit {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 20px;
+	 text-align :center;
+	margin-top: 0px;
+	margin-bottom: 0;
+	width :602px;
+}
+
+.MiddleCheckFullWithBoxBodyEdit 
+{
+    
+	
+
+  margin-top: 0px;	margin-bottom: 0;width: 600px;  display:inline-block;     ;
+ 
+}
+
+.MiddleCheckHalfWithBoxBodyEdit {
+	
+  margin-top: 0px;	margin-bottom: 0;width: 300px;	 display:inline-block;   ;
+ 
+}
+
+
+
+
+.EditDistancefromMeEdit
+{
+ float :left;    
+    
+}

@@ -1,0 +1,44 @@
+﻿Stetp one after the model and context files are created run this in PMconsole
+
+ PM> Enable-Migrations  
+
+
+
+
+Automatic migration was not applied because it would result in data loss.
+
+I am going through all the new modles and properly naming the lookup tables and their primary keys , just a quick update here.
+
+So I looked into the scheme deal and you can make sure db objects are mapped to a named scheme using this fluent syntax called in the onmodelcreating method
+
+    modelBuilder.Entity(Of CustomErrorLog)().ToTable("CustomErrorLogs", schemaName:="Logging")
+    modelBuilder.Entity(Of lu_application)().ToTable("lu_application", schemaName:="Logging")
+    modelBuilder.Entity(Of lu_logSeverity)().ToTable("lu_logSeverity", schemaName:="Logging")
+
+or you can decorate the entiies as follows 
+   <Table("CustomErrorLog", Schema:="Logging")> _
+
+And thwy will be automatically renamed or mapped to the correct schema.
+
+ Below is the commad to create/modify the database from visual studio and the generated script is listed for your intrest.
+I like how it checks for the schema to exist and if it does’nt creates a new one which is cool.
+
+
+Sample migraation command.
+
+PM> Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel" -verbose 
+
+
+if you dont care if any data is deleted use the -force flag. and If you are having problems with previous migrations you can delete the migrations
+table that is created in SQL
+
+Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel" -verbose –force
+Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose –force
+
+check the model updating model for custom database migration settings i.e schema and object relationships
+ 
+
+ added this code to configure migrations to be constally updated on db changes automatically
+ add-Migration -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" ConfigurationNotificationModelInitial
+ add-Migration  -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel"  ConfigurationCustomerrorLogModelInitial
+

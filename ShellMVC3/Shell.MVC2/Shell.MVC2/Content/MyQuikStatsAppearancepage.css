@@ -1,0 +1,586 @@
+@charset "utf-8";
+
+body {
+	background-color: #f5f6f7;
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+}
+body * {
+	font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 0;
+}
+#main p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}
+li.clearFloat {
+	clear: both;
+}
+ul.symbolList {
+	display: inline;
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#main {
+	margin: 0 auto;
+	width: 1024px;
+}
+#headerDivMyQSEappearnce {
+	margin-left: 0px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+height: 90px;
+}
+html > body #headerDivMyQSEappearnce {
+	height: auto;
+	height: 90px;
+}
+#header2DivMyQSEappearnce {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 40px;
+}
+html > body #header2DivMyQSEappearnce {
+	height: auto;
+	min-height: 40px;
+}
+.My_Quik_Stats_EditsMyQSEappearnce {
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-size: 250%;
+	font-weight: bold;
+	text-align: left;
+	color: #115eb3;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	 text-align :center ;
+	margin-top: 0px;
+	margin-bottom: 0;
+	width: auto;
+}
+#leftDivMyQSEappearnce {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 201px;
+	padding-top: 0px;
+	height: auto;
+}
+html > body #leftDivMyQSEappearnce {
+	height: auto;
+	min-height: 10px;
+}
+#BodyDivMyQSEappearnce {
+	margin-left: 0px;
+	margin-top: 0px;	
+	float: left;
+	margin-bottom: 0;
+	width: 622px;
+	padding-top: 0px;
+	height: 0px;
+}
+html > body #BodyDivMyQSEappearnce {
+	height: auto;
+	min-height: 0px;
+}
+#MyQSEappearnceBox3SliceContainer {
+	margin-left: 9px;
+margin-top: 30px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 602px;
+	background-image: url(../Content/images/MyQSEappearnceMid.png);
+	background-repeat: repeat;
+}
+#MyQSEappearnceBox3SliceContainer_top_1 {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(../Content/images/MyQSEappearnceTop2.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 62px;
+	margin-bottom: 0;
+	width: 602px;
+}
+
+
+.AppearanceSettingsNavigationLinks
+{
+   margin-left :80px;
+ text-align : center;   
+   
+}
+
+
+.MeMyQSEappearnce {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 271px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#bodyTypeComboBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 96px;
+	margin-top: 19px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+#heightMeComboBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 105px;
+	margin-top: 19px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+.YouMyQSEappearnce {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-top: 30px;
+
+ text-align :center;
+	margin-bottom: 0;
+}
+#height1YouComboBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 96px;
+	margin-top: 19px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+#height2YouComboBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 105px;
+	margin-top: 19px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+#MyQSEappearncecolwrap4 {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 161px;
+}
+#chkBoxLeftDivMyQSEappearnce {
+	margin-left: 49px;
+	margin-top: 32px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 112px;
+	padding-top: 0px;
+	height: 164px;
+}
+html > body #chkBoxLeftDivMyQSEappearnce {
+	height: auto;
+	min-height: 165px;
+}
+#slimCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 6px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#slenderCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 6px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#averageCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 6px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#athleticCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 6px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#fitTonedCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 6px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#MyQSEappearncecolwrap5 {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 215px;
+}
+#chkBoxMidDivMyQSEappearnce {
+	margin-left: 65px;
+	margin-top: 32px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 150px;
+	padding-top: 0px;
+	height: 164px;
+}
+html > body #chkBoxMidDivMyQSEappearnce {
+	height: auto;
+	min-height: 165px;
+}
+#fewExpoundsCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 4px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#fFiguredCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 4px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#curvyCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 4px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#volupCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 4px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#thickCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 4px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#MyQSEappearncecolwrap6 {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 200px;
+}
+#chkBoxRightDivMyQSEappearnce {
+	margin-left: 50px;
+	margin-top: 32px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 150px;
+	padding-top: 0px;
+	height: 164px;
+}
+html > body #chkBoxRightDivMyQSEappearnce {
+	height: auto;
+	min-height: 165px;
+}
+#heavySetCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 5px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#stockyCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 5px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#largeCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 5px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#bbwCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 5px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#bBuilderCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 5px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#anyCheckBox_win_MyQSEappearnce {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: bold;
+	margin-left: 260px;
+	margin-top: 26px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+.backMyQSEappearnce {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 51px;
+	margin-top: 30px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.nextMyQSEappearnce {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 39px;
+	margin-top: 30px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+}
+#buttonDivMyQSEappearnce {
+	margin-left: 217px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 122px;
+	padding-top: 0px;
+	height: 41px;
+}
+html > body #buttonDivMyQSEappearnce {
+	height: auto;
+	min-height: 40px;
+}
+#MyQSEappearnceBox3SliceContainer_bottom_1 {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(images/MyQSEappearnceBottom.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 62px;
+	margin-bottom: 0;
+	width: 602px;
+}
+#rightDivMyQSEappearnce {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 201px;
+	padding-top: 0px;
+	height: auto;
+}
+html > body #rightDivMyQSEappearnce {
+	height: auto;
+	min-height: 0px;
+}
+#footerDivMyQSEappearnce {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: auto;
+}
+html > body #footerDivMyQSEappearnce {
+	height: auto;
+	min-height: 10px;
+}

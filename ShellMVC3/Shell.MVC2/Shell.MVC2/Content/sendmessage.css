@@ -1,0 +1,495 @@
+@charset "utf-8";
+
+body {
+	background-color: #fff;
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+}
+body * {
+	font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 0;
+}
+#main p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}
+li.clearFloat {
+	clear: both;
+}
+ul.symbolList {
+	display: inline;
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#main {
+	margin: 0 auto;
+	width: 1024px;
+}
+#headerDiv {
+	margin-left: 1px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1022px;
+	padding-top: 0px;
+	height: 337px;
+}
+html > body #headerDiv {
+	height: auto;
+	min-height: 338px;
+}
+#headerDiv2 {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1022px;
+	padding-top: 0px;
+	height: 112px;
+	background-image: url(../anewluv.com%2012/images/headerPngClear.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+html > body #headerDiv2 {
+	height: auto;
+	min-height: 113px;
+}
+
+#postBoardDiv {
+		margin-top: 1px;	
+ text-align :center;
+	margin-bottom: 0;	
+	padding-top: 10px;
+	height: 94px;
+	padding-bottom : 20px;
+}
+html > body #postBoardDiv {
+	height: auto;
+	min-height: 90px;
+}
+
+#pic9 {
+	margin-right: 28px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic9 {
+	height: auto;
+	min-height: 94px;
+}
+#pic8 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic8 {
+	height: auto;
+	min-height: 94px;
+}
+#pic7 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic7 {
+	height: auto;
+	min-height: 94px;
+}
+#pic6 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic6 {
+	height: auto;
+	min-height: 94px;
+}
+#pic5 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic5 {
+	height: auto;
+	min-height: 94px;
+}
+#pic4 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic4 {
+	height: auto;
+	min-height: 94px;
+}
+#pic3 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic3 {
+	height: auto;
+	min-height: 94px;
+}
+#pic2 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic2 {
+	height: auto;
+	min-height: 94px;
+}
+#pic1 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic1 {
+	height: auto;
+	min-height: 94px;
+}
+#leftDivsendmsg {
+	margin-left: 1px;
+	margin-top: 60px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 178px;
+	padding-top: 0px;
+	height: 645px;
+}
+html > body #leftDivsendmsg {
+	height: auto;
+	min-height: 646px;
+}
+#bodyDivsendmsg {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 636px;
+	padding-top: 0px;
+	height: 645px;
+}
+html > body #bodyDivsendmsg {
+	height: auto;
+	min-height: 646px;
+}
+.Txt_SENDsendmsg {
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-size: 210%;
+	font-weight: bold;
+	text-align: center;
+	color: #115eb2;
+	line-height: 100%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 257px;
+	margin-top: 18px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#Box3SliceContainersendmsg {
+	margin-left: 0px;
+	margin-top: 17px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 630px;
+	background-image: url(images/midSendMessage.png);
+	background-repeat: repeat;
+}
+#Box3SliceContainer_top_1sendmsg {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(images/topSendMessage.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 30px;
+	margin-bottom: 0;
+	width: 630px;
+}
+.Txt_Sendingsendmsg {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 64px;
+	margin-top: 19px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 548px;
+}
+#colwrap4sendmsg {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 299px;
+}
+#leftBoxSlicesendmsg {
+	margin-left: 28px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 271px;
+	padding-top: 0px;
+	height: 143px;
+}
+html > body #leftBoxSlicesendmsg {
+	height: auto;
+	min-height: 144px;
+}
+.Txt_Subjectsendmsg {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #333;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 8px;
+	margin-top: 9px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#TextField_winsendmsg {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 48px;
+	margin-top: 4px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.Txt_Messagesendmsg {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #333;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 8px;
+	margin-top: 45px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#colwrap5sendmsg {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 265px;
+}
+#rightboxSlicesendmsg {
+	margin-left: 0px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 265px;
+	padding-top: 0px;
+	height: 143px;
+}
+html > body #rightboxSlicesendmsg {
+	height: auto;
+	min-height: 144px;
+}
+.Txt_Tosendmsg {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 54px;
+	margin-top: 9px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Txt_Namesendmsg {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 10px;
+	margin-top: 9px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#photoDivsendmsg {
+	margin-left: 97px;
+	margin-top: 9px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #photoDivsendmsg {
+	height: auto;
+	min-height: 94px;
+}
+#textAreaDivsendmsg {
+	margin-left: 64px;
+	margin-top: 5px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+
+	width: 498px;
+	padding-top: 0px;
+	height: 129px;
+}
+html > body #textAreaDivsendmsg {
+	height: auto;
+	min-height: 128px;
+}
+#buttonDivsendmsg {
+	margin-left: 64px;
+	margin-top: 23px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+
+	width: 86px;
+	padding-top: 0px;
+	height: 35px;
+}
+html > body #buttonDivsendmsg {
+	height: auto;
+	min-height: 34px;
+}
+#Box3SliceContainer_bottom_1sendmsg {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(images/botSendMesage.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 30px;
+	margin-bottom: 0;
+	width: 630px;
+}
+#rightDivsendmsg {
+	margin-left: 0px;
+	margin-top: 60px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 208px;
+	padding-top: 0px;
+	height: 645px;
+}
+html > body #rightDivsendmsg {
+	height: auto;
+	min-height: 646px;
+}
+

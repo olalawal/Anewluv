@@ -1,0 +1,199 @@
+@charset "utf-8";
+
+body {
+	background-color: #f5f6f7;
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+}
+body * {
+	font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 50;
+}
+#main p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}
+li.clearFloat {
+	clear: both;
+}
+ul.symbolList {
+	display: inline;
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	clip: rect(auto,auto,auto,auto);
+	padding-top: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 120;
+	text-align: center;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#main {
+	margin: 0 auto;
+	width: 1024px;
+}
+#headerDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 112px;
+	background-image: url(images/headerPngClear.png);
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+html > body #headerDiv {
+	height: auto;
+	min-height: 113px;
+}
+
+#leftDivAboutUs {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 188px;
+	padding-top: 0px;
+	height: 713px;
+}
+html > body #leftDivAboutUs {
+	height: auto;
+	min-height: 714px;
+}
+#bodyDivAboutUs {
+	margin-left: 18px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 606px;
+	padding-top: 0px;
+	height: 713px;
+}
+html > body #bodyDivAboutUs {
+	height: auto;
+	min-height: 714px;
+}
+#Box3SliceContainerAboutUs {
+	margin-left: 5px;
+	margin-top: 100px;
+	display: inline;
+	float: left;
+	margin-bottom: 100;
+	width: 600px;
+	background-image: url(images/halfTop.png);
+	background-repeat: repeat-x;
+	background-position: left 25px;
+}
+#Box3SliceContainer_top_1AboutUs {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(images/aboutUsTop.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 30px;
+	margin-bottom: 0;
+	width: 600px;
+}
+.Txt_AboutAboutUs {
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-size: 300%;
+	font-weight: bold;
+	text-align: left;
+	color: #3475bd;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 155px;
+	margin-top: 6px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Txt_LoremAboutUs {
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-size: 170%;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 0px;
+	margin-left: 20px;
+	margin-top: 50px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 559px;
+}
+#Box3SliceContainer_bottom_1AboutUs {
+	margin-left: 0px;
+	margin-top: 147px;
+	background-image: url(images/halfBottom.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 60px;
+	margin-bottom: 0;
+	width: 598px;
+	background-position: left 125px;
+	background-repeat: repeat;
+}
+#bottomContainerDivAboutUs {
+	margin-left: 5px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px none #000;
+	width: 598px;
+	padding-top: 0px;
+	height: 113px;
+	background-image: url(images/aboutUsBottom2.png);
+	background-position: center -140px;
+	background-repeat: no-repeat;
+}
+html > body #bottomContainerDivAboutUs {
+	height: auto;
+	min-height: 112px;
+}
+#rightDivAboutUs {
+	margin-left: 18px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 194px;
+	padding-top: 0px;
+	height: 713px;
+}
+html > body #rightDivAboutUs {
+	height: auto;
+	min-height: 714px;
+}

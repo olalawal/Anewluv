@@ -1,0 +1,558 @@
+@charset "utf-8";
+
+body {
+	background-color: #f5f6f7;
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+}
+body * {
+	font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 0;
+}
+#main p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}
+li.clearFloat {
+	clear: both;
+}
+ul.symbolList {
+	display: inline;
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#main {
+	margin: 0 auto;
+	width: 1024px;
+}
+#headerAccountSettingsDiv {
+		margin-top: 10px;	
+ text-align :center ;
+	margin-bottom: 0;
+	
+	padding-top: 0px;
+	height: 114px;
+	padding-bottom : 20px;
+}
+html > body #headerAccountSettingsDiv {
+	height: auto;
+	min-height: 115px;
+}
+#header2AccountSettingsDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 0px;
+}
+html > body #header2AccountSettingsDiv {
+	height: auto;
+	min-height: 88px;
+}
+.My_Quik_Stats_EditsAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 250%;
+	font-weight: bold;
+	text-align: left;
+	color: #115eb3;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 367px;
+	margin-top: 27px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#leftAccountSettingsDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 171px;
+	padding-top: 0px;
+	height: auto;
+}
+html > body #leftAccountSettingsDiv {
+	height: auto;
+	min-height: 100px;
+}
+#BodyAccountSettingsDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 680px;
+	padding-top: 0px;
+	 height:auto;
+}
+html > body #BodyAccountSettingsDiv {
+	height: auto;
+	min-height: 0px;
+}
+#AccountSettingsBox3SliceContainer {
+	margin-left: 35px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 602px;
+	background-image: url(images/AccountSettingsMid.png);
+	background-repeat: repeat;
+}
+#AccountSettingsBox3SliceContainer_top_1 {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(images/AccountSettingsTop2.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 62px;
+	margin-bottom: 0;
+	width: 602px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+
+.Change_SettingsAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	 margin-top :120px;
+ margin-bottom : 5px;
+	
+	
+}
+.Change_Email_AddressAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 25px;
+	margin-top: 25px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#changeEmAddressTextField_win_AccountSettings {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 24px;
+	margin-top: 22px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.Confirm_EmailAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 80px;
+	margin-top: 14px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#confirmEmTextField_win_AccountSettings {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 23px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.Birth_DateAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 85px;
+	margin-top: 14px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#birthDateComboBox_win_AccountSettings {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 24px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.GenderAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 125px;
+	margin-top: 14px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#genderComboBox_win_AccountSettings {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 24px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.Change_PasswordAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 75px;
+	margin-top: 13px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#changePassWrdTextField_win_AccountSettings {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 24px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.Confirm_PasswordAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 20px;
+	margin-top: 14px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#confirmPasWrdTextField_win_AccountSettings {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 24px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.CountryAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 120px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#countryComboBox_win_AccountSettings {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 26px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.My_CityAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 145px;
+	margin-top: 13px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#myCityTextField_winAccountSettings {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 26px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+
+.ZipPostal_CodeAccountSettings
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 75px;
+	margin-top: 13px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;   
+
+
+}
+
+.ComboBox_win_ZipPstAccountSettings
+{
+    color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 20px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+    
+    }
+
+.Security_QuestionAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 51px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#securityQuesComboBox_win_AccountSettings {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 27px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.Security_AnswerAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 63px;
+	margin-top: 13px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#securityAnsrTextField_win_AccountSettings {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 25px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.DeActivate_AccountAccountSettings {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 44px;
+	margin-top: 15px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+
+
+#buttonAccountSettingsDiv {
+	margin-left: 436px;
+	margin-top: 62px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 122px;
+	padding-top: 0px;
+	height: 41px;
+}
+html > body #buttonAccountSettingsDiv {
+	height: auto;
+	min-height: 40px;
+}
+#AccountSettingsBox3SliceContainer_bottom_1 {
+	margin-left: 0px;
+	    margin-top: 0px;
+	background-image: url(images/AccountSettingsBottom.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 62px;
+	margin-bottom: 0;
+	width: 602px;
+}
+#rightAccountSettingsDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 170px;
+	padding-top: 0px;
+	height: auto;
+}
+html > body #rightAccountSettingsDiv {
+	height: auto;
+	min-height: 110px;
+}
+#footerAccountSettingsDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: auto;
+}
+html > body #footerAccountSettingsDiv {
+	height: auto;
+	min-height: 0px;
+}

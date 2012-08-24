@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0145184E-916D-4DB2-BB19-E069DF0F1F36}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Shell.MVC2.DependencyResolution.Ninject</RootNamespace>
+    <AssemblyName>Shell.MVC2.DependencyResolution.Ninject</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\Entities\Shell.MVC.Infrastructure.Entities\bin\Debug\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\Shell.MVC2\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.ServiceModel.DomainServices.EntityFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.DomainServices.Server, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Modules\ContextModules\UserRepairLogContextModule.cs" />
+    <Compile Include="Modules\ContextModules\PostalDataContextModule.cs" />
+    <Compile Include="Modules\ContextModules\CustomErrorLogContextModule.cs" />
+    <Compile Include="Modules\ContextModules\NotificationContextModule.cs" />
+    <Compile Include="Modules\PostalDataServiceModule.cs" />
+    <Compile Include="Modules\ErrroLoggingModule.cs" />
+    <Compile Include="Modules\UserRepairModule.cs" />
+    <Compile Include="Modules\InfoNotificationModule.cs" />
+    <Compile Include="Modules\ErrorNotificationModule.cs" />
+    <Compile Include="Modules\MemberActionsModule.cs" />
+    <Compile Include="Modules\MembershipModule.cs" />
+    <Compile Include="Modules\GeoModule.cs" />
+    <Compile Include="Modules\MembersMapperModule.cs" />
+    <Compile Include="Modules\DatingServiceModule.cs" />
+    <Compile Include="Modules\ContextModules\DatingContextModule.cs" />
+    <Compile Include="Modules\MembersModule.cs" />
+    <Compile Include="Modules\MediaModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
+      <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
+      <Name>Dating.Server.Data.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Domain\Interfaces\Shell.MVC2.Interfaces\Shell.MVC2.Interfaces.csproj">
+      <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
+      <Name>Shell.MVC2.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Services\Contracts\Shell.MVC2.Services.Contracts\Shell.MVC2.Services.Contracts.csproj">
+      <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
+      <Name>Shell.MVC2.Services.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Entities\Shell.MVC.Infrastructure.Entities\Shell.MVC2.Infrastructure.Entities.csproj">
+      <Project>{92B7DBBB-2313-4C2E-88AB-970751B229F1}</Project>
+      <Name>Shell.MVC2.Infrastructure.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Interfaces\Shell.MVC2.Infrastructure.Interfaces\Shell.MVC2.Infrastructure.Interfaces.csproj">
+      <Project>{475514E9-91B6-4CC7-91C8-122BFEFC876C}</Project>
+      <Name>Shell.MVC2.Infrastructure.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shell.MVC2.Data\Shell.MVC2.Data.csproj">
+      <Project>{69ACF655-FC62-490E-A321-4049873F69DF}</Project>
+      <Name>Shell.MVC2.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

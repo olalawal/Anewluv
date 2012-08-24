@@ -1,0 +1,306 @@
+﻿@model Shell.MVC2.Models.AdminViewModel
+           
+
+
+
+ @{ //Pull the users who are avaiable to chat from from the viewbag
+      var OnlineChatUsers = ViewBag.OnlineChatUsers as List<ChatUser>; 
+     
+   } 
+
+
+
+@{
+    ViewBag.Title = "Adminhome"; 
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+
+
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
+
+
+
+
+<style type="text/css">
+
+#main-Admin
+{
+    text-align:center;
+   /* float:right;*/
+    padding-top:3em;
+    font-size:medium;
+    padding-bottom:3em;
+   
+    
+   
+}
+/*
+#main-Admin a:hover
+{
+    color:Red;
+    
+   
+}*/
+h1
+{ font-size:16px;
+  font-weight:bolder;
+  margin-bottom:1em;
+  color:#8094aa;
+}
+    .PhotoListItem li
+    {
+       display: block;
+       list-style-type: none;
+        float: right;
+       /* margin-left: 4px;
+        /*margin-bottom: 40px;
+        border: 1px solid #000; */
+        width: 124px;
+        height: 124px;
+       
+        cursor:pointer;
+        padding:0px;
+         margin:0px;
+         
+    }
+
+    .PhotoList
+    {
+        float: right; 
+        font-size:larger;
+       width: 505px; /* 576px; /* 635px; */
+       /*  /*padding:0px;
+        margin-right: 0px;
+        margin-left: 0px;
+        margin-top: 4px;*/
+       /*  border:1px solid red;*/
+    }
+    ._Next{float:left;}
+    ._Previous{float:right;}
+    #List
+    {
+        /*
+      float:right;
+      width:555px;
+      */
+       padding:0px;
+         margin:0px;
+     }
+     #Photostatus
+     {float:left;
+      font-size:larger;
+     }
+    #TabStrip p
+    {
+        height: 100px auto;
+        clear: right;
+        text-align:left;
+    }
+    
+    #TabStrip a.buttons
+    {
+        cursor: pointer;
+        float: left;
+        margin-top: 5px;
+        margin-right:1em;
+        color: #4c8acb;
+        font-weight: bolder;
+        font-size: 11px;
+        font-family: verdana,Arial, Helvetica, sans-serif;
+    }
+        #TabStrip p input.buttons
+    {
+        cursor: pointer;
+        float: left;
+        margin-top: 5px;
+        margin-right:1em;
+        color: #4c8acb;
+        font-weight:bolder;
+        font-size: 11px;
+        font-family: verdana,Arial, Helvetica, sans-serif;
+       /* border: 0px solid;
+        background-color: white;*/
+    }
+    #Kbutton
+    {
+        cursor:pointer; 
+        float:right; 
+        margin-bottom:5px; 
+        margin-right: 24px;
+        color: #4c8acb;
+        font-weight:bolder;
+        font-size:11px; 
+        font-family: verdana,Arial, Helvetica, sans-serif;
+        background-color: white;
+        border: 0px solid;
+
+    }
+    
+    #uploadEditPhoto
+    {
+        width: 555px;
+        font-family: Helvetica,Arial, verdana, sans-serif;
+        text-align:center;
+        font-size:12px;
+        margin-bottom:2em;
+        margin-left:22px;
+        background-color: #9cb8d6; /*#4c8acb;*/
+        color:White;
+        border:1px white solid;
+    }
+    div.t-tabstrip 
+{ 
+    border: 0 none; 
+    background:none; 
+}
+div.t-tabstrip .t-content {
+   border-bottom: 0 none; 
+   border-left: 0 none;
+   border-right: 0 none;
+}
+
+.new-field-validation-error
+{
+    color:white;
+    background-color:#c82b34;
+    padding:5px;
+    font-weight:bold;
+    margin-bottom:3px;
+}
+
+.input-validation-error
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: #ff0000;
+}
+
+</style>
+
+<div id="main">
+<div class="clearFloat"></div>
+<div id="main-Admin">
+@*    <div>*@
+        
+@*       <br />
+        <br />
+        <br />*@
+
+
+<div id="TabEditPhoto" style="margin-left:12px;width:995px;">
+	@{ Html.Telerik().TabStrip()
+				   .Name("TabStrip")
+				   .HtmlAttributes(new { style = "height: 0px auto;font-size:11px;" })
+				   .Items(tabstrip =>
+			   {
+				   tabstrip.Add().Text("Photo Management").Content(@<text>
+	<p>
+    <div id="container" style="text-align:left;">
+
+<h2>
+    Page Rendered: @DateTime.Now.ToLongTimeString()
+</h2>
+
+    @Html.Action("PhotoMenu")
+
+    
+    <br clear="all" />
+   @* <span id="status">status </span>*@
+
+    <span id="List"><b>No Photo's Viewed</b></span>
+    
+
+  @*  <% Html.RenderAction("PhotoList", "Admin", new { page = 1, approve ="No" }); %>*@
+</div>
+	</p>
+	</text>).Selected(true);
+				   tabstrip.Add().Text("Messaging").Content(@<text>
+	<p>
+       
+             @(Ajax.ActionLink("Test Email Messaging", /* link text */
+             "TestEmailMessaging", /* action name */  
+             "Admin", /* controller name */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "TestEmailMessaging" }, new { @class = "btn" }))
+            
+             @(Ajax.ActionLink("Send Global Email Update", /* link text */
+                      "SendEmailToALLMembers",/* action name */  
+             "Admin", /* controller name */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "TestEmailMessaging" }, new {@type="submit", @class = "btn" }))
+
+               @(Ajax.ActionLink("Sent Matches Test", /* link text */
+                              "SendEmailMatches",/* action name */  
+             "Admin", /* controller name */
+                     new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "SendEmailMatches" }, new { @type = "submit", @class = "btn" }))
+
+            <div id="TestEmailMessaging">           
+             @Html.Partial("TestEmailMessaging") 
+            </div>
+            
+            <div id="SendMessageToAllUsers">           
+             @Html.Partial("SendEmailToALLMembers",Model.AdminEmailModel) 
+            </div>   
+
+	        <div id="SendEmailMatches">           
+             @Html.Partial("SendEmailMatches") 
+            </div>
+      
+       
+       
+         } 
+
+
+	</p>
+	</text>);
+	  tabstrip.Add().Text("Email Monitor").Content(@<text>
+	<p>
+   
+	</p>
+	</text>);
+   	  tabstrip.Add().Text("Profile Management").Content(@<text>
+	<p>
+		Profile Management
+	</p>
+	</text>);
+   	  tabstrip.Add().Text("Chat Management").Content(@<text>
+
+	  @(Ajax.ActionLink("Members Online to chat", /* link text */
+              "ViewMembersOnline", /* action name */  
+             "Admin", /* controller name */
+                       new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ViewMembersOnline" }, new { @class = "btn" }))
+            
+                
+    
+    <p>
+		<div id="ViewMembersOnline">           
+             @Html.Partial("ViewMembersOnline") 
+            </div>
+	</p>
+	</text>);
+   	  tabstrip.Add().Text("Tab1").Content(@<text>
+	<p>
+		
+	</p>
+	</text>);
+   	  tabstrip.Add().Text("Tab2").Content(@<text>
+	<p>
+		
+	</p>
+	</text>);
+      
+	}).Render(); } <!-- End of Html.Telerik().TabStrip() -->
+               
+</div>
+
+
+</div> <!-- End of main-admin -->
+</div> <!-- End of "main" -->
+<div class="clearFloat"></div>
+
+

@@ -1,0 +1,19 @@
+﻿
+<!-- Remeber to change the  input data types to float and output to real if edmx changes-->
+<Function Name="fnGetDistance" ReturnType="real" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+  <Parameter Name="Lat1" Type="float" Mode="In" />
+  <Parameter Name="Long1" Type="float" Mode="In" />
+  <Parameter Name="Lat2" Type="float" Mode="In" />
+  <Parameter Name="Long2" Type="float" Mode="In" />
+  <Parameter Name="ReturnType" Type="varchar" Mode="In" />
+</Function>
+<Function Name="fnGetLastLoggedOnTime" ReturnType="varchar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+  <Parameter Name="lastloggedintime" Type="datetime" Mode="In" />
+</Function>
+<Function Name="fnGetUserOlineStatus" ReturnType="bit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+  <Parameter Name="ProfileID" Type="varchar" Mode="In" />
+</Function>
+<Function Name="fnTruncateString" ReturnType="varchar(max)" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+  <Parameter Name="StringToTruncate" Type="varchar(max)" Mode="In" />
+  <Parameter Name="LengthToTrunCateBy" Type="int" Mode="In" />
+</Function>

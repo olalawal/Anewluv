@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Shell.MVC2.Models.AdminPhotoModel>
+@{
+    int PageIndex = Convert.ToInt32(ViewData["PageIndex"].ToString());
+    int ModelCount = Convert.ToInt32(ViewData["ModelCount"].ToString());
+}
+<div class="_Next">
+    <p>
+        @if (Model.Count() >= ModelCount)
+           {
+        @Html.Encode("Next")
+        }
+           else
+           {
+        @Ajax.ActionLink("Next", "PhotoList", new { page = (PageIndex + 1), PhotoView = (ViewData["Message"].ToString()) }, new AjaxOptions { UpdateTargetId = "List", HttpMethod = "Post" })
+        } 
+    </p>
+</div>
+<div class="_Previous">
+    <p>
+        @if (PageIndex <= 1)
+           {
+        @Html.Encode("Next")
+           }
+        else
+        {
+        @Ajax.ActionLink("Previous", "PhotoList", new { page = (PageIndex - 1), PhotoView = (ViewData["Message"].ToString()) }, new AjaxOptions { UpdateTargetId = "List", HttpMethod = "Post" })
+        } 
+    </p>
+</div>
+<div style="margin-left: 7em; text-align: center;">
+    Current Page:
+    @ViewData["PageIndex"]</div>
+<br clear="all" />
+
