@@ -1,0 +1,434 @@
+﻿
+@model Dating.Server.Data.Models.ProfileVisiblitySetting
+           @using Shell.MVC2.Infastructure
+
+
+
+
+
+<script type="text/javascript" >
+@* jquery script to show default values as Any *@
+
+//Test to loop through all the comboboxes , works 
+$(function() {
+
+// debugger;
+    setdefaults();
+
+  //sets a defult city on load 
+        function setdefaults() {
+
+            //get all for combo boxes 
+            //set defaults for all combo
+
+            $('.combobox').each(function() { 
+           // alert($(this).text());   // using text() here, because the  
+          });                          // options have no value..? 
+
+
+           
+        }
+
+});
+ 
+</script>
+
+@* load the select lists from app afrabice *@
+ @{  List<SelectListItem> Countries = CachingFactory.SharedObjectHelper.GetCountrysList();   
+     Utils.AddFirstItemToSelectListItems(Countries, "Any");
+        //set it as defaul value as well in there
+     
+     List<SelectListItem> Ages = CachingFactory.SharedObjectHelper.GetAgeList();
+        Utils.AddFirstItemToSelectListItems(Ages, "Any");
+        
+        //set it as defaul value as well in there
+        List<SelectListItem> VisibilityMailSettings = CachingFactory.SharedObjectHelper.GetVisibilityMailSettingsList() ;
+        List<SelectListItem> VisibilityStealthSettings = CachingFactory.SharedObjectHelper.GetVisibilityStealthSettingsList();
+          
+       
+     List<SelectListItem> Genders = CachingFactory.SharedObjectHelper.GetGenderList();
+     Utils.AddFirstItemToSelectListItems(Genders, "Any");
+     }
+
+ @using (Html.BeginForm("EditProfileVisibilitySettings", "EditProfile", FormMethod.Post))
+ { 
+
+    
+    
+    
+    
+    <div>
+    
+
+
+    
+    	<div class="clearFloat"></div>
+			<div class="profileVisvisSet">
+				
+					<p class="lastNode">Profile Visibility
+				</p>
+			</div>
+			<div id="ComboBox_win_visSetProfileVisibility">
+                @(Html.Telerik().ComboBoxFor(model => Model.ProfileVisiblity   )                                             
+                      .AutoFill(true) //fill it with default data                  
+              .BindTo(VisibilityStealthSettings)
+              .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                      
+                       .AutoFill(true)
+                      .HighlightFirstMatch(true)    
+                    )  
+			</div>
+						<div class="clearFloat"></div>
+			<div class="Contact_SettingsvisSet">
+				
+					<p class="lastNode">Contact Settings
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="Lorem_ipsum_dolor_si2visSet">
+				
+					<p class="lastNode">Enter your preferences for contact with your profile from other members
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div id="visSeTcolwrap4">
+				<div id="visSetleftcontactDiv">
+					<div id="viSetAgeRangeDiv">
+						<div class="Age_RangevisSet">
+							
+								<p class="lastNode">Age Range
+							</p>
+						</div>
+						<div  id="ComboBox_win_visSetAge1">
+                         @(Html.Telerik().ComboBoxFor(model => Model.AgeMinVisibility)
+    .HtmlAttributes(new { style = string.Format("width: 75px"), @class = "combobox" })          
+                    .BindTo(Ages ) 
+                     .AutoFill(true)
+)
+                        </div>
+						<div id="ComboBox_win_visSetAge2">
+                     @(Html.Telerik().ComboBoxFor(model => Model.AgeMaxVisibility)
+        .HtmlAttributes(new { style = string.Format("width: 75px"), @class = "combobox" })
+                    .BindTo(Ages)
+                     .AutoFill(true)
+
+
+)
+                                                </div>
+												<div class="clearFloat"></div>
+					</div>
+					<div class="clearFloat"></div>
+					<div id="visSetGenderDiv">
+						<div class="GendervisSet">
+							
+								<p class="lastNode">Gender
+							</p>
+						</div>
+						<div id="ComboBox_win_visSetGender">
+                   @(Html.Telerik().ComboBoxFor(model => Model.GenderID)
+          .HtmlAttributes(new { style = string.Format("width: 150px"), @class = "combobox" })
+                    .BindTo(Genders)
+                    .AutoFill(true)
+)
+
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div id="visSeTcolwrap5">
+				<div id="visSetrightContactDiv" >
+					<div id="visSetCountryDiv">
+						<div class="CountryvisSet">
+							
+								<p class="lastNode">Country
+							</p>
+						</div>
+						<div id="ComboBox_win_visSetCountry">
+                                              
+                      @(Html.Telerik().ComboBoxFor(model => Model.CountryID)                                           
+                      .AutoFill(true) //fill it with default data                    
+                     .BindTo(Countries)
+                     .HtmlAttributes(new { style = string.Format("width:{0}px",150),@class="combobox" })                      
+                       .AutoFill(true)
+                      .HighlightFirstMatch(true)    
+                    )  
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+					<div id="visSetetPeekDiv">
+						<div id="ComboBox_win_visSetLetPeek">
+						 @(Html.Telerik().ComboBoxFor(model => Model.SteathPeeks )                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+                       .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                    )  
+						</div>
+						<div class="Let_them_know_I_peekvisSet">
+							
+								<p class="lastNode">Let them know I peeked!
+							</p>
+						</div>						
+					</div>
+					
+				</div>
+				<div class="clearFloat"></div>
+			</div>
+			<div class="Mail_SettingsvisSet">				
+					<p class="lastNode">Mail Settings
+				</p>
+
+			</div>
+         
+			<div class="clearFloat"></div>
+			<div class="Lorem_ipsum_dolor_sivisSet1">				
+					<p class="lastNode">Customize your Email Notification Settings @*, customize what kinds of updates on profile activity you want to receive*@
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="visSeTcolwrap6">
+				<div class="visSetleftMailDiv">
+					<div class="visSetPeekslDiv">
+						<div class="PeeksvisSet">
+							
+								<p class="lastNode">Peeks
+							</p>
+						</div>
+						<div class="ComboBox_win_visSetPeek">
+		              @(Html.Telerik().ComboBoxFor(model => Model.MailPeeks)                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+              .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                      )  
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+					<div class="visSetLikesDiv">
+						<div class="LikesvisSet">
+							
+								<p class="lastNode">Likes
+							</p>
+						</div>
+						<div class="ComboBox_win_VisSetLikes">
+                        		 @(Html.Telerik().ComboBoxFor(model => Model.MailLikes  )                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+   .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                    )  
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+					<div class="visSetMailDiv">
+						<div class="NewsvisSet">
+							
+								<p class="lastNode">News
+							</p>
+						</div>
+						<div class="ComboBox_win_visSetNews">
+                                      		 @(Html.Telerik().ComboBoxFor(model => Model.MailNews   )                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+   .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                    ) 
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class="visSeTcolwrap7">
+				<div class="visSetrightMailDiv">
+					<div class="visSetInterestsDiv">
+						<div class="InterestsvisSet">
+							
+								<p class="lastNode">Interests
+							</p>
+						</div>
+						<div class="ComboBox_win_visSetInterests">
+                                      		 @(Html.Telerik().ComboBoxFor(model => Model.MailIntrests   )                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+   .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                    ) 
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+					<div class="visSetMatchesDiv">
+						<div class="MatchesvisSet">
+							
+								<p class="lastNode">Matches
+							</p>
+						</div>
+						<div class="ComboBox_win_visSetMatches">
+                         @(Html.Telerik().ComboBoxFor(model => Model.MailMatches  )                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+   .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                    ) 
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+					<div class="visSetODiv">
+						<div class="OthervisSet">
+							
+								<p class="lastNode">Chat Requests
+							</p>
+						</div>
+						<div class="ComboBox_win_visSetO">
+                                    @(Html.Telerik().ComboBoxFor(model => Model.MailChatRequest   )                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+   .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                    ) 
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+			</div>
+			
+			
+       <div class="clearFloat"></div>
+       <div class="Mail_SettingsvisSet">				
+					<p class="lastNode">Chat Settings
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="Lorem_ipsum_dolor_sivisSet1">				
+					<p class="lastNode"> Customize your onsite Chat visiblity settings @*customize what kinds of updates on chat activity you want to receive*@
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="visSeTcolwrap6">
+				<div class="visSetleftMailDiv">
+					<div class="visSetPeekslDiv">
+						<div class="PeeksvisSet">
+							
+								<p class="lastNode">Searches
+							</p>
+						</div>
+						<div class="ComboBox_win_visSetPeek">
+		              @(Html.Telerik().ComboBoxFor(model => Model.ChatVisiblityToSearch)                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+              .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                      )  
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+					<div id="visSetLikesDiv">
+						<div class="LikesvisSet">
+							
+								<p class="lastNode">Likes
+							</p>
+						</div>
+						<div class="ComboBox_win_VisSetLikes">
+                        		 @(Html.Telerik().ComboBoxFor(model => Model.ChatVisiblityToLikes  )                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+   .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                    )  
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+					<div id="visSetMailDiv">
+						<div class="NewsvisSet">
+							
+								<p class="lastNode">Peeks
+							</p>
+						</div>
+						<div class="ComboBox_win_visSetNews">
+                                      		 @(Html.Telerik().ComboBoxFor(model => Model.ChatVisiblityToPeeks  )                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+   .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                    ) 
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div class  ="visSeTcolwrap7">
+				<div class="visSetrightMailDiv">
+					<div class="visSetInterestsDiv">
+						<div class="InterestsvisSet">
+							
+								<p class="lastNode">Interests
+							</p>
+						</div>
+						<div class="ComboBox_win_visSetInterests">
+                                      		 @(Html.Telerik().ComboBoxFor(model => Model.ChatVisiblityToInterests   )                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+   .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                    ) 
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+					<div class="visSetMatchesDiv">
+						<div class="MatchesvisSet">
+							
+								<p class="lastNode">Matches
+							</p>
+						</div>
+						<div class="ComboBox_win_visSetMatches">
+                         @(Html.Telerik().ComboBoxFor(model => Model.ChatVisiblityToMatches )                                          
+                      .AutoFill(true) //fill it with default data
+                       .BindTo(VisibilityMailSettings )
+   .HtmlAttributes(new { style = string.Format("width:{0}px", 150), @class = "combobox" })                  
+                      .HighlightFirstMatch(true)
+                    ) 
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+					<div class="visSetODiv">
+						<div class="OthervisSet">
+							
+								<p class="lastNode">Other
+							</p>
+						</div>
+						<div class="ComboBox_win_visSetO">
+                        Comming Soon
+                        </div>
+											</div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+			</div>
+
+            <div class="clearFloat"></div>
+
+          
+            
+             <div id="buttonbootstrap1">
+             <button class="btn btn-primary" type="submit" value="Registration">Save Changes</button>
+			</div>
+		 	<div id="buttonbootstrap2">
+               <button class="btn btn-inverse" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+          
+	     </div>
+
+         <div class="visSetFinishButtonDiv">
+              <div id ="buttonTelerikCenterLinkDiv">
+    <div>
+    @Html.ActionLink("Back to homepage", "MembersHome","Members")
+</div>
+       
+    </div>
+         </div>
+  
+    
+    </div>
+    
+    
+}
+

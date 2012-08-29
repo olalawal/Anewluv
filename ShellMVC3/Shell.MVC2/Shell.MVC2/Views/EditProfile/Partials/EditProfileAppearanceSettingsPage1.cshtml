@@ -1,0 +1,273 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.AppFabric
+@using Shell.MVC2.Models
+
+@*<script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js") " type="text/javascript"></script>*@
+
+
+
+  
+<script type="text/javascript">
+
+//backup works to select 5 or no more
+//    $(function () {
+//        var checkedcount = 0;
+//        $("input.SelectedYourBodyTypesIDs").change(function () {
+//            if (this.checked) checkedcount++;  //counts the number of checked items 
+//            else checkedcount--;
+//            if (checkedcount >= 5)
+//                $("input.SelectedYourBodyTypesIDs:not(:checked)").attr("disabled", "disabled");
+//            else $("input.SelectedYourBodyTypesIDs:not(:checked)").removeAttr("disabled");
+//        });
+//    });
+
+    //var checked = $("#selectall").attr("checked");
+    //$(".chk").attr("checked", checked);
+
+    //$("input.SelectedYourBodyTypesIDs").val(["check1", "check2", "radio1"]);
+
+
+    //$(function ()
+    // {
+    //    $('#SelectedYourBodyTypesIDs').click(function () {
+    //        var other = $('#SelectedYourBodyTypesIDs:checked').val();
+    //        if (other != undefined) $('#other').removeAttr('readonly');
+    //        else $('#other').attr('readonly', 'readonly');
+    //    });
+    //});
+
+
+//Jqeuery to handle ANY selection of checkboxes
+$(function () {
+
+    $("input.SelectedYourBodyTypesIDs").click(function () {
+        if ($("input.SelectedYourBodyTypesIDs:checked").val() == 1)
+
+        //loop through and disbale all other since they picked ANY which means all anways
+            $("input.SelectedYourBodyTypesIDs").each(function () {
+                if ($(this).attr("value") != 1) {
+                    $(this).removeAttr("checked");
+                    $(this).attr("disabled", "disabled");
+                }
+            }); 
+           //otherwise un disable them all
+            else $("input.SelectedYourBodyTypesIDs").removeAttr("disabled"); 
+        //first dsiable all then enable on the ANy one
+          //  $("input.SelectedYourBodyTypesIDs").attr("disabled", "disabled");
+        //enable and check the any one
+      
+
+     //   $("#log").html($(":checked").val() + " is checked!");
+       
+
+     });
+
+});
+
+
+
+//Eventually use thise maybe to set default values 
+    $(document).ready(function () {
+       // $('#load').hide();
+       // var commentContainer
+      //  var string;
+       // UpdateMemberStatus();
+
+
+    });
+
+
+
+    //this function runs before the dailog to make sure the have not edit thier profile
+    // or seen the popup already in the current session.
+    function SetDefaultValues() {
+
+        $.post('/Members/CheckMemberStatus', '',
+              function (data) {
+
+
+
+                  if (data.Status == false) {
+
+                     // dialog.dialog("open");
+
+                      //$('#ZipOrPostalQuickSearchHomePageDiv').show;
+
+                      // try 
+                      // {
+                      //      ziporpostalcmb.dataBind(data.postalcodes);
+                      //  } catch (err) 
+                      //  {
+                      //    return false;
+                      //  }
+
+                  }
+                  else {
+
+                      //set the value to the geopostalcode value
+                      // ziporpostalcmb.value(data.geocode);
+                      //  $('#ZipOrPostalQuickSearchHomePageDiv').hide(); 
+
+                  }
+
+                  //set the value to the geopostalcode value
+                  //ziporpostalcmb.value(data.geocode);
+
+
+              }, "json");
+        //add a function to bind postal code as well
+
+    }
+
+
+
+   
+</script>
+
+
+
+ <div id="PartialContainderForEditApperance1">
+     @{  List<SelectListItem> Heights = CachingFactory.SharedObjectHelper.GetMetricHeightList() ;  } 
+     @{  List<SelectListItem> BodyTypes = CachingFactory.SharedObjectHelper.GetBodyTypesList () ;  } 
+    
+    <div id="log"></div>
+     <div class="Describe_what_makes_aboutEdit">
+				
+					<p class="lastNode">Describe your body type and height as well as what you are looking for body type and height wise in your matches
+				</p>
+	</div>
+			
+			<div class="clearFloat"></div>
+         
+        @using (Html.BeginForm("EditProfileAppearanceSettings", "EditProfile", new { @ViewIndex = Constants.AppearanceSettingsPage1, @fulledit = Model.IsFullEditing }, FormMethod.Post))
+           { 
+           <div class="MeMyQSEappearnce">
+				
+					<p class="lastNode">Me
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div id="bodyTypeComboBox_win_MyQSEappearnce">
+            @(Html.Telerik().ComboBoxFor(model => Model.AppearanceSettings.BodyTypesID)
+                                    .Name("Model.AppearanceSettings.BodyTypesID")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                                   .BindTo(BodyTypes) 
+                     .AutoFill(true)
+)
+            </div>
+			<div id="heightMeComboBox_win_MyQSEappearnce">
+             @(Html.Telerik().ComboBoxFor(model => Model.AppearanceSettings.Height)
+                     .Name("Model.AppearanceSettings.Height")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                                   .BindTo(Heights) 
+                     .AutoFill(true)
+)
+            </div>
+						<div class="clearFloat"></div>
+			<div class="YouMyQSEappearnce">
+				
+					<p class="lastNode">You(Height range your are looking for)
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div id="height1YouComboBox_win_MyQSEappearnce">
+            @(Html.Telerik().ComboBoxFor(model => Model.AppearanceSearchSettings.LookingForHeightMin )
+                                    .Name("Model.AppearanceSearchSettings.LookingForHeightMin")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                                   .BindTo(Heights) 
+                     .AutoFill(true)
+)
+            </div> 
+            
+			<div id="height2YouComboBox_win_MyQSEappearnce">
+             @(Html.Telerik().ComboBoxFor(model => Model.AppearanceSearchSettings.LookingForHeightMax  )
+                                                   .Name("Model.AppearanceSearchSettings.LookingForHeightMax")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                                   .BindTo(Heights) 
+                     .AutoFill(true)
+)
+            </div> 
+            
+           
+						<div class="clearFloat"></div>
+			<div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your Body Types..
+			</p>
+		   </div>
+           
+      <div class="editor-field"> 
+            <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt = 0; } 
+               @foreach(var showme in Model.AppearanceSearchSettings.BodyTypesList)                   
+                 { 
+                  if (cnt == 3 || cnt == 6 || cnt == 9 || cnt == 12 || cnt == 15) 
+                  { 
+                     <tr></tr>
+                         
+                  }
+                    
+                  
+ 
+                      <td style="padding:5px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedYourBodyTypesIDs" name="SelectedYourBodyTypesIDs" value="@showme.BodyTypesID" checked="checked"  />   
+                              
+                           } 
+                           else 
+                          {         
+                          <input type="checkbox" class ="SelectedYourBodyTypesIDs" name="SelectedYourBodyTypesIDs" value="@showme.BodyTypesID"  />
+                        }  
+                     
+                        @showme.BodyTypesName
+                        
+                           </td> 
+                          
+                          
+
+                    
+                   
+                     <!-- increment counter here only once -->
+                     cnt++;  
+                  
+                    
+                  }
+                  
+			 </table> 
+
+			
+             </div>
+
+		
+			
+			<div id="buttonbootstrap1">
+             <button class="btn btn-primary" type="submit" value="Submit">Submit this page</button>
+			</div>
+			<div id="buttonbootstrap2">
+               <button class="btn btn-inverse" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+          
+	     </div>
+		<div id="MyQSEappearnceBox3SliceContainer_bottom_1">
+        <div class="EditProfileBottomLinkBack">
+				
+					<p class="lastNode">
+                      @Html.ActionLink("Back", "EditProfileBasicSettings", "EditProfile", new  { ViewIndex = Constants.BasicSettingsPage2} , null)
+
+           
+				</p>
+			</div>
+			<div class="EditProfileBottomLikNext">
+				
+					<p class="lastNode">
+                      @Html.ActionLink("Next", "EditProfileAppearanceSettings", "EditProfile", new { ViewIndex = Constants.AppearanceSettingsPage2 }, null)
+				</p>
+			</div>
+		</div>
+ 
+             } 
+
+
+ </div>  

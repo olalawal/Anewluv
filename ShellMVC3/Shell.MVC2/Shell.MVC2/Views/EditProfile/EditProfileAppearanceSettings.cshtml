@@ -1,0 +1,130 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.Models
+
+
+@{
+    ViewBag.Title = "Edit Profile Apperance Settings"; 
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+
+
+
+
+<div id="main">
+	<div id="headerDivMyQSEappearnce">
+       <!-- Added to toggle adds 1-27-2012 -->
+    
+     @Html.Partial("AddSense/TopBottomBanner") 
+      
+   
+	</div>
+	<div class="clearFloat"></div>
+	<div id="header2DivMyQSEappearnce">
+		<div class="My_Quik_Stats_EditsMyQSEappearnce">
+			
+				<p class="lastNode">Edit Your Appearance and Ethnicity
+			</p>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div class="clearFloat"></div>
+	<div id="leftDivMyQSEappearnce">
+    <center>
+            <!-- Added to toggle adds 1-27-2012 -->
+    
+    @Html.Partial("AddSense/LeftRightScraper") 
+
+     
+     </center>  
+	</div>
+	<div id="BodyDivMyQSEappearnce">
+		<div id="MyQSEappearnceBox3SliceContainer">
+			<div id="MyQSEappearnceBox3SliceContainer_top_1">
+			</div>
+			
+            <div id="actualcontent">
+		      <center>
+             <p class="lastNode">
+                     @ViewData["EditProfileAppearanceStatus"] 
+                </p> 
+				@Html.ValidationSummary(false, "There was an error updating your settings. Please correct the errors and try again.")
+             </center>
+
+               <div class="AppearanceSettingsNavigationLinks">
+            
+             <div  style="margin-left :10px; padding-top: 30px;float:left;">
+             @(Ajax.ActionLink("Body Type and Height", /* link text */
+             "EditProfileAppearanceSettings", /* action name */  
+             "EditProfile", /* controller name */
+             new { ViewIndex = Constants.AppearanceSettingsPage1 ,fulledit= Model.IsFullEditing }, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileAppearanceSettingsPage1" }, new {  @class = "MvcActionLinkStyle"}))
+             </div>
+             <div  style="margin-left :10px; padding-top: 30px; float:left;">
+             @(Ajax.ActionLink("Ethnicity", /* link text */
+             "EditProfileAppearanceSettings", /* action name */  
+             "EditProfile", /* controller name */
+                              new { ViewIndex = Constants.AppearanceSettingsPage2 , fulledit= Model.IsFullEditing}, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileAppearanceSettingsPage2" }, new {  @class = "MvcActionLinkStyle"}))
+             </div>
+             <div style="margin-left :10px; padding-top: 30px;float:left;">
+             @(Ajax.ActionLink("Eye and Hair Colors", /* link text */
+             "EditProfileAppearanceSettings", /* action name */  
+             "EditProfile", /* controller name */
+              new { ViewIndex = Constants.AppearanceSettingsPage3, fulledit = Model.IsFullEditing }, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileAppearanceSettingsPage3" }, new {  @class = "MvcActionLinkStyle"}))
+             </div>
+
+             <div  style="margin-left :10px; padding-top: 30px;float:left;">
+             @(Ajax.ActionLink("Hot Feature", /* link text */
+             "EditProfileAppearanceSettings", /* action name */  
+             "EditProfile", /* controller name */
+              new { ViewIndex = Constants.AppearanceSettingsPage4, fulledit = Model.IsFullEditing }, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileAppearanceSettingsPage4" }, new {  @class = "MvcActionLinkStyle"}))
+             </div>
+             </div>
+
+             	 
+        
+
+            <div id="EditProfileAppearanceSettingsPages1">
+            @if (Model.ViewIndex == Constants.AppearanceSettingsPage1 | Model.ViewIndex == 0)
+            { 
+            @Html.Partial("EditProfileAppearanceSettingsPage1", Model) }
+            </div>  		
+			
+            <div id="EditProfileAppearanceSettingsPage2">
+              @if (Model.ViewIndex == Constants.AppearanceSettingsPage2)
+              {  
+            @Html.Partial("EditProfileAppearanceSettingsPage2", Model) }
+            </div>  
+
+            <div id="EditProfileAppearanceSettingsPage3">
+              @if (Model.ViewIndex == Constants.AppearanceSettingsPage3)
+              {  
+            @Html.Partial("EditProfileAppearanceSettingsPage3", Model) }
+            </div>  
+
+            <div id="EditProfileAppearanceSettingsPage4">
+              @if (Model.ViewIndex == Constants.AppearanceSettingsPage4)
+              {  
+            @Html.Partial("EditProfileAppearanceSettingsPage4", Model) }
+            </div>  
+        </div>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div id="rightDivMyQSEappearnce">
+        <!-- Added to toggle adds 1-27-2012 -->
+    
+    @Html.Partial("AddSense/LeftRightScraper") 
+      
+	</div>
+	<div class="clearFloat"></div>
+	<div id="footerDivMyQSEappearnce">
+	</div>
+	<div class="clearFloat"></div>
+</div>
+
+
+

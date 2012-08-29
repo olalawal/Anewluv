@@ -1,0 +1,257 @@
+﻿@model Shell.MVC2.Models.MembersViewModel
+@using Shell.MVC2.Models
+
+
+@{
+    ViewBag.Title = "Account"; 
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+   
+
+
+    <div id="main">
+    <div class="clearFloat"></div>
+	<div id="headerMyQseQuikDiv">
+     <!-- Added to toggle adds 1-27-2012 -->
+    
+     @Html.Partial("AddSense/TopBottomBanner") 
+     
+   
+
+	</div>
+	<div class="clearFloat"></div>
+	<div id="header2MyQseQuikDiv">
+		<div class="My_Quik_Stats_EditsaboutEditMyQseQuik">
+			
+				<p class="lastNode">My Quik Stats Edits
+			</p>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div class="clearFloat"></div>
+    <center>
+	<div id="leftMyQseQuikDiv">
+    <!-- Added to toggle adds 1-27-2012 -->
+    
+    @Html.Partial("AddSense/LeftRightScraper") 
+       
+	</div>
+    </center>
+	<div id="bodyMyQseQuikDiv">
+		<div id="Box3SliceContainerQseQuik">
+			<div id="Box3SliceContainer_top_1QseQuik">
+          
+			</div>
+              <div class="EditProfileStatusText">
+            Edit your profile here, click individual links to edit specific parts of your profile or click the <b>FULL EDIT</b>
+            link at the bottom to edit you entire profile (Recommended)
+            </div>
+			<div id="mainPhotoMyQseQuik">
+              <a href="@Url.Action("PhotoEditQuick", "EditProfile")">
+             <img  src="@Url.Action("GetGalleryImageByScreenName", "Images", new { id =  Model.Profile.ScreenName },null)" alt="" width ="192" height ="193" />
+             </a> 
+			</div>
+			<div id="colwrapMyQseQuikDiv4">
+
+          
+           
+				<div id="MyQseQuikListLtDiv">
+					<div class="Edit_seeking_ageMyQseQuik">
+						
+							<p class="lastNode">
+                             @Html.ActionLink("[Edit seeking age]", "EditProfileBasicSettings", "EditProfile",new {ViewIndex = Constants.BasicSettingsPage1 , fulledit = false}, null)
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_HeightMyQseQuik">
+						
+							<p class="lastNode">
+                            @Html.ActionLink("[Edit Height]", "EditProfileAppearanceSettings", "EditProfile",new {ViewIndex = Constants.AppearanceSettingsPage1, fulledit = false}, null)
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_EthnicityMyQseQuik">
+						
+							<p class="lastNode">
+                        
+                     @Html.ActionLink("[Edit Ethnicity]", "EditProfileAppearanceSettings", "EditProfile", new { ViewIndex = Constants.AppearanceSettingsPage2, fulledit=false }, null)
+                       
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_Has_KidsMyQseQuik">
+						
+							<p class="lastNode">
+                             @Html.ActionLink("[Edit Has Kids]", "EditProfileLifeStyleSettings", "EditProfile", new {ViewIndex = Constants.LifeStyleSettingsPage2 , fulledit = false }, null)
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_My_CityMyQseQuik">
+						
+							<p class="lastNode">
+                             @Html.ActionLink("[Edit Income]", "EditProfileLifeStyleSettings", "EditProfile", new {ViewIndex = Constants.LifeStyleSettingsPage3 , fulledit = false }, null)
+                    
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_CountryMyQseQuik">
+						
+							<p class="lastNode">
+                            @Html.ActionLink("[Edit Humor]", "EditProfileCharacterSettings", "EditProfile", new { ViewIndex = Constants.CharacterSettingsPage4 ,fulledit = false }, null)
+                    
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_GenderMyQseQuik">
+						
+							<p class="lastNode">
+                             @Html.ActionLink("[Edit Sign]", "EditProfileCharacterSettings", "EditProfile", new {ViewIndex = Constants.CharacterSettingsPage2 , fulledit = false }, null)
+                    
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div id="colwrapMyQseQuikDiv5">
+				<div id="MyQseQuikListRtDiv">
+					<div class="Edit_Seeking_GenderMyQseQuik">
+						
+							<p class="lastNode">
+                                 @Html.ActionLink("[Edit Seeking Gender]", "EditProfileBasicSettings", "EditProfile", new { ViewIndex = Constants.BasicSettingsPage1 ,fulledit = false }, null)
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_Body_TypeMyQseQuik">
+						
+							<p class="lastNode">                           
+                          
+                     @Html.ActionLink("[Edit Body Type]", "EditProfileAppearanceSettings", "EditProfile", new { ViewIndex = Constants.AppearanceSettingsPage1,fulledit=false }, null)
+                       
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_ReligionMyQseQuik">
+						
+							<p class="lastNode">
+                             @Html.ActionLink("[Edit Religion]", "EditProfileCharacterSettings", "EditProfile", new { ViewIndex = Constants.CharacterSettingsPage3, fulledit = false }, null)
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_SmokesMyQseQuik">
+						
+							<p class="lastNode">
+                            @Html.ActionLink("[Edit Smokes]", "EditProfileCharacterSettings", "EditProfile", new { ViewIndex = Constants.CharacterSettingsPage1, fulledit = false }, null)
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_Marital_StatusMyQseQuik">
+						
+							<p class="lastNode">
+                              @Html.ActionLink("[Edit Marital Status]", "EditProfileLifeStyleSettings", "EditProfile", new {ViewIndex = Constants.LifeStyleSettingsPage1 , fulledit = false }, null)
+                      
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_EmailMyQseQuik">
+						
+							<p class="lastNode">
+                             @Html.ActionLink("[Edit Profession]", "EditProfileLifeStyleSettings", "EditProfile", new {ViewIndex = Constants.LifeStyleSettingsPage4 , fulledit = false }, null)
+                      
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Edit_PasswordMyQseQuik">
+						
+							<p class="lastNode"> @Html.ActionLink("[Edit Employment]", "EditProfileLifeStyleSettings", "EditProfile", new {ViewIndex = Constants.LifeStyleSettingsPage3  , fulledit = false}, null)
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+			</div>
+			<div class="Edit_PhotosMyQseQuik">
+				
+					<p class="lastNode">
+                      @Html.ActionLink("[Edit Photos]", "PhotoEditQuick", "EditProfile", null)
+				</p>
+			</div>
+			<div class="Txt_About">
+				
+					<p class="lastNode">
+                    @Html.ActionLink("About me and the person I'm seeking [Edit]", "EditProfileBasicSettings", "EditProfile", new {ViewIndex = Constants.BasicSettingsPage1 , fulledit = false }, null)
+                    
+				</p>
+			</div>
+			<div class="My_Catchy_Intro_LineMyQseQuik">
+				
+					<p class="lastNode">
+                    @Html.ActionLink("My Catchy Intro Line [Edit]", "EditProfileBasicSettings", "EditProfile", new {ViewIndex = Constants.BasicSettingsPage1 , fulledit = false }, null)
+                    
+                    
+				</p>
+			</div>
+			<div id="colwrapMyQseQuikDiv6">
+				<div id="bigPhotoMyQseQuikDiv">
+				
+                  @if (Model.MyEditProfilePhotosViewModel.ProfilePhotosApproved.ToList().Count  > 0) 
+                                {  
+                                
+                                  foreach (var item2 in  Model.MyEditProfilePhotosViewModel.ProfilePhotosApproved)
+                                 { 
+                                        <img id="@item2.PhotoID" src="@Url.Action("GetGalleryImageByPhotoID", "Images", new { id = item2.PhotoID},null)"
+                                            alt="" width="94" height="94" />          
+                                     } 
+                                 }
+                                else 
+                                {             
+                                 @Html.Encode("You do not have any more photos uploaded , click on the edit photos link to add photos to your profile")
+                                 } 
+
+           
+					
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+			</div>
+			
+		<div id="Box3SliceContainer_bottom_1QseQuik">
+        <div class="Account_Settings_EdiMyQseQuik">
+				
+					<p class="lastNode">
+                     @Html.ActionLink("[Edit Account]", "Account", "Account", null, null)
+				</p>
+			</div>
+			<div class="Full_EditMyQseQuik">
+				
+					<p class="lastNode">
+                    @Html.ActionLink("Full Edit", "EditProfileBasicSettings", "EditProfile",new { fulledit = true} ,null)
+                    
+				</p>
+			</div>
+			<div id="finishButtonMyQseQuikDiv">
+            <button class="btn" type="submit"  onclick='javascript:history.go(-1);return false;'>Return To Previous Page</button>
+			</div>
+		</div>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+
+    <center >
+	<div id="righMyQseQuiktDiv">
+     <!-- Added to toggle adds 1-27-2012 -->
+    
+    @Html.Partial("AddSense/LeftRightScraper") 
+      
+	</div>
+    </center>
+	<div class="clearFloat"></div>
+	<div id="footerMyQseQuikDiv">
+	</div>
+	<div class="clearFloat"></div>
+</div>
+
+
+
+

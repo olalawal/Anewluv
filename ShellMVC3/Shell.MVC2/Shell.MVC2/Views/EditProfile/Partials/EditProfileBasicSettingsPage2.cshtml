@@ -1,0 +1,156 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.AppFabric
+@using Shell.MVC2.Models
+
+
+<div id="PartialContainderForEditBasic1">
+			<div class="Describe_what_makes_aboutEdit">
+				
+					<p class="lastNode">How do you want your matches sorted? do you want members a certain distance from you or does it not mater? Enter those settings here
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+
+<div id="Content"> 
+    
+    @using (Html.BeginForm("EditProfileBasicSettings","EditProfile", new {@ViewIndex =2 ,@fulledit=Model.IsFullEditing  }, FormMethod.Post))
+           { 
+
+      <div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Show me..
+			</p>
+		   </div>
+      <div class="editor-field"> 
+            <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt = 0; } 
+               @foreach(var showme in Model.BasicSearchSettings.ShowMeList)                   
+                 { 
+                    if(cnt++  == 3 ) {
+                     Response.Write("</tr> <tr>")
+                         ; }
+                       
+                  
+ 
+                      <td style="padding:5px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" name="SelectedShowMeIds" value="@showme.ShowMeID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" name="SelectedShowMeIds" value="@showme.ShowMeID"  />
+                           }  
+                        
+                        @showme.ShowMeName
+                        
+                        </td> 
+
+
+                    
+                     
+                  
+                    
+                  }
+                  
+			 </table> 
+
+			 </div>
+
+             <div class="clearFloat"></div>
+             <div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Sort by..
+			</p>
+            
+		   </div>
+      <div class="editor-field"> 
+            <table style="width: 95% " class="CheckboxLabelText"> 
+                <tr> </tr> 
+              @{ int cnt2 = 0; } 
+                @foreach(var sortby in Model.BasicSearchSettings.SortByList)                   
+                 { 
+                  if(cnt2++  == 3 ) {
+                    <tr></tr>
+                         
+                  }
+ 
+                       <td style="padding:5px;" >  
+                         @if (sortby.Selected)
+                         {     
+                          <input type="checkbox" name="SelectedSortByIds" value="@sortby.SortByTypeID" checked="checked"  />   
+                              
+                         }
+                         else
+                         {         
+                          <input type="checkbox" name="SelectedSortByIds" value="@sortby.SortByTypeID"  />
+                         }  
+                        
+                        @sortby.SortByTypeName
+                        
+                        </td> 
+                     
+                  
+                    
+                 }
+                  
+			 </table> 
+
+			 </div>
+
+              <div class="clearFloat"></div>
+              
+             <div class="MiddleCheckBoxHeaderEdit">
+              <div class="editor-field">  
+					<p class="lastNode">Distance from You..
+                     @Html.TextBoxFor(model => model.BasicSearchSettings.DistanceFromMe, new { style = "width:120px;" }) 
+			</p>
+               </div>              
+	    </div>
+         <div class="clearFloat"></div>
+              <div class ="TextFeildRightValidation">
+                @Html.ValidationMessageFor(model => model.BasicSearchSettings.DistanceFromMe)
+            </div>
+
+  <div class="clearFloat"></div>
+       <div id="buttonbootstrap1">
+             <button class="btn btn-primary" type="submit" value="Submit">Submit this page</button>
+			</div>
+			<div id="buttonbootstrap2">
+               <button class="btn btn-inverse" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+          
+	     </div>
+              
+           	<div class="clearFloat"></div>
+		<div id="aboutEditBox3SliceContainer_bottom_1">
+        <div class="clearFloat"></div>
+          <div class="BackaboutEdit">
+				
+					<p class="lastNode">
+                    @(Ajax.ActionLink("Back", /* link text */
+             "EditProfileBasicSettings", /* action name */
+             "EditProfile", /* controller name */
+             new { ViewIndex = Constants.BasicSettingsPage1 }, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileBasicSettingsPage1" }))
+				</p>
+			</div>
+	    <div class="NextaboutEdit">				
+					<p class="lastNode">
+                     @Html.ActionLink("Next", "EditProfileAppearanceSettings", "EditProfile", new { ViewIndex = Constants.AppearanceSettingsPage1 }, null)
+
+           
+				</p>
+		</div>
+		</div>
+
+
+   } 
+
+
+</div>
+
+
+ </div>  
+       
+              
+
+

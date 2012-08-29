@@ -1,0 +1,299 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.AppFabric
+@using Shell.MVC2.Models
+
+
+
+
+
+<script type="text/javascript">
+
+
+    //Eventually use thise maybe to set default values 
+    $(document).ready(function () {
+        // $('#load').hide();
+        // var commentContainer
+        //  var string;
+        // UpdateMemberStatus();
+
+
+    });
+
+    //Jqeuery to handle ANY selection of checkboxes
+    $(function () {
+
+        $("input.SelectedYourEducationLevelIds").click(function () {
+            if ($("input.SelectedYourEducationLevelIds:checked").val() == 1)
+
+            //loop through and disbale all other since they picked ANY which means all anways
+                $("input.SelectedYourEducationLevelIds").each(function () {
+                    if ($(this).attr("value") != 1) {
+                        $(this).removeAttr("checked");
+                        $(this).attr("disabled", "disabled");
+                    }
+                });
+            //otherwise un disable them all
+            else $("input.SelectedYourEducationLevelIds").removeAttr("disabled");
+            //first dsiable all then enable on the ANy one
+            //  $("input.SelectedYourEducationLevelIds").attr("disabled", "disabled");
+            //enable and check the any one
+
+
+            //   $("#log").html($(":checked").val() + " is checked!");
+
+
+        });
+
+    });
+
+
+
+
+    //Jqeuery to handle ANY selection of checkboxes
+    $(function () {
+
+        $("input.SelectedYourProfessionIds").click(function () {
+            if ($("input.SelectedYourProfessionIds:checked").val() == 1)
+
+            //loop through and disbale all other since they picked ANY which means all anways
+                $("input.SelectedYourProfessionIds").each(function () {
+                    if ($(this).attr("value") != 1) {
+                        $(this).removeAttr("checked");
+                        $(this).attr("disabled", "disabled");
+                    }
+                });
+            //otherwise un disable them all
+            else $("input.SelectedYourProfessionIds").removeAttr("disabled");
+            //first dsiable all then enable on the ANy one
+            //  $("input.SelectedYourProfessionIds").attr("disabled", "disabled");
+            //enable and check the any one
+
+
+            //   $("#log").html($(":checked").val() + " is checked!");
+
+
+        });
+
+    });
+
+
+
+
+
+
+
+
+    //this function runs before the dailog to make sure the have not edit thier profile
+    // or seen the popup already in the current session.
+    function SetDefaultValues() {
+
+        $.post('/Members/CheckMemberStatus', '',
+              function (data) {
+
+
+
+                  if (data.Status == false) {
+
+
+
+                  }
+                  else {
+
+
+                  }
+
+                  //set the value to the geopostalcode value
+                  //ziporpostalcmb.value(data.geocode);
+
+
+              }, "json");
+        //add a function to bind postal code as well
+
+    }
+
+
+
+   
+</script>
+
+
+
+ <div id="PartialContainderForEditLifeStyle2">
+     @{  List<SelectListItem> EducationLevels = CachingFactory.SharedObjectHelper.GetEducationLevelList() ;  } 
+     @{  List<SelectListItem> Professions = CachingFactory.SharedObjectHelper.GetProfessionList();  } 
+
+    
+    <div id="log"></div>
+     <div class="Describe_what_makes_aboutEdit">
+				
+					<p class="lastNode">Tell us about your current Employment Status and Income Level
+				</p>
+	</div>
+			
+			<div class="clearFloat"></div>
+         
+        @using (Html.BeginForm("EditProfileLifeStyleSettings", "EditProfile", new { @ViewIndex = Constants.LifeStyleSettingsPage4, @fulledit = Model.IsFullEditing }, FormMethod.Post))
+           { 
+
+           <div id="contentforpartial">
+      
+      		<div class="MeMyQSElifestyle">				
+					<p class="lastNode">Me(What is your highest level of education and what is your Profession) 
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+            <div id="MiddleCenterAlign_win_MyQSElifestyle" >
+			<div id="hasKidsMeComboBox_win_MyQSElifestyle">
+
+                  @(Html.Telerik().ComboBoxFor(model => Model.LifeStyleSettings.EducationLevelID )
+                                   .Name("Model.LifeStyleSettings.EducationLevelID")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                       .BindTo(EducationLevels  ) 
+                     .AutoFill(true)
+)
+
+            </div> 
+		  <div id="smokeMeComboBox_win_MyQSElifestyle">          
+         
+       </div> 
+
+			<div id="maritalStatusMeComboBox_win_MyQSElifestyle">
+               @(Html.Telerik().ComboBoxFor(model => Model.LifeStyleSettings.ProfessionID  )
+                                                                                  .Name("Model.LifeStyleSettings.ProfessionID")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                                   .BindTo(Professions) 
+                     .AutoFill(true)
+)
+            </div> 
+           
+                      
+
+             </div> 
+             
+
+			<div class="clearFloat"></div>
+            
+			<div class="YouMyQSElifestyle">				
+					<p class="lastNode">You (What Education level and profession do you seek in a match?)
+				</p>
+			</div>
+			
+			
+			
+			
+            						<div class="clearFloat"></div>
+			<div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your Education Level.
+			</p>
+		   </div>
+           
+            <div class="editor-field"> 
+             
+             <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt3 = 0; } 
+               @foreach(var showme in Model.LifeStyleSearchSettings.EducationLevelList    )                   
+                 { 
+                  if (cnt3 == 3 || cnt3 == 6 || cnt3 == 9 || cnt3 == 12 || cnt3 == 15) 
+                  {   <tr></tr> }                  
+                   
+                      <td style="padding:5px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedYourEducationLevelIds" name="SelectedYourEducationLevelIds" value="@showme.EducationLevelID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" class="SelectedYourEducationLevelIds" name="SelectedYourEducationLevelIds" value="@showme.EducationLevelID"  />
+                           }  
+                        
+
+                        @showme.EducationLevelName</td>                     
+                      
+                     <!-- increment counter here only once -->
+                       cnt3++   ;               
+                        
+                  
+                    
+                  }
+                  
+			 </table>
+			
+             </div>
+
+
+
+                <div class="clearFloat"></div>
+             <div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your Profession
+			</p>
+		   </div>           
+        
+            <div class="editor-field"> 
+             <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt2 = 0; } 
+               @foreach(var showme in Model.LifeStyleSearchSettings.ProfessionList )                   
+                 { 
+                   if (cnt2 == 4 || cnt2 == 8 || cnt2 == 12|| cnt2 == 16 || cnt2 == 20)
+                   {   <tr></tr>  }                   
+                  
+ 
+                      <td style="padding:5px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedYourProfessionIds" name="SelectedYourProfessionIds" value="@showme.ProfessionID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" class="SelectedYourProfessionIds" name="SelectedYourProfessionIds" value="@showme.ProfessionID"  />
+                           }  
+                        
+
+                        @showme.ProfessionName</td>                     
+                   
+                     <!-- increment counter here only once -->
+                   cnt2++;
+
+
+
+                 }
+                  
+			 </table>
+
+			
+             </div>
+
+			
+					
+		<div id="buttonbootstrap1">
+             <button class="btn btn-primary" type="submit" value="Submit">Submit this page</button>
+			</div>
+			<div id="buttonbootstrap2">
+               <button class="btn btn-inverse" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+          
+	     </div>
+		<div id="lifestyleBox3SliceContainer_bottom_1">
+        
+        <div class="EditProfileBottomLinkBack">
+				
+					<p class="lastNode">
+                      @Html.ActionLink("Back", "EditProfileLifeStyleSettings", "EditProfile", new { ViewIndex = Constants.LifeStyleSettingsPage3 }, null)           
+				</p>
+			</div>
+          
+			<div class="EditProfileBottomLikNext">
+				
+						<p class="lastNode">
+                      @Html.ActionLink("Next", "EditProfileCharacterSettings", "EditProfile", new { ViewIndex = Constants.CharacterSettingsPage1 }, null)
+				</p>
+			</div>
+		</div>
+		</div>
+		<div class="clearFloat"></div>
+	
+ 
+             } 
+
+
+ </div>  

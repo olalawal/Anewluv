@@ -1,0 +1,300 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.AppFabric
+@using Shell.MVC2.Models
+
+
+
+
+
+<script type="text/javascript">
+
+
+    //Eventually use thise maybe to set default values 
+    $(document).ready(function () {
+        // $('#load').hide();
+        // var commentContainer
+        //  var string;
+        // UpdateMemberStatus();
+
+
+    });
+
+    //Jqeuery to handle ANY selection of checkboxes
+    $(function () {
+
+        $("input.SelectedYourEmploymentStatusIds").click(function () {
+            if ($("input.SelectedYourEmploymentStatusIds:checked").val() == 1)
+
+            //loop through and disbale all other since they picked ANY which means all anways
+                $("input.SelectedYourEmploymentStatusIds").each(function () {
+                    if ($(this).attr("value") != 1) {
+                        $(this).removeAttr("checked");
+                        $(this).attr("disabled", "disabled");
+                    }
+                });
+            //otherwise un disable them all
+            else $("input.SelectedYourEmploymentStatusIds").removeAttr("disabled");
+            //first dsiable all then enable on the ANy one
+            //  $("input.SelectedYourEmploymentStatusIds").attr("disabled", "disabled");
+            //enable and check the any one
+
+
+            //   $("#log").html($(":checked").val() + " is checked!");
+
+
+        });
+
+    });
+
+
+
+
+    //Jqeuery to handle ANY selection of checkboxes
+    $(function () {
+
+        $("input.SelectedYourIncomeLevelIds").click(function () {
+            if ($("input.SelectedYourIncomeLevelIds:checked").val() == 1)
+
+            //loop through and disbale all other since they picked ANY which means all anways
+                $("input.SelectedYourIncomeLevelIds").each(function () {
+                    if ($(this).attr("value") != 1) {
+                        $(this).removeAttr("checked");
+                        $(this).attr("disabled", "disabled");
+                    }
+                });
+            //otherwise un disable them all
+            else $("input.SelectedYourIncomeLevelIds").removeAttr("disabled");
+            //first dsiable all then enable on the ANy one
+            //  $("input.SelectedYourIncomeLevelIds").attr("disabled", "disabled");
+            //enable and check the any one
+
+
+            //   $("#log").html($(":checked").val() + " is checked!");
+
+
+        });
+
+    });
+
+
+
+
+
+
+
+
+    //this function runs before the dailog to make sure the have not edit thier profile
+    // or seen the popup already in the current session.
+    function SetDefaultValues() {
+
+        $.post('/Members/CheckMemberStatus', '',
+              function (data) {
+
+
+
+                  if (data.Status == false) {
+
+
+
+                  }
+                  else {
+
+
+                  }
+
+                  //set the value to the geopostalcode value
+                  //ziporpostalcmb.value(data.geocode);
+
+
+              }, "json");
+        //add a function to bind postal code as well
+
+    }
+
+
+
+   
+</script>
+
+
+
+ <div id="PartialContainderForEditLifeStyle2">
+     @{  List<SelectListItem> IncomeLevels = CachingFactory.SharedObjectHelper.GetIncomeLevelList() ;  } 
+     @{  List<SelectListItem> EmploymentStatuses = CachingFactory.SharedObjectHelper.GetEmploymentStatusList();  } 
+
+    
+    <div id="log"></div>
+     <div class="Describe_what_makes_aboutEdit">
+				
+					<p class="lastNode">Tell us about your current Employment Status and Income Level
+				</p>
+	</div>
+			
+			<div class="clearFloat"></div>
+         
+        @using (Html.BeginForm("EditProfileLifeStyleSettings", "EditProfile", new { @ViewIndex = Constants.LifeStyleSettingsPage3, @fulledit = Model.IsFullEditing }, FormMethod.Post))
+           { 
+
+           <div id="contentforpartial">
+      
+      		<div class="MeMyQSElifestyle">				
+					<p class="lastNode">Me(Employment Status and Income Level) 
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+            <div id="MiddleCenterAlign_win_MyQSElifestyle" >
+			<div id="hasKidsMeComboBox_win_MyQSElifestyle">
+
+                  @(Html.Telerik().ComboBoxFor(model => Model.LifeStyleSettings.EmploymentStatusID)
+                    .Name("Model.LifeStyleSettings.EmploymentStatusID")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                       .BindTo(EmploymentStatuses  ) 
+                     .AutoFill(true)
+)
+
+            </div> 
+		  <div id="smokeMeComboBox_win_MyQSElifestyle">          
+         
+       </div> 
+
+			<div id="maritalStatusMeComboBox_win_MyQSElifestyle">
+               @(Html.Telerik().ComboBoxFor(model => Model.LifeStyleSettings.IncomeLevelID )
+                                                                   .Name("Model.LifeStyleSettings.IncomeLevelID")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                                   .BindTo(IncomeLevels) 
+                     .AutoFill(true)
+)
+            </div> 
+           
+                      
+
+             </div> 
+             
+
+			<div class="clearFloat"></div>
+            
+			<div class="YouMyQSElifestyle">				
+					<p class="lastNode">You (What Employment Status and Income level are you looking for in a match?)
+				</p>
+			</div>
+			
+			
+			
+			
+            						<div class="clearFloat"></div>
+			<div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your Employment Status.
+			</p>
+		   </div>
+           
+            <div class="editor-field"> 
+             
+             <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt3 = 0; } 
+               @foreach(var showme in Model.LifeStyleSearchSettings.EmploymentStatusList   )                   
+                 { 
+                  if (cnt3 == 3 || cnt3 == 6 || cnt3 == 9 || cnt3 == 8 || cnt3 == 10) 
+                  {  <tr></tr> 
+                   }                  
+                   
+                      <td style="padding:5px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedYourEmploymentStatusIds" name="SelectedYourEmploymentStatusIds" value="@showme.EmploymentStatusID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" class="SelectedYourEmploymentStatusIds" name="SelectedYourEmploymentStatusIds" value="@showme.EmploymentStatusID"  />
+                           }  
+                        
+
+                        @showme.EmploymentStatusName</td>                     
+                     
+                     <!-- increment counter here only once -->
+                       cnt3++  ;                
+                        
+                  
+                    
+                  }
+                  
+			 </table>
+			
+             </div>
+
+
+
+                <div class="clearFloat"></div>
+             <div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your Income level
+			</p>
+		   </div>           
+        
+            <div class="editor-field"> 
+             <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt2 = 0; } 
+               @foreach(var showme in Model.LifeStyleSearchSettings.IncomeLevelList )                   
+                 { 
+                  if (cnt2 == 3 || cnt2 == 6 || cnt2 == 9|| cnt2 == 12 || cnt2 == 10) 
+                  {  <tr></tr> }                   
+                  
+ 
+                      <td style="padding:5px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedYourIncomeLevelIds" name="SelectedYourIncomeLevelIds" value="@showme.IncomeLevelID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" class="SelectedYourIncomeLevelIds" name="SelectedYourIncomeLevelIds" value="@showme.IncomeLevelID"  />
+                           }  
+                        
+
+                        @showme.IncomeLevelName</td>                     
+                      
+                     <!-- increment counter here only once -->
+                     cnt2++;                
+                         
+                  
+                    
+                  }
+                  
+			 </table>
+
+			
+             </div>
+
+			
+					
+		<div id="buttonbootstrap1">
+             <button class="btn btn-primary" type="submit" value="Submit">Submit this page</button>
+			</div>
+			<div id="buttonbootstrap2">
+               <button class="btn btn-inverse" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+          
+	     </div>
+		<div id="lifestyleBox3SliceContainer_bottom_1">
+        
+        <div class="EditProfileBottomLinkBack">
+				
+					<p class="lastNode">
+                      @Html.ActionLink("Back", "EditProfileLifeStyleSettings", "EditProfile", new { ViewIndex = Constants.LifeStyleSettingsPage2  }, null)           
+				</p>
+			</div>
+           
+			<div class="EditProfileBottomLikNext">
+				
+						<p class="lastNode">
+                      @Html.ActionLink("Next", "EditProfileLifeStyleSettings", "EditProfile", new { ViewIndex = Constants.LifeStyleSettingsPage4 }, null)
+				</p>
+			</div>
+		</div>
+		</div>
+		<div class="clearFloat"></div>
+	
+ 
+             } 
+
+
+ </div>  

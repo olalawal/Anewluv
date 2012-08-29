@@ -1,0 +1,56 @@
+﻿@model Shell.MVC2.Models.EditProfilePhotoModel
+
+ @using (Html.BeginForm("PhotoEditQuick", "EditProfile", FormMethod.Post))
+    { 
+
+
+         				  
+            @Html.HiddenFor(model => model.PhotoID)
+            @Html.HiddenFor(model => model.Aproved)
+
+  @Html.ValidationMessage("piecesOfCake")          
+
+            <div id="PhotoEditsDivcolwrap4">
+            <div id="mainPhotoPhotoEditsDiv">
+            <img  src="@Url.Action("GetGalleryImageByPhotoID", "Images", new { id = Model.PhotoID},null)" alt="" width ="192" height ="193" />
+            
+            </div>
+<span style="margin-left: 26px;font-size:9px;font-family: Arial, Helvetica, sans-serif;color: #4c8acb;/*#000*/">
+Photo created on  @*March 5th, 2011*@
+ @String.Format("{0:MMMM d, yyyy}", Model.PhotoDate) 
+</span>
+          <p id="CheckBox_win_Make_PrimaryPhotoEditsDiv">
+         
+                    @if (Model.Aproved == "Yes" && Model.PhotoStatusID !=3 ) {
+                    @Html.CheckBoxFor(model => model.checkedPrimary) @Html.Encode("Make Primary")
+                    } else {
+                    @Html.CheckBoxFor(model => model.checkedPrimary, new { disabled = "disabled", @readonly = "readonly" }) @Html.Encode("Make Primary")
+                  
+                    }   
+
+            </p>
+            </div>
+
+            <div id="PhotoEditsDivcolwrap5">
+				<div class="Write_Cool_CaptionPhotoEditsDiv">
+					
+						<p class="lastNode"> Write Cool Caption </p>
+                </div>
+
+                @Html.TextBoxFor(model => model.ImageCaption, new { @id = "TextField_win_CaptionPhotoEditsDiv" })
+                @Html.ValidationMessageFor(model => model.ImageCaption)
+
+
+
+<div class="clearFloat"></div><br />
+
+<div style="text-align:left;padding:26px;margin-top:6em;"> 
+
+<input type="submit" value="Update" name="UpdatePhotoAction" class="t-button"/>
+</div>
+
+     </div>
+
+	
+     } 
+

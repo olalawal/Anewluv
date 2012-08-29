@@ -280,6 +280,20 @@
     <Compile Include="Infastructure\JanRainAuthentication\RpxProfile.cs" />
     <Compile Include="Infastructure\JanRainAuthentication\RpxResponsParser.cs" />
     <Compile Include="Infastructure\JanRainAuthentication\Rpx.cs" />
+    <Compile Include="Repositories\AccountRepository.cs" />
+    <Compile Include="Repositories\Chat\ChatRepositoryExtensions.cs" />
+    <Compile Include="Repositories\Chat\IChatRepositiory.cs" />
+    <Compile Include="Repositories\Chat\InMemoryChatRepository.cs" />
+    <Compile Include="Repositories\Chat\PersistedChatRepository.cs" />
+    <Compile Include="Repositories\EditProfileRepository.cs" />
+    <Compile Include="Repositories\GeoRepository.cs" />
+    <Compile Include="Repositories\MailMessageRepository.cs" />
+    <Compile Include="Repositories\MailModelRepository.cs" />
+    <Compile Include="Repositories\MailRepository.cs" />
+    <Compile Include="Repositories\MembersRepository.cs" />
+    <Compile Include="Repositories\ProfileRepository.cs" />
+    <Compile Include="Repositories\SearchRepository.cs" />
+    <Compile Include="Repositories\SharedRepository.cs" />
     <Compile Include="Resources\UxMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -308,10 +322,6 @@
     <Compile Include="Infastructure\Infastructure.cs" />
     <Compile Include="Infastructure\ModelClientValidationRangeDateRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\Chat\ChatRepositoryExtensions.cs" />
-    <Compile Include="Repositories\Chat\IChatRepositiory.cs" />
-    <Compile Include="Repositories\Chat\InMemoryChatRepository.cs" />
-    <Compile Include="Repositories\Chat\PersistedChatRepository.cs" />
     <Compile Include="Resources\EmailMessageResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

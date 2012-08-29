@@ -1,0 +1,137 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.Models
+
+
+@{
+    ViewBag.Title = "Edit Profile LifeStye Settings"; 
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+
+
+<div id="main">
+	<div id="headerMyQSElifestyleDiv">
+      
+          @Html.Partial("TopBottomLink") 
+    
+	</div>
+	<div class="clearFloat"></div>
+	<div id="header2MyQSElifestyleDiv">
+		<div class="My_Quik_Stats_EditsMyQSElifestyle">
+			
+				<p class="lastNode">Edit Your LifeStyle
+                		</p>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div class="clearFloat"></div>
+	<div id="leftMyQSElifestyleDiv">
+       
+       @Html.Partial("AddSense/LeftRightScraper") 
+
+        
+	</div>
+	<div id="BodyMyQSElifestyleDiv">
+		<div id="lifestyleBox3SliceContainer">
+			<div id="lifestyleBox3SliceContainer_top_1">
+			</div>
+                  <div id="actualcontent">
+		      <center>
+             <p class="lastNode">
+                     @ViewData["EditProfileLifeStyleStatus"] 
+                </p> 
+				@Html.ValidationSummary(false, "There was an error updating your settings. Please correct the errors and try again.")
+             </center>
+
+               <div class="LifestyleSettingsNavigationHeader">
+            
+             <div  class="LifeStyleNaviationHeadingLinks">
+             @(Ajax.ActionLink("Domestic Situation", /* link text */
+             "EditProfileLifeStyleSettings", /* action name */  
+             "EditProfile", /* controller name */
+             new { ViewIndex = Constants.LifeStyleSettingsPage1 ,fulledit= Model.IsFullEditing }, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileLifeStyleSettingsPage1" }, new {  @class = "MvcActionLinkStyle"}))
+             </div>
+             <div   class="LifeStyleNaviationHeadingLinks">
+             @(Ajax.ActionLink("Kids?", /* link text */
+             "EditProfileLifeStyleSettings", /* action name */  
+             "EditProfile", /* controller name */
+                              new { ViewIndex = Constants.LifeStyleSettingsPage2 , fulledit= Model.IsFullEditing}, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileLifeStyleSettingsPage2" }, new {  @class = "MvcActionLinkStyle"}))
+             </div>
+             <div  class="LifeStyleNaviationHeadingLinks">
+             @(Ajax.ActionLink("Employment/Income", /* link text */
+             "EditProfileLifeStyleSettings", /* action name */  
+             "EditProfile", /* controller name */
+              new { ViewIndex = Constants.LifeStyleSettingsPage3, fulledit = Model.IsFullEditing }, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileLifeStyleSettingsPage3" }, new {  @class = "MvcActionLinkStyle"}))
+             </div>
+
+             <div   class="LifeStyleNaviationHeadingLinks">
+             @(Ajax.ActionLink("Education/Profession", /* link text */
+             "EditProfileLifeStyleSettings", /* action name */  
+             "EditProfile", /* controller name */
+              new { ViewIndex = Constants.LifeStyleSettingsPage4, fulledit = Model.IsFullEditing }, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileLifeStyleSettingsPage4" }, new {  @class = "MvcActionLinkStyle"}))
+             </div>
+             </div>
+
+             	 
+        
+
+            <div id="EditProfileLifeStyleSettingsPages1">
+            @if (Model.ViewIndex == Constants.LifeStyleSettingsPage1 | Model.ViewIndex == 0)
+            { 
+            @Html.Partial("EditProfileLifeStyleSettingsPage1", Model) }
+            </div>  		
+			
+            <div id="EditProfileLifeStyleSettingsPage2">
+              @if (Model.ViewIndex == Constants.LifeStyleSettingsPage2)
+              {  
+            @Html.Partial("EditProfileLifeStyleSettingsPage2", Model) }
+            </div>  
+
+            <div id="EditProfileLifeStyleSettingsPage3">
+              @if (Model.ViewIndex == Constants.LifeStyleSettingsPage3)
+              {  
+            @Html.Partial("EditProfileLifeStyleSettingsPage3", Model) }
+            </div>  
+
+            <div id="EditProfileLifeStyleSettingsPage4">
+              @if (Model.ViewIndex == Constants.LifeStyleSettingsPage4)
+              {  
+            @Html.Partial("EditProfileLifeStyleSettingsPage4", Model) }
+            </div>  
+        </div>
+		</div>
+        </div> 
+		<div class="clearFloat"></div>
+
+
+
+
+
+
+	<div id="rightMyQSElifestyleDiv">
+      <center>
+      
+       @Html.Partial("AddSense/LeftRightScraper") 
+
+        
+  </center>
+	</div>
+	<div class="clearFloat"></div>
+	<div id="footerMyQSElifestyleDiv">
+                  
+       
+       @Html.Partial("TopBottomBanner") 
+
+    
+	</div>
+	<div class="clearFloat"></div>
+</div>
+
+
+
+

@@ -1,0 +1,61 @@
+﻿@model Dating.Server.Data.Models.ProfileVisiblitySetting
+@{
+    ViewBag.Title = "EditProfileVisibilitySettings";
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@*<h2>EditProfileVisibilitySettings</h2>
+*@
+<div id="main">
+	<div id="visSetHeaderDiv">
+               <!-- Added to toggle adds 1-27-2012 -->
+    
+     @Html.Partial("AddSense/TopBottomBanner") 
+     
+	</div>
+	<div class="clearFloat"></div>
+	<div id="visSetHeader2Div">
+		<div class="My_Quik_Stats_EditsaboutEdit">
+			
+				<p class="lastNode">Edit Your Visibility Settings 
+			</p>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div class="clearFloat"></div>
+	<div id="visSetLeftDiv">
+         <!-- Added to toggle adds 1-27-2012 -->
+    
+    @Html.Partial("AddSense/LeftRightScraper") 
+     
+	</div>
+	<div id="visSetBodyDiv">
+		<div id="visSetBox3SliceContainer">
+			<div id="visSetBox3SliceContainer_top_1">
+			</div>
+			<div class="Lorem_ipsum_dolor_si3visSet">
+				
+					<p class="lastNode">    @ViewData["Status"] 
+				</p>
+                 <div class="CenterLinkDiv">
+				@Html.ValidationSummary(false, "Your Visibility Settings Update was unsuccessful. Please correct the errors and try again.")
+           </div>
+			</div>
+
+		   @Html.Partial("EditProfileVisibilitySettingsDetail", Model) 
+		<div id="visSetBox3SliceContainer_bottom_1">
+      
+		</div>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div id="visSetRightDiv">
+        
+    @Html.Partial("AddSense/LeftRightScraper") 
+      
+	</div>
+	<div class="clearFloat"></div>
+	<div id="visSetFooterDiv">
+	</div>
+	<div class="clearFloat"></div>
+</div>

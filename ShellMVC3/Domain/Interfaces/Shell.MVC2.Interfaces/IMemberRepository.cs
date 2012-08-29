@@ -11,17 +11,27 @@ namespace Shell.MVC2.Data
    public interface IMemberRepository
    {
 
-     
 
+
+       //member viewmodoem mapping and registration models mappers
+       public MembersViewModel MapMember(string profileid);
+       
+       public MembersViewModel MapGuest();
+
+       public RegisterModel MapRegistration(MembersViewModel membersmodel);
+     
+       public RegisterModel MapJainRainRegistration(rpxprofile profile, MembersViewModel membersmodel);      
+
+       //TO DO move to unit test
+       public RegisterModel MapRegistrationTest();     
+     
        //initial profile stuffs
         profile getprofilebyusername(string username)  ;
         profiledata getprofiledatabyprofileid(string profileid) ;
         searchsetting getperfectmatchsearchsettingsbyprofileid(string profileid);
-        searchsetting createmyperfectmatchsearchsettingsbyprofileid(string profileid);
-       
+        searchsetting createmyperfectmatchsearchsettingsbyprofileid(string profileid);       
      
-       //get full profile stuff
-       
+       //get full profile stuff       
         string getgenderbyscreenname(string strScreenName);            
         string getgenderbyphotoid(Guid guid);  
        //TO DO this needs to be  linked to roles

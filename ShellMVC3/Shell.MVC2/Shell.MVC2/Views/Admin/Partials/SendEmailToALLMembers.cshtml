@@ -1,0 +1,23 @@
+﻿ @model Shell.MVC2.Models.EmailModel 
+ 
+ 
+ 
+ @using (Html.BeginForm("SendEmailToALLMembers", "Admin", FormMethod.Post))
+ {
+	   <div>
+       Subject  @Html.TextBoxFor(model => model.MessageSubject )    
+       </div>
+	    <div>Detail
+           @Html.TextAreaFor(model => model.MessageBody, new { style = "height: 150px;width:550px" })  
+                    
+         </div>
+        
+     
+		<div id="buttonTelerikEditProfile">
+			 <button class="btn btn-primary" type="submit" value="SubmitEditProfilebasicSettingsPage2">Send this message to all emails</button>
+			</div>
+			<div id="buttonTelerik2">
+			   <button class="btn" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+		  
+		 </div>
+ }

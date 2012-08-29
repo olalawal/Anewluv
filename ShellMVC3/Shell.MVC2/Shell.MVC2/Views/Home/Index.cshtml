@@ -1,0 +1,191 @@
+﻿@model Shell.MVC2.Models.LogOnModel 
+
+
+  @{ //Pull the users who are avaiable to chat from from the viewbag
+      var OnlineChatUsers = ViewBag.OnlineChatUsers as List<ChatUser>; 
+     
+   } 
+
+
+
+@{
+    ViewBag.Title = "IndexTest"; 
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+
+  <!-- Script for GeoLocation -->
+     <script src="@Url.Content("http://www.geoplugin.net/javascript.gp")" type="text/javascript" ></script>
+
+<!-- for jainrain engange -->
+<script type="text/javascript">
+
+    (function () {
+
+     
+       
+
+        if (typeof window.janrain !== 'object') window.janrain = {};
+        window.janrain.settings = {};
+
+        var url = document.location.href;
+        var nav = url.indexOf('#');
+        url = nav > 0 ? url.substring(0, nav) : url;
+        url = url.replace('index.html', '');
+
+        janrain.settings.tokenUrl = url + 'Account/AuthenticateOpenID';
+
+        function isReady() { janrain.ready = true; };
+        if (document.addEventListener) {
+            document.addEventListener("DOMContentLoaded", isReady, false);
+        } else {
+            window.attachEvent('onload', isReady);
+        }
+
+        var e = document.createElement('script');
+        e.type = 'text/javascript';
+        e.id = 'janrainAuthWidget';
+
+        if (document.location.protocol === 'https:') {
+            e.src = 'https://rpxnow.com/js/lib/anewluv/engage.js';
+        } else {
+            e.src = 'http://widget-cdn.rpxnow.com/js/lib/anewluv/engage.js';
+        }
+
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(e, s);
+    })();
+
+</script>
+
+<script type="text/javascript" >
+    document.write("Welcome to our visitors from " + geoplugin_city() + ", " + geoplugin_countryName());
+
+
+    $(function () {
+
+      
+        updateinterests();
+
+        function updateinterests() {
+          
+            var url = "http://www.geoplugin.net/php.gp?ip=";
+
+            $.ajax({
+                url: 'http://www.geoplugin.net/json.gp?jsoncallback=?',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (geodata) {
+                    //  alert(result['geoplugin_city']);
+                  
+
+                    var samplemembersviewmodel = {
+                        MyCountryName: geodata['geoplugin_country'],
+                        MyRegionName: geodata['geoplugin_regionName'],
+                        MyCity: geodata['geoplugin_city'],
+                        MyCountryName: geodata['geoplugin_countryName'],
+                        MyLongitude: geodata['geoplugin_longitude'],
+                        MyLatitude: geodata['geoplugin_latitude']
+                    };
+
+                    //var json = JSON.stringify(geodata);
+
+//                    $.post("Home/SaveGuestGeoData", json, function (data) {
+//                        // get the result and do some magic with it
+//                        //var message = data.Message;
+//                        //$("#resultMessage").html(message);
+//                        //update the UI via client i think its cleaner ?
+//                    }, "json");
+
+                    $.ajax({
+                        url: '@Url.Action("SaveGuestGeoData", "home")',
+                        data: JSON.stringify(samplemembersviewmodel),
+                        type: 'POST',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        success: function (result) {
+                           // alert(result.ItemList[0].Str);
+                        }
+                    }); 
+
+
+
+//                   $.ajax({
+//                        url: '../Home/SaveGuestGeoData',
+//                        type: 'POST',
+//                        dataType: 'json',
+//                        data: geodata,
+//                        contentType: 'application/json; charset=utf-8',
+//                        success: function (data) {
+//                            alert("ser ver updated");
+//                        }
+//                    });
+
+                }
+            });
+
+
+       
+
+        }
+
+    });
+
+   
+
+
+</script>
+
+<h2>Index</h2>
+
+
+<a class="janrainEngage" href="#">Sign-In with cool stuff</a>
+  <div id="janrainEngageEmbed">
+ </div>
+
+   <link href="@Url.Content("~/Content/emoji20.css")" rel="stylesheet" type="text/css" />
+
+ @using (Html.BeginForm("LogOnDetail", "Account", FormMethod.Post))
+ {    
+     
+        @Html.ActionLink("Find Somebody Today!", "Register", "Account", null, new { @class = "a_Find_Somebody_Today" }) 
+     
+     	<div id ="Txt_UsernameLogin" >
+				<p >
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.UserName)
+                </div>
+				</p>
+			</div>
+
+
+            <div class ="TextField_win_usrNmeLogIn">
+            <div class="editor-field">
+                  @Html.TextBoxFor(model => model.UserName)             
+            </div>
+            </div> 
+			     
+          <div class="clearFloat"></div> 		
+			<div class="Txt_passwordLogin">				
+				<p >
+                  <div class="editor-label">
+                    @Html.LabelFor(model => model.Password)
+                </div>
+				</p>
+			</div>
+			<div class="TextField_win_psswrdLogIn"> 
+            <div class="editor-field">
+                    @Html.PasswordFor(model => model.Password) 
+                   
+             </div>            
+          </div> 
+ 
+     
+      <div class="clearFloat"></div>
+			   <div id="buttonLogInDiv">
+             <button class="t-button" type="submit" value="Submit" >Submit</button>
+			</div>
+ }
+       

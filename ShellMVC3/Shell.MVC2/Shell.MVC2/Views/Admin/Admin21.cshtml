@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Dating.Server.Data.Models.photo>
+
+<!DOCTYPE html>
+
+<html>
+
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table>
+        <tr>
+            <th>
+                ProfileID
+            </th>
+            <th>
+                ImageCaption
+            </th>
+            <th>
+                ProfileImageType
+            </th>
+            <th>
+                PhotoStatusID
+            </th>
+            <th>
+                Aproved
+            </th>
+            <th>
+                PhotoSize
+            </th>
+            <th>
+                PhotoDate
+            </th>
+            <th>
+                PhotoAlbumID
+            </th>
+            <th>
+                PhotoReviewStatusID
+            </th>
+            <th>
+                PhotoReviewerID
+            </th>
+            <th>
+                PhotoReviewDate
+            </th>
+            <th></th>
+        </tr>
+    
+    @{ foreach (var item in Model) { 
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProfileID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageCaption)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProfileImageType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhotoStatusID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Aproved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhotoSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhotoDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhotoAlbumID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhotoReviewStatusID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhotoReviewerID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhotoReviewDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.PhotoID }) |
+                @Html.ActionLink("Details", "Details", new { id=item.PhotoID }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.PhotoID })
+            </td>
+        </tr>
+     } }
+    
+    </table>
+</body>
+</html>
+

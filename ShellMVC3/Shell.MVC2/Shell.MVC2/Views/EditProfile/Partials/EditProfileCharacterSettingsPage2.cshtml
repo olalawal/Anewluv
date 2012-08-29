@@ -1,0 +1,367 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.AppFabric
+@using Shell.MVC2.Models
+
+
+
+
+  
+<script type="text/javascript">
+
+
+    //Eventually use thise maybe to set default values 
+    $(document).ready(function () {
+        // $('#load').hide();
+        // var commentContainer
+        //  var string;
+        // UpdateMemberStatus();
+
+
+    });
+
+    //Jqeuery to handle ANY selection of checkboxes
+//    $(function () {
+
+//        $("input.SelectedYourHobbyIds").click(function () {
+//            if ($("input.SelectedYourHobbyIds:checked").val() == 1)
+
+//            //loop through and disbale all other since they picked ANY which means all anways
+//                $("input.SelectedYourHobbyIds").each(function () {
+//                    if ($(this).attr("value") != 1) {
+//                        $(this).removeAttr("checked");
+//                        $(this).attr("disabled", "disabled");
+//                    }
+//                });
+//            //otherwise un disable them all
+//            else $("input.SelectedYourHobbyIds").removeAttr("disabled");
+//            //first dsiable all then enable on the ANy one
+//            //  $("input.SelectedYourHobbyIds").attr("disabled", "disabled");
+//            //enable and check the any one
+
+
+//            //   $("#log").html($(":checked").val() + " is checked!");
+
+
+//        });
+
+//    });
+
+
+
+
+//    //Jqeuery to handle ANY selection of checkboxes
+//    $(function () {
+
+//        $("input.SelectedMyHobbyIds").click(function () {
+//            if ($("input.SelectedMyHobbyIds:checked").val() == 1)
+
+//            //loop through and disbale all other since they picked ANY which means all anways
+//                $("input.SelectedMyHobbyIds").each(function () {
+//                    if ($(this).attr("value") != 1) {
+//                        $(this).removeAttr("checked");
+//                        $(this).attr("disabled", "disabled");
+//                    }
+//                });
+//            //otherwise un disable them all
+//            else $("input.SelectedMyHobbyIds").removeAttr("disabled");
+//            //first dsiable all then enable on the ANy one
+//            //  $("input.SelectedMyHobbyIds").attr("disabled", "disabled");
+//            //enable and check the any one
+
+
+//            //   $("#log").html($(":checked").val() + " is checked!");
+
+
+//        });
+
+//    });
+
+    //Jqeuery to handle ANY selection of checkboxes
+    $(function () {
+
+        $("input.SelectedYourSignIds").click(function () {
+            if ($("input.SelectedYourSignIds:checked").val() == 1)
+
+            //loop through and disbale all other since they picked ANY which means all anways
+                $("input.SelectedYourSignIds").each(function () {
+                    if ($(this).attr("value") != 1) {
+                        $(this).removeAttr("checked");
+                        $(this).attr("disabled", "disabled");
+                    }
+                });
+            //otherwise un disable them all
+            else $("input.SelectedYourSignIds").removeAttr("disabled");
+            //first dsiable all then enable on the ANy one
+            //  $("input.SelectedYourSignIds").attr("disabled", "disabled");
+            //enable and check the any one
+
+
+            //   $("#log").html($(":checked").val() + " is checked!");
+
+
+        });
+
+    });
+
+
+
+    
+
+
+
+
+
+
+    //this function runs before the dailog to make sure the have not edit thier profile
+    // or seen the popup already in the current session.
+    function SetDefaultValues() {
+
+        $.post('/Members/CheckMemberStatus', '',
+              function (data) {
+
+
+
+                  if (data.Status == false) {
+
+
+
+                  }
+                  else {
+
+
+                  }
+
+                  //set the value to the geopostalcode value
+                  //ziporpostalcmb.value(data.geocode);
+
+
+              }, "json");
+        //add a function to bind postal code as well
+
+    }
+
+
+
+   
+</script>
+
+
+
+ <div id="PartialContainderForEditApperance1">
+     @{  List<SelectListItem> Hobbys = CachingFactory.SharedObjectHelper.GetHobbyList();  } 
+     @{  List<SelectListItem> Signs = CachingFactory.SharedObjectHelper.GetSignList() ;  } 
+   
+
+    
+    <div id="log"></div>
+     <div class="Describe_what_makes_aboutEdit">
+				
+					<p class="lastNode">Choose you astrological sign and your hobbies, also select the astrological signs and hobbies of members you want to be matched to
+				</p>
+	</div>
+			
+			<div class="clearFloat"></div>
+         
+      @using (Html.BeginForm("EditProfileCharacterSettings", "EditProfile", new { @ViewIndex = Constants.CharacterSettingsPage2, @fulledit = Model.IsFullEditing }, FormMethod.Post))
+           { 
+
+           <div id="contentforpartial">
+      
+      		<div class="MeMyQSElifestyle">				
+					<p class="lastNode">Me(Sign) 
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+            <div id="MiddleCenterAlign_win_MyQSElifestyle" >
+			<div id="hasKidsMeComboBox_win_MyQSElifestyle">
+              @(Html.Telerik().ComboBoxFor(model => Model.CharacterSettings.SignID )
+                              .Name("Model.CharacterSettings.SignID")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                                   .BindTo(Signs) 
+                     .AutoFill(true)
+)
+          
+             </div> 
+
+             <div class="clearFloat"></div>
+
+       
+             <div class ="MiddleCheckFullWithBoxBodyEdit">
+			<div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Me(Hobbies)
+			</p>
+		   </div>
+           
+       
+            <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt = 0; } 
+               @foreach(var showme in Model.CharacterSettings.MyHobbyList)                   
+                 { 
+                   if (cnt == 5 || cnt == 10 || cnt == 15|| cnt == 20 || cnt == 25 || cnt == 30) 
+                   {  <tr></tr>
+                         }
+                    
+                  
+ 
+                      <td style="padding:5px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedMyHobbyIds" name="SelectedMyHobbyIds" value="@showme.MyHobbyID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" class ="SelectedMyHobbyIds" name="SelectedMyHobbyIds" value="@showme.MyHobbyID"  />
+                           }  
+                        
+                        @showme.MyHobbyName
+                        </td> 
+
+
+                    
+                    
+                     <!-- increment counter here only once -->
+                       cnt++ ;             
+                         
+                  
+                    
+                  }
+                  
+			 </table> 
+
+             </div> 
+         
+           
+                 <div class="clearFloat"></div>
+			<div class="YouMyQSElifestyle">				
+					<p class="lastNode">You (What I am looking for in a Match)
+				</p>
+			</div>
+							<div class="clearFloat"></div>
+			
+              <div class ="MiddleCheckFullWithBoxBodyEdit">
+            <div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your Signs
+			</p>
+		   </div>
+           
+      <div class="editor-field"> 
+            <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt2 = 0; } 
+               @foreach(var showme in Model.CharacterSearchSettings.SignList)                   
+                 { 
+                   if (cnt2 == 5 || cnt2 == 10 || cnt2 == 15 || cnt2 == 20 || cnt2 == 25)
+                   {   <tr></tr> }
+                    
+                  
+ 
+                      <td style="padding:2px;" >  
+                      @if (showme.Selected)
+                      {     
+                          <input type="checkbox" class="SelectedYourSignIds" name="SelectedYourSignIds" value="@showme.SignID" checked="checked"  />   
+                              
+                      }
+                      else
+                      {         
+                          <input type="checkbox" class ="SelectedYourSignIds" name="SelectedYourSignIds" value="@showme.SignID"  />
+                      }  
+                        
+                        @showme.SignName
+                        </td> 
+
+
+                    
+                   
+                     <!-- increment counter here only once -->
+                      cnt2++;
+
+
+
+                 }
+                  
+			 </table> 
+
+			
+             </div>
+</div> 
+
+             				<div class="clearFloat"></div>
+                              
+                              <div class ="MiddleCheckFullWithBoxBodyEdit">
+			<div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your Hobbies
+			</p>
+		   </div>
+           
+      <div class="editor-field"> 
+            <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt3 = 0; } 
+               @foreach (var showme in Model.CharacterSearchSettings.HobbyList)
+               {
+                   if (cnt3 == 5 || cnt3 == 10 || cnt3 == 15 || cnt3 == 20 || cnt3 == 25)
+                   {   <tr></tr>}
+                    
+                  
+ 
+                      <td style="padding:2px;" >  
+                      @if (showme.Selected)
+                      {     
+                          <input type="checkbox" class="SelectedYourHobbyIds" name="SelectedYourHobbyIds" value="@showme.HobbyID" checked="checked"  />   
+                              
+                      }
+                      else
+                      {         
+                          <input type="checkbox" class ="SelectedYourHobbyIds" name="SelectedYourHobbyIds" value="@showme.HobbyID"  />
+                      }  
+                        
+                        @showme.HobbyName
+                        </td> 
+
+
+                    
+                
+                     <!-- increment counter here only once -->
+                      cnt3++;
+
+
+
+               }
+                  
+			 </table> 
+
+			
+             </div>
+			</div> 		
+		<div id="buttonbootstrap1">
+             <button class="btn btn-primary" type="submit" value="Submit">Submit this page</button>
+			</div>
+			<div id="buttonbootstrap2">
+               <button class="btn btn-inverse" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+          
+	     </div>
+		<div id="lifestyleBox3SliceContainer_bottom_1">
+        
+        <div class="EditProfileBottomLinkBack">
+				
+					<p class="lastNode">
+                      @Html.ActionLink("Back", "EditProfileCharacterSettings", "EditProfile", new { ViewIndex = Constants.CharacterSettingsPage1  }, null)           
+				</p>
+			</div>
+          
+			<div class="EditProfileBottomLikNext">
+				
+						<p class="lastNode">
+                      @Html.ActionLink("Next", "EditProfileCharacterSettings", "EditProfile", new { ViewIndex = Constants.CharacterSettingsPage3  }, null)
+				</p>
+			</div>
+		</div>
+		</div>
+		<div class="clearFloat"></div>
+	</div> 
+ 
+             } 
+             
+
+ </div>  

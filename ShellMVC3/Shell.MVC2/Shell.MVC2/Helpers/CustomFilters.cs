@@ -31,6 +31,9 @@ using LoggingLibrary;
 namespace Shell.MVC2.Filters
 {
 
+    //Region a new Filter that we will make as base 
+
+
     //Important filter to add the information from the chat service to a controller i.e the list of current users
     //this way we do not have to do anything in the conroller I think
     public class GetChatUsersDataAttribute : ActionFilterAttribute
@@ -364,4 +367,8 @@ namespace Shell.MVC2.Filters
             base.OnActionExecuting(filterContext);
         }
     }
+
+
+
+
 }

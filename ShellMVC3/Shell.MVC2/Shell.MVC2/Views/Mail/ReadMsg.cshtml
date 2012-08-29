@@ -1,0 +1,169 @@
+﻿@model IEnumerable<Shell.MVC2.Models.MailMessageRepository >
+@using MvcContrib.UI.Pager
+@using MvcContrib.Pagination
+
+
+  @{ //Pull the users who are avaiable to chat from from the viewbag
+      var OnlineChatUsers = ViewBag.OnlineChatUsers as List<ChatUser>; 
+     
+   } 
+
+
+
+@{
+    ViewBag.Title = "ReadMessage"; 
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+
+
+
+	<div id="leftDiv">
+	</div> <!-- End of leftDiv -->
+
+ 	<div id="bodyDiv">
+		<div class="Txt_READ">
+			
+				<p class="lastNode">READ MESSAGE
+			</p>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="Txt_Back">
+ @(Html.Pager((IPagination)Model).First("") 
+            .Last("")  
+             .Previous("Previous")   
+              .Next("Next Message")  
+              .SingleFormat("")  
+             .Format("")  
+)			
+				<p class="lastNode">Back to Messages 
+			</p>
+		</div>
+		<div class="Txt_Next">
+			
+				<p class="lastNode">Next Message
+			</p>
+		</div>
+              @{ foreach (var x in Model) {   
+
+
+		<div id="rightMessageBox">
+			<div id="rightMessageBox_top">
+			</div>
+			<div id="colwrap4">
+				<div id="leftMesssgeBox">
+					<div id="photoDiv">
+                      <img  src="@Url.Action("GetGalleryImageByScreenName", "Images", new { id = x.SenderName},null)" alt="" width ="92" height ="92" />
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Txt_Age">
+						
+							<p class="lastNode">Age
+						</p>
+					</div>
+					<div class="Txt_30">
+						
+							<p class="lastNode"> @x.dob  
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Txt_Somewhere">
+						
+							<p class="lastNode">@x.City + ", " + x.State
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Txt_Report">
+						
+							<p class="lastNode"> @Html.ActionLink("Report User", "Create")
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div id="colwrap5">
+				<div id="replyTrashDiv">
+					<div class="Txt_REPLY">
+						
+							<p class="lastNode">@Html.ActionLink("REPLY", "Edit", new { /* id=item.PrimaryKey */ })
+						</p>
+					</div>
+					<div class="Txt_TRASH">
+						
+							<p class="lastNode">@Html.ActionLink("TRASH", "Edit", new { /* id=item.PrimaryKey */ })
+						</p>
+					</div>
+				</div>
+				<div class="clearFloat"></div>
+				<div id="fromDiv">
+					<div class="Txt_From">
+						
+							<p class="lastNode">From:
+						</p>
+					</div>
+					<div class="Txt_Name">
+						
+							<p class="lastNode">@x.RecipientName
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+				<div id="subjectDiv">
+					<div class="Txt_Subject">
+						
+							<p class="lastNode">Subject:
+						</p>
+					</div>
+					<div class="Txt_A">
+						
+							<p class="lastNode">@x.Subject
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+				<div id="dateDiv">
+					<div class="Txt_Date">
+						
+							<p class="lastNode">Date:
+						</p>
+					</div>
+					<div class="Txt_123110">
+						
+							<p class="lastNode">@String.Format("{0:M/d/yy}", x.CreationDate)
+						</p>
+					</div>
+					<div class="Txt_843">
+						
+							<p class="lastNode">@String.Format("{0:t}", x.CreationDate) 
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+				<div id="Line">
+				</div>
+				<div class="clearFloat"></div>
+				<div class="Txt_Message">
+					
+						<p class="lastNode">Message:
+					</p> @x.Body
+				</div>
+				<div class="clearFloat"></div>
+			</div>
+		<div id="rightMessageBox_bottom">
+		</div>
+		</div>
+
+             } }
+	</div>
+
+    <p>
+       
+    </p>
+
+
+
+

@@ -1,0 +1,1535 @@
+﻿@model Shell.MVC2.Models.ProfileBrowseModel
+
+         @{ //Pull the users who are avaiable to chat from from the viewbag
+      var OnlineChatUsers = ViewBag.OnlineChatUsers as List<ChatUser>; 
+     
+ } 
+
+
+@{
+    ViewBag.Title = "QuickProfile2";
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+    @* tto do move to content management *@
+    <link href="@Url.Content("~/Content/gallerypage2.css")" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+    $(function () {
+        $("#appearH3FullProfileDiv").click(function () {
+            $("#appearFullProfileDiv").slideToggle("slow")
+        });
+        $("#lifeStyleH3FullProfileDiv").click(function () {
+            $("#lifeStyleFullProfileDiv").slideToggle("slow")
+        });
+        $("#characterH3FullProfileDiv").click(function () {
+            $("#characterFullProfileDiv").slideToggle("slow")
+
+        });
+
+    });
+    $("#appearH3FullProfileDiv,#lifeStyleH3FullProfileDiv,#characterH3FullProfileDiv").hover(function () {
+        $(this).css("background-color", "#7FDBEF");
+
+    });
+	
+	
+	</script>
+
+<div id="main">
+	<div id="qProfilEheaderDiv">
+		<div id="qProfilEheaderDiv2">
+  
+		</div>
+		<div class="clearFloat"></div>
+		<div id="qProfilEpostBoardDiv">
+         @Html.Partial("AddSense/TopBottomBanner") 
+		</div>
+		<div class="clearFloat"></div>
+		<div id="qProfilEpicBoxDiv">
+			<div id="photoBoxStrip">
+				<div id="pic9">
+				</div>
+				<div id="pic8">
+				</div>
+				<div id="pic7">
+				</div>
+				<div id="pic6">
+				</div>
+				<div id="pic5">
+				</div>
+				<div id="pic4">
+				</div>
+				<div id="pic3">
+				</div>
+				<div id="pic2">
+				</div>
+				<div id="pic1">
+				</div>
+				<div class="clearFloat"></div>
+			</div>
+			<div class="clearFloat"></div>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div class="clearFloat"></div>
+  <div id="qProfilEbodyDiv">
+	 <div  class ="MiddleNaveButtonsBorder">
+   
+     <div class ="MiddleNavbuttonsquickprofile">
+  
+     
+        </div>
+        
+         <div class="clearFloat"></div>
+		<div class="Txt_PreviousqProfilE">
+			<p class="lastNode">
+                        
+			</p>
+			
+		</div>
+		<div class="Txt_NextqProfilE">
+			
+			<p class="lastNode">
+                
+			</p>
+		</div>
+		<div class="Txt_returnqProfilE">
+			
+				<p class="lastNode">
+                <a href="javascript:history.go(-1)">return to search results </a>
+                 
+                
+			</p>
+		</div>
+         </div>
+          <div class="clearFloat"></div>
+
+
+		<div id="qProfilEcolwrap3">
+			<div id="qProfileBox3SliceContainer">
+				<div id="qProfileBox3SliceContainer_top_1">
+                <div class="Name_or_HandleqProfilE">
+					
+						<p class="lastNode">@Model.ProfileDetails.profile.ScreenName
+					</p>
+				</div>
+                <div class="My_catchy_intro_lineqProfilE">
+					
+						<p class="lastNode">@Model.ProfileDetails.MyCatchyIntroLineQuickSearch  
+					</p>
+				</div>
+				</div>
+				
+				
+				<div id="qProfilEcolwrap6">
+					<div id="qProfilEquikDetailsProfileBoxDiv">
+                    @*  handle sitatation where user has only one photo so dont show one in additionl photo area *@
+                               <span id="status">
+            @if (Model.ProfileDetails.ProfilePhotos.SingleProfilePhoto != null)
+            { 
+               @Html.Partial("QuickProfileMainPhoto", Model.ProfileDetails.ProfilePhotos.SingleProfilePhoto);
+
+
+            }
+            else
+            { 
+             @Html.Partial("QuickProfileMainPhotoDefault", Model.ProfileDetails);
+
+            }
+              </span>
+					</div>
+					<div id="qProfilEbottomPhotoDiv">
+						<div class="ageqProfilE">
+							
+								<p class="lastNode">age:
+							</p>
+						</div>
+						<div class="ageNumberqProfilE">
+							
+								<p class="lastNode">	@Model.ProfileDetails.Age 
+							</p>
+						</div>
+						<div class="BumfuckSWqProfilE">
+							
+								<p class="lastNode">@Model.ProfileDetails.City , @Model.ProfileDetails.State_Province 
+							</p>
+						</div>
+						<div class="Seeking_person_age_0qProfilE">
+							
+								<p class="lastNode">Seeking person age @Model.ProfileCriteria.BasicSearchSettings.SeekingAgeMin  to @Model.ProfileCriteria.BasicSearchSettings.SeekingAgeMax 
+							</p>
+						</div>
+						<div class="Active_within_hours_qProfilE">
+							
+								<p class="lastNode">Active within  @Model.ProfileDetails.lastloggedonString 
+							</p>
+						</div>
+					</div>
+				</div>
+				<div id="qProfilEcolwrap7">
+                <div class="quikProfileRows">
+					<div class="YOUqProfilE">
+						
+							<p class="lastNode">YOU
+						</p>
+					</div>
+					<div class="MEqProfilE">
+						
+							<p class="lastNode">ME
+						</p>
+					</div>
+                   </div>
+					<div class="clearFloat"></div>
+					<div class="quikProfileRows">
+						<div class="categoriesQuikProfile">
+							
+								<p class="lastNode">Ethnicity
+							</p>
+						</div>
+						<div class="youQuikProfileColWrap">
+							
+							
+                               @if (Model.ProfileCriteria.AppearanceSearchSettings.EthnicityList.Count > 0)
+                               {
+                                   foreach (var item in Model.ProfileCriteria.AppearanceSearchSettings.EthnicityList)
+                                   { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                   }
+                               }
+                               else
+                               {            
+                                    @Html.Encode("Ask Me")
+                               } 
+                        
+						</div>
+						<div class="meQuikProfileColWrap">
+							
+							 @if (Model.ProfileCriteria.Ethnicity.Count > 0)
+                               {
+                                   foreach (var item in Model.ProfileCriteria.Ethnicity)
+                                   { 
+                                       <p class="lastNode">
+                                    @item
+                                 </p>       
+                                                                
+                                   }
+                               }
+                               else
+                               {            
+                                   <p class="lastNode">Ask Me
+							</p>
+                               } 
+                        
+						</div>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="quikProfileRows">
+						<div class="categoriesQuikProfile">
+							
+								<p class="lastNode">Body Type
+							</p>
+						</div>
+						<div class="youQuikProfileColWrap">
+							
+								
+                                @if (Model.ProfileCriteria.AppearanceSearchSettings.BodyTypesList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.AppearanceSearchSettings.BodyTypesList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+							
+						</div>
+						<div class="meQuikProfileColWrap">
+							
+								<p class="lastNode">@Model.ProfileCriteria.BodyType 
+							</p>
+						</div>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="quikProfileRows">
+						<div class="categoriesQuikProfile">
+							
+								<p class="lastNode">Height
+							</p>
+						</div>
+						<div class="youQuikProfileColWrap">
+							
+								<p class="lastNode">@Model.ProfileCriteria.AppearanceSearchSettings.HeightMin to @Model.ProfileCriteria.AppearanceSearchSettings.HeightMax
+							</p>
+						</div>
+						<div class="meQuikProfileColWrap">
+							
+								<p class="lastNode">@Model.ProfileCriteria.HeightByCulture 
+							</p>
+						</div>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="quikProfileRows">
+						<div class="categoriesQuikProfile">
+							
+								<p class="lastNode">Smoke
+							</p>
+						</div>
+						<div class="youQuikProfileColWrap">
+							
+							  @if (Model.ProfileCriteria.CharacterSearchSettings.SmokesList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.SmokesList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+						</div>
+						<div class="meQuikProfileColWrap">
+							
+								<p class="lastNode">@Model.ProfileCriteria.Smokes 
+							</p>
+						</div>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="quikProfileRows">
+						<div class="categoriesQuikProfile">
+							
+								<p class="lastNode">Has Kids
+							</p>
+						</div>
+						<div class="youQuikProfileColWrap">
+							
+							 @if (Model.ProfileCriteria.LifeStyleSearchSettings.HaveKidsList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.HaveKidsList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+						</div>
+						<div class="meQuikProfileColWrap">
+							
+								<p class="lastNode">@Model.ProfileCriteria.HaveKids 
+							</p>
+						</div>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="quikProfileRows">
+						<div class="categoriesQuikProfile">
+							
+								<p class="lastNode">Faith
+							</p>
+						</div>
+						<div class="youQuikProfileColWrap">
+
+							 @if (Model.ProfileCriteria.CharacterSearchSettings.ReligionList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.ReligionList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+							
+						</div>
+						<div class="meQuikProfileColWrap">
+							
+								<p class="lastNode">@Model.ProfileCriteria.Religion 
+							</p>
+						</div>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="quikProfileRows">
+						<div class="categoriesQuikProfile">
+							
+								<p class="lastNode">Marital Status
+							</p>
+						</div>
+						<div class="youQuikProfileColWrap">
+							
+							 @if (Model.ProfileCriteria.LifeStyleSearchSettings.MaritalStatusList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.MaritalStatusList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+						</div>
+						<div class="meQuikProfileColWrap">
+							
+								<p class="lastNode">@Model.ProfileCriteria.MaritalStatus 
+							</p>
+						</div>
+					</div>
+					<div class="clearFloat"></div>
+                  <div class="quikProfileRows">
+						<div class="categoriesQuikProfile">
+							
+								<p class="lastNode">Looking For
+							</p>
+						</div>
+						<div class="youQuikProfileColWrap">
+							 @if (Model.ProfileCriteria.LifeStyleSearchSettings.LookingForList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.LookingForList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+						</div>
+						<div class="meQuikProfileColWrap">
+							
+							@if (Model.ProfileCriteria.LookingFor.Count  > 0)
+                               {
+                                   foreach (var item in Model.ProfileCriteria.LookingFor)
+                                   { 
+                                     <p class="lastNode">
+                                    @item
+                                        </p>                                
+                                   }
+                               }
+       else
+       {            
+                                    <p class="lastNode">Ask Me
+							</p>
+       } 
+						</div>
+					</div>
+				</div>
+			<div id="qProfileBox3SliceContainer_bottom_1">
+			</div>
+			</div>
+		</div>
+		<div id="qProfilEprofileNavBar">
+        <div id="quicksearchchat">
+
+
+        
+      @if (Request.IsAuthenticated)
+      {
+          if (Model.BlockedMe == true)
+          { 
+                @Html.Encode("User blocked you")
+          }
+          else
+          {
+
+              if (OnlineChatUsers != null && OnlineChatUsers.Any(p => p.Name.Contains(Model.ProfileDetails.profile.ScreenName)))
+                     {  
+                                  
+                       @*  //TO DO check if the user allows random people to chat with them before adding the chat link
+                       //also convert to an inmage link ala quick profile page    
+                       @Html.ActionLink("Chat",null,null, null, new { @class = "Link10", data_name=@item.ScreenName })*@                                 
+              <a class="chatquickprofile" href="javascript:void(0)"  Id="InviteToChat" data-name=@Model.ProfileDetails.profile.ScreenName ></a>              
+             
+                     }
+                 else
+                 {   
+               
+             
+                          
+                 } 
+              
+              
+         @*  @Html.ActionButton("", "SendMsg", "Mail", new { Model.ProfileDetails.profile.ScreenName }, "emailquickprofile", null)*@
+     
+           
+          }
+      }
+      else
+      { 
+           <!-- fis this to use right image later -->           
+           @Html.ActionLink("Log in to chat with this member", "LogOn", "Account", null, new { @class = "chatquickprofile" })  
+
+      } 
+
+
+
+  
+   
+    
+    </div>
+
+        <div id="quicksearchemail">
+
+
+        
+      @if (Request.IsAuthenticated)
+      {
+          if (Model.BlockedMe == true)
+          { 
+                @Html.Encode("User blocked you")
+          }
+          else
+          { 
+            
+         @*  @Html.ActionButton("", "SendMsg", "Mail", new { Model.ProfileDetails.profile.ScreenName }, "emailquickprofile", null)*@
+
+             @Html.ActionLink("Send Email", "SendMsg", "Mail", new { Model.ProfileDetails.profile.ScreenName }, new { @class = "emailquickprofile" })  
+              
+          
+          }
+      }
+      else
+      { 
+           <!-- fis this to use right image later -->           
+           @Html.ActionLink("Log in to email this member", "LogOn", "Account", null, new { @class = "emailquickprofile" })  
+
+      } 
+
+
+
+  
+   
+    
+    </div>
+       <div id="quicksearchinterest" style="height :50px;"> 
+
+            @if (Request.IsAuthenticated)
+            {
+                if (Model.IntrestSentToThisMember == true)
+                {  
+             <!-- put in an image that is unclickable or goes to no action i think -->
+            <div class="interestalreadysentquickprofile">
+        
+            </div>
+                }
+                else
+                {    
+                @Html.ActionLink("Sent Interest", "SendInterest", "Members", new { SenderScreenName = Model.ViewerProfileDetails.profile.ScreenName, TargetScreenName = Model.ProfileDetails.profile.ScreenName, page = 0, returnUrl = ViewContext.HttpContext.Request.Url.PathAndQuery }, new { @class = "interestquickprofile" })  
+                }
+            }
+            else
+            {  
+         <!-- fis this to use right image later -->           
+            @Html.ActionLink("Log in to like this member", "LogOn", "Account", null, new { @class = "interestquickprofile" })  
+            } 
+
+
+      
+         
+    </div>
+    <div id="quicksearchlike"> 
+        @if (Request.IsAuthenticated)
+        {
+            if (Model.LikedThisMember == true)
+            {  
+        <!-- put in an image that is unclickable or goes to no action i think -->
+      
+         <div class="likealreadysentquickprofile">
+         
+        </div>
+       
+            }
+            else
+            { 
+                
+                 @Html.ActionLink("Send Like", "SendLike", "Members", new { SenderScreenName = Model.ViewerProfileDetails.profile.ScreenName, TargetScreenName = Model.ProfileDetails.profile.ScreenName, page = 0, returnUrl = ViewContext.HttpContext.Request.Url.PathAndQuery }, new { @class = "likequickprofile" })  
+               
+            }
+        }
+        else
+        {        
+      
+          <!-- fis this to use right image later -->           
+            @Html.ActionLink("Log in to like this member", "LogOn", "Account", null, new { @class = "likequickprofile" })  
+
+          
+        }  
+    </div>
+        <div id="block"> 
+        @if (Request.IsAuthenticated)
+        {
+            if (Model.BlockedThisMember == true)
+            {  
+        <!-- put in an image that is unclickable or goes to no action i think -->
+                @Html.ActionLink("Unblock", "UnblockBlock", "Members", new { SenderScreenName = Model.ViewerProfileDetails.profile.ScreenName, TargetScreenName = Model.ProfileDetails.profile.ScreenName, page = 0, returnUrl = ViewContext.HttpContext.Request.Url.PathAndQuery }, new { @class = "blockedquickprofile" })                    
+         
+            }
+            else
+            {     
+               @Html.ActionLink("Block", "SendBlock", "Members", new { SenderScreenName = Model.ViewerProfileDetails.profile.ScreenName, TargetScreenName = Model.ProfileDetails.profile.ScreenName, page = 0, returnUrl = ViewContext.HttpContext.Request.Url.PathAndQuery }, new { @class = "blockquickprofile" })               
+         
+                        
+            }
+        }
+        else
+        {        
+      
+          <!-- fis this to use right image later -->           
+            @Html.ActionLink("Log in to block member", "LogOn", "Account", null, new { @class = "blockquickprofile" })  
+
+          
+        }  
+    </div>
+    <div id="reportconcernquickseac"> 
+        @if (Request.IsAuthenticated)
+        {  
+            
+            @Html.ActionLink("Unblock", "ReportAbuse", "Members", new { SenderScreenName = Model.ViewerProfileDetails.profile.ScreenName, TargetScreenName = Model.ProfileDetails.profile.ScreenName, page = 0, returnUrl = ViewContext.HttpContext.Request.Url.PathAndQuery }, new { @class = "reportquickprofile" })                    
+         
+        }
+        else
+        {        
+      
+          <!-- fis this to use right image later -->           
+            @Html.ActionLink("Log in to report this user", "LogOn", "Account", null, new { @class = "reportquickprofile" })  
+
+          
+        }  
+    </div>
+	  </div>
+		<div class="clearFloat"></div>
+         <div class="qProfileLinkAddDiv">
+           @Html.Partial("460x15link") 
+         </div> 
+		<div id="qProfilEleftAdDiv">
+           @Html.Partial("300x250box") 
+		</div>
+		<div id="qProfilEcolwrap6">
+			<div id="qProfilEmidDiv">
+				<div class="more_photosqProfilE">
+					
+						<p class="lastNode">more photos
+					</p>
+				</div>
+				<div class="clearFloat"></div>
+				<div id="qProfilePhotosScrollBox">
+                @foreach (var item2 in Model.ProfileDetails.ProfilePhotos.ProfilePhotosApproved)
+                { 
+            
+                    <a class="rotator">
+                <img id="@item2.PhotoID " src="@Url.Action("GetGalleryImageByPhotoID", "Images", new { id = item2.PhotoID }, null) "
+                    alt="" width="94" height="94" />
+           </a>
+               
+          
+                } 
+				</div>
+				<div class="clearFloat"></div>
+			</div>
+			<div class="clearFloat"></div>
+		</div>
+		<div class="About_me_and_the_typqProfilE1">
+			
+				<p class="lastNode">About me and the type of person I&rsquo;m looking for
+			</p>
+		</div>
+		<div class="clearFloat"></div>
+		<div id="qProfilEtextAreaDiv">
+			<div class="Lorem_ipsum_dolor_siqProfilE2">
+				
+					<p class="lastNode">@Model.ProfileCriteria.AboutMe  </p>
+			</div>
+		
+			<div class="clearFloat"></div>
+		</div>
+    <div id="appearH3FullProfileDiv">
+   
+	  <span class="iconDiv"></span>
+        
+        
+			<h3 class="h3_Appearance">
+             
+				Appearance
+			</h3>
+		
+		<div class="clearFloat"></div>
+	</div>
+	<div class="clearFloat"></div>
+	<div id="appearFullProfileDiv">
+       <div class="block">
+       <div class="alcInnerRows">
+       <div class="categoriesAcc">
+       </div>
+		<div class="YouAccord">
+			
+				<p class="lastNode">You
+			</p>
+		</div>
+		<div class="MEacord">
+			
+				<p class="lastNode">ME
+			</p>
+		</div>
+       </div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Height:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.AppearanceSearchSettings.HeightMin to @Model.ProfileCriteria.AppearanceSearchSettings.HeightMax
+							</p>
+			</div>
+			<div class="meColwrapAccord">
+				
+					@Model.ProfileCriteria.HeightByCulture 
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode"> Ethnicity:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+				  @if (Model.ProfileCriteria.AppearanceSearchSettings.EthnicityList.Count > 0)
+                               {
+                                   foreach (var item in Model.ProfileCriteria.AppearanceSearchSettings.EthnicityList)
+                                   { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                   }
+                               }
+                               else
+                               {            
+                                    @Html.Encode("Ask Me")
+                               } 
+			</div>
+			<div class="meColwrapAccord">
+				
+				 @if (Model.ProfileCriteria.Ethnicity.Count > 0)
+                               {
+                                   foreach (var item in Model.ProfileCriteria.Ethnicity)
+                                   { 
+                                       <p class="lastNode">
+                                    @item
+                                 </p>       
+                                                                
+                                   }
+                               }
+                               else
+                               {            
+                                   <p class="lastNode">Ask Me
+							</p>
+                               } 
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode"> Body Type:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+                                @if (Model.ProfileCriteria.AppearanceSearchSettings.BodyTypesList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.AppearanceSearchSettings.BodyTypesList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.BodyType 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Eye Color:
+				</p>
+			</div>
+
+            <div class="youColwrapAccord">
+				
+				 @if (Model.ProfileCriteria.AppearanceSearchSettings.EyeColorList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.AppearanceSearchSettings.EyeColorList )
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+			
+					<p class="lastNode"> @Model.ProfileCriteria.EyeColor </p> 
+			</div>
+			
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Hair Color:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+				 @if (Model.ProfileCriteria.AppearanceSearchSettings.HairColorList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.AppearanceSearchSettings.HairColorList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode"> @Model.ProfileCriteria.HairColor 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+      </div>
+	</div>
+	<div class="clearFloat"></div>
+	<div id="lifeStyleH3FullProfileDiv">
+    <span class="iconDiv"></span>
+		
+			<h3 class="h3_LifeStyle">
+				LifeStyle
+			</h3>
+		
+		<div class="clearFloat"></div>
+	</div>
+	<div class="clearFloat"></div>
+	<div id="lifeStyleFullProfileDiv">
+       <div class="block">
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode"> Marital Status:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+				 @if (Model.ProfileCriteria.LifeStyleSearchSettings.MaritalStatusList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.MaritalStatusList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.MaritalStatus 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Has Kids:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.LifeStyleSearchSettings.HaveKidsList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.HaveKidsList )
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.HaveKids 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Wants more Kids:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.LifeStyleSearchSettings.WantsKidsList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.WantsKidsList )
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode"> @Model.ProfileCriteria.WantsKids 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Living Situation:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.LifeStyleSearchSettings.LivingSituationList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.LivingSituationList )
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+		<div class="meColwrapAccord">
+				
+					<p class="lastNode"> @Model.ProfileCriteria.LivingSituation 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Educational Level:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.LifeStyleSearchSettings.EducationLevelList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.EducationLevelList )
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode"> @Model.ProfileCriteria.EducationLevel 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Employment Status:
+				</p>
+			</div>
+
+            <div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.LifeStyleSearchSettings.EmploymentStatusList .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.EmploymentStatusList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode"> @Model.ProfileCriteria.EmploymentSatus  
+				</p>
+			</div>
+			
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Income Level:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+			
+					 @if (Model.ProfileCriteria.LifeStyleSearchSettings.IncomeLevelList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.IncomeLevelList )
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode"> @Model.ProfileCriteria.IncomeLevel 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Profession:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+				
+					 @if (Model.ProfileCriteria.LifeStyleSearchSettings.ProfessionList  .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.LifeStyleSearchSettings.ProfessionList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode"> @Model.ProfileCriteria.Profession 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+      </div>
+	</div>
+	<div class="clearFloat"></div>
+	<div id="characterH3FullProfileDiv">
+    <span class="iconDiv"></span>
+		
+			<h3 class="h3_Character">
+            <span class="hoverH3"></span>
+				Character
+			</h3>
+		
+		<div class="clearFloat"></div>
+	</div>
+	<div class="clearFloat"></div>
+	<div id="characterFullProfileDiv">
+         <div class="block">
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Drinks:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+				
+					 @if (Model.ProfileCriteria.CharacterSearchSettings.DrinksList   .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.DrinksList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode"> @Model.ProfileCriteria.Drinks 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Smokes:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+				
+					 @if (Model.ProfileCriteria.CharacterSearchSettings.SmokesList    .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.SmokesList )
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode"> @Model.ProfileCriteria.Smokes 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Exercise:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+			
+					 @if (Model.ProfileCriteria.CharacterSearchSettings.ExerciseList   .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.ExerciseList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.Exercise 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Diet:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.CharacterSearchSettings.DietList.Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.DietList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.Diet 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Religion:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.CharacterSearchSettings.ReligionList  .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.ReligionList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.Religion
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Religion Attendance:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.CharacterSearchSettings.ReligiousAttendanceList    .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.ReligiousAttendanceList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.ReligiousAttendance 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Humor:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.CharacterSearchSettings.HumorList    .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.HumorList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.Humor 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Political View:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.CharacterSearchSettings.PoliticalViewList .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.PoliticalViewList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.PoliticalView 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Hobbies/Interests:
+				</p>
+			</div>
+            <div class="youColwrapAccord">
+				
+					 @if (Model.ProfileCriteria.CharacterSearchSettings.HobbyList   .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.HobbyList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+				
+			</div>
+
+
+			<div class="meColwrapAccord">
+				@if (Model.ProfileCriteria.Hobbies .Count > 0)
+                               {
+                                   foreach (var item in Model.ProfileCriteria.Hobbies)
+                                   { 
+                                       <p class="lastNode">
+                                    @item
+                                 </p>       
+                                                                
+                                   }
+                               }
+                               else
+                               {            
+                                   <p class="lastNode">Ask Me
+							</p>
+                               } 
+
+
+
+			</div>
+			
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">Astrological Sign:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+				 @if (Model.ProfileCriteria.CharacterSearchSettings.SignList    .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.CharacterSearchSettings.SignList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+					<p class="lastNode">@Model.ProfileCriteria.Sign 
+				</p>
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+		<div class="alcInnerRows">
+			<div class="categoriesAcc">
+				
+					<p class="lastNode">My Hot Feature:
+				</p>
+			</div>
+			<div class="youColwrapAccord">
+				
+				
+				 @if (Model.ProfileCriteria.AppearanceSearchSettings.HotFeatureList     .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.AppearanceSearchSettings.HotFeatureList)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+			<div class="meColwrapAccord">
+				
+				
+				 @if (Model.ProfileCriteria.HotFeature     .Count > 0)
+                                {
+                                    foreach (var item in Model.ProfileCriteria.HotFeature)
+                                    { 
+                                      <p class="lastNode">
+                                    @item
+                                        </p>                         
+                                    }
+                                }
+                                else
+                                {         
+                                     
+                             <p class="lastNode">Ask Me
+							</p>
+                                } 
+			</div>
+		</div>
+		<div class="clearFloat"></div>
+        </div>
+	</div>
+	<div class="clearFloat"></div>
+        
+        
+	<div class="clearFloat"></div>
+	</div>
+	<div id="qProfilErightDiv">
+    <center>
+    @Html.Partial("AddSense/LeftRightScraper") 
+    @Html.Partial("AddSense/LeftRightScraper") 
+     @Html.Partial("AddSense/LeftRightScraper") 
+    </center>
+	</div>
+	<div class="clearFloat"></div>
+	<div id="qProfilEfooterDiv">
+	</div>
+	<div class="clearFloat"></div>
+</div>

@@ -1,0 +1,75 @@
+﻿@model Shell.MVC2.Models.ActivateProfileContainerViewModel
+
+@{
+    ViewBag.Title = "ActivateProfile"; 
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+   
+
+
+
+<div id="main">	
+	<div id="headerActivate1Div">
+	</div>
+	<div class="clearFloat"></div>
+	<div id="header2Activate1Div">
+	</div>
+	<div class="clearFloat"></div>
+	<div id="leftActivate1Div">
+	</div>
+	<div id="bodyActivate1Div">
+		<div id="Box3SliceContainerActivate">
+			<div id="Box3SliceContainer_top_1Activate">
+			</div>
+			<div class="Go_ahead_Log_in_and_Activate1">
+				
+				
+
+					<p class="lastNode">
+                     @ViewData["ActivateProfileStatus"]                    
+                   
+				</p>
+
+                @Html.ValidationSummary(false, "Account activation was unsuccessful. Please correct the errors and try again.")
+			</div>
+			<div class="clearFloat"></div>
+       
+			  	
+
+     @Html.Partial("ActivateProfileDetail", Model) 
+
+     @if(Model.ActivateProfileModel.PhotoStatus == false  ){       
+            @Html.Partial("UploadPhotoActivate", Model.ActivateProfilePhotos)  
+      }  
+			<div class="clearFloat"></div>
+          
+          <div style="margin-top :30px;" ></div>
+               
+           <div id ="CenterLinkDiv">
+                @Html.ActionLink("Register on Home Page", "Register", null, new { @class = "MvcActionLinkStyle" })
+            <div style="margin-top :10px;" ></div>
+                @Html.ActionLink("Login in If you are registered", "LogOn", null, new { @class = "MvcActionLinkStyle" })
+             
+            </div>
+			<div id="Box3SliceContainer_bottom_1Activate">
+		</div>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div id="rightActivate1Div">
+	</div>
+	<div class="clearFloat"></div>
+	<div id="footerActivate1Div">
+	</div>
+	
+	
+</div>
+
+
+  
+
+     
+
+

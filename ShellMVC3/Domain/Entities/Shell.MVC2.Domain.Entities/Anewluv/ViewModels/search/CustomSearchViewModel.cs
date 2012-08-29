@@ -5,12 +5,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+
 using System.Web.Security;
 
-using Dating.Server.Data;
-using Dating.Server.Data.Services;
-using Dating.Server.Data.Models;
+
+
+
 
 //using RiaServicesContrib.Mvc;
 
@@ -20,16 +20,14 @@ using System.Collections;
 
 //using RiaServicesContrib.Mvc.Services;
 
-using Omu.Awesome.Core;
-
-//trying MVC pagination
-using MvcContrib.Pagination;
-using MvcContrib.UI.Grid;
 
 
 
 
-namespace Shell.MVC2.Models
+
+
+
+namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
 
     //constants for page indexes

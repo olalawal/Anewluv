@@ -1,0 +1,195 @@
+﻿@model IPageable<Shell.MVC2.Models.MailModel>
+@using Omu.Awesome.Core
+@using Omu.Awesome.Mvc.Helpers
+
+  @{ //Pull the users who are avaiable to chat from from the viewbag
+      var OnlineChatUsers = ViewBag.OnlineChatUsers as List<ChatUser>; 
+     
+   } 
+
+
+
+@{
+    ViewBag.Title = "Trash"; 
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+
+
+
+<div id="postBoardDiv">
+      <!-- Added to toggle adds 1-27-2012 --> 
+     @Html.Partial("AddSense/TopBottomBanner") 
+		</div>
+ <div class="clearFloat"></div>
+		<div id="photoBoxStrip">
+			<div id="pic9">
+			</div>
+			<div id="pic8">
+			</div>
+			<div id="pic7">
+			</div>
+			<div id="pic6">
+			</div>
+			<div id="pic5">
+			</div>
+			<div id="pic4">
+			</div>
+			<div id="pic3">
+			</div>
+			<div id="pic2">
+			</div>
+			<div id="pic1">
+			</div>
+			<div class="clearFloat"></div>
+		</div>
+		<div class="clearFloat"></div>
+		<div id="leftDivinbox">
+		<div id="mailNavDivinbox">
+			<div class="Txt_Inboxinbox">
+				
+					<p class="lastNode">Inbox
+				</p>
+			</div>
+			<div class="Txt_900inbox">
+				
+					<p class="lastNode">@Html.ActionLink(ViewData["inbox"], "MailHome", "Mail")
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="Txt_Sentinbox">
+				
+					<p class="lastNode">Sent
+				</p>
+			</div>
+			<div class="Txt_500inbox">
+				
+					<p class="lastNode">@Html.ActionLink(ViewData["sent"], "Sent", "Mail")
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="Txt_Trashinbox">
+				
+					<p class="lastNode">Trash
+				</p>
+			</div>
+			<div class="Txt_100inbox">
+				
+					<p class="lastNode">@Html.ActionLink(ViewData["trash"], "Trash", "Mail")
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div id="bodyDivinbox">
+		<div class="Txt_INBOXinbox">
+			
+				<p class="lastNode">TRASH
+			</p>
+		</div>
+		<div class="clearFloat"></div>
+		<div id="inboxBoxinbox">
+			<div id="inboxBox_topinbox">
+			</div>
+			<div class="Txt_Selectinbox">
+
+			</div>
+			<div id="deleteButtonDivinbox">
+			</div>
+			<div id="infoBarDivinbox">
+				<div class="Txt_Frominbox">
+					
+						<p class="lastNode">From
+					</p>
+				</div>
+				<div class="Txt_Repliedinbox">
+					
+						<p class="lastNode">Replied
+					</p>
+				</div>
+				<div class="Txt_Readinbox">
+					
+						<p class="lastNode">Read
+					</p>
+				</div>
+				<div class="Txt_Dateinbox">
+					
+						<p class="lastNode">Date
+					</p>
+				</div>
+				<div class="Txt_Subjectinbox">
+					
+						<p class="lastNode">Subject
+					</p>
+				</div>
+			</div>
+            @{ int i = 1; }
+                @{ foreach (var item in Model.Page) { 
+              
+			<div id="pic_boxinbox">
+             <img  src="@Url.Action("GetGalleryImageByScreenName", "Images", new { id = item.SenderName},null)" alt="" width ="94" height ="94" />
+			
+			</div>
+			<div id="colwrap4inbox">
+				<div id="inboxInfoDivinbox">
+					<div class="Txt_Biginbox">
+						
+							<p class="lastNode">@Html.ActionLink(item.SenderName, "NewReadMsg3", new { page = i, MailboxFolderID = item.MailboxFolderID, MailboxMessagesFoldersID=item.MailboxMessagesFoldersID })@{  i++; }:
+						</p>
+					</div>
+					<div class="Txt_Thinkinbox">
+						
+							<p class="lastNode">@item.Subject
+						</p>
+					</div>
+					<div class="Txt_Noinbox">
+						
+							<p class="lastNode">@item.Replied 
+						</p>
+					</div>
+					<div class="Txt_Yesinbox">
+						
+							<p class="lastNode">@item.Read
+						</p>
+					</div>
+					<div class="Txt_9202011inbox">
+						
+							<p class="lastNode">@String.Format("{0:g}",item.CreationDate)
+						</p>
+					</div>
+				</div>
+				<div class="clearFloat"></div>
+			</div>
+			<div id="Lineinbox">
+			</div>
+
+             } /* End of for each */ }
+			<div class="clearFloat"></div>
+            <div style="padding-right:3.5em;padding-top:1em;">@Html.Pagination() </div>
+            <br />
+                
+
+		<div id="inboxBox_bottominbox">
+		</div>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div id="rightDivinbox">
+    <center >
+      <!-- Added to toggle adds 1-27-2012 -->
+    @Html.Partial("AddSense/LeftRightScraper") 
+</center>
+	</div>
+	<div class="clearFloat"></div>
+
+    <div id="footerPhotoEditsDiv">
+<center>
+       <!-- Added to toggle adds 1-27-2012 --> 
+     @Html.Partial("AddSense/TopBottomBanner") 
+</center> 
+</div>
+
+
+

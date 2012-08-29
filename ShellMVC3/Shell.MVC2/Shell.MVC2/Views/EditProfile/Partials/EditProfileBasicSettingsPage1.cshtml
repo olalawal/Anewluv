@@ -1,0 +1,176 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.AppFabric
+@using Shell.MVC2.Models
+
+
+
+ <div id="PartialContainderForEditBasic1">
+   @{  List<SelectListItem> Ages = CachingFactory.SharedObjectHelper.GetAgeList();  } 
+
+
+			<div class="Describe_what_makes_aboutEdit">
+				
+					<p class="lastNode">Describe what makes up you. What makes you one of a kind, incomparable, unrivaled. What are you looking for in that special person? What makes your heart pound with excitement? What qualities you feel best compliment your personality?
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+          
+         
+        @using (Html.BeginForm("EditProfileBasicSettings", "EditProfile", new { @ViewIndex = Constants.BasicSettingsPage1, @fulledit = Model.IsFullEditing }, FormMethod.Post))
+           { 
+
+<div id="Content"> 
+
+
+			<div id="describeInputTextArea_win_aboutEdit" >
+           @* <% Html.Telerik().EditorFor(model => model.BasicProfileSettings.AboutMe)
+            .Name("Editor")
+              .Encode(false)
+            
+            .HtmlAttributes(new { style = "height: 150px" })
+         
+            
+         
+            .Render();
+            %>         *@
+             
+                       <div class="editor-field">
+                      @Html.TextArea("Model.BasicProfileSettings.AboutMe" ,@Model.BasicProfileSettings.AboutMe, new { style = "height: 150px;width:550px; max-width: 550px;" })  
+
+               
+                      </div>
+            </div >
+            <div class="clearFloat"></div>
+              <div class ="TextFeildRightValidation">
+                @Html.ValidationMessageFor(model => Model.BasicProfileSettings.AboutMe)
+            </div>
+
+
+       <div class="clearFloat"></div>
+
+			<div class="SeekingaboutEdit">
+					<p class="lastNode">Seeking
+			</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div id="genderComboBox_win_aboutEdit" >
+            <div class="editor-field"> 
+            <table style="width: 100%"> 
+                <tr> </tr> 
+             @* <%: int cnt = 0 %> *@
+                @foreach(var gender in Model.BasicSearchSettings.LookingForGendersList )                   
+                 { 
+                  @* <%: if(cnt++ %=3 == 0 %>*@
+ 
+                       <td>  
+
+                       @if (gender.Selected) 
+                          {     
+                          <input type="checkbox" name="SelectedGenderIds" value="@gender.GenderID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" name="SelectedGenderIds" value="@gender.GenderID"  />
+                           }  
+                        
+                        @gender.GenderName
+                        
+                        </td> 
+
+                     
+                    
+                  
+                    
+                  }
+                  
+			 </table> 
+
+			 </div>
+            </div>
+            
+            
+          
+
+						<div class="clearFloat"></div>
+			<div id="age1ComboBox_win_aboutEdit">
+              @(Html.Telerik().ComboBoxFor(model => Model.BasicSearchSettings.LookingForAgeMin)
+                                    .Name("Model.BasicSearchSettings.LookingForAgeMin")
+                    .HtmlAttributes(new { style = string.Format("width: 75px") })          
+                    .BindTo(Ages ) 
+                     .AutoFill(true)
+)
+            </div>
+						<div class="Txt_toaboutEdit">				
+					<p class="lastNode">to
+				</p>
+			</div>
+			<div id="Age2ComboBox_win_aboutEdit">
+            
+                  @(Html.Telerik().ComboBoxFor(model => Model.BasicSearchSettings.LookingForAgeMax)
+                                    .Name("Model.BasicSearchSettings.LookingForAgeMax")
+                    .HtmlAttributes(new { style = string.Format("width: 75px") })          
+                    .BindTo(Ages) 
+                     .AutoFill(true)
+                    
+                    
+)
+            </div>
+						<div class="clearFloat"></div>
+			<div class="My_Catchy_Intro_LineaboutEdit">
+				
+					<p class="lastNode">My Catchy Intro Line
+				</p>
+			</div>
+
+           
+			<div class="clearFloat"></div>
+            <div id="introLineTextField_win_aboutEdit">
+                       <div class="editor-field">
+                         @Html.TextBox("Model.BasicProfileSettings.MyCatchyIntroLine", @Model.BasicProfileSettings.MyCatchyIntroLine,new { style = "width:350px;" })  
+
+                   @*   @Html.TextBoxFor(model =>  Model.BasicProfileSettings.MyCatchyIntroLine, new { style = "width:350px;" })  *@
+                      </div>
+            </div >
+            <div class="clearFloat"></div>
+              <div class ="TextFeildRightValidation">
+                @Html.ValidationMessageFor(model => Model.BasicProfileSettings.MyCatchyIntroLine)
+            </div>
+
+            <div class="clearFloat"></div>
+         <div id="buttonbootstrap1">
+             <button class="btn btn-primary" type="submit" value="Submit">Submit this page</button>
+			</div>
+			<div id="buttonbootstrap2">
+               <button class="btn btn-inverse" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+          
+	     </div>
+              
+           	<div class="clearFloat"></div>
+		<div id="aboutEditBox3SliceContainer_bottom_1">
+        <div class="clearFloat"></div>
+        <div class="BackaboutEdit">
+				
+					<p class="lastNode">
+                    @(Ajax.ActionLink("Back to EditProfile", /* link text */
+             "EditProfile", /* action name */  
+             "EditProfile", /* controller name */   
+             new { ViewIndex = Constants.BasicSettingsPage1   }, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileBasicSettingsPage1" }))
+				</p>
+			</div>
+
+	    <div class="NextaboutEdit">				
+					<p class="lastNode">
+                               @(Ajax.ActionLink("Next", /* link text */
+             "EditProfileBasicSettings", /* action name */  
+             "EditProfile", /* controller name */   
+             new { ViewIndex = Constants.BasicSettingsPage2  }, /* route values */
+             new AjaxOptions() { InsertionMode = InsertionMode.Replace, UpdateTargetId = "EditProfileBasicSettingsPage2" }))
+				</p>
+		</div>
+		</div>
+</div> 
+             } 
+
+
+ </div>  

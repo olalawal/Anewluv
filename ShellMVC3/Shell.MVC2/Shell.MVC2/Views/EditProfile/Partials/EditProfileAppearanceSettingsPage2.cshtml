@@ -1,0 +1,198 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.AppFabric
+@using Shell.MVC2.Models
+
+@*<script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js") " type="text/javascript"></script>*@
+
+<script type="text/javascript">
+
+
+    $(function () {
+
+        $("input.SelectedMyEthnicityIds").click(function () {
+            if ($("input.SelectedMyEthnicityIds:checked").val() == 1)
+
+            //loop through and disbale all other since they picked ANY which means all anways
+                $("input.SelectedMyEthnicityIds").each(function () {
+                    if ($(this).attr("value") != 1) {
+                        $(this).removeAttr("checked");
+                        $(this).attr("disabled", "disabled");
+                    }
+                });
+            //otherwise un disable them all
+            else $("input.SelectedMyEthnicityIds").removeAttr("disabled");
+            //first dsiable all then enable on the ANy one
+            //  $("input.SelectedMyEthnicityIds").attr("disabled", "disabled");
+            //enable and check the any one
+
+            //for debugging
+           // $("#log").html($(":checked").val() + " is checked!");
+
+
+        });
+
+    });
+
+
+    $(function () {
+
+        $("input.SelectedYourEthnicityIds").click(function () {
+            if ($("input.SelectedYourEthnicityIds:checked").val() == 1)
+
+            //loop through and disbale all other since they picked ANY which means all anways
+                $("input.SelectedYourEthnicityIds").each(function () {
+                    if ($(this).attr("value") != 1) {
+                        $(this).removeAttr("checked");
+                        $(this).attr("disabled", "disabled");
+                    }
+                });
+            //otherwise un disable them all
+                else $("input.SelectedYourEthnicityIds").removeAttr("disabled");
+            //first dsiable all then enable on the ANy one
+            //  $("input.SelectedYourEthnicityIds").attr("disabled", "disabled");
+            //enable and check the any one
+
+            //for debugging
+            // $("#log").html($(":checked").val() + " is checked!");
+
+
+        });
+
+    });
+
+   
+</script>
+
+ <div id="PartialContainderForEditApperance1">
+     @{  List<SelectListItem> Heights = CachingFactory.SharedObjectHelper.GetMetricHeightList() ;  } 
+        <div id="log"></div>
+
+     <div class="Describe_what_makes_aboutEdit">
+				
+					<p class="lastNode">Describe your Ethnicity  and the ethnicities you are interested in, ** note if you select ANY you cannot choose another setting **
+				</p>
+	</div>
+			
+			<div class="clearFloat"></div>
+         
+        @using (Html.BeginForm("EditProfileAppearanceSettings", "EditProfile", new { @ViewIndex = Constants.AppearanceSettingsPage2, @fulledit = Model.IsFullEditing }, FormMethod.Post))
+           { 
+
+           <div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">My 
+			</p>
+		   </div> 
+            <div class="editor-field"> 
+            <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt = 0; } 
+               @foreach(var showme in Model.AppearanceSettings.MyEthnicityList)                   
+                 { 
+                   
+                  if (cnt == 3 || cnt == 6 || cnt == 9 || cnt == 12 || cnt == 15)                  
+                   {  
+                       <tr></tr>
+                      }   
+                         
+                      <td style="padding:5px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedMyEthnicityIds" name="SelectedMyEthnicityIds" value="@showme.EthnicityID" checked="checked"  />   
+                              
+                           } 
+                           else 
+                          {         
+                          <input type="checkbox"  class="SelectedMyEthnicityIds"  name="SelectedMyEthnicityIds" value="@showme.EthnicityID"  />
+                           }  
+                        
+                       
+
+                          @showme.EthnicityName
+                     </td> 
+                 
+                     <!-- increment counter here only once -->
+                       cnt++     ; 
+                  
+                    
+                  }
+                  
+			 </table> 			
+            </div>             
+			<div class="clearFloat"></div>
+
+			<div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your 
+			</p>
+		   </div>           
+            <div class="editor-field"> 
+            <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt4 = 0; } 
+               @foreach(var ethnicity in Model.AppearanceSearchSettings.EthnicityList)                   
+                 { 
+                   if (cnt4 == 3 || cnt4 == 6 || cnt4 == 9 || cnt4 == 12 || cnt4 == 15) {
+                             <tr></tr>                
+                   }
+                    
+                  
+ 
+                      <td style="padding:5px;" >  
+                      @if (ethnicity.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedYourEthnicityIds" name="SelectedYourEthnicityIds" value="@ethnicity.EthnicityID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" class="SelectedYourEthnicityIds" name="SelectedYourEthnicityIds" value="@ethnicity.EthnicityID"  />
+                           }  
+                        
+                        @ethnicity.EthnicityName
+                        </td> 
+
+
+                    
+                   
+                     <!-- increment counter here only once -->
+                     cnt4++;                
+                         
+                  
+                    
+                  }
+                  
+			 </table>  
+             </div>	
+             
+             <div class="clearFloat"></div>
+             
+			<div id="buttonbootstrap1">
+             <button class="btn btn-primary" type="submit" value="Submit">Submit this page</button>
+			</div>
+			<div id="buttonbootstrap2">
+               <button class="btn btn-inverse" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+          
+	     </div>
+            
+		<div id="MyQSEappearnceBox3SliceContainer_bottom_1">
+        <div class="EditProfileBottomLinkBack">
+				
+					<p class="lastNode">
+                      @Html.ActionLink("Back", "EditProfileAppearanceSettings", "EditProfile", new { ViewIndex = Constants.AppearanceSettingsPage1  }, null)
+
+           
+				</p>
+			</div>
+			<div class="EditProfileBottomLikNext">
+				
+					<p class="lastNode">
+                      @Html.ActionLink("Next", "EditProfileAppearanceSettings", "EditProfile", new { ViewIndex = Constants.AppearanceSettingsPage3 }, null)
+				</p>
+			</div>
+		</div>
+ 
+             } 
+
+
+ </div>  
+

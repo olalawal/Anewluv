@@ -1,0 +1,118 @@
+﻿@model IPageable<Shell.MVC2.Models.MailModel>
+@using Omu.Awesome.Core
+@using Omu.Awesome.Mvc.Helpers
+
+  @{ //Pull the users who are avaiable to chat from from the viewbag
+      var OnlineChatUsers = ViewBag.OnlineChatUsers as List<ChatUser>; 
+     
+   } 
+
+
+
+@{
+    ViewBag.Title = "NewReadMessage3"; 
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+
+
+<div id="postBoardDiv">
+    <script type="text/javascript"><!--
+        google_ad_client = "ca-pub-9814096529112578";
+        /* 728x90, created 3/10/10 */
+        google_ad_slot = "2378578289";
+        google_ad_width = 728;
+        google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+		</div>
+      <div class="clearFloat"></div>
+		<div id="photoBoxStrip">
+			<div id="pic9">
+			</div>
+			<div id="pic8">
+			</div>
+			<div id="pic7">
+			</div>
+			<div id="pic6">
+			</div>
+			<div id="pic5">
+			</div>
+			<div id="pic4">
+			</div>
+			<div id="pic3">
+			</div>
+			<div id="pic2">
+			</div>
+			<div id="pic1">
+			</div>
+			<div class="clearFloat"></div>
+		</div>
+	<div class="clearFloat"></div>
+	<div id="leftDivreadmsg">
+      <script type="text/javascript"><!--
+          google_ad_client = "ca-pub-9814096529112578";
+          /* 160x600image add */
+          google_ad_slot = "0602151849";
+          google_ad_width = 160;
+          google_ad_height = 600;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+	</div>
+@* <% Html.RenderPartial("ViewMsg1"); %>*@
+
+                <br /><br />
+	<div id="bodyDivreadmsg">
+		<div class="Txt_READreadmsg">
+			
+				<p class="lastNode">READ MESSAGE 
+			</p>
+           
+		</div>
+        <div class="clearFloat"></div>
+        <div class ="Txt_READreadmsgStatus">
+            <p>
+            <b> Use the View Thread mode link to delete messages  </b>
+            </p>
+        </div>
+		<div class="clearFloat"></div>
+            @{ foreach (var item in Model.Page) { 
+  
+ 
+
+@*								<p class="lastNode">
+                             <%: Html.ActionLink("Delete", "DeleteMail", new { id = item.MailboxMessagesFoldersID, PageIndex = Model.PageIndex, fldId = item.MailboxFolderID }, new { @class = "delete-link" })%>
+						</p>*@
+		<div id="ReadMessageBox">
+         @Html.Partial("NewReadMsgForm", Model) 
+		</div>
+  } /* End of for each */ }
+
+
+
+  <div class="clearFloat"></div>
+	</div>
+	<div id="rightDivreadmsg">
+      <script type="text/javascript"><!--
+          google_ad_client = "ca-pub-9814096529112578";
+          /* 160x600image add */
+          google_ad_slot = "0602151849";
+          google_ad_width = 160;
+          google_ad_height = 600;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+	</div>
+	<div class="clearFloat"></div>
+
+
+

@@ -1,0 +1,556 @@
+﻿<!DOCTYPE html>
+
+ 
+
+<html>
+<head>
+
+ <title>@ViewBag.Title</title>
+
+@(
+Html.Telerik().StyleSheetRegistrar() 
+     .DefaultGroup(group => group.Add("telerik.common.css") 
+                     .Add("telerik.vista.css")) 
+)
+
+    
+  
+   
+   <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon" />
+<link rel="icon"  href="../../favicon.ico" type="image/x-icon" />
+    
+       
+    
+     
+                               
+           <!-- chat test stuff --->  
+           <!-- Jquery UI--->  
+          @* THERE IS A BUG IN THIS STUPID css*@
+      @*     <link href="@Url.Content("~/Content/WhoTookaPeek.css")" rel="stylesheet" type="text/css" />*@
+
+           <link href="@Url.Content("~/Content/Interests.css")" rel="stylesheet" type="text/css" />
+             <link href="@Url.Content("~/Content/MyQuikStatsAboutMepage.css")" rel="stylesheet" type="text/css" />
+             <link href="@Url.Content("~/Content/auth-buttons.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/css/redmond/jquery-ui-1.8.18.custom.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/MyQuikStatsAppearancepage.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/MyQStatEditlifestylepage.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/MyQuikStatsEditsCharacterpage.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/ProfileEditQuik.css")" rel="stylesheet" type="text/css" />
+  <link href="@Url.Content("~/Content/inbox.css")" rel="stylesheet" type="text/css" />
+  <link href="@Url.Content("~/Content/AccountSettingspage.css")" rel="stylesheet" type="text/css" />
+   <link href="@Url.Content("~/Content/Awesome.css")" rel="stylesheet" type="text/css" />   
+@*<link href="@Url.Content("~/Chat.css")" rel="stylesheet" type="text/css" />*@
+<link href="@Url.Content("~/Chat.dictionary.css")" rel="stylesheet" type="text/css" />   
+  @* added stuff to fully implement jabra chat and then plans to redesign *@
+  <link href="@Url.Content("~/Content/KeyTips.css")"  rel="stylesheet" type="text/css" />
+  <link href="@Url.Content("~/Content/bootstrap/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+  <link href="@Url.Content("~/Content/emoji20.css")" rel="stylesheet" type="text/css" />
+
+     @* kelly chat test stuff *@ 
+  <link href="@Url.Content("~/Content/ChatKellyTest.css")" rel="stylesheet" type="text/css" />
+  
+<link href="@Url.Content("~/Content/Linkdirectory.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/masterPage.css")" rel="stylesheet" type="text/css" />
+
+@* addeded pages from normal site page *@
+
+        <link href="@Url.Content("~/Content/activationpage.css")"  rel="stylesheet" type="text/css"  media="all" />
+       <link href="@Url.Content("~/Content/registration.css")" rel="stylesheet" type="text/css"  media="all" />
+        <link href="@Url.Content("~/Content/LogIn.css")" rel="stylesheet" type="text/css"  media="all" />
+           <link href="@Url.Content("~/Content/login_page.css")" type="text/css"  media="all" />
+
+<!-- new stuff verify it don't break other pages -->
+<link href="@Url.Content("~/Content/Homepage2.css")" rel="stylesheet" type="text/css" />
+<!-- figure out why these 3 css break the Ui-->
+@*<link href="@Url.Content("~/Content/sendmessage.css")" rel="stylesheet" type="text/css" />
+
+<link href="@Url.Content("~/Content/ReadMessage.css")" rel="stylesheet" type="text/css" />*@
+<link href="@Url.Content("~/Content/PhotoEditQuik.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/ReadMessage.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/sendmessage.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/contactUs.css")" rel="stylesheet" type="text/css" />
+
+  
+
+<link href= "@Url.Content("~/Content/site.css")" rel="stylesheet" type="text/css" />
+
+
+
+ 
+            <link href="@Url.Content("~/Content/Visibility_settings_page.css")" rel="stylesheet" type="text/css" />
+ <link href="@Url.Content("~/Content/quick_Profile_page.css")" rel="stylesheet" type="text/css" />
+@*<link href="@Url.Content("~/Content/quick Profile page.css")" rel="stylesheet" type="text/css" />*@
+
+
+<link href="@Url.Content("~/Content/Who_Likes_Me!.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Who'sLookingforMe!.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Who I_LIke!.css")" rel="stylesheet" type="text/css" />
+@*<link href="@Url.Content("~/Content/WhoTookaPeek.css")" rel="stylesheet" type="text/css" />*@
+<link href="@Url.Content("~/Content/similiar.css")" rel="stylesheet" type="text/css" />
+@*<link href="@Url.Content("~/Content/QuickSearch_ page.css")" rel="stylesheet" type="text/css" />   *@    
+
+
+  
+
+   
+
+ 
+ <link href="@Url.Content("~/Content/SavedSearches.css")" rel="stylesheet" type="text/css" />
+ 
+ <link href="@Url.Content("~/Content/underconstruction.css")" rel="stylesheet" type="text/css" />
+
+
+ @* <link href="@Url.Content("~/Content/inbox.css")" rel="stylesheet" type="text/css" />*@
+  <link href="@Url.Content("~/Content/ReadMessage.css")" rel="stylesheet" type="text/css" />
+
+
+        <!--end of mailbox stuff-->   
+@*<link href="@Url.Content("~/Content/AccountSettings page.css")" rel="stylesheet" type="text/css" />*@
+<link href="@Url.Content("~/Content/InterestSent.css")" rel="stylesheet" type="text/css" />
+@*<link href="@Url.Content("~/Content/ProfileEditQuik.css")" rel="stylesheet" type="text/css" />*@
+<link href="@Url.Content("~/Content/SavedSearches.css")" rel="stylesheet" type="text/css" />
+
+
+
+     
+  @*   <link href="@Url.Content("~/Content/Awesome.css")" rel="stylesheet" type="text/css" />*@
+
+
+
+ 
+     <script src="@Url.Content("~/Scripts/jquery-1.7.1.js")" type="text/javascript"></script>
+  
+      <script src="@Url.Content("~/Scripts/js/jquery-ui-1.8.18.custom.min.js")" type="text/javascript"></script>
+  
+
+
+
+  @* <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>*@
+     <script src="@Url.Content("~/Scripts/jquery.form.js")" type="text/javascript"></script>
+     <script src="@Url.Content("~/Scripts/json2.min.js")" type="text/javascript"></script>
+     <script src="@Url.Content("~/Scripts/jquery.form.js")" type="text/javascript"></script>
+     <script src="@Url.Content("~/Scripts/Awesome.js")" type="text/javascript"></script>
+     <script src="@Url.Content("~/Scripts/jquery.url.js")" type="text/javascript"></script>
+      <!-- Used for SignalR -->
+     <script src="@Url.Content("~/Scripts/jquery.signalR.min.js")" type="text/javascript"></script>
+     <script src="@Url.Content("~/signalr/hubs")" type="text/javascript"></script>
+
+   
+
+
+     
+     <!-- stuff pulled from jabra chat ,dependencies -->
+     <script src="@Url.Content("~/Scripts/bootstrap/bootstrap.min.js")"  type="text/javascript"></script>
+     <script src="@Url.Content("~/Scripts/jquery.KeyTips.js")"  type="text/javascript"></script>
+   
+
+
+     <script src="@Url.Content("~/Scripts/modernizr.js")" type="text/javascript"></script>
+     <script src="@Url.Content("~/Scripts/jQuery.tmpl.js")" type="text/javascript"></script>
+     <script src="@Url.Content("~/Scripts/jquery.cookie.js")" type="text/javascript"></script>    
+     <script src="@Url.Content("~/Scripts/jquery.autotabcomplete.js")"  type="text/javascript"></script>
+          <script src="@Url.Content("~/Scripts/quicksilver.js")" type="text/javascript"></script>
+     <script src="@Url.Content("~/Scripts/jquery.livesearch.js")"  type="text/javascript"></script>
+  
+
+
+     <script src="@Url.Content("~/Scripts/jquery.timeago.0.10.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.captureDocumentWrite.min.js")"  type="text/javascript"></script>
+    <script  src="@Url.Content("~/Scripts/jquery.sortElements.js")"  type="text/javascript"></script>
+   @*  <script src="@Url.Content("~/Scripts/Markdown.Converter.js")"  type="text/javascript"></script>*@
+    <script src="@Url.Content("~/Scripts/jquery.history.js")"   type="text/javascript"></script>
+
+ <script src="@Url.Content("~/Chat.utility.js")" type="text/javascript"></script>
+ <script src="@Url.Content("~/Chat.emoji.js")" type="text/javascript"></script>
+ <script src="@Url.Content("~/Chat.toast.js")" type="text/javascript"></script>
+ <script src="@Url.Content("~/Chat.ui.js")" type="text/javascript"></script>
+ <script src="@Url.Content("~/Chat.documentOnWrite.js")" type="text/javascript"></script>
+ <script src="@Url.Content("~/Chat.pinnedWindows.js")" type="text/javascript"></script>
+ <script src="@Url.Content("~/Chat.js")" type="text/javascript"></script>
+
+
+
+
+
+@* Kelly chat test *@
+@*<script src="@Url.Content("~/Scripts/ChatKelly.js")"  type="text/javascript"></script>*@
+
+     
+ @*   <script src="Chat.toast.js" type="text/javascript"></script>*@
+  
+
+          
+       <!-- end of awesome stuff -->
+    
+         
+               
+  
+
+
+         <!-- google anyltics -->
+@*<script type="text/javascript">
+    $(function () {
+
+        debugger;
+        // Proxy created on the fly
+        var chat = $.connection.chatHub;   
+        
+                 
+      
+
+        //Create instance of the diff-match-patch javascript class
+        //  var dmp = new diff_match_patch();
+        // Declare a function on the blog hub so the server can invoke it
+        //        blog.addMessage = function (message, sessnId) {
+        //            var sessId = $('#sessinId').val();
+        //            if (sessId != sessnId) // if this is not the page that initated
+        //            // the publish
+        //            {
+        //                dmp.Match_Distance = 1000;
+        //                dmp.Match_Threshold = 0.5;
+        //                dmp.Patch_DeleteThreshold = 0.5;
+        //                // Diff between text currently in text box and 'message' sent
+        //                // by hub
+        //                var patches = dmp.patch_make($('#BlogBody').val(), message);
+        //                // Get the patch results
+        //                var results = dmp.patch_apply(patches, $('#BlogBody').val());
+        //                // Set the patch value in the current client
+        //                $('#BlogBody').val(results[0]);
+        //            }
+        //        };
+        // Start the connection
+        //do some stuff with the username I think too
+
+       // $.connection.hub.start(function () { test.start(); });
+        $.connection.hub.start(function () {
+
+             //conection intialization,handle stuff like if a members is already connected etc
+            chat.join()
+                    .done(function (result) {
+                        clients = result; alert("Chat join status =  " + result);
+                    })
+                    .fail(function (error) {
+                    });
+        });
+
+        //create the list of users dynamically
+
+
+        // Send message to hub saying text may have changed
+        // $("#BlogBody").keyup(function (event) {
+        //     var sessId = $("#sessinId").val();
+        //   blog.send($("#BlogBody").val(), sessId);
+        // });
+    });
+
+
+
+</script>*@
+
+  <!-- google anyltics -->
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-15173371-2']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+</script>
+
+<!-- chat U i scripts need to be modifed and tanken out-->
+<script id="new-message-template" type="text/x-jquery-tmpl">
+        <li class="message ${highlight} clearfix" id="m-${id}" data-name="${name}" data-timestamp="${date}">
+            <div class="left">
+                {{if showUser}}
+                <img src="http://www.gravatar.com/avatar/${hash}?s=16&d=mm" class="gravatar" />
+                <span class="name">${trimmedName}</span>
+                {{/if}}
+                <span class="state"></span>
+            </div>
+            <div class="middle">
+                {{html message}}
+            </div>
+            <div class="right">
+                <span id="t-${id}" class="time" title="${fulldate}">${when}</span>
+            </div>
+        </li>
+    </script>
+    <script id="new-notification-template" type="text/x-jquery-tmpl">
+        <li class="${type}" data-timestamp="${date}">
+            <div class="content">
+                {{html message}}
+                <a class="info" href="#"></a>
+            </div>
+            <div class="right">
+                <span class="time" title="${fulldate}">${when}</span>
+            </div>
+        </li>
+    </script>
+    <script id="message-separator-template" type="text/x-jquery-tmpl">
+        <li class="message-separator">
+        </li>
+    </script>
+    <script id="new-user-template" type="text/x-jquery-tmpl">
+        <li class="user" data-name="${name}">
+            <img class="gravatar" src="http://www.gravatar.com/avatar/${hash}?s=16&d=mm" />
+            <div class="details">
+                <span class="name">${name}</span>
+                <span class="owner">{{if owner}}(owner){{/if}}</span>
+                <span class="note{{if noteClass}} ${noteClass}{{/if}}" {{if note}}title="${note}"{{/if}}></span>
+                <span class="flag{{if flagClass}} ${flagClass}{{/if}}" {{if flag}}title="${country}"{{/if}}></span>
+            </div>
+        </li>
+    </script>
+    <script id="new-userlist-template" type="text/x-jquery-tmpl">
+        <h3 class="userlist-header nav-header">
+            ${listname}
+        </h3>
+        <div>
+            <ul id="${id}" />
+        </div>
+    </script>
+    <script id="new-tab-template" type="text/x-jquery-tmpl">
+        <li id="tabs-${id}" class="room" data-name="${name}">
+            <span class="lock"></span>
+            <button> 
+                <span class="content">${name}</span>
+            </button>
+            <div class="close"></div>
+        </li>
+    </script>
+
+@RenderSection("head",false)
+</head> 
+
+
+
+<body class="@Html.BodyCssStyle()">
+<div id="mainmasterpage">
+
+
+
+	<div id="headerDivmasterpage">
+		
+        @if (Request.IsAuthenticated)
+        { 
+        <a href="#" class="Link">
+          @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "Link" })
+	    </a>
+        }
+        else
+        {    <a href="#" class="Link">	
+               @Html.ActionLink("Sign In","LogOn", "Account" , null, new { @class = "Link" }) 
+		</a>
+        }
+        
+        @*To DO add chat online if a rep is online*@
+     
+		<a >
+		 @Html.ActionLink("Help", "ContactUs", "Home", null, new { @class = "Link2" })
+		</a>
+
+
+        @if (Request.IsAuthenticated)
+        {          
+		<a href="#" >
+			 @Html.ActionLink("My Account", "Account", "Account", null, new { @class = "Link3" })
+		</a>
+        }
+        else
+        {
+          <a href="#" >
+			@Html.ActionLink("Suscribe","Register", "Account" , null, new { @class = "Link4" })
+		</a>
+        }
+  
+		<div class="clearFloat"></div>
+		<div class="Txt_Hi">
+	    @if (Request.IsAuthenticated)
+        { 
+       
+                 <text>Hi <strong>@User.Identity.Name</strong>!</text> 
+	
+        }
+     else
+     {
+         <p class="lastNode">Welcome Guest
+       </p>
+     }
+        
+
+				
+		</div>
+        
+        @if (Request.IsAuthenticated)
+        { 
+        <a href="#" class="Link5">
+			   @Html.ActionLink("My Profile", "QuickProfileMine", "Members", null, new { @class = "Link5" })
+		</a>
+        }
+        else
+        {
+          <a href="#" class="Link5">	
+               @Html.ActionLink("My Profile", "QuickProfileMine", "Members", null, new { @class = "Link5" }) 
+		</a>
+        }
+        
+		
+		<a href="#" class="Link6">
+         @Html.ActionLink("Who Took a Peek!", "WhoViewedMe", "Members", null, new { @class = "Link6" })
+			
+		</a>
+		<a href="#" class="Link7">
+         @Html.ActionLink("Who I Like!", "WhoILike", "Members", null, new { @class = "Link7" })
+			
+		</a>
+		<a href="#" class="Link8">
+         @Html.ActionLink("Who Likes Me!", "Likes", "Members", null, new { @class = "Link8" })
+			
+		</a>
+		<a>
+       @Html.ActionLink("Mail", "MailHome", "Mail", null, new { @class = "Link9" })
+		</a>
+
+		<a href="#" class="Link10">
+		@Html.ActionLink("Search", "Underconstruction", "Members", null, new { @class = "Link10" })
+		</a>
+
+        @if (Request.IsAuthenticated)
+        {
+            
+		<a href="#" class="Link11">
+			 @Html.ActionLink("Home", "MembersHome", "Members", null, new { @class = "Link11" })
+		</a>
+        }
+        else
+        {
+                  
+	     <a href="#" class="Link11">
+			  @Html.ActionLink("Home", "SplashPage", "Home", null, new { @class = "Link11" })
+		</a>
+        }
+        
+
+	</div>
+	<div class="clearFloat"></div>
+
+   @*  <h2 > test for chatting</h2>
+   <a href="javascript:void(0)" Id="ChatWithUser" data-name="Jane"> Chat With Jane</a> 
+   <a href="javascript:void(0)" Id="CloseChatBox" data-name="Jane"> Close jane</a> 
+    <a href="javascript:void(0)" Id="MinimizeChatBox" data-name="Jane"> minimize jane</a> 
+  <div>
+  <a href="javascript:void(0)" Id="ChatWithUser" data-name="case"> Chat With Case</a> 
+   <a href="javascript:void(0)" Id="CloseChatBox" data-name="case"> Close case Case</a> 
+    <a href="javascript:void(0)" Id="MinimizeChatBox" data-name="case"> minimize Case</a> 
+  </div>
+   <div>
+  <a href="javascript:void(0)" Id="ChatWithUser" data-name="Dar"> Chat With Dar</a> 
+   <a href="javascript:void(0)" Id="CloseChatBox" data-name="Dar"> Close jane Dar</a> 
+    <a href="javascript:void(0)" Id="MinimizeChatBox" data-name="Dar"> minimize Dar</a> 
+  </div>
+   
+   <div>
+    <h2 > test for notifications</h2>  
+   </div>  
+   <div>    
+   
+   <div>
+   <a href="javascript:void(0)" Id="InviteToChat" data-name="Case"> InviteToChat Case to chat</a> 
+   <a href="javascript:void(0)" Id="CloseInviteToChat" data-name="Case"> cancel chat invite Case</a> 
+    <a href="javascript:void(0)" Id="MinimizeInviteToChat" data-name="Case"> minimize Case</a> 
+  </div>
+
+  <div>
+   <a href="javascript:void(0)" Id="InviteToChat" data-name="Jane"> InviteToChat Jane to chat</a> 
+   <a href="javascript:void(0)" Id="CloseInviteToChat" data-name="Jane"> cancel chat invite Jane</a> 
+    <a href="javascript:void(0)" Id="MinimizeInviteToChat" data-name="Jane"> minimize Jane</a> 
+  </div> 
+   <div>
+  <a href="javascript:void(0)" Id="InviteToChat" data-name="Dar"> InviteToChat Dar to chat</a> 
+   <a href="javascript:void(0)" Id="CloseInviteToChat" data-name="Dar"> cancel chat invite Dar</a> 
+    <a href="javascript:void(0)" Id="MinimizeInviteToChat" data-name="Dar"> minimize Dar</a> 
+  </div>
+  
+    <div>
+  <a href="javascript:void(0)" Id="InviteToChat" data-name="dar1"> InviteToChat dar1 to chat</a> 
+   <a href="javascript:void(0)" Id="CloseInviteToChat" data-name="dar1"> cancel chat invite dar1</a> 
+    <a href="javascript:void(0)" Id="MinimizeInviteToChat" data-name="dar1"> minimize dar1</a> 
+  </div>
+*@
+
+  	<div id="bodyDivmaster">
+    @RenderBody()
+    </div>
+ 	<div class="clearFloat"></div>
+    
+	<div id="footerDivmasterpage">
+		<ul class="symbolListmasterpage">
+			<li id="List_Itemmasterpage">
+				<a href="#">About anewluv.com</a>
+			</li>
+				<li id="List_Itemmasterpage2">
+				<a href="#">Terms of Use</a>
+			</li>
+				<li id="List_Itemmasterpage3">
+			 @Html.ActionLink("Contact Us", "ContactUs", "Home", null, new { @class = "List_Itemmasterpage3" })
+				
+			</li>
+				<li id="List_Itemmasterpage4">
+				<a href="#">Your Privacy</a>
+			</li>
+				<li id="List_Itemmasterpage5">
+                 @Html.ActionLink("Advertise on Anewluv.com", "ContactUs", "Home", null, new { @class = "List_Itemmasterpage5" })
+				
+			</li>
+				<div class="clearFloat"></div>
+		<li id="List_Itemmasterpage6">
+				<a href="#">Media Room</a>
+			</li>
+				<li id="List_Itemmasterpage7">
+                @Html.ActionLink("Help", "ContactUs", "Home", null, new { @class = "List_Itemmasterpage7" })
+				
+			</li>
+				<li id="List_Itemmasterpage8">
+				<a href="#">FAQ</a>
+			</li>
+	</ul>
+				<li id="List_Itemmasterpage9">
+				<a href="#">Site Map</a>
+			</li>
+				<li id="List_Itemmasterpage10">
+				<a href="#">Promotions and Sponorships</a>
+			</li>
+				<div class="clearFloat"></div>
+		<li id="List_Itemmasterpage11">
+				<a href="#">Testimonials</a>
+			</li>
+				<li id="List_Itemmasterpage12">
+				<a href="#">Forums</a>
+			</li>
+				<li id="List_Itemmasterpage13">
+                @Html.ActionLink("Suggestions", "ContactUs", "Home", null, new { @class = "List_Itemmasterpage13" })
+				
+			</li>
+				<li id="List_Itemmasterpage14">
+				<a href="#">Coming Features</a>
+			</li>
+				<li id="List_Itemmasterpage15">
+			   @Html.ActionLink("Community Connections", "CommunityConnections", "Home", null, new { @class = "List_Itemmasterpage15" })
+			</li>
+				<div class="clearFloat"></div>
+	</div>
+	<div class="clearFloat"></div>
+</div>
+ @(Html.Telerik().ScriptRegistrar().jQuery(false) )
+  
+
+
+
+                
+</body>
+</html>

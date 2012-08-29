@@ -66,6 +66,7 @@
     <Compile Include="AuthenticationAndMembership\AnewLuvMembershipProvider.cs" />
     <Compile Include="BaseClasses\GeoRepositoryBase.cs" />
     <Compile Include="APIkeyRepository.cs" />
+    <Compile Include="JainrainRepositiory.cs" />
     <Compile Include="MailRepository.cs" />
     <Compile Include="ChatRepository.cs" />
     <Compile Include="ErrorLoggingRepository.cs" />

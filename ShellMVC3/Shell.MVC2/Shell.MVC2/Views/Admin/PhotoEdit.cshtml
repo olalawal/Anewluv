@@ -1,0 +1,66 @@
+﻿@model Shell.MVC2.Models.AdminPhotoModel
+
+<!DOCTYPE html>
+
+<html>
+
+<body>
+  
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+
+    
+    @using (Html.BeginForm()) { 
+        @Html.ValidationSummary(true)
+        <fieldset>
+            <legend>photo</legend>
+
+<img  src="@Url.Action("GetGalleryImageByPhotoID", "Images", new { id = Model.PhotoID},null)" alt="" width ="94" height ="94" />
+					   
+            @Html.HiddenFor(model => model.PhotoID)            
+            @Html.HiddenFor(model => model.ProfileID)
+            @Html.HiddenFor(model => model.ProfileImageType)
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ProfileID):   @Html.DisplayFor(model => model.ProfileID)
+            </div>
+
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ProfileImageType)
+            
+                @Html.TextBoxFor(model => model.ProfileImageType, new { disabled="disabled", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.ProfileImageType)
+            </div>
+@*    
+            <div class="editor-label">
+                <%: Html.LabelFor(model => model.Aproved) %>
+            </div>
+            <div class="editor-field">
+                <%: Html.EditorFor(model => model.Aproved) %>
+                <%: Html.ValidationMessageFor(model => model.Aproved) %>
+                <%: Html.CheckBox("checkedAproved", Model.checkedAproved)%> 
+                <%: Html.CheckBox("check", Model.checkedAproved, new { @disabled = true })%>
+            </div>*@
+            <div class="editor-field">Aproved Value:
+                @Html.DisplayFor(model => model.Aproved)
+                @Html.ValidationMessageFor(model => model.Aproved)
+
+            </div>
+            <br /><br />
+           <div class="editor-label">
+              Photo Approved   @Html.CheckBoxFor(model => model.checkedAproved)
+            </div>
+
+
+            <p>
+                <input type="submit" value="Save" />
+            </p>
+        </fieldset>
+     } 
+    
+    <div>
+        @Html.ActionLink("Back to List", "Admin")
+    </div>
+</body>
+</html>
+

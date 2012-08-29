@@ -1,0 +1,55 @@
+﻿@model Shell.MVC2.Models.MembersViewModel
+
+@{
+    ViewBag.Title = "Register"; 
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+   
+
+
+<div id="mainregister">
+	<div id="headerRegDiv">
+	</div>
+	<div class="clearFloat"></div>
+	<div id="header2RegDiv">
+	</div>
+	<div class="clearFloat"></div>
+	<div id="leftRegDiv">
+	</div>
+	<div id="bodyRegDiv">
+		<div id="Box3SliceContainerReg">
+			<div id="Box3SliceContainer_top_1Reg">
+
+			</div>
+            
+            <div class="Go_ahead_and_Register">
+
+                  Passwords are required to be a minimum of @Membership.MinRequiredPasswordLength characters in length.
+            
+				  	<p class="lastNode">
+                     @ViewData["RegisterStatus"] 
+                </p> 
+				@Html.ValidationSummary(false, "Account creation was unsuccessful. Please correct the errors and try again.")
+
+			</div>
+
+	        @Html.Partial("RegisterDetail", Model.Register) 
+
+			<div class="clearFloat"></div>
+		<div id="Box3SliceContainer_bottom_1Reg">
+		</div>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div id="rightRegDiv">
+	</div>
+	<div class="clearFloat"></div>
+	<div id="footerRegDiv">
+	</div>
+	<div class="clearFloat"></div>
+</div>
+
+
+

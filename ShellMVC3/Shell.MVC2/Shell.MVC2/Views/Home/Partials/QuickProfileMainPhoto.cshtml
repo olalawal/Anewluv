@@ -1,0 +1,14 @@
+﻿@model Shell.MVC2.Models.EditProfilePhotoModel
+
+      @Html.HiddenFor(model => model.PhotoID)
+      @Html.HiddenFor(model => model.Aproved)
+      @Html.HiddenFor(model => model.ScreenName)
+
+<div class="qProfilEquikDetailsProfileBoxDiv">
+
+@if (Model.PhotoID != null)
+{ 
+            <img  src="@Url.Action("GetGalleryImageByPhotoID", "Images", new { id = Model.PhotoID},null)" alt="" width ="192" height ="193" />
+    }       
+      
+ </div>

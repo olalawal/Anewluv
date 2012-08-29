@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActivationURL" xml:space="preserve">
+    <value>&lt;a href="http://www.AnewLuv.com/Account/ActivateProfile/?ProfileId={0}&amp;ActivationCode={1}"&gt;Activate Your Profile By Clicking this Link&lt;/a&gt;</value>
+    <comment>this is the generated URL posted in a created profile's activation email</comment>
+  </data>
+  <data name="AdminEmail" xml:space="preserve">
+    <value>ola.lawal@gmail.com,anewluvadmin@nmedia.com</value>
+    <comment>email of administrators ola, kelly and default admin</comment>
+  </data>
+  <data name="AminEmail2" xml:space="preserve">
+    <value>Administrator@nmedia.com</value>
+    <comment>seccomdary email for admins</comment>
+  </data>
+  <data name="ContactUsAdminMessageBody" xml:space="preserve">
+    <value>The Member {0} sent the following message: &lt;p&gt;&lt;/p&gt; &lt;b&gt; &lt;/br&gt;  subject:  {1}  &lt;/b&gt; &lt;/br&gt; Message : &lt;/br&gt; {2}</value>
+  </data>
+  <data name="ContactUsAdminMessageSubject" xml:space="preserve">
+    <value>A new Question from a user has been recived at Anewluv.com! Please respond </value>
+  </data>
+  <data name="ContactUsMessageBody" xml:space="preserve">
+    <value>Dear {0} ,&lt;p&gt;&lt;/p&gt; Thank you for contacting us at Anewluv.com, your message has been added to the support ticket list and you will get a response from our support staff within 24 hours &lt;p&gt;&lt;/p&gt; The Anewluv.com Support Team</value>
+  </data>
+  <data name="ContactUsMessageSubject" xml:space="preserve">
+    <value>You Question or Comment has been accepted on Anewluv.com! (No Action Required)</value>
+  </data>
+  <data name="DefaultEmailSender" xml:space="preserve">
+    <value>DoNotReply@AnewLuv.com</value>
+    <comment>outgoing email routing address</comment>
+  </data>
+  <data name="DefaultSupportEmail" xml:space="preserve">
+    <value>Support@Anewluv.com,anewluvhelp@mail.com,ola_lawal@yahoo.com</value>
+  </data>
+  <data name="PhotoUploadedAdminMessageBody" xml:space="preserve">
+    <value>A new photo for the user {0} has been uploaded to AnewLuv.com</value>
+  </data>
+  <data name="PhotoUploadedAdminMessageSubject" xml:space="preserve">
+    <value>A new Photo has been uploaded on Anewluv.com! Please Aprove this Photo.</value>
+  </data>
+  <data name="PhotoUploadedMessageBody" xml:space="preserve">
+    <value>Dear {0} ,&lt;/br&gt; Thank you for uploading your photo to  Anewluv.com Please allow up to 24 hours for your photo to be aproved.</value>
+  </data>
+  <data name="PhotoUploadedMessageSubject" xml:space="preserve">
+    <value>AnewLuv.com *Your Photo has been uploaded *</value>
+  </data>
+  <data name="ProfileActivatedAdminMessageBody" xml:space="preserve">
+    <value>The  profile for the user {0} has been &lt;b&gt; Activated &lt;/b&gt; on AnewLuv.com</value>
+  </data>
+  <data name="ProfileActivatedAdminMessageSubject" xml:space="preserve">
+    <value>A Profile has been Activated!</value>
+  </data>
+  <data name="ProfileActivatedMessageBody" xml:space="preserve">
+    <value>Dear {0} ,&lt;p&gt;&lt;/p&gt;  Your account has been activated on AnewLuv.com , You can now log in to your account at &lt;p&gt;&lt;/p&gt; &lt;a href="http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}"&gt;Login to AnewLuv.com&lt;/a&gt;  &lt;p&gt;&lt;/p&gt;&lt;a href="http://www.anewluv.com"&gt;Anewluv.com &lt;/a&gt;</value>
+  </data>
+  <data name="ProfileActivatedMessageSubject" xml:space="preserve">
+    <value>Your Profile has been Activated on AnewLuv.com</value>
+  </data>
+  <data name="ProfileBlockedMessageAdminBody" xml:space="preserve">
+    <value>The  Member {0} has been blocked by another member.</value>
+  </data>
+  <data name="ProfileBlockedMessageAdminSubject" xml:space="preserve">
+    <value>A Member has blocked another Member</value>
+  </data>
+  <data name="ProfileCreatedAdminMessageBody" xml:space="preserve">
+    <value>A new profile for the user {0} has been created on AnewLuv.com</value>
+  </data>
+  <data name="ProfileCreatedAdminMessageSubject" xml:space="preserve">
+    <value>A new Profile has been created !</value>
+  </data>
+  <data name="ProfileCreatedMessageBody" xml:space="preserve">
+    <value>Dear {0} ,&lt;p&gt;&lt;/p&gt; Thank you for creating a profile at &lt;a href="www.anewluv.com"&gt;Anewluv.com &lt;/a&gt; &lt;p&gt;&lt;/p&gt;&lt;a href="www.anewluv.com"&gt;Anewluv.com &lt;/a&gt;   provides a new and refereshing way to  meet people from all walks of life.  &lt;p&gt;&lt;/p&gt; You have &lt;b&gt; FREE &lt;/b&gt; access to our exclusive geo-targeting system to link up with members from all around the world! &lt;p&gt;&lt;/p&gt;  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  &lt;p&gt;&lt;/p&gt; Our system spans  hundreds of countries all around the world.  &lt;p&gt;&lt;/p&gt; We are also adding new features every month &lt;p&gt;&lt;/p&gt; So get started today!  Please click on the link below to activate your profile. &lt;b&gt;If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page &lt;/b&gt; &lt;/br&gt; Your user name is: &lt;b&gt; {1} &lt;/b&gt; and Your activation code is:  &lt;b&gt;  {2} &lt;/b&gt;  &lt;p&gt;&lt;/p&gt;  - The AnewLuv.com Team &lt;p&gt;&lt;/p&gt;  </value>
+  </data>
+  <data name="ProfileCreatedMessageSubject" xml:space="preserve">
+    <value>AnewLuv.com * Action Required * : Your new profile needs to be activated</value>
+  </data>
+  <data name="ProfileInterestReceivedMessageAdminBody" xml:space="preserve">
+    <value>The  Member {0} has received an Interest from the Member, {1}</value>
+  </data>
+  <data name="ProfileInterestReceivedMessageAdminSubject" xml:space="preserve">
+    <value>A Member has sent an Interest to another  </value>
+  </data>
+  <data name="ProfileInterestReceivedMessageBody" xml:space="preserve">
+    <value>Dear {0}, &lt;p&gt;&lt;/p&gt;A member  has expressed interest in your profile on AnewLuv.com, Please log into your account and check your new interests on your home page to see who is interested in you. &lt;/br&gt;&lt;p&gt;&lt;/p&gt; &lt;b&gt;&lt;a href="http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}"&gt;Log on to your Account on www.Anewluv.com&lt;/a&gt;&lt;/b&gt;</value>
+  </data>
+  <data name="ProfileInterestReceivedMessageSubject" xml:space="preserve">
+    <value>You have a new Interest on Anewluv.com!</value>
+  </data>
+  <data name="ProfileLikeReceivedlMessageAdminBody" xml:space="preserve">
+    <value>The  Member {0} has received a Like from the member {1}</value>
+  </data>
+  <data name="ProfileLikeReceivedMessageAdminSubject" xml:space="preserve">
+    <value>A Member has sent a Like to another Member!</value>
+  </data>
+  <data name="ProfileLikeReceivedMessageBody" xml:space="preserve">
+    <value>Dear {0}, &lt;p&gt;&lt;/p&gt;A member  likes you  on AnewLuv.com, Please log into your account and check the new Likes  on your home page to see who that member is. &lt;/br&gt;&lt;p&gt;&lt;/p&gt; &lt;b&gt;&lt;a href="http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}"&gt;Log on to your Account on www.Anewluv.com&lt;/a&gt;&lt;/b&gt;</value>
+  </data>
+  <data name="ProfileLikeReceivedMessageSubject" xml:space="preserve">
+    <value>You have a new Like on Anewluv.com!</value>
+  </data>
+  <data name="ProfilePeekReceivedlMessageAdminBody" xml:space="preserve">
+    <value>The  Member {0} has received a Peek from the member {1}</value>
+  </data>
+  <data name="ProfilePeekReceivedMessageAdminSubject" xml:space="preserve">
+    <value>A Member has Peeked at another Member! </value>
+  </data>
+  <data name="ProfilePeekReceivedMessageBody" xml:space="preserve">
+    <value>Dear {0}, &lt;p&gt;&lt;/p&gt;A member  has viewed your profile on AnewLuv.com, Please log into your account to see who viewed you &lt;/br&gt;&lt;p&gt;&lt;/p&gt; &lt;b&gt;&lt;a href="http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}"&gt;Log on to your Account on www.Anewluv.com&lt;/a&gt;&lt;/b&gt;</value>
+  </data>
+  <data name="ProfilePeekReceivedMessageSubject" xml:space="preserve">
+    <value>You have a new peek  on Anewluv.com!</value>
+  </data>
+  <data name="ProfileReceivedMailMessageAdminBody" xml:space="preserve">
+    <value>The  Member {0} has received a Message from the member {1}</value>
+  </data>
+  <data name="ProfileReceivedMailMessageAdminSubject" xml:space="preserve">
+    <value>Members have Communicated ! </value>
+  </data>
+  <data name="ProfileReceivedMailMessageBody" xml:space="preserve">
+    <value>Dear {0}, &lt;p&gt;&lt;/p&gt;A member  has sent you a message on AnewLuv.com, Please log into your account to view the message &lt;/br&gt;&lt;p&gt;&lt;/p&gt; &lt;b&gt;&lt;a href="http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}"&gt;Log on to your Account on www.Anewluv.com&lt;/a&gt;&lt;/b&gt;</value>
+  </data>
+  <data name="ProfileReceivedMailMessageSubject" xml:space="preserve">
+    <value>You have a new message on Anewluv.com!</value>
+  </data>
+  <data name="RecoverAccountAdminMessageBody" xml:space="preserve">
+    <value>The User  {0} has been Recoverd their password and login information on AnewLuv.com</value>
+  </data>
+  <data name="RecoverAccountAdminMessageSubject" xml:space="preserve">
+    <value>An Account has been recovered on Anewluv.com</value>
+  </data>
+  <data name="RecoverAccountMessageBody" xml:space="preserve">
+    <value>Dear {0} ,&lt;p&gt;&lt;/p&gt; Your account has been recovered on AnewLuv.com , Your Username is &lt;b&gt; {1} &lt;/b&gt;  and your new password is &lt;b&gt; {2} &lt;/b&gt;,  You can now log in to your account at &lt;/br&gt;&lt;p&gt;&lt;/p&gt; &lt;b&gt;&lt;a href="http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}" &gt;Log on to your Account on www.Anewluv.com&lt;/a&gt;&lt;/b&gt;</value>
+  </data>
+  <data name="RecoverAccountMessageSubject" xml:space="preserve">
+    <value>Your Account has been Recovered on AnewLuv.com</value>
+  </data>
+  <data name="SendEmails" xml:space="preserve">
+    <value>Yes</value>
+    <comment>stops emails from being sent out in debug mode</comment>
+  </data>
+  <data name="ProfileActivationCodeRecoveredAdminMessageBody" xml:space="preserve">
+    <value>A Profile ActivationCode for the user {0} has been recovered on AnewLuv.com</value>
+  </data>
+  <data name="ProfileActivationCodeRecoveredAdminMessageSubject" xml:space="preserve">
+    <value>A Profile ActivationCode has been Recovered!</value>
+  </data>
+  <data name="ProfileActivationCodeRecoveredMessageBody" xml:space="preserve">
+    <value>Dear {0} ,&lt;p&gt;&lt;/p&gt;   Please click on the link below to activate your profile. &lt;b&gt;If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page &lt;/b&gt; &lt;/br&gt; Your user name is: &lt;b&gt; {1} &lt;/b&gt; and Your activation code is:  &lt;b&gt;  {2} &lt;/b&gt;  &lt;p&gt;&lt;/p&gt;  - The AnewLuv.com Team &lt;p&gt;&lt;/p&gt;  </value>
+  </data>
+  <data name="ProfileActivationCodeRecoveredMessageSubject" xml:space="preserve">
+    <value>AnewLuv.com * Action Required * : Your new profile needs to be activated</value>
+  </data>
+  <data name="AdminEmailPhotos" xml:space="preserve">
+    <value>ola.lawal@gmail.com,welaworks@mail.com,anewluvadmin@nmedia.com</value>
+    <comment>email of administrators ola, kelly and default admin</comment>
+  </data>
+  <data name="PhotoRejectedMessageBody" xml:space="preserve">
+    <value>Dear {0} ,&lt;/br&gt; Thank you for uploading your photo to  Anewluv.com &lt;/br&gt;Unfortunately your photo did not meed our terms of service, please read the terms of service for acceptable photo formats and content. &lt;p&gt;&lt;/p&gt; This is the reason why : &lt;p&gt;&lt;/p&gt; &lt;b&gt;  {1} &lt;/b&gt;</value>
+  </data>
+  <data name="PhotoRejectedMessageSubject" xml:space="preserve">
+    <value>Your photo was not Approved on AnewLuv.com!</value>
+  </data>
+  <data name="ProfileCreatedJainRainAdminMessageBody" xml:space="preserve">
+    <value>A new profile for the user {0} has been created on AnewLuv.com </value>
+  </data>
+  <data name="ProfileCreatedJainRainAdminMessageSubject" xml:space="preserve">
+    <value>A new Profile has been created via Jain raid using {0} !</value>
+  </data>
+  <data name="ProfileCreatedJainRainMessageBody" xml:space="preserve">
+    <value>Dear {0} ,&lt;p&gt;&lt;/p&gt; Thank you for creating a profile at &lt;a href="www.anewluv.com"&gt;Anewluv.com &lt;/a&gt; &lt;p&gt;&lt;/p&gt;&lt;a href="www.anewluv.com"&gt;Anewluv.com &lt;/a&gt;   provides a new and refereshing way to  meet people from all walks of life.  &lt;p&gt;&lt;/p&gt; You have &lt;b&gt; FREE &lt;/b&gt; access to our exclusive geo-targeting system to link up with members from all around the world! &lt;p&gt;&lt;/p&gt;  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  &lt;p&gt;&lt;/p&gt; Our system spans  hundreds of countries all around the world.  &lt;p&gt;&lt;/p&gt; We are also adding new features every month &lt;p&gt;&lt;/p&gt; You profile has already been activated since you signed in with {1} , please make sure you information was correctly uploaded by checking your profile details on our website  &lt;/b&gt; &lt;/br&gt; Your user name is: &lt;b&gt; {2} &lt;/b&gt;&lt;p&gt;&lt;/p&gt;  - The AnewLuv.com Team &lt;p&gt;&lt;/p&gt;  </value>
+  </data>
+  <data name="ProfileCreatedJainRainMessageSubject" xml:space="preserve">
+    <value>Thank you for creating a profile on AnewLuv.com</value>
+  </data>
+  <data name="SpamBlockedAdminMessageBody" xml:space="preserve">
+    <value>A message from the user {0} was blocked becase {1}</value>
+  </data>
+  <data name="SpamBlockedAdminMessageSubject" xml:space="preserve">
+    <value>Message was blocked on Anewluv.com by {0}</value>
+  </data>
+</root>

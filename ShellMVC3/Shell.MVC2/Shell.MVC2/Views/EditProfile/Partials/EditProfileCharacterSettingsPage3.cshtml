@@ -1,0 +1,302 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.AppFabric
+@using Shell.MVC2.Models
+
+
+
+
+  
+<script type="text/javascript">
+
+
+    //Eventually use thise maybe to set default values 
+    $(document).ready(function () {
+        // $('#load').hide();
+        // var commentContainer
+        //  var string;
+        // UpdateMemberStatus();
+
+
+    });
+
+    //Jqeuery to handle ANY selection of checkboxes
+    $(function () {
+
+        $("input.SelectedYourReligionIds").click(function () {
+            if ($("input.SelectedYourReligionIds:checked").val() == 1)
+
+            //loop through and disbale all other since they picked ANY which means all anways
+                $("input.SelectedYourReligionIds").each(function () {
+                    if ($(this).attr("value") != 1) {
+                        $(this).removeAttr("checked");
+                        $(this).attr("disabled", "disabled");
+                    }
+                });
+            //otherwise un disable them all
+            else $("input.SelectedYourReligionIds").removeAttr("disabled");
+            //first dsiable all then enable on the ANy one
+            //  $("input.SelectedYourReligionIds").attr("disabled", "disabled");
+            //enable and check the any one
+
+
+            //   $("#log").html($(":checked").val() + " is checked!");
+
+
+        });
+
+    });
+
+
+
+
+    //Jqeuery to handle ANY selection of checkboxes
+    $(function () {
+
+        $("input.SelectedYourReligiousAttendanceIds").click(function () {
+            if ($("input.SelectedYourReligiousAttendanceIds:checked").val() == 1)
+
+            //loop through and disbale all other since they picked ANY which means all anways
+                $("input.SelectedYourReligiousAttendanceIds").each(function () {
+                    if ($(this).attr("value") != 1) {
+                        $(this).removeAttr("checked");
+                        $(this).attr("disabled", "disabled");
+                    }
+                });
+            //otherwise un disable them all
+            else $("input.SelectedYourReligiousAttendanceIds").removeAttr("disabled");
+            //first dsiable all then enable on the ANy one
+            //  $("input.SelectedYourReligiousAttendanceIds").attr("disabled", "disabled");
+            //enable and check the any one
+
+
+            //   $("#log").html($(":checked").val() + " is checked!");
+
+
+        });
+
+    });
+
+   
+
+
+
+
+
+
+    //this function runs before the dailog to make sure the have not edit thier profile
+    // or seen the popup already in the current session.
+    function SetDefaultValues() {
+
+        $.post('/Members/CheckMemberStatus', '',
+              function (data) {
+
+
+
+                  if (data.Status == false) {
+
+
+
+                  }
+                  else {
+
+
+                  }
+
+                  //set the value to the geopostalcode value
+                  //ziporpostalcmb.value(data.geocode);
+
+
+              }, "json");
+        //add a function to bind postal code as well
+
+    }
+
+
+
+   
+</script>
+
+
+
+ <div id="PartialContainderForEditApperance1">
+     @{  List<SelectListItem> Religions= CachingFactory.SharedObjectHelper.GetReligionList();  } 
+     @{  List<SelectListItem>  ReligiousAttendances = CachingFactory.SharedObjectHelper.GetReligiousAttendanceList() ;  } 
+   
+
+    
+    <div id="log"></div>
+     <div class="Describe_what_makes_aboutEdit">
+				
+					<p class="lastNode">Enter you faith as well as the faith you are looking for a perfect match
+				</p>
+	</div>
+			
+			<div class="clearFloat"></div>
+         
+        @using (Html.BeginForm("EditProfileCharacterSettings", "EditProfile", new { @ViewIndex = Constants.CharacterSettingsPage3, @fulledit = Model.IsFullEditing }, FormMethod.Post))
+           { 
+
+           <div id="contentforpartial">
+      
+      		<div class="MeMyQSElifestyle">				
+					<p class="lastNode">Me(Religion and Religious Attendance/Practice) 
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+            <div id="MiddleCenterAlign_win_MyQSElifestyle" >
+			<div id="hasKidsMeComboBox_win_MyQSElifestyle">
+              @(Html.Telerik().ComboBoxFor(model => Model.CharacterSettings.ReligionID )
+                                             .Name("Model.CharacterSettings.ReligionID")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                                   .BindTo(Religions) 
+                     .AutoFill(true)
+)
+            </div> 
+		  <div id="smokeMeComboBox_win_MyQSElifestyle">          
+         
+       </div> 
+
+			<div id="maritalStatusMeComboBox_win_MyQSElifestyle">
+                  @(Html.Telerik().ComboBoxFor(model => Model.CharacterSettings.ReligiousAttendanceID  )
+                                                                   .Name("Model.CharacterSettings.ReligiousAttendanceID")
+                    .HtmlAttributes(new { style = string.Format("width: 125px") })
+                       .BindTo(ReligiousAttendances  ) 
+                     .AutoFill(true)
+)
+            </div> 
+                      
+
+             </div> 
+         
+           
+                 <div class="clearFloat"></div>
+			<div class="YouMyQSElifestyle">				
+					<p class="lastNode">You (What I am looking for in a Match)
+				</p>
+			</div>
+							<div class="clearFloat"></div>
+			
+              <div class ="MiddleCheckFullWithBoxBodyEdit">
+            <div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your Religions
+			</p>
+		   </div>
+           
+      <div class="editor-field"> 
+             
+             <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt3 = 0; } 
+               @foreach(var showme in Model.CharacterSearchSettings.ReligionList)                   
+                 { 
+                   if (cnt3 == 5 || cnt3 == 10 || cnt3 == 15 || cnt3 == 20 || cnt3 == 25) 
+                   { <tr></tr> }
+                    
+                  
+ 
+                      <td style="padding:2px;" >  
+                     @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedYourReligionIds" name="SelectedYourReligionIds" value="@showme.ReligionID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" class ="SelectedYourReligionIds" name="SelectedYourReligionIds" value="@showme.ReligionID"  />
+                           }  
+                        
+                        @showme.ReligionName
+                        </td> 
+
+
+                    
+                     
+                     <!-- increment counter here only once -->
+                       cnt3++    ;              
+                         
+                  
+                    
+                  }
+                  
+			 </table>
+			
+             </div>
+</div> 
+
+             				<div class="clearFloat"></div>
+                              
+                              <div class ="MiddleCheckFullWithBoxBodyEdit">
+			<div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your Relgious Attendance/PiousNess
+			</p>
+		   </div>
+           
+      <div class="editor-field"> 
+             
+             <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt2 = 0; } 
+               @foreach(var showme in Model.CharacterSearchSettings.ReligiousAttendanceList)                   
+                 { 
+                   if (cnt2 == 5 || cnt2 == 10 || cnt2 == 15 || cnt2 == 20 || cnt2 == 25)
+                   {  <tr></tr>  }
+                    
+                  
+ 
+                      <td style="padding:2px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedYourReligiousAttendanceIds" name="SelectedYourReligiousAttendanceIds" value="@showme.ReligiousAttendanceID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" class ="SelectedYourReligiousAttendanceIds" name="SelectedYourReligiousAttendanceIds" value="@showme.ReligiousAttendanceID"  />
+                           }  
+                        
+                        @showme.ReligiousAttendanceName
+                        </td> 
+
+
+                    
+                     
+                     <!-- increment counter here only once -->
+                   cnt2++;
+
+
+
+                 }
+                  
+			 </table>
+			
+             </div>
+			</div> 		
+		<div id="buttonbootstrap1">
+             <button class="btn btn-primary" type="submit" value="Submit">Submit this page</button>
+			</div>
+			<div id="buttonbootstrap2">
+               <button class="btn btn-inverse" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+          
+	     </div>
+		<div id="lifestyleBox3SliceContainer_bottom_1">
+        
+        <div class="EditProfileBottomLinkBack">
+				
+					<p class="lastNode">
+                      @Html.ActionLink("Back", "EditProfileCharacterSettings", "EditProfile", new { ViewIndex = Constants.CharacterSettingsPage2 }, null)           
+				</p>
+			</div>
+         
+			<div class="EditProfileBottomLikNext">
+				
+						<p class="lastNode">
+                      @Html.ActionLink("Next", "EditProfileCharacterSettings", "EditProfile", new { ViewIndex = Constants.CharacterSettingsPage4 }, null)
+				</p>
+			</div>
+		</div>
+		</div>
+		<div class="clearFloat"></div>
+	
+ 
+             } 
+
+
+ </div>  

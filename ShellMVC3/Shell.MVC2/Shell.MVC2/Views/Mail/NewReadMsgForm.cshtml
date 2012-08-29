@@ -1,0 +1,244 @@
+﻿@model IPageable<Shell.MVC2.Models.MailModel>
+
+
+  @{ //Pull the users who are avaiable to chat from from the viewbag
+      var OnlineChatUsers = ViewBag.OnlineChatUsers as List<ChatUser>; 
+     
+   } 
+
+
+
+@{ foreach (var item in Model.Page) { 
+<div id="ContainerReadMsg">
+        	
+            
+            
+        <div class="Txt_Backreadmsg">
+        				<p class="lastNode">
+                    @if (Model.PageIndex <= 1) {
+                    @Html.Encode("Previous Messages")
+                    } else {
+                    @(Ajax.ActionLink("Previous Messages", /* link text */
+                      "NewReadMsg3", /* action name */
+                      "Mail", /* controller name */
+                      new { page = (Model.PageIndex - 1), item.MailboxFolderID, item.MailboxMessagesFoldersID }, /* route values */
+                      new AjaxOptions() { //InsertionMode = InsertionMode.Replace,
+                                          UpdateTargetId = "ReadMessageBox" }))
+                    } 
+          </p>
+</div>
+					
+		<div class="Txt_Nextreadmsg">
+			
+				<p class="lastNode">
+
+        @if (Model.PageIndex + 1 > Model.PageCount)
+           {
+        @Html.Encode("Next Message")
+        }
+           else
+           {
+        @(Ajax.ActionLink("Next Message", /* link text */
+                      "NewReadMsg3", /* action name */
+                      "Mail", /* controller name */
+                      new { page = (Model.PageIndex + 1), item.MailboxFolderID, item.MailboxMessagesFoldersID }, /* route values */
+                      new AjaxOptions() { InsertionMode = InsertionMode.Replace,
+                                          UpdateTargetId = "ReadMessageBox"
+                      }))
+        } 
+			</p>
+		</div>
+
+		<div id="rightMessageBoxreadmsg">
+ 			<div id="rightMessageBox_topreadmsg">
+			</div>
+			<div id="colwrap4readmsgreadmsg">
+				<div id="leftMesssgeBoxreadmsg">
+					<div id="photoDivreadmsg">
+                    <img  src="@Url.Action("GetGalleryImageByScreenName", "Images", new { id = item.SenderName},null)" alt="" width ="94" height ="94" />
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Txt_Agereadmsg">
+						
+							<p class="lastNode">Age
+						</p>
+					</div>
+					<div class="Txt_30readmsg">
+						
+							<p class="lastNode">@item.dob  
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div class="Txt_Somewherereadmsg">
+						
+							<p class="lastNode">@item.City  , @item.State
+						</p>
+					</div>
+                    <div class="Txt_Somewherereadmsg">
+						
+						   @if (OnlineChatUsers != null && OnlineChatUsers != null && OnlineChatUsers.Any(p => p.Name.Contains(item.SenderName)))
+                                    {  
+                                   @Html.Encode("Member Online Now!")
+                                 @*  //TO DO check if the user allows random people to chat with them before adding the chat link
+                                     //also convert to an inmage link ala quick profile page    
+                                    	@Html.ActionLink("Chat",null,null, null, new { @class = "Link10", data_name=@item.ScreenName })*@
+                                                                          
+                                   <a href="javascript:void(0)" Id="InviteToChat" data-name=@item.SenderName >Chat</a> 
+                           }
+                                   
+					</div>
+
+					<div class="clearFloat"></div>
+					<div class="Txt_ThreadModereadmsg">
+						
+							<p class="lastNode">@*<%: Html.ActionLink("Report User", "Create")%>*@
+                                      @Html.ActionLink("View Thread", "NewReadMsgThread", new { page = Model.PageIndex, mailboxMessageID = item.MailboxMessageID})
+
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div id="colwrap5readmsg">
+				<div id="replyTrashDivreadmsg">
+					<div class="Txt_REPLYreadmsg">
+						
+							<p class="lastNode">@Html.ActionLink("REPLY", "NewReply", new { id = item.MailboxMessageID, mailboxMsgFldId = item.MailboxMessagesFoldersID })
+						</p>
+					</div>
+                    	<div class="Txt_Blockreadmsg">
+							<p class="lastNode">
+                             @Html.ActionLink("Block This Member", "SendBlock",  new { controller = "Members", TargetProfileName = item.SenderName, ViewContext.HttpContext.Request.Url.PathAndQuery })
+                           
+						</p>						
+
+					</div>
+
+					<div class="Txt_TRASHreadmsg">
+							<p class="lastNode">
+                             @Html.ActionLink("Report This Member", "DeleteMail", new { id = item.MailboxMessagesFoldersID, PageIndex = Model.PageIndex, fldId = item.MailboxFolderID }, new { @class = "delete-link" })
+						</p>						
+
+					</div>
+				</div>
+				<div class="clearFloat"></div>
+				<div id="fromDivreadmsg">
+					<div class="Txt_Fromreadmsg">
+						
+							<p class="lastNode">From:
+						</p>
+					</div>
+					<div class="Txt_Namereadmsg">
+						
+							<p class="lastNode">@item.SenderName
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+				<div id="subjectDivreadmsg">
+					<div class="Txt_Subjectreadmsg">
+						
+							<p class="lastNode">Subject:
+						</p>
+					</div>
+					<div class="Txt_Areadmsg">
+						
+							<p class="lastNode">@item.Subject
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+				<div id="dateDivreadmsg">
+					<div class="Txt_Datereadmsg">
+						
+							<p class="lastNode">Date:
+						</p>
+					</div>
+					<div class="Txt_123110readmsg">
+						
+							<p class="lastNode">@String.Format("{0:M/d/yy}", item.CreationDate)
+						</p>
+					</div>
+					<div class="Txt_843readmsg">
+						
+							<p class="lastNode">@String.Format("{0:t}", item.CreationDate) 
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+				<div id="Linereadmsg">
+				</div>
+				<div class="clearFloat"></div>
+				<div class="Txt_Messagereadmsg">
+					
+						<p class="lastNode">@item.Body
+					</p>
+                    
+				</div>
+
+				<div class="clearFloat"></div>
+			</div>
+		<div id="rightMessageBox_bottomreadmsg">
+		</div>
+</div>
+  </div>
+ } }
+
+ <!-- fix this to work with popop on delete later 
+  <div id="delete-dialog" title="Delete e-mail" style="font-size:16px;" ><p>
+ <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
+  This item will be deleted. Are you sure?</p><p id="P1"></p></div>
+  -->
+
+ <script type="text/javascript">
+     $(function () {
+         var commentContainer;
+         var deleteLinkObj;
+
+
+         var dialog = $("#dialog-confirm").dialog({ autoOpen: false });
+         $("#click").click(function (e) {
+             e.preventDefault();
+             dialog.dialog("open");
+         });
+
+         // delete Link
+         $('.delete-link').click(function () {
+             commentContainer = $('#rightMessageBox').parent();
+             deleteLinkObj = $(this);
+             dialog.dialog('open');
+             return false; // prevents the default behaviour
+
+         });
+
+         $('#delete-dialog').dialog({
+             autoOpen: false, width: 400, resizable: false, modal: true, //Dialog options
+             buttons: {
+                 "Continue": function () {
+                     $.ajax({ type: "Post",
+                         url: deleteLinkObj[0].href,
+                         cache: false,
+                         success: function (data) {
+                             //window.location.reload(true);
+                             // commentContainer.slideUp('slow', function () { $(this).remove(); });
+
+
+                             $('#ReadMessageBox').replaceWith(data);
+
+                         }
+
+                     });
+
+
+                 },
+                 "Cancel": function () { dialog.dialog('close'); }
+             }
+         });
+
+     });
+</script>
+
+

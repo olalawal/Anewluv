@@ -15,7 +15,7 @@ using Shell.MVC2.Domain.Entities.Anewluv;
 //using RiaServicesContrib.Mvc.Services;
 
 
-
+           
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
   

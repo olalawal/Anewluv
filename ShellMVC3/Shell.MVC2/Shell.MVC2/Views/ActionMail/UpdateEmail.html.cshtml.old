@@ -1,0 +1,17 @@
+﻿@model Shell.MVC2.Models.EmailModel
+
+@{
+    ViewBag.Title = "General Upates from AnewLuv.com";
+    Layout = "~/Views/ActionMail/Shared/_LayoutHtmlEmail.cshtml";
+}
+
+<h2>AnewLuv Update Message</h2>
+
+
+
+    <div>
+        Dear , @Model.ScreenName ,    @Model.MessageBody 
+          @Url.Action("LogOn", "Account", new { profileID = @Model.ProfileID.ToString() }) Thanks!
+    </div>
+
+

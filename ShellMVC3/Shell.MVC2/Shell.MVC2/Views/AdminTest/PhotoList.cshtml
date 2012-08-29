@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Shell.MVC2.Models.AdminPhotoModel>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+        $('a#rotator').hover(function () {
+            // Get PhotoId value
+            var id = $(this).find('img').attr("id");
+            $("#status").html(id);
+            //now do your ajax postback passing in the id.
+            $.get('@Url.Action("PhotoApprovalView")', { photoid: id }, function (result) {
+                $("#Photostatus").html(result); //This is the line you need, displays contents
+            });
+        });
+
+
+</script>
+
+
+
+<span id="Photostatus" >Status Photo preview</span>
+
+<div class="PhotoList">
+    <h1>
+        @ViewData["Message"]</h1>
+    <b>
+        @ViewData["ModelCount"]</b> items are <b>
+            @ViewData["Message"]</b>
+    <br />
+    <b>Photo Created</b>
+    @ViewData["DateRange"]
+    <br clear="all" />
+    @Html.Partial("PhotoPagation")
+    <ul style="margin: 0px; padding: 0px;" class="PhotoListItem">
+        @{ foreach (var item in Model)
+           { 
+        <li style="margin: 0px; padding: 0px;"><a id="rotator">
+            <img id="@item.PhotoID" src="@Url.Action("GetGalleryImageByPhotoID", "Images", new { id = item.PhotoID},null)"
+                alt="" width="124" height="124" />
+        </a></li>
+         } }
+    </ul>
+</div>
+@*End of PhotoEditsItem*@
+ <br clear="all" />
+
+

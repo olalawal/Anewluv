@@ -1,0 +1,147 @@
+﻿@model Shell.MVC2.Models.EditProfileSettingsViewModel
+@using Shell.MVC2.AppFabric
+@using Shell.MVC2.Models
+
+@*<script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js") " type="text/javascript"></script>
+*@
+<script type="text/javascript">
+
+
+
+   
+</script>
+
+ <div id="PartialContainderForEditApperance1">
+   
+
+
+     <div class="Describe_what_makes_aboutEdit">
+				
+					<p class="lastNode">Describe  what you consider your most attractive features and what features attract you the most in other members 
+				</p>
+	</div>
+			
+			<div class="clearFloat"></div>
+         
+        @using (Html.BeginForm("EditProfileAppearanceSettings", "EditProfile", new { @ViewIndex = Constants.AppearanceSettingsPage4, @fulledit = Model.IsFullEditing }, FormMethod.Post))
+           { 
+        
+       			
+			
+			<div class="YouMyQSEappearnce">
+				
+					<p class="lastNode">Me(HotFeature)
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="editor-field"> 
+            <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt2 = 0; } 
+               @foreach(var showme in Model.AppearanceSettings.MyHotFeatureList)                   
+                 { 
+                   if (cnt2 == 3 || cnt2 == 6 || cnt2 == 9 || cnt2 == 12 || cnt2 == 15) 
+                   {  <tr></tr>
+                          }                   
+                  
+ 
+                      <td style="padding:5px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedMyHotFeatureIds" name="SelectedMyHotFeatureIds" value="@showme.HotFeatureID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" class="SelectedMyHotFeatureIds" name="SelectedMyHotFeatureIds" value="@showme.HotFeatureID"  />
+                           }  
+                        
+                        @showme.HotFeatureName
+                        </td>                     
+                     
+                     <!-- increment counter here only once -->
+                       cnt2++  ;              
+                         
+                  
+                    
+                  }
+                  
+			 </table> 			
+             </div>            
+           
+			<div class="clearFloat"></div>
+		
+             
+     
+             <div class="MiddleCheckBoxHeaderEdit">
+					<p class="lastNode">Your HotFeatures
+			</p>
+		   </div>	
+           <div class="editor-field"> 
+             <table style="width: 95%"  class="CheckboxLabelText"  > 
+                <tr> </tr> 
+               @{ int cnt3 = 0; } 
+               @foreach(var showme in Model.AppearanceSearchSettings.HotFeatureList)                   
+                 { 
+                  if (cnt3 == 3 || cnt3 == 6 || cnt3 == 9 || cnt3 == 12 || cnt3 == 15)
+                  {<tr></tr> }
+                    
+                  
+ 
+                      <td style="padding:5px;" >  
+                      @if (showme.Selected) 
+                          {     
+                          <input type="checkbox" class="SelectedYourHotFeatureIds" name="SelectedYourHotFeatureIds" value="@showme.HotFeatureID" checked="checked"  />   
+                              
+                           } else 
+                          {         
+                          <input type="checkbox" class="SelectedYourHotFeatureIds"  name="SelectedYourHotFeatureIds" value="@showme.HotFeatureID"  />
+                           }  
+                        
+                        @showme.HotFeatureName
+                        </td> 
+
+
+                    
+                  
+                     <!-- increment counter here only once -->
+                  cnt3++
+                    ;
+
+
+                 }
+                  
+			 </table>
+
+			
+             </div>
+		<div id="buttonbootstrap1">
+             <button class="btn btn-primary" type="submit" value="Submit">Submit this page</button>
+			</div>
+			<div id="buttonbootstrap2">
+               <button class="btn btn-inverse" type="submit" onclick='javascript:history.go(-1);return false;'>Cancel And Return</button>
+          
+	     </div>
+		<div id="MyQSEappearnceBox3SliceContainer_bottom_1">
+        <div class="EditProfileBottomLinkBack">
+				
+					<p class="lastNode">
+                             @Html.ActionLink("Back", "EditProfileApperanceSettings", "EditProfile", new { ViewIndex = Constants.AppearanceSettingsPage3  }, null)           
+			
+				</p>
+			</div>
+			<div class="EditProfileBottomLikNext">
+				
+					<p class="lastNode">
+                            @Html.ActionLink("Next", "EditProfileLifeStyleSettings", "EditProfile", new { ViewIndex = Constants.LifeStyleSettingsPage1 }, null)
+				
+				</p>
+			</div>
+		</div>
+ 
+             } 
+
+
+ </div>  
+

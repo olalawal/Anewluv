@@ -1,0 +1,170 @@
+﻿@model MailMessageModel
+
+
+
+@{
+    ViewBag.Title = "SendMessage";
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+
+   <div id="postBoardDiv">
+         <!-- Added to toggle adds 1-27-2012 -->
+    
+          @Html.Partial("TopBottomLink") 
+     }   
+
+		</div>
+        <div class="clearFloat"></div>
+    <div id="photoBoxStrip">
+			<div id="pic9">
+			</div>
+			<div id="pic8">
+			</div>
+			<div id="pic7">
+			</div>
+			<div id="pic6">
+			</div>
+			<div id="pic5">
+			</div>
+			<div id="pic4">
+			</div>
+			<div id="pic3">
+			</div>
+			<div id="pic2">
+			</div>
+			<div id="pic1">
+			</div>
+			<div class="clearFloat"></div>
+		</div>
+	<div class="clearFloat"></div>
+	
+  <div id="leftDivsendmsg">
+  <center>
+  
+        
+       @Html.Partial("AddSense/LeftRightScraper")
+        
+  </center>
+
+
+	</div>
+	<div id="bodyDivsendmsg">
+		<div class="Txt_SENDsendmsg">
+			
+				<p class="lastNode">SEND MESSAGE
+			</p>
+		</div>
+		<div class="clearFloat"></div>
+        <div style="text-align :center;">
+           @ViewData["message"]
+        	@Html.ValidationSummary(false, "was unable to send your email, please fix your errors")
+        </div>
+         
+          @using (Html.BeginForm()) {
+         
+
+		<div id="Box3SliceContainersendmsg">
+			<div id="Box3SliceContainer_top_1sendmsg">
+			</div>
+			<div class="Txt_Sendingsendmsg">
+				
+					<p class="lastNode">Sending a message is strictly confidential. So your name and email address will never be revealed. Your Contact info is private and is never displayed.
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div id="colwrap4sendmsg">
+				<div id="leftBoxSlicesendmsg">
+					<div class="Txt_Subjectsendmsg">
+						
+							<p class="lastNode">Subject:
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				  <div id = "TextField_winsendmsg">@Html.TextBoxFor(model => model.Subject, new { style = "width:190px;margin-left: 48px;" })
+                    @Html.ValidationMessageFor(model => model.Subject)</div>
+										<div class="clearFloat"></div>
+					<div class="Txt_Messagesendmsg">
+						
+							<p class="lastNode">Message:
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+			</div>
+			<div id="colwrap5sendmsg">
+				<div id="rightboxSlicesendmsg">
+					<div class="Txt_Tosendmsg">
+						
+							<p class="lastNode">To:
+						</p>
+					</div>
+					<div class="Txt_Namesendmsg">
+						
+							<p class="lastNode">@Model.RecipientName 
+						</p>
+					</div>
+					<div class="clearFloat"></div>
+					<div id="photoDivsendmsg">
+                        <img  src="@Url.Action("GetGalleryImageByScreenName", "Images", new { id = Model.RecipientName},null) " alt="" width ="94" height ="94" />
+					
+					</div>
+					<div class="clearFloat"></div>
+				</div>
+				<div class="clearFloat"></div>
+			</div>
+			<div id="textAreaDivsendmsg">
+              
+               <div class="editor-field">
+                     @* @Html.TextArea("Model.BasicProfileSettings.AboutMe", @Model.Body, new { style = "height: 150px;width:450px; max-width: 450px;" })  
+*@
+               
+                      </div>
+
+          @Html.TextAreaFor(model => model.Body,  new { style = "height: 150px;width:450px; max-width: 450px;" }) 
+                      <div class ="TextFeildRightValidation">
+                         @Html.ValidationMessageFor(model => model.Body)
+             </div> 
+			</div>
+            @Html.HiddenFor(model => model.RecipientID)
+              @Html.HiddenFor(model => model.RecipientName )
+            @Html.HiddenFor(model => model.SenderID)
+            @Html.HiddenFor(model => model.SenderName)
+            @Html.HiddenFor(model => model.Subject) 
+            @Html.HiddenFor(model => model.uniqueID)
+			
+			<div class="clearFloat"></div>
+			<div id="buttonDivsendmsg">
+             <input class="btn btn-primary" type="submit" value="Send" name="Save" id="Submit1"   />
+			</div>
+
+			<div class="clearFloat"></div>
+		<div id="Box3SliceContainer_bottom_1sendmsg">
+		</div>
+		</div>
+             } @* End of BeginForm() *@
+		<div class="clearFloat"></div>
+	</div>
+	<div id="rightDivsendmsg">
+    
+    <center>
+    
+         
+       @Html.Partial("AddSense/LeftRightScraper") 
+             
+    </center>
+
+	</div>
+
+	<div class="clearFloat"></div>
+    <div id="footerPhotoEditsDiv">
+<center>
+                     
+       
+       @Html.Partial("TopBottomBanner") 
+
+     
+
+</center> 
+</div>

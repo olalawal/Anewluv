@@ -1,0 +1,231 @@
+﻿@model dynamic
+@using Omu.Awesome.Core
+@using Omu.Awesome.Mvc.Helpers
+
+  @{ //Pull the users who are avaiable to chat from from the viewbag
+      var OnlineChatUsers = ViewBag.OnlineChatUsers as List<ChatUser>; 
+     
+   } 
+
+
+
+@{
+    ViewBag.Title = "NewReadMessage3";
+    Layout = "~/Views/Members/Shared/_LayoutMembers.cshtml";
+}
+
+@{ Html.EnableClientValidation(); }
+
+
+    <div id="postBoardDiv">
+    <script type="text/javascript"><!--
+        google_ad_client = "ca-pub-9814096529112578";
+        /* 728x90, created 3/10/10 */
+        google_ad_slot = "2378578289";
+        google_ad_width = 728;
+        google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+		</div>
+
+ <div class="clearFloat"></div>
+		<div id="photoBoxStrip">
+			<div id="pic9">
+			</div>
+			<div id="pic8">
+			</div>
+			<div id="pic7">
+			</div>
+			<div id="pic6">
+			</div>
+			<div id="pic5">
+			</div>
+			<div id="pic4">
+			</div>
+			<div id="pic3">
+			</div>
+			<div id="pic2">
+			</div>
+			<div id="pic1">
+			</div>
+			<div class="clearFloat"></div>
+		</div>
+<div class="clearFloat"></div>
+
+
+ 
+	<div id="leftDivinbox">
+		<div id="mailNavDivinbox">
+			<div class="Txt_Inboxinbox">
+				
+					<p class="lastNode">Inbox
+				</p>
+			</div>
+			<div class="Txt_900inbox">
+				
+					<p class="lastNode">@Html.ActionLink(ViewData["inbox"].ToString(), "MailHome", "Mail")
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="Txt_Sentinbox">
+				
+					<p class="lastNode">Sent
+				</p>
+			</div>
+			<div class="Txt_500inbox">
+				
+					<p class="lastNode">@Html.ActionLink(ViewData["sent"].ToString(), "Sent", "Mail")
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+			<div class="Txt_Trashinbox">
+				
+					<p class="lastNode">Trash
+				</p>
+			</div>
+			<div class="Txt_100inbox">
+				
+					<p class="lastNode">@Html.ActionLink(ViewData["trash"].ToString(), "Trash", "Mail")
+				</p>
+			</div>
+			<div class="clearFloat"></div>
+		</div>
+		<div class="clearFloat"></div>
+	</div>
+	<div id="bodyDivinboxThread">
+   
+   <div class="Txt_ThreadedHeader">
+			
+				<p class="lastNode">Threaded View Of Messages
+			</p>
+		</div>
+		<div class="clearFloat"></div>
+
+    <br/>
+@{ foreach (var item in Model)
+   { 
+
+
+  <div class="box">
+  <b> @item.SenderName -> @item.RecipientName</b>
+  <img src="@Url.Action("GetGalleryImageByScreenName", "Images", new { id = item.RecipientName }, null)" width="75" height="75" border="0" class="avatar"/>
+    <div class="text"><span>@item.RecipientName</span><br/>
+      @item.Body
+      <div class="date">@String.Format("{0:MMMM dd yyyy}", item.CreationDate) at @String.Format("{0:t}", item.CreationDate) </div>
+    </div>
+    <a href="@item.FolderName" id="@item.MailboxMessagesFoldersID" class="delete">x</a>
+    <div class="clear"></div>
+    <em>Location: <i>@item.FolderName</i></em>
+    </div>
+
+   } }
+        <div class="clearFloat"></div>
+        </div>
+
+<div id="dialog-confirm" title="Delete e-mail">
+	<p id="dialog-check"><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+    These items will be <b>permanently</b> deleted and cannot be recovered. Are you sure?</p>
+</div>
+
+   <script type="text/javascript">
+            $(document).ready(function () {
+                $('#load').hide();
+                var commentContainer
+                var string;
+            });
+
+            // did you initialize the dialog?
+
+            var dialog = $("#dialog-confirm").dialog({ autoOpen: false });
+            $("#click").click(function (e) {
+                e.preventDefault();
+                dialog.dialog("open");
+            });
+
+
+
+            var $dialog = $(function () {
+                $(".delete").click(function () {
+                    $('#load').fadeIn();
+                    commentContainer = $(this).parent();
+                    var id = $(this).attr("id");
+                    string = 'id=' + id;
+                    var folder = $(this).attr("href");
+                    var msg = "This item will be <b>deleted</b>. Are you sure?";
+                    if (folder == "Trash") { msg = "These email will be <b>permanently</b> deleted and cannot be recovered. Are you sure?"; }
+                    $("p#dialog-check").html(msg.toString());
+                    dialog.dialog('open');
+                   
+                    return false; // prevents the default behaviour
+                });
+            });
+
+            // open dialog popup before you delete email
+            $('#dialog-confirm').dialog({
+                autoOpen: false,
+                width: 400,
+                modal: true,
+                resizable: false, //Dialog options
+                buttons: {
+                    "Delete Mail": function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Mail/DeleteThreadMail",
+                            data: string,
+                            cache: false,
+                            success: function (data) {
+                                commentContainer.slideUp('slow', function () { $(this).remove(); });
+                                $('#load').fadeOut();
+                            }
+                        }); // end of ajax
+                        // $(this).dialog("close");
+                    },
+
+                    "Cancel": function () {
+                        dialog.dialog('close');
+                        
+                       // $(this).dialog("close");
+                    }
+                }
+            });
+
+
+</script>
+
+	<div id="rightDivinbox">
+    <center>
+      <script type="text/javascript"><!--
+          google_ad_client = "ca-pub-9814096529112578";
+          /* 160x600image add */
+          google_ad_slot = "0602151849";
+          google_ad_width = 160;
+          google_ad_height = 600;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</center>
+	</div>
+	<div class="clearFloat"></div>
+
+    <div id="footerPhotoEditsDiv">
+<center>
+    <script type="text/javascript"><!--
+        google_ad_client = "ca-pub-9814096529112578";
+        /* 728x90, created 3/10/10 */
+        google_ad_slot = "2378578289";
+        google_ad_width = 728;
+        google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</center> 
+</div>
+
+

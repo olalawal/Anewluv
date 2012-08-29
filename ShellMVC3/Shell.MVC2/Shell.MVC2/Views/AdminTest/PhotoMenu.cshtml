@@ -1,0 +1,60 @@
+﻿@model dynamic
+<style type="text/css">
+
+    .PhotoMenui
+    {        
+        list-style-type: none;
+        height: 35px;
+        margin: 0em;
+        padding:0em;
+        font-weight:bold;
+      /*  border:1px solid blue;*/
+    }
+    .PhotoMenui li a
+    {
+        float: left;
+        padding:.4em; 
+        margin:.4em 1em .4em 0em;
+        text-decoration: none;
+        background-color:#8094aa; /*#c82b34; /*#cc6699; #c82b34;*/
+        color: #FFF;        
+    }
+    .PhotoMenui li a:hover  
+    {
+        background-color:#cc6699;/*#ffeeee; #3399ff;*/
+        color: #FFF;
+    }  
+    .PhotoMenui li a active
+    {
+        background-color:#ffeeee; /*#3399ff;*/
+        color: #FFF;
+    }   
+/*
+.new-field-validation-error
+{
+    color:white;
+    background-color:#c82b34;
+    padding:5px;
+    font-weight:bold;
+    margin-bottom:3px;
+}
+
+.input-validation-error
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: #ff0000;
+}
+*/
+</style>
+<ul class="PhotoMenui">
+<li> @Ajax.ActionLink("Not Reviewed", "PhotoList", new { page = 1, PhotoView = "Not Reviewed" }, new AjaxOptions { UpdateTargetId = "List", HttpMethod = "Post" }) </li>
+<li> @Ajax.ActionLink("Approved", "PhotoList", new { page = 1, PhotoView = "Approved" }, new AjaxOptions { UpdateTargetId = "List", HttpMethod = "Post" })</li>
+<li> @Ajax.ActionLink("Disapproved", "PhotoList", new { page = 1, PhotoView = "Disapproved" }, new AjaxOptions { UpdateTargetId = "List", HttpMethod = "Post" })</li>
+
+</ul>

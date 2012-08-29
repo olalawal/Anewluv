@@ -50,6 +50,7 @@
     <Compile Include="IChatRepository.cs" />
     <Compile Include="IAnewLuvMembershipProvider.cs" />
     <Compile Include="IGeoRepository.cs" />
+    <Compile Include="IJainrainRepositiory.cs" />
     <Compile Include="IMailRepository.cs" />
     <Compile Include="IMemberRepository.cs" />
     <Compile Include="IMembersMapperRepository.cs" />

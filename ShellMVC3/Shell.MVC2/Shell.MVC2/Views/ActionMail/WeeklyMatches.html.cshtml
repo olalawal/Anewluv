@@ -1,0 +1,47 @@
+﻿@model Shell.MVC2.ViewModels.Email.EmailMatchesViewModel 
+
+@{
+    ViewBag.Title = "WeeklyMatches";
+    Layout = "~/Views/ActionMail/Shared/_LayoutHtmlEmail.cshtml";
+}
+
+
+<table  align="center"width="600" border="0" cellspacing="0" cellpadding="10">
+       <tr>
+    <td colspan="2" style="border-left-color: #6bb5ff; border-bottom-color: #6bb5ff; border-right-color: #6bb5ff; border-top-color: #6bb5ff; border-left-style: solid; border-bottom-style: none; border-right-style: solid; border-top-style: solid; border-left-width: 1px; border-bottom-width: 0px; border-right-width: 1px; border-top-width: 1px;font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 85%;
+	font-weight: bold;
+	text-align: left;
+	color: #0c52b2;
+    background-color: #f3f8ff;" >
+				<p class="lastNode">Dear anewluv.com member, @Model.EmailModel.UserName 
+
+			</p></td>
+    <tr>
+      <td   style="border-right-style: solid; border-left-width: 1px; border-left-color: #6bb5ff; border-bottom-color: #6bb5ff; border-right-color: #6bb5ff; border-top-color: none; border-left-style: solid; border-bottom-style: none; border-right-style border-left-width: 1px; border-bottom-width: 0px; border-right-width: 1px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 85%; font-weight: bold; text-align: left; color: #0c52b2; background-color: #f3f8ff;;" >
+        
+               @Model.EmailModel.MessageBody 
+    @* add the images as partial *@
+    
+    @if( Model.HasMatches == true){
+        var pp = new PaginatedList<MemberSearchViewModel>(); 
+        var productPagedList = pp.GetPageableList((List<MemberSearchViewModel>)(Model.EmailMatches), 1, 4);
+        if (productPagedList != null)
+        { 
+        @Html.Partial("EmailMatches", productPagedList)   
+        }     
+        }
+        else
+        {
+    @Html.Encode("You have no matches, please log on to your profile and edit your profile")
+    
+    }
+                 
+                      
+                        
+    
+</table>
+
+
+
+   

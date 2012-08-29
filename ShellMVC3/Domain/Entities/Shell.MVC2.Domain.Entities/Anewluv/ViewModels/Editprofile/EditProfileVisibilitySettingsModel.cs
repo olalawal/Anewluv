@@ -9,7 +9,7 @@ using System.Web.Security;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using System.Collections;
 
-namespace Shell.MVC2.Models
+namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
            
 

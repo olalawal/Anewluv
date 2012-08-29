@@ -1,0 +1,13 @@
+﻿@model IEnumerable<object>
+
+    @if (Model != null)
+        {
+            foreach (var o in Model)
+            {
+    
+         @Html.Partial("item", o) 
+    
+            }
+        }
+
+

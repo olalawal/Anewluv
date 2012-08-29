@@ -26,21 +26,38 @@ namespace Shell.MVC2.Helpers
 {
 
 
-    public class CustomBaseController : Controller
+    public class ActivityLoggingController : Controller
     { 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+
             base.OnActionExecuting(filterContext);
+           //code to store the current page class as a viewbag item so it is accesible for backgroudnds etc
             string pageClass = filterContext.RouteData.Values["controller"].ToString() + "_" + filterContext.RouteData.Values["action"].ToString();
             ViewBag.PageClass = pageClass.ToLower();
- } 
+
+            //get the data to be logged 
+             var actionDescriptor= filterContext.ActionDescriptor;
+             string controllerName = actionDescriptor.ControllerDescriptor.ControllerName;
+             string actionName = actionDescriptor.ActionName;
+             string userName = filterContext.HttpContext.User.Identity.Name.ToString();
+             DateTime timeStamp = filterContext.HttpContext.Timestamp;
+             string routeId=string.Empty;
+             if (filterContext.RouteData.Values["id"] != null)
+             {
+                 routeId = filterContext.RouteData.Values["id"].ToString();
+             } 
+             //connect to the logging service and log it to the GEOdatalogging table
+
+            }
+
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            // ... log stuff after execution
+        }
+
+ 
     }
-
-
-
-
-    
-     
 
 
     /// <summary>
@@ -49,9 +66,7 @@ namespace Shell.MVC2.Helpers
     /// does work with open ranges
     /// By default the attribute also marks the property with DataType.Date - this can be 
     /// disabled with SuppressDataTypeUpdate
-    /// </summary>
-    /// 
-
+    /// </summary> 
    // public class DateAttribute : RangeAttribute {
     //    public DateAttribute() : base(typeof(DateTime), DateTime.Now.AddYears(-20).ToShortDateString(), DateTime.Now.AddYears(2).ToShortDateString()) { } } 
 
@@ -211,146 +226,7 @@ namespace Shell.MVC2.Helpers
     }
 
  
-    ////TO DO
-    ////utils that should be moved to Common when its converted to C#
-    //    public class Utils
-    //    {
-
-          
-
-
-            
-    //        #region "Logging"
-    //        public static void LogInfo(string message)
-    //        {
-    //            LogMessage(message, TraceLevel.Info);
-    //        }
-
-    //        public static void LogMessage(MethodBase method, string message)
-    //        {
-    //            LogMessage("ERROR IN " + method.DeclaringType.ToString() + ":" + method.Name + ":" + message, TraceLevel.Error);
-    //        }
-    //        public static void LogMessage(string application, MethodBase method, string message)
-    //        {
-    //            LogMessage(application, "ERROR IN " + method.DeclaringType.ToString() + ":" + method.Name + ":" + message, TraceLevel.Error);
-    //        }
-    //        public static void LogMessage(string message, TraceLevel level)
-    //        {
-    //            try
-    //            {
-    //                switch (level)
-    //                {
-    //                    case TraceLevel.Error:
-    //                        LogEventLog("Webtox", message, EventLogEntryType.Error);
-    //                        break;
-    //                    case TraceLevel.Info:
-    //                        LogEventLog("Webtox", message, EventLogEntryType.Information);
-    //                        break;
-    //                    case TraceLevel.Warning:
-    //                        LogEventLog("Webtox", message, EventLogEntryType.Warning);
-    //                        break;
-    //                }
-    //            }
-    //            catch
-    //            {
-    //            }
-    //        }
-
-    //        public static void LogMessage(string application, string message, TraceLevel level)
-    //        {
-    //            try
-    //            {
-    //                switch (level)
-    //                {
-    //                    case TraceLevel.Error:
-    //                        LogEventLog(application, message, EventLogEntryType.Error);
-    //                        break;
-    //                    case TraceLevel.Info:
-    //                        LogEventLog(application, message, EventLogEntryType.Information);
-    //                        break;
-    //                    case TraceLevel.Warning:
-    //                        LogEventLog(application, message, EventLogEntryType.Warning);
-    //                        break;
-    //                }
-    //            }
-    //            catch
-    //            {
-    //            }
-    //        }
-    //        public static bool LogEventLog(string sApp, string logMessage, EventLogEntryType EventType = EventLogEntryType.Error)
-    //        {
-
-    //            EventLog objEventLog = new EventLog();
-
-    //            try
-    //            {
-    //                if (!EventLog.SourceExists(sApp))
-    //                {
-    //                    EventLog.CreateEventSource(sApp, "Application");
-    //                }
-    //                objEventLog.Source = sApp;
-    //                objEventLog.WriteEntry(logMessage, EventType);
-    //                return true;
-    //            }
-    //            catch (Exception ex)
-    //            {
-    //                throw ex;
-    //                // log the execption message
-    //                //return false;
-    //            }
-
-    //        }
-
-    //         public static bool LogEmailAndEventLog(string sApp, string logMessage, EventLogEntryType EventType = EventLogEntryType.Error)
-    //        {
-
-    //            EventLog objEventLog = new EventLog();
-
-    //            try
-    //            {
-    //                if (!EventLog.SourceExists(sApp))
-    //                {
-    //                    EventLog.CreateEventSource(sApp, "Application");
-    //                }
-    //                objEventLog.Source = sApp;
-    //                objEventLog.WriteEntry(logMessage, EventType);
-
-    //                return true;
-    //            }
-    //            catch (Exception ex)
-    //            {
-    //                throw ex;
-    //                // log the execption message
-    //                //return false;
-    //            }
-
-    //        }
-
-    //        #endregion
-
-    //        #region "Miscellanous"
-
-
-    //        public static string FormatException(Exception ex)
-    //        {
-
-    //            string sTemp = "Message: " + ex.Message + "  Stack: " + ex.StackTrace;
-    //            return sTemp;
-
-    //        }
-    //        //public static string FormatSQLException(SqlException ex)
-    //        //{
-
-    //        //    string sTemp = "Message: " + ex.Message + "  Stack: " + ex.StackTrace;
-    //        //    return sTemp;
-
-    //        //}
-
-
-    //        #endregion
-
-
-    //    }
+    
 
 
 
