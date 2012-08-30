@@ -2,28 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Shell.MVC2.Models.Chat;
-using Shell.MVC2.Services.Chat;
+using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 
-namespace Shell.MVC2.ViewModels.Chat
+
+namespace Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels
 {
     public class UserViewModel
     {
-        public UserViewModel(ChatUser user)
-        {
-            Name = user.Name;
-            ScreenName = user.ScreenName;
-            Gender = user.Gender;
-            Hash = user.Hash;
-            Active = user.Status == (int)UserStatus.Active;
-            Status = ((UserStatus)user.Status).ToString();
-            Note = user.Note;
-            AfkNote = user.AfkNote;
-            IsAfk = user.IsAfk;
-            Flag = user.Flag;
-            Country = ChatService.GetCountry(user.Flag);
-            LastActivity = user.LastActivity;
-        }
+      
 
         public string Name { get; private set; }
         public string ScreenName { get; set; }

@@ -20,5 +20,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public string PostalCode { get; set; }
         //gender is now allowing multiple selections
         public List<string> GendersList = new List<string>();
+
+       
+
     }
 }

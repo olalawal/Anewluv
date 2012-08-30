@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Shell.MVC2.Models.Chat;
+using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 
-namespace Shell.MVC2.ViewModels.Chat
+namespace Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels
 {
     public class RoomViewModel
     {

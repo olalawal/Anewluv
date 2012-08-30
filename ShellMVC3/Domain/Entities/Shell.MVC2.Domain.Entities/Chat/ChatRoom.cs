@@ -5,7 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 
 
-namespace Shell.MVC2.Models.Chat
+namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
 {
     //TO do get rid of this topic crap and use what is in user list, match up user's on UI side
     public class ChatRoom

@@ -6,7 +6,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 //using Shell.MVC2.Infastructure.Chat;
 
-namespace Shell.MVC2.Models.Chat
+namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
 {
   
 

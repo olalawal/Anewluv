@@ -41,7 +41,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
       
         //linked collections
         public virtual ICollection<membersinrole > roles { get; set; }
-        public virtual ICollection<loginGeodata> geodatalogs { get; set; }
+        public virtual ICollection<activitylog> activitylogs { get; set; }
         public virtual ICollection<openid> openids { get; set; }
 
         public string profile_id { get; set; }

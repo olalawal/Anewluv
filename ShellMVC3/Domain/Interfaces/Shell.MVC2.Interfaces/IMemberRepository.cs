@@ -12,19 +12,16 @@ namespace Shell.MVC2.Data
    {
 
 
-
+       //TO Do posibly move this to a separate service for benchmarking
        //member viewmodoem mapping and registration models mappers
-       public MembersViewModel MapMember(string profileid);
-       
-       public MembersViewModel MapGuest();
-
-       public RegisterModel MapRegistration(MembersViewModel membersmodel);
-     
-       public RegisterModel MapJainRainRegistration(rpxprofile profile, MembersViewModel membersmodel);      
-
+       public MembersViewModel mapmember(string profileid);       
+       public MembersViewModel mapguest();
+       public RegisterModel mapregistration(MembersViewModel membersmodel);     
+       public RegisterModel mapjainrainregistration(rpxprofile profile, MembersViewModel membersmodel);
        //TO DO move to unit test
-       public RegisterModel MapRegistrationTest();     
-     
+       public RegisterModel mapregistrationtest();  
+       //end of profile mapping
+
        //initial profile stuffs
         profile getprofilebyusername(string username)  ;
         profiledata getprofiledatabyprofileid(string profileid) ;
@@ -51,7 +48,7 @@ namespace Shell.MVC2.Data
        //check if profile is activated 
         bool checkifprofileisactivated(string strProfileID);   
        //check if mailbox folder exist
-        bool checkifmailboxfoldersarecreated(string strProfileID);      
+        bool checkifmailboxfoldersarecreated(string strProfileID);     
 
       //DateTimeFUcntiosn for longin etc "
        //********************************************
@@ -109,11 +106,9 @@ namespace Shell.MVC2.Data
        //Hereis where the members Repository stuff that was in the MVC project starts at
        //************************************************************************************
    
-        profile getprofilebyprofileid(string ProfileId);       
-                         
-     
-         bool deactivateprofile(string profileid);
-         visiblitysetting getprofilevisibilitysettingsbyprofileid(string ProfileID);          
+        profile getprofilebyprofileid(string ProfileId);         
+        bool deactivateprofile(string profileid);
+        visiblitysetting getprofilevisibilitysettingsbyprofileid(string ProfileID);          
      
      
        //TO DO move these functions to a Matches or Search Services Area and repoisitory eventually
@@ -127,12 +122,5 @@ namespace Shell.MVC2.Data
          List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model);
           
       
-     
-       
-      
-       
-    
-
-
     }
 }

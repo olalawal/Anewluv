@@ -148,8 +148,8 @@
     <Compile Include="Anewluv\ViewModels\MemberSearchViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\MembershipUserViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\MembersViewModel.cs" />
-    <Compile Include="Anewluv\ViewModels\OpenId\RpxAuthInfo.cs" />
-    <Compile Include="Anewluv\ViewModels\OpenId\RpxProfile.cs" />
+    <Compile Include="Anewluv\ViewModels\OpenId\rpxauthinfo.cs" />
+    <Compile Include="Anewluv\ViewModels\OpenId\rpxprofile.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\EditProfilePhotoModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\EditProfilePhotosViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\EditProfileViewPhotoModel.cs" />
@@ -161,7 +161,11 @@
     <Compile Include="Anewluv\ViewModels\SearchSettings\SearchBasicSettings.cs" />
     <Compile Include="Anewluv\ViewModels\SearchSettings\SearchCharacterSettings.cs" />
     <Compile Include="Anewluv\ViewModels\SearchSettings\SearchLifeStyleSettings.cs" />
-    <Compile Include="Anewluv\ViewModels\search\CustomSearchViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Search\AppearanceSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Search\LifeStyleSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Search\CharacterSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Search\SearchSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Search\BasicSettingsViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\UxMessages\UxMessageTypeModel.cs" />
     <Compile Include="Anewluv\ViewModels\ValidateRegistrationGeoDataModel.cs" />
     <Compile Include="Anewluv\visiblitysetting.cs" />

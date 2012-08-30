@@ -24,7 +24,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<hotlist> hotlists { get; set; }
         public DbSet<interest> interests { get; set; }
         public DbSet<like> likes { get; set; }
-        public DbSet<loginGeodata> loginGeoData { get; set; }
+        public DbSet<activitylog> activitylog { get; set; }
+        public DbSet<activityloggeodata > activityloggeodata { get; set; }
         public DbSet<profiledata_lookingfor> lookingfor { get; set; }
         public DbSet<mailupdatefreqency> mailupdatefreqencies { get; set; }
         public DbSet<membersinrole> membersinroles { get; set; }

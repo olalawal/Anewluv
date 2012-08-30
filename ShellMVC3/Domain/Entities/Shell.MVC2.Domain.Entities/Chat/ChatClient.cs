@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shell.MVC2.Models.Chat
+namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
 {
     public class ChatClient
     {

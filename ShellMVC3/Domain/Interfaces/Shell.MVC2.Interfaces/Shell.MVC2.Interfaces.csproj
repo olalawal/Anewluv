@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Omu.Awesome.Core, Version=1.7.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\Shell.MVC2\Shell.MVC2\bin\Omu.Awesome.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -50,7 +47,7 @@
     <Compile Include="IChatRepository.cs" />
     <Compile Include="IAnewLuvMembershipProvider.cs" />
     <Compile Include="IGeoRepository.cs" />
-    <Compile Include="IJainrainRepositiory.cs" />
+    <Compile Include="IOpenidRepositiory.cs" />
     <Compile Include="IMailRepository.cs" />
     <Compile Include="IMemberRepository.cs" />
     <Compile Include="IMembersMapperRepository.cs" />
