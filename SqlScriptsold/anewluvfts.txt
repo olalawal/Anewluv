@@ -1,0 +1,4091 @@
+USE [AnewLuvFts]
+GO
+/****** Object:  ForeignKey [FK_abusereport_ProfileData]    Script Date: 08/31/2012 02:03:45 ******/
+ALTER TABLE [dbo].[abusereport] DROP CONSTRAINT [FK_abusereport_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_abusereports_abusetypes]    Script Date: 08/31/2012 02:03:45 ******/
+ALTER TABLE [dbo].[abusereport] DROP CONSTRAINT [FK_abusereports_abusetypes]
+GO
+/****** Object:  ForeignKey [FK_favorites_ProfileData]    Script Date: 08/31/2012 02:03:48 ******/
+ALTER TABLE [dbo].[favorite] DROP CONSTRAINT [FK_favorites_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_Friends_ProfileData]    Script Date: 08/31/2012 02:03:48 ******/
+ALTER TABLE [dbo].[Friends] DROP CONSTRAINT [FK_Friends_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_Hotlists_ProfileData]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Hotlist] DROP CONSTRAINT [FK_Hotlists_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_Interest_ProfileData]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Interest] DROP CONSTRAINT [FK_Interest_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_Like_ProfileData]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Like] DROP CONSTRAINT [FK_Like_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_Mailboxblocks_ProfileData]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Mailboxblocks] DROP CONSTRAINT [FK_Mailboxblocks_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_MailboxFolders_MailboxFolderTypes]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[MailboxFolders] DROP CONSTRAINT [FK_MailboxFolders_MailboxFolderTypes]
+GO
+/****** Object:  ForeignKey [FK_MailboxFolders_ProfileData]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[MailboxFolders] DROP CONSTRAINT [FK_MailboxFolders_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_MailboxMessagesFolders_MailboxFolders]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[MailboxMessagesFolders] DROP CONSTRAINT [FK_MailboxMessagesFolders_MailboxFolders]
+GO
+/****** Object:  ForeignKey [FK_MailboxMessagesFolders_MailboxMessages]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[MailboxMessagesFolders] DROP CONSTRAINT [FK_MailboxMessagesFolders_MailboxMessages]
+GO
+/****** Object:  ForeignKey [FK_MembersInRole_ProfileData]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[MembersInRole] DROP CONSTRAINT [FK_MembersInRole_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_MembersInRole_profiles]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[MembersInRole] DROP CONSTRAINT [FK_MembersInRole_profiles]
+GO
+/****** Object:  ForeignKey [FK_MembersInRole_Roles]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[MembersInRole] DROP CONSTRAINT [FK_MembersInRole_Roles]
+GO
+/****** Object:  ForeignKey [FK_photo_PhotoRejectionReasons]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photo_PhotoRejectionReasons]
+GO
+/****** Object:  ForeignKey [FK_photo_PhotoType]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photo_PhotoType]
+GO
+/****** Object:  ForeignKey [FK_photo_ProfileData]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photo_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_photo_ProfileData1]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photo_ProfileData1]
+GO
+/****** Object:  ForeignKey [FK_photos_PhotoAlbums]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photos_PhotoAlbums]
+GO
+/****** Object:  ForeignKey [FK_photos_PhotoReviewStatus]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photos_PhotoReviewStatus]
+GO
+/****** Object:  ForeignKey [FK_photos_PhotoStatus]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photos_PhotoStatus]
+GO
+/****** Object:  ForeignKey [FK_PhotoAlbums_ProfileData]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[PhotoAlbums] DROP CONSTRAINT [FK_PhotoAlbums_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_abusers]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_abusers]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaAppearance_Bodytypes]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaAppearance_Bodytypes]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaAppearance_EyeColor]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaAppearance_EyeColor]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaAppearance_HairColor]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaAppearance_HairColor]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Diet]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Diet]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Drinks]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Drinks]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Exercise]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Exercise]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Humor]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Humor]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_PoliticalView]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_PoliticalView]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Religion]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Religion]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_ReligiousAttendance]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_ReligiousAttendance]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Sign]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Sign]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Smokes]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Smokes]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_EducationLevel]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_EducationLevel]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_EmploymentStatus]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_EmploymentStatus]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_HaveKids]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_HaveKids]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_IncomeLevel]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_IncomeLevel]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_LivingSituation]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_LivingSituation]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_MaritalStatus]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_MaritalStatus]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_Profession]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_Profession]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_WantsKids]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_WantsKids]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_genders]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_genders]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_Ethnicity_CriteriaAppearance_Ethnicity]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_Ethnicity] DROP CONSTRAINT [FK_ProfileData_Ethnicity_CriteriaAppearance_Ethnicity]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_Ethnicity_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_Ethnicity] DROP CONSTRAINT [FK_ProfileData_Ethnicity_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_Hobby_CriteriaCharacter_Hobby]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_Hobby] DROP CONSTRAINT [FK_ProfileData_Hobby_CriteriaCharacter_Hobby]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_Hobby_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_Hobby] DROP CONSTRAINT [FK_ProfileData_Hobby_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_HotFeature_CriteriaCharacter_HotFeature]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_HotFeature] DROP CONSTRAINT [FK_ProfileData_HotFeature_CriteriaCharacter_HotFeature]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_HotFeature_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_HotFeature] DROP CONSTRAINT [FK_ProfileData_HotFeature_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_LookingFor_CriteriaLife_LookingFor]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_LookingFor] DROP CONSTRAINT [FK_ProfileData_LookingFor_CriteriaLife_LookingFor]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_LookingFor_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_LookingFor] DROP CONSTRAINT [FK_ProfileData_LookingFor_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileEmailUpdateFreqency_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileEmailUpdateFreqency] DROP CONSTRAINT [FK_ProfileEmailUpdateFreqency_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileGeoDataLogger_profiles]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileGeoDataLogger] DROP CONSTRAINT [FK_ProfileGeoDataLogger_profiles]
+GO
+/****** Object:  ForeignKey [FK_profileOpenIDStore_profiles]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[profileOpenIDStore] DROP CONSTRAINT [FK_profileOpenIDStore_profiles]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatings_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileRatings] DROP CONSTRAINT [FK_ProfileRatings_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatings_Ratings]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileRatings] DROP CONSTRAINT [FK_ProfileRatings_Ratings]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatings_Ratings1]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileRatings] DROP CONSTRAINT [FK_ProfileRatings_Ratings1]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatingTracker_ProfileRatings]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileRatingTracker] DROP CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatingTracker_ProfileRatings1]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileRatingTracker] DROP CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings1]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatingTracker_ProfileRatings2]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileRatingTracker] DROP CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings2]
+GO
+/****** Object:  ForeignKey [FK_profiles_ProfileData]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [FK_profiles_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_profiles_profilestatuses]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [FK_profiles_profilestatuses]
+GO
+/****** Object:  ForeignKey [FK_profiles_SecurityQuestion]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [FK_profiles_SecurityQuestion]
+GO
+/****** Object:  ForeignKey [FK_ProfileViews_ProfileData]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileViews] DROP CONSTRAINT [FK_ProfileViews_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileVisiblitySettings_genders]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileVisiblitySettings] DROP CONSTRAINT [FK_ProfileVisiblitySettings_genders]
+GO
+/****** Object:  ForeignKey [FK_ProfileVisiblitySettings_ProfileData]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileVisiblitySettings] DROP CONSTRAINT [FK_ProfileVisiblitySettings_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ProfileData]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[SearchSettings] DROP CONSTRAINT [FK_SearchSettings_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ProfileData1]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[SearchSettings] DROP CONSTRAINT [FK_SearchSettings_ProfileData1]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_BodyTypes_CriteriaAppearance_Bodytypes]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_BodyTypes] DROP CONSTRAINT [FK_SearchSettings_BodyTypes_CriteriaAppearance_Bodytypes]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_BodyTypes_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_BodyTypes] DROP CONSTRAINT [FK_SearchSettings_BodyTypes_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Diet_CriteriaCharacter_Diet]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Diet] DROP CONSTRAINT [FK_SearchSettings_Diet_CriteriaCharacter_Diet]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Diet_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Diet] DROP CONSTRAINT [FK_SearchSettings_Diet_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Drinks_CriteriaCharacter_Drinks]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Drinks] DROP CONSTRAINT [FK_SearchSettings_Drinks_CriteriaCharacter_Drinks]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Drinks_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Drinks] DROP CONSTRAINT [FK_SearchSettings_Drinks_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EducationLevel_CriteriaLife_EducationLevel]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EducationLevel] DROP CONSTRAINT [FK_SearchSettings_EducationLevel_CriteriaLife_EducationLevel]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EducationLevel_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EducationLevel] DROP CONSTRAINT [FK_SearchSettings_EducationLevel_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EmploymentStatus_CriteriaLife_EmploymentStatus]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EmploymentStatus] DROP CONSTRAINT [FK_SearchSettings_EmploymentStatus_CriteriaLife_EmploymentStatus]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EmploymentStatus_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EmploymentStatus] DROP CONSTRAINT [FK_SearchSettings_EmploymentStatus_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Ethnicity_CriteriaAppearance_Ethnicity]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Ethnicity] DROP CONSTRAINT [FK_SearchSettings_Ethnicity_CriteriaAppearance_Ethnicity]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Ethnicity_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Ethnicity] DROP CONSTRAINT [FK_SearchSettings_Ethnicity_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Exercise_CriteriaCharacter_Exercise]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Exercise] DROP CONSTRAINT [FK_SearchSettings_Exercise_CriteriaCharacter_Exercise]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Exercise_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Exercise] DROP CONSTRAINT [FK_SearchSettings_Exercise_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EyeColor_CriteriaAppearance_EyeColor]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EyeColor] DROP CONSTRAINT [FK_SearchSettings_EyeColor_CriteriaAppearance_EyeColor]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EyeColor_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EyeColor] DROP CONSTRAINT [FK_SearchSettings_EyeColor_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Genders_genders]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Genders] DROP CONSTRAINT [FK_SearchSettings_Genders_genders]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Genders_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Genders] DROP CONSTRAINT [FK_SearchSettings_Genders_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HairColor_CriteriaAppearance_HairColor]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HairColor] DROP CONSTRAINT [FK_SearchSettings_HairColor_CriteriaAppearance_HairColor]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HairColor_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HairColor] DROP CONSTRAINT [FK_SearchSettings_HairColor_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HaveKids_CriteriaLife_HaveKids]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HaveKids] DROP CONSTRAINT [FK_SearchSettings_HaveKids_CriteriaLife_HaveKids]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HaveKids_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HaveKids] DROP CONSTRAINT [FK_SearchSettings_HaveKids_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Hobby_CriteriaCharacter_Hobby]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Hobby] DROP CONSTRAINT [FK_SearchSettings_Hobby_CriteriaCharacter_Hobby]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Hobby_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Hobby] DROP CONSTRAINT [FK_SearchSettings_Hobby_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HotFeature_CriteriaCharacter_HotFeature]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HotFeature] DROP CONSTRAINT [FK_SearchSettings_HotFeature_CriteriaCharacter_HotFeature]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HotFeature_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HotFeature] DROP CONSTRAINT [FK_SearchSettings_HotFeature_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Humor_CriteriaCharacter_Humor]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Humor] DROP CONSTRAINT [FK_SearchSettings_Humor_CriteriaCharacter_Humor]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Humor_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Humor] DROP CONSTRAINT [FK_SearchSettings_Humor_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_IncomeLevel_CriteriaLife_IncomeLevel]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_IncomeLevel] DROP CONSTRAINT [FK_SearchSettings_IncomeLevel_CriteriaLife_IncomeLevel]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_IncomeLevel_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_IncomeLevel] DROP CONSTRAINT [FK_SearchSettings_IncomeLevel_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_LivingStituation_CriteriaLife_LivingSituation]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_LivingStituation] DROP CONSTRAINT [FK_SearchSettings_LivingStituation_CriteriaLife_LivingSituation]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_LivingStituation_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_LivingStituation] DROP CONSTRAINT [FK_SearchSettings_LivingStituation_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Location_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Location] DROP CONSTRAINT [FK_SearchSettings_Location_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_LookingFor_CriteriaLife_LookinFor]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_LookingFor] DROP CONSTRAINT [FK_SearchSettings_LookingFor_CriteriaLife_LookinFor]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_LookingFor_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_LookingFor] DROP CONSTRAINT [FK_SearchSettings_LookingFor_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_MaritalStatus_CriteriaLife_MaritalStatus]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_MaritalStatus] DROP CONSTRAINT [FK_SearchSettings_MaritalStatus_CriteriaLife_MaritalStatus]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_MaritalStatus_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_MaritalStatus] DROP CONSTRAINT [FK_SearchSettings_MaritalStatus_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_NigerianState_NigerianState]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_NigerianState] DROP CONSTRAINT [FK_SearchSettings_NigerianState_NigerianState]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_NigerianState_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_NigerianState] DROP CONSTRAINT [FK_SearchSettings_NigerianState_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_PoliticalView_CriteriaCharacter_PoliticalView]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_PoliticalView] DROP CONSTRAINT [FK_SearchSettings_PoliticalView_CriteriaCharacter_PoliticalView]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_PoliticalView_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_PoliticalView] DROP CONSTRAINT [FK_SearchSettings_PoliticalView_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Profession_CriteriaLife_Profession]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Profession] DROP CONSTRAINT [FK_SearchSettings_Profession_CriteriaLife_Profession]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Profession_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Profession] DROP CONSTRAINT [FK_SearchSettings_Profession_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Religion_CriteriaCharacter_Religion]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Religion] DROP CONSTRAINT [FK_SearchSettings_Religion_CriteriaCharacter_Religion]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Religion_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Religion] DROP CONSTRAINT [FK_SearchSettings_Religion_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ReligiousAttendance_CriteriaCharacter_ReligiousAttendance]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance] DROP CONSTRAINT [FK_SearchSettings_ReligiousAttendance_CriteriaCharacter_ReligiousAttendance]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ReligiousAttendance_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance] DROP CONSTRAINT [FK_SearchSettings_ReligiousAttendance_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ReligiousAttendance_SearchSettings1]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance] DROP CONSTRAINT [FK_SearchSettings_ReligiousAttendance_SearchSettings1]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ShowMe_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ShowMe] DROP CONSTRAINT [FK_SearchSettings_ShowMe_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ShowMe_ShowMe]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ShowMe] DROP CONSTRAINT [FK_SearchSettings_ShowMe_ShowMe]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Sign_CriteriaCharacter_Sign1]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Sign] DROP CONSTRAINT [FK_SearchSettings_Sign_CriteriaCharacter_Sign1]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Sign_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Sign] DROP CONSTRAINT [FK_SearchSettings_Sign_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Smokes_CriteriaCharacter_Smokes]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_Smokes] DROP CONSTRAINT [FK_SearchSettings_Smokes_CriteriaCharacter_Smokes]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Smokes_SearchSettings]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_Smokes] DROP CONSTRAINT [FK_SearchSettings_Smokes_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_SortByType_SearchSettings]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_SortByType] DROP CONSTRAINT [FK_SearchSettings_SortByType_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_SortByType_SortByType]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_SortByType] DROP CONSTRAINT [FK_SearchSettings_SortByType_SortByType]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Tribe_SearchSettings]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_Tribe] DROP CONSTRAINT [FK_SearchSettings_Tribe_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_WantKids_CriteriaLife_WantsKids]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_WantKids] DROP CONSTRAINT [FK_SearchSettings_WantKids_CriteriaLife_WantsKids]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_WantKids_SearchSettings]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_WantKids] DROP CONSTRAINT [FK_SearchSettings_WantKids_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_User_Logtime_ProfileData]    Script Date: 08/31/2012 02:03:57 ******/
+ALTER TABLE [dbo].[User_Logtime] DROP CONSTRAINT [FK_User_Logtime_ProfileData]
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnGetUserOlineStatus]    Script Date: 08/31/2012 02:03:57 ******/
+DROP FUNCTION [dbo].[fnGetUserOlineStatus]
+GO
+/****** Object:  Table [dbo].[MailboxMessagesFolders]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[MailboxMessagesFolders] DROP CONSTRAINT [FK_MailboxMessagesFolders_MailboxFolders]
+GO
+ALTER TABLE [dbo].[MailboxMessagesFolders] DROP CONSTRAINT [FK_MailboxMessagesFolders_MailboxMessages]
+GO
+DROP TABLE [dbo].[MailboxMessagesFolders]
+GO
+/****** Object:  Table [dbo].[MembersInRole]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[MembersInRole] DROP CONSTRAINT [FK_MembersInRole_ProfileData]
+GO
+ALTER TABLE [dbo].[MembersInRole] DROP CONSTRAINT [FK_MembersInRole_profiles]
+GO
+ALTER TABLE [dbo].[MembersInRole] DROP CONSTRAINT [FK_MembersInRole_Roles]
+GO
+DROP TABLE [dbo].[MembersInRole]
+GO
+/****** Object:  Table [dbo].[photo]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photo_PhotoRejectionReasons]
+GO
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photo_PhotoType]
+GO
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photo_ProfileData]
+GO
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photo_ProfileData1]
+GO
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photos_PhotoAlbums]
+GO
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photos_PhotoReviewStatus]
+GO
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [FK_photos_PhotoStatus]
+GO
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [DF_photos_PhotoID]
+GO
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [DF__photos__ProfileI__395884C4]
+GO
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [DF__photos__Caption__3B40CD36]
+GO
+ALTER TABLE [dbo].[photo] DROP CONSTRAINT [DF_photos_Aproved]
+GO
+DROP TABLE [dbo].[photo]
+GO
+/****** Object:  Table [dbo].[ProfileGeoDataLogger]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileGeoDataLogger] DROP CONSTRAINT [FK_ProfileGeoDataLogger_profiles]
+GO
+DROP TABLE [dbo].[ProfileGeoDataLogger]
+GO
+/****** Object:  Table [dbo].[profileOpenIDStore]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[profileOpenIDStore] DROP CONSTRAINT [FK_profileOpenIDStore_profiles]
+GO
+DROP TABLE [dbo].[profileOpenIDStore]
+GO
+/****** Object:  Table [dbo].[ProfileRatingTracker]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileRatingTracker] DROP CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings]
+GO
+ALTER TABLE [dbo].[ProfileRatingTracker] DROP CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings1]
+GO
+ALTER TABLE [dbo].[ProfileRatingTracker] DROP CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings2]
+GO
+DROP TABLE [dbo].[ProfileRatingTracker]
+GO
+/****** Object:  Table [dbo].[SearchSettings_BodyTypes]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_BodyTypes] DROP CONSTRAINT [FK_SearchSettings_BodyTypes_CriteriaAppearance_Bodytypes]
+GO
+ALTER TABLE [dbo].[SearchSettings_BodyTypes] DROP CONSTRAINT [FK_SearchSettings_BodyTypes_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_BodyTypes]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Diet]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Diet] DROP CONSTRAINT [FK_SearchSettings_Diet_CriteriaCharacter_Diet]
+GO
+ALTER TABLE [dbo].[SearchSettings_Diet] DROP CONSTRAINT [FK_SearchSettings_Diet_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Diet]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Drinks]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Drinks] DROP CONSTRAINT [FK_SearchSettings_Drinks_CriteriaCharacter_Drinks]
+GO
+ALTER TABLE [dbo].[SearchSettings_Drinks] DROP CONSTRAINT [FK_SearchSettings_Drinks_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Drinks]
+GO
+/****** Object:  Table [dbo].[SearchSettings_EducationLevel]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EducationLevel] DROP CONSTRAINT [FK_SearchSettings_EducationLevel_CriteriaLife_EducationLevel]
+GO
+ALTER TABLE [dbo].[SearchSettings_EducationLevel] DROP CONSTRAINT [FK_SearchSettings_EducationLevel_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_EducationLevel]
+GO
+/****** Object:  Table [dbo].[SearchSettings_EmploymentStatus]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EmploymentStatus] DROP CONSTRAINT [FK_SearchSettings_EmploymentStatus_CriteriaLife_EmploymentStatus]
+GO
+ALTER TABLE [dbo].[SearchSettings_EmploymentStatus] DROP CONSTRAINT [FK_SearchSettings_EmploymentStatus_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_EmploymentStatus]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Ethnicity]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Ethnicity] DROP CONSTRAINT [FK_SearchSettings_Ethnicity_CriteriaAppearance_Ethnicity]
+GO
+ALTER TABLE [dbo].[SearchSettings_Ethnicity] DROP CONSTRAINT [FK_SearchSettings_Ethnicity_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Ethnicity]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Exercise]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Exercise] DROP CONSTRAINT [FK_SearchSettings_Exercise_CriteriaCharacter_Exercise]
+GO
+ALTER TABLE [dbo].[SearchSettings_Exercise] DROP CONSTRAINT [FK_SearchSettings_Exercise_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Exercise]
+GO
+/****** Object:  Table [dbo].[SearchSettings_EyeColor]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EyeColor] DROP CONSTRAINT [FK_SearchSettings_EyeColor_CriteriaAppearance_EyeColor]
+GO
+ALTER TABLE [dbo].[SearchSettings_EyeColor] DROP CONSTRAINT [FK_SearchSettings_EyeColor_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_EyeColor]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Genders]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Genders] DROP CONSTRAINT [FK_SearchSettings_Genders_genders]
+GO
+ALTER TABLE [dbo].[SearchSettings_Genders] DROP CONSTRAINT [FK_SearchSettings_Genders_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Genders]
+GO
+/****** Object:  Table [dbo].[SearchSettings_HairColor]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HairColor] DROP CONSTRAINT [FK_SearchSettings_HairColor_CriteriaAppearance_HairColor]
+GO
+ALTER TABLE [dbo].[SearchSettings_HairColor] DROP CONSTRAINT [FK_SearchSettings_HairColor_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_HairColor]
+GO
+/****** Object:  Table [dbo].[SearchSettings_HaveKids]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HaveKids] DROP CONSTRAINT [FK_SearchSettings_HaveKids_CriteriaLife_HaveKids]
+GO
+ALTER TABLE [dbo].[SearchSettings_HaveKids] DROP CONSTRAINT [FK_SearchSettings_HaveKids_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_HaveKids]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Hobby]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Hobby] DROP CONSTRAINT [FK_SearchSettings_Hobby_CriteriaCharacter_Hobby]
+GO
+ALTER TABLE [dbo].[SearchSettings_Hobby] DROP CONSTRAINT [FK_SearchSettings_Hobby_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Hobby]
+GO
+/****** Object:  Table [dbo].[SearchSettings_HotFeature]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HotFeature] DROP CONSTRAINT [FK_SearchSettings_HotFeature_CriteriaCharacter_HotFeature]
+GO
+ALTER TABLE [dbo].[SearchSettings_HotFeature] DROP CONSTRAINT [FK_SearchSettings_HotFeature_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_HotFeature]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Humor]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Humor] DROP CONSTRAINT [FK_SearchSettings_Humor_CriteriaCharacter_Humor]
+GO
+ALTER TABLE [dbo].[SearchSettings_Humor] DROP CONSTRAINT [FK_SearchSettings_Humor_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Humor]
+GO
+/****** Object:  Table [dbo].[SearchSettings_IncomeLevel]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_IncomeLevel] DROP CONSTRAINT [FK_SearchSettings_IncomeLevel_CriteriaLife_IncomeLevel]
+GO
+ALTER TABLE [dbo].[SearchSettings_IncomeLevel] DROP CONSTRAINT [FK_SearchSettings_IncomeLevel_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_IncomeLevel]
+GO
+/****** Object:  Table [dbo].[SearchSettings_LivingStituation]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_LivingStituation] DROP CONSTRAINT [FK_SearchSettings_LivingStituation_CriteriaLife_LivingSituation]
+GO
+ALTER TABLE [dbo].[SearchSettings_LivingStituation] DROP CONSTRAINT [FK_SearchSettings_LivingStituation_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_LivingStituation]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Location]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Location] DROP CONSTRAINT [FK_SearchSettings_Location_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Location]
+GO
+/****** Object:  Table [dbo].[SearchSettings_LookingFor]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_LookingFor] DROP CONSTRAINT [FK_SearchSettings_LookingFor_CriteriaLife_LookinFor]
+GO
+ALTER TABLE [dbo].[SearchSettings_LookingFor] DROP CONSTRAINT [FK_SearchSettings_LookingFor_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_LookingFor]
+GO
+/****** Object:  Table [dbo].[SearchSettings_MaritalStatus]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_MaritalStatus] DROP CONSTRAINT [FK_SearchSettings_MaritalStatus_CriteriaLife_MaritalStatus]
+GO
+ALTER TABLE [dbo].[SearchSettings_MaritalStatus] DROP CONSTRAINT [FK_SearchSettings_MaritalStatus_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_MaritalStatus]
+GO
+/****** Object:  Table [dbo].[SearchSettings_NigerianState]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_NigerianState] DROP CONSTRAINT [FK_SearchSettings_NigerianState_NigerianState]
+GO
+ALTER TABLE [dbo].[SearchSettings_NigerianState] DROP CONSTRAINT [FK_SearchSettings_NigerianState_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_NigerianState]
+GO
+/****** Object:  Table [dbo].[SearchSettings_PoliticalView]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_PoliticalView] DROP CONSTRAINT [FK_SearchSettings_PoliticalView_CriteriaCharacter_PoliticalView]
+GO
+ALTER TABLE [dbo].[SearchSettings_PoliticalView] DROP CONSTRAINT [FK_SearchSettings_PoliticalView_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_PoliticalView]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Profession]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Profession] DROP CONSTRAINT [FK_SearchSettings_Profession_CriteriaLife_Profession]
+GO
+ALTER TABLE [dbo].[SearchSettings_Profession] DROP CONSTRAINT [FK_SearchSettings_Profession_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Profession]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Religion]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Religion] DROP CONSTRAINT [FK_SearchSettings_Religion_CriteriaCharacter_Religion]
+GO
+ALTER TABLE [dbo].[SearchSettings_Religion] DROP CONSTRAINT [FK_SearchSettings_Religion_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Religion]
+GO
+/****** Object:  Table [dbo].[SearchSettings_ReligiousAttendance]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance] DROP CONSTRAINT [FK_SearchSettings_ReligiousAttendance_CriteriaCharacter_ReligiousAttendance]
+GO
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance] DROP CONSTRAINT [FK_SearchSettings_ReligiousAttendance_SearchSettings]
+GO
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance] DROP CONSTRAINT [FK_SearchSettings_ReligiousAttendance_SearchSettings1]
+GO
+DROP TABLE [dbo].[SearchSettings_ReligiousAttendance]
+GO
+/****** Object:  Table [dbo].[SearchSettings_ShowMe]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ShowMe] DROP CONSTRAINT [FK_SearchSettings_ShowMe_SearchSettings]
+GO
+ALTER TABLE [dbo].[SearchSettings_ShowMe] DROP CONSTRAINT [FK_SearchSettings_ShowMe_ShowMe]
+GO
+DROP TABLE [dbo].[SearchSettings_ShowMe]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Sign]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Sign] DROP CONSTRAINT [FK_SearchSettings_Sign_CriteriaCharacter_Sign1]
+GO
+ALTER TABLE [dbo].[SearchSettings_Sign] DROP CONSTRAINT [FK_SearchSettings_Sign_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Sign]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Smokes]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_Smokes] DROP CONSTRAINT [FK_SearchSettings_Smokes_CriteriaCharacter_Smokes]
+GO
+ALTER TABLE [dbo].[SearchSettings_Smokes] DROP CONSTRAINT [FK_SearchSettings_Smokes_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Smokes]
+GO
+/****** Object:  Table [dbo].[SearchSettings_SortByType]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_SortByType] DROP CONSTRAINT [FK_SearchSettings_SortByType_SearchSettings]
+GO
+ALTER TABLE [dbo].[SearchSettings_SortByType] DROP CONSTRAINT [FK_SearchSettings_SortByType_SortByType]
+GO
+DROP TABLE [dbo].[SearchSettings_SortByType]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Tribe]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_Tribe] DROP CONSTRAINT [FK_SearchSettings_Tribe_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_Tribe]
+GO
+/****** Object:  Table [dbo].[SearchSettings_WantKids]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_WantKids] DROP CONSTRAINT [FK_SearchSettings_WantKids_CriteriaLife_WantsKids]
+GO
+ALTER TABLE [dbo].[SearchSettings_WantKids] DROP CONSTRAINT [FK_SearchSettings_WantKids_SearchSettings]
+GO
+DROP TABLE [dbo].[SearchSettings_WantKids]
+GO
+/****** Object:  Table [dbo].[SearchSettings]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[SearchSettings] DROP CONSTRAINT [FK_SearchSettings_ProfileData]
+GO
+ALTER TABLE [dbo].[SearchSettings] DROP CONSTRAINT [FK_SearchSettings_ProfileData1]
+GO
+ALTER TABLE [dbo].[SearchSettings] DROP CONSTRAINT [DF_SearchSettings_DistanceFromMe]
+GO
+ALTER TABLE [dbo].[SearchSettings] DROP CONSTRAINT [DF_SearchSettings_AgeMin]
+GO
+ALTER TABLE [dbo].[SearchSettings] DROP CONSTRAINT [DF_SearchSettings_AgeMax]
+GO
+DROP TABLE [dbo].[SearchSettings]
+GO
+/****** Object:  Table [dbo].[Hotlist]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Hotlist] DROP CONSTRAINT [FK_Hotlists_ProfileData]
+GO
+ALTER TABLE [dbo].[Hotlist] DROP CONSTRAINT [DF__Hotlists__Favor__25518C17]
+GO
+ALTER TABLE [dbo].[Hotlist] DROP CONSTRAINT [DF__Hotlists__Mutua__2645B050]
+GO
+DROP TABLE [dbo].[Hotlist]
+GO
+/****** Object:  Table [dbo].[Interest]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Interest] DROP CONSTRAINT [FK_Interest_ProfileData]
+GO
+DROP TABLE [dbo].[Interest]
+GO
+/****** Object:  Table [dbo].[User_Logtime]    Script Date: 08/31/2012 02:03:57 ******/
+ALTER TABLE [dbo].[User_Logtime] DROP CONSTRAINT [FK_User_Logtime_ProfileData]
+GO
+ALTER TABLE [dbo].[User_Logtime] DROP CONSTRAINT [DF_User_Logtime_Offline]
+GO
+DROP TABLE [dbo].[User_Logtime]
+GO
+/****** Object:  Table [dbo].[profiles]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [FK_profiles_ProfileData]
+GO
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [FK_profiles_profilestatuses]
+GO
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [FK_profiles_SecurityQuestion]
+GO
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [DF__profiles__UserNa__3E1D39E1]
+GO
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [DF__profiles__Forwar__4B7734FF]
+GO
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [DF__profiles__Creati__4E53A1AA]
+GO
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [DF__profiles__Modifi__4F47C5E3]
+GO
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [DF__profiles__LoginD__503BEA1C]
+GO
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [DF__profiles__Activa__51300E55]
+GO
+ALTER TABLE [dbo].[profiles] DROP CONSTRAINT [DF__profiles__Profil__5224328E]
+GO
+DROP TABLE [dbo].[profiles]
+GO
+/****** Object:  Table [dbo].[ProfileViews]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileViews] DROP CONSTRAINT [FK_ProfileViews_ProfileData]
+GO
+DROP TABLE [dbo].[ProfileViews]
+GO
+/****** Object:  Table [dbo].[ProfileVisiblitySettings]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileVisiblitySettings] DROP CONSTRAINT [FK_ProfileVisiblitySettings_genders]
+GO
+ALTER TABLE [dbo].[ProfileVisiblitySettings] DROP CONSTRAINT [FK_ProfileVisiblitySettings_ProfileData]
+GO
+DROP TABLE [dbo].[ProfileVisiblitySettings]
+GO
+/****** Object:  Table [dbo].[ProfileRatings]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileRatings] DROP CONSTRAINT [FK_ProfileRatings_ProfileData]
+GO
+ALTER TABLE [dbo].[ProfileRatings] DROP CONSTRAINT [FK_ProfileRatings_Ratings]
+GO
+ALTER TABLE [dbo].[ProfileRatings] DROP CONSTRAINT [FK_ProfileRatings_Ratings1]
+GO
+DROP TABLE [dbo].[ProfileRatings]
+GO
+/****** Object:  Table [dbo].[ProfileData_Ethnicity]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_Ethnicity] DROP CONSTRAINT [FK_ProfileData_Ethnicity_CriteriaAppearance_Ethnicity]
+GO
+ALTER TABLE [dbo].[ProfileData_Ethnicity] DROP CONSTRAINT [FK_ProfileData_Ethnicity_ProfileData]
+GO
+DROP TABLE [dbo].[ProfileData_Ethnicity]
+GO
+/****** Object:  Table [dbo].[ProfileData_Hobby]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_Hobby] DROP CONSTRAINT [FK_ProfileData_Hobby_CriteriaCharacter_Hobby]
+GO
+ALTER TABLE [dbo].[ProfileData_Hobby] DROP CONSTRAINT [FK_ProfileData_Hobby_ProfileData]
+GO
+DROP TABLE [dbo].[ProfileData_Hobby]
+GO
+/****** Object:  Table [dbo].[ProfileData_HotFeature]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_HotFeature] DROP CONSTRAINT [FK_ProfileData_HotFeature_CriteriaCharacter_HotFeature]
+GO
+ALTER TABLE [dbo].[ProfileData_HotFeature] DROP CONSTRAINT [FK_ProfileData_HotFeature_ProfileData]
+GO
+DROP TABLE [dbo].[ProfileData_HotFeature]
+GO
+/****** Object:  Table [dbo].[ProfileData_LookingFor]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_LookingFor] DROP CONSTRAINT [FK_ProfileData_LookingFor_CriteriaLife_LookingFor]
+GO
+ALTER TABLE [dbo].[ProfileData_LookingFor] DROP CONSTRAINT [FK_ProfileData_LookingFor_ProfileData]
+GO
+DROP TABLE [dbo].[ProfileData_LookingFor]
+GO
+/****** Object:  Table [dbo].[ProfileEmailUpdateFreqency]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileEmailUpdateFreqency] DROP CONSTRAINT [FK_ProfileEmailUpdateFreqency_ProfileData]
+GO
+DROP TABLE [dbo].[ProfileEmailUpdateFreqency]
+GO
+/****** Object:  Table [dbo].[PhotoAlbums]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[PhotoAlbums] DROP CONSTRAINT [FK_PhotoAlbums_ProfileData]
+GO
+DROP TABLE [dbo].[PhotoAlbums]
+GO
+/****** Object:  Table [dbo].[Friends]    Script Date: 08/31/2012 02:03:48 ******/
+ALTER TABLE [dbo].[Friends] DROP CONSTRAINT [FK_Friends_ProfileData]
+GO
+ALTER TABLE [dbo].[Friends] DROP CONSTRAINT [DF__Friends__Profi__245D67DE]
+GO
+ALTER TABLE [dbo].[Friends] DROP CONSTRAINT [DF__Friends__Favor__25518C17]
+GO
+ALTER TABLE [dbo].[Friends] DROP CONSTRAINT [DF__Friends__Mutua__2645B050]
+GO
+DROP TABLE [dbo].[Friends]
+GO
+/****** Object:  Table [dbo].[favorite]    Script Date: 08/31/2012 02:03:48 ******/
+ALTER TABLE [dbo].[favorite] DROP CONSTRAINT [FK_favorites_ProfileData]
+GO
+ALTER TABLE [dbo].[favorite] DROP CONSTRAINT [DF__favorites__Profi__245D67DE]
+GO
+ALTER TABLE [dbo].[favorite] DROP CONSTRAINT [DF__favorites__Favor__25518C17]
+GO
+ALTER TABLE [dbo].[favorite] DROP CONSTRAINT [DF__favorites__Mutua__2645B050]
+GO
+DROP TABLE [dbo].[favorite]
+GO
+/****** Object:  Table [dbo].[Like]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Like] DROP CONSTRAINT [FK_Like_ProfileData]
+GO
+DROP TABLE [dbo].[Like]
+GO
+/****** Object:  Table [dbo].[Mailboxblocks]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Mailboxblocks] DROP CONSTRAINT [FK_Mailboxblocks_ProfileData]
+GO
+ALTER TABLE [dbo].[Mailboxblocks] DROP CONSTRAINT [DF__messagebl__Profi__2B0A656D]
+GO
+ALTER TABLE [dbo].[Mailboxblocks] DROP CONSTRAINT [DF__messagebl__Block__2BFE89A6]
+GO
+DROP TABLE [dbo].[Mailboxblocks]
+GO
+/****** Object:  Table [dbo].[MailboxFolders]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[MailboxFolders] DROP CONSTRAINT [FK_MailboxFolders_MailboxFolderTypes]
+GO
+ALTER TABLE [dbo].[MailboxFolders] DROP CONSTRAINT [FK_MailboxFolders_ProfileData]
+GO
+DROP TABLE [dbo].[MailboxFolders]
+GO
+/****** Object:  Table [dbo].[abusereport]    Script Date: 08/31/2012 02:03:45 ******/
+ALTER TABLE [dbo].[abusereport] DROP CONSTRAINT [FK_abusereport_ProfileData]
+GO
+ALTER TABLE [dbo].[abusereport] DROP CONSTRAINT [FK_abusereports_abusetypes]
+GO
+ALTER TABLE [dbo].[abusereport] DROP CONSTRAINT [DF__abuserepo__Abuse__0D7A0286]
+GO
+ALTER TABLE [dbo].[abusereport] DROP CONSTRAINT [DF__abuserepo__Repor__0E6E26BF]
+GO
+ALTER TABLE [dbo].[abusereport] DROP CONSTRAINT [DF__abuserepo__Repor__0F624AF8]
+GO
+ALTER TABLE [dbo].[abusereport] DROP CONSTRAINT [DF__abuserepo__Abuse__10566F31]
+GO
+DROP TABLE [dbo].[abusereport]
+GO
+/****** Object:  Table [dbo].[ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_abusers]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaAppearance_Bodytypes]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaAppearance_EyeColor]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaAppearance_HairColor]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Diet]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Drinks]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Exercise]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Humor]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_PoliticalView]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Religion]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_ReligiousAttendance]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Sign]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaCharacter_Smokes]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_EducationLevel]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_EmploymentStatus]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_HaveKids]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_IncomeLevel]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_LivingSituation]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_MaritalStatus]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_Profession]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_CriteriaLife_WantsKids]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [FK_ProfileData_genders]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [DF_ProfileData_Lattitude]
+GO
+ALTER TABLE [dbo].[ProfileData] DROP CONSTRAINT [DF_ProfileData_Longitude]
+GO
+DROP TABLE [dbo].[ProfileData]
+GO
+/****** Object:  Table [dbo].[Ratings]    Script Date: 08/31/2012 02:03:52 ******/
+DROP TABLE [dbo].[Ratings]
+GO
+/****** Object:  Table [dbo].[Roles]    Script Date: 08/31/2012 02:03:52 ******/
+DROP TABLE [dbo].[Roles]
+GO
+/****** Object:  Table [dbo].[profilestatuses]    Script Date: 08/31/2012 02:03:52 ******/
+DROP TABLE [dbo].[profilestatuses]
+GO
+/****** Object:  Table [dbo].[MailboxFolderTypes]    Script Date: 08/31/2012 02:03:49 ******/
+DROP TABLE [dbo].[MailboxFolderTypes]
+GO
+/****** Object:  Table [dbo].[MailboxMessages]    Script Date: 08/31/2012 02:03:49 ******/
+DROP TABLE [dbo].[MailboxMessages]
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnCheckIfBirthDateIsInRange]    Script Date: 08/31/2012 02:03:57 ******/
+DROP FUNCTION [dbo].[fnCheckIfBirthDateIsInRange]
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnGetDistance]    Script Date: 08/31/2012 02:03:57 ******/
+DROP FUNCTION [dbo].[fnGetDistance]
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnGetLastLoggedOnTime]    Script Date: 08/31/2012 02:03:57 ******/
+DROP FUNCTION [dbo].[fnGetLastLoggedOnTime]
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnTruncateString]    Script Date: 08/31/2012 02:03:57 ******/
+DROP FUNCTION [dbo].[fnTruncateString]
+GO
+/****** Object:  Table [dbo].[abuser]    Script Date: 08/31/2012 02:03:45 ******/
+ALTER TABLE [dbo].[abuser] DROP CONSTRAINT [DF__abusers__Suspens__1332DBDC]
+GO
+ALTER TABLE [dbo].[abuser] DROP CONSTRAINT [DF__abusers__FlagTyp__14270015]
+GO
+ALTER TABLE [dbo].[abuser] DROP CONSTRAINT [DF__abusers__AbuserU__151B244E]
+GO
+DROP TABLE [dbo].[abuser]
+GO
+/****** Object:  Table [dbo].[genders]    Script Date: 08/31/2012 02:03:48 ******/
+DROP TABLE [dbo].[genders]
+GO
+/****** Object:  Table [dbo].[Height]    Script Date: 08/31/2012 02:03:48 ******/
+DROP TABLE [dbo].[Height]
+GO
+/****** Object:  Table [dbo].[NigerianState]    Script Date: 08/31/2012 02:03:50 ******/
+DROP TABLE [dbo].[NigerianState]
+GO
+/****** Object:  Table [dbo].[PhotoRejectionReasons]    Script Date: 08/31/2012 02:03:50 ******/
+DROP TABLE [dbo].[PhotoRejectionReasons]
+GO
+/****** Object:  Table [dbo].[PhotoReviewStatus]    Script Date: 08/31/2012 02:03:50 ******/
+DROP TABLE [dbo].[PhotoReviewStatus]
+GO
+/****** Object:  Table [dbo].[PhotoStatus]    Script Date: 08/31/2012 02:03:50 ******/
+DROP TABLE [dbo].[PhotoStatus]
+GO
+/****** Object:  Table [dbo].[PhotoType]    Script Date: 08/31/2012 02:03:50 ******/
+DROP TABLE [dbo].[PhotoType]
+GO
+/****** Object:  Table [dbo].[abusetype]    Script Date: 08/31/2012 02:03:45 ******/
+DROP TABLE [dbo].[abusetype]
+GO
+/****** Object:  Table [dbo].[CommunicationQuotas]    Script Date: 08/31/2012 02:03:45 ******/
+DROP TABLE [dbo].[CommunicationQuotas]
+GO
+/****** Object:  Table [dbo].[CriteriaAppearance_Bodytypes]    Script Date: 08/31/2012 02:03:45 ******/
+DROP TABLE [dbo].[CriteriaAppearance_Bodytypes]
+GO
+/****** Object:  Table [dbo].[CriteriaAppearance_Ethnicity]    Script Date: 08/31/2012 02:03:45 ******/
+ALTER TABLE [dbo].[CriteriaAppearance_Ethnicity] DROP CONSTRAINT [DF__ethniciti__Ethni__2180FB33]
+GO
+DROP TABLE [dbo].[CriteriaAppearance_Ethnicity]
+GO
+/****** Object:  Table [dbo].[CriteriaAppearance_EyeColor]    Script Date: 08/31/2012 02:03:45 ******/
+DROP TABLE [dbo].[CriteriaAppearance_EyeColor]
+GO
+/****** Object:  Table [dbo].[CriteriaAppearance_HairColor]    Script Date: 08/31/2012 02:03:46 ******/
+DROP TABLE [dbo].[CriteriaAppearance_HairColor]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Diet]    Script Date: 08/31/2012 02:03:46 ******/
+DROP TABLE [dbo].[CriteriaCharacter_Diet]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Drinks]    Script Date: 08/31/2012 02:03:46 ******/
+DROP TABLE [dbo].[CriteriaCharacter_Drinks]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Exercise]    Script Date: 08/31/2012 02:03:46 ******/
+DROP TABLE [dbo].[CriteriaCharacter_Exercise]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Hobby]    Script Date: 08/31/2012 02:03:46 ******/
+DROP TABLE [dbo].[CriteriaCharacter_Hobby]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_HotFeature]    Script Date: 08/31/2012 02:03:46 ******/
+DROP TABLE [dbo].[CriteriaCharacter_HotFeature]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Humor]    Script Date: 08/31/2012 02:03:46 ******/
+DROP TABLE [dbo].[CriteriaCharacter_Humor]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_PoliticalView]    Script Date: 08/31/2012 02:03:46 ******/
+DROP TABLE [dbo].[CriteriaCharacter_PoliticalView]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Religion]    Script Date: 08/31/2012 02:03:46 ******/
+DROP TABLE [dbo].[CriteriaCharacter_Religion]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_ReligiousAttendance]    Script Date: 08/31/2012 02:03:46 ******/
+DROP TABLE [dbo].[CriteriaCharacter_ReligiousAttendance]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Sign]    Script Date: 08/31/2012 02:03:47 ******/
+DROP TABLE [dbo].[CriteriaCharacter_Sign]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Smokes]    Script Date: 08/31/2012 02:03:47 ******/
+DROP TABLE [dbo].[CriteriaCharacter_Smokes]
+GO
+/****** Object:  Table [dbo].[CriteriaLife_EducationLevel]    Script Date: 08/31/2012 02:03:47 ******/
+DROP TABLE [dbo].[CriteriaLife_EducationLevel]
+GO
+/****** Object:  Table [dbo].[CriteriaLife_EmploymentStatus]    Script Date: 08/31/2012 02:03:47 ******/
+DROP TABLE [dbo].[CriteriaLife_EmploymentStatus]
+GO
+/****** Object:  Table [dbo].[CriteriaLife_HaveKids]    Script Date: 08/31/2012 02:03:47 ******/
+DROP TABLE [dbo].[CriteriaLife_HaveKids]
+GO
+/****** Object:  Table [dbo].[CriteriaLife_IncomeLevel]    Script Date: 08/31/2012 02:03:47 ******/
+DROP TABLE [dbo].[CriteriaLife_IncomeLevel]
+GO
+/****** Object:  Table [dbo].[CriteriaLife_LivingSituation]    Script Date: 08/31/2012 02:03:47 ******/
+DROP TABLE [dbo].[CriteriaLife_LivingSituation]
+GO
+/****** Object:  Table [dbo].[CriteriaLife_LookingFor]    Script Date: 08/31/2012 02:03:47 ******/
+DROP TABLE [dbo].[CriteriaLife_LookingFor]
+GO
+/****** Object:  Table [dbo].[CriteriaLife_MaritalStatus]    Script Date: 08/31/2012 02:03:48 ******/
+DROP TABLE [dbo].[CriteriaLife_MaritalStatus]
+GO
+/****** Object:  Table [dbo].[CriteriaLife_Profession]    Script Date: 08/31/2012 02:03:48 ******/
+DROP TABLE [dbo].[CriteriaLife_Profession]
+GO
+/****** Object:  Table [dbo].[CriteriaLife_WantsKids]    Script Date: 08/31/2012 02:03:48 ******/
+DROP TABLE [dbo].[CriteriaLife_WantsKids]
+GO
+/****** Object:  Table [dbo].[databaseerrors]    Script Date: 08/31/2012 02:03:48 ******/
+DROP TABLE [dbo].[databaseerrors]
+GO
+/****** Object:  Table [dbo].[emailerror]    Script Date: 08/31/2012 02:03:48 ******/
+ALTER TABLE [dbo].[emailerror] DROP CONSTRAINT [DF__emailerro__Subje__1EA48E88]
+GO
+DROP TABLE [dbo].[emailerror]
+GO
+/****** Object:  Table [dbo].[Legal]    Script Date: 08/31/2012 02:03:49 ******/
+DROP TABLE [dbo].[Legal]
+GO
+/****** Object:  Table [dbo].[SecurityQuestion]    Script Date: 08/31/2012 02:03:56 ******/
+DROP TABLE [dbo].[SecurityQuestion]
+GO
+/****** Object:  Table [dbo].[ShowMe]    Script Date: 08/31/2012 02:03:56 ******/
+DROP TABLE [dbo].[ShowMe]
+GO
+/****** Object:  Table [dbo].[SortByType]    Script Date: 08/31/2012 02:03:56 ******/
+DROP TABLE [dbo].[SortByType]
+GO
+/****** Object:  Table [dbo].[SystemImages]    Script Date: 08/31/2012 02:03:56 ******/
+DROP TABLE [dbo].[SystemImages]
+GO
+/****** Object:  Table [dbo].[SystemPageSettings]    Script Date: 08/31/2012 02:03:56 ******/
+DROP TABLE [dbo].[SystemPageSettings]
+GO
+/****** Object:  Table [dbo].[Tribe]    Script Date: 08/31/2012 02:03:57 ******/
+DROP TABLE [dbo].[Tribe]
+GO
+/****** Object:  Table [dbo].[Tribe]    Script Date: 08/31/2012 02:03:57 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Tribe](
+	[TribeID] [tinyint] IDENTITY(1,1) NOT NULL,
+	[TribeName] [varchar](50) NOT NULL,
+ CONSTRAINT [PK__Tribe__57DD0BE4] PRIMARY KEY CLUSTERED 
+(
+	[TribeID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SystemPageSettings]    Script Date: 08/31/2012 02:03:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SystemPageSettings](
+	[Titile] [nchar](50) NOT NULL,
+	[Path] [varchar](100) NULL,
+	[Description] [nchar](255) NULL,
+	[BodyCssSyleName] [nchar](50) NULL,
+	[HitCount] [int] NULL,
+	[IsMasterPage] [bit] NULL,
+ CONSTRAINT [PK_SystemPageSettings] PRIMARY KEY CLUSTERED 
+(
+	[Titile] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SystemImages]    Script Date: 08/31/2012 02:03:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SystemImages](
+	[ImageID] [int] NOT NULL,
+	[ProfileID] [varchar](50) NULL,
+	[ImageCaption] [varchar](255) NULL,
+	[Image] [image] NULL,
+	[ImageType] [varchar](255) NULL,
+	[ImageStatus] [nvarchar](25) NULL,
+	[AproveStatus] [varchar](50) NULL,
+ CONSTRAINT [PK_SystemImages] PRIMARY KEY CLUSTERED 
+(
+	[ImageID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SortByType]    Script Date: 08/31/2012 02:03:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SortByType](
+	[SortByTypeID] [int] IDENTITY(1,1) NOT NULL,
+	[SortByName] [varchar](50) NULL,
+ CONSTRAINT [PK_SortByType] PRIMARY KEY CLUSTERED 
+(
+	[SortByTypeID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ShowMe]    Script Date: 08/31/2012 02:03:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ShowMe](
+	[ShowMeID] [int] IDENTITY(1,1) NOT NULL,
+	[ShowMeName] [varchar](50) NULL,
+ CONSTRAINT [PK_ShowMe] PRIMARY KEY CLUSTERED 
+(
+	[ShowMeID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SecurityQuestion]    Script Date: 08/31/2012 02:03:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SecurityQuestion](
+	[SecurityQuestionID] [tinyint] IDENTITY(1,1) NOT NULL,
+	[SecurityQuestionText] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_SecurityQuestion] PRIMARY KEY CLUSTERED 
+(
+	[SecurityQuestionID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Legal]    Script Date: 08/31/2012 02:03:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Legal](
+	[ItemID] [nchar](10) NULL,
+	[TermsAndConditions] [text] NULL,
+	[PrivacyPolicy] [text] NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[emailerror]    Script Date: 08/31/2012 02:03:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[emailerror](
+	[EmailErrorID] [int] IDENTITY(1,1) NOT NULL,
+	[FromEmail] [text] NOT NULL,
+	[ToEmail] [text] NOT NULL,
+	[Subject] [varchar](128) NOT NULL CONSTRAINT [DF__emailerro__Subje__1EA48E88]  DEFAULT (''),
+	[Body] [text] NOT NULL,
+	[ErrorDate] [datetime] NOT NULL,
+	[ExceptionError] [text] NULL,
+ CONSTRAINT [PK__emailerrors__1DB06A4F] PRIMARY KEY CLUSTERED 
+(
+	[EmailErrorID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[databaseerrors]    Script Date: 08/31/2012 02:03:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[databaseerrors](
+	[ErrorID] [smallint] IDENTITY(1,1) NOT NULL,
+	[ErrorDate] [timestamp] NOT NULL,
+	[SqlStatement] [text] NOT NULL,
+	[Exception] [text] NOT NULL,
+	[PageName] [text] NOT NULL,
+ CONSTRAINT [PK__databaseerrors__1AD3FDA4] PRIMARY KEY CLUSTERED 
+(
+	[ErrorID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CriteriaLife_WantsKids]    Script Date: 08/31/2012 02:03:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaLife_WantsKids](
+	[WantsKidsID] [int] IDENTITY(1,1) NOT NULL,
+	[WantsKidsName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaLife_WantsKids] PRIMARY KEY CLUSTERED 
+(
+	[WantsKidsID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaLife_Profession]    Script Date: 08/31/2012 02:03:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaLife_Profession](
+	[ProfessionID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfiessionName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaLife_Profession] PRIMARY KEY CLUSTERED 
+(
+	[ProfessionID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaLife_MaritalStatus]    Script Date: 08/31/2012 02:03:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaLife_MaritalStatus](
+	[MaritalStatusID] [int] IDENTITY(1,1) NOT NULL,
+	[MaritalStatusName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaLife_MaritalStatus] PRIMARY KEY CLUSTERED 
+(
+	[MaritalStatusID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaLife_LookingFor]    Script Date: 08/31/2012 02:03:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaLife_LookingFor](
+	[LookingForID] [int] IDENTITY(1,1) NOT NULL,
+	[LookingForName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaLife_LookinFor] PRIMARY KEY CLUSTERED 
+(
+	[LookingForID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaLife_LivingSituation]    Script Date: 08/31/2012 02:03:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaLife_LivingSituation](
+	[LivingSituationID] [int] IDENTITY(1,1) NOT NULL,
+	[LivingSituationName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaLife_LivingSituation] PRIMARY KEY CLUSTERED 
+(
+	[LivingSituationID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaLife_IncomeLevel]    Script Date: 08/31/2012 02:03:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaLife_IncomeLevel](
+	[IncomeLevelID] [int] IDENTITY(1,1) NOT NULL,
+	[IncomeLevelName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaLife_IncomeLevel] PRIMARY KEY CLUSTERED 
+(
+	[IncomeLevelID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaLife_HaveKids]    Script Date: 08/31/2012 02:03:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaLife_HaveKids](
+	[HaveKidsId] [int] IDENTITY(1,1) NOT NULL,
+	[HaveKidsName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteraLife_HaveKids] PRIMARY KEY CLUSTERED 
+(
+	[HaveKidsId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaLife_EmploymentStatus]    Script Date: 08/31/2012 02:03:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaLife_EmploymentStatus](
+	[EmploymentSatusID] [int] IDENTITY(1,1) NOT NULL,
+	[EmploymentStatusName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaLife_EmploymentStatus] PRIMARY KEY CLUSTERED 
+(
+	[EmploymentSatusID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaLife_EducationLevel]    Script Date: 08/31/2012 02:03:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaLife_EducationLevel](
+	[EducationLevelID] [int] IDENTITY(1,1) NOT NULL,
+	[EducationLevelName] [varchar](max) NULL,
+ CONSTRAINT [PK_CriteriaLife_EducationLevel] PRIMARY KEY CLUSTERED 
+(
+	[EducationLevelID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Smokes]    Script Date: 08/31/2012 02:03:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_Smokes](
+	[SmokesID] [int] IDENTITY(1,1) NOT NULL,
+	[SmokesName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaCharacter_Smokes] PRIMARY KEY CLUSTERED 
+(
+	[SmokesID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Sign]    Script Date: 08/31/2012 02:03:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_Sign](
+	[SignID] [int] IDENTITY(1,1) NOT NULL,
+	[SignName] [nvarchar](50) NOT NULL,
+	[SignBirthMonth] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Sign] PRIMARY KEY CLUSTERED 
+(
+	[SignID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_ReligiousAttendance]    Script Date: 08/31/2012 02:03:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_ReligiousAttendance](
+	[ReligiousAttendanceID] [int] IDENTITY(1,1) NOT NULL,
+	[ReligiousAttendanceName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaCharacter_ReligiousAttendance] PRIMARY KEY CLUSTERED 
+(
+	[ReligiousAttendanceID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Religion]    Script Date: 08/31/2012 02:03:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_Religion](
+	[religionID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[religionName] [varchar](50) NOT NULL,
+ CONSTRAINT [PK__sexualorientatio__55F4C372] PRIMARY KEY CLUSTERED 
+(
+	[religionID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_PoliticalView]    Script Date: 08/31/2012 02:03:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_PoliticalView](
+	[PoliticalViewID] [int] IDENTITY(1,1) NOT NULL,
+	[PoliticalViewName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaCharacter_PoliticalView] PRIMARY KEY CLUSTERED 
+(
+	[PoliticalViewID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Humor]    Script Date: 08/31/2012 02:03:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_Humor](
+	[HumorID] [int] IDENTITY(1,1) NOT NULL,
+	[HumorName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaCharacter_Humor] PRIMARY KEY CLUSTERED 
+(
+	[HumorID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_HotFeature]    Script Date: 08/31/2012 02:03:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_HotFeature](
+	[HotFeatureID] [int] IDENTITY(1,1) NOT NULL,
+	[HotFeatureName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaCharacter_HotFeature] PRIMARY KEY CLUSTERED 
+(
+	[HotFeatureID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Hobby]    Script Date: 08/31/2012 02:03:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_Hobby](
+	[HobbyID] [int] IDENTITY(1,1) NOT NULL,
+	[HobbyName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaCharacter_Hobby] PRIMARY KEY CLUSTERED 
+(
+	[HobbyID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Exercise]    Script Date: 08/31/2012 02:03:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_Exercise](
+	[ExerciseID] [int] IDENTITY(1,1) NOT NULL,
+	[ExerciseName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaCharacter_Exercise] PRIMARY KEY CLUSTERED 
+(
+	[ExerciseID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Drinks]    Script Date: 08/31/2012 02:03:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_Drinks](
+	[DrinksID] [int] IDENTITY(1,1) NOT NULL,
+	[DrinksName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaCharacter_Drinks] PRIMARY KEY CLUSTERED 
+(
+	[DrinksID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaCharacter_Diet]    Script Date: 08/31/2012 02:03:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaCharacter_Diet](
+	[DietID] [int] IDENTITY(1,1) NOT NULL,
+	[DietName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaCharacter_Diet] PRIMARY KEY CLUSTERED 
+(
+	[DietID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaAppearance_HairColor]    Script Date: 08/31/2012 02:03:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaAppearance_HairColor](
+	[HairColorID] [int] IDENTITY(1,1) NOT NULL,
+	[HairColorName] [varchar](50) NULL,
+ CONSTRAINT [PK_CriteriaAppearanceHairColor] PRIMARY KEY CLUSTERED 
+(
+	[HairColorID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaAppearance_EyeColor]    Script Date: 08/31/2012 02:03:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CriteriaAppearance_EyeColor](
+	[EyeColorID] [int] IDENTITY(1,1) NOT NULL,
+	[EyeColorName] [nchar](10) NULL,
+ CONSTRAINT [PK_CriteriaAppearanceEyeColor] PRIMARY KEY CLUSTERED 
+(
+	[EyeColorID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CriteriaAppearance_Ethnicity]    Script Date: 08/31/2012 02:03:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaAppearance_Ethnicity](
+	[EthnicityID] [int] IDENTITY(1,1) NOT NULL,
+	[EthnicityName] [varchar](50) NOT NULL CONSTRAINT [DF__ethniciti__Ethni__2180FB33]  DEFAULT (''),
+ CONSTRAINT [PK__ethnicities__208CD6FA] PRIMARY KEY CLUSTERED 
+(
+	[EthnicityID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CriteriaAppearance_Bodytypes]    Script Date: 08/31/2012 02:03:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CriteriaAppearance_Bodytypes](
+	[BodyTypesID] [int] IDENTITY(1,1) NOT NULL,
+	[BodyTypeName] [varchar](50) NOT NULL,
+ CONSTRAINT [PK__bodytypes__18EBB532] PRIMARY KEY CLUSTERED 
+(
+	[BodyTypesID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CommunicationQuotas]    Script Date: 08/31/2012 02:03:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[CommunicationQuotas](
+	[QuotaID] [int] IDENTITY(1,1) NOT NULL,
+	[QuotaName] [varchar](50) NULL,
+	[QuotaDescription] [varchar](max) NULL,
+	[QuotaValue] [int] NULL,
+	[QuotaRoleID] [int] NULL,
+	[Active] [bit] NULL,
+	[LastUpdateDate] [datetime] NULL,
+	[UpdatedBy] [varchar](255) NULL,
+ CONSTRAINT [PK_CommunicationQuotas] PRIMARY KEY CLUSTERED 
+(
+	[QuotaID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[abusetype]    Script Date: 08/31/2012 02:03:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[abusetype](
+	[AbuseTypeID] [tinyint] IDENTITY(1,1) NOT NULL,
+	[AbuseTypeName] [text] NOT NULL,
+ CONSTRAINT [PK__abusetypes__17036CC0] PRIMARY KEY CLUSTERED 
+(
+	[AbuseTypeID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PhotoType]    Script Date: 08/31/2012 02:03:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PhotoType](
+	[PhotoTypeID] [int] IDENTITY(1,1) NOT NULL,
+	[PhotoTypeName] [nchar](15) NULL,
+	[PhotoTypeDescription] [nchar](50) NULL,
+ CONSTRAINT [PK_PhotoType] PRIMARY KEY CLUSTERED 
+(
+	[PhotoTypeID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PhotoStatus]    Script Date: 08/31/2012 02:03:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[PhotoStatus](
+	[PhotoStatusID] [int] IDENTITY(1,1) NOT NULL,
+	[PhotoStatusValue] [varchar](50) NULL,
+	[Description] [text] NULL,
+ CONSTRAINT [PK_PhotoStatus] PRIMARY KEY CLUSTERED 
+(
+	[PhotoStatusID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[PhotoReviewStatus]    Script Date: 08/31/2012 02:03:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PhotoReviewStatus](
+	[PhotoReviewStatusID] [int] IDENTITY(1,1) NOT NULL,
+	[PhotoReviewStatusValue] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_PhotoReviewStatus] PRIMARY KEY CLUSTERED 
+(
+	[PhotoReviewStatusID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PhotoRejectionReasons]    Script Date: 08/31/2012 02:03:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PhotoRejectionReasons](
+	[PhotoRejectionReasonID] [int] IDENTITY(1,1) NOT NULL,
+	[Description] [nvarchar](50) NULL,
+	[UserMessage] [text] NULL,
+ CONSTRAINT [PK_PhotoRejectionReasons] PRIMARY KEY CLUSTERED 
+(
+	[PhotoRejectionReasonID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[NigerianState]    Script Date: 08/31/2012 02:03:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[NigerianState](
+	[NigerianStateID] [int] IDENTITY(1,1) NOT NULL,
+	[StateName] [varchar](50) NOT NULL,
+ CONSTRAINT [PK__neighborhoods__367C1819] PRIMARY KEY CLUSTERED 
+(
+	[NigerianStateID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Height]    Script Date: 08/31/2012 02:03:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Height](
+	[HeightID] [int] IDENTITY(1,1) NOT NULL,
+	[HeightValue] [varchar](50) NULL,
+ CONSTRAINT [PK_Height] PRIMARY KEY CLUSTERED 
+(
+	[HeightID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[genders]    Script Date: 08/31/2012 02:03:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[genders](
+	[GenderID] [int] IDENTITY(1,1) NOT NULL,
+	[GenderName] [varchar](50) NOT NULL,
+ CONSTRAINT [PK__genders__282DF8C2] PRIMARY KEY CLUSTERED 
+(
+	[GenderID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[abuser]    Script Date: 08/31/2012 02:03:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[abuser](
+	[ProfileID] [varchar](255) NOT NULL,
+	[SuspensionDate] [datetime] NULL CONSTRAINT [DF__abusers__Suspens__1332DBDC]  DEFAULT ('2000-01-01 00:00:00'),
+	[DeletionDate] [timestamp] NULL,
+	[FlagTypeID] [tinyint] NULL CONSTRAINT [DF__abusers__FlagTyp__14270015]  DEFAULT ('0'),
+	[AbuserUserName] [varchar](255) NULL CONSTRAINT [DF__abusers__AbuserU__151B244E]  DEFAULT (''),
+ CONSTRAINT [PK__abusers__123EB7A3] PRIMARY KEY CLUSTERED 
+(
+	[ProfileID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnTruncateString]    Script Date: 08/31/2012 02:03:57 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [dbo].[fnTruncateString]
+	(
+	
+	@StringToTruncate  Varchar(MAX),
+	@LengthToTrunCateBy int
+	
+	)
+RETURNS VARCHAR(MAX)
+
+AS
+	BEGIN
+	declare @length int;
+
+	set @length = LEN(@StringToTruncate) 
+	
+	IF @length > @LengthToTrunCateBy
+	BEGIN
+		RETURN SUBSTRING(@StringToTruncate, 0, @LengthToTrunCateBy)
+	END
+	    RETURN @StringToTruncate
+	END
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnGetLastLoggedOnTime]    Script Date: 08/31/2012 02:03:57 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date, ,>
+-- Description:	<Description, ,>
+-- =============================================
+CREATE FUNCTION [dbo].[fnGetLastLoggedOnTime] 
+(
+	-- Add the parameters for the function here
+	@lastloggedintime DateTime
+)
+RETURNS Varchar(25)
+AS
+BEGIN
+
+
+	-- Declare the return variable here
+	Declare @Today DateTime; 
+	Declare @DateToday DateTime; 
+	Declare @DateYesterday DateTime; 
+    Declare @DateThreeDaysAgo DateTime; 
+    Declare @DateThreeWeeksago DateTime; 
+    Declare @DateOneWeekAgo DateTime; 
+    Declare @DateThreeMonthsAgo DateTime; 
+    Declare @DateSixMonthsAgo DateTime;
+    Declare @DateOneMonthAgo DateTime; 
+    Declare @ReturnText Varchar(25);
+    
+   Set @Today = GetDate();    
+      --Subtract 1 days
+   Set @DateToday = DATEADD(HOUR, -23, @Today);
+      --Subtract 2 days
+   Set @DateYesterday = DATEADD(HOUR, -36, @Today);   
+    --Subtract 3 days
+   Set @DateThreeDaysAgo = DATEADD(day, -3, @Today);
+   --Subtract 1 weeks               
+   Set @DateOneWeekAgo = DATEADD(day, -7, @Today);
+    --Subtract 3 weeks   
+   Set @DateThreeWeeksago = DATEADD(day, -21, @Today);   
+     --Subtract 4 weeks =1 months      
+   Set @DateOneMonthAgo = DATEADD(month, -1, @Today);
+   --Subtract 12 weeks =3 months        
+   Set @DateThreeMonthsAgo = DATEADD(month, -3, @Today);
+   --Subtract 24 weeks =6 months   
+   Set @DateSixMonthsAgo = DATEADD(month, -6, @Today);
+   
+   SET @ReturnText = 
+     CASE 
+		 WHEN (@lastloggedintime > @DateToday) THEN  'Today'
+		 WHEN (@lastloggedintime > @DateYesterday) THEN  'Two Days Ago'
+         WHEN (@lastloggedintime > @DateThreeDaysAgo) THEN  'Last Three Days'
+         WHEN (@lastloggedintime > @DateOneWeekAgo) THEN   'Last Week '
+         WHEN (@lastloggedintime > @DateThreeWeeksago) THEN  'Three Weeks Ago'
+         WHEN (@lastloggedintime > @DateOneMonthAgo) THEN  'One Month Ago'
+       --  WHEN (@lastloggedintime > @DateThreeMonthsAgo) THEN  'O Months Ago'
+         WHEN (@lastloggedintime > @DateSixMonthsAgo) THEN  'Six Months Ago'        
+         ELSE 'Over one Month'
+      END
+
+   
+   
+  Return @ReturnText;
+
+
+
+
+END
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnGetDistance]    Script Date: 08/31/2012 02:03:57 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create Function [dbo].[fnGetDistance] 
+( 
+      @Lat1 Float(18),  
+      @Long1 Float(18), 
+      @Lat2 Float(18), 
+      @Long2 Float(18), 
+      @ReturnType VarChar(10) 
+) 
+
+
+
+
+Returns Float(18) 
+
+
+
+
+AS 
+
+
+
+
+Begin 
+
+
+
+
+      Declare @R Float(8); 
+      Declare @dLat Float(18); 
+      Declare @dLon Float(18); 
+      Declare @a Float(18); 
+      Declare @c Float(18); 
+      Declare @d Float(18); 
+
+
+      Set @R =  
+            Case @ReturnType  
+            When 'Miles' Then 3956.55  
+            When 'Kilometers' Then 6367.45 
+            When 'Feet' Then 20890584 
+            When 'Meters' Then 6367450 
+            Else 20890584 -- Default feet (Garmin rel elev) 
+            End 
+
+
+
+
+      Set @dLat = Radians(@lat2 - @lat1); 
+
+
+
+
+      Set @dLon = Radians(@long2 - @long1); 
+
+
+
+
+      Set @a = Sin(@dLat / 2)  
+                 * Sin(@dLat / 2)  
+                 + Cos(Radians(@lat1)) 
+                 * Cos(Radians(@lat2))  
+                 * Sin(@dLon / 2)  
+                 * Sin(@dLon / 2); 
+      Set @c = 2 * Asin(Min(Sqrt(@a))); 
+
+      Set @d = @R * @c; 
+      Return @d; 
+
+End
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnCheckIfBirthDateIsInRange]    Script Date: 08/31/2012 02:03:57 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date, ,>
+-- Description:	<Description, ,>
+-- =============================================
+CREATE FUNCTION [dbo].[fnCheckIfBirthDateIsInRange] 
+(
+	-- Add the parameters for the function here
+	@birthDate DateTime,
+	@intAgeMin int=0,
+	@intAgeMax int=0
+)
+RETURNS bit
+AS
+BEGIN
+
+
+	-- Declare the return variable here
+	Declare @Today DateTime;
+    Declare @ReturnValue bit;
+    Declare @DateMax Date;
+    Declare @DateMin Date;
+  
+    
+   Set @Today = GetDate(); 
+  
+      
+    --build max date 3 days
+   Set @DateMax = DATEADD(YEAR ,-(@intAgeMin + 1), @Today);
+   --build min date              
+   Set @DateMin = DATEADD(day, -(@intAgeMax), @Today);
+   
+   
+   SET @ReturnValue = 
+     CASE 
+         WHEN (@birthDate > @DateMin AND @birthDate <= @DateMax ) THEN  1
+             
+         ELSE 0
+      END
+
+   
+   
+  Return @ReturnValue;
+
+
+
+
+END
+GO
+/****** Object:  Table [dbo].[MailboxMessages]    Script Date: 08/31/2012 02:03:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MailboxMessages](
+	[MailboxMessageID] [int] IDENTITY(1,1) NOT NULL,
+	[SenderID] [nvarchar](50) NULL,
+	[RecipientID] [nvarchar](50) NULL,
+	[Body] [text] NULL,
+	[Subject] [nvarchar](max) NULL,
+	[CreationDate] [datetime] NULL,
+	[uniqueID] [int] NULL,
+ CONSTRAINT [PK_NigeriaConnections_Messages] PRIMARY KEY CLUSTERED 
+(
+	[MailboxMessageID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[MailboxFolderTypes]    Script Date: 08/31/2012 02:03:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[MailboxFolderTypes](
+	[MailboxFolderTypeID] [int] IDENTITY(1,1) NOT NULL,
+	[MailboxFolderTypeName] [nvarchar](50) NULL,
+	[MailboxFolderTypeDescription] [varchar](50) NULL,
+	[FolderType] [nchar](25) NULL,
+ CONSTRAINT [PK_MessageFolders] PRIMARY KEY CLUSTERED 
+(
+	[MailboxFolderTypeID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[profilestatuses]    Script Date: 08/31/2012 02:03:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[profilestatuses](
+	[ProfileStatusID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileStatusName] [text] NOT NULL,
+ CONSTRAINT [PK__profilestatuses__540C7B00] PRIMARY KEY CLUSTERED 
+(
+	[ProfileStatusID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Roles]    Script Date: 08/31/2012 02:03:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Roles](
+	[RoleID] [int] IDENTITY(1,1) NOT NULL,
+	[RoleName] [nchar](10) NOT NULL,
+ CONSTRAINT [PK_Roles] PRIMARY KEY CLUSTERED 
+(
+	[RoleID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Ratings]    Script Date: 08/31/2012 02:03:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Ratings](
+	[RatingID] [int] IDENTITY(1,1) NOT NULL,
+	[RatingDescription] [varchar](250) NULL,
+	[RatingMaxValue] [int] NULL,
+	[RatingWeight] [int] NULL,
+ CONSTRAINT [PK_Ratings] PRIMARY KEY CLUSTERED 
+(
+	[RatingID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileData](
+	[ProfileID] [varchar](255) NOT NULL,
+	[Latitude] [float] NULL CONSTRAINT [DF_ProfileData_Lattitude]  DEFAULT ('0'),
+	[Longitude] [float] NULL CONSTRAINT [DF_ProfileData_Longitude]  DEFAULT ('0'),
+	[State_Province] [varchar](255) NULL,
+	[Country_Region] [varchar](50) NULL,
+	[PostalCode] [varchar](50) NOT NULL,
+	[CountryID] [int] NOT NULL,
+	[City] [varchar](255) NOT NULL,
+	[GenderID] [int] NOT NULL,
+	[Age] [int] NULL,
+	[Birthdate] [datetime] NOT NULL,
+	[Height] [int] NULL,
+	[BodyTypeID] [int] NULL,
+	[EyeColorID] [int] NULL,
+	[HairColorID] [int] NULL,
+	[ExerciseID] [int] NULL,
+	[ReligionID] [int] NULL,
+	[ReligiousAttendanceID] [int] NULL,
+	[DrinksID] [int] NULL,
+	[SmokesID] [int] NULL,
+	[HumorID] [int] NULL,
+	[PoliticalViewID] [int] NULL,
+	[DietID] [int] NULL,
+	[SignID] [int] NULL,
+	[IncomeLevelID] [int] NULL,
+	[HaveKidsId] [int] NULL,
+	[WantsKidsID] [int] NULL,
+	[EmploymentSatusID] [int] NULL,
+	[EducationLevelID] [int] NULL,
+	[ProfessionID] [int] NULL,
+	[MaritalStatusID] [int] NULL,
+	[LivingSituationID] [int] NULL,
+	[NigerianStateID] [int] NULL,
+	[TribeID] [int] NULL,
+	[AboutMe] [text] NULL,
+	[Phone] [varchar](50) NULL,
+	[MyCatchyIntroLine] [varchar](150) NULL,
+ CONSTRAINT [PK_ProfileData] PRIMARY KEY CLUSTERED 
+(
+	[ProfileID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[abusereport]    Script Date: 08/31/2012 02:03:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[abusereport](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[RecordDate] [timestamp] NOT NULL,
+	[AbuserID] [varchar](255) NOT NULL CONSTRAINT [DF__abuserepo__Abuse__0D7A0286]  DEFAULT ('0'),
+	[ProfileID] [varchar](255) NOT NULL CONSTRAINT [DF__abuserepo__Repor__0E6E26BF]  DEFAULT ('0'),
+	[ReporterComments] [text] NULL CONSTRAINT [DF__abuserepo__Repor__0F624AF8]  DEFAULT (''),
+	[AbuseTypeID] [tinyint] NOT NULL CONSTRAINT [DF__abuserepo__Abuse__10566F31]  DEFAULT ('0'),
+ CONSTRAINT [PK__abusereports__0C85DE4D] PRIMARY KEY CLUSTERED 
+(
+	[RecordID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[MailboxFolders]    Script Date: 08/31/2012 02:03:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[MailboxFolders](
+	[MailboxFolderID] [int] IDENTITY(1,1) NOT NULL,
+	[MailboxFolderTypeID] [int] NULL,
+	[MailboxFolderTypeName] [nvarchar](15) NULL,
+	[ProfileID] [varchar](255) NULL,
+	[Active] [int] NULL,
+ CONSTRAINT [PK_Folders] PRIMARY KEY CLUSTERED 
+(
+	[MailboxFolderID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Mailboxblocks]    Script Date: 08/31/2012 02:03:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Mailboxblocks](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NOT NULL CONSTRAINT [DF__messagebl__Profi__2B0A656D]  DEFAULT ('0'),
+	[MailboxBlockDate] [datetime] NULL,
+	[BlockID] [varchar](255) NOT NULL CONSTRAINT [DF__messagebl__Block__2BFE89A6]  DEFAULT ('0'),
+	[BlockRemoved] [bit] NULL,
+	[BlockRemovedDate] [datetime] NULL,
+ CONSTRAINT [PK__messageblocks__2A164134] PRIMARY KEY CLUSTERED 
+(
+	[RecordID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Like]    Script Date: 08/31/2012 02:03:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Like](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NOT NULL,
+	[LikeID] [varchar](255) NOT NULL,
+	[LikeDate] [datetime] NULL,
+	[MutuaLikes] [int] NULL,
+	[LikeViewed] [bit] NULL,
+	[LikeViewedDate] [datetime] NULL,
+	[DeletedByProfileID] [bit] NULL,
+	[DeletedByProfileIDDate] [datetime] NULL,
+	[DeletedByLikeID] [bit] NULL,
+	[DeletedByLikeIDDate] [datetime] NULL,
+ CONSTRAINT [PK_Like] PRIMARY KEY CLUSTERED 
+(
+	[RecordID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[favorite]    Script Date: 08/31/2012 02:03:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[favorite](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NOT NULL CONSTRAINT [DF__favorites__Profi__245D67DE]  DEFAULT ('0'),
+	[FavoriteID] [varchar](50) NOT NULL CONSTRAINT [DF__favorites__Favor__25518C17]  DEFAULT ('0'),
+	[MutualFavorite] [int] NULL CONSTRAINT [DF__favorites__Mutua__2645B050]  DEFAULT ('0'),
+	[FavoriteDate] [datetime] NULL,
+	[FavoriteViewed] [bit] NULL,
+	[FavoriteViewedDate] [datetime] NULL,
+ CONSTRAINT [PK__favorites__236943A5] PRIMARY KEY CLUSTERED 
+(
+	[RecordID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Friends]    Script Date: 08/31/2012 02:03:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Friends](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NOT NULL CONSTRAINT [DF__Friends__Profi__245D67DE]  DEFAULT ('0'),
+	[FriendID] [varchar](50) NOT NULL CONSTRAINT [DF__Friends__Favor__25518C17]  DEFAULT ('0'),
+	[MutualFriend] [int] NULL CONSTRAINT [DF__Friends__Mutua__2645B050]  DEFAULT ('0'),
+	[FriendDate] [datetime] NULL,
+	[FriendViewed] [bit] NULL,
+	[FriendViewedDate] [datetime] NULL,
+ CONSTRAINT [PK__Friends__236943A5] PRIMARY KEY CLUSTERED 
+(
+	[RecordID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[PhotoAlbums]    Script Date: 08/31/2012 02:03:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[PhotoAlbums](
+	[PhotoAlbumID] [int] NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[PhotoAlbumDescription] [varchar](50) NULL,
+ CONSTRAINT [PK_PhotoAlbums] PRIMARY KEY CLUSTERED 
+(
+	[PhotoAlbumID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ProfileEmailUpdateFreqency]    Script Date: 08/31/2012 02:03:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileEmailUpdateFreqency](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[EmailUpdateFreqency] [int] NULL,
+ CONSTRAINT [PK_ProfileEmailUpdateFreqency] PRIMARY KEY CLUSTERED 
+(
+	[RecordID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ProfileData_LookingFor]    Script Date: 08/31/2012 02:03:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileData_LookingFor](
+	[ProfileData_LookingFor] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[LookingForID] [int] NULL,
+ CONSTRAINT [PK_ProfileData_LookingFor] PRIMARY KEY CLUSTERED 
+(
+	[ProfileData_LookingFor] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ProfileData_HotFeature]    Script Date: 08/31/2012 02:03:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileData_HotFeature](
+	[ProfileData_HotFeature] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[HotFeatureID] [int] NULL,
+ CONSTRAINT [PK_ProfileData_HotFeature] PRIMARY KEY CLUSTERED 
+(
+	[ProfileData_HotFeature] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ProfileData_Hobby]    Script Date: 08/31/2012 02:03:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileData_Hobby](
+	[ProfileData_Hobby] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[HobbyID] [int] NULL,
+ CONSTRAINT [PK_ProfileData_Hobby] PRIMARY KEY CLUSTERED 
+(
+	[ProfileData_Hobby] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ProfileData_Ethnicity]    Script Date: 08/31/2012 02:03:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileData_Ethnicity](
+	[ProfileData_Ethnicity] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[EthnicityID] [int] NULL,
+ CONSTRAINT [PK_ProfileData_Ethnicity] PRIMARY KEY CLUSTERED 
+(
+	[ProfileData_Ethnicity] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ProfileRatings]    Script Date: 08/31/2012 02:03:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileRatings](
+	[ProfileRatingID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[RatingID] [int] NULL,
+	[AverageRating] [float] NOT NULL,
+ CONSTRAINT [PK_ProfileRatings] PRIMARY KEY CLUSTERED 
+(
+	[ProfileRatingID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ProfileVisiblitySettings]    Script Date: 08/31/2012 02:03:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileVisiblitySettings](
+	[ProfileID] [varchar](255) NOT NULL,
+	[MailPeeks] [bit] NULL,
+	[MailIntrests] [bit] NULL,
+	[MailLikes] [bit] NULL,
+	[MailMatches] [bit] NULL,
+	[MailNews] [bit] NULL,
+	[ProfileVisiblity] [bit] NULL,
+	[CountryID] [int] NULL,
+	[GenderID] [int] NULL,
+	[SteathPeeks] [bit] NULL,
+	[LastUpdateDate] [datetime] NULL,
+	[ChatVisiblityToLikes] [bit] NULL,
+	[ChatVisiblityToInterests] [bit] NULL,
+	[ChatVisiblityToMatches] [bit] NULL,
+	[ChatVisiblityToPeeks] [bit] NULL,
+	[ChatVisiblityToSearch] [bit] NULL,
+	[MailChatRequest] [bit] NULL,
+	[SaveOfflineChat] [bit] NULL,
+	[AgeMinVisibility] [int] NULL,
+	[AgeMaxVisibility] [int] NULL,
+ CONSTRAINT [PK_ProfileVisiblitySettings_1] PRIMARY KEY CLUSTERED 
+(
+	[ProfileID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ProfileViews]    Script Date: 08/31/2012 02:03:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileViews](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NOT NULL,
+	[ProfileViewerID] [varchar](255) NOT NULL,
+	[ProfileViewDate] [datetime] NULL,
+	[MutualViews] [int] NULL,
+	[ProfileViewViewed] [bit] NULL,
+	[ProfileViewViewedDate] [datetime] NULL,
+	[DeletedByProfileID] [bit] NULL,
+	[DeletedByProfileIDDate] [datetime] NULL,
+	[DeletedByProfileViewerID] [bit] NULL,
+	[DeletedByProfileViewerIDDate] [datetime] NULL,
+ CONSTRAINT [PK_ProfileViews] PRIMARY KEY CLUSTERED 
+(
+	[RecordID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[profiles]    Script Date: 08/31/2012 02:03:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[profiles](
+	[ProfileIndex] [int] IDENTITY(1,1) NOT NULL,
+	[UserName] [varchar](16) NOT NULL CONSTRAINT [DF__profiles__UserNa__3E1D39E1]  DEFAULT (''),
+	[ProfileID] [varchar](255) NOT NULL,
+	[ForwardMessages] [tinyint] NULL CONSTRAINT [DF__profiles__Forwar__4B7734FF]  DEFAULT ('1'),
+	[CreationDate] [datetime] NOT NULL CONSTRAINT [DF__profiles__Creati__4E53A1AA]  DEFAULT ('2000-01-01 0:0:0.000'),
+	[ModificationDate] [datetime] NOT NULL CONSTRAINT [DF__profiles__Modifi__4F47C5E3]  DEFAULT (getdate()),
+	[LoginDate] [datetime] NOT NULL CONSTRAINT [DF__profiles__LoginD__503BEA1C]  DEFAULT (getdate()),
+	[ActivationCode] [varchar](max) NULL CONSTRAINT [DF__profiles__Activa__51300E55]  DEFAULT ('0'),
+	[ProfileStatusID] [int] NOT NULL CONSTRAINT [DF__profiles__Profil__5224328E]  DEFAULT ('1'),
+	[ScreenName] [varchar](50) NULL,
+	[SecurityQuestionID] [tinyint] NULL,
+	[SecurityAnswer] [nvarchar](50) NULL,
+	[Password] [nvarchar](max) NULL,
+	[salt] [nvarchar](max) NULL,
+	[PasswordChangedDate] [datetime] NULL,
+	[PasswordChangeAttempts] [int] NULL,
+	[PasswordChangedCount] [int] NULL,
+	[ReadTemsOfUse] [bit] NULL,
+	[ReadPrivacyStatement] [bit] NULL,
+	[DailySentEmailQuota] [int] NULL,
+	[DailSentMessageQuota] [int] NULL,
+	[SentEmailQuotaHitCount] [int] NULL,
+	[SentMessageQuotaHitCount] [int] NULL,
+ CONSTRAINT [PK__profiles__3D2915A8] PRIMARY KEY NONCLUSTERED 
+(
+	[ProfileID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY],
+ CONSTRAINT [IX_profiles] UNIQUE NONCLUSTERED 
+(
+	[ProfileIndex] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[User_Logtime]    Script Date: 08/31/2012 02:03:57 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[User_Logtime](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[SessionID] [nchar](50) NULL,
+	[LoginTime] [datetime] NULL,
+	[LogoutTime] [datetime] NULL,
+	[Offline] [tinyint] NOT NULL CONSTRAINT [DF_User_Logtime_Offline]  DEFAULT ((0)),
+ CONSTRAINT [PK_User_Logtime] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Interest]    Script Date: 08/31/2012 02:03:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Interest](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NOT NULL,
+	[MutualInterest] [int] NOT NULL,
+	[InterestDate] [datetime] NULL,
+	[InterestID] [varchar](255) NULL,
+	[IntrestViewed] [bit] NULL,
+	[IntrestViewedDate] [datetime] NULL,
+	[DeletedByProfileID] [bit] NULL,
+	[DeletedByProfileIDDate] [datetime] NULL,
+	[DeletedByInterestID] [bit] NULL,
+	[DeletedByInterestIDDate] [datetime] NULL,
+ CONSTRAINT [PK_Interest] PRIMARY KEY CLUSTERED 
+(
+	[RecordID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Hotlist]    Script Date: 08/31/2012 02:03:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Hotlist](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[HotlistID] [varchar](50) NULL CONSTRAINT [DF__Hotlists__Favor__25518C17]  DEFAULT ('0'),
+	[MutualHotlist] [int] NULL CONSTRAINT [DF__Hotlists__Mutua__2645B050]  DEFAULT ('0'),
+	[HotlistDate] [datetime] NULL,
+	[HotlistViewed] [bit] NULL,
+	[HotlistViewedDate] [datetime] NULL,
+ CONSTRAINT [PK__Hotlists__236943A5] PRIMARY KEY CLUSTERED 
+(
+	[RecordID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SearchSettings]    Script Date: 08/31/2012 02:03:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SearchSettings](
+	[SearchSettingsID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[SearchName] [nvarchar](50) NULL,
+	[SearchRank] [int] NULL,
+	[DistanceFromMe] [int] NULL CONSTRAINT [DF_SearchSettings_DistanceFromMe]  DEFAULT ((100)),
+	[AgeMin] [int] NULL CONSTRAINT [DF_SearchSettings_AgeMin]  DEFAULT ((18)),
+	[AgeMax] [int] NULL CONSTRAINT [DF_SearchSettings_AgeMax]  DEFAULT ((40)),
+	[HeightMin] [int] NULL,
+	[HeightMax] [int] NULL,
+	[MyPerfectMatch] [bit] NULL,
+	[SystemMatch] [bit] NULL,
+	[SavedSearch] [bit] NULL,
+	[LastUpdateDate] [datetime] NULL,
+	[CreationDate] [datetime] NULL,
+ CONSTRAINT [PK_SearchSettings] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettingsID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SearchSettings_WantKids]    Script Date: 08/31/2012 02:03:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_WantKids](
+	[SearchSettings_WantKidsID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[WantKidsID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_WantKids] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_WantKidsID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Tribe]    Script Date: 08/31/2012 02:03:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Tribe](
+	[SearchSettings_TribeID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[TribeID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Tribe] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_TribeID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_SortByType]    Script Date: 08/31/2012 02:03:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_SortByType](
+	[SearchSettings_SortByType] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[SortByTypeID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_SortByType] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_SortByType] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Smokes]    Script Date: 08/31/2012 02:03:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Smokes](
+	[SearchSettings_SmokesID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[SmokesID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Smokes] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_SmokesID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Sign]    Script Date: 08/31/2012 02:03:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Sign](
+	[SearchSettings_SignID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[SignID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Sign] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_SignID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_ShowMe]    Script Date: 08/31/2012 02:03:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_ShowMe](
+	[SearchSettings_ShowMeID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[ShowMeID] [int] NULL,
+ CONSTRAINT [PK_SearchSettingsShowMeValues] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_ShowMeID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_ReligiousAttendance]    Script Date: 08/31/2012 02:03:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_ReligiousAttendance](
+	[SearchSettings_ReligiousAttendanceID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[ReligiousAttendanceID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_ReligiousAttendance] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_ReligiousAttendanceID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Religion]    Script Date: 08/31/2012 02:03:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Religion](
+	[SearchSettings_ReligionID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[ReligionID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Religion] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_ReligionID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Profession]    Script Date: 08/31/2012 02:03:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Profession](
+	[SearchSettings_ProfessionID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[ProfessionID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Profession] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_ProfessionID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_PoliticalView]    Script Date: 08/31/2012 02:03:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_PoliticalView](
+	[SearchSettings_PoliticalViewID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[PoliticalViewID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_PoliticalView] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_PoliticalViewID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_NigerianState]    Script Date: 08/31/2012 02:03:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_NigerianState](
+	[SearchSettings_NigerianStateID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[NigerianStateID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_NigerianState] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_NigerianStateID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_MaritalStatus]    Script Date: 08/31/2012 02:03:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_MaritalStatus](
+	[SearchSettings_MaritalStatusID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[MaritalStatusID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_MaritalStatus] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_MaritalStatusID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_LookingFor]    Script Date: 08/31/2012 02:03:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_LookingFor](
+	[SearchSettings_LookingFor] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[LookingForID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_LookingFor] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_LookingFor] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Location]    Script Date: 08/31/2012 02:03:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Location](
+	[SearchSettings_Location] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[CountryID] [int] NULL,
+	[City] [varchar](100) NULL,
+	[PostalCode] [varchar](25) NULL,
+ CONSTRAINT [PK_SearchSettings_Location] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_Location] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SearchSettings_LivingStituation]    Script Date: 08/31/2012 02:03:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_LivingStituation](
+	[SearchSettings_LivingStituationID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[LivingStituationID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_LivingStituation] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_LivingStituationID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_IncomeLevel]    Script Date: 08/31/2012 02:03:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_IncomeLevel](
+	[SearchSettings_IncomeLevelID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[ImcomeLevelID] [int] NULL,
+ CONSTRAINT [PK_SearchSettingsIncomeLevel] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_IncomeLevelID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Humor]    Script Date: 08/31/2012 02:03:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Humor](
+	[SearchSettings_HumorID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[HumorID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Humor] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_HumorID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_HotFeature]    Script Date: 08/31/2012 02:03:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_HotFeature](
+	[SearchSettings_HotFeatureID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[HotFeatureID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_HotFeature] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_HotFeatureID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Hobby]    Script Date: 08/31/2012 02:03:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Hobby](
+	[SearchSettings_HobbyID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[HobbyID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Hobbies] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_HobbyID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_HaveKids]    Script Date: 08/31/2012 02:03:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_HaveKids](
+	[SearchSettings_HaveKidsID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[HaveKidsID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_HaveKids] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_HaveKidsID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_HairColor]    Script Date: 08/31/2012 02:03:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_HairColor](
+	[SearchSettings_HairColorID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[HairColorID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_HairColor] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_HairColorID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Genders]    Script Date: 08/31/2012 02:03:53 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Genders](
+	[SearchSettings_GenderID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[GenderID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Genders] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_GenderID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_EyeColor]    Script Date: 08/31/2012 02:03:53 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_EyeColor](
+	[SearchSettings_EyeColorID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[EyeColorID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_EyeColor] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_EyeColorID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Exercise]    Script Date: 08/31/2012 02:03:53 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Exercise](
+	[SearchSettings_ExerciseID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[ExerciseID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Exercise] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_ExerciseID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Ethnicity]    Script Date: 08/31/2012 02:03:53 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Ethnicity](
+	[SearchSettings_EthnicitiesID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[EthicityID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Ethnicity] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_EthnicitiesID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_EmploymentStatus]    Script Date: 08/31/2012 02:03:53 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_EmploymentStatus](
+	[SearchSettings_EmploymentStatusID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[EmploymentStatusID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_EmploymentStatus] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_EmploymentStatusID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_EducationLevel]    Script Date: 08/31/2012 02:03:53 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_EducationLevel](
+	[SearchSettings_EducationLevelID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[EducationLevelID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_EducationLevel] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_EducationLevelID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Drinks]    Script Date: 08/31/2012 02:03:53 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Drinks](
+	[SearchSettings_DrinksID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[DrinksID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Drinks] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_DrinksID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_Diet]    Script Date: 08/31/2012 02:03:53 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_Diet](
+	[SearchSettings_DietID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[DietID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_Diet] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_DietID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SearchSettings_BodyTypes]    Script Date: 08/31/2012 02:03:53 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SearchSettings_BodyTypes](
+	[SearchSettings_BodyTypeID] [int] IDENTITY(1,1) NOT NULL,
+	[SearchSettingsID] [int] NULL,
+	[BodyTypesID] [int] NULL,
+ CONSTRAINT [PK_SearchSettings_BodyTypes] PRIMARY KEY CLUSTERED 
+(
+	[SearchSettings_BodyTypeID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ProfileRatingTracker]    Script Date: 08/31/2012 02:03:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileRatingTracker](
+	[ProfileRatingTrackerID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileRatingID] [int] NULL,
+	[ProfileID] [varchar](255) NULL,
+	[RatingValue] [float] NULL,
+	[ProfileRatingTrackerDate] [datetime] NULL,
+ CONSTRAINT [PK_ProfileRatingTracker] PRIMARY KEY CLUSTERED 
+(
+	[ProfileRatingTrackerID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[profileOpenIDStore]    Script Date: 08/31/2012 02:03:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[profileOpenIDStore](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[openidIdentifier] [varchar](255) NULL,
+	[openidProviderName] [varchar](50) NULL,
+	[creationDate] [datetime] NULL,
+	[active] [bit] NULL,
+ CONSTRAINT [PK_profileOpenIDStore] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ProfileGeoDataLogger]    Script Date: 08/31/2012 02:03:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ProfileGeoDataLogger](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NULL,
+	[CountryName] [varchar](255) NULL,
+	[CountryCode] [varchar](10) NULL,
+	[RegionName] [varchar](100) NULL,
+	[City] [nchar](100) NULL,
+	[Longitude] [float] NULL,
+	[Lattitude] [float] NULL,
+	[CreationDate] [datetime] NULL,
+	[UserAgent] [varchar](255) NULL,
+	[Continent] [varchar](50) NULL,
+	[IPaddress] [varchar](255) NULL,
+	[SessionID] [varchar](255) NULL,
+	[CustomRegionCode] [varchar](10) NULL,
+ CONSTRAINT [PK_ProfileGeoDataLogger] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[photo]    Script Date: 08/31/2012 02:03:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[photo](
+	[PhotoID] [uniqueidentifier] ROWGUIDCOL  NOT NULL CONSTRAINT [DF_photos_PhotoID]  DEFAULT (newsequentialid()),
+	[ProfileID] [varchar](255) NOT NULL CONSTRAINT [DF__photos__ProfileI__395884C4]  DEFAULT ('0'),
+	[ImageCaption] [varchar](255) NULL CONSTRAINT [DF__photos__Caption__3B40CD36]  DEFAULT (NULL),
+	[ProfileImageType] [varchar](255) NOT NULL,
+	[PhotoStatusID] [int] NOT NULL,
+	[Aproved] [varchar](50) NOT NULL CONSTRAINT [DF_photos_Aproved]  DEFAULT ('No'),
+	[PhotoSize] [int] NULL,
+	[PhotoDate] [datetime] NULL,
+	[PhotoAlbumID] [int] NULL,
+	[PhotoReviewStatusID] [int] NULL,
+	[PhotoReviewerID] [varchar](50) NULL,
+	[PhotoReviewDate] [datetime] NULL,
+	[ProfileImage] [varbinary](max) NOT NULL,
+	[PhotoRejectionReasonID] [int] NULL,
+	[PhotoUniqueID] [uniqueidentifier] NULL,
+	[PhotoTypeID] [int] NULL,
+	[PhotoProviderName] [varchar](50) NULL,
+ CONSTRAINT [PK_photos] PRIMARY KEY CLUSTERED 
+(
+	[PhotoID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[MembersInRole]    Script Date: 08/31/2012 02:03:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[MembersInRole](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[ProfileID] [varchar](255) NOT NULL,
+	[RoleID] [int] NULL,
+	[RoleStartDate] [datetime] NULL,
+	[RoleExpireDate] [datetime] NULL,
+	[Active] [bit] NULL,
+ CONSTRAINT [PK_MembersInRole] PRIMARY KEY CLUSTERED 
+(
+	[RecordID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[MailboxMessagesFolders]    Script Date: 08/31/2012 02:03:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MailboxMessagesFolders](
+	[MailboxMessagesFoldersID] [int] IDENTITY(1,1) NOT NULL,
+	[MailboxFolderID] [int] NULL,
+	[MailBoxMessageID] [int] NULL,
+	[MessageRead] [int] NULL,
+	[MessageReplied] [int] NULL,
+	[MessageFlagged] [int] NULL,
+	[MessageDraft] [int] NULL,
+	[MessageDeleted] [int] NULL,
+	[MessageRecent] [int] NULL,
+ CONSTRAINT [PK_MessagesFolders] PRIMARY KEY CLUSTERED 
+(
+	[MailboxMessagesFoldersID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 1) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnGetUserOlineStatus]    Script Date: 08/31/2012 02:03:57 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date, ,>
+-- Description:	<Description, ,>
+-- =============================================
+CREATE FUNCTION [dbo].[fnGetUserOlineStatus]
+(
+	-- Add the parameters for the function here
+	@ProfileID Varchar(50)
+)
+RETURNS Bit 
+AS
+BEGIN
+	-- Declare the return variable here
+	Declare @ReturnValue Bit;
+
+	-- Add the T-SQL statements to compute the return value here
+	 --myQuery = ObjectContext.User_Logtime.Where(p => p.ProfileID == profileid && p.Offline == 0).Distinct().OrderBy(n => n.LoginTime);
+      
+      Set @ReturnValue =
+       CASE  
+        WHEN EXISTS( 
+             SELECT DISTINCT ProfileID FROM User_LogTime WHERE ProfileID =@ProfileID and offline='0') 
+        THEN 1 --'NOT ALL' 
+ 
+        ELSE 0 -- 'ALL' 
+	    END
+	
+
+	-- Return the result of the function
+	RETURN  @ReturnValue;
+
+END
+GO
+/****** Object:  ForeignKey [FK_abusereport_ProfileData]    Script Date: 08/31/2012 02:03:45 ******/
+ALTER TABLE [dbo].[abusereport]  WITH CHECK ADD  CONSTRAINT [FK_abusereport_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[abusereport] CHECK CONSTRAINT [FK_abusereport_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_abusereports_abusetypes]    Script Date: 08/31/2012 02:03:45 ******/
+ALTER TABLE [dbo].[abusereport]  WITH CHECK ADD  CONSTRAINT [FK_abusereports_abusetypes] FOREIGN KEY([AbuseTypeID])
+REFERENCES [dbo].[abusetype] ([AbuseTypeID])
+GO
+ALTER TABLE [dbo].[abusereport] CHECK CONSTRAINT [FK_abusereports_abusetypes]
+GO
+/****** Object:  ForeignKey [FK_favorites_ProfileData]    Script Date: 08/31/2012 02:03:48 ******/
+ALTER TABLE [dbo].[favorite]  WITH NOCHECK ADD  CONSTRAINT [FK_favorites_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[favorite] NOCHECK CONSTRAINT [FK_favorites_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_Friends_ProfileData]    Script Date: 08/31/2012 02:03:48 ******/
+ALTER TABLE [dbo].[Friends]  WITH NOCHECK ADD  CONSTRAINT [FK_Friends_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[Friends] NOCHECK CONSTRAINT [FK_Friends_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_Hotlists_ProfileData]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Hotlist]  WITH NOCHECK ADD  CONSTRAINT [FK_Hotlists_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[Hotlist] NOCHECK CONSTRAINT [FK_Hotlists_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_Interest_ProfileData]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Interest]  WITH CHECK ADD  CONSTRAINT [FK_Interest_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[Interest] CHECK CONSTRAINT [FK_Interest_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_Like_ProfileData]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Like]  WITH CHECK ADD  CONSTRAINT [FK_Like_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[Like] CHECK CONSTRAINT [FK_Like_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_Mailboxblocks_ProfileData]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[Mailboxblocks]  WITH NOCHECK ADD  CONSTRAINT [FK_Mailboxblocks_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[Mailboxblocks] NOCHECK CONSTRAINT [FK_Mailboxblocks_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_MailboxFolders_MailboxFolderTypes]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[MailboxFolders]  WITH NOCHECK ADD  CONSTRAINT [FK_MailboxFolders_MailboxFolderTypes] FOREIGN KEY([MailboxFolderTypeID])
+REFERENCES [dbo].[MailboxFolderTypes] ([MailboxFolderTypeID])
+GO
+ALTER TABLE [dbo].[MailboxFolders] NOCHECK CONSTRAINT [FK_MailboxFolders_MailboxFolderTypes]
+GO
+/****** Object:  ForeignKey [FK_MailboxFolders_ProfileData]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[MailboxFolders]  WITH NOCHECK ADD  CONSTRAINT [FK_MailboxFolders_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[MailboxFolders] NOCHECK CONSTRAINT [FK_MailboxFolders_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_MailboxMessagesFolders_MailboxFolders]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[MailboxMessagesFolders]  WITH CHECK ADD  CONSTRAINT [FK_MailboxMessagesFolders_MailboxFolders] FOREIGN KEY([MailboxFolderID])
+REFERENCES [dbo].[MailboxFolders] ([MailboxFolderID])
+GO
+ALTER TABLE [dbo].[MailboxMessagesFolders] CHECK CONSTRAINT [FK_MailboxMessagesFolders_MailboxFolders]
+GO
+/****** Object:  ForeignKey [FK_MailboxMessagesFolders_MailboxMessages]    Script Date: 08/31/2012 02:03:49 ******/
+ALTER TABLE [dbo].[MailboxMessagesFolders]  WITH CHECK ADD  CONSTRAINT [FK_MailboxMessagesFolders_MailboxMessages] FOREIGN KEY([MailBoxMessageID])
+REFERENCES [dbo].[MailboxMessages] ([MailboxMessageID])
+GO
+ALTER TABLE [dbo].[MailboxMessagesFolders] CHECK CONSTRAINT [FK_MailboxMessagesFolders_MailboxMessages]
+GO
+/****** Object:  ForeignKey [FK_MembersInRole_ProfileData]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[MembersInRole]  WITH CHECK ADD  CONSTRAINT [FK_MembersInRole_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[MembersInRole] CHECK CONSTRAINT [FK_MembersInRole_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_MembersInRole_profiles]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[MembersInRole]  WITH CHECK ADD  CONSTRAINT [FK_MembersInRole_profiles] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[profiles] ([ProfileID])
+GO
+ALTER TABLE [dbo].[MembersInRole] CHECK CONSTRAINT [FK_MembersInRole_profiles]
+GO
+/****** Object:  ForeignKey [FK_MembersInRole_Roles]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[MembersInRole]  WITH CHECK ADD  CONSTRAINT [FK_MembersInRole_Roles] FOREIGN KEY([RoleID])
+REFERENCES [dbo].[Roles] ([RoleID])
+GO
+ALTER TABLE [dbo].[MembersInRole] CHECK CONSTRAINT [FK_MembersInRole_Roles]
+GO
+/****** Object:  ForeignKey [FK_photo_PhotoRejectionReasons]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo]  WITH CHECK ADD  CONSTRAINT [FK_photo_PhotoRejectionReasons] FOREIGN KEY([PhotoRejectionReasonID])
+REFERENCES [dbo].[PhotoRejectionReasons] ([PhotoRejectionReasonID])
+GO
+ALTER TABLE [dbo].[photo] CHECK CONSTRAINT [FK_photo_PhotoRejectionReasons]
+GO
+/****** Object:  ForeignKey [FK_photo_PhotoType]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo]  WITH CHECK ADD  CONSTRAINT [FK_photo_PhotoType] FOREIGN KEY([PhotoTypeID])
+REFERENCES [dbo].[PhotoType] ([PhotoTypeID])
+GO
+ALTER TABLE [dbo].[photo] CHECK CONSTRAINT [FK_photo_PhotoType]
+GO
+/****** Object:  ForeignKey [FK_photo_ProfileData]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo]  WITH CHECK ADD  CONSTRAINT [FK_photo_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[photo] CHECK CONSTRAINT [FK_photo_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_photo_ProfileData1]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo]  WITH CHECK ADD  CONSTRAINT [FK_photo_ProfileData1] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[photo] CHECK CONSTRAINT [FK_photo_ProfileData1]
+GO
+/****** Object:  ForeignKey [FK_photos_PhotoAlbums]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo]  WITH NOCHECK ADD  CONSTRAINT [FK_photos_PhotoAlbums] FOREIGN KEY([PhotoAlbumID])
+REFERENCES [dbo].[PhotoAlbums] ([PhotoAlbumID])
+GO
+ALTER TABLE [dbo].[photo] NOCHECK CONSTRAINT [FK_photos_PhotoAlbums]
+GO
+/****** Object:  ForeignKey [FK_photos_PhotoReviewStatus]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo]  WITH CHECK ADD  CONSTRAINT [FK_photos_PhotoReviewStatus] FOREIGN KEY([PhotoReviewStatusID])
+REFERENCES [dbo].[PhotoReviewStatus] ([PhotoReviewStatusID])
+GO
+ALTER TABLE [dbo].[photo] CHECK CONSTRAINT [FK_photos_PhotoReviewStatus]
+GO
+/****** Object:  ForeignKey [FK_photos_PhotoStatus]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[photo]  WITH CHECK ADD  CONSTRAINT [FK_photos_PhotoStatus] FOREIGN KEY([PhotoStatusID])
+REFERENCES [dbo].[PhotoStatus] ([PhotoStatusID])
+GO
+ALTER TABLE [dbo].[photo] CHECK CONSTRAINT [FK_photos_PhotoStatus]
+GO
+/****** Object:  ForeignKey [FK_PhotoAlbums_ProfileData]    Script Date: 08/31/2012 02:03:50 ******/
+ALTER TABLE [dbo].[PhotoAlbums]  WITH CHECK ADD  CONSTRAINT [FK_PhotoAlbums_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[PhotoAlbums] CHECK CONSTRAINT [FK_PhotoAlbums_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_abusers]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_abusers] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[abuser] ([ProfileID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_abusers]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaAppearance_Bodytypes]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH CHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaAppearance_Bodytypes] FOREIGN KEY([BodyTypeID])
+REFERENCES [dbo].[CriteriaAppearance_Bodytypes] ([BodyTypesID])
+GO
+ALTER TABLE [dbo].[ProfileData] CHECK CONSTRAINT [FK_ProfileData_CriteriaAppearance_Bodytypes]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaAppearance_EyeColor]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaAppearance_EyeColor] FOREIGN KEY([EyeColorID])
+REFERENCES [dbo].[CriteriaAppearance_EyeColor] ([EyeColorID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaAppearance_EyeColor]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaAppearance_HairColor]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaAppearance_HairColor] FOREIGN KEY([HairColorID])
+REFERENCES [dbo].[CriteriaAppearance_HairColor] ([HairColorID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaAppearance_HairColor]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Diet]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaCharacter_Diet] FOREIGN KEY([DietID])
+REFERENCES [dbo].[CriteriaCharacter_Diet] ([DietID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaCharacter_Diet]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Drinks]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaCharacter_Drinks] FOREIGN KEY([DrinksID])
+REFERENCES [dbo].[CriteriaCharacter_Drinks] ([DrinksID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaCharacter_Drinks]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Exercise]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaCharacter_Exercise] FOREIGN KEY([ExerciseID])
+REFERENCES [dbo].[CriteriaCharacter_Exercise] ([ExerciseID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaCharacter_Exercise]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Humor]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaCharacter_Humor] FOREIGN KEY([HumorID])
+REFERENCES [dbo].[CriteriaCharacter_Humor] ([HumorID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaCharacter_Humor]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_PoliticalView]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaCharacter_PoliticalView] FOREIGN KEY([PoliticalViewID])
+REFERENCES [dbo].[CriteriaCharacter_PoliticalView] ([PoliticalViewID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaCharacter_PoliticalView]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Religion]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaCharacter_Religion] FOREIGN KEY([ReligionID])
+REFERENCES [dbo].[CriteriaCharacter_Religion] ([religionID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaCharacter_Religion]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_ReligiousAttendance]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaCharacter_ReligiousAttendance] FOREIGN KEY([ReligiousAttendanceID])
+REFERENCES [dbo].[CriteriaCharacter_ReligiousAttendance] ([ReligiousAttendanceID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaCharacter_ReligiousAttendance]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Sign]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaCharacter_Sign] FOREIGN KEY([SignID])
+REFERENCES [dbo].[CriteriaCharacter_Sign] ([SignID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaCharacter_Sign]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaCharacter_Smokes]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaCharacter_Smokes] FOREIGN KEY([SmokesID])
+REFERENCES [dbo].[CriteriaCharacter_Smokes] ([SmokesID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaCharacter_Smokes]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_EducationLevel]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaLife_EducationLevel] FOREIGN KEY([EducationLevelID])
+REFERENCES [dbo].[CriteriaLife_EducationLevel] ([EducationLevelID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaLife_EducationLevel]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_EmploymentStatus]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaLife_EmploymentStatus] FOREIGN KEY([EmploymentSatusID])
+REFERENCES [dbo].[CriteriaLife_EmploymentStatus] ([EmploymentSatusID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaLife_EmploymentStatus]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_HaveKids]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaLife_HaveKids] FOREIGN KEY([HaveKidsId])
+REFERENCES [dbo].[CriteriaLife_HaveKids] ([HaveKidsId])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaLife_HaveKids]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_IncomeLevel]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaLife_IncomeLevel] FOREIGN KEY([IncomeLevelID])
+REFERENCES [dbo].[CriteriaLife_IncomeLevel] ([IncomeLevelID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaLife_IncomeLevel]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_LivingSituation]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaLife_LivingSituation] FOREIGN KEY([LivingSituationID])
+REFERENCES [dbo].[CriteriaLife_LivingSituation] ([LivingSituationID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaLife_LivingSituation]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_MaritalStatus]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaLife_MaritalStatus] FOREIGN KEY([MaritalStatusID])
+REFERENCES [dbo].[CriteriaLife_MaritalStatus] ([MaritalStatusID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaLife_MaritalStatus]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_Profession]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaLife_Profession] FOREIGN KEY([ProfessionID])
+REFERENCES [dbo].[CriteriaLife_Profession] ([ProfessionID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaLife_Profession]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_CriteriaLife_WantsKids]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileData_CriteriaLife_WantsKids] FOREIGN KEY([WantsKidsID])
+REFERENCES [dbo].[CriteriaLife_WantsKids] ([WantsKidsID])
+GO
+ALTER TABLE [dbo].[ProfileData] NOCHECK CONSTRAINT [FK_ProfileData_CriteriaLife_WantsKids]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_genders]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData]  WITH CHECK ADD  CONSTRAINT [FK_ProfileData_genders] FOREIGN KEY([GenderID])
+REFERENCES [dbo].[genders] ([GenderID])
+GO
+ALTER TABLE [dbo].[ProfileData] CHECK CONSTRAINT [FK_ProfileData_genders]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_Ethnicity_CriteriaAppearance_Ethnicity]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_Ethnicity]  WITH CHECK ADD  CONSTRAINT [FK_ProfileData_Ethnicity_CriteriaAppearance_Ethnicity] FOREIGN KEY([EthnicityID])
+REFERENCES [dbo].[CriteriaAppearance_Ethnicity] ([EthnicityID])
+GO
+ALTER TABLE [dbo].[ProfileData_Ethnicity] CHECK CONSTRAINT [FK_ProfileData_Ethnicity_CriteriaAppearance_Ethnicity]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_Ethnicity_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_Ethnicity]  WITH CHECK ADD  CONSTRAINT [FK_ProfileData_Ethnicity_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[ProfileData_Ethnicity] CHECK CONSTRAINT [FK_ProfileData_Ethnicity_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_Hobby_CriteriaCharacter_Hobby]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_Hobby]  WITH CHECK ADD  CONSTRAINT [FK_ProfileData_Hobby_CriteriaCharacter_Hobby] FOREIGN KEY([HobbyID])
+REFERENCES [dbo].[CriteriaCharacter_Hobby] ([HobbyID])
+GO
+ALTER TABLE [dbo].[ProfileData_Hobby] CHECK CONSTRAINT [FK_ProfileData_Hobby_CriteriaCharacter_Hobby]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_Hobby_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_Hobby]  WITH CHECK ADD  CONSTRAINT [FK_ProfileData_Hobby_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[ProfileData_Hobby] CHECK CONSTRAINT [FK_ProfileData_Hobby_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_HotFeature_CriteriaCharacter_HotFeature]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_HotFeature]  WITH CHECK ADD  CONSTRAINT [FK_ProfileData_HotFeature_CriteriaCharacter_HotFeature] FOREIGN KEY([HotFeatureID])
+REFERENCES [dbo].[CriteriaCharacter_HotFeature] ([HotFeatureID])
+GO
+ALTER TABLE [dbo].[ProfileData_HotFeature] CHECK CONSTRAINT [FK_ProfileData_HotFeature_CriteriaCharacter_HotFeature]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_HotFeature_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_HotFeature]  WITH CHECK ADD  CONSTRAINT [FK_ProfileData_HotFeature_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[ProfileData_HotFeature] CHECK CONSTRAINT [FK_ProfileData_HotFeature_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_LookingFor_CriteriaLife_LookingFor]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_LookingFor]  WITH CHECK ADD  CONSTRAINT [FK_ProfileData_LookingFor_CriteriaLife_LookingFor] FOREIGN KEY([LookingForID])
+REFERENCES [dbo].[CriteriaLife_LookingFor] ([LookingForID])
+GO
+ALTER TABLE [dbo].[ProfileData_LookingFor] CHECK CONSTRAINT [FK_ProfileData_LookingFor_CriteriaLife_LookingFor]
+GO
+/****** Object:  ForeignKey [FK_ProfileData_LookingFor_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileData_LookingFor]  WITH CHECK ADD  CONSTRAINT [FK_ProfileData_LookingFor_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[ProfileData_LookingFor] CHECK CONSTRAINT [FK_ProfileData_LookingFor_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileEmailUpdateFreqency_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileEmailUpdateFreqency]  WITH CHECK ADD  CONSTRAINT [FK_ProfileEmailUpdateFreqency_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[ProfileEmailUpdateFreqency] CHECK CONSTRAINT [FK_ProfileEmailUpdateFreqency_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileGeoDataLogger_profiles]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileGeoDataLogger]  WITH CHECK ADD  CONSTRAINT [FK_ProfileGeoDataLogger_profiles] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[profiles] ([ProfileID])
+GO
+ALTER TABLE [dbo].[ProfileGeoDataLogger] CHECK CONSTRAINT [FK_ProfileGeoDataLogger_profiles]
+GO
+/****** Object:  ForeignKey [FK_profileOpenIDStore_profiles]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[profileOpenIDStore]  WITH CHECK ADD  CONSTRAINT [FK_profileOpenIDStore_profiles] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[profiles] ([ProfileID])
+GO
+ALTER TABLE [dbo].[profileOpenIDStore] CHECK CONSTRAINT [FK_profileOpenIDStore_profiles]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatings_ProfileData]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileRatings]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileRatings_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[ProfileRatings] NOCHECK CONSTRAINT [FK_ProfileRatings_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatings_Ratings]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileRatings]  WITH CHECK ADD  CONSTRAINT [FK_ProfileRatings_Ratings] FOREIGN KEY([RatingID])
+REFERENCES [dbo].[Ratings] ([RatingID])
+GO
+ALTER TABLE [dbo].[ProfileRatings] CHECK CONSTRAINT [FK_ProfileRatings_Ratings]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatings_Ratings1]    Script Date: 08/31/2012 02:03:51 ******/
+ALTER TABLE [dbo].[ProfileRatings]  WITH CHECK ADD  CONSTRAINT [FK_ProfileRatings_Ratings1] FOREIGN KEY([RatingID])
+REFERENCES [dbo].[Ratings] ([RatingID])
+GO
+ALTER TABLE [dbo].[ProfileRatings] CHECK CONSTRAINT [FK_ProfileRatings_Ratings1]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatingTracker_ProfileRatings]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileRatingTracker]  WITH CHECK ADD  CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings] FOREIGN KEY([ProfileRatingID])
+REFERENCES [dbo].[ProfileRatings] ([ProfileRatingID])
+GO
+ALTER TABLE [dbo].[ProfileRatingTracker] CHECK CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatingTracker_ProfileRatings1]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileRatingTracker]  WITH CHECK ADD  CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings1] FOREIGN KEY([ProfileRatingID])
+REFERENCES [dbo].[ProfileRatings] ([ProfileRatingID])
+GO
+ALTER TABLE [dbo].[ProfileRatingTracker] CHECK CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings1]
+GO
+/****** Object:  ForeignKey [FK_ProfileRatingTracker_ProfileRatings2]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileRatingTracker]  WITH CHECK ADD  CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings2] FOREIGN KEY([ProfileRatingID])
+REFERENCES [dbo].[ProfileRatings] ([ProfileRatingID])
+GO
+ALTER TABLE [dbo].[ProfileRatingTracker] CHECK CONSTRAINT [FK_ProfileRatingTracker_ProfileRatings2]
+GO
+/****** Object:  ForeignKey [FK_profiles_ProfileData]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[profiles]  WITH CHECK ADD  CONSTRAINT [FK_profiles_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[profiles] CHECK CONSTRAINT [FK_profiles_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_profiles_profilestatuses]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[profiles]  WITH CHECK ADD  CONSTRAINT [FK_profiles_profilestatuses] FOREIGN KEY([ProfileStatusID])
+REFERENCES [dbo].[profilestatuses] ([ProfileStatusID])
+GO
+ALTER TABLE [dbo].[profiles] CHECK CONSTRAINT [FK_profiles_profilestatuses]
+GO
+/****** Object:  ForeignKey [FK_profiles_SecurityQuestion]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[profiles]  WITH CHECK ADD  CONSTRAINT [FK_profiles_SecurityQuestion] FOREIGN KEY([SecurityQuestionID])
+REFERENCES [dbo].[SecurityQuestion] ([SecurityQuestionID])
+GO
+ALTER TABLE [dbo].[profiles] CHECK CONSTRAINT [FK_profiles_SecurityQuestion]
+GO
+/****** Object:  ForeignKey [FK_ProfileViews_ProfileData]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileViews]  WITH NOCHECK ADD  CONSTRAINT [FK_ProfileViews_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[ProfileViews] NOCHECK CONSTRAINT [FK_ProfileViews_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_ProfileVisiblitySettings_genders]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileVisiblitySettings]  WITH CHECK ADD  CONSTRAINT [FK_ProfileVisiblitySettings_genders] FOREIGN KEY([GenderID])
+REFERENCES [dbo].[genders] ([GenderID])
+GO
+ALTER TABLE [dbo].[ProfileVisiblitySettings] CHECK CONSTRAINT [FK_ProfileVisiblitySettings_genders]
+GO
+/****** Object:  ForeignKey [FK_ProfileVisiblitySettings_ProfileData]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[ProfileVisiblitySettings]  WITH CHECK ADD  CONSTRAINT [FK_ProfileVisiblitySettings_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[ProfileVisiblitySettings] CHECK CONSTRAINT [FK_ProfileVisiblitySettings_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ProfileData]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[SearchSettings]  WITH NOCHECK ADD  CONSTRAINT [FK_SearchSettings_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[SearchSettings] NOCHECK CONSTRAINT [FK_SearchSettings_ProfileData]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ProfileData1]    Script Date: 08/31/2012 02:03:52 ******/
+ALTER TABLE [dbo].[SearchSettings]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_ProfileData1] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[SearchSettings] CHECK CONSTRAINT [FK_SearchSettings_ProfileData1]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_BodyTypes_CriteriaAppearance_Bodytypes]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_BodyTypes]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_BodyTypes_CriteriaAppearance_Bodytypes] FOREIGN KEY([BodyTypesID])
+REFERENCES [dbo].[CriteriaAppearance_Bodytypes] ([BodyTypesID])
+GO
+ALTER TABLE [dbo].[SearchSettings_BodyTypes] CHECK CONSTRAINT [FK_SearchSettings_BodyTypes_CriteriaAppearance_Bodytypes]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_BodyTypes_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_BodyTypes]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_BodyTypes_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_BodyTypes] CHECK CONSTRAINT [FK_SearchSettings_BodyTypes_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Diet_CriteriaCharacter_Diet]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Diet]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Diet_CriteriaCharacter_Diet] FOREIGN KEY([DietID])
+REFERENCES [dbo].[CriteriaCharacter_Diet] ([DietID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Diet] CHECK CONSTRAINT [FK_SearchSettings_Diet_CriteriaCharacter_Diet]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Diet_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Diet]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Diet_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Diet] CHECK CONSTRAINT [FK_SearchSettings_Diet_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Drinks_CriteriaCharacter_Drinks]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Drinks]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Drinks_CriteriaCharacter_Drinks] FOREIGN KEY([DrinksID])
+REFERENCES [dbo].[CriteriaCharacter_Drinks] ([DrinksID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Drinks] CHECK CONSTRAINT [FK_SearchSettings_Drinks_CriteriaCharacter_Drinks]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Drinks_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Drinks]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Drinks_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Drinks] CHECK CONSTRAINT [FK_SearchSettings_Drinks_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EducationLevel_CriteriaLife_EducationLevel]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EducationLevel]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_EducationLevel_CriteriaLife_EducationLevel] FOREIGN KEY([EducationLevelID])
+REFERENCES [dbo].[CriteriaLife_EducationLevel] ([EducationLevelID])
+GO
+ALTER TABLE [dbo].[SearchSettings_EducationLevel] CHECK CONSTRAINT [FK_SearchSettings_EducationLevel_CriteriaLife_EducationLevel]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EducationLevel_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EducationLevel]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_EducationLevel_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_EducationLevel] CHECK CONSTRAINT [FK_SearchSettings_EducationLevel_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EmploymentStatus_CriteriaLife_EmploymentStatus]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EmploymentStatus]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_EmploymentStatus_CriteriaLife_EmploymentStatus] FOREIGN KEY([EmploymentStatusID])
+REFERENCES [dbo].[CriteriaLife_EmploymentStatus] ([EmploymentSatusID])
+GO
+ALTER TABLE [dbo].[SearchSettings_EmploymentStatus] CHECK CONSTRAINT [FK_SearchSettings_EmploymentStatus_CriteriaLife_EmploymentStatus]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EmploymentStatus_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EmploymentStatus]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_EmploymentStatus_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_EmploymentStatus] CHECK CONSTRAINT [FK_SearchSettings_EmploymentStatus_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Ethnicity_CriteriaAppearance_Ethnicity]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Ethnicity]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Ethnicity_CriteriaAppearance_Ethnicity] FOREIGN KEY([EthicityID])
+REFERENCES [dbo].[CriteriaAppearance_Ethnicity] ([EthnicityID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Ethnicity] CHECK CONSTRAINT [FK_SearchSettings_Ethnicity_CriteriaAppearance_Ethnicity]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Ethnicity_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Ethnicity]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Ethnicity_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Ethnicity] CHECK CONSTRAINT [FK_SearchSettings_Ethnicity_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Exercise_CriteriaCharacter_Exercise]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Exercise]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Exercise_CriteriaCharacter_Exercise] FOREIGN KEY([ExerciseID])
+REFERENCES [dbo].[CriteriaCharacter_Exercise] ([ExerciseID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Exercise] CHECK CONSTRAINT [FK_SearchSettings_Exercise_CriteriaCharacter_Exercise]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Exercise_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Exercise]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Exercise_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Exercise] CHECK CONSTRAINT [FK_SearchSettings_Exercise_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EyeColor_CriteriaAppearance_EyeColor]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EyeColor]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_EyeColor_CriteriaAppearance_EyeColor] FOREIGN KEY([EyeColorID])
+REFERENCES [dbo].[CriteriaAppearance_EyeColor] ([EyeColorID])
+GO
+ALTER TABLE [dbo].[SearchSettings_EyeColor] CHECK CONSTRAINT [FK_SearchSettings_EyeColor_CriteriaAppearance_EyeColor]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_EyeColor_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_EyeColor]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_EyeColor_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_EyeColor] CHECK CONSTRAINT [FK_SearchSettings_EyeColor_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Genders_genders]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Genders]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Genders_genders] FOREIGN KEY([GenderID])
+REFERENCES [dbo].[genders] ([GenderID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Genders] CHECK CONSTRAINT [FK_SearchSettings_Genders_genders]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Genders_SearchSettings]    Script Date: 08/31/2012 02:03:53 ******/
+ALTER TABLE [dbo].[SearchSettings_Genders]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Genders_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Genders] CHECK CONSTRAINT [FK_SearchSettings_Genders_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HairColor_CriteriaAppearance_HairColor]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HairColor]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_HairColor_CriteriaAppearance_HairColor] FOREIGN KEY([HairColorID])
+REFERENCES [dbo].[CriteriaAppearance_HairColor] ([HairColorID])
+GO
+ALTER TABLE [dbo].[SearchSettings_HairColor] CHECK CONSTRAINT [FK_SearchSettings_HairColor_CriteriaAppearance_HairColor]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HairColor_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HairColor]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_HairColor_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_HairColor] CHECK CONSTRAINT [FK_SearchSettings_HairColor_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HaveKids_CriteriaLife_HaveKids]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HaveKids]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_HaveKids_CriteriaLife_HaveKids] FOREIGN KEY([HaveKidsID])
+REFERENCES [dbo].[CriteriaLife_HaveKids] ([HaveKidsId])
+GO
+ALTER TABLE [dbo].[SearchSettings_HaveKids] CHECK CONSTRAINT [FK_SearchSettings_HaveKids_CriteriaLife_HaveKids]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HaveKids_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HaveKids]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_HaveKids_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_HaveKids] CHECK CONSTRAINT [FK_SearchSettings_HaveKids_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Hobby_CriteriaCharacter_Hobby]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Hobby]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Hobby_CriteriaCharacter_Hobby] FOREIGN KEY([HobbyID])
+REFERENCES [dbo].[CriteriaCharacter_Hobby] ([HobbyID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Hobby] CHECK CONSTRAINT [FK_SearchSettings_Hobby_CriteriaCharacter_Hobby]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Hobby_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Hobby]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Hobby_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Hobby] CHECK CONSTRAINT [FK_SearchSettings_Hobby_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HotFeature_CriteriaCharacter_HotFeature]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HotFeature]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_HotFeature_CriteriaCharacter_HotFeature] FOREIGN KEY([HotFeatureID])
+REFERENCES [dbo].[CriteriaCharacter_HotFeature] ([HotFeatureID])
+GO
+ALTER TABLE [dbo].[SearchSettings_HotFeature] CHECK CONSTRAINT [FK_SearchSettings_HotFeature_CriteriaCharacter_HotFeature]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_HotFeature_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_HotFeature]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_HotFeature_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_HotFeature] CHECK CONSTRAINT [FK_SearchSettings_HotFeature_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Humor_CriteriaCharacter_Humor]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Humor]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Humor_CriteriaCharacter_Humor] FOREIGN KEY([HumorID])
+REFERENCES [dbo].[CriteriaCharacter_Humor] ([HumorID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Humor] CHECK CONSTRAINT [FK_SearchSettings_Humor_CriteriaCharacter_Humor]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Humor_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Humor]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Humor_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Humor] CHECK CONSTRAINT [FK_SearchSettings_Humor_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_IncomeLevel_CriteriaLife_IncomeLevel]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_IncomeLevel]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_IncomeLevel_CriteriaLife_IncomeLevel] FOREIGN KEY([ImcomeLevelID])
+REFERENCES [dbo].[CriteriaLife_IncomeLevel] ([IncomeLevelID])
+GO
+ALTER TABLE [dbo].[SearchSettings_IncomeLevel] CHECK CONSTRAINT [FK_SearchSettings_IncomeLevel_CriteriaLife_IncomeLevel]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_IncomeLevel_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_IncomeLevel]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_IncomeLevel_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_IncomeLevel] CHECK CONSTRAINT [FK_SearchSettings_IncomeLevel_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_LivingStituation_CriteriaLife_LivingSituation]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_LivingStituation]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_LivingStituation_CriteriaLife_LivingSituation] FOREIGN KEY([LivingStituationID])
+REFERENCES [dbo].[CriteriaLife_LivingSituation] ([LivingSituationID])
+GO
+ALTER TABLE [dbo].[SearchSettings_LivingStituation] CHECK CONSTRAINT [FK_SearchSettings_LivingStituation_CriteriaLife_LivingSituation]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_LivingStituation_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_LivingStituation]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_LivingStituation_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_LivingStituation] CHECK CONSTRAINT [FK_SearchSettings_LivingStituation_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Location_SearchSettings]    Script Date: 08/31/2012 02:03:54 ******/
+ALTER TABLE [dbo].[SearchSettings_Location]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Location_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Location] CHECK CONSTRAINT [FK_SearchSettings_Location_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_LookingFor_CriteriaLife_LookinFor]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_LookingFor]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_LookingFor_CriteriaLife_LookinFor] FOREIGN KEY([LookingForID])
+REFERENCES [dbo].[CriteriaLife_LookingFor] ([LookingForID])
+GO
+ALTER TABLE [dbo].[SearchSettings_LookingFor] CHECK CONSTRAINT [FK_SearchSettings_LookingFor_CriteriaLife_LookinFor]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_LookingFor_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_LookingFor]  WITH NOCHECK ADD  CONSTRAINT [FK_SearchSettings_LookingFor_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_LookingFor] NOCHECK CONSTRAINT [FK_SearchSettings_LookingFor_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_MaritalStatus_CriteriaLife_MaritalStatus]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_MaritalStatus]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_MaritalStatus_CriteriaLife_MaritalStatus] FOREIGN KEY([MaritalStatusID])
+REFERENCES [dbo].[CriteriaLife_MaritalStatus] ([MaritalStatusID])
+GO
+ALTER TABLE [dbo].[SearchSettings_MaritalStatus] CHECK CONSTRAINT [FK_SearchSettings_MaritalStatus_CriteriaLife_MaritalStatus]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_MaritalStatus_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_MaritalStatus]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_MaritalStatus_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_MaritalStatus] CHECK CONSTRAINT [FK_SearchSettings_MaritalStatus_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_NigerianState_NigerianState]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_NigerianState]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_NigerianState_NigerianState] FOREIGN KEY([NigerianStateID])
+REFERENCES [dbo].[NigerianState] ([NigerianStateID])
+GO
+ALTER TABLE [dbo].[SearchSettings_NigerianState] CHECK CONSTRAINT [FK_SearchSettings_NigerianState_NigerianState]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_NigerianState_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_NigerianState]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_NigerianState_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_NigerianState] CHECK CONSTRAINT [FK_SearchSettings_NigerianState_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_PoliticalView_CriteriaCharacter_PoliticalView]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_PoliticalView]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_PoliticalView_CriteriaCharacter_PoliticalView] FOREIGN KEY([PoliticalViewID])
+REFERENCES [dbo].[CriteriaCharacter_PoliticalView] ([PoliticalViewID])
+GO
+ALTER TABLE [dbo].[SearchSettings_PoliticalView] CHECK CONSTRAINT [FK_SearchSettings_PoliticalView_CriteriaCharacter_PoliticalView]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_PoliticalView_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_PoliticalView]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_PoliticalView_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_PoliticalView] CHECK CONSTRAINT [FK_SearchSettings_PoliticalView_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Profession_CriteriaLife_Profession]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Profession]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Profession_CriteriaLife_Profession] FOREIGN KEY([ProfessionID])
+REFERENCES [dbo].[CriteriaLife_Profession] ([ProfessionID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Profession] CHECK CONSTRAINT [FK_SearchSettings_Profession_CriteriaLife_Profession]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Profession_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Profession]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Profession_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Profession] CHECK CONSTRAINT [FK_SearchSettings_Profession_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Religion_CriteriaCharacter_Religion]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Religion]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Religion_CriteriaCharacter_Religion] FOREIGN KEY([ReligionID])
+REFERENCES [dbo].[CriteriaCharacter_Religion] ([religionID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Religion] CHECK CONSTRAINT [FK_SearchSettings_Religion_CriteriaCharacter_Religion]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Religion_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Religion]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Religion_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Religion] CHECK CONSTRAINT [FK_SearchSettings_Religion_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ReligiousAttendance_CriteriaCharacter_ReligiousAttendance]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_ReligiousAttendance_CriteriaCharacter_ReligiousAttendance] FOREIGN KEY([ReligiousAttendanceID])
+REFERENCES [dbo].[CriteriaCharacter_ReligiousAttendance] ([ReligiousAttendanceID])
+GO
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance] CHECK CONSTRAINT [FK_SearchSettings_ReligiousAttendance_CriteriaCharacter_ReligiousAttendance]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ReligiousAttendance_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_ReligiousAttendance_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance] CHECK CONSTRAINT [FK_SearchSettings_ReligiousAttendance_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ReligiousAttendance_SearchSettings1]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_ReligiousAttendance_SearchSettings1] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_ReligiousAttendance] CHECK CONSTRAINT [FK_SearchSettings_ReligiousAttendance_SearchSettings1]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ShowMe_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ShowMe]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_ShowMe_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_ShowMe] CHECK CONSTRAINT [FK_SearchSettings_ShowMe_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_ShowMe_ShowMe]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_ShowMe]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_ShowMe_ShowMe] FOREIGN KEY([ShowMeID])
+REFERENCES [dbo].[ShowMe] ([ShowMeID])
+GO
+ALTER TABLE [dbo].[SearchSettings_ShowMe] CHECK CONSTRAINT [FK_SearchSettings_ShowMe_ShowMe]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Sign_CriteriaCharacter_Sign1]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Sign]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Sign_CriteriaCharacter_Sign1] FOREIGN KEY([SignID])
+REFERENCES [dbo].[CriteriaCharacter_Sign] ([SignID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Sign] CHECK CONSTRAINT [FK_SearchSettings_Sign_CriteriaCharacter_Sign1]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Sign_SearchSettings]    Script Date: 08/31/2012 02:03:55 ******/
+ALTER TABLE [dbo].[SearchSettings_Sign]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Sign_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Sign] CHECK CONSTRAINT [FK_SearchSettings_Sign_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Smokes_CriteriaCharacter_Smokes]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_Smokes]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Smokes_CriteriaCharacter_Smokes] FOREIGN KEY([SmokesID])
+REFERENCES [dbo].[CriteriaCharacter_Smokes] ([SmokesID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Smokes] CHECK CONSTRAINT [FK_SearchSettings_Smokes_CriteriaCharacter_Smokes]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Smokes_SearchSettings]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_Smokes]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Smokes_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Smokes] CHECK CONSTRAINT [FK_SearchSettings_Smokes_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_SortByType_SearchSettings]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_SortByType]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_SortByType_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_SortByType] CHECK CONSTRAINT [FK_SearchSettings_SortByType_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_SortByType_SortByType]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_SortByType]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_SortByType_SortByType] FOREIGN KEY([SortByTypeID])
+REFERENCES [dbo].[SortByType] ([SortByTypeID])
+GO
+ALTER TABLE [dbo].[SearchSettings_SortByType] CHECK CONSTRAINT [FK_SearchSettings_SortByType_SortByType]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_Tribe_SearchSettings]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_Tribe]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_Tribe_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_Tribe] CHECK CONSTRAINT [FK_SearchSettings_Tribe_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_WantKids_CriteriaLife_WantsKids]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_WantKids]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_WantKids_CriteriaLife_WantsKids] FOREIGN KEY([WantKidsID])
+REFERENCES [dbo].[CriteriaLife_WantsKids] ([WantsKidsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_WantKids] CHECK CONSTRAINT [FK_SearchSettings_WantKids_CriteriaLife_WantsKids]
+GO
+/****** Object:  ForeignKey [FK_SearchSettings_WantKids_SearchSettings]    Script Date: 08/31/2012 02:03:56 ******/
+ALTER TABLE [dbo].[SearchSettings_WantKids]  WITH CHECK ADD  CONSTRAINT [FK_SearchSettings_WantKids_SearchSettings] FOREIGN KEY([SearchSettingsID])
+REFERENCES [dbo].[SearchSettings] ([SearchSettingsID])
+GO
+ALTER TABLE [dbo].[SearchSettings_WantKids] CHECK CONSTRAINT [FK_SearchSettings_WantKids_SearchSettings]
+GO
+/****** Object:  ForeignKey [FK_User_Logtime_ProfileData]    Script Date: 08/31/2012 02:03:57 ******/
+ALTER TABLE [dbo].[User_Logtime]  WITH NOCHECK ADD  CONSTRAINT [FK_User_Logtime_ProfileData] FOREIGN KEY([ProfileID])
+REFERENCES [dbo].[ProfileData] ([ProfileID])
+GO
+ALTER TABLE [dbo].[User_Logtime] NOCHECK CONSTRAINT [FK_User_Logtime_ProfileData]
+GO
