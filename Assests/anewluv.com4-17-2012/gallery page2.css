@@ -1,0 +1,395 @@
+@charset "utf-8";
+
+body {
+	background-color: #fff;
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+}
+body * {
+	font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 0;
+}
+#main p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+/*div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}*/
+li.clearFloat {
+	clear: both;
+}
+ul.symbolList {
+	display: inline;
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#main {
+	margin: 0 auto;
+	width: 1024px;
+}
+#GalleryLeftDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #0ff;
+	width: 97px;
+	padding-top: 0px;
+	height: 1179px;
+}
+html > body #GalleryLeftDiv {
+	height: auto;
+	min-height: 1178px;
+}
+#Gallerycolwrap {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 715px;
+}
+#GalleryheaderDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 713px;
+	padding-top: 0px;
+	height: 109px;
+}
+html > body #GalleryheaderDiv {
+	height: auto;
+	min-height: 108px;
+}
+#GallerybodyDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 713px;
+	padding-top: 0px;
+	height: 954px;
+}
+html > body #GallerybodyDiv {
+	height: auto;
+	min-height: 953px;
+}
+#GallerypostBoardDiv {
+	margin-left: 0px;
+	margin-top: -1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 712px;
+	padding-top: 0px;
+	height: 104px;
+}
+html > body #GallerypostBoardDiv {
+	height: auto;
+	min-height: 103px;
+}
+* layouts for the out Gallery pic box
+/* no margins for this layout */
+.fullgallerylayout {
+	
+}
+
+.mymatcheslayout 
+{
+  margin-left : 15px; 
+}
+#GallerypicDivOuter {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 138px;
+	padding-top: 0px;
+	height: 167px;
+	background-image: url(images/galleryClearbox_s1.png);
+	background-repeat: no-repeat;
+	background-position: center top;
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+html > body #GallerypicDivOuter {
+	height: auto;
+	min-height: 166px;
+}
+
+.GallerypicDivInner {
+	margin-left: 19px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	background-color: #fff;
+	border: 2px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body .GallerypicDivInner {
+	height: auto;
+	min-height: 94px;
+}
+.GallerypicDivInner a img  {
+	margin-left: 20px;
+	margin-top :13px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+	
+}
+
+
+
+
+html > body .GallerypicDivInner a img {	
+	min-height: 94px;
+}
+#GallerynameDiv {
+	margin:0px auto;	
+	border: 0px none #000;
+	width: 138px;
+	padding-top: 5px;
+	height: 12px;
+	text-align :center;
+	font-family: 'Cooper Std Black', Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	line-height: 130%;
+	color: #6bd9ff;
+}
+html > body #GallerynameDiv {
+
+	min-height: 10px;
+}
+
+.Gallerytext {
+	font-family: 'Cooper Std Black', Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: center;
+	color: #6bd9ff;
+	line-height: 110%;
+	display: inline;
+	margin-bottom: 0;
+}
+#GalleryageCityDiv {
+ font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 100%;
+	color: #000;
+	line-height: 100%;
+    margin: 0 auto;
+	
+	margin-bottom: 0;
+	border: 0px none #000;
+	width: 138px;
+	padding-top: 7px;
+	 text-align: center;
+	 	 display :inline-block;
+}
+html > body #GalleryageCityDiv {	
+	min-height: 10px;
+}
+.Gallerytxt {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 100%;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 17px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Gallerytext2 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 100%;
+	text-align: center;
+	color:  green;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 10px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#GalleryactiveWhenDiv {
+	margin:0px auto;	
+	margin-bottom: 0;
+	border: 0px none #000;
+	width: 138px;
+	padding-top: 0px;
+	height: 12px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 90%;
+	color: #000;
+ line-height : 120%;
+ text-align :center ;
+ float:left;
+ 
+
+}
+
+html > body #GalleryactiveWhenDiv {
+
+	max-height: 16px;
+}
+.Gallerytext3 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 90%;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 5px;
+	padding-top: 0px;
+	margin-left: 0px;
+	margin-top: 1px;
+	display: inline;
+	margin-bottom: 0px;
+	padding-left: 0px;
+}
+a.galleryChatIcon99:hover {
+	background-position: -21px 0;
+	
+}
+
+
+.onlinenowtext {
+ margin-top : -5px;
+}
+
+.galleryChatIcon  
+{
+    margin-top  : -25px;
+     margin-left :100px;
+	margin-left: 10px;
+	margin-top: 0px;
+	margin-bottom: 0;
+	 display :inline-block;
+	border: 0px none #000;
+	width: 14px;
+	padding-top: 0px;
+	height: 13px;
+	background-image: url(images/chatIconsSm.png);
+	background-repeat: no-repeat;
+	background-position: left top;
+	cursor:pointer;	
+	
+	
+}
+
+
+html > body .galleryChatIcon {
+	height: auto;
+	min-height: 12px;
+}
+.galleryChatIcon:hover {
+	background-position: -21px 0;
+	
+}
+
+}
+#GalleryfooterDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 713px;
+	padding-top: 0px;
+	height: 114px;
+}
+html > body #GalleryfooterDiv {
+	height: auto;
+	min-height: 113px;
+}
+#GalleryrightDiv {
+	margin-left: 1px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 207px;
+	padding-top: 0px;
+	height: 1179px;
+}
+html > body #GalleryrightDiv {
+	height: auto;
+	min-height: 1178px;
+}
+#rightDivquicksearch {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	  	width: 50px;
+	padding-top: 107px;
+	height: auto;
+}
+
+
+.QuickSearchPaging
+{
+margin-top : 10px;
+   
+}
+
+html > body #rightDivquicksearch {
+	height: auto;
+	min-height: 100px;
+}
+.searchResults{
+	width:710px;
+	height:20px;
+}
+.pageCount{
+	width:710px;
+	height:20px;
+}

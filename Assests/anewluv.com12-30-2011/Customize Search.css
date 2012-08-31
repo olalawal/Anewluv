@@ -1,0 +1,1478 @@
+@charset "utf-8";
+
+body {
+	background-color: #f5f6f7;
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+}
+body * {
+	font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 0;
+}
+#main p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}
+li.clearFloat {
+	clear: both;
+}
+ul.symbolList {
+	display: inline;
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#main {
+	margin: 0 auto;
+	width: 1024px;
+}
+#headerCustSrchDiv {
+	margin-left: 0px;
+	margin-top: 4px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 334px;
+}
+html > body #headerCustSrchDiv {
+	height: auto;
+	min-height: 335px;
+}
+#headerCustSrchDiv2 {
+	margin-left: 0px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1023px;
+	padding-top: 0px;
+	height: 107px;
+}
+html > body #headerCustSrchDiv2 {
+	height: auto;
+	min-height: 108px;
+}
+#postBoardCustSrchDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 85px;
+}
+html > body #postBoardCustSrchDiv {
+	height: auto;
+	min-height: 86px;
+}
+#picBoxCustSrchDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	background-color: #fff;
+	border: 1px solid #000;
+	width: 1022px;
+	padding-top: 0px;
+	height: 139px;
+}
+html > body #picBoxCustSrchDiv {
+	height: auto;
+	min-height: 138px;
+}
+#photoBoxStrip {
+	margin-left: 10px;
+	margin-top: 16px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	background-color: #fff;
+	border: 1px solid #000;
+	width: 998px;
+	padding-top: 0px;
+	height: 113px;
+}
+html > body #photoBoxStrip {
+	height: auto;
+	min-height: 112px;
+}
+#pic9 {
+	margin-right: 28px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic9 {
+	height: auto;
+	min-height: 94px;
+}
+#pic8 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic8 {
+	height: auto;
+	min-height: 94px;
+}
+#pic7 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic7 {
+	height: auto;
+	min-height: 94px;
+}
+#pic6 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic6 {
+	height: auto;
+	min-height: 94px;
+}
+#pic5 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic5 {
+	height: auto;
+	min-height: 94px;
+}
+#pic4 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic4 {
+	height: auto;
+	min-height: 94px;
+}
+#pic3 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic3 {
+	height: auto;
+	min-height: 94px;
+}
+#pic2 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic2 {
+	height: auto;
+	min-height: 94px;
+}
+#pic1 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic1 {
+	height: auto;
+	min-height: 94px;
+}
+#bodyCustSrchDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 782px;
+	padding-top: 0px;
+	height: 3158px;
+}
+html > body #bodyCustSrchDiv {
+	height: auto;
+	min-height: 3159px;
+}
+#CustSrch {
+	margin-left: 176px;
+	margin-top: 80px;
+	display: inline;
+	float: left;
+	height: 27px;
+	margin-bottom: 0;
+	width: 449px;
+}
+#basic2 {
+	margin-left: 0px;
+	margin-top: 65px;
+	background-image: url(images/basic2.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 58px;
+	margin-bottom: 0;
+	width: 780px;
+}
+#gender2ComboBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-right: 113px;
+	margin-top: 38px;
+	display: inline;
+	float: right;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+.Txt_Seeking {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 49px;
+	margin-top: 40px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+}
+#gender1ComboBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-right: 34px;
+	margin-top: 38px;
+	display: inline;
+	float: right;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+.Txt_I {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 43px;
+	margin-top: 40px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+}
+#age2ComboBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-right: 113px;
+	margin-top: 36px;
+	display: inline;
+	float: right;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+.Txt_to {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 70px;
+	margin-top: 38px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+}
+#age1ComboBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-right: 53px;
+	margin-top: 36px;
+	display: inline;
+	float: right;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+.Txt_Between {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 43px;
+	margin-top: 39px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+}
+#myCityTextField_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-right: 53px;
+	margin-top: 34px;
+	display: inline;
+	float: right;
+	height: auto;
+	margin-bottom: 0;
+	width: 190px;
+}
+.Txt_milesKM {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 46px;
+	margin-top: 36px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+}
+#milesKmTextField_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-right: 24px;
+	margin-top: 34px;
+	display: inline;
+	float: right;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+.Txt_living {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 34px;
+	margin-top: 36px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+}
+#proPhotosCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 102px;
+	margin-top: 39px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#countryComboBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 44px;
+	margin-top: 33px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+#onlineCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 142px;
+	margin-top: 37px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#allStComboBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 44px;
+	margin-top: 31px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+#appearance2 {
+	margin-left: 0px;
+	margin-top: 87px;
+	background-image: url(images/appearance2.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 58px;
+	margin-bottom: 0;
+	width: 780px;
+}
+#height2 {
+	margin-left: 62px;
+	margin-top: 76px;
+	display: inline;
+	float: left;
+	height: 38px;
+	margin-bottom: 0;
+	width: 600px;
+}
+#height1ComboBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 123px;
+	margin-top: 54px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+.Txt_to2 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 48px;
+	margin-top: 54px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#height2ComboBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 57px;
+	margin-top: 54px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 130px;
+}
+#ethnicity2 {
+	margin-left: 62px;
+	margin-top: 59px;
+	background-image: url(images/ethnicity2.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 38px;
+	margin-bottom: 0;
+	width: 600px;
+}
+#asianCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#midEastCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 147px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#blackCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#natAmerCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 58px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#whiteCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#pacIslCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 34px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#anyEthnCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 146px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#eIndiCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#interRaceCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 116px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#latinoCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#otherCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 92px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#bodyType2 {
+	margin-left: 61px;
+	margin-top: 38px;
+	display: inline;
+	float: left;
+	height: 38px;
+	margin-bottom: 0;
+	width: 601px;
+}
+#slimCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#extrPoundsCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 153px;
+	margin-top: 38px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#heavySetCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 53px;
+	margin-top: 38px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#slenderCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 34px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#fFiguredCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 134px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#stockyCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 97px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#averageCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 34px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#curvyCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 134px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#largeCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 131px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#athlCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 34px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#volupCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 139px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#bbwCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 107px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#fitTonedCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 34px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#thickCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 127px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#bBuilderCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 132px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#anyBtCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 35px;
+	margin-top: -65px;
+	display: inline;
+	float: right;
+	height: auto;
+	margin-bottom: 0;
+}
+#lifestyle2 {
+	margin-left: 0px;
+	margin-top: 74px;
+	display: inline;
+	float: left;
+	height: 58px;
+	margin-bottom: 0;
+	width: 780px;
+}
+#religion2 {
+	margin-left: 62px;
+	margin-top: 73px;
+	display: inline;
+	float: left;
+	height: 38px;
+	margin-bottom: 0;
+	width: 600px;
+}
+#budTaoCheckBoxCustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#catholicCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 88px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#sciientCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 117px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#christianCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#protestCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 124px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#spiritBnrCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 105px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#musIslmCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#mormonCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 104px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#nReligCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 117px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#jewishCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#agnosticCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 136px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#otherCheckBox_win_CustSrch2 {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 115px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#anyRelCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 43px;
+	margin-top: -25px;
+	display: inline;
+	float: right;
+	height: auto;
+	margin-bottom: 0;
+}
+#hinduCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#atheistCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 143px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#haskids2 {
+	margin-left: 61px;
+	margin-top: 57px;
+	display: inline;
+	float: left;
+	height: 38px;
+	margin-bottom: 0;
+	width: 601px;
+}
+#noHkCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#yesFtHkCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 162px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#anyHkCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 564px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#yesFhkCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#yesBnMeHkCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 103px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#smoke2 {
+	margin-left: 61px;
+	margin-top: 77px;
+	display: inline;
+	float: left;
+	height: 38px;
+	margin-bottom: 0;
+	width: 601px;
+}
+#neverSmkCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#oftenSmkCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 145px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#anySmkCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 564px;
+	margin-top: 22px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#occassionSmkCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#yesTQuitSmkCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 107px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#marital2 {
+	margin-left: 61px;
+	margin-top: 73px;
+	display: inline;
+	float: left;
+	height: 38px;
+	margin-bottom: 0;
+	width: 601px;
+}
+#singleMsCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#divMsCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 64px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#anyMsCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 564px;
+	margin-top: 11px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#sepMsCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 112px;
+	margin-top: 11px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#widCheckBox_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 121px;
+	margin-top: 11px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+}
+#searchButtonCustSrchhDiv {
+	margin-left: 304px;
+	margin-top: 129px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 129px;
+	padding-top: 0px;
+	height: 41px;
+}
+html > body #searchButtonCustSrchhDiv {
+	height: auto;
+	min-height: 40px;
+}
+.Name_SearchCustSrch {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 322px;
+	margin-top: 125px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#nameSrchTextField_win_CustSrch {
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 120%;
+	font-style: normal;
+	font-weight: normal;
+	margin-left: 223px;
+	margin-top: 17px;
+	display: inline;
+	float: left;
+	height: auto;
+	margin-bottom: 0;
+	width: 300px;
+}
+#saveSearchButtonCustSrchhDiv {
+	margin-left: 306px;
+	margin-top: 53px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 124px;
+	padding-top: 0px;
+	height: 37px;
+}
+html > body #saveSearchButtonCustSrchhDiv {
+	height: auto;
+	min-height: 36px;
+}
+#rightCustSrchDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 242px;
+	padding-top: 0px;
+	height: 3158px;
+}
+html > body #rightCustSrchDiv {
+	height: auto;
+	min-height: 3159px;
+}
+#footerCustSrchDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 121px;
+}
+html > body #footerCustSrchDiv {
+	height: auto;
+	min-height: 122px;
+}

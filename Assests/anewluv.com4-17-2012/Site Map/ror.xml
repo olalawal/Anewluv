@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:ror="http://rorweb.com/0.1/" >
+<channel>
+	<title>ROR Sitemap for http://www.anewluv.com </title>
+	<link>http://www.anewluv.com</link>
+<item>
+	<link>http://www.anewluv.com/Account/Register</link>
+	<title>
+	
+	Register
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Account/LogOn</link>
+	<title>
+	
+	LogOn
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Home/ContactUs</link>
+	<title>
+	
+    ContactUs
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Members/WhoViewedMe</link>
+	<title>
+	
+    ContactUs
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Members/WhoIlike</link>
+	<title>
+	
+    ContactUs
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Members/Likes</link>
+	<title>
+	
+    ContactUs
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Mail/MailHome</link>
+	<title>
+	
+	MembersHome
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Account/LogOff</link>
+	<title>
+	
+	MembersHome
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Account/Account</link>
+	<title>
+	
+	MembersHome
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Members/MembersHome</link>
+	<title>
+	
+	MembersHome
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Members/WhoILike</link>
+	<title>
+	
+	MembersHome
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Members/WhoLikesMe</link>
+	<title>
+	
+	MembersHome
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Members/Underconstruction</link>
+	<title>
+	
+	MembersHome
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Mail/Sent</link>
+	<title>
+	
+	Sent
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Mail/Trash</link>
+	<title>
+	
+	Trash
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Home/CommunityConnections</link>
+	<title>
+	
+    ContactUs
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/</link>
+	<title>Find Sombody Today At AnewLuv.com</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Home/AboutUs</link>
+	<title>
+	
+	LogOn
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Account/LogOn?LostPassword=True&LostActivationCode=False</link>
+	<title>
+	
+	LogOn
+
+</title>
+</item>
+<item>
+	<link>http://www.anewluv.com/Account/LogOn?LostActivationCode=True&LostPassword=False</link>
+	<title></title>
+</item>
+</channel></rss>

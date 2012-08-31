@@ -1,0 +1,615 @@
+@charset "utf-8";
+
+body {
+	background-color: #f5f6f7;
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+}
+body * {
+	font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 0;
+}
+#main p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}
+li.clearFloat {
+	clear: both;
+}
+ul.symbolList {
+	display: inline;
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#main {
+	margin: 0 auto;
+	width: 1024px;
+}
+#whoILikeheaderDiv {
+	margin-left: 0px;
+	margin-top: 4px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 334px;
+}
+html > body #whoILikeheaderDiv {
+	height: auto;
+	min-height: 335px;
+}
+#whoILikeheaderDiv2 {
+	margin-left: 0px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1023px;
+	padding-top: 0px;
+	height: 107px;
+}
+html > body #whoILikeheaderDiv2 {
+	height: auto;
+	min-height: 108px;
+}
+#whoILikepostBoardDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 85px;
+}
+html > body #whoILikepostBoardDiv {
+	height: auto;
+	min-height: 86px;
+}
+#whoILikepicBoxDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	background-color: #fff;
+	width: 1024px;
+	padding-top: 0px;
+	height: 139px;
+}
+html > body #whoILikepicBoxDiv {
+	height: auto;
+	min-height: 140px;
+}
+#photoBoxStrip {
+	margin-left: 10px;
+	margin-top: 13px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	background-color: #fff;
+	border: 1px solid #000;
+	width: 998px;
+	padding-top: 0px;
+	height: 113px;
+}
+html > body #photoBoxStrip {
+	height: auto;
+	min-height: 112px;
+}
+#pic9 {
+	margin-right: 28px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic9 {
+	height: auto;
+	min-height: 94px;
+}
+#pic8 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic8 {
+	height: auto;
+	min-height: 94px;
+}
+#pic7 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic7 {
+	height: auto;
+	min-height: 94px;
+}
+#pic6 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic6 {
+	height: auto;
+	min-height: 94px;
+}
+#pic5 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic5 {
+	height: auto;
+	min-height: 94px;
+}
+#pic4 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic4 {
+	height: auto;
+	min-height: 94px;
+}
+#pic3 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic3 {
+	height: auto;
+	min-height: 94px;
+}
+#pic2 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic2 {
+	height: auto;
+	min-height: 94px;
+}
+#pic1 {
+	margin-right: 11px;
+	margin-top: 7px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic1 {
+	height: auto;
+	min-height: 94px;
+}
+#whoILikebodyDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 782px;
+	padding-top: 0px;
+	height: 3158px;
+}
+html > body #whoILikebodyDiv {
+	height: auto;
+	min-height: 3159px;
+}
+.Who_I_LikewhoILike {
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-size: 310%;
+	font-weight: bold;
+	text-align: left;
+	color: #115eb2;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 301px;
+	margin-top: 24px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Select_AllwhoILike {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 18px;
+	margin-top: 22px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#whoILikedeleteDiv {
+	margin-right: 29px;
+	margin-top: 20px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 93px;
+	padding-top: 0px;
+	height: 20px;
+}
+html > body #whoILikedeleteDiv {
+	height: auto;
+	min-height: 21px;
+}
+#whoILikegreybarDiv {
+	margin-left: 18px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 745px;
+	padding-top: 0px;
+	height: 37px;
+	background-image: url(images/greyBar.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+html > body #whoILikegreybarDiv {
+	height: auto;
+	min-height: 38px;
+}
+#whoILikeCheckboxDiv1 {
+	margin-left: 0px;
+	margin-top: 5px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 23px;
+	padding-top: 0px;
+	height: 24px;
+}
+html > body #whoILikeCheckboxDiv1 {
+	height: auto;
+	min-height: 23px;
+}
+#whoILikequikDetailsDiv {
+	margin-left: 0px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 781px;
+	padding-top: 0px;
+	height: 299px;
+	background-image: url(images/detailViewProfileBox.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+html > body #whoILikequikDetailsDiv {
+	height: auto;
+	min-height: 300px;
+}
+#colwrap4 {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 227px;
+}
+#whoILikeDetailLeftDiv {
+	margin-left: 9px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 218px;
+	padding-top: 0px;
+	height: 297px;
+}
+html > body #whoILikeDetailLeftDiv {
+	height: auto;
+	min-height: 298px;
+}
+#whoILikeCheckboxDiv2 {
+	margin-left: 8px;
+	margin-top: 32px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 25px;
+	padding-top: 0px;
+	height: 24px;
+}
+html > body #whoILikeCheckboxDiv2 {
+	height: auto;
+	min-height: 25px;
+}
+#colwrap7 {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 151px;
+}
+.Name_or_handlewhoILike {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #333;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 16px;
+	margin-top: 15px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#whoILikedetailsProfileBoxDiv {
+	margin-left: 1px;
+	margin-top: 3px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 148px;
+	padding-top: 0px;
+	height: 149px;
+}
+html > body #whoILikedetailsProfileBoxDiv {
+	height: auto;
+	min-height: 148px;
+}
+.AgewhoILike {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 88px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Location_SWwhoILike {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 57px;
+	margin-top: 3px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.age_person_seekingwhoILike {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 36px;
+	margin-top: 3px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Active_within_hours_whoILike {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 7px;
+	margin-top: 3px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 191px;
+}
+#whoILikeprofileNavDiv {
+	margin-left: 3px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 130px;
+	padding-top: 0px;
+	height: 297px;
+}
+html > body #whoILikeprofileNavDiv {
+	height: auto;
+	min-height: 298px;
+}
+#colwrap6 {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 392px;
+}
+.My_catchy_intro_linewhoILike {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 104px;
+	margin-top: 28px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Lorem_ipsum_dolor_siwhoILike {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 110%;
+	font-weight: bold;
+	text-align: center;
+	color: #333;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 23px;
+	margin-top: 15px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 327px;
+}
+.View_Full_ProfilewhoILike {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 250px;
+	margin-top: 27px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.PreviouswhoILike {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: left;
+	color: #5590cd;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 64px;
+	margin-top: 2648px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.NextwhoILike {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	text-align: left;
+	color: #6898ff;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 21px;
+	margin-top: 2648px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+}
+#whoILikerightDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 242px;
+	padding-top: 0px;
+	height: 3158px;
+}
+html > body #whoILikerightDiv {
+	height: auto;
+	min-height: 3159px;
+}
+#whoILikefooterDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 121px;
+}
+html > body #whoILikefooterDiv {
+	height: auto;
+	min-height: 122px;
+}

@@ -1,0 +1,8 @@
+
+
+div#ugut2_1.fbConnectWidgetTopmost
+Border-style:none;
+
+searchLandingDiv{
+margin-top:48p;
+}

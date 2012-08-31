@@ -1,0 +1,582 @@
+@charset "utf-8";
+
+body {
+	background-color: #f5f6f7;
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+}
+body * {
+	font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 0;
+}
+#main p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}
+li.clearFloat {
+	clear: both;
+}
+ul.symbolList {
+	display: inline;
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#main {
+	margin: 0 auto;
+	width: 1024px;
+}
+#headerMyQseQuikDiv {
+	margin-left: 0px;
+	margin-top: 1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 114px;
+}
+html > body #headerMyQseQuikDiv {
+	height: auto;
+	min-height: 115px;
+}
+#header2MyQseQuikDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 87px;
+}
+html > body #header2MyQseQuikDiv {
+	height: auto;
+	min-height: 88px;
+}
+.My_Quik_Stats_EditsaboutEditMyQseQuik {
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-size: 250%;
+	font-weight: bold;
+	text-align: left;
+	color: #115eb3;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 403px;
+	margin-top: 28px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#leftMyQseQuikDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 201px;
+	padding-top: 0px;
+	height: 671px;
+}
+html > body #leftMyQseQuikDiv {
+	height: auto;
+	min-height: 672px;
+}
+#bodyMyQseQuikDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 622px;
+	padding-top: 0px;
+	height: 671px;
+}
+html > body #bodyMyQseQuikDiv {
+	height: auto;
+	min-height: 672px;
+}
+#Box3SliceContainer {
+	margin-left: 9px;
+	margin-top: 61px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 602px;
+	background-image: url(images/MyQseQuikMid.png);
+	background-repeat: repeat;
+}
+#Box3SliceContainer_top_1 {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(images/MyQseQuikTop2.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 62px;
+	margin-bottom: 0;
+	width: 602px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+#mainPhotoMyQseQuik {
+	margin-left: 22px;
+	margin-top: 21px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	background-color: #fff;
+	border: 1px solid #000;
+	width: 192px;
+	padding-top: 0px;
+	height: 193px;
+}
+html > body #mainPhotoMyQseQuik {
+	height: auto;
+	min-height: 192px;
+}
+#colwrapMyQseQuikDiv4 {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 187px;
+}
+#MyQseQuikListLtDiv {
+	margin-left: 0px;
+	margin-top: 21px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: none;
+	width: 185px;
+	padding-top: 0px;
+	height: 201px;
+}
+html > body #MyQseQuikListLtDiv {
+	height: auto;
+	min-height: 200px;
+}
+.Edit_seeking_ageMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 46px;
+	margin-top: -1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_HeightMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 46px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_EthnicityMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 46px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_Has_KidsMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 46px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_My_CityMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 46px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_CountryMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 46px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_GenderMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 46px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+#colwrapMyQseQuikDiv5 {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 187px;
+}
+#MyQseQuikListRtDiv {
+	margin-left: 0px;
+	margin-top: 21px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000none;
+	width: 185px;
+	padding-top: 0px;
+	height: 201px;
+}
+html > body #MyQseQuikListRtDiv {
+	height: auto;
+	min-height: 200px;
+}
+.Edit_Seeking_GenderMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 15px;
+	margin-top: -1px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_Body_TypeMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 15px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_ReligionMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 15px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_SmokesMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 15px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_Marital_StatusMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 15px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_EmailMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 15px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_PasswordMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 15px;
+	margin-top: 10px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Edit_PhotosMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: left;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 71px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Txt_About {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 55px;
+	margin-top: 2px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	width: 276px;
+}
+.My_Catchy_Intro_LineMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 1px;
+	margin-top: 36px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 160px;
+}
+#colwrapMyQseQuikDiv6 {
+	float: left;
+	margin-left: 0px;
+	margin-top: 0px;
+	width: 422px;
+}
+#bigPhotoMyQseQuikDiv {
+	margin-left: 2px;
+	margin-top: 15px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: none;
+	width: 418px;
+	padding-top: 0px;
+	height: 105px;
+}
+html > body #bigPhotoMyQseQuikDiv {
+	height: auto;
+	min-height: 104px;
+}
+#pic1MyQseQuik {
+	margin-left: 1px;
+	margin-top: 3px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 94px;
+	padding-top: 0px;
+	height: 95px;
+}
+html > body #pic1MyQseQuik {
+	height: auto;
+	min-height: 94px;
+}
+.Account_Settings_EdiMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 16px;
+	margin-top: 30px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 131px;
+}
+.Full_EditMyQseQuik {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 130%;
+	font-weight: bold;
+	text-align: center;
+	color: #4c8acb;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-right: 16px;
+	margin-top: 30px;
+	display: inline;
+	float: right;
+	margin-bottom: 0;
+	width: 60px;
+}
+#finishButtonMyQseQuikDiv {
+	margin-left: 120px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	border: 1px solid #000;
+	width: 124px;
+	padding-top: 0px;
+	height: 41px;
+}
+html > body #finishButtonMyQseQuikDiv {
+	height: auto;
+	min-height: 42px;
+}
+#Box3SliceContainer_bottom_1 {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(images/MyQseQuikBottom.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 62px;
+	margin-bottom: 0;
+	width: 602px;
+}
+#righMyQseQuiktDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 201px;
+	padding-top: 0px;
+	height: 671px;
+}
+html > body #righMyQseQuiktDiv {
+	height: auto;
+	min-height: 672px;
+}
+#footerMyQseQuikDiv {
+	margin-left: 0px;
+	margin-top: 0px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 1024px;
+	padding-top: 0px;
+	height: 123px;
+}
+html > body #footerMyQseQuikDiv {
+	height: auto;
+	min-height: 124px;
+}

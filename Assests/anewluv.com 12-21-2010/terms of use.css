@@ -1,0 +1,155 @@
+@charset "utf-8";
+
+body {
+	background-color: #f5f6f7;
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+}
+body * {
+	font-size: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+p {
+	margin-bottom: 1.1em;
+	margin-top: 0;
+}
+#main p.lastNode {
+	margin-bottom: 0;
+}
+a:link img, a:visited img {
+	border: none;
+}
+div.clearFloat {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	line-height: 0px;
+}
+li.clearFloat {
+	clear: both;
+}
+ul.symbolList {
+	display: inline;
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.AbsWrap {
+	position: relative;
+	width: 100%;
+}
+.rowWrap {
+	width: 100%;
+}
+#main {
+	margin: 0 auto;
+	width: 1024px;
+}
+#leftDiv {
+	margin-left: 0px;
+	margin-top: 113px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 188px;
+	padding-top: 0px;
+	height: 713px;
+}
+html > body #leftDiv {
+	height: auto;
+	min-height: 714px;
+}
+#bodyDiv {
+	margin-left: 18px;
+	margin-top: 113px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 606px;
+	padding-top: 0px;
+	height: 713px;
+}
+html > body #bodyDiv {
+	height: auto;
+	min-height: 714px;
+}
+#Box3SliceContainer {
+	margin-left: 5px;
+	margin-top: 100px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 600px;
+	background-image: url(images/terms%20of%20use_r4_c2.png);
+	background-repeat: repeat;
+}
+#Box3SliceContainer_top_1 {
+	margin-left: 0px;
+	margin-top: 0px;
+	background-image: url(images/terms%20of%20use_r2_c2.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 30px;
+	margin-bottom: 0;
+	width: 600px;
+}
+.Txt_Terms {
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-size: 300%;
+	font-weight: bold;
+	text-align: left;
+	color: #3374bd;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 212px;
+	margin-top: 12px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+}
+.Txt_Lorem {
+	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-size: 170%;
+	text-align: center;
+	color: #000;
+	line-height: 120%;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-left: 20px;
+	margin-top: 49px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 559px;
+}
+#Box3SliceContainer_bottom_1 {
+	margin-left: 0px;
+	margin-top: 147px;
+	background-image: url(images/terms%20of%20use_r6_c2.png);
+	overflow: hidden;
+	display: inline;
+	float: left;
+	height: 30px;
+	margin-bottom: 0;
+	width: 600px;
+}
+#rightDiv {
+	margin-left: 18px;
+	margin-top: 113px;
+	display: inline;
+	float: left;
+	margin-bottom: 0;
+	width: 194px;
+	padding-top: 0px;
+	height: 713px;
+}
+html > body #rightDiv {
+	height: auto;
+	min-height: 714px;
+}
