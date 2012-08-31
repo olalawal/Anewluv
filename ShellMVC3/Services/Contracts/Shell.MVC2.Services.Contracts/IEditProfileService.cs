@@ -1,72 +1,93 @@
-namespace Shell.MVC2.Controllers
+namespace Shell.MVC2.Models
 {
     using System;
-    using System.ServiceModel.Web;
-    using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
-
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
     public interface IEditProfileService
     {
-        string EditProfile();
+        EditProfileSettingsViewModel EditProfileBasicSettingsPage1Update(EditProfileSettingsViewModel model,
+                                                                                         FormCollection formCollection, int?[] SelectedGenderIds, string _ProfileID);
 
-        string EditProfileBasicSettings(int? ViewIndex, bool? fulledit);
+        EditProfileSettingsViewModel EditProfileBasicSettingsPage2Update(EditProfileSettingsViewModel model,
+                                                                                         FormCollection formCollection,
+                                                                                         int?[] SelectedShowMeIds, int?[] SelectedSortByIds, string _ProfileID);
 
-        string EditProfileBasicSettings( EditProfileBasicSettingsModel   model,
-                                                               int? ViewIndex, int?[] SelectedGenderIds, int?[] SelectedShowMeIds, int?[] SelectedSortByIds, bool? fulledit);
+        EditProfileSettingsViewModel EditProfileAppearanceSettingsPage1Update(EditProfileSettingsViewModel model,
+                                                                                              FormCollection formCollection, int?[] SelectedYourBodyTypesID,  string _ProfileID);
 
-        string EditProfileAppearanceSettings(int? ViewIndex, bool? fulledit);
+        EditProfileSettingsViewModel EditProfileAppearanceSettingsPage2Update(EditProfileSettingsViewModel model,
+                                                                                              FormCollection formCollection, int?[] SelectedYourEthnicityIds, int?[] SelectedMyEthnicityIds, string _ProfileID
+            );
 
-        string EditProfileAppearanceSettings(EditProfileBasicSettingsModel model,
-                                                                   int? ViewIndex, int?[] SelectedYourBodyTypesIds,
-                                                                   int?[] SelectedYourEthnicityIds,int?[] SelectedMyEthnicityIds,int?[] SelectedYourEyeColorIds,
-                                                                   int?[] SelectedYourHairColorIds,int?[] SelectedYourHotFeatureIds, int?[] SelectedMyHotFeatureIds,bool? fulledit);
+        EditProfileSettingsViewModel EditProfileAppearanceSettingsPage3Update(EditProfileSettingsViewModel model,
+                                                                                              FormCollection formCollection, int?[] SelectedYourEyeColorIds, 
+                                                                                              int?[] SelectedYourHairColorIds,
+                                                                                              string _ProfileID);
 
-        string EditProfileLifeStyleSettings(int? ViewIndex, bool? fulledit);
+        EditProfileSettingsViewModel EditProfileAppearanceSettingsPage4Update(EditProfileSettingsViewModel model,
+                                                                                              FormCollection formCollection, int?[] SelectedYourHotFeatureIds, int?[] SelectedMyHotFeatureIds, string _ProfileID);
 
-        string EditProfileLifeStyleSettings(EditProfileBasicSettingsModel model,
-                                                                  int? ViewIndex,  int?[] SelectedYourMaritalStatusIds,
-                                                                  int?[] SelectedYourLivingSituationIds,
-                                                                  int?[] SelectedYourLookingForIds, int?[] SelectedMyLookingForIds, 
-                                                                  int?[] SelectedYourHaveKidsIds, int?[] SelectedYourWantsKidsIds, 
-                                                                  int?[] SelectedYourEmploymentStatusIds, int?[] SelectedYourIncomeLevelIds,
-                                                                  int?[] SelectedYourEducationLevelIds, int?[] SelectedYourProfessionIds,
-                                                                  bool? fulledit);
+        EditProfileSettingsViewModel EditProfileLifeStyleSettingsPage1Update(EditProfileSettingsViewModel model,
+                                                                                             FormCollection formCollection, int?[] SelectedYourMaritalStatusIds, int?[] SelectedYourLivingSituationIds,
+                                                                                             int?[] SelectedYourLookingForIds, int?[] SelectedMyLookingForIds, string _ProfileID);
 
-        string EditProfileCharacterSettings(int? ViewIndex, bool? fulledit);
+        EditProfileSettingsViewModel EditProfileLifeStyleSettingsPage2Update(EditProfileSettingsViewModel model,
+                                                                                             FormCollection formCollection, int?[] SelectedYourHaveKidsIds, int?[] SelectedYourWantsKidsIds,
+                                                                                             string _ProfileID);
 
-        string EditProfileCharacterSettings(EditProfileBasicSettingsModel model,
-                                                                  int? ViewIndex, int?[] SelectedYourDietIds, int?[] SelectedYourDrinksIds,
-                                                                  int?[] SelectedYourExerciseIds,int?[] SelectedYourSmokesIds,int?[] SelectedYourHobbyIds,
-                                                                  int?[] SelectedMyHobbyIds, int?[] SelectedYourSignIds, int?[] SelectedYourReligionIds,
-                                                                  int?[] SelectedYourReligiousAttendanceIds, int?[] SelectedYourPoliticalViewIds,
-                                                                  int?[] SelectedYourHumorIds, bool? fulledit);
+        EditProfileSettingsViewModel EditProfileLifeStyleSettingsPage3Update(EditProfileSettingsViewModel model,
+                                                                                             FormCollection formCollection, int?[] SelectedYourEmploymentStatusIds, int?[] SelectedYourIncomeLevelIds,
+                                                                                             string _ProfileID);
 
-        string EditProfileQuickStats( EditProfileBasicSettingsModel model);
+        EditProfileSettingsViewModel EditProfileLifeStyleSettingsPage4Update(EditProfileSettingsViewModel model,
+                                                                                             FormCollection formCollection, int?[] SelectedYourEducationLevelIds, int?[] SelectedYourProfessionIds,
+                                                                                             string _ProfileID);
 
-        string EditProfileVisibilitySettings(string ProfileID);
+        EditProfileSettingsViewModel EditProfileCharacterSettingsPage1Update(EditProfileSettingsViewModel model,
+                                                                                             FormCollection formCollection, int?[] SelectedYourDietIds, int?[] SelectedYourDrinksIds,
+                                                                                             int?[] SelectedYourExerciseIds,int?[] SelectedYourSmokesIds,  string _ProfileID);
 
-        string EditProfileVisibilitySettings(ProfileVisibilitySettingsModel model);
+        EditProfileSettingsViewModel EditProfileCharacterSettingsPage2Update(EditProfileSettingsViewModel model,
+                                                                                             FormCollection formCollection, int?[] SelectedYourHobbyIds,int?[] SelectedMyHobbyIds, int?[] SelectedYourSignIds,
+                                                                                             string _ProfileID);
 
-        string PhotoEditQuick(EditProfilePhotosViewModel model);
+        EditProfileSettingsViewModel EditProfileCharacterSettingsPage3Update(EditProfileSettingsViewModel model,
+                                                                                             FormCollection formCollection, int?[] SelectedYourReligionIds, int?[] SelectedYourReligiousAttendanceIds,
+                                                                                             string _ProfileID);
 
-        string PhotoEditView(Guid photoid);
+        EditProfileSettingsViewModel EditProfileCharacterSettingsPage4Update(EditProfileSettingsViewModel model,
+                                                                                             FormCollection formCollection, int?[] SelectedYourPoliticalViewIds, int?[] SelectedYourHumorIds,
+                                                                                             string _ProfileID);
 
-        string EditProfile_UpdatePhotos(EditProfilePhotoModel Photo1);
+        bool UpdateProfileVisibilitySettings(ProfileVisiblitySetting model);
 
-        string IndexPost(Guid[] deleteInputs);
+        IQueryable<photo> MyPhotos(string username);
 
-        string PhotoPrivatePost_Delete(Guid[] privateInputs);
+        IEnumerable<EditProfileViewPhotoModel> GetApproved(IQueryable<photo> MyPhotos, string approved,
+                                                                           int page, int pagesize);
 
-        string PhotoPrivatePost_MakePublic(Guid[] privateInputs);
+        IEnumerable<EditProfileViewPhotoModel> GetApprovedMinusGallery(IQueryable<photo> MyPhotos, string approved,
+                                                                                       int page, int pagesize);
 
-        string PhotoPublicPost_Delete(Guid[] publicInputs);
+        IEnumerable<EditProfileViewPhotoModel> GetPhotoByStatusID(IQueryable<photo> MyPhotos, int photoStatusID,
+                                                                                  int page, int pagesize);
 
-        string PhotoPublicPost_MakePublic(Guid[] publicInputs);
+        EditProfilePhotosViewModel GetPhotoViewModel(IEnumerable<EditProfileViewPhotoModel> Approved,
+                                                                     IEnumerable<EditProfileViewPhotoModel> NotApproved,
+                                                                     IEnumerable<EditProfileViewPhotoModel> Private,
+                                                                     IQueryable<photo> model);
 
-        string ShowPhotoUpload(EditProfilePhotosViewModel model);
+        EditProfilePhotoModel GetSingleProfilePhotoByphotoID(Guid photoid);
 
-        string EditUploadPhoto(PhotoViewModel model);
+        EditProfilePhotosViewModel GetEditPhotoModel(string UserName, string ApprovedYes,string NotApprovedNo,
+                                                                     int photoStatusID, int page, int pagesize);
 
-        string CancelUploadPhoto(PhotoViewModel model);
+        void DeletedUserPhoto(Guid PhotoID);
+
+        void MakeUserPhoto_Private(Guid PhotoID);
+
+        void MakeUserPhoto_Public(Guid PhotoID);
     }
 }
