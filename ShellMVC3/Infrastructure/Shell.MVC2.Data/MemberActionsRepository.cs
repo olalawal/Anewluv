@@ -11,7 +11,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 
 using Shell.MVC2.Infrastructure;
 using Shell.MVC2.Interfaces;
-using Omu.Awesome.Core;
+
 
 using Shell.MVC2.Data.Infrastructure;
 

@@ -24,6 +24,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public string mycatchyintroLine { get; set; }
             public string phone { get; set; }
             public string postalcode { get; set; }
+
             public string profile_id { get; set; }
             public virtual profile profile { get; set; }
 
@@ -59,7 +60,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public virtual ICollection<interest> interests { get; set; }
             public virtual ICollection<like> likes { get; set; }
             public virtual ICollection<block> blocks { get; set; }
-            public virtual ICollection<peek> peeks { get; set; }   
+            public virtual ICollection<peek> peeks { get; set; }
+            public virtual ICollection<hotlist> hotlists { get; set; }  
+ 
 
 
             public virtual ICollection<mailboxfolder> mailboxfolders { get; set; }

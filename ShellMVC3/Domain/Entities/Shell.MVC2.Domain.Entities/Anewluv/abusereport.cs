@@ -26,3 +26,5 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
     }
 }
+
+      

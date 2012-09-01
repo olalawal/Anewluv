@@ -13,8 +13,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public string profile_id { get; set; }        
         public virtual profile profile { get; set; }
         public virtual lu_role role { get; set; }
-        public DateTime? roleExpireDate { get; set; }
+        public DateTime? roleexpiredate { get; set; }
         //public int? roleID { get; set; }
-        public DateTime? roleStartDate { get; set; }
+        public DateTime? rolestartdate { get; set; }
     }
 }

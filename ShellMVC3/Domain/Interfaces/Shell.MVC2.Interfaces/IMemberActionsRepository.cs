@@ -12,7 +12,7 @@ using Dating.Server.Data;
 using System.Data.Objects;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using System.ComponentModel.DataAnnotations;
-using Omu.Awesome.Core;
+
 
 namespace Shell.MVC2.Interfaces
 {
@@ -30,13 +30,13 @@ namespace Shell.MVC2.Interfaces
        
       int getwhoisinterestedinmenewcount(string profileid);
         
-       IPageable<MemberSearchViewModel> getinterests(string profileid, int? Page, int? NumberPerPage);
-              
-       IPageable<MemberSearchViewModel> getwhoisinterestedinme(string profileid, int? Page, int? NumberPerPage);             
-   
-       IPageable<MemberSearchViewModel> getwhoisinterestedinmenew(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getinterests(string profileid, int? Page, int? NumberPerPage);
 
-      IEnumerable<MemberSearchViewModel> getmutualinterests(string profileid, string targetprofileid);
+       List<MemberSearchViewModel> getwhoisinterestedinme(string profileid, int? Page, int? NumberPerPage);
+
+       List<MemberSearchViewModel> getwhoisinterestedinmenew(string profileid, int? Page, int? NumberPerPage);
+
+       List<MemberSearchViewModel> getmutualinterests(string profileid, string targetprofileid);
              
         bool checkinterest(string profileid, string targetprofileid);
        
@@ -68,13 +68,13 @@ namespace Shell.MVC2.Interfaces
           
       int getwhoeekedatmenewcount(string profileid);
     
-       IPageable<MemberSearchViewModel> getwhopeekedatme(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getwhopeekedatme(string profileid, int? Page, int? NumberPerPage);
    
-         IPageable <MemberSearchViewModel> getwhopeekedatmenew(string profileid, int? Page, int? NumberPerPage);   
+         List <MemberSearchViewModel> getwhopeekedatmenew(string profileid, int? Page, int? NumberPerPage);   
     
-       IPageable<MemberSearchViewModel> getwhoipeekedat(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getwhoipeekedat(string profileid, int? Page, int? NumberPerPage);
  
-      IEnumerable<MemberSearchViewModel> getmutualpeeks(string profileid, string targetprofileid);
+      List<MemberSearchViewModel> getmutualpeeks(string profileid, string targetprofileid);
            
         bool checkpeek(string profileid, string targetprofileid);
  
@@ -100,10 +100,10 @@ namespace Shell.MVC2.Interfaces
 
          int getwhoiblockedcount(string profileid);
 
-       IPageable<MemberSearchViewModel> getwhoiblocked(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getwhoiblocked(string profileid, int? Page, int? NumberPerPage);
    
                    
-      IEnumerable<MemberSearchViewModel> getmutualblocks(string profileid, string targetprofileid);
+      List<MemberSearchViewModel> getmutualblocks(string profileid, string targetprofileid);
   
         bool checkblock(string profileid, string targetprofileid);
      
@@ -129,13 +129,13 @@ namespace Shell.MVC2.Interfaces
            
       int getwhoislikesmenewcount(string profileid);
     
-       IPageable <MemberSearchViewModel> getwholikesmenew(string profileid, int? Page, int? NumberPerPage); 
+       List <MemberSearchViewModel> getwholikesmenew(string profileid, int? Page, int? NumberPerPage); 
       
-        IPageable <MemberSearchViewModel> getwholikesme(string profileid, int? Page, int? NumberPerPage);
+        List <MemberSearchViewModel> getwholikesme(string profileid, int? Page, int? NumberPerPage);
                 
-       IPageable<MemberSearchViewModel> getwhoilike(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getwhoilike(string profileid, int? Page, int? NumberPerPage);
        
-      IEnumerable<MemberSearchViewModel> getmutuallikes(string profileid, string targetprofileid);
+      List<MemberSearchViewModel> getmutuallikes(string profileid, string targetprofileid);
              
         bool checklike(string profileid, string targetprofileid);
       

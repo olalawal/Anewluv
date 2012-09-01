@@ -80,7 +80,7 @@
     <Compile Include="Anewluv\Lookups\lu_securityleveltype.cs" />
     <Compile Include="Anewluv\Lookups\lu_defaultmailboxfolder.cs" />
     <Compile Include="Anewluv\Mail\ViewModels\EmailMatchesViewModel.cs" />
-    <Compile Include="Anewluv\Membership\AnewLuvMembershipUser.cs" />
+    <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
     <Compile Include="Anewluv\photoconversion.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\bodytypes.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\ethnicty.cs" />
@@ -259,7 +259,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Anewluv\Context\Anewluv.Context.OnModelCreating.cs" />
+    <Compile Include="Anewluv\Context\AnewluvModelbuilder.cs" />
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

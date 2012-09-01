@@ -16,15 +16,15 @@ namespace Shell.MVC2.Interfaces
 
         List<photo> GetAllPhotos(string username);
 
-        //IEnumerable<EditProfileViewPhotoModel> GetAllMApproved(IQueryable<photo> MyPhotos, string approved, int page, int pagesize);
+        //List<EditProfileViewPhotoModel> GetAllMApproved(IQueryable<photo> MyPhotos, string approved, int page, int pagesize);
   
         //gets all approved non prviate photos athat are not gallery 
-      // IEnumerable<EditProfileViewPhotoModel> GetApprovedMinusGallery(IQueryable<photo> MyPhotos, string approved,int page, int pagesize);
+      // List<EditProfileViewPhotoModel> GetApprovedMinusGallery(IQueryable<photo> MyPhotos, string approved,int page, int pagesize);
 
-      // IEnumerable<EditProfileViewPhotoModel> GetPhotoByStatusID(IQueryable<photo> MyPhotos, int photoStatusID, int page, int pagesize);
+      // List<EditProfileViewPhotoModel> GetPhotoByStatusID(IQueryable<photo> MyPhotos, int photoStatusID, int page, int pagesize);
 
-      // EditProfilePhotosViewModel GetPhotoViewModel(IEnumerable<EditProfileViewPhotoModel> Approved, IEnumerable<EditProfileViewPhotoModel> NotApproved,
-        //                                                    IEnumerable<EditProfileViewPhotoModel> Private, IQueryable<photo> model);        
+      // EditProfilePhotosViewModel GetPhotoViewModel(List<EditProfileViewPhotoModel> Approved, List<EditProfileViewPhotoModel> NotApproved,
+        //                                                    List<EditProfileViewPhotoModel> Private, IQueryable<photo> model);        
          
        EditProfilePhotoModel GetSingleProfilePhotobyphotoID(Guid photoid);
 

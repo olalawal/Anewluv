@@ -47,6 +47,7 @@
     <Compile Include="IChatRepository.cs" />
     <Compile Include="IAnewLuvMembershipProvider.cs" />
     <Compile Include="IGeoRepository.cs" />
+    <Compile Include="ILookupRepository.cs" />
     <Compile Include="IOpenidRepositiory.cs" />
     <Compile Include="IMailRepository.cs" />
     <Compile Include="IMemberRepository.cs" />

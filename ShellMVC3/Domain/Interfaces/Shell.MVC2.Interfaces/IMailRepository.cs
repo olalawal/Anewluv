@@ -31,13 +31,13 @@ namespace Shell.MVC2.Interfaces
          int GetNewMailCountbyfolderid(int folderid, string profile_id)    ;    
 
         //TO DO find a way to use ENUM for these names 
-         IEnumerable<mailmodel> GetAllMailbydefaultmailboxfoldertypeMail(string foldertypename, string profile_id);
+         List<mailmodel> GetAllMailbydefaultmailboxfoldertypeMail(string foldertypename, string profile_id);
 
-         IEnumerable<mailmodel> GetAllMailbyfolder(int folderid, string profile_id) ;      
+         List<mailmodel> GetAllMailbyfolder(int folderid, string profile_id) ;      
 
 
         //TO DO read out the description feild from enum using sample code
-         IEnumerable<mailmodel> GetMailMsgThreadByUserID(int uniqueId, string profile_id);
+         List<mailmodel> GetMailMsgThreadByUserID(int uniqueId, string profile_id);
 
  
      

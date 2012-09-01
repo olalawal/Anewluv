@@ -16,8 +16,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
        public virtual profiledata favoriteprofiledata { get; set; }
         public DateTime creationdate { get; set; }
         public DateTime? modificationdate { get; set; }    
-        public DateTime? viewdate { get; set; }  
-    
+        public DateTime? viewdate { get; set; }      
         public DateTime? deletedbymemberdate { get; set; }
         public DateTime? deletedbyfavoritedate { get; set; }    
         public int mutual { get; set; }

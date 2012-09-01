@@ -27,13 +27,13 @@ namespace Shell.MVC2.Data
     {
        // private AnewluvContext _db;
         //TO DO move from ria servives
-        private AnewluvContext _datingservice;
+        private IMemberRepository  _memberepository;
 
 
-        public PhotoRepository(AnewluvContext datingcontext, AnewluvContext datingservice)
+        public PhotoRepository(AnewluvContext datingcontext, IMemberRepository memberepository)
             : base(datingcontext)
         {          
-            _datingservice = datingservice;
+            _memberepository = memberepository;
         }
 
         public List<photo> GetAllPhotos(string username)
@@ -74,17 +74,17 @@ namespace Shell.MVC2.Data
        
         public EditProfilePhotoModel GetSingleProfilePhotobyphotoID(Guid photoid)
         {
-            EditProfilePhotoModel model = (from p in _datingcontext.photos.Where(p => p.PhotoID == photoid)
+            EditProfilePhotoModel model = (from p in _datingcontext.photos.Where(p => p.id  == photoid)
                                            select new EditProfilePhotoModel
                                            {
-                                               PhotoID = p.PhotoID,
-                                               ProfileID = p.ProfileID,
-                                               ScreenName = p.profiledata.profile.ScreenName,
-                                               Aproved = p.Aproved,
+                                               PhotoID = p.id ,
+                                               ProfileID = p.profile_id,
+                                               ScreenName = p.profiledata.profile.screenname ,
+                                               Aproved = p.approvalstatus.id,
                                                ProfileImageType = p.ProfileImageType,
                                                ImageCaption = p.ImageCaption,
-                                               PhotoDate = p.PhotoDate,
-                                               photostatus.id  = p.photostatus.id 
+                                               PhotoDate = p.creationdate ,
+                                              PhotoStatusID   = p.photostatus.id 
                                            }).Single();
             model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
 

@@ -14,6 +14,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [Key]
         public Guid id { get; set; }           
       
+        
         public virtual ICollection<photoalbum>  albums { get; set; }
         public virtual lu_photorejectionreason  rejectionreason { get; set; }
         public virtual lu_photostatus  photostatus { get; set; }
@@ -36,3 +37,4 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
          public string imageCaption { get; set; } 
     }
 }
+

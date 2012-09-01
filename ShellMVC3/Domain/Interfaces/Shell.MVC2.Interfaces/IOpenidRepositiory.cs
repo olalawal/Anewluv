@@ -11,12 +11,12 @@ namespace Shell.MVC2.Interfaces
     interface IOpenidRepositiory
     {
         //Jain Rain OPEN ID auth code 
-        public rpxprofile authinfojson(string token);      
-        public List<string> mappings(string primaryKey);    
-        private string getcontents(string xpath_expr, XPathNavigator nav);
-        public void map(string identifier, string primaryKey);
-        public void unmap(string identifier, string primaryKey);
-        public rpxprofile apicalljson(string methodName, Dictionary<string, string> partialQuery);
+         rpxprofile authinfojson(string token);      
+         List<string> mappings(string primaryKey);    
+         string getcontents(string xpath_expr, XPathNavigator nav);
+         void map(string identifier, string primaryKey);
+         void unmap(string identifier, string primaryKey);
+         rpxprofile apicalljson(string methodName, Dictionary<string, string> partialQuery);
        //End of JainRan code
     }
 }

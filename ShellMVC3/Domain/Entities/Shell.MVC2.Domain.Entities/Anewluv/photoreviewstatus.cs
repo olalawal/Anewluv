@@ -13,6 +13,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DateTime? reviewdate { get; set; }
         public string reviewerprofile_id { get; set; }
         public virtual profiledata reviewerprofiledata { get; set; }
-        public virtual ICollection<photo> photos { get; set; }
+        public Guid photo_id { get; set; }
+        public virtual photo photo { get; set; }
     }
 }

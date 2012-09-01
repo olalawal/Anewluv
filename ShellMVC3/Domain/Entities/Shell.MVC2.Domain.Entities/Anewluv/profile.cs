@@ -21,7 +21,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DateTime creationdate { get; set; }
         public DateTime? failedpasswordchangedate { get; set; }
         public DateTime? passwordChangeddate { get; set; } 
-          
+         
+        
         public virtual lu_profilestatus status { get; set; }     
         public bool? readprivacystatement { get; set; }
         public bool? readtemsofuse { get; set; }
@@ -46,6 +47,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
         public string profile_id { get; set; }
         public virtual profiledata profiledata { get; set; }
+
+
 
     }
 }

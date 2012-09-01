@@ -14,12 +14,12 @@ namespace Shell.MVC2.Data
 
        //TO Do posibly move this to a separate service for benchmarking
        //member viewmodoem mapping and registration models mappers
-       public MembersViewModel mapmember(string profileid);       
-       public MembersViewModel mapguest();
-       public RegisterModel mapregistration(MembersViewModel membersmodel);     
-       public RegisterModel mapjainrainregistration(rpxprofile profile, MembersViewModel membersmodel);
+        MembersViewModel mapmember(string profileid);       
+        MembersViewModel mapguest();
+        RegisterModel mapregistration(MembersViewModel membersmodel);     
+        RegisterModel mapjainrainregistration(rpxprofile profile, MembersViewModel membersmodel);
        //TO DO move to unit test
-       public RegisterModel mapregistrationtest();  
+        RegisterModel mapregistrationtest();  
        //end of profile mapping
 
        //initial profile stuffs
