@@ -56,7 +56,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
         //lookup tables
 
-
+        //
 
         public AnewluvContext()
             : base("name=AnewluvContext")
@@ -69,8 +69,23 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         }
 
 
-    
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            // modelBuilder.Entity<message>().ToTable("messages", schemaName: "Logging");
+            //modelBuilder.Entity<address>().ToTable("messageAddresses", schemaName: "Logging");
+            // modelBuilder.Entity<systemAddress>().ToTable("messageSystemAddresses", schemaName: "Logging");
+            // modelBuilder.Entity<lu_template>().ToTable("lu_messageTemplate", schemaName: "Logging");
+            // modelBuilder.Entity<lu_messageType>().ToTable("lu_messageType", schemaName: "Logging");
+            // modelBuilder.Entity<lu_systemAddressType>().ToTable("lu_messageSystemAddressType", schemaName: "Logging");
 
+            // map required relationships abusereport
+            //**************************************
+
+            //comment this out when sharing after generating the database
+            //only share with sql scripts 
+            anewluvmodelbuilder.buildgeneralmodels(modelBuilder);
+            anewluvmodelbuilder.buildsearchsettingsmodels(modelBuilder);
+        }
 
         public class Initializer : IDatabaseInitializer<AnewluvContext >
         {
