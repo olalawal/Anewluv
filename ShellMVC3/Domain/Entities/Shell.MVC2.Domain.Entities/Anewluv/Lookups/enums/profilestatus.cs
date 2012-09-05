@@ -16,6 +16,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     [DataContract]
     public enum profilestatusEnum : int
     {
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("NotActivated")] 
         [EnumMember]
         NotActivated,

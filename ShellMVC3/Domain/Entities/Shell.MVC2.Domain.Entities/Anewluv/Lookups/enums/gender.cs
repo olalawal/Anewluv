@@ -16,6 +16,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     [DataContract]
     public enum genderEnum : int
     {
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("Male")] 
         [EnumMember]
         Male,

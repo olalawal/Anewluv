@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Omu.Awesome.Core">
-      <HintPath>..\..\..\..\..\..\..\temp\ShellMVC3 8-24-2012\Shell.MVC2\Shell.MVC2\bin\Omu.Awesome.Core.dll</HintPath>
+      <HintPath>..\..\Shell.MVC2\packages\MvcProjectAwesome.1.9\lib\40\Omu.Awesome.Core.dll</HintPath>
     </Reference>
     <Reference Include="RazorEngine">
       <HintPath>..\..\Shell.MVC2\packages\RazorEngine.3.0.8\lib\net40\RazorEngine.dll</HintPath>
@@ -52,6 +52,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebActivator">
+      <HintPath>..\..\Shell.MVC2\packages\WebActivator.1.0.0.0\lib\WebActivator.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Akismet.NET\Comment.cs" />
@@ -73,6 +76,14 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="! mvc project awesome readme.txt" />
+    <Content Include="Content\Awesome.css" />
+    <Content Include="Scripts\Awesome.js" />
+    <Content Include="Scripts\Awesome.min.js" />
+    <Content Include="Scripts\jquery.form.js" />
+    <Content Include="Scripts\jquery.form.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

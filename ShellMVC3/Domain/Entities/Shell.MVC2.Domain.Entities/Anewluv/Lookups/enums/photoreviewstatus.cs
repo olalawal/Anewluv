@@ -16,6 +16,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     [DataContract]
     public enum photoreviewstatusEnum : int
     {
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("Reviewed")] 
         [EnumMember]
         Reviewed,

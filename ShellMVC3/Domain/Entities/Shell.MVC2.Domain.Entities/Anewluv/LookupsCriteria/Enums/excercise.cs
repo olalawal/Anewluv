@@ -16,6 +16,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     [DataContract]
     public enum excerciseEnum : int
     {
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("Any")] 
         [EnumMember]
         Any ,

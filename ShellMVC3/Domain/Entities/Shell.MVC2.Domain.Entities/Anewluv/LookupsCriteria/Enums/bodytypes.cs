@@ -16,9 +16,12 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     [DataContract]
     public enum bodytypesEnum : int
     {
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("Any")] 
         [EnumMember]
-        Any ,
+        Any=1,
         [Description("Slim")]
         [EnumMember]
         Slim,

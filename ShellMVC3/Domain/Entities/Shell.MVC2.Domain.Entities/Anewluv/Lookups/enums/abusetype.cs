@@ -16,9 +16,12 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     [DataContract]
     public enum abusetypeEnum : int
     {
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("Racism")] 
         [EnumMember]
-        Racism,
+        Racism ,
         [Description("Sexism")]
         [EnumMember]
         Sexism,
