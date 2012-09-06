@@ -239,8 +239,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
          .HasRequired(p => p.profile);
 
             //visiblitysetting
-            modelBuilder.Entity<visiblitysetting>()
-          .HasRequired(p => p.profiledata);
+         //   modelBuilder.Entity<visiblitysetting>()
+         // .HasRequired(p => p.profiledata);
 
 
             //  //map requierd  relationshipds for friend
