@@ -8,9 +8,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class profiledata
     {
             // Metadata classes are not meant to be instantiated.
-            [Key]
-            public string id { get; set; }   
         
+            public int id { get; set; }            
             public int? age { get; set; }
             public DateTime birthdate { get; set; }          
             public string city { get; set; }
@@ -23,9 +22,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public long height { get; set; }
             public string mycatchyintroLine { get; set; }
             public string phone { get; set; }
-            public string postalcode { get; set; }
-
-            public string profile_id { get; set; }
+            public string postalcode { get; set; }           
             public virtual profile profile { get; set; }
 
 

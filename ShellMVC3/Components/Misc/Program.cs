@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DatingModel;
+//using DatingModel;
 
 
 
@@ -13,7 +13,7 @@ namespace Misc
         static void Main(string[] args)
         {
 
-            MisFunctions.FixBadUserGeoData();
+           //MisFunctions.FixBadUserGeoData();
           //FixBadUserGeoData();
         }
     }

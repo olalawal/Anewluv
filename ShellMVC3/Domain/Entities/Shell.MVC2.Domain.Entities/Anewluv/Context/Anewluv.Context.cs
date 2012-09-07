@@ -40,7 +40,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<rating> ratings { get; set; }
  
 
-        public DbSet<securityquestion> securityquestions { get; set; }
+      
         public DbSet<systempagesetting> systempagesettings { get; set; }
         
         public DbSet<userlogtime> userlogtimes { get; set; }

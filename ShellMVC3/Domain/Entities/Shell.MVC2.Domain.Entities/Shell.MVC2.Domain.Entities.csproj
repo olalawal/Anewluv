@@ -53,6 +53,7 @@
     <Compile Include="Anewluv\abusereport.cs" />
     <Compile Include="Anewluv\abusereportnotes.cs" />
     <Compile Include="Anewluv\activityloggeodata.cs" />
+    <Compile Include="Anewluv\Context\SeedingConversions.cs" />
     <Compile Include="Anewluv\Context\SeedMethods.cs" />
     <Compile Include="Anewluv\Lookups\lu_sortbytype.cs" />
     <Compile Include="Anewluv\Lookups\lu_photoapprovalstatus.cs" />
@@ -253,6 +254,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
+      <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
+      <Name>Dating.Server.Data.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
       <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
       <Name>Shell.MVC2.Infrastructure</Name>

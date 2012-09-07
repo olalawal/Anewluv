@@ -2,10 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DatingModel;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Collections.Generic;
+//using DatingModel;
+using System.Collections.Generic;
+
 using Dating.Server.Data.Models;
-using Dating.Server.Data.Services;
+using Shell.MVC2.Domain.Entities;
+using Shell.MVC2.Infrastructure.Entities;
 using LoggingLibrary;
+using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using Shell.MVC2.Domain.Entities.Anewluv;
 
 namespace Misc
 {
@@ -13,37 +21,145 @@ namespace Misc
     {
 
 
-        public static void FixBadUserGeoData()
-        {
-            var db = new Dating.Server.Data.Services.DatingService();
-            var datingentities = new AnewLuvFTSEntities();
-            var postaldataentities = new PostalData2Entities();
-            var postaldb= new PostalDataService();
-            List<MembersViewModel> membersmodels = new List<MembersViewModel>();
-            List<profiledata> profiledatas =  new List<profiledata>();
-            //  Dim testSignatureSample As String = New LargeImageTestdata().LargeImageTest
-            //get all the profile Data's with errors 
+        //synch up anew luv database with the new database 
+        //add the old database model
+        //once this is tested and working we want to move this code into migrations ins Domain.Entities
+        public static void ConvertDatabase()
+       {
+           var olddb = new AnewluvFtsEntities();
+           var context = new AnewluvContext();
 
-            profiledatas = datingentities.ProfileDatas.Where(p => p.Longitude ==0  && p.Latitude == 0 ).ToList();
-
-
-
+            //code for simple type data swap
+           //olddb.profiles.ToList().ForEach(p => context.profiles.AddOrUpdate(new Shell.MVC2.Domain.Entities.Anewluv.profile()
+           //{
+           //})          
+           //);
 
 
-            foreach (profiledata  tcd in profiledatas)
+
+            //convert profileData and profile first 
+           //convet abusers data
+         
+            int newprofileid = 1;
+            foreach (Dating.Server.Data.Models.profile item in olddb.profiles )
             {
+             var myobject = new Shell.MVC2.Domain.Entities.Anewluv.profile();
+
+
+             myobject.id = newprofileid; 
+             myobject.username = item.UserName ;
+             myobject.screenname = item.ScreenName ;
+             myobject.activationcode = item.ActivationCode ;
+             myobject.dailsentmessagequota = item.DailSentMessageQuota; 
+             myobject.dailysentemailquota = item.DailySentEmailQuota ;
+             myobject.forwardmessages = item.ForwardMessages  ;
+             myobject.logindate = item.LoginDate   ;
+             myobject. modificationdate = item.ModificationDate  ;
+             myobject.creationdate = item.CreationDate ;
+             myobject.failedpasswordchangedate = null ;
+             myobject.passwordChangeddate = item.PasswordChangedDate ;        
+             myobject.readprivacystatement = item.ReadPrivacyStatement  ;
+             myobject.readtemsofuse = item.ReadTemsOfUse  ;
+             myobject.password = item.Password ;
+             myobject.passwordchangecount = item.PasswordChangedCount  ;
+             myobject.failedpasswordchangeattemptcount = item.PasswordChangeAttempts  ;   
+             myobject.salt = item.salt           ;
+                myobject.status = context.lu_profilestatus.Where(z=>z.id == item.ProfileStatusID).First();
+             myobject.securityquestion  =  context.lu_securityquestion.Where(z=>z.id == item.SecurityQuestionID ).First();
+             myobject.securityanswer = item.SecurityAnswer ;
+             myobject.sentemailquotahitcount = item.SentEmailQuotaHitCount  ;
+             myobject.sentmessagequotahitcount = item.SentMessageQuotaHitCount  ;
+           
+           
+             //iccrement new ID
+             newprofileid = +newprofileid;
+
+            }
+
+
+            
+           
+            foreach (Dating.Server.Data.Models.ProfileData  item in olddb.ProfileDatas  )
+            {
+             var myobject = new Shell.MVC2.Domain.Entities.Anewluv.profiledata();
+
+                //query the profile data
+             var matchedprofile = context.profiles.Where(p => p.emailaddress   == item.ProfileID );
+
+                 // Metadata classes are not meant to be instantiated.
+
+             myobject.id = matchedprofile.First().id ;
+             myobject.age = item.Age ;
+             myobject.birthdate = item.Birthdate ;
+             myobject.city = item.City ;
+             myobject.countryregion = item.Country_Region ;
+             myobject.stateprovince = item.State_Province ;
+             myobject.countryid = item.CountryID ;
+             myobject.longitude = item.Longitude ;
+             myobject.latitude = item.Latitude ;
+             myobject.aboutme = item.AboutMe ;
+             myobject.height = (long)item.Height ;
+             myobject.mycatchyintroLine = item.MyCatchyIntroLine ;
+             myobject.phone = item.Phone ;
+             myobject.postalcode = item.PostalCode ;
+             myobject.profile = context.profiles.Where(z => z.id == myobject.id).First();
+          
+           
+             //iccrement new ID
+             newprofileid = +newprofileid;
+
+            }
+
+           
+
+
+
+
+
+
+
+           //convet abusers data
+           olddb.abusereports.ToList().ForEach(p => context.abusereports.AddOrUpdate (new Shell.MVC2.Domain.Entities.Anewluv.abusereport()
+           {
+               abuser_id =  p.AbuserID,
+               abusereporter_id  = p.ProfileID 
+
+
+           }));
+
+       }
+
+        //public static void FixBadUserGeoData()
+        //{
+        //    //var db =  //new Dating.Server.Data.Services.DatingService();
+        //    var datingentities = new AnewLuvFTSEntities();
+        //    var postaldataentities = new PostalData2Entities();
+        //    var postaldb= new PostalDataService();
+        //    List<MembersViewModel> membersmodels = new List<MembersViewModel>();
+        //    List<profiledata> profiledatas =  new List<profiledata>();
+        //    //  Dim testSignatureSample As String = New LargeImageTestdata().LargeImageTest
+        //    //get all the profile Data's with errors 
+
+        //    profiledatas = datingentities.ProfileDatas.Where(p => p.Longitude ==0  && p.Latitude == 0 ).ToList();
+
+
+
+
+
+        //    foreach (profiledata  tcd in profiledatas)
+        //    {
                
 
-               //get country and city to get lattitude and longitude
-                var countryname =  postaldb.GetCountryNameByCountryID(tcd.CountryID);
-                int haspostalcodes = postaldb.GetCountry_PostalCodeStatusByCountryName(countryname);
-                string postalcodegpsdata = (haspostalcodes == 1)? postaldb.GetGeoPostalCodebyCountryNameAndCity(countryname,tcd.City):"";
-                IQueryable<GpsData> dd = postaldb.GetGpsDataByCountryAndCity(countryname,tcd.City);
+        //       //get country and city to get lattitude and longitude
+        //        var countryname =  postaldb.GetCountryNameByCountryID(tcd.countryid );
+        //        int haspostalcodes = postaldb.GetCountry_PostalCodeStatusByCountryName(countryname);
+        //        string postalcodegpsdata = (haspostalcodes == 1)? postaldb.GetGeoPostalCodebyCountryNameAndCity(countryname,tcd.city):"";
+        //        IQueryable<GpsData> dd = postaldb.GetGpsDataByCountryAndCity(countryname,tcd.city );
                 
-                tcd.PostalCode = postalcodegpsdata;
-                tcd.Latitude = dd.Count() > 0?  dd.FirstOrDefault().Latitude :0.0;
-                tcd.Longitude = dd.Count() > 0? dd.FirstOrDefault().Longitude:0.0;
-                tcd.State_Province = dd.Count() > 0 ? dd.FirstOrDefault().State_Province : null; 
+        //        tcd.postalcode  = postalcodegpsdata;
+        //        tcd.latitude  = dd.Count() > 0?  dd.FirstOrDefault().Latitude :0.0;
+        //        tcd.longitude  = dd.Count() > 0? dd.FirstOrDefault().Longitude:0.0;
+        //        tcd.stateprovince  = dd.Count() > 0 ? dd.FirstOrDefault().State_Province : null; 
                            
                         
                
@@ -51,50 +167,54 @@ namespace Misc
                  
 
 
-                try
-                {
+        //        try
+        //        {
 
 
-                    if (tcd.Latitude != 0.0 && tcd.Longitude != 0.0)
-                    {
+        //            if (tcd.Latitude != 0.0 && tcd.Longitude != 0.0)
+        //            {
 
-                        datingentities.SaveChanges();
+        //                datingentities.SaveChanges();
 
-                        UserRepairLogging logger = new UserRepairLogging();
-                       // LoggingLibrary.ServiceReference2.UserRepairLog log = new LoggingLibrary.ServiceReference2.UserRepairLog();
-                        logger.oLogEntry.CountryName = countryname;
-                        logger.oLogEntry.ProfileID = tcd.ProfileID;
-                        logger.oLogEntry.DateFixed = DateTime.Now;
-                        logger.oLogEntry.RepairReason = "Fixed users with empty lat long";
-                        logger.WriteSingleEntry(logger.oLogEntry);
-                    }
+        //                UserRepairLogging logger = new UserRepairLogging();
+        //               // LoggingLibrary.ServiceReference2.UserRepairLog log = new LoggingLibrary.ServiceReference2.UserRepairLog();
+        //                logger.oLogEntry.CountryName = countryname;
+        //                logger.oLogEntry.ProfileID = tcd.ProfileID;
+        //                logger.oLogEntry.DateFixed = DateTime.Now;
+        //                logger.oLogEntry.RepairReason = "Fixed users with empty lat long";
+        //                logger.WriteSingleEntry(logger.oLogEntry);
+        //            }
 
-                    Console.WriteLine();
-                    Console.WriteLine("TestCase/name:  = " + "Geodata fix");
-                    Console.WriteLine("UserName    = " + tcd.ProfileID);
-                    // Console.WriteLine("Password    = " + tcd.Password);
-                    Console.WriteLine("Country =" + countryname );
-                    Console.WriteLine("This Script Updated the following values :");
-                    Console.WriteLine("Lattutude : {0}",tcd.Latitude);
-                    Console.WriteLine("LongiTude : {0}",tcd.Longitude);
-                    Console.WriteLine("State Province :{0}",tcd.State_Province);
+        //            Console.WriteLine();
+        //            Console.WriteLine("TestCase/name:  = " + "Geodata fix");
+        //            Console.WriteLine("UserName    = " + tcd.ProfileID);
+        //            // Console.WriteLine("Password    = " + tcd.Password);
+        //            Console.WriteLine("Country =" + countryname );
+        //            Console.WriteLine("This Script Updated the following values :");
+        //            Console.WriteLine("Lattutude : {0}",tcd.Latitude);
+        //            Console.WriteLine("LongiTude : {0}",tcd.Longitude);
+        //            Console.WriteLine("State Province :{0}",tcd.State_Province);
 
-                    Console.WriteLine();
-                }
-                catch (Exception  ex)
-                {
-                    Console.WriteLine("The service operation timed out. " +ex.Message);
-                    Console.ReadLine();
-                    //     Client.Abort()
-                    //these are expected errors here i.e handled 
-                }
+        //            Console.WriteLine();
+        //        }
+        //        catch (Exception  ex)
+        //        {
+        //            Console.WriteLine("The service operation timed out. " +ex.Message);
+        //            Console.ReadLine();
+        //            //     Client.Abort()
+        //            //these are expected errors here i.e handled 
+        //        }
                
                 
 
 
-            }
+        //    }
 
-        }
+        //}
+
+
+     
+
 
         //=======================================================
         //Service provided by Telerik (www.telerik.com)

@@ -24,7 +24,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<lu_securityleveltype> lu_securityleveltype { get; set; }
         public DbSet<lu_showme> lu_showme { get; set; }
         public DbSet<lu_sortbytype > lu_sortbytype { get; set; }
-       
+        public DbSet<lu_securityquestion> lu_securityquestion { get; set; }
 
     }
 }

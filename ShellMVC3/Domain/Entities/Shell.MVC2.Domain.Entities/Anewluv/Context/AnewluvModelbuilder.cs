@@ -184,23 +184,30 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //Profile
             // Specify one-to-one association between profile and profiledata
             //*****************************************************************
-            modelBuilder.Entity<profile>()
-           .HasRequired(t => t.profiledata).WithRequiredPrincipal(t => t.profile);
-            //status is required         
-            modelBuilder.Entity<profile>()
-           .HasRequired(p => p.status);
 
-            //Profiledata
-            //Specify one-to-one association between profile and profiledata
-            modelBuilder.Entity<profiledata>()
-           .HasOptional(t => t.visibilitysettings).WithOptionalPrincipal(t => t.profiledata);
-            //gender is required         
-            modelBuilder.Entity<profiledata>()
-           .HasRequired(p => p.gender);
+            //sets up a one to one relation ship with same primary key
+            modelBuilder.Entity<profile>().HasOptional(zm => zm.profiledata);
+            modelBuilder.Entity<profile >().HasKey(zmt => zmt.id);
+            modelBuilder.Entity<profile>().HasRequired(zmt => zmt.profiledata).WithRequiredDependent(zm => zm.profile );
+        //http://stackoverflow.com/questions/9434245/how-do-i-code-an-optional-one-to-one-relationship-in-ef-4-1-code-first-with-lazy
 
-            //set one to many relation ship with searchsettings                 
-            modelBuilder.Entity<profiledata>()
-           .HasMany(p => p.searchsettings);
+           // modelBuilder.Entity<profile>()
+           //.HasRequired(t => t.profiledata).WithRequiredPrincipal(t => t.profile);
+           // //status is required         
+           // modelBuilder.Entity<profile>()
+           //.HasRequired(p => p.status);
+
+           // //Profiledata
+           // //Specify one-to-one association between profile and profiledata
+           // modelBuilder.Entity<profiledata>()
+           //.HasOptional(t => t.visibilitysettings).WithOptionalPrincipal(t => t.profiledata);
+           // //gender is required         
+           // modelBuilder.Entity<profiledata>()
+           //.HasRequired(p => p.gender);
+
+           // //set one to many relation ship with searchsettings                 
+           // modelBuilder.Entity<profiledata>()
+           //.HasMany(p => p.searchsettings);
 
             //profiledata_ethnicity complex model requered field mappings
             // map required relationships profiledata_ethnicity
@@ -246,8 +253,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
             //userlogtime
             modelBuilder.Entity<userlogtime>()
-<<<<<<< HEAD
-         .HasRequired(p => p.profile);
+          .HasRequired(p => p.profile);
 
             //visiblitysetting
          //   modelBuilder.Entity<visiblitysetting>()
@@ -408,9 +414,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             // //.HasRequired(t => t.profile)
             //// .WithRequiredPrincipal();
 
-=======
-           .HasRequired(p => p.profile);
->>>>>>> updated code first DB
+
 
         
         }

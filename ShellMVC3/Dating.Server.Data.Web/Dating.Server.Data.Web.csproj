@@ -189,6 +189,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\OldDatingModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OldDatingModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\PostalDataModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -232,6 +237,10 @@
     <EntityDeploy Include="Models\PostalDataModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>PostalDataModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="Models\OldDatingModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>OldDatingModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Dating.Server.Data.Models.AnewluvFTSEntities.datasource" />

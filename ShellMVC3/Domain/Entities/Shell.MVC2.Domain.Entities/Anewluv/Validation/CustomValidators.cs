@@ -553,7 +553,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Validation
                     //call to the data model to verify the activation code 
                     using (AnewluvContext dbContext = new AnewluvContext())
                     {
-                        emailalreadyexists = (dbContext.profiles.Any(u => u.id == value.ToString()));                          
+                        emailalreadyexists = (dbContext.profiles.Any(u => u.id == (int)value));                          
                         //row = _repo.GetAdminLoginByUsername(valueAsString);
                     }
 
