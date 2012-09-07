@@ -9,7 +9,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         [Key]
         public int id { get; set; }
-        public string description { get; set; }
+        //public string photoreviewstatustype_id { get; set; }
+        //public lu_photoreviewstatustype photoreviewstatustype  { get; set; }
+        public string notes { get; set; }
         public DateTime? reviewdate { get; set; }
         public string reviewerprofile_id { get; set; }
         public virtual profiledata reviewerprofiledata { get; set; }

@@ -18,8 +18,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<searchsetting_ethnicity> searchsetting_ethnicity { get; set; }
         public DbSet<searchsetting_exercise> searchsetting_exercise { get; set; }
         public DbSet<searchsetting_eyecolor> searchsetting_eyecolor { get; set; }
-        public DbSet<searchsetting_genders> searchsetting_genders { get; set; }
+        public DbSet<searchsetting_gender> searchsetting_gender { get; set; }
         public DbSet<searchsetting_haircolor> searchsetting_haircolor { get; set; }
+        
 
 
         public DbSet<searchsetting_havekids> searchsetting_havekids { get; set; }
@@ -33,6 +34,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<searchsetting_location> searchsetting_location { get; set; }
         public DbSet<searchsetting_maritalstatus> searchsetting_maritalstatus { get; set; }
         public DbSet<searchsetting_politicalview> searchsetting_politicalview { get; set; }
+        public DbSet<searchsetting_lookingfor> searchsetting_lookingfor { get; set; }
 
         public DbSet<searchsetting_profession> searchsetting_profession { get; set; }
         public DbSet<searchsetting_religion> searchsetting_religion { get; set; }

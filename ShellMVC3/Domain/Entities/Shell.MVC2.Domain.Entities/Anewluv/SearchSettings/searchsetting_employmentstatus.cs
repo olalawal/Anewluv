@@ -7,7 +7,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 {
     public class searchsetting_employmentstatus
     {
-        public virtual lu_life_employmentstatus employmentstatus { get; set; }
+        public virtual lu_employmentstatus employmentstatus { get; set; }
         [Key]
         public int? id { get; set; }
         public virtual searchsetting  searchsetting { get; set; } 

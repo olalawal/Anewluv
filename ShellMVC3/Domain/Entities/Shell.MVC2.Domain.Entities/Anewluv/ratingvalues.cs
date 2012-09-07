@@ -20,3 +20,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public Double ? value { get; set; }
     }
 }
+     
+           //   //map requierd  relationshipds for favorite
+           //   //**************************************
+           // favorite  reqired ,  first part has to sleetc the nav property in perant
+           // modelBuilder.Entity<ratingvalue>().HasRequired(t => t.rateeprofiledata ).WithMany(z => z.ratingvalues )
+           //.HasForeignKey(p => p.rateeprofile_id ).WillCascadeOnDelete(false);

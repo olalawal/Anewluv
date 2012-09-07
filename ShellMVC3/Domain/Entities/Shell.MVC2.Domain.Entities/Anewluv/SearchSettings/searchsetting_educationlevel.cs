@@ -7,7 +7,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 {
     public class searchsetting_educationlevel
     {
-        public virtual lu_life_educationlevel educationlevel  { get; set; }
+        public virtual lu_educationlevel educationlevel  { get; set; }
         [Key]
         public int? id { get; set; }
         public virtual searchsetting  searchsetting { get; set; } 

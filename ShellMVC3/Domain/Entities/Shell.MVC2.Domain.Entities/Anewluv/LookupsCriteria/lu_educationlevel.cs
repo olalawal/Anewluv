@@ -5,10 +5,11 @@ using System.Text;using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    public class lu_life_wantskids
+    public class lu_educationlevel
     {
-       [Key]
+        [Key]
         public int id { get; set; }
         public string description { get; set; }
+  
     }
 }

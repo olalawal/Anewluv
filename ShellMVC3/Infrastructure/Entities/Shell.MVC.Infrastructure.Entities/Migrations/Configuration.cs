@@ -149,7 +149,6 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
        
     }
 
-
     internal sealed class ConfigurationCustomerrorLogModel : DbMigrationsConfiguration<CustomErrorLogModel.CustomErrorLogContext>
     {
         public ConfigurationCustomerrorLogModel()

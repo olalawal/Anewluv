@@ -9,7 +9,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
 
         
-        public virtual lu_character_hotfeature hotfeature { get; set; }
+        public virtual lu_hotfeature hotfeature { get; set; }
         [Key ]
         public int id { get; set; }
        public virtual profiledata profiledata { get; set; }

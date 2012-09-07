@@ -5,12 +5,12 @@ using System.Text;using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    public class lu_life_lookingfor
+    //appearance
+    public class lu_haircolor
     {
         [Key]
         public int id { get; set; }
         public string description { get; set; }
-
-    
+     
     }
 }

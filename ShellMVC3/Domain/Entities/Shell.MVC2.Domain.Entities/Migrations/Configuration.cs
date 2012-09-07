@@ -4,6 +4,8 @@ namespace Shell.MVC2.Domain.Entities.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using Shell.MVC2.Domain.Entities.Anewluv;
+    using Shell.MVC2.Infrastructure;
 
     internal sealed class ConfigurationAnewluv : DbMigrationsConfiguration<Shell.MVC2.Domain.Entities.Anewluv.AnewluvContext>
     {
@@ -26,7 +28,11 @@ namespace Shell.MVC2.Domain.Entities.Migrations
             //      new Person { FullName = "Brice Lambson" },
             //      new Person { FullName = "Rowan Miller" }
             //    );
-            //
+            // 
+            SeedMethods.seedgenerallookups(context);
+            SeedMethods.seedcriterialookups(context);
+
+
         }
     }
 }

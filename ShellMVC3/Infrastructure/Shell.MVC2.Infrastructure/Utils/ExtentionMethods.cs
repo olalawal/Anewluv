@@ -14,6 +14,8 @@ using System.Configuration;
 
 namespace Shell.MVC2.Infrastructure
 {
+
+    //9-5-2012 olawal added extention for getting the descrption of an enum, this is cached
     public static class Extensions
     {
 
@@ -243,13 +245,6 @@ namespace Shell.MVC2.Infrastructure
 
             return items;
         } 
-
-
-
-
-    
-
-
 
 
 

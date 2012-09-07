@@ -5,11 +5,15 @@ using System.Text;using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    public class lu_life_incomelevel
+    public class lu_sign
     {
+
+
+        public string month { get; set; }
         [Key]
         public int id { get; set; }
         public string description { get; set; }
 
-   }
+   
+    }
 }

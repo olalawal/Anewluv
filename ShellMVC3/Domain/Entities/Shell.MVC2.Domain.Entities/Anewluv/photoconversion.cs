@@ -15,7 +15,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public int id { get; set; }
         public Guid photo_id { get; set; }
         public virtual photo photo { get; set; }   
-        public virtual lu_phototype  type { get; set; }
+        public virtual lu_photoformat  type { get; set; }
         public DateTime? creationdate { get; set; }
         public string description { get; set; } 
         //actual image data

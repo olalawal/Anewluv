@@ -10,7 +10,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
        
         [Key]
         public int? id { get; set; }
-        public virtual lu_character_religion religion { get; set; }
+        public virtual lu_religion religion { get; set; }
         public virtual searchsetting  searchsetting { get; set; } 
     
     }

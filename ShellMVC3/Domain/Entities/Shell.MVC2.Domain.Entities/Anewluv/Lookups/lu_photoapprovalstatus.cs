@@ -7,7 +7,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 {
     public class lu_photoapprovalstatus
     {
-        public string value { get; set; }       
+        public string description{ get; set; }       
         [Key]
         public int id { get; set; }
         //use the ID

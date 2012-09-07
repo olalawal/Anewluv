@@ -32,26 +32,26 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         //lookups for personal profile details 
             public virtual lu_gender gender { get; set; }
             public virtual ICollection<abusereport> abusereports { get; set; }
-            public virtual lu_appearance_bodytype  bodytype { get; set; }
-            public virtual lu_appearance_eyecolor eyecolor { get; set; }
-            public virtual lu_appearance_haircolor haircolor { get; set; }
-            public virtual lu_character_diet diet { get; set; }
-            public virtual lu_character_drinks drinking { get; set; }
-            public virtual lu_character_exercise exercise { get; set; }
-            public virtual lu_character_humor humor { get; set; }
-            public virtual lu_character_politicalview politicalview { get; set; }
-            public virtual lu_character_religion religion { get; set; }
-            public virtual lu_character_religiousattendance religiousattendance { get; set; }
-            public virtual lu_character_sign sign { get; set; }
-            public virtual lu_character_smokes smoking { get; set; }
-            public virtual lu_life_educationlevel educationlevel { get; set; }
-            public virtual lu_life_employmentstatus employmentstatus { get; set; }
-            public virtual lu_life_havekids kidstatus { get; set; }
-            public virtual lu_life_incomelevel incomelevel { get; set; }
-            public virtual lu_life_livingsituation livingsituation { get; set; }
-            public virtual lu_life_maritalstatus maritalstatus { get; set; }
-            public virtual lu_life_profession profession { get; set; }
-            public virtual lu_life_wantskids wantsKidstatus { get; set; }
+            public virtual lu_bodytype  bodytype { get; set; }
+            public virtual lu_eyecolor eyecolor { get; set; }
+            public virtual lu_haircolor haircolor { get; set; }
+            public virtual lu_diet diet { get; set; }
+            public virtual lu_drinks drinking { get; set; }
+            public virtual lu_exercise exercise { get; set; }
+            public virtual lu_humor humor { get; set; }
+            public virtual lu_politicalview politicalview { get; set; }
+            public virtual lu_religion religion { get; set; }
+            public virtual lu_religiousattendance religiousattendance { get; set; }
+            public virtual lu_sign sign { get; set; }
+            public virtual lu_smokes smoking { get; set; }
+            public virtual lu_educationlevel educationlevel { get; set; }
+            public virtual lu_employmentstatus employmentstatus { get; set; }
+            public virtual lu_havekids kidstatus { get; set; }
+            public virtual lu_incomelevel incomelevel { get; set; }
+            public virtual lu_livingsituation livingsituation { get; set; }
+            public virtual lu_maritalstatus maritalstatus { get; set; }
+            public virtual lu_profession profession { get; set; }
+            public virtual lu_wantskids wantsKidstatus { get; set; }
                     
                  
             //member actions

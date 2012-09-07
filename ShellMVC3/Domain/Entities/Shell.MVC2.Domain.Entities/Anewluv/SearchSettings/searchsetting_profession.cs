@@ -10,7 +10,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
         [Key]
         public int? id { get; set; }
-        public virtual lu_life_profession profession { get; set; }       
+        public virtual lu_profession profession { get; set; }       
         public virtual searchsetting  searchsetting { get; set; } 
        
     }

@@ -177,6 +177,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //photo is requred too
             modelBuilder.Entity<photoreviewstatus>()
            .HasRequired(p => p.photo);
+            //wonder if we should have a review status type as required
+
 
 
             //Profile
@@ -195,6 +197,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //gender is required         
             modelBuilder.Entity<profiledata>()
            .HasRequired(p => p.gender);
+
+            //set one to many relation ship with searchsettings                 
+            modelBuilder.Entity<profiledata>()
+           .HasMany(p => p.searchsettings);
 
             //profiledata_ethnicity complex model requered field mappings
             // map required relationships profiledata_ethnicity
@@ -226,16 +232,21 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             // map required relationships rating value
             //**************************************
             modelBuilder.Entity<ratingvalue>()
-            .HasRequired(p => p.profiledata);
+           .HasRequired(p => p.rating); //.WithMany(z=>z.ratingvalues).HasForeignKey(p=>p.id).WillCascadeOnDelete(false);
+            
+            //  //map requierd  relationshipds for favorite
+            //  //**************************************
+            //favorite  reqired ,  first part has to sleetc the nav property in perant
+            modelBuilder.Entity<ratingvalue>().HasRequired(t => t.rateeprofiledata ).WithMany(z => z.ratingvalues )
+           .HasForeignKey(p => p.rateeprofile_id ).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<ratingvalue>()
-           .HasRequired(p => p.rateeprofiledata);
-
-            modelBuilder.Entity<ratingvalue>()
-             .HasRequired(p => p.rating);
+            //favorite sender required
+            modelBuilder.Entity<ratingvalue>().HasRequired(t => t.profiledata).WithMany()
+            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
             //userlogtime
             modelBuilder.Entity<userlogtime>()
+<<<<<<< HEAD
          .HasRequired(p => p.profile);
 
             //visiblitysetting
@@ -397,7 +408,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             // //.HasRequired(t => t.profile)
             //// .WithRequiredPrincipal();
 
+=======
+           .HasRequired(p => p.profile);
+>>>>>>> updated code first DB
 
+        
         }
 
         public static void buildsearchsettingsmodels(DbModelBuilder modelBuilder)
@@ -493,11 +508,16 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //genders
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_genders>()
-           .HasRequired(t => t.searchsetting);
+           // modelBuilder.Entity<searchsetting>()
+           //.HasMany(t => t.genders);
+
+            //TO DO for some reason gender will not do the many part !?
+            //all the other related tables  now          
+           // modelBuilder.Entity<searchsetting_gender>()
+           //.HasRequired(t => t.searchsetting);
 
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_genders>()
+            modelBuilder.Entity<searchsetting_gender>()
            .HasRequired(t => t.gender);
 
             //haircolor
@@ -606,6 +626,16 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<searchsetting_politicalview>()
            .HasRequired(t => t.politicalview);
 
+            //lookingfor
+            //***********************************
+            //all the other related tables  now          
+            modelBuilder.Entity<searchsetting_lookingfor>()
+           .HasRequired(t => t.searchsetting);
+
+            //all the other related tables  now          
+            modelBuilder.Entity<searchsetting_lookingfor>()
+           .HasRequired(t => t.lookingfor);
+
 
             //profession
             //***********************************
@@ -687,7 +717,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_sortbytype>()
-           .HasRequired(t => t.sortbytype);
+           .HasRequired(t => t.sortbytype );
 
 
 

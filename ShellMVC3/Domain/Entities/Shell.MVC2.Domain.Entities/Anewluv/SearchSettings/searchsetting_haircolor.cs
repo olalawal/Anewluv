@@ -10,7 +10,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         
         [Key]
         public int? id { get; set; }
-        public virtual lu_appearance_haircolor haircolor { get; set; }
+        public virtual lu_haircolor haircolor { get; set; }
         public virtual searchsetting  searchsetting { get; set; } 
 
     

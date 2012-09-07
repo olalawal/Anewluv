@@ -11,7 +11,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public string id { get; set; }
 
         public string profile_id { get; set; }
-       public virtual profiledata profiledata { get; set; }
+        public virtual profiledata profiledata { get; set; }
 
         public int? AgeMaxVisibility { get; set; }
         public int? AgeMinVisibility { get; set; }

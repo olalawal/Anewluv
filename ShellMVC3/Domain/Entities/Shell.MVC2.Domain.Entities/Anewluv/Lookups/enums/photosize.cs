@@ -14,7 +14,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum phototypesizeEnum : int
+    public enum photosizeEnum : int
     {
         [Description("NotSet")]
         [EnumMember]
