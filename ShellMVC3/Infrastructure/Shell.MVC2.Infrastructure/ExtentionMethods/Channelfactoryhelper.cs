@@ -18,13 +18,13 @@ namespace Shell.MVC2.Infrastructure
         /// </summary>
         /// <param name="proxy">The service proxy.</param>
         /// <typeparam name="T">The type of service to use.</typeparam>
-        internal delegate void UseServiceDelegate<in T>(T proxy);
+        public delegate void UseServiceDelegate<in T>(T proxy);
 
         /// <summary>
         /// Wraps using a WCF service.
         /// </summary>
         /// <typeparam name="T">The type of service to use.</typeparam>
-        internal static class Service<T>
+        public static class Service<T>
         {
             /// <summary>
             /// A dictionary to hold looked-up endpoint names.
@@ -45,7 +45,7 @@ namespace Shell.MVC2.Infrastructure
             /// Uses the specified code block.
             /// </summary>
             /// <param name="codeBlock">The code block.</param>
-            static internal void Use(UseServiceDelegate<T> codeBlock)
+          public static void Use(UseServiceDelegate<T> codeBlock)
             {
                 dynamic factory = GetChannelFactory();
                 dynamic proxy = (IClientChannel)factory.CreateChannel();

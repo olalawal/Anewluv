@@ -24,12 +24,12 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public string phone { get; set; }
             public string postalcode { get; set; }           
             public virtual profile profile { get; set; }
+            public virtual profilemetadata profilemetadata { get; set; }
 
-
-        //lookups for personal profile details 
+            //lookups for personal profile details 
             public virtual lu_gender gender { get; set; }
             public virtual ICollection<abusereport> abusereports { get; set; }
-            public virtual lu_bodytype  bodytype { get; set; }
+            public virtual lu_bodytype bodytype { get; set; }
             public virtual lu_eyecolor eyecolor { get; set; }
             public virtual lu_haircolor haircolor { get; set; }
             public virtual lu_diet diet { get; set; }
@@ -49,34 +49,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public virtual lu_maritalstatus maritalstatus { get; set; }
             public virtual lu_profession profession { get; set; }
             public virtual lu_wantskids wantsKidstatus { get; set; }
-                    
-                 
-            //member actions
-            public virtual ICollection<favorite> favorites { get; set; }
-            public virtual ICollection<friend> friends { get; set; }
-            public virtual ICollection<interest> interests { get; set; }
-            public virtual ICollection<like> likes { get; set; }
-            public virtual ICollection<block> blocks { get; set; }
-            public virtual ICollection<peek> peeks { get; set; }
-            public virtual ICollection<hotlist> hotlists { get; set; }  
- 
 
-
-            public virtual ICollection<mailboxfolder> mailboxfolders { get; set; }
-            public virtual ICollection<membersinrole> membersinroles { get; set; }
-            public virtual ICollection<photoalbum> photoalbums { get; set; }
-            public virtual ICollection<photo> photos { get; set; }
-            public virtual ICollection<photoconversion> convertedphotos { get; set; } 
-            public virtual ICollection<profiledata_ethnicity> ethnicities { get; set; }           
-            public virtual ICollection<profiledata_hobby> hobbies { get; set; }           
-            public virtual ICollection<profiledata_hotfeature> hotfeatures { get; set; }           
-            public virtual ICollection<profiledata_lookingfor> lookingfor { get; set; }           
-            public virtual ICollection<mailupdatefreqency> mailupdatefreqencies { get; set; }
-            public virtual ICollection<ratingvalue> ratingvalues { get; set; }           
-                   
-            public virtual  visiblitysetting  visibilitysettings { get; set; }                    
-            public virtual ICollection<searchsetting> searchsettings { get; set; }
-            public virtual ICollection<userlogtime> logontimes { get; set; }
-         
+            public virtual visiblitysetting visibilitysettings { get; set; }    
     }
 }

@@ -12,7 +12,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DateTime? loginTime { get; set; }
         public DateTime? logoutTime { get; set; }
         public byte offline { get; set; }
-        public string profile_id { get; set; }
+       public int profile_id { get; set; }
         public virtual profile profile { get; set; }
         public string sessionid { get; set; }
     }

@@ -5,14 +5,17 @@ using System.Text;using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
+    /// <summary>
+    /// custom join table so we define it ourslefs
+    /// </summary>
     public class mailboxmessagefolder
     {
         [Key]
         public int id { get; set; }
         public int mailboxfolder_id { get; set; }
         public int mailboxmessage_id { get; set; }     
-        public mailboxfolder mailboxfolder { get; set; }  
-        public mailboxmessage mailboxmessage { get; set; }    
+        public virtual mailboxfolder mailboxfolder { get; set; }
+        public virtual mailboxmessage mailboxmessage { get; set; }    
         public DateTime? deleteddate { get; set; }       
         public DateTime? draftdate { get; set; }       
         public DateTime? flaggeddate { get; set; }

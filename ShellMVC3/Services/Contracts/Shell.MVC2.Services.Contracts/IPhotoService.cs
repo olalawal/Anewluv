@@ -21,7 +21,7 @@ namespace Shell.MVC2.Services.Contracts
        
         [WebGet]
         [OperationContract]
-        List<photo> GetAllMyPhotos(string username);
+        List<Shell.MVC2.Domain.Entities.Anewluv.photo> GetAllMyPhotos(string username);
 
         [WebGet]
         [OperationContract]
@@ -44,7 +44,7 @@ namespace Shell.MVC2.Services.Contracts
         [WebInvoke]
         [OperationContract]
 
-         bool AddPhoto(photo model);
+        bool AddPhoto(Shell.MVC2.Domain.Entities.Anewluv.photo model);
         [WebGet]
         [OperationContract]
          bool CheckValidJPGGIF(byte[] image);
@@ -53,7 +53,7 @@ namespace Shell.MVC2.Services.Contracts
       
         [WebGet]
         [OperationContract]
-         photo UploadProfileImage(string _imageUrl, string caption);
+        Shell.MVC2.Domain.Entities.Anewluv.photo UploadProfileImage(string _imageUrl, string caption);
 
         // added by Deshola on 5/17/2011   
         [OperationContract]
@@ -70,7 +70,7 @@ namespace Shell.MVC2.Services.Contracts
          byte[] GetGalleryPhotobyProfileID(string strProfileID);
         [WebInvoke]
         [OperationContract]
-         bool InsertPhotoCustom(photo newphoto);
+        bool InsertPhotoCustom(Shell.MVC2.Domain.Entities.Anewluv.photo newphoto);
         [WebGet]
         [OperationContract]
          bool CheckIfPhotoCaptionAlreadyExists(string strProfileID, string strPhotoCaption);

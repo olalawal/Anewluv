@@ -48,7 +48,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IEditProfileService.cs" />
     <Compile Include="IErrorLoggingService.cs" />
     <Compile Include="IErrorNotificationService.cs" />
     <Compile Include="IGeoService.cs" />

@@ -10,7 +10,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [Key]
         public int id { get; set; }
         public bool? active { get; set; }
-        public string profile_id { get; set; }        
+       public int profile_id { get; set; }        
         public virtual profile profile { get; set; }
         public virtual lu_role role { get; set; }
         public DateTime? roleexpiredate { get; set; }

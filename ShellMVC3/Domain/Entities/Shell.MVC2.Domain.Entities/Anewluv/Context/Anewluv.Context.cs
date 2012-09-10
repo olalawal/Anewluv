@@ -36,13 +36,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<photoconversion> photoconversions { get; set; }
         public DbSet<photoreviewstatus > photoreviewstatuses { get; set; }
         public DbSet<profile> profiles { get; set; }
-        public DbSet<profiledata> profiledatas { get; set; }
+        public DbSet<profiledata> profiledata { get; set; }
+        public DbSet<profilemetadata> profilemetadata { get; set; }
         public DbSet<rating> ratings { get; set; }
- 
-
-      
-        public DbSet<systempagesetting> systempagesettings { get; set; }
-        
+               
+        public DbSet<systempagesetting> systempagesettings { get; set; }        
         public DbSet<userlogtime> userlogtimes { get; set; }
         public DbSet<visiblitysetting> visibilitysettings { get; set; }
       
@@ -55,9 +53,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<mailboxmessagefolder> mailboxmessagefolders { get; set; }
 
         //lookup tables
-
         //
-
         public AnewluvContext()
             : base("name=AnewluvContext")
         {

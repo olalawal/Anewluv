@@ -20,8 +20,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual lu_photostatus  photostatus { get; set; }
         public virtual lu_photoapprovalstatus approvalstatus { get; set; }    
         public virtual photoreviewstatus reviewstatus { get; set; }
-        public string profile_id { get; set; }  
-        public virtual profiledata profiledata { get; set; }
+       public int profile_id { get; set; }  
+        public virtual profilemetadata profilemetadata { get; set; }
         //lazy load these for now and check perforamce
         public virtual ICollection<photoconversion> conversions { get; set; }  
         //private public secuity is done at photo level , overides album secuity

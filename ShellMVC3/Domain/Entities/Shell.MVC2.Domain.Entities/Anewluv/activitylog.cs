@@ -11,7 +11,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public int id { get; set; }       
         public DateTime? creationdate { get; set; }
         public string ipaddress { get; set; }     
-        public string profile_id { get; set; }     
+       public int profile_id { get; set; }     
         public virtual profile profile { get; set; }       
         public string regionname { get; set; }
         public string sessionid { get; set; }

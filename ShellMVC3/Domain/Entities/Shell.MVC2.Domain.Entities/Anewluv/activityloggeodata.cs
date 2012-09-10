@@ -18,7 +18,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public Nullable<double> lattitude { get; set; }
         public Nullable<double> longitude { get; set; }        
         public string regionname { get; set; }
-        public string activitylog_id { get; set; }
+        public int activitylog_id { get; set; }
         public virtual activitylog loggedactivity { get; set; } 
       
     }

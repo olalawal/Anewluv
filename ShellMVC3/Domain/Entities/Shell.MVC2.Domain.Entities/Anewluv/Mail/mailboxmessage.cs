@@ -13,8 +13,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DateTime? creationdate { get; set; }
         public string recipient_id { get; set; }
         public string sender_id { get; set; }
-        public virtual profile recipeint { get; set; }
-        public virtual profile sender { get; set; }
+        public virtual profilemetadata recipeint { get; set; }
+        public virtual profilemetadata sender { get; set; }
         public string body { get; set; }
         public string subject { get; set; }
         public int? uniqueid { get; set; }

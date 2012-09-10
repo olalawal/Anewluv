@@ -13,7 +13,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DateTime? creationdate { get; set; }      
         public string openididentifier { get; set; }
         public string openidprovidername { get; set; }
-        public string profile_id { get; set; }       
+       public int profile_id { get; set; }       
         public virtual profile profile { get; set; }
        
     }
