@@ -13,7 +13,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual profilemetadata  profilemetadata { get; set; }
         public int? active { get; set; }
         public virtual ICollection<mailboxmessage>  mailboxmessages  { get; set; }
-       // public int foldertype_id { get; set; }
+        public int foldertype_id { get; set; }
         public virtual mailboxfoldertype foldertype { get; set; }
         
     }

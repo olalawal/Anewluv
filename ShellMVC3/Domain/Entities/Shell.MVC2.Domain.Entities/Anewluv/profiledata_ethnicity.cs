@@ -12,7 +12,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual lu_ethnicity ethnicty { get; set; }
         [Key]
         public int id { get; set; }
-       public virtual profiledata profiledata { get; set; }
+        public int profile_id { get; set; }
+       public virtual profilemetadata  profilemetadata { get; set; }
         
     }
 }

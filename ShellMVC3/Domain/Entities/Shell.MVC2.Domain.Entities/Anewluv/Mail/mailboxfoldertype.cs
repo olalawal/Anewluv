@@ -9,7 +9,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         [Key]
         public int id { get; set; }       
-        public virtual ICollection<mailboxfolder> folders { get; set; }
+        //public virtual ICollection<mailboxfolder> folders { get; set; }
         //optional
         public virtual lu_defaultmailboxfolder defaultfolder { get; set; }
         public string name { get; set; }

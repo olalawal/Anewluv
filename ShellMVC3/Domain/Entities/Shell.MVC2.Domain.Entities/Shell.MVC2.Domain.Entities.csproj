@@ -267,7 +267,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anewluv\Context\AnewluvModelbuilder.cs" />
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

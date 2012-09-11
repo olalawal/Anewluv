@@ -10,8 +10,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [Key]
         public int id { get; set; }
         public int? updatefreqency { get; set; }
-       public int profile_id { get; set; } 
-        public virtual profiledata profiledata { get; set; }       
+        public int profile_id { get; set; } 
+        public virtual profilemetadata  profilemetadata { get; set; }       
       
     }
 }

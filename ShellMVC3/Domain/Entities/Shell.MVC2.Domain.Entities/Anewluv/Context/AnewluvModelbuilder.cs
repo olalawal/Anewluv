@@ -136,7 +136,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //  //map requierd  relationshipds for mailupdatefreqency
             //  //**************************************
             modelBuilder.Entity<mailupdatefreqency>()
-           .HasRequired(t => t.profiledata);
+           .HasRequired(t => t.profilemetadata );
 
             //membersinrole
             //  //map requierd  relationshipds for membersinrole
@@ -191,7 +191,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<mailboxmessage>().HasRequired(t => t.sender).WithMany(z => z.sentmailboxmessages)
            .HasForeignKey(p => p.sender_id ).WillCascadeOnDelete(false);
             //revived mailbox messages link
-            modelBuilder.Entity<mailboxmessage>().HasRequired(t => t.recipeint).WithMany(z => z.recivedmailboxmessages)
+            modelBuilder.Entity<mailboxmessage>().HasRequired(t => t.recipeint).WithMany(z => z.receivedmailboxmessages)
            .HasForeignKey(p => p.recipient_id ).WillCascadeOnDelete(false);
 
 
@@ -201,13 +201,16 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<mailboxfolder>().HasRequired(t => t.profilemetadata).WithMany(z => z.mailboxfolders )
            .HasForeignKey(p => p.profiled_id ).WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<mailboxfolder>().HasRequired(t => t.foldertype).WithMany()
+       .HasForeignKey(p => p.foldertype_id ).WillCascadeOnDelete(false);
+
             //setup relation ships for a precreated join table for messsages and mailxboxfolders
             //*********** many to many complete here 
             modelBuilder.Entity<mailboxmessagefolder>().HasRequired(t => t.mailboxfolder).WithMany()
-   .HasForeignKey(p => p.mailboxfolder_id ).WillCascadeOnDelete(false);
+            .HasForeignKey(p => p.mailboxfolder_id ).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<mailboxmessagefolder>().HasRequired(t => t.mailboxmessage ).WithMany()
-.HasForeignKey(p => p.mailboxmessage_id ).WillCascadeOnDelete(false);
+            .HasForeignKey(p => p.mailboxmessage_id ).WillCascadeOnDelete(false);
 
 
 
@@ -243,10 +246,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
             //map the remanining one to many  relationshipds for metadata tables
             //  //**************************************
-            //friend  reqired ,  first part has to sleetc the nav property in perant
-            modelBuilder.Entity<favorite>().HasRequired(t => t.friendprofilemetadata).WithMany(z => z.friends)
-           .HasForeignKey(p => p.friendprofile_id).WillCascadeOnDelete(false);
-
+     
           
 
 
@@ -271,27 +271,26 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //profiledata_ethnicity complex model requered field mappings
             // map required relationships profiledata_ethnicity
             //**************************************
-            modelBuilder.Entity<profiledata_ethnicity>()
-            .HasRequired(p => p.profiledata);
+            modelBuilder.Entity<profiledata_ethnicity>().HasRequired(t => t.profilemetadata).WithMany()
+     .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
             //profiledata_hobby complex model requered field mappings
             // map required relationships profiledata_hobby
             //**************************************
-            modelBuilder.Entity<profiledata_hobby>()
-            .HasRequired(p => p.profiledata);
+            modelBuilder.Entity<profiledata_hobby >().HasRequired(t => t.profilemetadata).WithMany()
+   .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
             //profiledata_hotfeature complex model requered field mappings
             // map required relationships profiledata_hotfeature
             //**************************************
-            modelBuilder.Entity<profiledata_hotfeature>()
-            .HasRequired(p => p.profiledata);
+            modelBuilder.Entity<profiledata_hotfeature>().HasRequired(t => t.profilemetadata).WithMany()
+    .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
             //profiledata_lookingfor complex model requered field mappings
             // map required relationships profiledata_lookingfor
             //**************************************
-            modelBuilder.Entity<profiledata_lookingfor>()
-            .HasRequired(p => p.profiledata);
-
+            modelBuilder.Entity<profiledata_lookingfor>().HasRequired(t => t.profilemetadata).WithMany()
+      .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
             //rating value 
             //rating complex model requered field mappings
