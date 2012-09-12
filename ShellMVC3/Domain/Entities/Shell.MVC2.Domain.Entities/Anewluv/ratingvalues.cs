@@ -8,8 +8,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class ratingvalue
     {
         [Key]
-        public string id { get; set; }
-        public string rating_id { get; set; }
+        public int id { get; set; }
+        public int rating_id { get; set; }
         public int profile_id { get; set; }
         public int rateeprofile_id { get; set; }
         public virtual rating  rating { get; set; }  //type of rating

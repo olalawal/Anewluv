@@ -17,7 +17,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public string body { get; set; }
         public string subject { get; set; }
         public int? uniqueid { get; set; }
-        public virtual ICollection<mailboxmessagefolder> mailboxmessagesfolder { get; set; } 
+        public virtual ICollection<mailboxmessagefolder> mailboxmessagesfolders { get; set; } 
        
 
     }

@@ -10,7 +10,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual lu_ethnicity ethnicity { get; set; }
         [Key]
         public int? id { get; set; }
-             public int searchsetting_id { get; set; }
+          
         public virtual searchsetting  searchsetting { get; set; }       
     
       

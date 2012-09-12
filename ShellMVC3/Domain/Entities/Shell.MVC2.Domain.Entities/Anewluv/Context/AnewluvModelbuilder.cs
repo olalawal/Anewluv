@@ -137,10 +137,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
            .HasRequired(t => t.profilemetadata );
 
             //membersinrole
-            //  //map requierd  relationshipds for membersinrole
-            //  //**************************************
-         //   modelBuilder.Entity<membersinrole>()
-          // .HasRequired(t => t.profile);
+             //map requierd  relationshipds for membersinrole
+             //**************************************
+         //   modelBuilder.Entity<profile>().HasMany(p => p.memberroles)
+           //.WithRequired(c => c.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+  
 
             //openid
             //  //map requierd  relationshipds for openid
@@ -179,10 +180,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
                    //map photoalbum relation ship with the given photo security level
             modelBuilder.Entity<photoalbum>().HasMany(p => p.securitylevels);
 
-
-          
-
-
+            
             //photoreviewstatus model requered field mappings
             // map required relationships photoreviewstatus
             //**************************************
@@ -201,10 +199,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<mailboxmessagefolder>().HasKey(c => new { c.mailboxfolder_id, c.mailboxmessage_id });
 
             modelBuilder.Entity<mailboxmessagefolder >().HasRequired(p => p.mailboxfolder)
-            .WithMany(c => c.mailboxmessagesfolder).HasForeignKey(p => new { p.mailboxfolder_id, p.mailboxmessage_id });
+            .WithMany(c => c.mailboxmessagesfolders).HasForeignKey(p=>p.mailboxfolder_id);
 
-            modelBuilder.Entity<mailboxmessagefolder>().HasRequired(p => p.mailboxmessage)
-            .WithMany(c => c.mailboxmessagesfolder).HasForeignKey(p => new { p.mailboxfolder_id, p.mailboxmessage_id }); 
+           modelBuilder.Entity<mailboxmessagefolder>().HasRequired(p => p.mailboxmessage)
+           .WithMany(c => c.mailboxmessagesfolders).HasForeignKey(p => p.mailboxmessage_id ); 
 
 
 
@@ -259,6 +257,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<profiledata>().HasKey(zmt => zmt.id);
             modelBuilder.Entity<profiledata>().HasRequired(zmt => zmt.profilemetadata ).WithRequiredDependent(zm => zm.profiledata);
         //http://stackoverflow.com/questions/9434245/how-do-i-code-an-optional-one-to-one-relationship-in-ef-4-1-code-first-with-lazy
+
+
 
 
             //map the remanining one to many  relationshipds for metadata tables
@@ -346,8 +346,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<profile>().HasMany(p => p.openids)
           .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<profile>().HasMany(p => p.roles)
-          .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profile>().HasMany(p => p.memberroles )
+           .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
 
 
                         //Profiledata
@@ -367,349 +367,251 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
         public static void buildsearchsettingsmodels(DbModelBuilder modelBuilder)
         {
+          
+
+
 
             //searchsetting
             //  //map requierd  relationshipds for openid
-            //  //**************************************
-            modelBuilder.Entity<searchsetting>()
-           .HasRequired(t => t.profilemetadata );
+            //  //**************************************       
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.searchsettings )
+           .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
 
-            //bodytype
-            //**********************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_bodytype>()
-           .HasRequired(t => t.bodytype);
+     //       //bodytype
+     //       //**********************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_bodytype>()
+     //      .HasRequired(t => t.bodytype);
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id ).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id ).WillCascadeOnDelete(false);
+     //       //wantkids
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_wantkids>()
+     //      .HasRequired(t => t.wantskids);
+     //       //   modelBuilder.Entity<searchsetting>().HasMany(p => p.wantkids)
+     //       // .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+
+     //       //diet
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_diet>()
+     //      .HasRequired(t => t.diet );
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.diets)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //drink
+     //       //***********************************             
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_drink>()
+     //      .HasRequired(t => t.drink );
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.drinks)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //educationlevel
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_educationlevel>()
+     //      .HasRequired(t => t.educationlevel );
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.educationlevels)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //employmentstatus
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_employmentstatus>()
+     //      .HasRequired(t => t.employmentstatus );
+     //     //  modelBuilder.Entity<searchsetting>().HasMany(p => p.employmentstatus)
+     //    //  .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //ethnicity
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_bodytype>()
+     //      .HasRequired(t => t.bodytype);
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //exercise
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_ethnicity>()
+     //      .HasRequired(t => t.ethnicity );
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.ethnicitys)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //eyecolor
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_eyecolor>()
+     //      .HasRequired(t => t.eyecolor );
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.eyecolors )
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //genders
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       // modelBuilder.Entity<searchsetting>()
+     //       //.HasMany(t => t.genders);
+
+     //       //TO DO for some reason gender will not do the many part !?
+     //       //all the other related tables  now          
+     //       // modelBuilder.Entity<searchsetting_gender>()
+     //       //.HasRequired(t => t.searchsetting);
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.genders)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_gender>()
+     //      .HasRequired(t => t.gender);
+
+     //       //haircolor
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_haircolor>()
+     //      .HasRequired(t => t.haircolor );
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.haircolors )
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+            
+     //       //havekids
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_havekids>()
+     //      .HasRequired(t => t.havekids);
+     //     //  modelBuilder.Entity<searchsetting>().HasMany(p => p.havekids )
+     //     // .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //hobby
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_hobby>()
+     //      .HasRequired(t => t.hobby);
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.hobbies)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //hotfeature
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_hotfeature>()
+     //      .HasRequired(t => t.hotfeature);
+     //     //  modelBuilder.Entity<searchsetting>().HasMany(p => p.hotfeature )
+     //     // .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //humor
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_humor>()
+     //      .HasRequired(t => t.humor);
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.humors)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //incomelevel
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_incomelevel>()
+     //      .HasRequired(t => t.incomelevel);
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.incomelevels)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //livingsituation
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_livingstituation>()
+     //      .HasRequired(t => t.livingsituation );
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.livingstituations)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //location
+     //       //***********************************
+     //       //all the other related tables  now  
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.locations)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+
+     //       //lookingfor
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_lookingfor>()
+     //      .HasRequired(t => t.lookingfor);
+     //  //     modelBuilder.Entity<searchsetting>().HasMany(p => p.lookingfor)
+     ////      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //maritalstatus
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_maritalstatus>()
+     //      .HasRequired(t => t.maritalstatus);
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.maritalstatuses )
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //politicalview
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_politicalview>()
+     //      .HasRequired(t => t.politicalview);
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.politicalviews)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //profession
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_profession>()
+     //      .HasRequired(t => t.profession );
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.professions)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+
+
+     //       //religion
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_religion>()
+     //      .HasRequired(t => t.religion);
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.religions )
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+            
+     //       //religiousattendance
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_religiousattendance>()
+     //      .HasRequired(t => t.religiousattendance);
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.religiousattendances )
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //showme
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_showme>()
+     //      .HasRequired(t => t.showme);
+     ////       modelBuilder.Entity<searchsetting>().HasMany(p => p.showme )
+     // //     .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //sign
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_sign>()
+     //      .HasRequired(t => t.sign );
+     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.signs)
+     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //smokes
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_smokes>()
+     //      .HasRequired(t => t.smoke);
+     //   //    modelBuilder.Entity<searchsetting>().HasMany(p => p.smokes )
+     //   //   .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+     //       //sortbytype
+     //       //***********************************
+     //       //all the other related tables  now          
+     //       modelBuilder.Entity<searchsetting_sortbytype>()
+     //      .HasRequired(t => t.sortbytype );
+     //     //  modelBuilder.Entity<searchsetting>().HasMany(p => p.sortbytypes)
+     //     // .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
            
-
-            //diet
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_diet>()
-           .HasRequired(t => t.diet);
-
-            //drink
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_drink>()
-           .HasRequired(t => t.drink);
-
-            //educationlevel
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_educationlevel>()
-           .HasRequired(t => t.educationlevel);
-
-            //employmentstatus
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_employmentstatus>()
-           .HasRequired(t => t.employmentstatus);
-
-            //ethnicity
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_ethnicity>()
-           .HasRequired(t => t.ethnicity);
-
-            //exercise
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_exercise>()
-           .HasRequired(t => t.exercise);
-
-            //eyecolor
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_eyecolor>()
-           .HasRequired(t => t.eyecolor);
-
-            //genders
-            //***********************************
-            //all the other related tables  now          
-           // modelBuilder.Entity<searchsetting>()
-           //.HasMany(t => t.genders);
-
-            //TO DO for some reason gender will not do the many part !?
-            //all the other related tables  now          
-           // modelBuilder.Entity<searchsetting_gender>()
-           //.HasRequired(t => t.searchsetting);
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.genders)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_gender>()
-           .HasRequired(t => t.gender);
-
-            //haircolor
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_haircolor>()
-           .HasRequired(t => t.haircolor);
-
-            //havekids
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_havekids>()
-           .HasRequired(t => t.havekids);
-
-            //hobby
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_hobby>()
-           .HasRequired(t => t.hobby);
-
-            //hotfeature
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_hotfeature>()
-           .HasRequired(t => t.hotfeature);
-
-            //humor
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_humor>()
-           .HasRequired(t => t.humor);
-
-            //income
-            //***********************************
-            //all the other related tables  now          
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_incomelevel>()
-           .HasRequired(t => t.incomelevel);
-
-            //livingsituation
-            //***********************************
-            //all the other related tables  now         
-
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_livingstituation>()
-           .HasRequired(t => t.livingsituation);
-
-            //location
-            //***********************************
-            //all the other related tables  now  
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.locations)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //lookingfor
-            //***********************************
-            //all the other related tables  now       
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_lookingfor>()
-           .HasRequired(t => t.lookingfor);
-
-            //maritalstatus
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-         .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_maritalstatus>()
-           .HasRequired(t => t.maritalstatus);
-
-            //politicalview
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_politicalview>()
-           .HasRequired(t => t.politicalview);
-
-            //lookingfor
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-        .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_lookingfor>()
-           .HasRequired(t => t.lookingfor);
-
-
-            //profession
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-          .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_profession>()
-           .HasRequired(t => t.profession);
-
-
-
-            //religion
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-                   .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_religion>()
-           .HasRequired(t => t.religion);
-
-
-
-            //religiousattendance
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-          .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_religiousattendance>()
-           .HasRequired(t => t.religiousattendance);
-
-
-
-            //showme
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-             .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_showme>()
-           .HasRequired(t => t.showme);
-
-
-
-            //sign
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-             .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_sign>()
-           .HasRequired(t => t.sign);
-
-
-
-            //smokes
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-          .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_smokes>()
-           .HasRequired(t => t.smokes);
-
-
-
-            //sortbytype
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-       .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_sortbytype>()
-           .HasRequired(t => t.sortbytype );
-
-
-
-            //wantkids
-            //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-          .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_wantkids>()
-           .HasRequired(t => t.wantskids);
 
 
         }

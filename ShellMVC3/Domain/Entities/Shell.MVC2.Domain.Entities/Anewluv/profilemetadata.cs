@@ -35,10 +35,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public virtual ICollection<mailboxfolder> mailboxfolders { get; set; }
             public virtual ICollection<mailboxmessage> sentmailboxmessages { get; set; }
             public virtual ICollection<mailboxmessage> receivedmailboxmessages { get; set; }   
-            public virtual ICollection<membersinrole> membersinroles { get; set; }
+            //public virtual ICollection<membersinrole> membersinroles { get; set; }  //roles is tied to profile
             public virtual ICollection<photoalbum> photoalbums { get; set; }
             public virtual ICollection<photo> photos { get; set; }
-            public virtual ICollection<photoconversion> convertedphotos { get; set; } 
+            //public virtual ICollection<photoconversion> convertedphotos { get; set; }  //conveted photos is a navigation proptery from photo 
+            //i.e you have to go through photo to get it .
             public virtual ICollection<profiledata_ethnicity> ethnicities { get; set; }           
             public virtual ICollection<profiledata_hobby> hobbies { get; set; }           
             public virtual ICollection<profiledata_hotfeature> hotfeatures { get; set; }           

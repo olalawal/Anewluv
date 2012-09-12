@@ -13,7 +13,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         //public lu_photoreviewstatustype photoreviewstatustype  { get; set; }
         public string notes { get; set; }
         public DateTime? reviewdate { get; set; }
-        public string reviewerprofile_id { get; set; }
+        public int reviewerprofile_id { get; set; }
         public virtual profiledata reviewerprofiledata { get; set; }
         public Guid photo_id { get; set; }
         public virtual photo photo { get; set; }

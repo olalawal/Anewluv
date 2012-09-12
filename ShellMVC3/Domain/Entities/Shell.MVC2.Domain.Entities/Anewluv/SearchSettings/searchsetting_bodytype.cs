@@ -9,8 +9,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         [Key]
         public int? id { get; set; }
-        public virtual lu_bodytype  bodytype { get; set; }
-        public int searchsetting_id { get; set; }
+        public virtual lu_bodytype  bodytype { get; set; }    
         public virtual searchsetting searchsetting { get; set; }
       
     }
