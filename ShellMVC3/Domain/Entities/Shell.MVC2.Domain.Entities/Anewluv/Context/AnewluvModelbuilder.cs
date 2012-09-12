@@ -22,14 +22,16 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             // modelBuilder.Entity<lu_messageType>().ToTable("lu_messageType", schemaName: "Logging");
             // modelBuilder.Entity<lu_systemAddressType>().ToTable("lu_messageSystemAddressType", schemaName: "Logging");
 
-            // map required relationships abusereport
-            //**************************************
-            modelBuilder.Entity<abusereport>().HasRequired(p => p.abuser).WithMany()
-           .HasForeignKey(p => p.abuser_id).WillCascadeOnDelete(false);
+            // map one to many relation shipds for metadatata table from its side 
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-            //reporter required
-            modelBuilder.Entity<abusereport>().HasRequired(p => p.abusereporter).WithMany()
-            .HasForeignKey(p => p.abusereporter_id).WillCascadeOnDelete(false);
+            //abusereports
+            modelBuilder.Entity<profilemetadata>().HasMany(p=>p.abusereportadded)
+           .WithRequired(z=>z.abusereporter ).HasForeignKey(t=>t.abusereporter_id).WillCascadeOnDelete(false);
+           //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.abusereports)
+            .WithRequired(z => z.abuser).HasForeignKey(t => t.abuser_id ).WillCascadeOnDelete(false);
+
 
             // map required relationships abusereportnotes
             //**************************************
@@ -38,99 +40,95 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             .HasForeignKey(p => p.abusereport_id).WillCascadeOnDelete(false);
 
             //abuse report notes also requires a person creating it i.e profiledata
-            modelBuilder.Entity<abusereportnotes>().HasRequired(p => p.profiledata)
+            modelBuilder.Entity<abusereportnotes>().HasRequired(p => p.profilemetadata)
             .WithMany()
             .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
 
+            //  //map requierd  relationshipds for favorite
+            //  //**************************************
+            //favorite  reqired ,  first part has to sleetc the nav property in perant
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.favoritesadded )
+           .WithRequired(z => z.profilemetadata ).HasForeignKey(t => t.profile_id ).WillCascadeOnDelete(false);
+            //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.favorites)
+            .WithRequired(z => z.profilemetadata  ).HasForeignKey(t => t.favoriteprofile_id).WillCascadeOnDelete(false);
+
+           
+            //  //map requierd  relationshipds for hotlist
+            //  //**************************************
+            //hotlist  reqired ,  first part has to sleetc the nav property in perant
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.hotlistsadded)
+            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+            //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.hotlists)
+            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.hotlistprofile_id).WillCascadeOnDelete(false);
+
+
+            //  //map requierd  relationshipds for interest
+            //  //**************************************
+            //interest  reqired ,  first part has to sleetc the nav property in perant
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.interestsadded)
+           .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+            //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.interests )
+            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.interestprofile_id).WillCascadeOnDelete(false);
+
+            //  //map requierd  relationshipds for like
+            //  //**************************************
+            //like  reqired ,  first part has to sleetc the nav property in perant
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.likesadded)
+            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+            //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.likes )
+            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.likeprofile_id).WillCascadeOnDelete(false);
+
+
+            //  //map requierd  relationshipds for friend
+            //  //**************************************
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.friendsadded)
+              .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+            //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.friends)
+            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.friendprofile_id).WillCascadeOnDelete(false);
+
+            //  //map requierd  relationshipds for peek
+            //  //**************************************
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.peeksadded)
+          .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+            //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.peeks)
+            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.peekprofile_id).WillCascadeOnDelete(false);
+
+            
             //map requierd  relationshipds for block
             //**************************************
-            //blocked  reqired ,  first part has to sleetc the nav property in perant
-            modelBuilder.Entity<block>().HasRequired(t => t.blockedprofilemetadata ).WithMany(z => z.blocks)
-            .HasForeignKey(p => p.blockprofile_id).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.blocksadded )
+             .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id ).WillCascadeOnDelete(false);
+            //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.blocks )
+            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.blockprofile_id).WillCascadeOnDelete(false);
 
-            //blocker required
-            modelBuilder.Entity<block>().HasRequired(t => t.profilemetadata ).WithMany()
+            // map required relationships blocknotes
+            //**************************************
+            //map block notes to abuse report and set as required
+            modelBuilder.Entity<blocknotes>().HasRequired(p => p.block).WithMany(z => z.notes)
+            .HasForeignKey(p => p.block_id).WillCascadeOnDelete(false);
+
+            //abuse report notes also requires a person creating it i.e profiledata
+            modelBuilder.Entity<blocknotes>().HasRequired(p => p.profilemetadata)
+            .WithMany()
             .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
+
+
+
 
 
             //  //map requierd  relationshipds for CommunicationQoutas
             //  //**************************************
             modelBuilder.Entity<communicationquota>()
            .HasRequired(t => t.updaterprofiledata);
-
-            //  //map requierd  relationshipds for favorite
-            //  //**************************************
-            //favorite  reqired ,  first part has to sleetc the nav property in perant
-            modelBuilder.Entity<favorite>().HasRequired(t => t.favoriteprofilemetadata ).WithMany(z => z.favorites)
-           .HasForeignKey(p => p.favoriteprofile_id).WillCascadeOnDelete(false);
-
-            //favorite sender required
-            modelBuilder.Entity<favorite>().HasRequired(t => t.profilemetadata ).WithMany()
-            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
-
-            //  //map requierd  relationshipds for friend
-            //  //**************************************
-            //friend  reqired ,  first part has to sleetc the nav property in perant
-            modelBuilder.Entity<friend>().HasRequired(t => t.friendprofilemetadata ).WithMany(z => z.friends)
-           .HasForeignKey(p => p.friendprofile_id).WillCascadeOnDelete(false);
-
-            //friend sender required
-            modelBuilder.Entity<friend>().HasRequired(t => t.profilemetadata ).WithMany()
-            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
-
-            //  //map requierd  relationshipds for hotlist
-            //  //**************************************
-            //hotlist  reqired ,  first part has to sleetc the nav property in perant
-            modelBuilder.Entity<hotlist>().HasRequired(t => t.hotlistprofilemetadata ).WithMany(z => z.hotlists)
-           .HasForeignKey(p => p.hotlistprofile_id).WillCascadeOnDelete(false);
-
-            //hotlist sender required
-            modelBuilder.Entity<hotlist>().HasRequired(t => t.profilemetadata).WithMany()
-            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
-
-
-            //  //map requierd  relationshipds for interest
-            //  //**************************************
-            //interest  reqired ,  first part has to sleetc the nav property in perant
-            modelBuilder.Entity<interest>().HasRequired(t => t.interestprofilemetadata ).WithMany(z => z.interests)
-           .HasForeignKey(p => p.interestprofile_id).WillCascadeOnDelete(false);
-
-            //interest sender required
-            modelBuilder.Entity<interest>().HasRequired(t => t.profilemetadata ).WithMany()
-            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
-
-            //  //map requierd  relationshipds for like
-            //  //**************************************
-            //like  reqired ,  first part has to sleetc the nav property in perant
-            modelBuilder.Entity<like>().HasRequired(t => t.likeprofilemetadata ).WithMany(z => z.likes)
-           .HasForeignKey(p => p.likeprofile_id).WillCascadeOnDelete(false);
-
-            //like sender required
-            modelBuilder.Entity<like>().HasRequired(t => t.profilemetadata ).WithMany()
-            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
-
-
-            //  //map requierd  relationshipds for friend
-            //  //**************************************
-            //friend  reqired ,  first part has to sleetc the nav property in perant
-            modelBuilder.Entity<friend>().HasRequired(t => t.friendprofilemetadata ).WithMany(z => z.friends)
-           .HasForeignKey(p => p.friendprofile_id).WillCascadeOnDelete(false);
-
-            //friend sender required
-            modelBuilder.Entity<friend>().HasRequired(t => t.profilemetadata ).WithMany()
-            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
-
-
-            //  //map requierd  relationshipds for peek
-            //  //**************************************
-            //peek  reqired ,  first part has to sleetc the nav property in perant
-            modelBuilder.Entity<peek>().HasRequired(t => t.peekprofilemetadata ).WithMany(z => z.peeks)
-           .HasForeignKey(p => p.peekprofile_id).WillCascadeOnDelete(false);
-
-            //peek sender required
-            modelBuilder.Entity<peek>().HasRequired(t => t.profilemetadata ).WithMany()
-            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
+           
 
             //mailupdatefreqency
             //  //map requierd  relationshipds for mailupdatefreqency
@@ -184,33 +182,45 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //Mailbox relation ships 
             //*********************************************************
             //*********************************************************
-            
-            //Messages
+
+            //Setup composite table first
+            modelBuilder.Entity<mailboxmessagefolder>().HasKey(c => new { c.mailboxfolder_id, c.mailboxmessage_id });
+
+            modelBuilder.Entity<mailboxmessagefolder >().HasRequired(p => p.mailboxfolder)
+            .WithMany(c => c.mailboxmessagesfolder).HasForeignKey(p => new { p.mailboxfolder_id, p.mailboxmessage_id });
+
+            modelBuilder.Entity<mailboxmessagefolder>().HasRequired(p => p.mailboxmessage)
+            .WithMany(c => c.mailboxmessagesfolder).HasForeignKey(p => new { p.mailboxfolder_id, p.mailboxmessage_id }); 
+
+
+
+            //Messages link to profilemetadata , set this from profilemetatdata
             //======================================================
             //sent messages link to metatdata
-            modelBuilder.Entity<mailboxmessage>().HasRequired(t => t.sender).WithMany(z => z.sentmailboxmessages)
-           .HasForeignKey(p => p.sender_id ).WillCascadeOnDelete(false);
-            //revived mailbox messages link
-            modelBuilder.Entity<mailboxmessage>().HasRequired(t => t.recipeint).WithMany(z => z.receivedmailboxmessages)
-           .HasForeignKey(p => p.recipient_id ).WillCascadeOnDelete(false);
+           // modelBuilder.Entity<mailboxmessage>().HasRequired(t => t.sender).WithMany(z => z.sentmailboxmessages)
+           //.HasForeignKey(p => p.sender_id ).WillCascadeOnDelete(false);
+           // //revived mailbox messages link
+           // modelBuilder.Entity<mailboxmessage>().HasRequired(t => t.recipeint).WithMany(z => z.receivedmailboxmessages)
+           //.HasForeignKey(p => p.recipient_id ).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.sentmailboxmessages)
+          .WithRequired(z => z.sender).HasForeignKey(t => t.sender_id ).WillCascadeOnDelete(false);
+            //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.receivedmailboxmessages)
+            .WithRequired(z => z.recipeint  ).HasForeignKey(t => t.recipient_id ).WillCascadeOnDelete(false);
 
 
-            //mailbox messages folder links, many to many will be automatically mapped between mailmessage and mailboxfolder, just map to metadata
-            //and foldter type is also auto mapped since it is virtual
+            //setup link to mailbox messages folder links, 
             //======================================================
-            modelBuilder.Entity<mailboxfolder>().HasRequired(t => t.profilemetadata).WithMany(z => z.mailboxfolders )
-           .HasForeignKey(p => p.profiled_id ).WillCascadeOnDelete(false);
+           // modelBuilder.Entity<mailboxfolder>().HasRequired(t => t.profilemetadata).WithMany(z => z.mailboxfolders )
+           //.HasForeignKey(p => p.profiled_id ).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<mailboxfolder>().HasRequired(t => t.foldertype).WithMany()
-       .HasForeignKey(p => p.foldertype_id ).WillCascadeOnDelete(false);
+           // modelBuilder.Entity<mailboxfolder>().HasRequired(t => t.foldertype).WithMany()
+           //.HasForeignKey(p => p.foldertype_id ).WillCascadeOnDelete(false);
 
-            //setup relation ships for a precreated join table for messsages and mailxboxfolders
-            //*********** many to many complete here 
-            modelBuilder.Entity<mailboxmessagefolder>().HasRequired(t => t.mailboxfolder).WithMany()
-            .HasForeignKey(p => p.mailboxfolder_id ).WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<mailboxmessagefolder>().HasRequired(t => t.mailboxmessage ).WithMany()
-            .HasForeignKey(p => p.mailboxmessage_id ).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.mailboxfolders )
+         .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profiled_id ).WillCascadeOnDelete(false);
+            //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
 
 
 

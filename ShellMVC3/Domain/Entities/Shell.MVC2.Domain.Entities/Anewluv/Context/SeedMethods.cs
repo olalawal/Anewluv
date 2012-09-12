@@ -28,7 +28,20 @@ namespace Shell.MVC2.Domain.Entities.Migrations
                 id = (int)kvp,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
-            
+
+
+            //notetypes addded 9/11/2012
+            //filter an enum for not set since that is the zero value i.e  
+            var notetypeqry = from notetypeEnum value in Enum.GetValues(typeof(notetypeEnum))
+                              where value != notetypeEnum.NotSet
+                               orderby value // to sort by value; remove otherwise 
+                               select value;
+            notetypeqry.ToList().ForEach(kvp => context.lu_notetype.AddOrUpdate(new lu_notetype ()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
             //defaultmailboxfoldertypes
             //filter an enum for not set since that is the zero value i.e  
             var defaultmailboxfoldertypeqry = from defaultmailboxfoldertypeEnum value in Enum.GetValues(typeof(defaultmailboxfoldertypeEnum))

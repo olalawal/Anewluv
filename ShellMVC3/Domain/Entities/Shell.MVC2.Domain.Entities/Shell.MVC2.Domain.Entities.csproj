@@ -56,6 +56,9 @@
     <Compile Include="Anewluv\activityloggeodata.cs" />
     <Compile Include="Anewluv\Context\SeedingConversions.cs" />
     <Compile Include="Anewluv\Context\SeedMethods.cs" />
+    <Compile Include="Anewluv\blocknotes.cs" />
+    <Compile Include="Anewluv\Lookups\lu_notetype.cs" />
+    <Compile Include="Anewluv\Lookups\enums\notetype.cs" />
     <Compile Include="Anewluv\profilemetadata.cs" />
     <Compile Include="Anewluv\Lookups\lu_sortbytype.cs" />
     <Compile Include="Anewluv\Lookups\lu_photoapprovalstatus.cs" />

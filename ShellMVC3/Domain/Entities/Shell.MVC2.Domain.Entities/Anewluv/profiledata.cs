@@ -27,8 +27,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public virtual profilemetadata profilemetadata { get; set; }
 
             //lookups for personal profile details 
-            public virtual lu_gender gender { get; set; }
-            public virtual ICollection<abusereport> abusereports { get; set; }
+            public virtual lu_gender gender { get; set; }          
             public virtual lu_bodytype bodytype { get; set; }
             public virtual lu_eyecolor eyecolor { get; set; }
             public virtual lu_haircolor haircolor { get; set; }
@@ -49,7 +48,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public virtual lu_maritalstatus maritalstatus { get; set; }
             public virtual lu_profession profession { get; set; }
             public virtual lu_wantskids wantsKidstatus { get; set; }
-
             public virtual visiblitysetting visibilitysettings { get; set; }    
     }
 }

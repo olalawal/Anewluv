@@ -16,12 +16,19 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
                                 
                  
             //member actions
+            public virtual ICollection<favorite> favoritesadded { get; set; }
             public virtual ICollection<favorite> favorites { get; set; }
+            public virtual ICollection<friend> friendsadded { get; set; }
             public virtual ICollection<friend> friends { get; set; }
+            public virtual ICollection<interest> interestsadded { get; set; }
             public virtual ICollection<interest> interests { get; set; }
+            public virtual ICollection<like> likesadded { get; set; }
             public virtual ICollection<like> likes { get; set; }
+            public virtual ICollection<block> blocksadded { get; set; }
             public virtual ICollection<block> blocks { get; set; }
+            public virtual ICollection<peek> peeksadded { get; set; }
             public virtual ICollection<peek> peeks { get; set; }
+            public virtual ICollection<hotlist> hotlistsadded { get; set; }
             public virtual ICollection<hotlist> hotlists { get; set; }  
 
 
@@ -42,6 +49,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
                           
             public virtual ICollection<searchsetting> searchsettings { get; set; }
             public virtual ICollection<userlogtime> logontimes { get; set; }
-            public virtual ICollection<abusereport> abusereports { get; set; }
+            public virtual ICollection<abusereport> abusereportadded { get; set; }   //list of reports created by this user 
+            public virtual ICollection<abusereport> abusereports { get; set; } 
+            
     }
 }

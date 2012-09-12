@@ -14,7 +14,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         
        // public DbSet<abuser> abusers { get; set; }
         public DbSet<abusereport> abusereports { get; set; }
+        public DbSet<abusereportnotes> abusereportnotes { get; set; }
         public DbSet<block> blocks { get; set; }
+        public DbSet<blocknotes> blocknotes { get; set; }
         public DbSet<communicationquota> communicationquotas { get; set; }
         public DbSet<profiledata_ethnicity> ethnicities { get; set; }
         public DbSet<favorite> favorites { get; set; }

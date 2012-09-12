@@ -10,8 +10,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     /// </summary>
     public class mailboxmessagefolder
     {
-        [Key]
-        public int id { get; set; }
+     
+        //Key is a custom composite key
+        //[Key]
+        //public int id { get; set; }
         public int mailboxfolder_id { get; set; }
         public int mailboxmessage_id { get; set; }     
         public virtual mailboxfolder mailboxfolder { get; set; }
@@ -23,6 +25,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         //what to do aboutrecent flag
         public bool? recent { get; set; }
         public DateTime? replieddate { get; set; }
-
+      
     }
 }

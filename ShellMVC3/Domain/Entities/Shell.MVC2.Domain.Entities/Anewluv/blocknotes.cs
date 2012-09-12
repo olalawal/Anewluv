@@ -6,13 +6,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    public class abusereportnotes
+    public class blocknotes
     {
         [Key]
         public int id { get; set; }
-        public int abusereport_id { get; set; }
+        public int block_id { get; set; }
         public int profile_id { get; set; }
-        public virtual abusereport abusereport { get; set; }
+        public virtual block block { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
         public virtual lu_notetype notetype { get; set; }
         public string note { get; set; }
