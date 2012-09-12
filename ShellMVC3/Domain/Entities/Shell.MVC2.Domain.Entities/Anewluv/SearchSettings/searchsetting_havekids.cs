@@ -9,7 +9,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         [Key]
         public int? id { get; set; }
-        public virtual lu_havekids havekids { get; set; }    
+        public virtual lu_havekids havekids { get; set; }
+        public int searchsetting_id { get; set; }
         public virtual searchsetting  searchsetting { get; set; } 
        
     }

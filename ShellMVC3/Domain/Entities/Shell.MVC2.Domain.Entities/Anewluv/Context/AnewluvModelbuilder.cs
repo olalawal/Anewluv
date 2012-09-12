@@ -52,7 +52,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
            .WithRequired(z => z.profilemetadata ).HasForeignKey(t => t.profile_id ).WillCascadeOnDelete(false);
             //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.favorites)
-            .WithRequired(z => z.profilemetadata  ).HasForeignKey(t => t.favoriteprofile_id).WillCascadeOnDelete(false);
+            .WithRequired(z => z.favoriteprofilemetadata  ).HasForeignKey(t => t.favoriteprofile_id).WillCascadeOnDelete(false);
 
            
             //  //map requierd  relationshipds for hotlist
@@ -62,7 +62,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
             //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.hotlists)
-            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.hotlistprofile_id).WillCascadeOnDelete(false);
+            .WithRequired(z => z.hotlistprofilemetadata ).HasForeignKey(t => t.hotlistprofile_id).WillCascadeOnDelete(false);
 
 
             //  //map requierd  relationshipds for interest
@@ -72,7 +72,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
             //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.interests )
-            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.interestprofile_id).WillCascadeOnDelete(false);
+            .WithRequired(z => z.interestprofilemetadata).HasForeignKey(t => t.interestprofile_id).WillCascadeOnDelete(false);
 
             //  //map requierd  relationshipds for like
             //  //**************************************
@@ -81,7 +81,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
             //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.likes )
-            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.likeprofile_id).WillCascadeOnDelete(false);
+            .WithRequired(z => z.likeprofilemetadata ).HasForeignKey(t => t.likeprofile_id).WillCascadeOnDelete(false);
 
 
             //  //map requierd  relationshipds for friend
@@ -90,7 +90,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
               .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
             //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.friends)
-            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.friendprofile_id).WillCascadeOnDelete(false);
+            .WithRequired(z => z.friendprofilemetadata).HasForeignKey(t => t.friendprofile_id).WillCascadeOnDelete(false);
 
             //  //map requierd  relationshipds for peek
             //  //**************************************
@@ -98,7 +98,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
           .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
             //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.peeks)
-            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.peekprofile_id).WillCascadeOnDelete(false);
+            .WithRequired(z => z.peekprofilemetadata ).HasForeignKey(t => t.peekprofile_id).WillCascadeOnDelete(false);
 
             
             //map requierd  relationshipds for block
@@ -107,7 +107,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
              .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id ).WillCascadeOnDelete(false);
             //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.blocks )
-            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.blockprofile_id).WillCascadeOnDelete(false);
+            .WithRequired(z => z.blockedprofilemetadata).HasForeignKey(t => t.blockprofile_id).WillCascadeOnDelete(false);
 
             // map required relationships blocknotes
             //**************************************
@@ -139,44 +139,58 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //membersinrole
             //  //map requierd  relationshipds for membersinrole
             //  //**************************************
-            modelBuilder.Entity<membersinrole>()
-           .HasRequired(t => t.profile);
+         //   modelBuilder.Entity<membersinrole>()
+          // .HasRequired(t => t.profile);
 
             //openid
             //  //map requierd  relationshipds for openid
             //  //**************************************
-            modelBuilder.Entity<openid>()
-           .HasRequired(t => t.profile);
+         //   modelBuilder.Entity<openid>()
+         //  .HasRequired(t => t.profile);
 
             //photo complex model requered field mappings
-            // map required relationships abusereport
+            // map required relationships to profile metadata
             //**************************************
-            modelBuilder.Entity<photo>().HasRequired(t => t.profilemetadata).WithMany(z => z.photos )
-           .HasForeignKey(p => p.profile_id ).WillCascadeOnDelete(false);
+          //  modelBuilder.Entity<photo>().HasRequired(t => t.profilemetadata).WithMany(z => z.photos )
+           //.HasForeignKey(p => p.profile_id ).WillCascadeOnDelete(false);
+
+
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.photos )
+            .WithRequired(z => z.profilemetadata ).HasForeignKey(t => t.profile_id ).WillCascadeOnDelete(false);
+
+            //map photo conversions relation ship with photo      
+            //**************************************
+            modelBuilder.Entity<photo>().HasMany(p => p.conversions)
+              .WithRequired(z => z.photo ).HasForeignKey(t => t.photo_id ).WillCascadeOnDelete(false);
+
+            //phto conversion type is requred too
+            modelBuilder.Entity<photoconversion>()
+           .HasRequired(p => p.type);
+           
+            //map photo relation ship with the given photo security level
+            modelBuilder.Entity<photo>().HasMany(p => p.securitylevels);
+          
 
             // map required relationships photoalbum -many to many with photo is automatcic
             //**************************************
             modelBuilder.Entity<photoalbum>().HasRequired(t => t.profilemetadata).WithMany(z => z.photoalbums )
            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
-            //photoconversion model requered field mappings
-            // map required relationships photoconversion
-            //**************************************
-            modelBuilder.Entity<photoconversion>()
-            .HasRequired(p => p.photo);
-            //type is requred too
-            modelBuilder.Entity<photoconversion>()
-           .HasRequired(p => p.type);
+                   //map photoalbum relation ship with the given photo security level
+            modelBuilder.Entity<photoalbum>().HasMany(p => p.securitylevels);
+
+
+          
 
 
             //photoreviewstatus model requered field mappings
             // map required relationships photoreviewstatus
             //**************************************
             modelBuilder.Entity<photoreviewstatus>()
-            .HasRequired(p => p.reviewerprofiledata);
+            .HasRequired(p => p.reviewerprofiledata).WithMany().HasForeignKey(z=>z.reviewerprofile_id);
             //photo is requred too
             modelBuilder.Entity<photoreviewstatus>()
-           .HasRequired(p => p.photo);
+           .HasRequired(p => p.photo).WithMany().HasForeignKey(z=>z.photo_id);
             //wonder if we should have a review status type as required
 
             //Mailbox relation ships 
@@ -219,17 +233,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
            //.HasForeignKey(p => p.foldertype_id ).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.mailboxfolders )
-         .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profiled_id ).WillCascadeOnDelete(false);
+           .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profiled_id ).WillCascadeOnDelete(false);
             //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
 
-
-
-
-
-            //mailboxfoldertypes 
-            //======================================================
-
-
+         
 
             //Profile
             // Specify one-to-one association between profile and profiledata
@@ -281,47 +288,66 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //profiledata_ethnicity complex model requered field mappings
             // map required relationships profiledata_ethnicity
             //**************************************
-            modelBuilder.Entity<profiledata_ethnicity>().HasRequired(t => t.profilemetadata).WithMany()
-     .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(t => t.ethnicities)
+           .WithRequired(p=>p.profilemetadata).HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
             //profiledata_hobby complex model requered field mappings
             // map required relationships profiledata_hobby
             //**************************************
-            modelBuilder.Entity<profiledata_hobby >().HasRequired(t => t.profilemetadata).WithMany()
-   .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(t => t.hobbies )
+            .WithRequired(p => p.profilemetadata).HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
             //profiledata_hotfeature complex model requered field mappings
             // map required relationships profiledata_hotfeature
             //**************************************
-            modelBuilder.Entity<profiledata_hotfeature>().HasRequired(t => t.profilemetadata).WithMany()
-    .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(t => t.hotfeatures )
+                  .WithRequired(p => p.profilemetadata).HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false); ;
 
             //profiledata_lookingfor complex model requered field mappings
             // map required relationships profiledata_lookingfor
             //**************************************
-            modelBuilder.Entity<profiledata_lookingfor>().HasRequired(t => t.profilemetadata).WithMany()
-      .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
+            modelBuilder.Entity<profilemetadata>().HasMany(t => t.lookingfor )
+              .WithRequired(p => p.profilemetadata).HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
             //rating value 
             //rating complex model requered field mappings
             // map required relationships rating value
             //**************************************
+
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.ratingvaluesadded )
+           .WithRequired(z => z.profilemetatadata ).HasForeignKey(t => t.profile_id ).WillCascadeOnDelete(false);
+         
+            modelBuilder.Entity<profilemetadata>().HasMany(p => p.ratingvalues)
+            .WithRequired(z => z.rateeprofilemetadata).HasForeignKey(t => t.rateeprofile_id ).WillCascadeOnDelete(false);
+
+
             modelBuilder.Entity<ratingvalue>()
-           .HasRequired(p => p.rating); //.WithMany(z=>z.ratingvalues).HasForeignKey(p=>p.id).WillCascadeOnDelete(false);
+           .HasRequired(p => p.rating).WithMany().HasForeignKey(z=>z.rating_id); //.WithMany(z=>z.ratingvalues).HasForeignKey(p=>p.id).WillCascadeOnDelete(false);
             
             //  //map requierd  relationshipds for favorite
             //  //**************************************
             //favorite  reqired ,  first part has to sleetc the nav property in perant
-            modelBuilder.Entity<ratingvalue>().HasRequired(t => t.rateeprofilemetadata   ).WithMany(z => z.ratingvalues )
-           .HasForeignKey(p => p.rateeprofile_id ).WillCascadeOnDelete(false);
+           // modelBuilder.Entity<ratingvalue>().HasRequired(t => t.rateeprofilemetadata   ).WithMany(z => z.ratingvalues )
+          // .HasForeignKey(p => p.rateeprofile_id ).WillCascadeOnDelete(false);
 
             //favorite sender required
-            modelBuilder.Entity<ratingvalue>().HasRequired(t => t.profilemetatadata ).WithMany()
-            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
+         //   modelBuilder.Entity<ratingvalue>().HasRequired(t => t.profilemetatadata ).WithMany()
+        //    .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
+
+            //add collection values tied to profile
             //userlogtime
-            modelBuilder.Entity<userlogtime>()
-          .HasRequired(p => p.profile);
+            modelBuilder.Entity<profile>().HasMany(p => p.logontimes )
+           .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<profile>().HasMany(p => p.activitylogs)
+          .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<profile>().HasMany(p => p.openids)
+          .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<profile>().HasMany(p => p.roles)
+          .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
 
 
                         //Profiledata
@@ -332,164 +358,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             
        
 
-            //visiblitysetting
-         //   modelBuilder.Entity<visiblitysetting>()
-         // .HasRequired(p => p.profiledata);
-
-
-            //  //map requierd  relationshipds for friend
-            //  //**************************************
-            //  //favorites profiledata  reqired
-            //  modelBuilder.Entity<friend>()
-            // .HasRequired(t => t.friendprofiledata)
-            // .WithRequiredPrincipal();
-            //  //member sendings friend profiledata required
-            //  modelBuilder.Entity<friend>()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-
-
-            //  //map hobby required realtionships
-            //  //profile  reqired
-            //  modelBuilder.Entity<hobby>()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-
-            //  //map hotfeature required realtionships
-            //  //profile  reqired
-            //  modelBuilder.Entity<hotfeature>()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-
-            //  //map requierd  relationshipds for hotlist
-            //  //**************************************
-            //  //favorites profiledata  reqired
-            //  modelBuilder.Entity<hotlist>()
-            // .HasRequired(t => t.hotlistprofiledata )
-            // .WithRequiredPrincipal();
-            //  //member sendings hotlist profiledata required
-            //  modelBuilder.Entity<hotlist>()
-            // .HasRequired(t => t.profile )
-            // .WithRequiredPrincipal();
-
-            //  //map requierd  relationshipds for Like
-            //  //**************************************
-            //  //favorites profiledata  reqired
-            //  modelBuilder.Entity<like>()
-            // .HasRequired(t => t.likeprofiledata )
-            // .WithRequiredPrincipal();
-            //  //member sendings like profiledata required
-            //  modelBuilder.Entity<like>()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-
-            //  //map loginGeodata required realtionships
-            //  //profile  reqired
-            //  modelBuilder.Entity<loginGeodata>()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-
-            //  //map lookingfor required realtionships
-            //  //profile  reqired
-            //  modelBuilder.Entity<lookingfor>()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-
-            //  //map lookingfor required realtionships
-            //  //profile  reqired
-            //  modelBuilder.Entity<lookingfor>()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-
-            //  //map mailupdatefreqency required realtionships
-            //  //profile  reqired
-            //  modelBuilder.Entity<mailupdatefreqency >()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-
-            //  //map membersinrole required realtionships
-            //  //profile  reqired
-            //  modelBuilder.Entity<membersinrole>()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-            //  //role required
-            //  modelBuilder.Entity<membersinrole>()
-            // .HasRequired(t => t.role )
-            // .WithRequiredPrincipal();
-
-            //  //map openid required realtionships
-            //  //profile  reqired
-            //  modelBuilder.Entity<openid>()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-
-            //  //map peek required realtionships
-            //  //peek profiledata  reqired
-            //  modelBuilder.Entity<peek>()
-            // .HasRequired(t => t.peekprofiledata )
-            // .WithRequiredPrincipal();
-            //  //peeker profiledata required
-            //  modelBuilder.Entity<peek>()
-            // .HasRequired(t => t.profile)
-            // .WithRequiredPrincipal();
-
-            //  //fluent config for photo table
-            //  //*************************************
-            //  // Specifify the generation of guid fields 
-            //  modelBuilder.Entity<photo>().Property(o => o.id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            //  //set required feild
-            //  modelBuilder.Entity<photo>()
-            //  .HasRequired(t => t.profile)
-            //  .WithRequiredPrincipal()
-            //  ;
-
-            //  //map photoconversions required realtionships
-            //  //photoconversions profiledata  reqired
-            //  modelBuilder.Entity<photoconversion>()
-            // .HasRequired(t => t.photo)
-            // .WithRequiredPrincipal();
-            //  //peeker profiledata required
-            //  modelBuilder.Entity<photoconversion>()
-            // .HasRequired(t => t.type)
-            // .WithRequiredPrincipal();
-
-
-            //  //fluent config for photoreviewstatus table
-            //  //*************************************
-            //  modelBuilder.Entity<photoreviewstatus>()
-            //  .HasRequired(t => t.reviewerprofiledata)
-            //   .WithRequiredPrincipal();
-
-            //  //profile and profiel data are at top
-
-            //  //fluent confg for ratingvalues
-            //  //map ratingvalues required realtionships
-
-            // //rating tie back required 
-            //  modelBuilder.Entity<ratingvalue>()
-            // .HasRequired(t => t.rating )
-            // .WithRequiredPrincipal();
-
-            //  //rater profiledata  reqired
-            //  modelBuilder.Entity<ratingvalue >()
-            // .HasRequired(t => t.raterprofiledata)
-            // .WithRequiredPrincipal();
-            //  //member being rated profiledata required
-            //  modelBuilder.Entity<ratingvalue>()
-            // .HasRequired(t => t.rateeprofiledata )
-            // .WithRequiredPrincipal();
-
-            //  //user logtime fluent mapping
-            //  //profile  reqired
-            //  modelBuilder.Entity<userlogtime>()
-            // .HasRequired(t => t.profile )
-            // .WithRequiredPrincipal();
-
-            //  //visibilitysetting fluent mapping
-            //  //profiledata  reqired
-            //  //modelBuilder.Entity<visiblitysetting>()
-            // //.HasRequired(t => t.profile)
-            //// .WithRequiredPrincipal();
+         
 
 
 
@@ -509,18 +378,20 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //**********************
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_bodytype>()
-           .HasRequired(t => t.searchsetting);
-
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_bodytype>()
            .HasRequired(t => t.bodytype);
 
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id ).WillCascadeOnDelete(false);
+
+           
 
             //diet
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_diet>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_diet>()
@@ -529,8 +400,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //drink
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_drink>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_drink>()
@@ -539,8 +412,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //educationlevel
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_educationlevel>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_educationlevel>()
@@ -549,8 +424,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //employmentstatus
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_employmentstatus>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_employmentstatus>()
@@ -559,8 +436,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //ethnicity
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_ethnicity>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_ethnicity>()
@@ -569,8 +448,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //exercise
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_exercise>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_exercise>()
@@ -579,8 +460,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //eyecolor
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_eyecolor>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_eyecolor>()
@@ -597,6 +480,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
            // modelBuilder.Entity<searchsetting_gender>()
            //.HasRequired(t => t.searchsetting);
 
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.genders)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
+
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_gender>()
            .HasRequired(t => t.gender);
@@ -604,8 +491,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //haircolor
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_haircolor>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_haircolor>()
@@ -614,8 +503,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //havekids
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_havekids>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_havekids>()
@@ -624,8 +514,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //hobby
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_hobby>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_hobby>()
@@ -634,8 +525,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //hotfeature
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_hotfeature>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_hotfeature>()
@@ -644,8 +537,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //humor
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_humor>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_humor>()
@@ -654,8 +549,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //income
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_incomelevel>()
-           .HasRequired(t => t.searchsetting);
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_incomelevel>()
@@ -663,9 +559,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
             //livingsituation
             //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_livingstituation>()
-           .HasRequired(t => t.searchsetting);
+            //all the other related tables  now         
+
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_livingstituation>()
@@ -673,15 +571,17 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
             //location
             //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_location>()
-           .HasRequired(t => t.searchsetting);
+            //all the other related tables  now  
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.locations)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //lookingfor
             //***********************************
-            //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_lookingfor>()
-           .HasRequired(t => t.searchsetting);
+            //all the other related tables  now       
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_lookingfor>()
@@ -690,8 +590,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //maritalstatus
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_maritalstatus>()
-           .HasRequired(t => t.searchsetting);
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+         .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_maritalstatus>()
@@ -700,8 +600,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //politicalview
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_politicalview>()
-           .HasRequired(t => t.searchsetting);
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+           .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_politicalview>()
@@ -710,8 +610,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //lookingfor
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_lookingfor>()
-           .HasRequired(t => t.searchsetting);
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+        .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_lookingfor>()
@@ -721,8 +621,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //profession
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_profession>()
-           .HasRequired(t => t.searchsetting);
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+          .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_profession>()
@@ -733,9 +633,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //religion
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_religion>()
-           .HasRequired(t => t.searchsetting);
-
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+                   .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_religion>()
            .HasRequired(t => t.religion);
@@ -745,8 +644,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //religiousattendance
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_religiousattendance>()
-           .HasRequired(t => t.searchsetting);
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+          .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_religiousattendance>()
@@ -757,8 +656,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //showme
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_showme>()
-           .HasRequired(t => t.searchsetting);
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+             .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_showme>()
@@ -769,8 +668,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //sign
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_sign>()
-           .HasRequired(t => t.searchsetting);
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+             .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_sign>()
@@ -781,8 +680,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //smokes
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_smokes>()
-           .HasRequired(t => t.searchsetting);
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+          .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_smokes>()
@@ -793,8 +692,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //sortbytype
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_sortbytype>()
-           .HasRequired(t => t.searchsetting);
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+       .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_sortbytype>()
@@ -805,8 +704,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //wantkids
             //***********************************
             //all the other related tables  now          
-            modelBuilder.Entity<searchsetting_wantkids>()
-           .HasRequired(t => t.searchsetting);
+            modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
+          .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
             //all the other related tables  now          
             modelBuilder.Entity<searchsetting_wantkids>()

@@ -10,9 +10,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [Key]
         public string id { get; set; }
         public string rating_id { get; set; }
-       public int profile_id { get; set; }
+        public int profile_id { get; set; }
         public int rateeprofile_id { get; set; }
-
         public virtual rating  rating { get; set; }  //type of rating
         public virtual profilemetadata profilemetatadata { get; set; }    //person giving the rating
         public virtual profilemetadata  rateeprofilemetadata { get; set; }   //person being rated  

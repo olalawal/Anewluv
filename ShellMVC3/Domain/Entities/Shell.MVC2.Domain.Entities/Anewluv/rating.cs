@@ -9,7 +9,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         [Key]
         public int id { get; set; }
-        public virtual ICollection<ratingvalue> ratingvalues { get; set; } 
+       // public virtual ICollection<ratingvalue> ratingvalues { get; set; }       
         public string description { get; set; }       
         public int? ratingmaxvalue { get; set; }
         public int? ratingweight { get; set; }

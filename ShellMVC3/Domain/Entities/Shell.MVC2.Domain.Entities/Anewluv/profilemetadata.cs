@@ -44,11 +44,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public virtual ICollection<profiledata_hotfeature> hotfeatures { get; set; }           
             public virtual ICollection<profiledata_lookingfor> lookingfor { get; set; }           
             public virtual ICollection<mailupdatefreqency> mailupdatefreqencies { get; set; }
-            public virtual ICollection<ratingvalue> ratingvalues { get; set; }           
+            public virtual ICollection<ratingvalue> ratingvaluesadded { get; set; }
+            public virtual ICollection<ratingvalue> ratingvalues { get; set; }       
                    
                           
-            public virtual ICollection<searchsetting> searchsettings { get; set; }
-            public virtual ICollection<userlogtime> logontimes { get; set; }
+            public virtual ICollection<searchsetting> searchsettings { get; set; }           
             public virtual ICollection<abusereport> abusereportadded { get; set; }   //list of reports created by this user 
             public virtual ICollection<abusereport> abusereports { get; set; } 
             
