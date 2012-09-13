@@ -7,6 +7,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 {
     public class profile
     {
+        public virtual profiledata profiledata { get; set; }
+        public virtual profilemetadata profilemetadata { get; set; }
        
         public int id { get; set; }    
     
@@ -46,8 +48,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual ICollection<openid> openids { get; set; }
         public virtual ICollection<userlogtime> logontimes { get; set; }
 
-        public virtual profiledata profiledata { get; set; }
-        public virtual profilemetadata profilemetadata { get; set; }
+      
 
 
 

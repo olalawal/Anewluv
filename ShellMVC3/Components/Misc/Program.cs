@@ -15,6 +15,7 @@ namespace Misc
 
            //MisFunctions.FixBadUserGeoData();
           //FixBadUserGeoData();
+            MisFunctions.ConvertDatabase ();
         }
     }
 }

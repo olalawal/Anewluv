@@ -8,8 +8,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class searchsetting_sortbytype
     {
         [Key]
-        public int? id { get; set; }
-     
+        public int? id { get; set; }     
         public virtual searchsetting  searchsetting { get; set; }
         public virtual lu_sortbytype sortbytype { get; set; }
 

@@ -19,7 +19,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public Nullable<double> longitude { get; set; }
             public Nullable<double> latitude { get; set; }
             public string aboutme { get; set; }
-            public long height { get; set; }
+            public long? height { get; set; }
             public string mycatchyintroLine { get; set; }
             public string phone { get; set; }
             public string postalcode { get; set; }           

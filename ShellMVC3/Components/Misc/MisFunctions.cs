@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
-using System.Collections.Generic;
+
 //using DatingModel;
-using System.Collections.Generic;
+
 
 using Dating.Server.Data.Models;
 using Shell.MVC2.Domain.Entities;
-using Shell.MVC2.Infrastructure.Entities;
-using LoggingLibrary;
+//using Shell.MVC2.Infrastructure.Entities;
+//using LoggingLibrary;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv;
 
@@ -46,33 +46,76 @@ namespace Misc
              var myobject = new Shell.MVC2.Domain.Entities.Anewluv.profile();
 
 
-             myobject.id = newprofileid; 
-             myobject.username = item.UserName ;
-             myobject.screenname = item.ScreenName ;
-             myobject.activationcode = item.ActivationCode ;
-             myobject.dailsentmessagequota = item.DailSentMessageQuota; 
-             myobject.dailysentemailquota = item.DailySentEmailQuota ;
-             myobject.forwardmessages = item.ForwardMessages  ;
-             myobject.logindate = item.LoginDate   ;
-             myobject. modificationdate = item.ModificationDate  ;
-             myobject.creationdate = item.CreationDate ;
-             myobject.failedpasswordchangedate = null ;
-             myobject.passwordChangeddate = item.PasswordChangedDate ;        
-             myobject.readprivacystatement = item.ReadPrivacyStatement  ;
-             myobject.readtemsofuse = item.ReadTemsOfUse  ;
-             myobject.password = item.Password ;
-             myobject.passwordchangecount = item.PasswordChangedCount  ;
-             myobject.failedpasswordchangeattemptcount = item.PasswordChangeAttempts  ;   
-             myobject.salt = item.salt           ;
-                myobject.status = context.lu_profilestatus.Where(z=>z.id == item.ProfileStatusID).First();
-             myobject.securityquestion  =  context.lu_securityquestion.Where(z=>z.id == item.SecurityQuestionID ).First();
-             myobject.securityanswer = item.SecurityAnswer ;
-             myobject.sentemailquotahitcount = item.SentEmailQuotaHitCount  ;
-             myobject.sentmessagequotahitcount = item.SentMessageQuotaHitCount  ;
-           
-           
-             //iccrement new ID
-             newprofileid = +newprofileid;
+             try
+             {
+                 myobject.id = newprofileid;
+                 myobject.username = item.UserName;
+                 myobject.emailaddress = item.ProfileID;
+                 myobject.screenname = item.ScreenName;
+                 myobject.activationcode = item.ActivationCode;
+                 myobject.dailsentmessagequota = item.DailSentMessageQuota;
+                 myobject.dailysentemailquota = item.DailySentEmailQuota;
+                 myobject.forwardmessages = item.ForwardMessages;
+                 myobject.logindate = item.LoginDate;
+                 myobject.modificationdate = item.ModificationDate;
+                 myobject.creationdate = item.CreationDate;
+                 myobject.failedpasswordchangedate = null;
+                 myobject.passwordChangeddate = item.PasswordChangedDate;
+                 myobject.readprivacystatement = item.ReadPrivacyStatement;
+                 myobject.readtemsofuse = item.ReadTemsOfUse;
+                 myobject.password = item.Password;
+                 myobject.passwordchangecount = item.PasswordChangedCount;
+                 myobject.failedpasswordchangeattemptcount = item.PasswordChangeAttempts;
+                 myobject.salt = item.salt;
+                 myobject.status = context.lu_profilestatus.Where(z => z.id == item.ProfileStatusID).FirstOrDefault();
+                 myobject.securityquestion = context.lu_securityquestion.Where(z => z.id == item.SecurityQuestionID).FirstOrDefault();
+                 myobject.securityanswer = item.SecurityAnswer;
+                 myobject.sentemailquotahitcount = item.SentEmailQuotaHitCount;
+                 myobject.sentmessagequotahitcount = item.SentMessageQuotaHitCount;
+             
+                 //build related profiledata object
+                 var myprofiledata = new Shell.MVC2.Domain.Entities.Anewluv.profiledata();
+
+                 //query the profile data
+                 var matchedprofiledata = olddb.ProfileDatas.Where(p => p.ProfileID == item.ProfileID);
+                 // Metadata classes are not meant to be instantiated.
+                 myprofiledata.id = newprofileid;
+                 myprofiledata.age = matchedprofiledata.FirstOrDefault().Age;
+                 myprofiledata.birthdate = matchedprofiledata.FirstOrDefault().Birthdate;
+                 myprofiledata.city = matchedprofiledata.FirstOrDefault().City;
+                 myprofiledata.countryregion = matchedprofiledata.FirstOrDefault().Country_Region;
+                 myprofiledata.stateprovince = matchedprofiledata.FirstOrDefault().State_Province;
+                 myprofiledata.countryid = matchedprofiledata.FirstOrDefault().CountryID;
+                 myprofiledata.longitude = matchedprofiledata.FirstOrDefault().Longitude;
+                 myprofiledata.latitude = matchedprofiledata.FirstOrDefault().Latitude;
+                 myprofiledata.aboutme = matchedprofiledata.FirstOrDefault().AboutMe;
+                 myprofiledata.height = (long)matchedprofiledata.FirstOrDefault().Height.GetValueOrDefault();
+                 myprofiledata.mycatchyintroLine = matchedprofiledata.FirstOrDefault().MyCatchyIntroLine;
+                 myprofiledata.phone = matchedprofiledata.FirstOrDefault().Phone;
+                 myprofiledata.postalcode = matchedprofiledata.FirstOrDefault().PostalCode;
+                 //myprofiledata.profile = context.profiles.Where(z => z.id == myprofiledata.id).FirstOrDefault();
+                
+
+                 //do the metadata noew
+                 var myprofilemetadata = new Shell.MVC2.Domain.Entities.Anewluv.profilemetadata();
+                 myprofilemetadata.id = newprofileid;
+
+
+                 //add the two new objects to profile
+                 myobject.profiledata = myprofiledata;
+                 myobject.profilemetadata = myprofilemetadata;
+
+                 context.profiles.Add(myobject);
+                 context.SaveChanges();
+                 //iccrement new ID
+                 newprofileid = +newprofileid;
+
+             }
+            catch ( Exception ex)
+                {
+
+                    var dd = ex.ToString();
+                }
 
             }
 
@@ -84,10 +127,8 @@ namespace Misc
              var myobject = new Shell.MVC2.Domain.Entities.Anewluv.profiledata();
 
                 //query the profile data
-             var matchedprofile = context.profiles.Where(p => p.emailaddress   == item.ProfileID );
-
-                 // Metadata classes are not meant to be instantiated.
-
+            var matchedprofile = context.profiles.Where(p => p.emailaddress   == item.ProfileID );
+            // Metadata classes are not meant to be instantiated.
              myobject.id = matchedprofile.First().id ;
              myobject.age = item.Age ;
              myobject.birthdate = item.Birthdate ;
@@ -102,9 +143,9 @@ namespace Misc
              myobject.mycatchyintroLine = item.MyCatchyIntroLine ;
              myobject.phone = item.Phone ;
              myobject.postalcode = item.PostalCode ;
-             myobject.profile = context.profiles.Where(z => z.id == myobject.id).First();
+             myobject.profile = context.profiles.Where(z => z.id == myobject.id).FirstOrDefault();
              //
-           
+             context.profiledata.Add(myobject);
              //iccrement new ID
              newprofileid = +newprofileid;
 
@@ -119,13 +160,13 @@ namespace Misc
 
 
            //convet abusers data
-           olddb.abusereports.ToList().ForEach(p => context.abusereports.AddOrUpdate (new Shell.MVC2.Domain.Entities.Anewluv.abusereport()
-           {
-               abuser_id =  p.AbuserID,
-               abusereporter_id  = p.ProfileID 
+           //olddb.abusereports.ToList().ForEach(p => context.abusereports.AddOrUpdate (new Shell.MVC2.Domain.Entities.Anewluv.abusereport()
+           //{
+           //    abuser_id =  p.AbuserID,
+           //    abusereporter_id  = p.ProfileID 
 
 
-           }));
+           //}));
 
        }
 
