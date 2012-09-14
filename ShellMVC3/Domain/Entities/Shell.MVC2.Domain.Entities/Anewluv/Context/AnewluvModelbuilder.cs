@@ -25,6 +25,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             // map one to many relation shipds for metadatata table from its side 
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+            //activitylog and geo data
+            modelBuilder.Entity<activitylog >().HasRequired(a => a.activitygeodata)
+                .WithMany().HasForeignKey(a => a.); 
+   
+
+
+
             //abusereports
             modelBuilder.Entity<profilemetadata>().HasMany(p=>p.abusereportadded)
            .WithRequired(z=>z.abusereporter ).HasForeignKey(t=>t.abusereporter_id).WillCascadeOnDelete(false);

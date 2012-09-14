@@ -142,11 +142,11 @@ namespace Misc
                      // myobject.id = matchedprofile.First().id ;
                     aractivitylogobject.creationdate = activitylogitem.CreationDate ;
                     aractivitylogobject.ipaddress  = activitylogitem.IPaddress ;
-                    aractivitylogobject.regionname  = activitylogitem.RegionName ;
+                    aractivitylogobject.actionname   = "" ;
                     aractivitylogobject.sessionid = activitylogitem.SessionID;
                     aractivitylogobject.useragent  = activitylogitem.UserAgent ;
 
-                    aractivitylogobject.routeurl  = activitylogitem.ur;
+                    aractivitylogobject.routeurl = "";
                     aractivitylogobject.useragent = activitylogitem.UserAgent;
                     aractivitylogobject.useragent = activitylogitem.UserAgent;
                     aractivitylogobject.useragent = activitylogitem.UserAgent;
