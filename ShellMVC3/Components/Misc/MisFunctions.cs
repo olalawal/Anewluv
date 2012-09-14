@@ -105,6 +105,84 @@ namespace Misc
                  myobject.profiledata = myprofiledata;
                  myobject.profilemetadata = myprofilemetadata;
 
+
+                 //populate collections tied to profile and profiledata
+
+                   //build  members in role data if it exists
+                 foreach (Dating.Server.Data.Models.MembersInRole membersinroleitem in olddb.MembersInRoles.Where(p => p.ProfileID == myobject.emailaddress))
+                 {
+                     var membersinroleobject = new Shell.MVC2.Domain.Entities.Anewluv.membersinrole();
+
+                     //query the profile data
+                     var matchedrole = context.profiles.Where(p => p.emailaddress == item.ProfileID);
+                     // Metadata classes are not meant to be instantiated.
+                     // myobject.id = matchedprofile.First().id ;
+                     membersinroleobject.active  = true;
+                     membersinroleobject.profile_id = newprofileid;
+                     membersinroleobject.role = context.lu_role.Where(z => z.id == membersinroleitem.Role.RoleID).FirstOrDefault();
+                     membersinroleobject.roleexpiredate  = null;
+                     membersinroleobject.rolestartdate  = DateTime.Now;
+                     
+                     //add the object to profile object
+                     myobject.memberroles.Add(membersinroleobject);
+
+                 }
+                 
+                 
+
+                 //build  activitylog if it exists
+                 foreach (Dating.Server.Data.Models.ProfileGeoDataLogger activitylogitem in olddb.ProfileGeoDataLoggers 
+                     .Where(p => p.ProfileID == myobject.emailaddress))
+                 {
+                     var aractivitylogobject = new Shell.MVC2.Domain.Entities.Anewluv.activitylog();
+
+                     //query the profile data
+                     var matchedrole = context.profiles.Where(p => p.emailaddress == item.ProfileID);
+                     // Metadata classes are not meant to be instantiated.
+                     // myobject.id = matchedprofile.First().id ;
+                    aractivitylogobject.creationdate = activitylogitem.CreationDate ;
+                    aractivitylogobject.ipaddress  = activitylogitem.IPaddress ;
+                    aractivitylogobject.regionname  = activitylogitem.RegionName ;
+                    aractivitylogobject.sessionid = activitylogitem.SessionID;
+                    aractivitylogobject.useragent  = activitylogitem.UserAgent ;
+
+                    aractivitylogobject.routeurl  = activitylogitem.ur;
+                    aractivitylogobject.useragent = activitylogitem.UserAgent;
+                    aractivitylogobject.useragent = activitylogitem.UserAgent;
+                    aractivitylogobject.useragent = activitylogitem.UserAgent;
+
+
+                     //add the object to profile object
+                    myobject.activitylogs.Add(aractivitylogobject);
+
+                 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                  context.profiles.Add(myobject);
                  context.SaveChanges();
                  //iccrement new ID
@@ -120,36 +198,6 @@ namespace Misc
             }
 
 
-            
-           
-            foreach (Dating.Server.Data.Models.ProfileData  item in olddb.ProfileDatas  )
-            {
-             var myobject = new Shell.MVC2.Domain.Entities.Anewluv.profiledata();
-
-                //query the profile data
-            var matchedprofile = context.profiles.Where(p => p.emailaddress   == item.ProfileID );
-            // Metadata classes are not meant to be instantiated.
-             myobject.id = matchedprofile.First().id ;
-             myobject.age = item.Age ;
-             myobject.birthdate = item.Birthdate ;
-             myobject.city = item.City ;
-             myobject.countryregion = item.Country_Region ;
-             myobject.stateprovince = item.State_Province ;
-             myobject.countryid = item.CountryID ;
-             myobject.longitude = item.Longitude ;
-             myobject.latitude = item.Latitude ;
-             myobject.aboutme = item.AboutMe ;
-             myobject.height = (long)item.Height ;
-             myobject.mycatchyintroLine = item.MyCatchyIntroLine ;
-             myobject.phone = item.Phone ;
-             myobject.postalcode = item.PostalCode ;
-             myobject.profile = context.profiles.Where(z => z.id == myobject.id).FirstOrDefault();
-             //
-             context.profiledata.Add(myobject);
-             //iccrement new ID
-             newprofileid = +newprofileid;
-
-            }
 
            
 
