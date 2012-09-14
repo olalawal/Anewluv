@@ -44,7 +44,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
       
         //linked collections
         public virtual ICollection<membersinrole > memberroles { get; set; }
-        public virtual ICollection<activitylog> activitylogs { get; set; }
+        public virtual ICollection<profileactivity> profileactivity { get; set; }
         public virtual ICollection<openid> openids { get; set; }
         public virtual ICollection<userlogtime> logontimes { get; set; }
 

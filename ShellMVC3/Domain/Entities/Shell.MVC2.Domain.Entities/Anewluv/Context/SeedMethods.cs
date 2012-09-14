@@ -16,6 +16,19 @@ namespace Shell.MVC2.Domain.Entities.Migrations
         {
 
 
+            //9-12-2012
+            //added for profile activity type
+            //activitytype
+            //filter an enum for not set since that is the zero value i.e  
+            var activitytypeqry = from activitytypeEnum value in Enum.GetValues(typeof(activitytypeEnum))
+                               where value != activitytypeEnum.NotSet
+                               orderby value // to sort by value; remove otherwise 
+                               select value;
+            activitytypeqry.ToList().ForEach(kvp => context.lu_activitytype.AddOrUpdate(new lu_activitytype()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
 
             //abusetypes
             //filter an enum for not set since that is the zero value i.e  
@@ -203,8 +216,8 @@ namespace Shell.MVC2.Domain.Entities.Migrations
 
             //bodytypes
             //filter an enum for not set since that is the zero value i.e  
-            var bodytypeqry = from bodytypesEnum value in Enum.GetValues(typeof(bodytypesEnum))
-                                where value != bodytypesEnum.NotSet
+            var bodytypeqry = from bodytypeEnum value in Enum.GetValues(typeof(bodytypeEnum))
+                                where value != bodytypeEnum.NotSet
                                 orderby value // to sort by value; remove otherwise 
                                 select value;
             bodytypeqry.ToList().ForEach(kvp => context.lu_bodytype.AddOrUpdate(new lu_bodytype()

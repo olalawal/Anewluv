@@ -27,8 +27,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
 
             //activitylog and geo data
-            modelBuilder.Entity<activitylog >().HasRequired(a => a.activitygeodata)
-                .WithMany().HasForeignKey(a => a.); 
+            modelBuilder.Entity<profileactivity>().HasRequired(a => a.profileactivitygeodata )
+                .WithMany().HasForeignKey(a => a.profileactivitygeodata_id ); 
    
 
 
@@ -348,8 +348,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<profile>().HasMany(p => p.logontimes )
            .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<profile>().HasMany(p => p.activitylogs)
-          .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+            //prfoile part is optional for profile activity since non registered  can log information as well
+            modelBuilder.Entity<profile>().HasMany(p => p.profileactivity )
+           .WithOptional(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<profile>().HasMany(p => p.openids)
           .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);

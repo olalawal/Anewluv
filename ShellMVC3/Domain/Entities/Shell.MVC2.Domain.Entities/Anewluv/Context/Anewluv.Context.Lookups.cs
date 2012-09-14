@@ -9,6 +9,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public partial  class AnewluvContext : DbContext
     {
         public DbSet<lu_abusetype> lu_abusetype { get; set; }
+        public DbSet<lu_activitytype > lu_activitytype { get; set; }
         public DbSet<lu_notetype> lu_notetype { get; set; }
         public DbSet<lu_defaultmailboxfolder> lu_defaultmailboxfolder { get; set; }
         public DbSet<lu_gender> lu_gender { get; set; }

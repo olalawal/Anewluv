@@ -14,14 +14,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum bodytypesEnum : int
+    public enum bodytypeEnum : int
     {
         [Description("NotSet")]
         [EnumMember]
         NotSet,
         [Description("Any")] 
         [EnumMember]
-        Any=1,
+        Any,
         [Description("Slim")]
         [EnumMember]
         Slim,

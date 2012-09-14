@@ -53,10 +53,12 @@
   <ItemGroup>
     <Compile Include="Anewluv\abusereport.cs" />
     <Compile Include="Anewluv\abusereportnotes.cs" />
-    <Compile Include="Anewluv\activityloggeodata.cs" />
+    <Compile Include="Anewluv\profileactivitygeodata.cs" />
     <Compile Include="Anewluv\Context\SeedingConversions.cs" />
     <Compile Include="Anewluv\Context\SeedMethods.cs" />
     <Compile Include="Anewluv\blocknotes.cs" />
+    <Compile Include="Anewluv\Lookups\enums\activitytype.cs" />
+    <Compile Include="Anewluv\Lookups\lu_activitytype.cs" />
     <Compile Include="Anewluv\Lookups\lu_notetype.cs" />
     <Compile Include="Anewluv\Lookups\enums\notetype.cs" />
     <Compile Include="Anewluv\profilemetadata.cs" />
@@ -89,7 +91,7 @@
     <Compile Include="Anewluv\Mail\ViewModels\EmailMatchesViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
     <Compile Include="Anewluv\photoconversion.cs" />
-    <Compile Include="Anewluv\LookupsCriteria\Enums\bodytypes.cs" />
+    <Compile Include="Anewluv\LookupsCriteria\Enums\bodytype.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\ethnicity.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\eyecolor.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\haircolor.cs" />
@@ -126,7 +128,7 @@
     <Compile Include="Anewluv\systempagesetting.cs" />
     <Compile Include="Anewluv\userlogtime.cs" />
     <Compile Include="Anewluv\mailupdatefreqency.cs" />
-    <Compile Include="Anewluv\activitylog.cs" />
+    <Compile Include="Anewluv\profileactivitylog.cs" />
     <Compile Include="Anewluv\openid.cs" />
     <Compile Include="Anewluv\ratingvalues.cs" />
     <Compile Include="Anewluv\Lookups\lu_profilestatus.cs" />

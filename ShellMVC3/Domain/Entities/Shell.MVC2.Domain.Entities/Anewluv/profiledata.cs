@@ -25,6 +25,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public string postalcode { get; set; }           
             public virtual profile profile { get; set; }
             public virtual profilemetadata profilemetadata { get; set; }
+            public virtual visiblitysetting visibilitysettings { get; set; }   
+
 
             //lookups for personal profile details 
             public virtual lu_gender gender { get; set; }          
@@ -48,6 +50,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public virtual lu_maritalstatus maritalstatus { get; set; }
             public virtual lu_profession profession { get; set; }
             public virtual lu_wantskids wantsKidstatus { get; set; }
-            public virtual visiblitysetting visibilitysettings { get; set; }    
+          
     }
 }

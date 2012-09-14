@@ -9,9 +9,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         [Key]
         public int id { get; set; }
-        public DateTime? loginTime { get; set; }
-        public DateTime? logoutTime { get; set; }
-        public byte offline { get; set; }
+        public DateTime? logintime { get; set; }
+        public DateTime? logouttime { get; set; }
+        public Boolean? offline { get; set; }
        public int profile_id { get; set; }
         public virtual profile profile { get; set; }
         public string sessionid { get; set; }
