@@ -376,7 +376,7 @@ namespace Shell.MVC2.Controllers
         {
 
              // Retrieve updated single photo profile by PhotoId
-            EditProfilePhotoModel Photo = editProfileRepository.GetSingleProfilePhotoByphotoID(photoid);
+            PhotoEditViewModel Photo = editProfileRepository.GetSingleProfilePhotoByphotoID(photoid);
             var src = Photo;
 
             return View("QuickProfileMainPhoto", src);

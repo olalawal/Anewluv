@@ -240,44 +240,44 @@ namespace Shell.MVC2.Controllers
 
            
                 Stream tempstream  =  null;  //stream to store the resized image to to save file space
-                //The resizing settings can specify any of 30 commands.. See http://imageresizing.net for details.
-                //Destination paths can have variables like <guid> and <ext>, or 
-                //even a santizied version of the original filename, like <filename:A-Za-z0-9>
-                //ImageResizer.ImageJob i = new ImageResizer.ImageJob(file, "~/uploads/<guid>.<ext>", new ImageResizer.ResizeSettings(
-                //                       "width=2000;height=2000;format=jpg;mode=max"));
-                //ImageResizer.ImageJob i = new ImageResizer.ImageJob(tempImage, "~/uploads/<guid>.<ext>", new ImageResizer.ResizeSettings(
-                //                        "width=2000;height=2000;format=jpg;mode=max;"));
-                //i.CreateParentDirectory = true; //Auto-create the uploads directory.                
-                //i.Build();        
+               // The resizing settings can specify any of 30 commands.. See http://imageresizing.net for details.
+              //  Destination paths can have variables like <guid> and <ext>, or 
+              //  even a santizied version of the original filename, like <filename:A-Za-z0-9>
+                ImageResizer.ImageJob i = new ImageResizer.ImageJob(file, "~/uploads/<guid>.<ext>", new ImageResizer.ResizeSettings(
+                                       "width=2000;height=2000;format=jpg;mode=max"));
+                ImageResizer.ImageJob i = new ImageResizer.ImageJob(tempImage, "~/uploads/<guid>.<ext>", new ImageResizer.ResizeSettings(
+                                        "width=2000;height=2000;format=jpg;mode=max;"));
+                i.CreateParentDirectory = true; //Auto-create the uploads directory.                
+                i.Build();        
     
 
-                //ImageResizer.ImageJob ii = new ImageResizer.ImageJob(tempImage, "~/uploads/<guid>.<ext>", new ImageResizer.ResizeSettings(
-                //                     "width=94;height=95;format=jpg;mode=max;carve=true;crop=auto"));
-                //i.CreateParentDirectory = true; //Auto-create the uploads directory.  
-                //i.Build();
+                ImageResizer.ImageJob ii = new ImageResizer.ImageJob(tempImage, "~/uploads/<guid>.<ext>", new ImageResizer.ResizeSettings(
+                                     "width=94;height=95;format=jpg;mode=max;carve=true;crop=auto"));
+                i.CreateParentDirectory = true; //Auto-create the uploads directory.  
+                i.Build();
 
 
-                //Generate each version
-                //foreach (string suffix in versions.Keys)
-                //{
-                //    //Generate a filename (GUIDs are best).
-                //    string fileNameTest = "~/uploads/<guid>" + suffix + ".<ext>";
+                Generate each version
+                foreach (string suffix in versions.Keys)
+                {
+                    //Generate a filename (GUIDs are best).
+                    string fileNameTest = "~/uploads/<guid>" + suffix + ".<ext>";
 
-                //    //Let the image builder add the correct extension based on the output file type
-                //  //  fileName = ImageBuilder.Current.Build(file, fileName, new ResizeSettings(versions[suffix]), false, true);
+                    //Let the image builder add the correct extension based on the output file type
+                  //  fileName = ImageBuilder.Current.Build(file, fileName, new ResizeSettings(versions[suffix]), false, true);
 
-                //   ImageResizer.ImageJob i =  new ImageResizer.ImageJob(tempImage, fileNameTest, new ImageResizer.ResizeSettings(
-                //                     versions[suffix]));
-                //    i.CreateParentDirectory = true; //Auto-create the uploads directory.                
-                //    i.Build();        
-                //}
+                   ImageResizer.ImageJob i =  new ImageResizer.ImageJob(tempImage, fileNameTest, new ImageResizer.ResizeSettings(
+                                     versions[suffix]));
+                    i.CreateParentDirectory = true; //Auto-create the uploads directory.                
+                    i.Build();        
+                }
 
 
-                // Some browsers send file names with full path. This needs to be stripped.
+                 Some browsers send file names with full path. This needs to be stripped.
               
-               // var physicalPath = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-               // var fileNametest = i.FinalPath;
-               // byte[] imagetest2 = new byte[i.ToString];
+                var physicalPath = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+                var fileNametest = i.FinalPath;
+                byte[] imagetest2 = new byte[i.ToString];
 
                
                 

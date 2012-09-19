@@ -31,13 +31,49 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge">
+      <HintPath>..\..\Shell.MVC2\packages\AForge.2.2.4\lib\AForge.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Imaging">
+      <HintPath>..\..\Shell.MVC2\packages\AForge.Imaging.2.2.4\lib\AForge.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Math">
+      <HintPath>..\..\Shell.MVC2\packages\AForge.Math.2.2.4\lib\AForge.Math.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\..\Shell.MVC2\packages\EntityFramework.4.3.1\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Omu.Awesome.Core, Version=1.7.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\Shell.MVC2\Shell.MVC2\bin\Omu.Awesome.Core.dll</HintPath>
+    <Reference Include="ImageResizer">
+      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.3.2.4\lib\ImageResizer.dll</HintPath>
     </Reference>
+    <Reference Include="ImageResizer.Plugins.AdvancedFilters">
+      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.AdvancedFilters.3.2.4\lib\ImageResizer.Plugins.AdvancedFilters.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer.Plugins.DiskCache">
+      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.DiskCache.3.2.4\lib\ImageResizer.Plugins.DiskCache.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer.Plugins.PrettyGifs">
+      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.PrettyGifs.3.2.4\lib\ImageResizer.Plugins.PrettyGifs.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer.Plugins.RemoteReader">
+      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.RemoteReader.3.2.4\lib\ImageResizer.Plugins.RemoteReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer.Plugins.SeamCarving">
+      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.SeamCarving.3.2.4\lib\ImageResizer.Plugins.SeamCarving.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer.Plugins.SimpleFilters">
+      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.SimpleFilters.3.2.4\lib\ImageResizer.Plugins.SimpleFilters.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer.Plugins.SqlReader">
+      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.SqlReader.3.2.4\lib\ImageResizer.Plugins.SqlReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer.Plugins.Watermark">
+      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.Watermark.3.2.4\lib\ImageResizer.Plugins.Watermark.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageResizer.Plugins.WhitespaceTrimmer">
+      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.WhitespaceTrimmer.3.2.4\lib\ImageResizer.Plugins.WhitespaceTrimmer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="RazorEngine">
       <HintPath>..\..\Shell.MVC2\packages\RazorEngine.3.0.8\lib\net40\RazorEngine.dll</HintPath>
     </Reference>
@@ -64,6 +100,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Advanced.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Advanced.aspx.designer.cs" />
     <Compile Include="AuthenticationAndMembership\AnewLuvMembershipProvider.cs" />
     <Compile Include="BaseClasses\GeoRepositoryBase.cs" />
     <Compile Include="APIkeyRepository.cs" />
@@ -114,7 +154,18 @@
       <Name>Shell.MVC2.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Advanced.aspx" />
+    <Content Include="ImageResizer\Basic.htm" />
+    <Content Include="css\Jcrop.gif" />
+    <Content Include="css\jquery.Jcrop.css" />
+    <Content Include="ImageResizer\fountain-small.jpg" />
+    <Content Include="js\jquery.Jcrop.js" />
+    <Content Include="js\jquery.Jcrop.min.js" />
+    <Content Include="js\jquery.jcrop.preview.js" />
+    <Content Include="js\jquery.min.js" />
+    <Content Include="ImageResizer\red-leaf.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />

@@ -46,7 +46,7 @@ namespace Shell.MVC2.Services.Media
 
         }
 
-        public EditProfilePhotoModel GetSingleProfilePhotobyphotoID(Guid photoid)
+        public PhotoEditViewModel GetSingleProfilePhotobyphotoID(Guid photoid)
         {
             return _photorepo.GetSingleProfilePhotobyphotoID(photoid);
         }

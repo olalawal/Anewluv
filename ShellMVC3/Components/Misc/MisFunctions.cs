@@ -24,7 +24,7 @@ namespace Misc
         //synch up anew luv database with the new database 
         //add the old database model
         //once this is tested and working we want to move this code into migrations ins Domain.Entities
-        public static void ConvertProfile()
+        public static void ConvertFlatProfileandprofiledata()
        {
            var olddb = new AnewluvFtsEntities();
             var postaldb = new PostalData2Entities();
@@ -147,7 +147,7 @@ namespace Misc
         }
 
 
-        public static void ConvertProfileColections()
+        public static void ConvertProfileCollections()
         {
           var olddb = new AnewluvFtsEntities();
             var postaldb = new PostalData2Entities();
@@ -287,7 +287,7 @@ namespace Misc
 
        }
 
-        public static void ConvertProfileDataMetadataCollectionsGeneral()
+        public static void ConvertProfileMetaDataBasicCollections()
         {
             var olddb = new AnewluvFtsEntities();
             var postaldb = new PostalData2Entities();
@@ -438,6 +438,7 @@ namespace Misc
 
 
                 //custom work for blocks which was mailbox blocks
+                //no block notes for now since thye are optional
                 foreach (Dating.Server.Data.Models.Mailboxblock blocksitem in olddb.Mailboxblocks)
                 {
                     var blocksobject = new Shell.MVC2.Domain.Entities.Anewluv.block();
@@ -540,6 +541,8 @@ namespace Misc
 
         }
 
+
+       //we will asl use the photo service to update the photo collections stuff
         public static void ConvertProfileDataMetadataCollectionsPhoto()
         {
             var olddb = new AnewluvFtsEntities();

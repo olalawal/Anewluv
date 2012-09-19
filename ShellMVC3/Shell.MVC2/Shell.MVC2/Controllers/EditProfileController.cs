@@ -948,7 +948,7 @@ namespace Shell.MVC2.Controllers
 
 
             // Retrieve updated single photo profile by PhotoId
-            EditProfilePhotoModel Photo = _editProfileRepository.GetSingleProfilePhotoByphotoID(photoid);
+            PhotoEditViewModel Photo = _editProfileRepository.GetSingleProfilePhotoByphotoID(photoid);
             var src = Photo;
 
             return View("PhotoEditView", src);
@@ -960,7 +960,7 @@ namespace Shell.MVC2.Controllers
         [AcceptParameter(Name = "UpdatePhotoAction", Value = "Update")]
         [ModelStateToTempData]
         [PassParametersDuringRedirect]
-        public ActionResult EditProfile_UpdatePhotos(EditProfilePhotoModel Photo1)
+        public ActionResult EditProfile_UpdatePhotos(PhotoEditViewModel Photo1)
         {
 
             int page = 1;
@@ -1011,7 +1011,7 @@ namespace Shell.MVC2.Controllers
                 _db.SaveChanges();
 
                 // Retrieve updated single photo profile by PhotoId
-                EditProfilePhotoModel src = _editProfileRepository.GetSingleProfilePhotoByphotoID(PhotoModify.PhotoID);
+                PhotoEditViewModel src = _editProfileRepository.GetSingleProfilePhotoByphotoID(PhotoModify.PhotoID);
                 var models = _editProfileRepository.GetEditPhotoModel(this.HttpContext.User.Identity.Name,
                                                     "Yes", "No", PhotoStatusID, page, ps);
                 models.SingleProfilePhoto = src;
@@ -1301,7 +1301,7 @@ namespace Shell.MVC2.Controllers
         [AcceptParameter(Name = "Uploadbutton", Value = "submit")]
         [ModelStateToTempData]
         [PassParametersDuringRedirect]
-        public ActionResult EditUploadPhoto(PhotoViewModel model)
+        public ActionResult EditUploadPhoto(PhotoEditModel model)
         {
 
             var membersmodel = new MembersViewModel();
@@ -1374,7 +1374,7 @@ namespace Shell.MVC2.Controllers
         [AcceptParameter(Name = "CancelUploadbutton", Value = "cancel")]
         [ModelStateToTempData]
         [PassParametersDuringRedirect]
-        public ActionResult CancelUploadPhoto(PhotoViewModel model)
+        public ActionResult CancelUploadPhoto(PhotoEditModel model)
         {
             var membersmodel = new MembersViewModel();
 

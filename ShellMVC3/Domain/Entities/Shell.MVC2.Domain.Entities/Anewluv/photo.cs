@@ -19,6 +19,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual lu_photorejectionreason  rejectionreason { get; set; }
         public virtual lu_photostatus  photostatus { get; set; }
         public virtual lu_photoapprovalstatus approvalstatus { get; set; }    
+        public virtual lu_photoimagetype imagetype  { get; set; } 
         public virtual photoreviewstatus reviewstatus { get; set; }
        public int profile_id { get; set; }  
         public virtual profilemetadata profilemetadata { get; set; }
@@ -34,7 +35,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         //actual image data
         //public byte[] image { get; set; }
         //public int? size { get; set; }
-         public string imageCaption { get; set; } 
+         public string imagecaption { get; set; } 
     }
 }
 

@@ -25,7 +25,7 @@ namespace Shell.MVC2.Services.Contracts
 
         [WebGet]
         [OperationContract]
-         EditProfilePhotoModel GetSingleProfilePhotobyphotoID(Guid photoid);
+         PhotoEditViewModel GetSingleProfilePhotobyphotoID(Guid photoid);
         
         [WebGet]
         [OperationContract]

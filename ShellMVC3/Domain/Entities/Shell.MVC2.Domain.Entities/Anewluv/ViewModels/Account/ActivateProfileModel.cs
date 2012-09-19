@@ -48,7 +48,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public bool PhotoStatus { get; set; }
 
         [DataMember]
-        PhotoViewModel Photos { get; set; }
+        PhotoEditModel Photos { get; set; }
 
 
     }

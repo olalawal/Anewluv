@@ -145,7 +145,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //public string SecurityAnswer { get; set; }
 
         //photo model stuff 
-        public PhotoViewModel RegistrationPhotos { get; set; }
+        public PhotoEditModel RegistrationPhotos { get; set; }
 
         //add temp storage for activation code too i guess
         public string ActivationCode { get; set; }

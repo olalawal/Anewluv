@@ -14,19 +14,19 @@ namespace Shell.MVC2.Interfaces
     public interface IPhotoRepository
     {
 
-        List<photo> GetAllPhotos(string username);
+        List<Shell.MVC2.Domain.Entities.Anewluv.photo> GetAllPhotos(string username);
 
-        //List<EditProfileViewPhotoModel> GetAllMApproved(IQueryable<photo> MyPhotos, string approved, int page, int pagesize);
+        //List<EditProfileViewPhotoModel> GetAllMApproved(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.photo> MyPhotos, string approved, int page, int pagesize);
   
         //gets all approved non prviate photos athat are not gallery 
-      // List<EditProfileViewPhotoModel> GetApprovedMinusGallery(IQueryable<photo> MyPhotos, string approved,int page, int pagesize);
+      // List<EditProfileViewPhotoModel> GetApprovedMinusGallery(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.photo> MyPhotos, string approved,int page, int pagesize);
 
-      // List<EditProfileViewPhotoModel> GetPhotoByStatusID(IQueryable<photo> MyPhotos, int photoStatusID, int page, int pagesize);
+      // List<EditProfileViewPhotoModel> GetPhotoByStatusID(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.photo> MyPhotos, int photoStatusID, int page, int pagesize);
 
       // EditProfilePhotosViewModel GetPhotoViewModel(List<EditProfileViewPhotoModel> Approved, List<EditProfileViewPhotoModel> NotApproved,
-        //                                                    List<EditProfileViewPhotoModel> Private, IQueryable<photo> model);        
+        //                                                    List<EditProfileViewPhotoModel> Private, IQueryable<Shell.MVC2.Domain.Entities.Anewluv.photo> model);        
          
-       EditProfilePhotoModel GetSingleProfilePhotobyphotoID(Guid photoid);
+       PhotoEditViewModel GetSingleProfilePhotobyphotoID(Guid photoid);
 
        EditProfilePhotosViewModel GetEditPhotoViewModel(string UserName, string ApprovedYes, string NotApprovedNo, int photoStatusID, int page, int pagesize);
       
@@ -36,7 +36,7 @@ namespace Shell.MVC2.Interfaces
         
        void MakeUserPhoto_Public(Guid PhotoID);        
 
-       bool AddPhoto(photo model);
+       bool AddPhoto(Shell.MVC2.Domain.Entities.Anewluv.photo model);
 
        bool CheckValidJPGGIF(byte[] image);
 
@@ -46,13 +46,13 @@ namespace Shell.MVC2.Interfaces
 
        byte[] GetGalleryImagebyNormalizedScreenName(string id);
 
-        photo UploadProfileImage(string _imageUrl, string caption);
+        Shell.MVC2.Domain.Entities.Anewluv.photo UploadProfileImage(string _imageUrl, string caption);
 
        // added by Deshola on 5/17/2011     
 
         byte[] GetGalleryPhotobyProfileID(string strProfileID);
 
-        bool InsertPhotoCustom(photo newphoto);
+        bool InsertPhotoCustom(Shell.MVC2.Domain.Entities.Anewluv.photo newphoto);
 
         bool CheckIfPhotoCaptionAlreadyExists(string strProfileID, string strPhotoCaption);
       
@@ -60,7 +60,7 @@ namespace Shell.MVC2.Interfaces
        
         bool CheckForUploadedPhotobyProfileID(string strProfileID);
        
-       
+        //9/18/2012 new conversion functions 
       
     }
 }

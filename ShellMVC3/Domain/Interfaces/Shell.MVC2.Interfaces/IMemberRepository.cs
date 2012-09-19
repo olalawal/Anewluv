@@ -23,7 +23,7 @@ namespace Shell.MVC2.Data
        //end of profile mapping
 
        //initial profile stuffs
-        profile getprofilebyusername(string username)  ;
+        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyusername(string username);
         profiledata getprofiledatabyprofileid(string profileid) ;
         searchsetting getperfectmatchsearchsettingsbyprofileid(string profileid);
         searchsetting createmyperfectmatchsearchsettingsbyprofileid(string profileid);       
@@ -93,7 +93,7 @@ namespace Shell.MVC2.Data
      //   byte[] GetGalleryPhotobyProfileID(string strProfileID); 
     //    byte[] GetGalleryPhotobyScreenName(string strScreenName);
     //    byte[] GetGalleryImagebyNormalizedScreenName(string strScreenName);   
-       // bool InsertPhotoCustom(photo newphoto);
+       // bool InsertPhotoCustom(Shell.MVC2.Domain.Entities.Anewluv.photo newphoto);
        // bool CheckIfPhotoCaptionAlreadyExists(string strProfileID, string strPhotoCaption);  
        /// <summary>
        /// Determines wethare an activation code matches the value in the database for a given profileID
@@ -105,8 +105,8 @@ namespace Shell.MVC2.Data
 
        //Hereis where the members Repository stuff that was in the MVC project starts at
        //************************************************************************************
-   
-        profile getprofilebyprofileid(string ProfileId);         
+
+        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyprofileid(string ProfileId);         
         bool deactivateprofile(string profileid);
         visiblitysetting getprofilevisibilitysettingsbyprofileid(string ProfileID);          
      

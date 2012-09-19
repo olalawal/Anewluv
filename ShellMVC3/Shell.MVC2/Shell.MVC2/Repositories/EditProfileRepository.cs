@@ -3003,13 +3003,13 @@ namespace Shell.MVC2.Models
                                                             IQueryable<photo> model)
         {
             // Retrieve singlephotoProfile from either the approved model or photo model
-            EditProfilePhotoModel src = new EditProfilePhotoModel();
+            PhotoEditViewModel src = new PhotoEditViewModel();
             if (Approved.Count() > 0)
             {
                 src = (from p in model
                                 join x in Approved
                                 on p.PhotoID equals x.PhotoID
-                                select new EditProfilePhotoModel
+                                select new PhotoEditViewModel
                                 {
                                     PhotoID = p.PhotoID,
                                     ScreenName = p.profiledata.profile.ScreenName,
@@ -3026,7 +3026,7 @@ namespace Shell.MVC2.Models
             else
             {
                  src = (from p in model
-                                select new EditProfilePhotoModel
+                                select new PhotoEditViewModel
                                 {
                                     PhotoID = p.PhotoID,
                                     ScreenName = p.profiledata.profile.ScreenName,
@@ -3051,7 +3051,7 @@ namespace Shell.MVC2.Models
             
             }
 
-            PhotoViewModel UploadPhotos = new PhotoViewModel();
+            PhotoEditModel UploadPhotos = new PhotoEditModel();
 
             EditProfilePhotosViewModel ViewModel = new EditProfilePhotosViewModel { 
                 SingleProfilePhoto = src,
@@ -3065,10 +3065,10 @@ namespace Shell.MVC2.Models
 
 
         }
-        public EditProfilePhotoModel GetSingleProfilePhotoByphotoID(Guid photoid)
+        public PhotoEditViewModel GetSingleProfilePhotoByphotoID(Guid photoid)
         {
-            EditProfilePhotoModel model = (from p in db.photos.Where(p => p.PhotoID == photoid)
-                                         select new EditProfilePhotoModel
+            PhotoEditViewModel model = (from p in db.photos.Where(p => p.PhotoID == photoid)
+                                         select new PhotoEditViewModel
                                          {
                                              PhotoID = p.PhotoID,
                                              ProfileID = p.ProfileID,

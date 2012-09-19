@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="Anewluv\abusereport.cs" />
     <Compile Include="Anewluv\abusereportnotes.cs" />
+    <Compile Include="Anewluv\Lookups\lu_photoimagetype.cs" />
+    <Compile Include="Anewluv\Lookups\enums\photoimagetype.cs" />
     <Compile Include="Anewluv\profileactivitygeodata.cs" />
     <Compile Include="Anewluv\Context\SeedingConversions.cs" />
     <Compile Include="Anewluv\Context\SeedMethods.cs" />
@@ -158,10 +160,9 @@
     <Compile Include="Anewluv\ViewModels\MembersViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\OpenId\rpxauthinfo.cs" />
     <Compile Include="Anewluv\ViewModels\OpenId\rpxprofile.cs" />
-    <Compile Include="Anewluv\ViewModels\PhotoRelated\EditProfilePhotoModel.cs" />
-    <Compile Include="Anewluv\ViewModels\PhotoRelated\EditProfilePhotosViewModel.cs" />
-    <Compile Include="Anewluv\ViewModels\PhotoRelated\EditProfileViewPhotoModel.cs" />
-    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoEditModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoEditViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoUploadViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\ProfileBrowseModels.cs" />
     <Compile Include="Anewluv\ViewModels\ProfileCriteriaModel.cs" />
     <Compile Include="Anewluv\ViewModels\QuickSearchModel.cs" />

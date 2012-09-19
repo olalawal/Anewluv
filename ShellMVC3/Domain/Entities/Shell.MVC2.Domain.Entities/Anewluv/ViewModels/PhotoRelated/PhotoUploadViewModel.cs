@@ -9,14 +9,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
  
     [DataContract]
-    public class PhotoViewModel
+    public class PhotoUploadViewModel
     {
-        public PhotoViewModel()
+        public PhotoUploadViewModel()
         {
 
 
         }
-          [DataMember]
+        [DataMember]
         public List<photo> Photos { get; set; }
           [DataMember]
         public string ProfileID { get; set; }

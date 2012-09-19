@@ -22,6 +22,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [Description("Approved")] 
         [EnumMember]
         Approved,
+        [Description("Not Reviewed")]
+        [EnumMember]
+        NotReviewed,
         [Description("Rejected")]
         [EnumMember]
         Rejected,

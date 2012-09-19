@@ -14,7 +14,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     {
                    
         public ActivateProfileModel ActivateProfileModel { get; set; }
-        public PhotoViewModel  ActivateProfilePhotos { get; set; }
+        public PhotoEditModel  ActivateProfilePhotos { get; set; }
     }
 
    

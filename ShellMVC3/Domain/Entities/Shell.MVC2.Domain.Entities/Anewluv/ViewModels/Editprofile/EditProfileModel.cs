@@ -189,7 +189,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
     //10-29-2011 moved the  edit photo stuff here but it is not edit only, probably should be in photomodel
         //[Serializable]
-        //public class EditProfilePhotoModel
+        //public class PhotoEditViewModel
         //{
         //    public Guid PhotoID { get; set; }
         //    public string ScreenName { get; set; }

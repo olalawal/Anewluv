@@ -145,6 +145,18 @@ namespace Shell.MVC2.Domain.Entities.Migrations
             }));
 
 
+            //photoimagetypes
+            //filter an enum for not set since that is the zero value i.e  
+            var photoimagetypeqry = from photoimagetypeEnum value in Enum.GetValues(typeof(photoimagetypeEnum))
+                                 where value != photoimagetypeEnum.NotSet
+                                 orderby value // to sort by value; remove otherwise 
+                                 select value;
+            photoimagetypeqry.ToList().ForEach(kvp => context.lu_photoimagetype.AddOrUpdate(new lu_photoimagetype()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
 
             //profilestatuss
             //filter an enum for not set since that is the zero value i.e  
