@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Dating.Server.Data.Models;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels ;
 using System.Web;
@@ -12,55 +11,53 @@ using System.Web;
 namespace Shell.MVC2.Interfaces
 {
     public interface IPhotoRepository
-    {
-
-        List<Shell.MVC2.Domain.Entities.Anewluv.photo> GetAllPhotos(string username);
-
-        //List<EditProfileViewPhotoModel> GetAllMApproved(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.photo> MyPhotos, string approved, int page, int pagesize);
-  
-        //gets all approved non prviate photos athat are not gallery 
-      // List<EditProfileViewPhotoModel> GetApprovedMinusGallery(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.photo> MyPhotos, string approved,int page, int pagesize);
-
-      // List<EditProfileViewPhotoModel> GetPhotoByStatusID(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.photo> MyPhotos, int photoStatusID, int page, int pagesize);
-
-      // EditProfilePhotosViewModel GetPhotoViewModel(List<EditProfileViewPhotoModel> Approved, List<EditProfileViewPhotoModel> NotApproved,
-        //                                                    List<EditProfileViewPhotoModel> Private, IQueryable<Shell.MVC2.Domain.Entities.Anewluv.photo> model);        
-         
-       PhotoEditViewModel GetSingleProfilePhotobyphotoID(Guid photoid);
-
-       EditProfilePhotosViewModel GetEditPhotoViewModel(string UserName, string ApprovedYes, string NotApprovedNo, int photoStatusID, int page, int pagesize);
-      
-       void DeletedUserPhoto(Guid PhotoID);
+    {       
        
-       void MakeUserPhoto_Private(Guid PhotoID);
-        
-       void MakeUserPhoto_Public(Guid PhotoID);        
-
-       bool AddPhoto(Shell.MVC2.Domain.Entities.Anewluv.photo model);
-
-       bool CheckValidJPGGIF(byte[] image);
-
-       byte[] GetGalleryImagebyPhotoId(Guid id);      
-
-       byte[] GetGalleryPhotobyScreenName(string id);
-
-       byte[] GetGalleryImagebyNormalizedScreenName(string id);
-
-        Shell.MVC2.Domain.Entities.Anewluv.photo UploadProfileImage(string _imageUrl, string caption);
-
-       // added by Deshola on 5/17/2011     
-
-        byte[] GetGalleryPhotobyProfileID(string strProfileID);
-
-        bool InsertPhotoCustom(Shell.MVC2.Domain.Entities.Anewluv.photo newphoto);
-
-        bool CheckIfPhotoCaptionAlreadyExists(string strProfileID, string strPhotoCaption);
-      
-        bool CheckForGalleryPhotobyProfileID(string strProfileID);
+        List<photo> getallphotosbyusername(string username);       
        
-        bool CheckForUploadedPhotobyProfileID(string strProfileID);
+        List<PhotoEditModel> getphotosbyprofileidandstatus(string profile_id, photoapprovalstatusEnum status);
+
+        List<PhotoEditModel> getpagedphotosbyprofileidstatus(string profile_id, photoapprovalstatusEnum status,
+                                                                    int page, int pagesize);
        
-        //9/18/2012 new conversion functions 
+        PhotoEditModel getsingleprofilephotobyphotoid(Guid photoid);       
+       
+        PhotoEditViewModel getpagededitphotoviewmodel(string username, string ApprovedYes, string NotApprovedNo,
+                                                           photoapprovalstatusEnum approvalstatus, int page, int pagesize);       
+       
+        void deleteduserphoto(Guid photoid);       
+       
+        void makeuserphoto_private(Guid PhotoID);       
+       
+        void makeuserphoto_public(Guid PhotoID);
+
+        //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
+        //since photo is only a row no big deal if duplicates but since conversion is required we must roll back if the photo already exists  
+        bool addphotos(PhotoUploadViewModel model);         
+       
+        bool addsinglephoto(PhotoUploadModel newphoto, int profileid);             
+       
+        List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded);       
+       
+        bool checkvalidjpggif(byte[] image);
+
+        //Stuff pulled from dating service regular
+        // added by Deshola on 5/17/2011      
+        byte[] getgalleryphotobyscreenname(string strScreenName);       
+       
+        byte[] getgalleryimagebyphotoid(Guid strPhotoID);       
+       
+        byte[] getgalleryphotobyprofileid(int intProfileID);       
+       
+        byte[] getgalleryimagebynormalizedscreenname(string strScreenName);       
+       
+        bool checkifphotocaptionalreadyexists(int intProfileID, string strPhotoCaption);       
+       
+        bool checkforgalleryphotobyprofileid(int intProfileID);       
+       
+        bool checkforuploadedphotobyprofileid(int intProfileID);   
+       
+        photo uploadprofileimage(string _imageUrl, string caption); 
       
     }
 }

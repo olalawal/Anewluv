@@ -107,6 +107,7 @@
     <Compile Include="AuthenticationAndMembership\AnewLuvMembershipProvider.cs" />
     <Compile Include="BaseClasses\GeoRepositoryBase.cs" />
     <Compile Include="APIkeyRepository.cs" />
+    <Compile Include="EditProfileRepository.cs" />
     <Compile Include="ImageResizer\ImageResizerUtils.cs" />
     <Compile Include="LookupRepository.cs" />
     <Compile Include="SearchRepository.cs" />

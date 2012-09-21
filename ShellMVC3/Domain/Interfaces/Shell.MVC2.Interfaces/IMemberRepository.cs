@@ -82,8 +82,8 @@ namespace Shell.MVC2.Data
        //5-20-2012 added to check if a user email is registered       
         bool checkifprofileidalreadyexists(string profileID);     
         string validatesecurityansweriscorrect(string strProfileID, int SecurityQuestionID, string strSecurityAnswer);  
-        string getprofileidbyusername(string strusername);
-        string getprofileidbyscreenname(string strscreenname);   
+        int getprofileidbyusername(string strusername);
+        int getprofileidbyscreenname(string strscreenname);   
         string getusernamebyprofileid(string profileid);       
         string getscreennamebyprofileid(string profileid);  
         string getscreennamebyusername(string username);      

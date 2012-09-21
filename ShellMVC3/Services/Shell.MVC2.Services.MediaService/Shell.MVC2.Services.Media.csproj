@@ -34,36 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AForge">
-      <HintPath>..\..\Shell.MVC2\packages\AForge.2.2.4\lib\AForge.dll</HintPath>
-    </Reference>
-    <Reference Include="AForge.Imaging">
-      <HintPath>..\..\Shell.MVC2\packages\AForge.Imaging.2.2.4\lib\AForge.Imaging.dll</HintPath>
-    </Reference>
-    <Reference Include="AForge.Math">
-      <HintPath>..\..\Shell.MVC2\packages\AForge.Math.2.2.4\lib\AForge.Math.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageResizer">
-      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.3.2.3\lib\ImageResizer.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageResizer.Plugins.AdvancedFilters">
-      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.AdvancedFilters.3.2.3\lib\ImageResizer.Plugins.AdvancedFilters.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageResizer.Plugins.DiskCache">
-      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.DiskCache.3.2.3\lib\ImageResizer.Plugins.DiskCache.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageResizer.Plugins.SeamCarving">
-      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.SeamCarving.3.2.3\lib\ImageResizer.Plugins.SeamCarving.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageResizer.Plugins.SimpleFilters">
-      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.SimpleFilters.3.2.3\lib\ImageResizer.Plugins.SimpleFilters.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageResizer.Plugins.SqlReader">
-      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.SqlReader.3.2.3\lib\ImageResizer.Plugins.SqlReader.dll</HintPath>
-    </Reference>
-    <Reference Include="ImageResizer.Plugins.WhitespaceTrimmer">
-      <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.WhitespaceTrimmer.3.2.3\lib\ImageResizer.Plugins.WhitespaceTrimmer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -82,13 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
-      <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
-      <Name>Dating.Server.Data.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Domain\Entities\Shell.MVC2.Domain.Entities\Shell.MVC2.Domain.Entities.csproj">
       <Project>{3413A2BC-A142-4383-A9BD-72145457C6CB}</Project>
       <Name>Shell.MVC2.Domain.Entities</Name>

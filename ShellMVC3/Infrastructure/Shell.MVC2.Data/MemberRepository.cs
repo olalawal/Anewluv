@@ -50,10 +50,10 @@ namespace Shell.MVC2.Data
              //get full profile stuff
             //4-28-2012 added profile visibility settings
             
-             public profiledata getprofiledatabyprofileid(string profileid)
+             public profiledata getprofiledatabyprofileid(int profileid)
              {
                  ////attempt to load the search settings as well
-                 //var items = from i in this._datingcontext.profiledatas.Include("searchsettings").Include("Profile")
+                 //var items = from i in this._datingcontext.profiledata.Include("searchsettings").Include("Profile")
                  //            where (i.ProfileID == profileid) && (i.searchsettings.Any(t => t.myperfectmatch == true))     
                  //   select i;
 
@@ -65,13 +65,13 @@ namespace Shell.MVC2.Data
                  //}
                  //else
                  //{
-                 //  items = from i in this._datingcontext.profiledatas
+                 //  items = from i in this._datingcontext.profiledata
                  //            where (i.ProfileID == profileid)         
                  //  select i;
                  //  return items.FirstOrDefault();
                  //}
 
-                 var items = from i in this._datingcontext.profiledatas 
+                 var items = from i in this._datingcontext.profiledata
                                  .Include("Profile")
                                  .Include("ProfileVisiblitySetting")
                                  .Include("ProfileData_Ethnicity.CriteriaAppearance_Ethnicity")
@@ -101,7 +101,7 @@ namespace Shell.MVC2.Data
                  {
                  
 
-                     items.FirstOrDefault().searchsettings.Add(this.getperfectmatchsearchsettingsbyprofileid (profileid));
+                     items.FirstOrDefault().profilemetadata.searchsettings.Add(this.getperfectmatchsearchsettingsbyprofileid (profileid));
 
                      return items.FirstOrDefault();
 
@@ -115,7 +115,7 @@ namespace Shell.MVC2.Data
 
              }
 
-             public searchsetting  getperfectmatchsearchsettingsbyprofileid(string profileid)
+             public searchsetting  getperfectmatchsearchsettingsbyprofileid(int profileid)
              {
                  IQueryable<searchsetting> tmpsearchsettings = default(IQueryable<searchsetting>);
                  //Dim ctx As New Entities()
@@ -153,7 +153,7 @@ namespace Shell.MVC2.Data
 
 
 
-                 .Where(p => p.profiledata.id   == profileid && p.myperfectmatch  == true);
+                 .Where(p => p.profile_id    == profileid && p.myperfectmatch  == true);
 
                  //End If
                  if (tmpsearchsettings.Count() > 0)
@@ -183,7 +183,7 @@ namespace Shell.MVC2.Data
                  }
              }
 
-             public searchsetting createmyperfectmatchsearchsettingsbyprofileid(string profileid)
+             public searchsetting createmyperfectmatchsearchsettingsbyprofileid(int profileid)
              {
                  
 
@@ -222,7 +222,7 @@ namespace Shell.MVC2.Data
                 
 
                  _gender = (from x in (_datingcontext.photos.Where(f=>f.id  == guid))
-                            join f in _datingcontext.profiledatas on x.profile_id  equals f.profile_id  
+                            join f in _datingcontext.profiledata on x.profile_id  equals f.id   
                             select f.gender).FirstOrDefault();
 
 
@@ -234,7 +234,7 @@ namespace Shell.MVC2.Data
        //***********************************************************************
              // Description:	Updates the users logout time
              // added 1/18/2010 ola lawal
-             public bool checkifquoutareachedandupdate(string profileID)
+             public bool checkifquoutareachedandupdate(int profileid)
              {
 
                  //get the profile
@@ -243,13 +243,13 @@ namespace Shell.MVC2.Data
                DateTime currenttime = DateTime.Now;
                bool QuotaHit = false ;
 
-                 //get the profileID from userID
-                 //string profileID = GetProfileIdbyusername(username);
+                 //get the profileid from userID
+                 //int profileid = GetProfileIdbyusername(username);
 
                  try
                  {
                   //get the profile
-                     myProfile = this._datingcontext.profiles.Where(p => p.id  == profileID).FirstOrDefault();
+                     myProfile = this._datingcontext.profiles.Where(p => p.id  == profileid).FirstOrDefault();
 
                      //update all other sessions that were not properly logged out
                     // myProfile = ;
@@ -287,7 +287,7 @@ namespace Shell.MVC2.Data
            // "Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
        //*************************************************************************************************
              //update the database i.e create folders and change profile status from guest to active ?!
-                public bool createmailboxfolders(string strProfileID)
+                public bool createmailboxfolders(int intprofileid)
                 {
                    
                     int max = 5;
@@ -296,8 +296,8 @@ namespace Shell.MVC2.Data
                     
                     for(i = 1; i < max;i++){
                    mailboxfolder    p = new mailboxfolder();
-                    p.foldertype_id   = i;
-                    p.profiled_id  = strProfileID;
+                    p.foldertype.id   = i;
+                    p.profiled_id  = intprofileid;
                     p.active   = 1;
                           //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
                       switch(i)       
@@ -334,7 +334,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
 
-                public bool activateprofile(string strProfileID)
+                public bool activateprofile(int intprofileid)
                 {
                     //get the profile
                     //profile myProfile;
@@ -342,7 +342,7 @@ namespace Shell.MVC2.Data
 
                     try
                     {
-                        myProfile  = this._datingcontext.profiles.Where(p => p.id  == strProfileID).FirstOrDefault();
+                        myProfile  = this._datingcontext.profiles.Where(p => p.id  == intprofileid).FirstOrDefault();
                         //update the profile status to 2
                         myProfile.status.id  = (int)profilestatusEnum.Activated;
                         //handele the update using EF
@@ -360,7 +360,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
 
-                public bool deactivateprofile(string strProfileID)
+                public bool deactivateprofile(int intprofileid)
                 {
                     //get the profile
                     //profile myProfile;
@@ -368,7 +368,7 @@ namespace Shell.MVC2.Data
 
                     try
                     {
-                        myProfile = this._datingcontext.profiles.Where(p => p.id == strProfileID).FirstOrDefault();
+                        myProfile = this._datingcontext.profiles.Where(p => p.id == intprofileid).FirstOrDefault();
                         //update the profile status to 2
                         myProfile.status.id  = (int)profilestatusEnum.Inactive ;
                         //handele the update using EF
@@ -386,7 +386,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
                 //updates the profile with a password that is presumed to be already encyrpted
-                public bool updatepassword(string profileID, string encryptedpassword)
+                public bool updatepassword(int profileid, string encryptedpassword)
                 {
 
                     //get the profile
@@ -395,7 +395,7 @@ namespace Shell.MVC2.Data
 
                     try
                     {
-                        myProfile = this._datingcontext.profiles.Where(p => p.id == profileID).FirstOrDefault();
+                        myProfile = this._datingcontext.profiles.Where(p => p.id == profileid).FirstOrDefault();
                         //update the profile status to 2
                         myProfile.password  = encryptedpassword;
                         myProfile.modificationdate  = DateTime.Now;
@@ -419,7 +419,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
 
-                public bool addnewopenidforprofile(string profileID,string openidIdentifer, string openidProvidername)
+                public bool addnewopenidforprofile(int profileid,string openidIdentifer, string openidProvidername)
                 {
 
                   
@@ -429,7 +429,7 @@ namespace Shell.MVC2.Data
                      {
                            active = true,
                           creationdate  = DateTime.UtcNow ,
-                           profile_id   = profileID,
+                           profile_id   = profileid,
                         openidprovidername   = openidProvidername ,
                            openididentifier   = openidIdentifer
                         };
@@ -451,11 +451,11 @@ namespace Shell.MVC2.Data
                 }
 
                 //check if profile is activated 
-                public bool checkifprofileisactivated(string strProfileID)
+                public bool checkifprofileisactivated(int intprofileid)
                 {
 
                     IQueryable<profile> myQuery = default(IQueryable<profile>);
-                    myQuery = this._datingcontext.profiles.Where(p => p.id  == strProfileID & p.status.id  != 1);
+                    myQuery = this._datingcontext.profiles.Where(p => p.id  == intprofileid & p.status.id  != 1);
 
 
                     if (myQuery.Count() > 0)
@@ -472,11 +472,11 @@ namespace Shell.MVC2.Data
                 }
 
                 //check if mailbox folder exist
-                public bool checkifmailboxfoldersarecreated(string strProfileID)
+                public bool checkifmailboxfoldersarecreated(int intprofileid)
                 {
 
                      mailboxfolder   myQuery;
-                    myQuery = this._datingcontext.mailboxfolders.Where(p => p.profiled_id   == strProfileID).FirstOrDefault();
+                    myQuery = this._datingcontext.mailboxfolders.Where(p => p.profiled_id   == intprofileid).FirstOrDefault();
 
 
                     if (myQuery != null)
@@ -496,7 +496,7 @@ namespace Shell.MVC2.Data
        //**********************************************************
                 // Description:	Updates the users logout time
                 // added 1/18/2010 ola lawal
-  public bool updateuserlogouttime(string profileID, string sessionID)
+  public bool updateuserlogouttime(int profileid, string sessionID)
                 {
 
                     //get the profile
@@ -504,17 +504,17 @@ namespace Shell.MVC2.Data
                     IQueryable<userlogtime > myQuery = default(IQueryable<userlogtime>);
                     DateTime currenttime = DateTime.Now;
 
-                    //get the profileID from userID
-                    //string profileID = GetProfileIdbyusername(username);
+                    //get the profileid from userID
+                    //int profileid = GetProfileIdbyusername(username);
 
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id == profileID && p.offline  == 0 && p.sessionid  == sessionID);
+                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id == profileid && p.offline == true && p.sessionid  == sessionID);
 
                         foreach (userlogtime p in myQuery)
                         {
-                            p.logoutTime  = currenttime;
+                            p.logouttime   = currenttime;
                         }
 
                         _datingcontext.SaveChanges();
@@ -531,7 +531,7 @@ namespace Shell.MVC2.Data
 
 
                 //get the last time the user logged in from profile
-  public Nullable<DateTime> getmemberlastlogintime(string profileid)
+  public Nullable<DateTime> getmemberlastlogintime(int profileid)
                 {
 
                     //get the profile
@@ -578,29 +578,29 @@ namespace Shell.MVC2.Data
                     userlogtime myLogtime = new userlogtime();
                     DateTime currenttime = DateTime.Now;
 
-                    //get the profileID from userID
-                    string profileID = GetProfileIdbyusername(username);
+                    //get the profileid from userID
+                    int profileid = getprofileidbyusername(username);
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id  == profileID && p.offline  == 0);
+                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id  == profileid && p.offline  == false );
 
                         foreach (userlogtime p in myQuery)
                         {
-                            p.offline  = 1;
+                            p.offline  = true;
 
                         }
 
                         //aloso update the profile table with current login date
-                        myProfile = this._datingcontext.profiles.Where(p => p.id == profileID).FirstOrDefault();
+                        myProfile = this._datingcontext.profiles.Where(p => p.id == profileid).FirstOrDefault();
                         //update the profile status to 2
                         myProfile.logindate  = currenttime;
 
 
                         //noew aslo update the logtime and then 
-                        myLogtime.profile_id  = profileID;
+                        myLogtime.profile_id  = profileid;
                         myLogtime.sessionid  = sessionID;
-                        myLogtime.loginTime  = currenttime;
+                        myLogtime.logintime  = currenttime;
                         this._datingcontext.userlogtimes.Add(myLogtime);
                         //save all changes bro
                         this._datingcontext.SaveChanges();
@@ -619,7 +619,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
 
-    public bool updateuserlogintimebyprofileid(string ProfileID, string sessionID)
+    public bool updateuserlogintimebyprofileid(int intprofileid, string sessionID)
                 {
 
                     //get the profile
@@ -629,29 +629,29 @@ namespace Shell.MVC2.Data
                     userlogtime myLogtime = new userlogtime();
                     DateTime currenttime = DateTime.Now;
 
-                    //get the profileID from userID
-                    string profileID = ProfileID;//GetProfileIdbyusername(username);
+                    //get the profileid from userID
+                    int profileid = intprofileid;//GetProfileIdbyusername(username);
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id  == profileID && p.offline  == 0);
+                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id  == profileid && p.offline  == false );
 
                         foreach (userlogtime p in myQuery)
                         {
-                            p.offline  = 1;
+                            p.offline  = true;
 
                         }
 
                         //aloso update the profile table with current login date
-                        myProfile = this._datingcontext.profiles.Where(p => p.id == profileID).FirstOrDefault();
+                        myProfile = this._datingcontext.profiles.Where(p => p.id == profileid).FirstOrDefault();
                         //update the profile status to 2
                         myProfile.logindate = currenttime;
 
 
                         //noew aslo update the logtime and then 
-                        myLogtime.profile_id  = profileID;
+                        myLogtime.profile_id  = profileid;
                         myLogtime.sessionid  = sessionID;
-                        myLogtime.loginTime = currenttime;
+                        myLogtime.logintime = currenttime;
                         this._datingcontext.userlogtimes.Add(myLogtime);
                         //save all changes bro
                         this._datingcontext.SaveChanges();
@@ -745,13 +745,13 @@ namespace Shell.MVC2.Data
                 }
 
                 //returns true if somone logged on
-     public bool getuseronlinestatus(string profileid)
+     public bool getuseronlinestatus(int profileid)
                 {
                     //get the profile
                     //profile myProfile;
                     IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
 
-                    myQuery = _datingcontext.userlogtimes.Where(p => p.profile_id  == profileid && p.offline  == 0).Distinct().OrderBy(n => n.loginTime);
+                    myQuery = _datingcontext.userlogtimes.Where(p => p.profile_id  == profileid && p.offline  == false).Distinct().OrderBy(n => n.logintime);
 
                     //            var queryB =
                     //                (from o in db.Orders
@@ -790,11 +790,11 @@ namespace Shell.MVC2.Data
 
    //5-20-2012 added to check if a user email is registered
   
-   public bool checkifprofileidalreadyexists(string profileID)
+   public bool checkifprofileidalreadyexists(int profileid)
    {
 
        IQueryable<profile> myQuery = default(IQueryable<profile>);
-       myQuery = this._datingcontext.profiles.Where(p => p.id  == profileID);
+       myQuery = this._datingcontext.profiles.Where(p => p.id  == profileid);
 
 
        if (myQuery.Count() > 0)
@@ -820,10 +820,10 @@ namespace Shell.MVC2.Data
 	    }
     }
           
-    public string validatesecurityansweriscorrect(string strProfileID ,int SecurityQuestionID,string strSecurityAnswer )
+    public string validatesecurityansweriscorrect(int intprofileid ,int SecurityQuestionID,string strSecurityAnswer )
     {
         IQueryable<profile> myQuery = default(IQueryable<profile>);
-        myQuery = this._datingcontext.profiles.Where(p => p.id   ==  strProfileID && p.securityanswer   == strSecurityAnswer && p.securityquestion_id  == SecurityQuestionID  );
+        myQuery = this._datingcontext.profiles.Where(p => p.id   ==  intprofileid && p.securityanswer   == strSecurityAnswer && p.securityquestion.id   == SecurityQuestionID  );
         
         if ( myQuery.Count()>0)
         {
@@ -837,13 +837,13 @@ namespace Shell.MVC2.Data
     }
 
     /// <summary>
-    /// Determines wethare an activation code matches the value in the database for a given profileID
+    /// Determines wethare an activation code matches the value in the database for a given profileid
     /// </summary>
-    public bool checkifactivationcodeisvalid(string strProfileID, string strActivationCode)
+    public bool checkifactivationcodeisvalid(int intprofileid, string strActivationCode)
     {
         IQueryable<profile> myQuery = default(IQueryable<profile>);
         //Dim ctx As New Entities()
-        myQuery = this._datingcontext.profiles.Where(p => p.activationcode  == strActivationCode & p.id == strProfileID);
+        myQuery = this._datingcontext.profiles.Where(p => p.activationcode  == strActivationCode & p.id == intprofileid);
 
         //End If
         if (myQuery.Count() > 0)
@@ -901,7 +901,7 @@ namespace Shell.MVC2.Data
         }
     }
 
-    public string getProfileIdbyusername(string User)
+    public int getProfileIdbyusername(string User)
     {
 
         return (from p in db.profiles
@@ -910,31 +910,31 @@ namespace Shell.MVC2.Data
     }
 
 
-    public profile getprofilebyprofileid(string ProfileId)
+    public profile getprofilebyprofileid(int profileid)
     {
 
         return (from p in db.profiles
-                where p.id  == ProfileId
+                where p.id  == profileid
                 select p).FirstOrDefault();
     }
 
 
-    public string getprofileidbyusername(string strusername)
+    public int getprofileidbyusername(string strusername)
     {
-        IQueryable<profile> myQuery = default(IQueryable<profile>);
-        myQuery = this._datingcontext.profiles.Where(p => p.username  == strusername );
+        //IQueryable<profile> myQuery = default(IQueryable<profile>);
+       return this._datingcontext.profiles.Where(p => p.username  == strusername ).FirstOrDefault().id;
 
-        if (myQuery.Count() > 0)
-        {
-            return myQuery.FirstOrDefault().id.ToString();
-        }
-        else
-        {
-            return "";
-        }
+        //if (myQuery.Count() > 0)
+        //{
+        //    return myQuery.FirstOrDefault().id.ToString();
+        //}
+        //else
+        //{
+        //    return "";
+        //}
     }
                  
-    public string getprofileidbyscreenname(string strscreenname)
+    public int getprofileidbyscreenname(string strscreenname)
     {
         return (from p in db.profiles
                 where p.screenname == strscreenname
@@ -942,7 +942,7 @@ namespace Shell.MVC2.Data
     }
 
    
-    public string getusernamebyprofileid(string profileid)
+    public string getusernamebyprofileid(int profileid)
     {
         IQueryable<profile> myQuery = default(IQueryable<profile>);
         myQuery = this._datingcontext.profiles.Where(p => p.id  == profileid );
@@ -957,7 +957,7 @@ namespace Shell.MVC2.Data
         }
     }
    
-    public string getscreennamebyprofileid(string profileid)
+    public string getscreennamebyprofileid(int profileid)
     {
         IQueryable<profile> myQuery = default(IQueryable<profile>);
         myQuery = this._datingcontext.profiles.Where(p => p.id == profileid);
@@ -993,7 +993,7 @@ namespace Shell.MVC2.Data
 	    //Dim ctx As New Entities()
 
 	
-	    myQuery =  this._datingcontext.profiles.Where (p=> p.id == strEmail);
+	    myQuery =  this._datingcontext.profiles.Where (p=> p.emailaddress  == strEmail);
 	
 	    if (myQuery.Count() > 0) {
 		    return true;
@@ -1018,18 +1018,18 @@ namespace Shell.MVC2.Data
             if (screenname == null) return null;
 
             return (from p in db.profiles where p.screenname   == screenname 
-                      join f in  db.profiledatas on p.id equals f.id
+                      join f in  db.profiledata on p.id equals f.id
                     select f.gender).FirstOrDefault().description ;
         }
 
 
     
        
-        public visiblitysetting getprofilevisibilitysettingsbyprofileid(string ProfileID)
+        public visiblitysetting getprofilevisibilitysettingsbyprofileid(int profileid)
         {
 
             return (from p in db.visibilitysettings 
-                    where p.profile_id  == ProfileID  select p).FirstOrDefault();
+                    where p.profile_id  == profileid  select p).FirstOrDefault();
         }
        
         //quick search for members in the same country for now, no more filters yet
@@ -1038,7 +1038,7 @@ namespace Shell.MVC2.Data
         {
 
             //get search sttings from DB
-            searchsetting perfectmatchsearchsettings = model.profiledata.searchsettings.FirstOrDefault();
+            searchsetting perfectmatchsearchsettings = model.profiledata.profilemetadata.searchsettings.FirstOrDefault();
             //set default perfect match distance as 100 for now later as we get more members lower
             //TO DO move this to a db setting or resourcer file
             if (perfectmatchsearchsettings.distancefromme   == null | perfectmatchsearchsettings.distancefromme   == 0)
@@ -1099,18 +1099,18 @@ namespace Shell.MVC2.Data
             //******** visiblitysettings test code ************************
             
             // test all the values you are pulling here
-            // var TestModel =   (from x in db.profiledatas.Where(x => x.profile.username  == "case")
+            // var TestModel =   (from x in db.profiledata.Where(x => x.profile.username  == "case")
            //                      select x).FirstOrDefault();
           //  var MinVis = today.AddYears(-(TestModel.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault() + 1));
            // bool TestgenderMatch = (TestModel.ProfileVisiblitySetting.GenderID  != null || TestModel.ProfileVisiblitySetting.GenderID == model.profiledata.GenderID) ? true : false;
 
-            //  var testmodel2 = (from x in db.profiledatas.Where(x => x.profile.username  == "case" &&  db.fnCheckIfBirthDateIsInRange(x.birthdate, 19, 20) == true  )
+            //  var testmodel2 = (from x in db.profiledata.Where(x => x.profile.username  == "case" &&  db.fnCheckIfBirthDateIsInRange(x.birthdate, 19, 20) == true  )
            //                     select x).FirstOrDefault();
 
     
            //****** end of visiblity test settings *****************************************
 
-            MemberSearchViewmodels = (from x in db.profiledatas.Where(p=> p.birthdate > min && p.birthdate <= max)
+            MemberSearchViewmodels = (from x in db.profiledata.Where(p=> p.birthdate > min && p.birthdate <= max)
                             
                                //** visiblity settings still needs testing           
                              //5-8-2012 add profile visiblity code here
@@ -1168,7 +1168,7 @@ namespace Shell.MVC2.Data
 
             //11/20/2011 handle case where  no profiles were found
             if (Profiles.Count() == 0 )
-            return GetQuickMatchesWhenQuickMatchesEmpty(model);
+            return getquickmatcheswhenquickmatchesempty(model);
 
 
             return Profiles.ToList();
@@ -1182,7 +1182,7 @@ namespace Shell.MVC2.Data
         {
 
             //get search sttings from DB
-            searchsetting perfectmatchsearchsettings = model.profiledata.searchsettings.FirstOrDefault();
+            searchsetting perfectmatchsearchsettings = model.profiledata.profilemetadata.searchsettings.FirstOrDefault();
             //set default perfect match distance as 100 for now later as we get more members lower
             //TO DO move this to a db setting or resourcer file
             if (perfectmatchsearchsettings.distancefromme  == null | perfectmatchsearchsettings.distancefromme == 0)
@@ -1241,7 +1241,7 @@ namespace Shell.MVC2.Data
 
 
 
-            MemberSearchViewmodels = (from x in db.profiledatas.Where(p => p.birthdate > min && p.birthdate <= max)
+            MemberSearchViewmodels = (from x in db.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id )) //using whereIF predicate function 
                             .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.LookingForGendersID.FirstOrDefault())
                             //Appearance filtering not implemented yet                        
@@ -1252,7 +1252,7 @@ namespace Shell.MVC2.Data
                                       select new MemberSearchViewModel
                                       {
                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
-                                          id = x.profile_id ,
+                                          id = x.id  ,
                                           stateprovince = x.stateprovince,
                                           postalcode = x.postalcode,
                                           countryid = x.countryid,
@@ -1298,7 +1298,7 @@ namespace Shell.MVC2.Data
         {
 
             //get search sttings from DB
-            searchsetting perfectmatchsearchsettings = model.profiledata.searchsettings.FirstOrDefault();
+            searchsetting perfectmatchsearchsettings = model.profiledata.profilemetadata.searchsettings.FirstOrDefault();
             //set default perfect match distance as 100 for now later as we get more members lower
             //TO DO move this to a db setting or resourcer file
             if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
@@ -1334,7 +1334,7 @@ namespace Shell.MVC2.Data
 
             //  where (LookingForGenderValues.Count !=null || LookingForGenderValues.Contains(x.GenderID)) 
             //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
-            MemberSearchViewmodels = (from x in db.profiledatas.Where(p => p.birthdate > min && p.birthdate <= max)
+            MemberSearchViewmodels = (from x in db.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id )) //using whereIF predicate function 
                             .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.LookingForGendersID.FirstOrDefault())                            
 
@@ -1342,7 +1342,7 @@ namespace Shell.MVC2.Data
                                       select new MemberSearchViewModel
                                       {
                                          // MyCatchyIntroLineQuickSearch = x.AboutMe,
-                                           id = x.profile_id ,
+                                           id = x.id  ,
                                           stateprovince = x.stateprovince,
                                           postalcode = x.postalcode,
                                           countryid = x.countryid,

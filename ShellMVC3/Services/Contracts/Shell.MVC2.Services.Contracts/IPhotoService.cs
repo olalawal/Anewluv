@@ -16,7 +16,7 @@ namespace Shell.MVC2.Services.Contracts
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
     [ServiceContract]
-      interface IPhotoService
+     public  interface IPhotoService
     {
        
         [WebGet]
@@ -28,8 +28,9 @@ namespace Shell.MVC2.Services.Contracts
          List<PhotoEditModel> getphotosbyprofileidandstatus(string profile_id, photoapprovalstatusEnum status);
 
         [WebGet]
-        [OperationContract]   
-         List<PhotoEditModel> getpagedphotosbystatus(List<photo> MyPhotos, photoapprovalstatusEnum approvalstatus);
+        [OperationContract]
+        List<PhotoEditModel> getpagedphotosbyprofileidstatus(string profile_id, photoapprovalstatusEnum status,
+                                                                   int page, int pagesize);
 
         [WebGet]
         [OperationContract]   
@@ -53,7 +54,7 @@ namespace Shell.MVC2.Services.Contracts
 
           [WebInvoke]
         [OperationContract]   
-         void makeuserphoto_(Guid PhotoID);
+         void makeuserphoto_public(Guid PhotoID);
        
 
         //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
@@ -83,7 +84,7 @@ namespace Shell.MVC2.Services.Contracts
         /// <returns></returns>
          [WebInvoke]
          [OperationContract]   
-         List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded, List<lu_photoformat> formats);
+         List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded);
 
         [WebGet]
         [OperationContract]   

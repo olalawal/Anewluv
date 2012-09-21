@@ -16,6 +16,8 @@ using Shell.MVC2.Interfaces;
 using Shell.MVC2.Data.Infrastructure;
 
 
+//TO DO move this kind of code to client
+////return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoisinterestedinme, Page ?? 1, NumberPerPage.GetValueOrDefault())
 
 namespace Shell.MVC2.Data
 {
@@ -48,14 +50,14 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public int getwhoiaminterestedincount(string profileid)
+        public int getwhoiaminterestedincount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
 
             count = (
                from f in _datingcontext.interests 
-               where (f.profile_id  == profileid && f.deletedbymemberdate == null)
+               where (f.profile_id   == profileid && f.deletedbymemberdate == null)
                select f).Count();
 
             // ?? operator example.
@@ -73,20 +75,20 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public int getwhoisinterestedinmecount(string profileID)
+        public int getwhoisinterestedinmecount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
 
             //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks .Where(p => p.profile_id == profileID && p.removedate != null)
+            var MyActiveblocks = from c in _datingcontext.blocks .Where(p => p.profile_id == profileid && p.removedate != null)
                                  select new
                                  {
                                     ProfilesBlockedId = c.blockprofile_id 
                                  };
 
             count = (
-               from p in _datingcontext.interests where (p.interestprofile_id == profileID )
+               from p in _datingcontext.interests where (p.interestprofile_id == profileid )
                join f in _datingcontext.profiles  on p.profile_id   equals f.id
                where (f.status.id  < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId  == f.id )) //filter out banned profiles or deleted profiles            
                select f).Count();
@@ -104,13 +106,13 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public int getwhoisinterestedinmenewcount(string profileID)
+        public int getwhoisinterestedinmenewcount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
 
             //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate != null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
                                  select new
                                  {
                                      ProfilesBlockedId = c.blockprofile_id
@@ -118,7 +120,7 @@ namespace Shell.MVC2.Data
 
             count = (
                from p in _datingcontext.interests
-               where (p.interestprofile_id == profileID && p.viewdate  == null)
+               where (p.interestprofile_id == profileid && p.viewdate  == null)
                join f in _datingcontext.profiles on p.profile_id equals f.id
                where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                select f).Count();
@@ -138,12 +140,12 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// //gets list of all the profiles I am interested in
         /// </summary 
-        public IPageable<MemberSearchViewModel> getinterests(string profileID, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getinterests(int profileid, int? Page, int? NumberPerPage)
         {
                         //gets all  interestets from the interest table based on if the person's profiles are stil lvalid tho
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id   == profileID && p.removedate  == null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id   == profileid && p.removedate  == null)
                                  select new
                                  {
                                      ProfilesBlockedId = c.blockprofile_id 
@@ -152,14 +154,14 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-         var   interests = (from p in _datingcontext.interests.Where(p => p.profile_id    == profileID)
-                         join f in _datingcontext.profiledatas on p.interestprofile_id  equals f.id 
+         var   interests = (from p in _datingcontext.interests.Where(p => p.profile_id    == profileid)
+                         join f in _datingcontext.profiledata on p.interestprofile_id  equals f.id 
                          join z in _datingcontext.profiles on p.interestprofile_id equals z.id
                          where (f.profile.status.id  < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id ))
                          select new MemberSearchViewModel
                          {
                                    creationdate    = p.creationdate ,
-                             id = p.profile_id ,
+                             id = p.id ,
                              age = f.age,
                              birthdate = f.birthdate,
                              city = f.city,
@@ -174,13 +176,13 @@ namespace Shell.MVC2.Data
                             screenname  = z.screenname,
                              mycatchyintroline   = f.mycatchyintroLine,
                           aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                          }).OrderByDescending(f => f.lastlogindate  ).ThenByDescending(f => f.interestdate  ).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(interests, Page ?? 1, NumberPerPage.GetValueOrDefault());
+         return interests; //new PaginatedList<MemberSearchViewModel>().GetPageableList(interests, Page ?? 1, NumberPerPage.GetValueOrDefault());
 
 
 
@@ -192,11 +194,11 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// //gets all the members who are interested in me
         /// </summary 
-        public IPageable<MemberSearchViewModel> getwhoisinterestedinme(string profileID, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoisinterestedinme(int profileid, int? Page, int? NumberPerPage)
         {
             //IEnumerable<MemberSearchViewModel> whoisinterestedinme = default(IEnumerable<MemberSearchViewModel>);
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate == null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
                                  select new
                                  {
                                     ProfilesBlockedId = c.blockprofile_id 
@@ -205,8 +207,8 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-         var   whoisinterestedinme = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileID)
-                                    join f in _datingcontext.profiledatas on p.profile_id equals f.id
+         var   whoisinterestedinme = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid)
+                                    join f in _datingcontext.profiledata on p.profile_id equals f.id
                                    join z in _datingcontext.profiles on p.profile_id  equals z.id 
                                    where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
                                    select new MemberSearchViewModel
@@ -227,25 +229,25 @@ namespace Shell.MVC2.Data
                             screenname  = z.screenname,
                              mycatchyintroline   = f.mycatchyintroLine,
                           aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.interestdate  ).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoisinterestedinme, Page ?? 1, NumberPerPage.GetValueOrDefault());
-
+            //return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoisinterestedinme, Page ?? 1, NumberPerPage.GetValueOrDefault());
+         return whoisinterestedinme;
         }
 
         /// <summary>
         /// //gets all the members who are interested in me, that ive not viewd yet
         /// </summary 
-        public IPageable<MemberSearchViewModel> getwhoisinterestedinmenew(string profileID, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoisinterestedinmenew(int profileid, int? Page, int? NumberPerPage)
         {
            // IEnumerable<MemberSearchViewModel> whoisinterestedinme = default(IEnumerable<MemberSearchViewModel>);
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate != null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
                                  select new
                                  {
                                     ProfilesBlockedId = c.blockprofile_id 
@@ -254,8 +256,8 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-          var  whoisinterestedinmenew = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileID && p.viewdate  ==  null)
-                                    join f in _datingcontext.profiledatas on p.profile_id equals f.id
+          var  whoisinterestedinmenew = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid && p.viewdate  ==  null)
+                                    join f in _datingcontext.profiledata on p.profile_id equals f.id
                                    join z in _datingcontext.profiles on p.profile_id  equals z.id 
                                    where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
                                    select new MemberSearchViewModel
@@ -276,13 +278,14 @@ namespace Shell.MVC2.Data
                             screenname  = z.screenname,
                              mycatchyintroline   = f.mycatchyintroLine,
                           aboutme   = f.aboutme,
-                             perfectmatchsettings   = f.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                             perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.interestdate  ).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoisinterestedinmenew, Page ?? 1, NumberPerPage.GetValueOrDefault());
+           // return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoisinterestedinmenew, Page ?? 1, NumberPerPage.GetValueOrDefault());
+          return whoisinterestedinmenew;
         }
 
         #region "update/check/change actions"
@@ -293,7 +296,7 @@ namespace Shell.MVC2.Data
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public IEnumerable<MemberSearchViewModel> getmutualinterests(string profileID, string targetprofileID)
+        public IEnumerable<MemberSearchViewModel> getmutualinterests(int profileid, int targetprofileid)
         {
             IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
             return mutualinterests;
@@ -302,24 +305,24 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// //checks if you already sent and interest to the target profile
         /// </summary        
-        public bool checkinterest(string profileid, string targetprofileid)
+        public bool checkinterest(int profileid, int targetprofileid)
         {
-            return this._datingcontext.interests.Any(r => r.profile_id == profileid && r.interestprofile_id == targetprofileid);
+            return this._datingcontext.interests.Any(r => r.profile_id == profileid && r.interestprofile_id  == targetprofileid);
         }
 
         /// <summary>
         /// Adds a New interest
         /// </summary>
-        public bool addinterest(string profileID, string targetprofileID)
+        public bool addinterest(int profileid, int targetprofileid)
         {
 
             //create new inetrest object
             interest interest = new interest();
             //make sure you are not trying to interest at yourself
-            if (profileID == targetprofileID) return false;
+            if (profileid == targetprofileid) return false;
 
             //if this was a interest being restored just do that part
-            if (checkinterest(profileID, targetprofileID))
+            if (checkinterest(profileid, targetprofileid))
             {
 
 
@@ -327,10 +330,10 @@ namespace Shell.MVC2.Data
 
             try
             {
-                //interest = this._datingcontext.interests.Where(p => p.ProfileID == profileID).FirstOrDefault();
+                //interest = this._datingcontext.interests.Where(p => p.profileid == profileid).FirstOrDefault();
                 //update the profile status to 2
-                interest.profile_id = profileID;
-                interest.interestprofile_id = targetprofileID;
+                interest.profile_id = profileid;
+                interest.interestprofile_id = targetprofileid;
                 interest.mutual = 0;  // not dealing with this calulatin yet
                 interest.creationdate = DateTime.Now;
                 //handele the update using EF
@@ -356,7 +359,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool removeinterestbyprofileid(string profileID, string interestprofile_id)
+        public bool removeinterestbyprofileid(int profileid, int interestprofile_id)
         {
 
             //get the profile
@@ -365,7 +368,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                interest = this._datingcontext.interests.Where(p => p.profile_id == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                interest = this._datingcontext.interests.Where(p => p.profile_id == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 interest.deletedbymemberdate = DateTime.Now;
@@ -393,7 +396,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool removeinterestbyinterestprofileid(string interestprofile_id, string profileID)
+        public bool removeinterestbyinterestprofileid(int interestprofile_id, int profileid)
         {
 
             //get the profile
@@ -402,7 +405,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                interest = this._datingcontext.interests.Where(p => p.profile_id == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                interest = this._datingcontext.interests.Where(p => p.profile_id == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 interest.deletedbyinterestdate = DateTime.Now;
@@ -430,7 +433,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreinterestbyprofileid(string profileID, string interestprofile_id)
+        public bool restoreinterestbyprofileid(int profileid, int interestprofile_id)
         {
 
             //get the profile
@@ -439,7 +442,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                interest = this._datingcontext.interests.Where(p => p.profile_id == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                interest = this._datingcontext.interests.Where(p => p.profile_id == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 interest.deletedbymemberdate = null;
@@ -467,7 +470,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreinterestbyinterestprofileid(string interestprofile_id, string profileID)
+        public bool restoreinterestbyinterestprofileid(int interestprofile_id, int profileid)
         {
 
             //get the profile
@@ -476,7 +479,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                interest = this._datingcontext.interests.Where(p => p.profile_id == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                interest = this._datingcontext.interests.Where(p => p.profile_id == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 interest.deletedbyinterestdate = null;
@@ -503,17 +506,17 @@ namespace Shell.MVC2.Data
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removeinterestsbyprofileidandscreennames(string profileID, List<String> screennames)
+        public bool removeinterestsbyprofileidandscreennames(int profileid, List<String> screennames)
         {
             try//
             {
-                // interests = this._datingcontext.interests.Where(p => p.ProfileID == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                // interests = this._datingcontext.interests.Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
                 interest interest = new interest();
                 foreach (string value in screennames)
                 {
-                    string interestprofile_id = _membersrepository.getprofileidbyscreenname(value);
-                    interest = this._datingcontext.interests.Where(p => p.profile_id == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                    int interestprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    interest = this._datingcontext.interests.Where(p => p.profile_id == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                     interest.deletedbymemberdate = DateTime.Now;
                     interest.modificationdate = DateTime.Now;
                     this._datingcontext.SaveChanges();
@@ -532,7 +535,7 @@ namespace Shell.MVC2.Data
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restoreinterestsbyprofileidandscreennames(string profileID, List<String> screennames)
+        public bool restoreinterestsbyprofileidandscreennames(int profileid, List<String> screennames)
         {
 
             //get the profile
@@ -540,13 +543,13 @@ namespace Shell.MVC2.Data
 
             try//
             {
-                // interests = this._datingcontext.interests.Where(p => p.ProfileID == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                // interests = this._datingcontext.interests.Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
                 interest interest = new interest();
                 foreach (string value in screennames)
                 {
-                    string interestprofile_id = _membersrepository.getprofileidbyscreenname(value);
-                    interest = this._datingcontext.interests.Where(p => p.profile_id == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                    int interestprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    interest = this._datingcontext.interests.Where(p => p.profile_id == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
 
                     interest.deletedbymemberdate = null;
                     interest.modificationdate = DateTime.Now;
@@ -569,7 +572,7 @@ namespace Shell.MVC2.Data
         /// <summary>
         ///  Update interest with a view     
         /// </summary 
-        public bool updateinterestviewstatus(string profileID, string targetprofileid)
+        public bool updateinterestviewstatus(int profileid, int targetprofileid)
         {
 
             //get the profile
@@ -578,7 +581,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                interest = this._datingcontext.interests.Where(p => p.interestprofile_id == targetprofileid && p.profile_id == profileID).FirstOrDefault();
+                interest = this._datingcontext.interests.Where(p => p.interestprofile_id == targetprofileid && p.profile_id == profileid).FirstOrDefault();
                 //update the profile status to 2            
                 if (interest.viewdate == null)
                 {
@@ -619,7 +622,7 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total peeks
         /// </summary>       
-        public int getwhoipeekedatcount(string profileid)
+        public int getwhoipeekedatcount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
@@ -644,13 +647,13 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total peeks
         /// </summary>       
-        public int getwhopeekedatmecount(string profileID)
+        public int getwhopeekedatmecount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
 
             //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate != null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
                                  select new
                                  {
                                      ProfilesBlockedId = c.blockprofile_id
@@ -658,7 +661,7 @@ namespace Shell.MVC2.Data
 
             count = (
                from p in _datingcontext.peeks
-               where (p.peekprofile_id == profileID)
+               where (p.peekprofile_id == profileid)
                join f in _datingcontext.profiles on p.profile_id equals f.id
                where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                select f).Count();
@@ -676,13 +679,13 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total peeks
         /// </summary>       
-        public int getwhoeekedatmenewcount(string profileID)
+        public int getwhoeekedatmenewcount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
 
             //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate != null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
                                  select new
                                  {
                                      ProfilesBlockedId = c.blockprofile_id
@@ -690,7 +693,7 @@ namespace Shell.MVC2.Data
 
             count = (
                from p in _datingcontext.peeks
-               where (p.peekprofile_id == profileID && p.viewdate == null)
+               where (p.peekprofile_id == profileid && p.viewdate == null)
                join f in _datingcontext.profiles on p.profile_id equals f.id
                where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                select f).Count();
@@ -711,13 +714,13 @@ namespace Shell.MVC2.Data
         /// //gets all the members who are interested in me
         /// //TODO add filtering for blocked members that you blocked and system blocked
         /// </summary 
-        public IPageable<MemberSearchViewModel> getwhopeekedatme(string profileID, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhopeekedatme(int profileid, int? Page, int? NumberPerPage)
         {
           //  IEnumerable<MemberSearchViewModel> WhoPeekedAtMe = default(IEnumerable<MemberSearchViewModel>);
 
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate == null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
                                  select new
                                  {
                                     ProfilesBlockedId = c.blockprofile_id 
@@ -726,8 +729,8 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-         var   WhoPeekedAtMe = (from p in _datingcontext.peeks.Where(p => p.peekprofile_id  == profileID)
-                             join f in _datingcontext.profiledatas on p.profile_id  equals f.id 
+         var   WhoPeekedAtMe = (from p in _datingcontext.peeks.Where(p => p.peekprofile_id  == profileid)
+                             join f in _datingcontext.profiledata on p.profile_id  equals f.id 
                              join z in _datingcontext.profiles on p.profile_id  equals z.id
                              where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
                              select new MemberSearchViewModel
@@ -748,14 +751,14 @@ namespace Shell.MVC2.Data
                             screenname  = z.screenname,
                              mycatchyintroline   = f.mycatchyintroLine,
                           aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.peekdate ).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(WhoPeekedAtMe, Page ?? 1, NumberPerPage.GetValueOrDefault());
-
+          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(WhoPeekedAtMe, Page ?? 1, NumberPerPage.GetValueOrDefault());
+         return WhoPeekedAtMe;
         }
 
 
@@ -763,14 +766,14 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// return all  new  Peeks as an object
         /// </summary>
-        public IPageable <MemberSearchViewModel> getwhopeekedatmenew(string profileID, int? Page, int? NumberPerPage)
+        public List <MemberSearchViewModel> getwhopeekedatmenew(int profileid, int? Page, int? NumberPerPage)
         {
            // IEnumerable<MemberSearchViewModel> PeekNew = default(IEnumerable<MemberSearchViewModel>);
 
             //gets all  interestets from the interest table based on if the person's profiles are stil lvalid tho
 
             
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate == null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
                                  select new
                                  {
                                     ProfilesBlockedId = c.blockprofile_id 
@@ -779,8 +782,8 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-            var PeekNew = (from p in _datingcontext.peeks .Where(p => p.peekprofile_id  == profileID && p.viewdate  == null)
-                       join f in _datingcontext.profiledatas on p.profile_id  equals f.id
+            var PeekNew = (from p in _datingcontext.peeks .Where(p => p.peekprofile_id  == profileid && p.viewdate  == null)
+                       join f in _datingcontext.profiledata on p.profile_id  equals f.id
                        join z in _datingcontext.profiles on p.profile_id  equals z.id
                        where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
                        select new MemberSearchViewModel
@@ -801,13 +804,14 @@ namespace Shell.MVC2.Data
                             screenname  = z.screenname,
                              mycatchyintroline   = f.mycatchyintroLine,
                           aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.peekdate ).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(PeekNew, Page ?? 1, NumberPerPage.GetValueOrDefault());
+          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(PeekNew, Page ?? 1, NumberPerPage.GetValueOrDefault());
+            return PeekNew;
 
         }
 
@@ -816,12 +820,12 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// //gets list of all the profiles I Peeked at in
         /// </summary 
-        public IPageable<MemberSearchViewModel> getwhoipeekedat(string profileID, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoipeekedat(int profileid, int? Page, int? NumberPerPage)
         {
             //Page, int? NumberPerPage
             //  List<MemberSearchViewModel> peeks = default(List<MemberSearchViewModel>);        
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate == null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
                                  select new
                                  {
                                     ProfilesBlockedId = c.blockprofile_id 
@@ -830,8 +834,8 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-            var peeks = (from p in _datingcontext.peeks.Where(p => p.profile_id  == profileID && p.deletedbymemberdate == null)
-                          join f in _datingcontext.profiledatas on p.profile_id equals f.id
+            var peeks = (from p in _datingcontext.peeks.Where(p => p.profile_id  == profileid && p.deletedbymemberdate == null)
+                          join f in _datingcontext.profiledata on p.profile_id equals f.id
                          join z in _datingcontext.profiles on p.profile_id  equals z.id
                          where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
                          select new MemberSearchViewModel
@@ -852,13 +856,14 @@ namespace Shell.MVC2.Data
                             screenname  = z.screenname,
                              mycatchyintroline   = f.mycatchyintroLine,
                           aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.creationdate ).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(peeks, Page ?? 1, NumberPerPage.GetValueOrDefault());
+           // return new PaginatedList<MemberSearchViewModel>().GetPageableList(peeks, Page ?? 1, NumberPerPage.GetValueOrDefault());
+            return peeks;
             
         }
 
@@ -873,7 +878,7 @@ namespace Shell.MVC2.Data
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public IEnumerable<MemberSearchViewModel> getmutualpeeks(string profileID, string targetprofileID)
+        public IEnumerable<MemberSearchViewModel> getmutualpeeks(int profileid, int targetprofileid)
         {
             IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
             return mutualinterests;
@@ -882,7 +887,7 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// //checks if you already sent and peek to the target profile
         /// </summary        
-        public bool checkpeek(string profileid, string targetprofileid)
+        public bool checkpeek(int profileid, int targetprofileid)
         {
             return this._datingcontext.peeks.Any(r => r.profile_id == profileid && r.peekprofile_id == targetprofileid);
         }
@@ -890,16 +895,16 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// Adds a New peek
         /// </summary>
-        public bool addpeek(string profileID, string targetprofileID)
+        public bool addpeek(int profileid, int targetprofileid)
         {
 
             //create new inetrest object
             peek peek = new peek();
             //make sure you are not trying to peek at yourself
-            if (profileID == targetprofileID) return false;
+            if (profileid == targetprofileid) return false;
 
             //if this was a peek being restored just do that part
-            if (checkpeek(profileID, targetprofileID))
+            if (checkpeek(profileid, targetprofileid))
             {
 
 
@@ -907,10 +912,10 @@ namespace Shell.MVC2.Data
 
             try
             {
-                //interest = this._datingcontext.peeks.Where(p => p.ProfileID == profileID).FirstOrDefault();
+                //interest = this._datingcontext.peeks.Where(p => p.profileid == profileid).FirstOrDefault();
                 //update the profile status to 2
-                peek.profile_id = profileID;
-                peek.peekprofile_id = targetprofileID;
+                peek.profile_id = profileid;
+                peek.peekprofile_id = targetprofileid;
                 peek.mutual = 0;  // not dealing with this calulatin yet
                 peek.creationdate = DateTime.Now;
                 //handele the update using EF
@@ -936,7 +941,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool removepeekbyprofileid(string profileID, string peekprofile_id)
+        public bool removepeekbyprofileid(int profileid,int peekprofile_id)
         {
 
             //get the profile
@@ -945,7 +950,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                peek = this._datingcontext.peeks.Where(p => p.profile_id == profileID && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                peek = this._datingcontext.peeks.Where(p => p.profile_id == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 peek.deletedbymemberdate = DateTime.Now;
@@ -973,7 +978,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool removepeekbypeekprofileid( string peekprofile_id,string profileID)
+        public bool removepeekbypeekprofileid(int peekprofile_id,int profileid)
         {
 
             //get the profile
@@ -982,7 +987,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                peek = this._datingcontext.peeks.Where(p => p.profile_id == profileID && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                peek = this._datingcontext.peeks.Where(p => p.profile_id == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 peek.deletedbypeekdate = DateTime.Now;
@@ -1010,7 +1015,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool restorepeekbyprofileid(string profileID, string peekprofile_id)
+        public bool restorepeekbyprofileid(int profileid,int peekprofile_id)
         {
 
             //get the profile
@@ -1019,7 +1024,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                peek = this._datingcontext.peeks.Where(p => p.profile_id == profileID && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                peek = this._datingcontext.peeks.Where(p => p.profile_id == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 peek.deletedbymemberdate = null;
@@ -1047,7 +1052,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool restorepeekbypeekprofileid(string peekprofile_id,string profileID)
+        public bool restorepeekbypeekprofileid(int peekprofile_id,int profileid)
         {
 
             //get the profile
@@ -1056,7 +1061,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                peek = this._datingcontext.peeks.Where(p => p.profile_id == profileID && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                peek = this._datingcontext.peeks.Where(p => p.profile_id == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 peek.deletedbypeekdate = null;
@@ -1083,17 +1088,17 @@ namespace Shell.MVC2.Data
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removepeeksbyprofileidandscreennames(string profileID, List<String> screennames)
+        public bool removepeeksbyprofileidandscreennames(int profileid, List<String> screennames)
         {
             try//
             {
-                // peeks = this._datingcontext.peeks.Where(p => p.ProfileID == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                // peeks = this._datingcontext.peeks.Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
                 peek peek = new peek();
                 foreach (string value in screennames)
                 {
-                    string peekprofile_id = _membersrepository.getprofileidbyscreenname(value);
-                    peek = this._datingcontext.peeks.Where(p => p.profile_id == profileID && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                   int peekprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    peek = this._datingcontext.peeks.Where(p => p.profile_id == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
                     peek.deletedbymemberdate = DateTime.Now;
                     peek.modificationdate = DateTime.Now;
                     this._datingcontext.SaveChanges();
@@ -1112,7 +1117,7 @@ namespace Shell.MVC2.Data
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restorepeeksbyprofileidandscreennames(string profileID, List<String> screennames)
+        public bool restorepeeksbyprofileidandscreennames(int profileid, List<String> screennames)
         {
 
             //get the profile
@@ -1120,13 +1125,13 @@ namespace Shell.MVC2.Data
 
             try//
             {
-                // peeks = this._datingcontext.peeks.Where(p => p.ProfileID == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                // peeks = this._datingcontext.peeks.Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
                 peek peek = new peek();
                 foreach (string value in screennames)
                 {
-                    string peekprofile_id = _membersrepository.getprofileidbyscreenname(value);
-                    peek = this._datingcontext.peeks.Where(p => p.profile_id == profileID && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                   int peekprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    peek = this._datingcontext.peeks.Where(p => p.profile_id == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
 
                     peek.deletedbymemberdate = null;
                     peek.modificationdate = DateTime.Now;
@@ -1149,7 +1154,7 @@ namespace Shell.MVC2.Data
         /// <summary>
         ///  Update peek with a view     
         /// </summary 
-        public bool updatepeekviewstatus(string profileID, string targetprofileid)
+        public bool updatepeekviewstatus(int profileid, int targetprofileid)
         {
 
             //get the profile
@@ -1158,7 +1163,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                peek = this._datingcontext.peeks.Where(p => p.peekprofile_id == targetprofileid && p.profile_id == profileID).FirstOrDefault();
+                peek = this._datingcontext.peeks.Where(p => p.peekprofile_id == targetprofileid && p.profile_id == profileid).FirstOrDefault();
                 //update the profile status to 2            
                 if (peek.viewdate == null )
                 {
@@ -1194,7 +1199,7 @@ namespace Shell.MVC2.Data
         /// count all total blocks
         /// </summary>
        
-        public int getwhoiblockedcount(string profileid)
+        public int getwhoiblockedcount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
@@ -1218,12 +1223,12 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// return all    block as an object
         /// </summary>
-        public IPageable<MemberSearchViewModel> getwhoiblocked(string profileID, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoiblocked(int profileid, int? Page, int? NumberPerPage)
         {
-            //IEnumerable<MemberSearchViewModel> MailboxblockNew = default(IEnumerable<MemberSearchViewModel>);
+            //IEnumerable<MemberSearchViewModel>blockNew = default(IEnumerable<MemberSearchViewModel>);
 
 
-            //var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.ProfileID == ProfileID && p.BlockRemoved == false)
+            //var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profileid == profileid && p.BlockRemoved == false)
             //                     select new
             //                     {
             //                        ProfilesBlockedId = c.blockprofile_id 
@@ -1232,8 +1237,8 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-          var   MailboxblockNew = (from p in _datingcontext.blocks.Where(p => p.profile_id   == profileID && p.removedate == null)
-                               join f in _datingcontext.profiledatas on p.blockprofile_id  equals f.id 
+          var  blockNew = (from p in _datingcontext.blocks.Where(p => p.profile_id   == profileid && p.removedate == null)
+                               join f in _datingcontext.profiledata on p.blockprofile_id  equals f.id 
                                join z in _datingcontext.profiles on p.blockprofile_id equals z.id 
                                where (f.profile.status.id< 3)
                                orderby (p.creationdate) descending
@@ -1255,26 +1260,27 @@ namespace Shell.MVC2.Data
                             screenname  = z.screenname,
                              mycatchyintroline   = f.mycatchyintroLine,
                           aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.blockdate  ).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(MailboxblockNew, Page ?? 1, NumberPerPage.GetValueOrDefault());
+         //   return new PaginatedList<MemberSearchViewModel>().GetPageableList(blockNew, Page ?? 1, NumberPerPage.GetValueOrDefault());
+          return blockNew;
         }
 
            /// <summary>
-        /// //gets all the members who are Mailboxblocked in me
+        /// //gets all the members who areblocked in me
         /// </summary 
-        public IPageable <MemberSearchViewModel> getwhoblockedme(string profileID, int? Page, int? NumberPerPage)
+        public List <MemberSearchViewModel> getwhoblockedme(int profileid, int? Page, int? NumberPerPage)
         {
            // IEnumerable<MemberSearchViewModel> whoisMailboxblockedinme = default(IEnumerable<MemberSearchViewModel>);
 
 
 
-          var  whoblockedme = (from p in _datingcontext.blocks.Where(p => p.blockprofile_id  == profileID && p.removedate == null)
-                                        join f in _datingcontext.profiledatas on p.profile_id equals f.id
+          var  whoblockedme = (from p in _datingcontext.blocks.Where(p => p.blockprofile_id  == profileid && p.removedate == null)
+                                        join f in _datingcontext.profiledata on p.profile_id equals f.id
                                        join z in _datingcontext.profiles on p.profile_id  equals z.id 
                                        where (f.profile.status.id< 3)
                                        orderby (p.creationdate ) descending
@@ -1296,13 +1302,14 @@ namespace Shell.MVC2.Data
                             screenname  = z.screenname,
                              mycatchyintroline   = f.mycatchyintroLine,
                           aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.blockdate  ).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoblockedme, Page ?? 1, NumberPerPage.GetValueOrDefault());
+          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoblockedme, Page ?? 1, NumberPerPage.GetValueOrDefault());
+          return whoblockedme;
         }
 
 
@@ -1313,7 +1320,7 @@ namespace Shell.MVC2.Data
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public IEnumerable<MemberSearchViewModel> getmutualblocks(string profileID, string targetprofileID)
+        public IEnumerable<MemberSearchViewModel> getmutualblocks(int profileid, int targetprofileid)
         {
             IEnumerable<MemberSearchViewModel> mutualblocks = default(IEnumerable<MemberSearchViewModel>);
             return mutualblocks;
@@ -1322,7 +1329,7 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// //checks if you already sent and block to the target profile
         /// </summary        
-        public bool checkblock(string profileid, string targetprofileid)
+        public bool checkblock(int profileid, int targetprofileid)
         {
             return this._datingcontext.blocks.Any(r => r.profile_id == profileid && r.blockprofile_id == targetprofileid);
         }
@@ -1330,16 +1337,16 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// Adds a New block
         /// </summary>
-        public bool addblock(string profileID, string targetprofileID)
+        public bool addblock(int profileid, int targetprofileid)
         {
 
             //create new inetrest object
             block block = new block();
             //make sure you are not trying to block at yourself
-            if (profileID == targetprofileID) return false;
+            if (profileid == targetprofileid) return false;
 
             //if this was a block being restored just do that part
-            if (checkblock(profileID, targetprofileID))
+            if (checkblock(profileid, targetprofileid))
             { 
             
             
@@ -1347,13 +1354,13 @@ namespace Shell.MVC2.Data
 
             try
             {
-                //interest = this._datingcontext.blocks.Where(p => p.ProfileID == profileID).FirstOrDefault();
+                //interest = this._datingcontext.blocks.Where(p => p.profileid == profileid).FirstOrDefault();
                 //update the profile status to 2
-                block.profile_id = profileID;
-                block.blockprofile_id = targetprofileID;
+                block.profile_id = profileid;
+                block.blockprofile_id = targetprofileid;
                 block.mutual = 0;  // not dealing with this calulatin yet
                 block.creationdate = DateTime.Now;              
-                block.reviewdate  = null;
+                //block.  = null;
                 //handele the update using EF
                 // this._datingcontext.profiles.AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
                 this._datingcontext.blocks.Add(block);
@@ -1377,7 +1384,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can block u
         ///  //not inmplemented
         /// </summary 
-        public bool removeblock(string profileID, string blockprofile_id)
+        public bool removeblock(int profileid, int blockprofile_id)
         {
 
             //get the profile
@@ -1386,7 +1393,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                block = this._datingcontext.blocks.Where(p => p.profile_id == profileID && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                block = this._datingcontext.blocks.Where(p => p.profile_id == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 block.removedate  = DateTime.Now;
@@ -1414,7 +1421,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can block u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreblock(string profileID, string blockprofile_id)
+        public bool restoreblock(int profileid, int blockprofile_id)
         {
 
             //get the profile
@@ -1423,7 +1430,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                block = this._datingcontext.blocks.Where(p => p.profile_id == profileID && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                block = this._datingcontext.blocks.Where(p => p.profile_id == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 block.removedate = null;
@@ -1450,7 +1457,7 @@ namespace Shell.MVC2.Data
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removeblocksbyscreennames(string profileID, List<String> screennames)
+        public bool removeblocksbyscreennames(int profileid, List<String> screennames)
         {
 
             //get the profile
@@ -1458,13 +1465,13 @@ namespace Shell.MVC2.Data
 
             try//
             {
-                // blocks = this._datingcontext.blocks.Where(p => p.ProfileID == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                // blocks = this._datingcontext.blocks.Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
                 block block = new block();
                 foreach (string value in screennames)
                 {
-                    string blockprofile_id = _membersrepository.getprofileidbyscreenname(value);
-                    block = this._datingcontext.blocks.Where(p => p.profile_id == profileID && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                    int blockprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    block = this._datingcontext.blocks.Where(p => p.profile_id == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
 
                     block.removedate  = DateTime.Now;
                     block.modificationdate = DateTime.Now;
@@ -1488,7 +1495,7 @@ namespace Shell.MVC2.Data
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restoreblocksbyscreennames(string profileID, List<String> screennames)
+        public bool restoreblocksbyscreennames(int profileid, List<String> screennames)
         {
 
             //get the profile
@@ -1496,13 +1503,13 @@ namespace Shell.MVC2.Data
 
             try//
             {
-                // blocks = this._datingcontext.blocks.Where(p => p.ProfileID == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                // blocks = this._datingcontext.blocks.Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
                 block block = new block();
                 foreach (string value in screennames)
                 {
-                    string blockprofile_id = _membersrepository.getprofileidbyscreenname(value);
-                    block = this._datingcontext.blocks.Where(p => p.profile_id == profileID && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                    int blockprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    block = this._datingcontext.blocks.Where(p => p.profile_id == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
 
                     block.removedate  = null;
                     block.modificationdate = DateTime.Now;
@@ -1521,10 +1528,13 @@ namespace Shell.MVC2.Data
             return true;
 
         }
+
+        //TO DO this needs to me reviewed , all blocks need notes  if reviewed otherwise nothing
         /// <summary>
         ///  Update block with a view     
         /// </summary 
-        public bool updateblockreviewstatus(string profileID,string targetprofileid, string reviewerid)
+        /// 
+        public bool updateblockreviewstatus(int profileid,int targetprofileid, string reviewerid)
         {
 
             //get the profile
@@ -1533,10 +1543,10 @@ namespace Shell.MVC2.Data
 
             try
             {
-                block = this._datingcontext.blocks.Where(p => p.blockprofile_id  == targetprofileid && p.profile_id == profileID ).FirstOrDefault();
+                block = this._datingcontext.blocks.Where(p => p.blockprofile_id  == targetprofileid && p.profile_id == profileid ).FirstOrDefault();
                 //update the profile status to 2            
-                block.reviewdate = DateTime.Now;
-                block.reviewerprofile_id = profileID;
+                //block. = DateTime.Now;
+                //block.reviewerprofile_id = profileid;
                 block.modificationdate = DateTime.Now;
                 this._datingcontext.SaveChanges();
 
@@ -1565,7 +1575,7 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total likes
         /// </summary>       
-        public int getwhoilikecount(string profileid)
+        public int getwhoilikecount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
@@ -1590,13 +1600,13 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total likes
         /// </summary>       
-        public int getwholikesmecount(string profileID)
+        public int getwholikesmecount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
 
             //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate != null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
                                  select new
                                  {
                                      ProfilesBlockedId = c.blockprofile_id
@@ -1604,7 +1614,7 @@ namespace Shell.MVC2.Data
 
             count = (
                from p in _datingcontext.likes
-               where (p.likeprofile_id == profileID)
+               where (p.likeprofile_id == profileid)
                join f in _datingcontext.profiles on p.profile_id equals f.id
                where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                select f).Count();
@@ -1622,13 +1632,13 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total likes
         /// </summary>       
-        public int getwhoislikesmenewcount(string profileID)
+        public int getwhoislikesmenewcount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
 
             //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate != null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
                                  select new
                                  {
                                      ProfilesBlockedId = c.blockprofile_id
@@ -1636,7 +1646,7 @@ namespace Shell.MVC2.Data
 
             count = (
                from p in _datingcontext.likes
-               where (p.likeprofile_id == profileID && p.viewdate == null)
+               where (p.likeprofile_id == profileid && p.viewdate == null)
                join f in _datingcontext.profiles on p.profile_id equals f.id
                where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                select f).Count();
@@ -1657,13 +1667,13 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// return all  new  likes as an object
         /// </summary>
-        public IPageable <MemberSearchViewModel> getwholikesmenew(string profileID, int? Page, int? NumberPerPage)
+        public List <MemberSearchViewModel> getwholikesmenew(int profileid, int? Page, int? NumberPerPage)
         {
           //  IEnumerable<MemberSearchViewModel> LikeNew = default(IEnumerable<MemberSearchViewModel>);
 
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate == null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
                                  select new
                                  {
                                     ProfilesBlockedId = c.blockprofile_id 
@@ -1672,8 +1682,8 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-            var LikeNew = (from p in _datingcontext.likes.Where(p => p.likeprofile_id  == profileID && p.viewdate  == null)
-                        join f in _datingcontext.profiledatas on p.profile_id equals f.id
+            var LikeNew = (from p in _datingcontext.likes.Where(p => p.likeprofile_id  == profileid && p.viewdate  == null)
+                        join f in _datingcontext.profiledata on p.profile_id equals f.id
                        join z in _datingcontext.profiles on p.profile_id  equals z.id 
                        where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
                        orderby (p.creationdate) descending
@@ -1695,25 +1705,26 @@ namespace Shell.MVC2.Data
                              screenname  = z.screenname,
                              mycatchyintroline   = f.mycatchyintroLine ,
                              aboutme   = f.aboutme,
-                             perfectmatchsettings   = f.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                             perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.likedate ).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(LikeNew, Page ?? 1, NumberPerPage.GetValueOrDefault());
+          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(LikeNew, Page ?? 1, NumberPerPage.GetValueOrDefault());
+            return LikeNew;
 
         }
 
         /// <summary>
         /// //gets all the members who Like Me
         /// </summary 
-        public IPageable <MemberSearchViewModel> getwholikesme(string profileID, int? Page, int? NumberPerPage)
+        public List <MemberSearchViewModel> getwholikesme(int profileid, int? Page, int? NumberPerPage)
         {
            // IEnumerable<MemberSearchViewModel> _Like = default(IEnumerable<MemberSearchViewModel>);
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate != null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
                                  select new
                                  {
                                     ProfilesBlockedId = c.blockprofile_id 
@@ -1722,8 +1733,8 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-            var wholikesme = (from p in _datingcontext.likes.Where(p => p.likeprofile_id   == profileID && p.deletedbylikedate == null)
-                      join f in _datingcontext.profiledatas on p.profile_id equals f.id
+            var wholikesme = (from p in _datingcontext.likes.Where(p => p.likeprofile_id   == profileid && p.deletedbylikedate == null)
+                      join f in _datingcontext.profiledata on p.profile_id equals f.id
                      join z in _datingcontext.profiles on p.profile_id  equals z.id 
                      where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
                      orderby (p.creationdate ) descending
@@ -1745,25 +1756,26 @@ namespace Shell.MVC2.Data
                             screenname  = z.screenname,
                              mycatchyintroline   = f.mycatchyintroLine,
                           aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.likedate  ).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(wholikesme, Page ?? 1, NumberPerPage.GetValueOrDefault());
+          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(wholikesme, Page ?? 1, NumberPerPage.GetValueOrDefault());
+            return wholikesme;
         }
 
 
         /// <summary>
         /// //gets all the members who Like Me
         /// </summary 
-        public IPageable<MemberSearchViewModel> getwhoilike(string profileID, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoilike(int profileid, int? Page, int? NumberPerPage)
         {
             // IEnumerable<MemberSearchViewModel> _Like = default(IEnumerable<MemberSearchViewModel>);
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileID && p.removedate != null)
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
                                  select new
                                  {
                                      ProfilesBlockedId = c.blockprofile_id
@@ -1772,8 +1784,8 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-            var wholikesme = (from p in _datingcontext.likes.Where(p => p.profile_id  == profileID && p.deletedbymemberdate == null)
-                              join f in _datingcontext.profiledatas on p.likeprofile_id  equals f.id
+            var whoilike = (from p in _datingcontext.likes.Where(p => p.profile_id  == profileid && p.deletedbymemberdate == null)
+                              join f in _datingcontext.profiledata on p.likeprofile_id  equals f.id
                               join z in _datingcontext.profiles on p.likeprofile_id  equals z.id
                               where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
                               orderby (p.creationdate) descending
@@ -1795,13 +1807,14 @@ namespace Shell.MVC2.Data
                                   screenname = z.screenname,
                                   mycatchyintroline = f.mycatchyintroLine,
                                   aboutme = f.aboutme,
-                                  perfectmatchsettings = f.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchSearchSettingsByProfileID(p.ProfileID )
+                                  perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
                               }).OrderByDescending(f => f.lastlogindate).ThenByDescending(f => f.likedate).ToList();
 
-            return new PaginatedList<MemberSearchViewModel>().GetPageableList(wholikesme, Page ?? 1, NumberPerPage.GetValueOrDefault());
+          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(wholikesme, Page ?? 1, NumberPerPage.GetValueOrDefault());
+            return whoilike;
         }
 
 
@@ -1813,7 +1826,7 @@ namespace Shell.MVC2.Data
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public IEnumerable<MemberSearchViewModel> getmutuallikes(string profileID, string targetprofileID)
+        public IEnumerable<MemberSearchViewModel> getmutuallikes(int profileid, int targetprofileid)
         {
             IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
             return mutualinterests;
@@ -1822,7 +1835,7 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// //checks if you already sent and like to the target profile
         /// </summary        
-        public bool checklike(string profileid, string targetprofileid)
+        public bool checklike(int profileid, int targetprofileid)
         {
             return this._datingcontext.likes.Any(r => r.profile_id == profileid && r.likeprofile_id == targetprofileid);
         }
@@ -1830,16 +1843,16 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// Adds a New like
         /// </summary>
-        public bool addlike(string profileID, string targetprofileID)
+        public bool addlike(int profileid, int targetprofileid)
         {
 
             //create new inetrest object
             like like = new like();
             //make sure you are not trying to like at yourself
-            if (profileID == targetprofileID) return false;
+            if (profileid == targetprofileid) return false;
 
             //if this was a like being restored just do that part
-            if (checklike(profileID, targetprofileID))
+            if (checklike(profileid, targetprofileid))
             {
 
 
@@ -1847,10 +1860,10 @@ namespace Shell.MVC2.Data
 
             try
             {
-                //interest = this._datingcontext.likes.Where(p => p.ProfileID == profileID).FirstOrDefault();
+                //interest = this._datingcontext.likes.Where(p => p.profileid == profileid).FirstOrDefault();
                 //update the profile status to 2
-                like.profile_id = profileID;
-                like.likeprofile_id = targetprofileID;
+                like.profile_id = profileid;
+                like.likeprofile_id = targetprofileid;
                 like.mutual = 0;  // not dealing with this calulatin yet
                 like.creationdate = DateTime.Now;
                 //handele the update using EF
@@ -1876,7 +1889,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool removelikebyprofileid(string profileID, string likeprofile_id)
+        public bool removelikebyprofileid(int profileid, int likeprofile_id)
         {
 
             //get the profile
@@ -1885,7 +1898,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                like = this._datingcontext.likes.Where(p => p.profile_id == profileID && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                like = this._datingcontext.likes.Where(p => p.profile_id == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 like.deletedbymemberdate = DateTime.Now;
@@ -1913,7 +1926,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool removelikebylikeprofileid( string likeprofile_id,string profileID)
+        public bool removelikebylikeprofileid( int likeprofile_id,int profileid)
         {
 
             //get the profile
@@ -1922,7 +1935,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                like = this._datingcontext.likes.Where(p => p.profile_id == profileID && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                like = this._datingcontext.likes.Where(p => p.profile_id == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 like.deletedbylikedate = DateTime.Now;
@@ -1950,7 +1963,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool restorelikebyprofileid(string profileID, string likeprofile_id)
+        public bool restorelikebyprofileid(int profileid, int likeprofile_id)
         {
 
             //get the profile
@@ -1959,7 +1972,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                like = this._datingcontext.likes.Where(p => p.profile_id == profileID && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                like = this._datingcontext.likes.Where(p => p.profile_id == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 like.deletedbymemberdate = null;
@@ -1987,7 +2000,7 @@ namespace Shell.MVC2.Data
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool restorelikebylikeprofileid(string likeprofile_id,string profileID)
+        public bool restorelikebylikeprofileid(int likeprofile_id,int profileid)
         {
 
             //get the profile
@@ -1996,7 +2009,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                like = this._datingcontext.likes.Where(p => p.profile_id == profileID && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                like = this._datingcontext.likes.Where(p => p.profile_id == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
                 //update the profile status to 2
 
                 like.deletedbylikedate = null;
@@ -2023,17 +2036,17 @@ namespace Shell.MVC2.Data
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removelikesbyprofileidandscreennames(string profileID, List<String> screennames)
+        public bool removelikesbyprofileidandscreennames(int profileid, List<String> screennames)
         {
             try//
             {
-                // likes = this._datingcontext.likes.Where(p => p.ProfileID == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                // likes = this._datingcontext.likes.Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
                 like like = new like();
                 foreach (string value in screennames)
                 {
-                    string likeprofile_id = _membersrepository.getprofileidbyscreenname(value);
-                    like = this._datingcontext.likes.Where(p => p.profile_id == profileID && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                    int likeprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    like = this._datingcontext.likes.Where(p => p.profile_id == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
                     like.deletedbymemberdate = DateTime.Now;
                     like.modificationdate = DateTime.Now;
                     this._datingcontext.SaveChanges();
@@ -2052,7 +2065,7 @@ namespace Shell.MVC2.Data
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restorelikesbyprofileidandscreennames(string profileID, List<String> screennames)
+        public bool restorelikesbyprofileidandscreennames(int profileid, List<String> screennames)
         {
 
             //get the profile
@@ -2060,13 +2073,13 @@ namespace Shell.MVC2.Data
 
             try//
             {
-                // likes = this._datingcontext.likes.Where(p => p.ProfileID == profileID && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                // likes = this._datingcontext.likes.Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                 //update the profile status to 2
                 like like = new like();
                 foreach (string value in screennames)
                 {
-                    string likeprofile_id = _membersrepository.getprofileidbyscreenname(value);
-                    like = this._datingcontext.likes.Where(p => p.profile_id == profileID && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                    int likeprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    like = this._datingcontext.likes.Where(p => p.profile_id == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
 
                     like.deletedbymemberdate = null;
                     like.modificationdate = DateTime.Now;
@@ -2089,7 +2102,7 @@ namespace Shell.MVC2.Data
         /// <summary>
         ///  Update like with a view     
         /// </summary 
-        public bool updatelikeviewstatus(string profileID, string targetprofileid)
+        public bool updatelikeviewstatus(int profileid, int targetprofileid)
         {
 
             //get the profile
@@ -2098,7 +2111,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                like = this._datingcontext.likes.Where(p => p.likeprofile_id == targetprofileid && p.profile_id == profileID).FirstOrDefault();
+                like = this._datingcontext.likes.Where(p => p.likeprofile_id == targetprofileid && p.profile_id == profileid).FirstOrDefault();
                 //update the profile status to 2            
                 if (like.viewdate == null )
                 {
@@ -2159,18 +2172,18 @@ namespace Shell.MVC2.Data
         //    //            select new 
         //    //            { 
 
-        //    // ObjectSet <profiledata> products = db.profiledatas ;  
+        //    // ObjectSet <profiledata> products = db.profiledata ;  
 
 
         //    //******** visiblitysettings test code ************************
 
         //    //// test all the values you are pulling here
-        //    //var TestModel = (from x in db.profiledatas.Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
+        //    //var TestModel = (from x in db.profiledata.Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
         //    //                      select x).FirstOrDefault();
         //    //  var MinVis = today.AddYears(-(TestModel.ProfileVisiblitySetting.AgeMaxVisibility.GetValueOrDefault() + 1));
         //    // bool TestgenderMatch = (TestModel.ProfileVisiblitySetting.GenderID  != null || TestModel.ProfileVisiblitySetting.GenderID == model.profiledata.GenderID) ? true : false;
 
-        //    // var testmodel2 = (from x in db.profiledatas.Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
+        //    // var testmodel2 = (from x in db.profiledata.Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
         //    //                     .Where(z=>z.ProfileVisiblitySetting !=null || z.ProfileVisiblitySetting.ProfileVisiblity == true)
         //    //                     select x).FirstOrDefault();
 
@@ -2178,15 +2191,15 @@ namespace Shell.MVC2.Data
 
 
 
-        //    MemberSearchViewmodels = (from x in _datingcontext.profiledatas.Include("ProfileVisiblitySetting").Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
+        //    MemberSearchViewmodels = (from x in _datingcontext.profiledata.Include("ProfileVisiblitySetting").Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
         //                             .WhereIf(strSelectedCity == "ALL", z => z.countryid == intSelectedCountryId)                                      
-        //                              join  f in _datingcontext.profiles on x.ProfileID equals f.profile_id
+        //                              join  f in _datingcontext.profiles on x.profileid equals f.profile_id
         //                              // from fp in f  where(x.countryid == intSelectedCountryId)
-        //                              //join z in db.photos on x.ProfileID equals z.ProfileID
+        //                              //join z in db.photos on x.profileid equals z.profileid
         //                              select new MemberSearchViewModel
         //                              {
         //                                  // MyCatchyIntroLineQuickSearch = x.AboutMe,
-        //                                  ProfileID = x.ProfileID,
+        //                                  profileid = x.profileid,
         //                                  stateprovince = x.stateprovince,
         //                                  postalcode = x.postalcode,
         //                                  countryid = x.countryid,
@@ -2195,12 +2208,12 @@ namespace Shell.MVC2.Data
         //                                  profile = f,
         //                                  longitude = (double)x.longitude,
         //                                  latitude = (double)x.latitude,
-        //                                  HasGalleryPhoto = (from p in _datingcontext.photos.Where(i => i.ProfileID == f.profile_id && i.ProfileImageType == "Gallery") select p.ProfileImageType).FirstOrDefault(),
+        //                                  HasGalleryPhoto = (from p in _datingcontext.photos.Where(i => i.profileid == f.profile_id && i.ProfileImageType == "Gallery") select p.ProfileImageType).FirstOrDefault(),
         //                                  creationdate = f.creationdate,
         //                                  city = _datingcontext.fnTruncateString(x.city, 11),
         //                                  lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.LoginDate),
         //                                  lastlogindate = f.LoginDate,
-        //                                  Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
+        //                                  Online = _datingcontext.fnGetUserOlineStatus(x.profileid),
         //                                  DistanceFromMe = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude, model.MyQuickSearch.MySelectedlattitude.Value, model.MyQuickSearch.MySelectedLongitude.Value, "Miles"),
         //                                  ProfileVisibility = x.ProfileVisiblitySetting.ProfileVisiblity
 

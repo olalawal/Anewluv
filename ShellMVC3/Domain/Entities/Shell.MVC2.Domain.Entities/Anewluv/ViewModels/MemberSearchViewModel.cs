@@ -44,7 +44,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public searchsetting  perfectmatchsettings { get; set; }
        // public EditProfilePhotosViewModel ProfilePhotos { get; set; }
         // properties       
-        public string id { get; set; }
+        public int id { get; set; }
         public string stateprovince { get; set; }
         public string postalcode { get; set; }
         public int? countryid { get; set; }

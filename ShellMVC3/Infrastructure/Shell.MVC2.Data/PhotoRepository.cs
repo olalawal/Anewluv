@@ -46,59 +46,39 @@ namespace Shell.MVC2.Data
             return query;
         }
 
-        public  List<PhotoEditModel> getphotosbyprofileidandstatus(string profile_id,photoapprovalstatusEnum  status)
-         {         
-             
-            
-        return  (from p in _datingcontext.photos.Where(a =>  a.approvalstatus.id == (int)status)                          
-                          select new PhotoEditModel
-                                           {
-                                               photoid = p.id ,
-                                               profileid = p.profile_id,
-                                               screenname = p.profilemetadata.profile.screenname ,
-                                               aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true:false ,
-                                               profileimagetype = p.imagetype.description ,
-                                                imagecaption  = p.imagecaption ,
-                                               photodate   = p.creationdate ,
-                                              photostatusid   = p.photostatus.id ,
-                                              checkedprimary = (p.photostatus.id == (int) photostatusEnum.Gallery)
-                                           }).ToList();
-
-           
-         }
-
-        public List<PhotoEditModel> getpagedphotosbystatus(List<photo> MyPhotos, photoapprovalstatusEnum  approvalstatus,
+        public List<PhotoEditModel> getpagedphotosbyprofileidstatus(string profile_id, photoapprovalstatusEnum status,
                                                                     int page, int pagesize)
         {
             // Retrieve All User's Photos that are not approved.
-            var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
-          
-            // Retrieve All User's Approved Photo's that are not Private and approved.
-          //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
+            //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
 
-            var model = (from p in photos
-                        select new PhotoEditModel
-                                           {
-                                               photoid = p.id ,
-                                               profileid = p.profile_id,
-                                               screenname = p.profilemetadata.profile.screenname ,
-                                               aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true:false ,
-                                               profileimagetype = p.imagetype.description ,
-                                                imagecaption  = p.imagecaption ,
-                                               photodate   = p.creationdate ,
-                                              photostatusid   = p.photostatus.id ,
-                                              checkedprimary = (p.photostatus.id == (int) photostatusEnum.Gallery)
-                                           });
+            // Retrieve All User's Approved Photo's that are not Private and approved.
+            //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
+
+            var model = (from p in _datingcontext.photos.Where(a => a.approvalstatus.id == (int)status)
+                         select new PhotoEditModel
+                         {
+                             photoid = p.id,
+                             profileid = p.profile_id,
+                             screenname = p.profilemetadata.profile.screenname,
+                             aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             profileimagetype = p.imagetype.description,
+                             imagecaption = p.imagecaption,
+                             photodate = p.creationdate,
+                             photostatusid = p.photostatus.id,
+                             checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
+                         });
 
 
             if (model.Count() > pagesize) { pagesize = model.Count(); }
 
 
-            return (model.OrderByDescending(u => u.photodate ).Skip((page - 1) * pagesize).Take(pagesize)).ToList();
+            return (model.OrderByDescending(u => u.photodate).Skip((page - 1) * pagesize).Take(pagesize)).ToList();
 
 
 
         }
+   
        
         public PhotoEditModel getsingleprofilephotobyphotoid(Guid photoid)
         {
@@ -132,8 +112,8 @@ namespace Shell.MVC2.Data
                                                            photoapprovalstatusEnum  approvalstatus , int page, int pagesize)
         {
             var myPhotos = getallphotosbyusername(username);
-            var ApprovedPhotos = getpagedphotosbystatus(myPhotos, photoapprovalstatusEnum.Approved , page, pagesize);
-            var NotApprovedPhotos = getpagedphotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed  , page, pagesize);
+            var ApprovedPhotos = filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, page, pagesize);
+            var NotApprovedPhotos = filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, page, pagesize);
             //TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
             //since this is edit mode that is fine
             var PrivatePhotos = filterphotosbysecuitylevel(myPhotos, securityleveltypeEnum.Private, page, pagesize);
@@ -210,7 +190,7 @@ namespace Shell.MVC2.Data
                     //TO DO move this out of RIA services to rest service
                     _datingcontext.photos.Add(NewPhoto);
                    //dont save changes yet we can possibly remove or detach photos if they are dupes
-                  var temp = addphotoconverions(NewPhoto, item,  _datingcontext.lu_photoformat.ToList());
+                  var temp = addphotoconverions(NewPhoto, item);
                   if (temp.Count > 0)
                   {
                        foreach (photoconversion convertedphoto in temp)
@@ -274,7 +254,7 @@ namespace Shell.MVC2.Data
                 //TO DO move this out of RIA services to rest service
                 _datingcontext.photos.Add(NewPhoto);
                 //dont save changes yet we can possibly remove or detach photos if they are dupes
-                var temp = addphotoconverions(NewPhoto, newphoto, _datingcontext.lu_photoformat.ToList());
+                var temp = addphotoconverions(NewPhoto, newphoto);
                 if (temp.Count > 0)
                 {
                     foreach (photoconversion convertedphoto in temp)
@@ -310,18 +290,19 @@ namespace Shell.MVC2.Data
         /// <param name="photouploaded"></param>
         /// <param name="formats"></param>
         /// <returns></returns>
-        public List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded, List<lu_photoformat> formats)
+        public List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded)
         {
             //TemporaryImageUpload tempImageUpload = new TemporaryImageUpload();             
             // tempImageUpload = _service.GetImageData(id) ?? null;
             List<photoconversion> convertedphotos = new List<photoconversion>();
+
             if (photouploaded.image != null)
             {
 
                 try
                 {
 
-                    foreach (lu_photoformat currentformat in formats)
+                    foreach (lu_photoformat currentformat in _datingcontext.lu_photoformat.ToList() )
                     {
                         byte[] byteArray = photouploaded.image; //tempImageUpload.TempImageData; 
                         using (var outStream = new MemoryStream())
@@ -393,6 +374,8 @@ namespace Shell.MVC2.Data
 
         //Private functions btw not exposed 
         //gets all approved non prviate photos athat are not gallery 
+        #region "private functions"
+      
         private IEnumerable<PhotoEditModel> filterphotosapprovedminusgallery(IQueryable<photo> MyPhotos, photoapprovalstatusEnum status,
                                                                 int page, int pagesize)
         {
@@ -447,6 +430,39 @@ namespace Shell.MVC2.Data
 
             if (model.Count() > pagesize) { pagesize = model.Count(); }
             return (model.OrderByDescending(u => u.photodate ).Skip((page - 1) * pagesize).Take(pagesize));
+
+        }
+
+        private List<PhotoEditModel> filterandpagephotosbystatus(List<photo> MyPhotos, photoapprovalstatusEnum approvalstatus,
+                                                               int page, int pagesize)
+        {
+            // Retrieve All User's Photos that are not approved.
+            var photos = MyPhotos.Where(a => a.approvalstatus.id == (int)approvalstatus);
+
+            // Retrieve All User's Approved Photo's that are not Private and approved.
+            //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
+
+            var model = (from p in photos
+                         select new PhotoEditModel
+                         {
+                             photoid = p.id,
+                             profileid = p.profile_id,
+                             screenname = p.profilemetadata.profile.screenname,
+                             aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             profileimagetype = p.imagetype.description,
+                             imagecaption = p.imagecaption,
+                             photodate = p.creationdate,
+                             photostatusid = p.photostatus.id,
+                             checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
+                         });
+
+
+            if (model.Count() > pagesize) { pagesize = model.Count(); }
+
+
+            return (model.OrderByDescending(u => u.photodate).Skip((page - 1) * pagesize).Take(pagesize)).ToList();
+
+
 
         }
 
@@ -525,6 +541,7 @@ namespace Shell.MVC2.Data
 
         }
 
+        #endregion
         //end of private stuff
 
         //Stuff pulled from dating service regular
