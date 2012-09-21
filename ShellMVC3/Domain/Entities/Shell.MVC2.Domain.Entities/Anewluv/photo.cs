@@ -19,22 +19,23 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual lu_photorejectionreason  rejectionreason { get; set; }
         public virtual lu_photostatus  photostatus { get; set; }
         public virtual lu_photoapprovalstatus approvalstatus { get; set; }    
-        public virtual lu_photoimagetype imagetype  { get; set; } 
-        public virtual photoreviewstatus reviewstatus { get; set; }
-       public int profile_id { get; set; }  
+        public virtual  lu_photoimagetype imagetype  { get; set; }
+       
+        public int profile_id { get; set; }  
         public virtual profilemetadata profilemetadata { get; set; }
+       
         //lazy load these for now and check perforamce
+        public virtual ICollection<photoreview> reviews { get; set; }
         public virtual ICollection<photoconversion> conversions { get; set; }  
         //private public secuity is done at photo level , overides album secuity
         public virtual ICollection<lu_securityleveltype> securitylevels { get; set; } 
 
         public DateTime creationdate { get; set; } 
         //not sure what this is for need to rember
-        //public Nullable<Guid> photoUniqueID { get; set; }
-            
+        //public Nullable<Guid> photoUniqueID { get; set; }            
         //actual image data
-        //public byte[] image { get; set; }
-        //public int? size { get; set; }
+         //public byte[] image { get; set; }
+         // public int? size { get; set; }
          public string imagecaption { get; set; } 
     }
 }

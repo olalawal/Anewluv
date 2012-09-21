@@ -112,7 +112,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public List<photo> MyPhotos { get; set; }
 
         //10-26-2011 added as another temp storrange
-        public EditProfilePhotosViewModel MyEditProfilePhotosViewModel { get; set; }
+        public PhotoEditViewModel MyEditProfilePhotosViewModel { get; set; }
         //10-26-2011 another tmeporary model 
         public List<MemberSearchViewModel> MyCurrentSearchList { get; set; }
 

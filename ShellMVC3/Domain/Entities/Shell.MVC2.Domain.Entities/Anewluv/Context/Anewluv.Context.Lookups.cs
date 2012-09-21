@@ -21,7 +21,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<lu_photostatusdescription> lu_photostatusdescription { get; set; }
         public DbSet<lu_photoformat> lu_photoformat { get; set; }
         public DbSet<lu_photoimagetype> lu_photoimagetype { get; set; }
-        public DbSet<lu_photosize> lu_photosize { get; set; }
+        public DbSet<lu_photoImagersizerformat> lu_photoImagersizerformat { get; set; }
         public DbSet<lu_profilestatus> lu_profilestatus { get; set; }
         public DbSet<lu_role> lu_role { get; set; }
         public DbSet<lu_securityleveltype> lu_securityleveltype { get; set; }

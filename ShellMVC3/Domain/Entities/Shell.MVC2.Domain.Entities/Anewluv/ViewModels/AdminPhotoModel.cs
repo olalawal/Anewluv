@@ -28,7 +28,7 @@ namespace Shell.MVC2.Models
         public DateTime? PhotoDate { get; set; }
         public DateTime? PhotoReviewDate { get; set; }
         public string PhotoReviewerID { get; set; }
-        public string PhotoReviewStatusID { get; set; }
+        public string photoreviewID { get; set; }
         public int PhotoRejectionReasonID { get; set; }
 
         public List<string> PhotoRejectionReasonList { get; set; }

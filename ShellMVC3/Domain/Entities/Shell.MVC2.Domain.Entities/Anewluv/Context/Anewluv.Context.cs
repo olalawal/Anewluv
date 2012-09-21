@@ -36,7 +36,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<photo> photos { get; set; }
         public DbSet<photoalbum> photoalbums { get; set; }
         public DbSet<photoconversion> photoconversions { get; set; }
-        public DbSet<photoreviewstatus > photoreviewstatuses { get; set; }
+        public DbSet<photoreview > photoreviewes { get; set; }
         public DbSet<profile> profiles { get; set; }
         public DbSet<profiledata> profiledata { get; set; }
         public DbSet<profilemetadata> profilemetadata { get; set; }

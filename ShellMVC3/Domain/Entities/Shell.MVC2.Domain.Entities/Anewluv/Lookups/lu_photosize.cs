@@ -5,7 +5,7 @@ using System.Text;using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    public class lu_photosize
+    public class lu_photoImagersizerformat
     {
 
         

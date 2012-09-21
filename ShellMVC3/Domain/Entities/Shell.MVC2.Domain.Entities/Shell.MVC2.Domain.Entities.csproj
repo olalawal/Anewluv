@@ -75,7 +75,7 @@
     <Compile Include="Anewluv\Lookups\enums\abusetype.cs" />
     <Compile Include="Anewluv\Lookups\enums\defaultmailboxfoldertype.cs" />
     <Compile Include="Anewluv\Lookups\enums\photoformat.cs" />
-    <Compile Include="Anewluv\Lookups\enums\photosize.cs" />
+    <Compile Include="Anewluv\Lookups\enums\photoImageresizerformat.cs" />
     <Compile Include="Anewluv\Lookups\enums\photorejectionreason.cs" />
     <Compile Include="Anewluv\Lookups\lu_abusetype.cs" />
     <Compile Include="Anewluv\Context\Anewluv.Context.cs" />
@@ -160,6 +160,7 @@
     <Compile Include="Anewluv\ViewModels\MembersViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\OpenId\rpxauthinfo.cs" />
     <Compile Include="Anewluv\ViewModels\OpenId\rpxprofile.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoUploadModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoEditModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoEditViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoUploadViewModel.cs" />
@@ -244,7 +245,7 @@
     <Compile Include="Anewluv\LookupsCriteria\lu_profession.cs" />
     <Compile Include="Anewluv\LookupsCriteria\lu_wantskids.cs" />
     <Compile Include="Anewluv\membersinrole.cs" />
-    <Compile Include="Anewluv\photoreviewstatus.cs" />
+    <Compile Include="Anewluv\photoreview.cs" />
     <Compile Include="Anewluv\Lookups\lu_photosize.cs" />
     <Compile Include="Anewluv\LookupsCriteria\lu_bodytype.cs" />
     <Compile Include="Anewluv\LookupsCriteria\lu_ethnicity.cs" />

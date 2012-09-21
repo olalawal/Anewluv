@@ -17,7 +17,7 @@ using System.Net;
 using System.IO;
 
 using System.Drawing;
-using Microsoft.VisualBasic; 
+using ImageResizer;
 
 
 
@@ -37,11 +37,7 @@ namespace Shell.MVC2.Data
         }
 
 
-       
-
-
-
-        public List<photo> GetAllPhotos(string username)
+        public List<photo> getallphotosbyusername(string username)
         {
             // Retrieve All User's Photo's that have not deleted by Admin and User.
             var query = _datingcontext.photos.Where(o => o.profilemetadata.profile.username == username
@@ -50,10 +46,7 @@ namespace Shell.MVC2.Data
             return query;
         }
 
-
-
-
-         public  List<PhotoEditModel> getphotosbyprofileidandstatus(string profile_id,photoapprovalstatusEnum  status)
+        public  List<PhotoEditModel> getphotosbyprofileidandstatus(string profile_id,photoapprovalstatusEnum  status)
          {         
              
             
@@ -73,8 +66,6 @@ namespace Shell.MVC2.Data
 
            
          }
-
-
 
         public List<PhotoEditModel> getpagedphotosbystatus(List<photo> MyPhotos, photoapprovalstatusEnum  approvalstatus,
                                                                     int page, int pagesize)
@@ -109,7 +100,7 @@ namespace Shell.MVC2.Data
 
         }
        
-        public PhotoEditModel GetSingleProfilePhotobyphotoID(Guid photoid)
+        public PhotoEditModel getsingleprofilephotobyphotoid(Guid photoid)
         {
             PhotoEditModel model = (from p in _datingcontext.photos.Where(p => p.id  == photoid)
                                           select new PhotoEditModel
@@ -134,26 +125,25 @@ namespace Shell.MVC2.Data
             return (model);
 
 
-        }
-    
+        }    
 
         //TO DO get photo albums as well ?
-        public PhotoEditViewModel GetEditPhotoViewModel(string username, string ApprovedYes, string NotApprovedNo,
+        public PhotoEditViewModel getpagededitphotoviewmodel(string username, string ApprovedYes, string NotApprovedNo,
                                                            photoapprovalstatusEnum  approvalstatus , int page, int pagesize)
         {
-            var myPhotos = GetAllPhotos(username);
+            var myPhotos = getallphotosbyusername(username);
             var ApprovedPhotos = getpagedphotosbystatus(myPhotos, photoapprovalstatusEnum.Approved , page, pagesize);
             var NotApprovedPhotos = getpagedphotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed  , page, pagesize);
             //TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
             //since this is edit mode that is fine
-            var PrivatePhotos = FilterPhotosbysecuitylevel(myPhotos, securityleveltypeEnum.Private, page, pagesize);
-            var model = GetPhotoViewModel(ApprovedPhotos, NotApprovedPhotos, PrivatePhotos, myPhotos);
+            var PrivatePhotos = filterphotosbysecuitylevel(myPhotos, securityleveltypeEnum.Private, page, pagesize);
+            var model = getphotoeditviewmodel(ApprovedPhotos, NotApprovedPhotos, PrivatePhotos, myPhotos);
 
             return (model);
             
         }
 
-        public void DeletedUserPhoto(Guid photoid)
+        public void deleteduserphoto(Guid photoid)
         {
             // Retrieve single value from photos table
             photo PhotoModify = _datingcontext.photos.Single(u => u.id == photoid);
@@ -165,7 +155,7 @@ namespace Shell.MVC2.Data
             //_datingcontext  //.PhotoModify, EntityState.Modified);
             _datingcontext.SaveChanges();
         }
-        public void MakeUserPhoto_Private(Guid PhotoID)
+        public void makeuserphoto_private(Guid PhotoID)
         {
             // Retrieve single value from photos table
             photo PhotoModify = _datingcontext.photos.Single(u => u.id == PhotoID);
@@ -181,62 +171,197 @@ namespace Shell.MVC2.Data
           //  _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
             _datingcontext.SaveChanges();
         }
-        public void MakeUserPhoto_Public(Guid PhotoID)
+        public void makeuserphoto_public(Guid PhotoID)
         {
             // Retrieve single value from photos table
-            photo PhotoModify = _datingcontext.photos.Single(u => u.PhotoID == PhotoID);
+            photo PhotoModify = _datingcontext.photos.Single(u => u.id  == PhotoID);
             PhotoModify.photostatus.id  = 1; //public values:1 or 2 are public values
             // Update database
-            _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+           // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
             _datingcontext.SaveChanges();
         }
 
-        public bool AddPhoto(photo model)
+        //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
+        //since photo is only a row no big deal if duplicates but since conversion is required we must roll back if the photo already exists
+        public bool addphotos(PhotoUploadViewModel model)
         {
 
-            //initialize the dating service here
-            //var datingservicecontext = new DatingService().Initialize();
-            photo objProfilePhotos = new photo();
-            
-            //Here's where the ContentType column comes in handy.  By saving
-            //  this to the database, it makes it infinitely easier to get it back
-            //  later when trying to show the image.
-            //ObjProfilePhotos.ContentType = file.ContentType;
+             List<photoconversion> convertedphotos = new List<photoconversion>();
+             
 
-            // Int32 length = file.ContentLength;
-            //This may seem odd, but the fun part is that if
-            //  I didn't have a temp image to read into, I would
-            //  get memory issues for some reason.  Something to do
-            //  with reading straight into the object's ActualImage property.
-
-            try
+            foreach (PhotoUploadModel  item in model.photosuploaded)
             {
+                //System.Console.WriteLine(i);
+                try
+                {
+                    photo NewPhoto = new photo();
+                    Guid identifier = Guid.NewGuid();
+                    NewPhoto.imagetype = item.imagetype;
+                    NewPhoto.id = identifier;
+                    NewPhoto.profile_id = model.profileid; //model.ProfileImage.Length;
+                    // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
+                    NewPhoto.creationdate  = item.creationdate;
+                    NewPhoto.imagecaption  =  item.caption ;
+                    //profile ID was passed with when this instance of the dispatacher was created
+                    // NewPhoto.ProfileImageType = "NoStatus";
+                    //NewPhoto.photostatus.id = 1;
+                    //NewPhoto.ProfileID = model.ProfileID;
+                    
+                    //TO DO move this out of RIA services to rest service
+                    _datingcontext.photos.Add(NewPhoto);
+                   //dont save changes yet we can possibly remove or detach photos if they are dupes
+                  var temp = addphotoconverions(NewPhoto, item,  _datingcontext.lu_photoformat.ToList());
+                  if (temp.Count > 0)
+                  {
+                       foreach (photoconversion convertedphoto in temp)
+                       {
+                           //if this does not recognise the photo object we might need to save that and delete it later
+                           _datingcontext.photoconversions.Add(convertedphoto);
+                       }                      
+                      _datingcontext.SaveChanges();                    
+                  }
+                  else
+                  {
+                      _datingcontext.Dispose();
 
-                Guid identifier = Guid.NewGuid();
-                objProfilePhotos.ProfileImage = model.ProfileImage;
-                objProfilePhotos.PhotoID = identifier;
-                objProfilePhotos.PhotoSize = model.ProfileImage.Length;
-                objProfilePhotos.Aproved = "No";
-                objProfilePhotos.PhotoDate = System.DateTime.Now;
-                objProfilePhotos.ImageCaption = model.ImageCaption;
-                //profile ID was passed with when this instance of the dispatacher was created
-                objProfilePhotos.ProfileImageType = "NoStatus";
-                objProfilePhotos.photostatus.id  = 1;
-                objProfilePhotos.ProfileID = model.ProfileID ;
+                  }
+                }
+               
 
-                //TO DO move this out of RIA services to rest service
-                _datingcontext.photos.AddObject(objProfilePhotos);
-                _datingcontext.SaveChanges();
-                return true;
+
+                catch
+                {    //log error
+                    return false;
+                }
+
+             
+             
+
             }
-            catch
-            {
-                return false;
-            }
+
+
+            return true;
+
+         
 
         }
 
-        public bool CheckValidJPGGIF(byte[] image)
+        /// <summary>
+        /// for adding as single photo withoute VM 
+        /// replaces InseartPhotoCustom , maybe add the profileID but i dont want to
+        /// </summary>
+        /// <param name="newphoto"></param>
+        /// <returns></returns>
+        public bool addsinglephoto(PhotoUploadModel newphoto,int profileid)
+        {
+
+            //System.Console.WriteLine(i);
+            try
+            {
+                photo NewPhoto = new photo();
+                Guid identifier = Guid.NewGuid();
+                NewPhoto.imagetype = newphoto.imagetype;
+                NewPhoto.id = identifier;
+                NewPhoto.profile_id = profileid; //model.ProfileImage.Length;
+                // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
+                NewPhoto.creationdate = newphoto.creationdate;
+                NewPhoto.imagecaption = newphoto.caption;
+                //profile ID was passed with when this instance of the dispatacher was created
+                // NewPhoto.ProfileImageType = "NoStatus";
+                //NewPhoto.photostatus.id = 1;
+                //NewPhoto.ProfileID = model.ProfileID;
+
+                //TO DO move this out of RIA services to rest service
+                _datingcontext.photos.Add(NewPhoto);
+                //dont save changes yet we can possibly remove or detach photos if they are dupes
+                var temp = addphotoconverions(NewPhoto, newphoto, _datingcontext.lu_photoformat.ToList());
+                if (temp.Count > 0)
+                {
+                    foreach (photoconversion convertedphoto in temp)
+                    {
+                        //if this does not recognise the photo object we might need to save that and delete it later
+                        _datingcontext.photoconversions.Add(convertedphoto);
+                    }
+                    _datingcontext.SaveChanges();
+                }
+                else
+                {
+                    _datingcontext.Dispose();
+
+                }
+            }
+
+
+
+            catch
+            {    //log error
+                return false;
+            }
+
+            return true;
+        }
+
+        //http://stackoverflow.com/questions/10484295/image-resizing-from-sql-database-on-the-fly-with-mvc2
+        /// <summary>
+        /// this function creates and stores converted photos on the fly and returns them as byte array.
+        /// if we have enough horsepower this might be faster than storing.
+        /// </summary>
+        /// <param name="photo"></param>
+        /// <param name="photouploaded"></param>
+        /// <param name="formats"></param>
+        /// <returns></returns>
+        public List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded, List<lu_photoformat> formats)
+        {
+            //TemporaryImageUpload tempImageUpload = new TemporaryImageUpload();             
+            // tempImageUpload = _service.GetImageData(id) ?? null;
+            List<photoconversion> convertedphotos = new List<photoconversion>();
+            if (photouploaded.image != null)
+            {
+
+                try
+                {
+
+                    foreach (lu_photoformat currentformat in formats)
+                    {
+                        byte[] byteArray = photouploaded.image; //tempImageUpload.TempImageData; 
+                        using (var outStream = new MemoryStream())
+                        {
+                            using (var inStream = new MemoryStream(byteArray))
+                            {
+                                //var settings = new ResizeSettings("maxwidth=200&maxheight=200");
+                                var settings = new ResizeSettings(currentformat.imageresizerformat.description);
+                                ImageResizer.ImageBuilder.Current.Build(inStream, outStream, settings);
+                                var outBytes = outStream.ToArray();
+
+                                //handle the check to see if this user has photos of the same size allredy which means a duplicate
+                                if (!_datingcontext.photoconversions.Where(p => p.photo.profile_id == photo.profile_id).Any(p => p.size == outBytes.Length))
+                                {
+                                    convertedphotos.Add(new photoconversion
+                                    {
+                                        creationdate = DateTime.Now,
+                                        description = currentformat.description,
+                                        image = outBytes,
+                                        size = outBytes.Length,
+                                        photo = photo
+                                    });
+                                }
+
+                                
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+            return convertedphotos;
+
+
+        }
+
+        public bool checkvalidjpggif(byte[] image)
         {
 
             try
@@ -268,7 +393,7 @@ namespace Shell.MVC2.Data
 
         //Private functions btw not exposed 
         //gets all approved non prviate photos athat are not gallery 
-        private IEnumerable<PhotoEditModel> FilterPhotosApprovedMinusGallery(IQueryable<photo> MyPhotos, photoapprovalstatusEnum status,
+        private IEnumerable<PhotoEditModel> filterphotosapprovedminusgallery(IQueryable<photo> MyPhotos, photoapprovalstatusEnum status,
                                                                 int page, int pagesize)
         {
             // Retrieve All User's Photos that are not approved.
@@ -302,7 +427,7 @@ namespace Shell.MVC2.Data
 
         }
 
-        private IEnumerable<PhotoEditModel> FilterPhotosbysecuitylevel(List<photo> MyPhotos, securityleveltypeEnum status,
+        private IEnumerable<PhotoEditModel> filterphotosbysecuitylevel(List<photo> MyPhotos, securityleveltypeEnum status,
                                                                    int page, int pagesize)
         {
             var model = (from p in MyPhotos.Where(a => a.securitylevels.Any(d => d.id == (int)status))
@@ -325,7 +450,7 @@ namespace Shell.MVC2.Data
 
         }
 
-        private PhotoEditViewModel GetPhotoViewModel(IEnumerable<PhotoEditModel> Approved,
+        private PhotoEditViewModel getphotoeditviewmodel(IEnumerable<PhotoEditModel> Approved,
                                                             IEnumerable<PhotoEditModel> NotApproved,
                                                             IEnumerable<PhotoEditModel> Private,
                                                             List<photo> model)
@@ -405,21 +530,49 @@ namespace Shell.MVC2.Data
         //Stuff pulled from dating service regular
         // added by Deshola on 5/17/2011
 
-        public byte[] GetGalleryPhotobyScreenName(string strScreenName)
+        public byte[] getgalleryphotobyscreenname(string strScreenName)
         {
-            IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
+            //IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
             //Dim ctx As New Entities()
 
             // string strProfileID = this.getprofileidbyscreenname(strScreenName);
-            GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.ScreenName == strScreenName)
-                            join f in _datingcontext.photos on p.ProfileID equals f.ProfileID
-                            where (f.Aproved == "Yes" & f.ProfileImageType == "Gallery")
-                            select f);
+          var  GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.screenname  == strScreenName)
+                            join f in _datingcontext.photos on p.id  equals f.profile_id 
+                            where (f.approvalstatus.id   ==  (int)photoapprovalstatusEnum.Approved  
+                            && f.imagetype.id  == (int)photostatusEnum.Gallery  )
+                            select f).FirstOrDefault();
 
             try
             {
-                //End If
-                if (GalleryPhoto.Count() > 0) return GalleryPhoto.FirstOrDefault().ProfileImage.ToArray();
+                //new code to only get the gallery conversion copy
+                return GalleryPhoto.conversions
+               .Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image ;
+
+            }
+            catch
+            {
+
+            }
+            return null;
+
+
+
+            // Return CInt(myQuery.First.ScreenName)
+
+        }       
+
+        public byte[] getgalleryimagebyphotoid(Guid strPhotoID)
+        {
+           // IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
+            //Dim ctx As New Entities()
+           var GalleryPhoto = this._datingcontext.photos.Where(p => p.id  == strPhotoID 
+               &&  p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved & p.imagetype.id  == (int)photostatusEnum.Gallery ).FirstOrDefault();
+
+            try
+            {
+                //new code to only get the gallery conversion copy
+                return GalleryPhoto.conversions
+               .Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image;
 
             }
             catch
@@ -434,65 +587,48 @@ namespace Shell.MVC2.Data
 
         }
 
-       
-
-        public byte[] GetGalleryImagebyPhotoId(Guid strPhotoID)
+        public byte[] getgalleryphotobyprofileid(int intProfileID)
         {
-            IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
+           // IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
             //Dim ctx As New Entities()
-            GalleryPhoto = this._datingcontext.photos.Where(p => p.PhotoID == strPhotoID);
+           var GalleryPhoto = this._datingcontext.photos
+          .Where(p => p.profile_id == intProfileID &&
+          p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved & p.imagetype.id == (int)photostatusEnum.Gallery).FirstOrDefault();
 
-            //End If
-            if (GalleryPhoto.Count() > 0)
+
+            try
             {
-                return GalleryPhoto.FirstOrDefault().ProfileImage.ToArray();
+                //new code to only get the gallery conversion copy
+                return GalleryPhoto.conversions
+               .Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image;
+
             }
-            else
+            catch
             {
-                return null;
 
             }
-
-
-            // Return CInt(myQuery.First.ScreenName)
+            return null;
 
         }
 
-        public byte[] GetGalleryPhotobyProfileID(string strProfileID)
+        public byte[] getgalleryimagebynormalizedscreenname(string strScreenName)
         {
-            IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
-            //Dim ctx As New Entities()
-            GalleryPhoto = this._datingcontext.photos.Where(p => p.ProfileID == strProfileID & p.Aproved == "Yes" & p.ProfileImageType == "Gallery");
-
-            //End If
-            if (GalleryPhoto.Count() > 0)
-            {
-                return GalleryPhoto.FirstOrDefault().ProfileImage.ToArray();
-            }
-            else
-            {
-                return null;
-
-            }
-        }
-
-        public byte[] GetGalleryImagebyNormalizedScreenName(string strScreenName)
-        {
-            IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
+            //IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
             //Dim ctx As New Entities()
             //
 
             // string strProfileID = this.getprofileidbyscreenname(strScreenName);
-            GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.ScreenName.Replace(" ", "") == strScreenName)
-                            join f in _datingcontext.photos on p.ProfileID equals f.ProfileID
-                            where (f.Aproved == "Yes" & f.ProfileImageType == "Gallery")
-                            select f);
+          var  GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.screenname.Replace(" ", "") == strScreenName)
+                            join f in _datingcontext.photos on p.id equals f.profile_id
+                               where (f.approvalstatus.id == (int)photoapprovalstatusEnum.Approved && f.imagetype.id == (int)photostatusEnum.Gallery)
+                            select f).FirstOrDefault();
 
 
-            try
+             try
             {
-                //End If
-                if (GalleryPhoto.Count() > 0) return GalleryPhoto.FirstOrDefault().ProfileImage.ToArray();
+                //new code to only get the gallery conversion copy
+                return GalleryPhoto.conversions
+               .Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image;
 
             }
             catch
@@ -505,10 +641,74 @@ namespace Shell.MVC2.Data
 
             // Return CInt(myQuery.First.ScreenName)
 
+        }     
+
+        public bool checkifphotocaptionalreadyexists(int intProfileID, string strPhotoCaption)
+        {
+            //IQueryable<photo> myPhotoList = default(IQueryable<photo>);
+            //Dim ctx As New Entities()
+
+
+            var myPhotoList = this._datingcontext.photos.Where(p => p.profile_id  == intProfileID && p.imagecaption  == strPhotoCaption).FirstOrDefault();
+
+            if (myPhotoList != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
+
+            // Return CInt(myQuery.First.ScreenName)
         }
 
-        //mobe this to a repository
-        public photo UploadProfileImage(string _imageUrl, string caption)
+        public bool checkforgalleryphotobyprofileid(int intProfileID)
+        {
+           // IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
+            //Dim ctx As New Entities()
+            var GalleryPhoto = this._datingcontext.photos.Where(p => p.profile_id  == intProfileID &&
+                p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved && p.imagetype.id == (int)photostatusEnum.Gallery).FirstOrDefault(); 
+
+            if (GalleryPhoto != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
+            // Return CInt(myQuery.First.ScreenName)
+        }
+
+        public bool checkforuploadedphotobyprofileid(int intProfileID)
+        {
+            IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
+            //Dim ctx As New Entities()
+            GalleryPhoto = this._datingcontext.photos.Where(p => p.profile_id   == intProfileID);
+
+            if (GalleryPhoto.Count() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
+            // Return CInt(myQuery.First.ScreenName)
+        }
+
+
+        /// <summary>
+        /// dont think this is used
+        /// </summary>
+        /// <param name="_imageUrl"></param>
+        /// <param name="caption"></param>
+        /// <returns></returns>
+        public photo uploadprofileimage(string _imageUrl, string caption)
         {
 
             //get current profileID from cache
@@ -540,9 +740,9 @@ namespace Shell.MVC2.Data
                 responseStream.Close();
                 imageResponse.Close();
 
-                photo.ImageCaption = caption;
+                photo.imagecaption = caption;
                 //photo.ImageUploaded = file;
-                photo.ProfileImage = imageBytes;
+                // photo.ProfileImage = imageBytes;
             }
             catch (WebException webEx)
             {
@@ -555,104 +755,8 @@ namespace Shell.MVC2.Data
             }
 
 
-
-
-            //stiore the photo in the model in this version not into server yet and store that model into session I guess
-            //membersmodel.MyPhotos.Add(photo);
-
-            //update the model in session, maybe latter just have it upload on the fly
-            //Conditianl update i.e add to corrent Cache gues ot member
-            //11-1-2001 removed guest stuff since guests cannot upload photos doh !!
-            //  membersmodel = (_ProfileID != null) ? CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, _ProfileID) : null; //
-
-
-            //FileStream fs = new FileStream(saveLocation, FileMode.Create);
-            //BinaryWriter bw = new BinaryWriter(fs);
-            //try
-            //{
-            //    bw.Write(imageBytes);
-            //}
-            //finally
-            //{
-            //    fs.Close();
-            //    bw.Close();
-            //}
-
             return photo;
-        } 
-
-        public bool InsertPhotoCustom(photo newphoto)
-        {
-
-            try
-            {
-                this._datingcontext.photos.AddObject(newphoto);
-
-                this._datingcontext.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public bool CheckIfPhotoCaptionAlreadyExists(string strProfileID, string strPhotoCaption)
-        {
-            IQueryable<photo> myPhotoList = default(IQueryable<photo>);
-            //Dim ctx As New Entities()
-
-
-            myPhotoList = this._datingcontext.photos.Where(p => p.ProfileID == strProfileID && p.ImageCaption == strPhotoCaption);
-
-            if (myPhotoList.Count() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-
-            }
-
-            // Return CInt(myQuery.First.ScreenName)
-        }
-
-        public bool CheckForGalleryPhotobyProfileID(string strProfileID)
-        {
-            IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
-            //Dim ctx As New Entities()
-            GalleryPhoto = this._datingcontext.photos.Where(p => p.ProfileID == strProfileID & p.Aproved == "Yes" & p.ProfileImageType == "Gallery");
-
-            if (GalleryPhoto.Count() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-
-            }
-            // Return CInt(myQuery.First.ScreenName)
-        }
-
-        public bool CheckForUploadedPhotobyProfileID(string strProfileID)
-        {
-            IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
-            //Dim ctx As New Entities()
-            GalleryPhoto = this._datingcontext.photos.Where(p => p.ProfileID == strProfileID);
-
-            if (GalleryPhoto.Count() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-
-            }
-            // Return CInt(myQuery.First.ScreenName)
-        }
+        }         
 
     }
 }

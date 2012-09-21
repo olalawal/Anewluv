@@ -14,32 +14,24 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public PhotoUploadViewModel()
         {
 
-
         }
         [DataMember]
-        public List<photo> Photos { get; set; }
-          [DataMember]
-        public string ProfileID { get; set; }
-
+        public List<PhotoUploadModel> photosuploaded { get; set; }
+        [DataMember]
+        public int profileid { get; set; }
         //determines if the users have a photo situation has been handled i,e ither the user refuses or agrees in registration
         //in activation photo must me uploaded so it must be true at some point
-          [DataMember]
-        public bool PhotoStatus { get; set; }
-          [DataMember]
-        public string ProfileImageType { get; set; }
-
+        //[DataMember]
+        //public bool PhotoStatus { get; set; }
+        //[DataMember]
+        //public string ProfileImageType { get; set; }
         //new properties for the telerik autoupload
-          [DataMember]
-        public bool autoUpload { get; set; }
-          [DataMember]
+        [DataMember]
+        public bool autoupload { get; set; }
+        [DataMember]
         public bool multiple { get; set; }
-
         //  ViewData["autoUpload"] = autoUpload ?? true;
         //  ViewData["multiple"] = multiple ?? true;
-
-
-
-  
 
 
     }

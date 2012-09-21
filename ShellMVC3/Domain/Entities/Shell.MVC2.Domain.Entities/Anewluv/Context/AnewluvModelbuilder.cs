@@ -167,35 +167,48 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.photos )
             .WithRequired(z => z.profilemetadata ).HasForeignKey(t => t.profile_id ).WillCascadeOnDelete(false);
 
-            //map photo conversions relation ship with photo      
+            //map photo      
             //**************************************
-            modelBuilder.Entity<photo>().HasMany(p => p.conversions)
-              .WithRequired(z => z.photo ).HasForeignKey(t => t.photo_id ).WillCascadeOnDelete(false);
 
-            //phto conversion type is requred too
-            modelBuilder.Entity<photoconversion>()
-           .HasRequired(p => p.type);
-           
+            //9-20-2012 added photo review
+            modelBuilder.Entity<photo>().HasMany(p => p.reviews )
+           .WithRequired(z => z.photo).HasForeignKey(t => t.photo_id).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<photo>().HasMany(p => p.conversions)
+            .WithRequired(z => z.photo ).HasForeignKey(t => t.photo_id ).WillCascadeOnDelete(false);
+
             //map photo relation ship with the given photo security level
             modelBuilder.Entity<photo>().HasMany(p => p.securitylevels);
-          
+
+            //phot conversions
+            //conversions relation ship with photo 
+            //phto conversion type is requred too
+            //********************************************
+            modelBuilder.Entity<photoconversion>()
+           .HasRequired(p => p.formattype);
+           
+             //confgure 1 to 1 required relatonship woth photo type
+            //********************************************
+            modelBuilder.Entity<lu_photoformat>()
+           .HasRequired(p => p.imageresizerformat).WithMany().HasForeignKey(z=>z.photoImagersizerformat_id);
+           
 
             // map required relationships photoalbum -many to many with photo is automatcic
             //**************************************
             modelBuilder.Entity<photoalbum>().HasRequired(t => t.profilemetadata).WithMany(z => z.photoalbums )
            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
-                   //map photoalbum relation ship with the given photo security level
+            //map photoalbum relation ship with the given photo security level
             modelBuilder.Entity<photoalbum>().HasMany(p => p.securitylevels);
 
             
-            //photoreviewstatus model requered field mappings
-            // map required relationships photoreviewstatus
+            //photoreview model requered field mappings
+            // map required relationships photoreview
             //**************************************
-            modelBuilder.Entity<photoreviewstatus>()
+            modelBuilder.Entity<photoreview >()
             .HasRequired(p => p.reviewerprofiledata).WithMany().HasForeignKey(z=>z.reviewerprofile_id);
             //photo is requred too
-            modelBuilder.Entity<photoreviewstatus>()
+            modelBuilder.Entity<photoreview>()
            .HasRequired(p => p.photo).WithMany().HasForeignKey(z=>z.photo_id);
             //wonder if we should have a review status type as required
 

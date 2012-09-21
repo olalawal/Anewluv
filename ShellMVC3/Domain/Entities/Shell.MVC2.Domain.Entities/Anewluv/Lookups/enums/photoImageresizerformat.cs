@@ -14,18 +14,18 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum photosizeEnum : int
+    public enum photoImageresizerformatEnum : int
     {
         [Description("NotSet")]
         [EnumMember]
         NotSet,
-        [Description("94x95 thumb cropped")] 
+        [Description("maxwidth=94&maxheight=95&format=jpg&mode=max&carve=true;crop=auto")] 
         [EnumMember]
-        ThumNailcropped,
-        [Description("400x400 image not cropped")]
+        GalleryCropped,
+        [Description("maxwidth=400&maxheight=400&format=jpg&mode=max&carve=true")]
         [EnumMember]
-        MediumUnCropped,
-        [Description("1900x1900 image not cropped")]
+        MediumUncropped,
+        [Description("maxwidth=2000&maxheight=2000&format=jpg&mode=max&carve=true")]
         [EnumMember]
         LargeUnCropped,
         

@@ -17,7 +17,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     {
 
         //added stuff for photo VMS
-        public EditProfilePhotosViewModel profilephotos { get; set; }
+        public PhotoEditViewModel profilephotos { get; set; }
 
 
         //added stuff from visiblity table

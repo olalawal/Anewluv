@@ -93,18 +93,7 @@ namespace Shell.MVC2.Domain.Entities.Migrations
             }));
 
 
-            //photoformats
-            //filter an enum for not set since that is the zero value i.e  
-            var photoformatqry = from photoformatEnum value in Enum.GetValues(typeof(photoformatEnum))
-                               where value != photoformatEnum.NotSet
-                               orderby value // to sort by value; remove otherwise 
-                               select value;
-            photoformatqry.ToList().ForEach(kvp => context.lu_photoformat.AddOrUpdate(new lu_photoformat()
-            {
-                id = (int)kvp,
-                description = EnumExtensionMethods.ToDescription(kvp)
-            }));
-
+           
 
             //photorejectionreasons
             //filter an enum for not set since that is the zero value i.e  
@@ -121,15 +110,33 @@ namespace Shell.MVC2.Domain.Entities.Migrations
 
             //photosizes
             //filter an enum for not set since that is the zero value i.e  
-            var photosizeqry = from photosizeEnum value in Enum.GetValues(typeof(photosizeEnum))
-                               where value != photosizeEnum.NotSet
+            var photosizeqry = from photoImageresizerformatEnum value in Enum.GetValues(typeof(photoImageresizerformatEnum))
+                               where value != photoImageresizerformatEnum.NotSet
                                orderby value // to sort by value; remove otherwise 
                                select value;
-            photosizeqry.ToList().ForEach(kvp => context.lu_photosize.AddOrUpdate(new lu_photosize()
+            photosizeqry.ToList().ForEach(kvp => context.lu_photoImagersizerformat.AddOrUpdate(new lu_photoImagersizerformat()
             {
                 id = (int)kvp,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
+
+
+            //has to come after image resizer format.
+             //photoformats
+            //filter an enum for not set since that is the zero value i.e  
+            var photoformatqry = from photoformatEnum value in Enum.GetValues(typeof(photoformatEnum))
+                               where value != photoformatEnum.NotSet
+                               orderby value // to sort by value; remove otherwise 
+                               select value;
+            photoformatqry.ToList().ForEach(kvp => context.lu_photoformat.AddOrUpdate(new lu_photoformat()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp),
+                photoImagersizerformat_id = (int)kvp  //this only works since these loookups have same order
+
+
+            }));
+
 
 
             //photostatuss
