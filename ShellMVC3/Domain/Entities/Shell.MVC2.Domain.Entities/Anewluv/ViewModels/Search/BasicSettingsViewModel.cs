@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using Shell.MVC2.Domain.Entities.Anewluv;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
@@ -63,7 +64,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
       
 
         //add the propeties for bound litsts here
-        public IList<ShowMeCheckBox> ShowMeList = new List<ShowMeCheckBox>();
+        public IList<lu_showme> ShowMeList = new List<ShowMeCheckBox>();
         public IList<SortByTypeCheckBox> SortByList = new List<SortByTypeCheckBox>();
         //gender is now allowing multiple selections
 

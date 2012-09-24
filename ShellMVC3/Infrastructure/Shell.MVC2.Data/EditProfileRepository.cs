@@ -12,58 +12,66 @@ using Shell.MVC2.Infrastructure;
 
 namespace Shell.MVC2.Data
 {
-   public  class SearcRepository : MemberRepositoryBase , IMemberRepository 
+   public  class EditProfileRepository : MemberRepositoryBase , IMemberRepository 
     {
 
        
        
-        private  AnewluvContext db; // = new AnewluvContext();
+        private  AnewluvContext db; // = new AnewluvContext();        
        //private  PostalData2Entities postaldb; //= new PostalData2Entities();
 
+        public class CheckBox
+        {
+            public int id { get; set; }
+            public string description { get; set; }
+            public bool selected { get; set; }
+        }
 
-
-        public SearcRepository(AnewluvContext datingcontext)
+        public EditProfileRepository(AnewluvContext datingcontext)
             : base(datingcontext)
         {
         } 
                     // constructor
-       public BasicSettingsViewModel getsearchbasicsettingsviewmodel(searchsetting p)
+       public BasicSettingsViewModel getsearchbasicsettingsviewmodelbyprofileid(int intprofileid)
             {
+
+                searchsetting p = db.searchsetting.Where(p => p.profile_id == intprofileid && p.myperfectmatch == true);
+                BasicSettingsViewModel model = new BasicSettingsViewModel();
 
                 //populate values here ok ?
                 if (p != null)
 
 
-                SearchName  = p.SearchName  == null ? "Unamed Search" : p.SearchName;
-                DistanceFromMe = p.DistanceFromMe == null ? 500 : p.DistanceFromMe.GetValueOrDefault();
-                SearchRank = p.SearchRank == null ? 0 : p.SearchRank.GetValueOrDefault();
+                    model.SearchName = p.searchname == null ? "Unamed Search" : p.searchname;
+                model.DistanceFromMe = p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();
+                model.SearchRank = p.searchrank == null ? 0 : p.searchrank.GetValueOrDefault();
 
                 //populate ages select list here I guess
                 //TODO get from app fabric
                // SharedRepository sharedrepository = new SharedRepository();
                 //Ages = sharedrepository.AgesSelectList;
 
-                LookingForAgeMax = p.AgeMax  == null ? 99 : p.AgeMax.GetValueOrDefault();
-                LookingForAgeMin  = p.AgeMin == null ? 18 : p.AgeMin.GetValueOrDefault();
+                model.LookingForAgeMax = p.agemax == null ? 99 : p.agemax.GetValueOrDefault();
+                model.LookingForAgeMin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
 
-             
-               
-              
-                MyPerfectMatch = p.MyPerfectMatch == null ? false : p.MyPerfectMatch.Value ;
-                SystemMatch = p.SystemMatch == null ? false : p.SystemMatch.Value;
-                SavedSearch = p.SavedSearch == null ? false : p.SavedSearch.Value;
+
+
+
+                model.MyPerfectMatch = p.myperfectmatch == null ? false : p.myperfectmatch.Value;
+                model.SystemMatch = p.systemmatch == null ? false : p.systemmatch.Value;
+                model.SavedSearch = p.savedsearch == null ? false : p.savedsearch.Value;
 
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var allShowMe = db.ShowMes;
-                var ShowMeValues = new HashSet<int>(p.SearchSettings_ShowMe.Select(c => c.ShowMeID.GetValueOrDefault() ));                
+                var allShowMe = db.lu_showme ;
+                var ShowMeValues = new HashSet<int>(p.showme.Select(c => c.id ));                
                 //foreach (var item in p.SearchSettings_ShowMe )
                 //{
                 //    (item.ShowMe.ShowMeName);
                 //}
                 foreach (var _ShowMe in allShowMe)
                 {
-                   ShowMeList.Add(new ShowMeCheckBox
+                    model.ShowMeList.Add(new CheckBox
                     {
                         ShowMeID = _ShowMe.ShowMeID,
                         ShowMeName = _ShowMe.ShowMeName,

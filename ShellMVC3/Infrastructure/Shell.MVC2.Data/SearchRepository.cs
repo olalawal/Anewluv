@@ -12,7 +12,7 @@ using Shell.MVC2.Infrastructure;
 
 namespace Shell.MVC2.Data
 {
-   public  class SearcRepository : MemberRepositoryBase , IMemberRepository 
+   public  class SearchRepository : MemberRepositoryBase , IMemberRepository 
     {
 
        
@@ -22,7 +22,7 @@ namespace Shell.MVC2.Data
 
 
 
-        public SearcRepository(AnewluvContext datingcontext)
+        public SearchRepository(AnewluvContext datingcontext)
             : base(datingcontext)
         {
         }

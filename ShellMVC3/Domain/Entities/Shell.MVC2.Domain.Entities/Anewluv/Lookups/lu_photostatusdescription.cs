@@ -10,7 +10,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
        [Key]
         public int id { get; set; }
         public string description { get; set; }
-        public lu_photostatus photostatus { get; set; }    
+        public lu_photostatus photostatus { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public bool Selected { get; set; }
       
         //use the ID
         //public string value { get; set; }
