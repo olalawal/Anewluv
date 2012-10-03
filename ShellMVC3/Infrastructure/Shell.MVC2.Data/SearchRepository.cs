@@ -90,12 +90,12 @@ namespace Shell.MVC2.Data
             //var MyCatchyIntroLine = formCollection["MyCatchyIntroLine"];
             var AboutMe = model.BasicProfileSettings.AboutMe;
             var MyCatchyIntroLine = model.BasicProfileSettings.MyCatchyIntroLine;
-            var LookingForAgeMin = model.BasicSearchSettings.LookingForAgeMin;
-            var LookingforAgeMax = model.BasicSearchSettings.LookingForAgeMax;
+            var agemin = model.BasicSearchSettings.agemin;
+            var agemax = model.BasicSearchSettings.agemax;
             //get current values from DB in case some values were not updated
             model.BasicProfileSettings = new EditProfileBasicSettingsModel(ProfileDataToUpdate);
             //test if thoe are empty
-            // var testLookingForAgeFrom = formCollection["BasicSearchSettings.LookingForAgeMin"];
+            // var testLookingForAgeFrom = formCollection["BasicSearchSettings.agemin"];
 
             //check if user checked at least one gender
             // bool isGenderSelected = formCollection.GetValues("SelectedGenderIds").Contains("true");  
@@ -109,14 +109,14 @@ namespace Shell.MVC2.Data
             //get map the basic search settings to the search settings pulled from databse
             model.BasicSearchSettings = new SearchModelBasicSettings(SearchSettingsToUpdate);
             //update the searchmodl settings with current settings
-            model.BasicSearchSettings.LookingForAgeMin = LookingForAgeMin;
-            model.BasicSearchSettings.LookingForAgeMax = LookingforAgeMax;
+            model.BasicSearchSettings.agemin = agemin;
+            model.BasicSearchSettings.agemax = agemax;
             //update gender values as well 
             IEnumerable<int?> myEnumerable = SelectedGenderIds;
 
             var GenderValues = myEnumerable != null ? new HashSet<int?>(myEnumerable) : null;
 
-            foreach (var _Gender in model.BasicSearchSettings.LookingForGendersList)
+            foreach (var _Gender in model.BasicSearchSettings.genderslist)
             {
                 _Gender.Selected = GendersValues != null ? GenderValues.Contains(_Gender.GenderID) : false;
             }
@@ -155,8 +155,8 @@ namespace Shell.MVC2.Data
                 //detrmine if we are in edit or add mode for search settings for perfect match
                 //if its null add a new entity  
                 //noew update searchsettings text values
-                SearchSettingsToUpdate.AgeMax = LookingforAgeMax;
-                SearchSettingsToUpdate.AgeMin = LookingForAgeMin;
+                SearchSettingsToUpdate.AgeMax = agemax;
+                SearchSettingsToUpdate.AgeMin = agemin;
 
                 SearchSettingsToUpdate.LastUpdateDate = DateTime.Now; //addded time stamp for updates this should be somone where else tho ?
                 //TO DO move this code to searchssettings Repositoury
@@ -214,7 +214,7 @@ namespace Shell.MVC2.Data
 
             var ShowMeTypeValues = myEnumerableShowmes != null ? new HashSet<int?>(myEnumerableShowmes) : null;
 
-            foreach (var _ShowMeType in model.BasicSearchSettings.ShowMeList)
+            foreach (var _ShowMeType in model.BasicSearchSettings.showmelist)
             {
                 _ShowMeType.Selected = ShowMeTypeValues != null ? ShowMeTypeValues.Contains(_ShowMeType.ShowMeID) : false;
             }
@@ -310,16 +310,16 @@ namespace Shell.MVC2.Data
             model.AppearanceSettings.Height = UiHeight;
             model.AppearanceSettings.BodyTypesID = UiBodyType;
 
-            var LookingForHeightMin = model.AppearanceSearchSettings.LookingForHeightMin == -1 ? 48 : model.AppearanceSearchSettings.LookingForHeightMin;
-            var LookingForHeightMax = model.AppearanceSearchSettings.LookingForHeightMax == -1 ? 89 : model.AppearanceSearchSettings.LookingForHeightMax;
+            var heightmin = model.AppearanceSearchSettings.heightmin == -1 ? 48 : model.AppearanceSearchSettings.heightmin;
+            var heightmax = model.AppearanceSearchSettings.heightmax == -1 ? 89 : model.AppearanceSearchSettings.heightmax;
 
 
             //reload search settings since it seems the checkbox values are lost on postback
             //we really should just rebuild them from form collection imo
             model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
             //update the reloaded  searchmodl settings with current settings on the UI
-            model.AppearanceSearchSettings.LookingForHeightMin = LookingForHeightMin;
-            model.AppearanceSearchSettings.LookingForHeightMax = LookingForHeightMax;
+            model.AppearanceSearchSettings.heightmin = heightmin;
+            model.AppearanceSearchSettings.heightmax = heightmax;
 
 
             //update the searchmodl settings with current settings            
@@ -328,7 +328,7 @@ namespace Shell.MVC2.Data
 
             var YourBodyTypesValues = EnumerableYourBodyTypes != null ? new HashSet<int?>(EnumerableYourBodyTypes) : null;
 
-            foreach (var _BodyTypes in model.AppearanceSearchSettings.BodyTypesList)
+            foreach (var _BodyTypes in model.AppearanceSearchSettings.bodytypeslist)
             {
                 _BodyTypes.Selected = YourBodyTypesValues != null ? YourBodyTypesValues.Contains(_BodyTypes.BodyTypesID) : false;
             }
@@ -359,8 +359,8 @@ namespace Shell.MVC2.Data
                 ProfileDataToUpdate.BodyTypeID = model.AppearanceSettings.BodyTypesID;
 
                 //now update the search settings 
-                SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.LookingForHeightMin;
-                SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.LookingForHeightMax;
+                SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.heightmin;
+                SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
                 SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
                 UpdateSearchSettingsBodyTypes(SelectedYourBodyTypesID, ProfileDataToUpdate);
 
@@ -416,7 +416,7 @@ namespace Shell.MVC2.Data
 
             var MyEthnicityValues = EnumerableMyEthnicity != null ? new HashSet<int?>(EnumerableMyEthnicity) : null;
 
-            foreach (var _Ethnicity in model.AppearanceSettings.MyEthnicityList)
+            foreach (var _Ethnicity in model.AppearanceSettings.Myethnicitylist)
             {
                 _Ethnicity.Selected = MyEthnicityValues != null ? MyEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
             }
@@ -425,7 +425,7 @@ namespace Shell.MVC2.Data
 
             var YourEthnicityValues = EnumerableYourEthnicity != null ? new HashSet<int?>(EnumerableYourEthnicity) : null;
 
-            foreach (var _Ethnicity in model.AppearanceSearchSettings.EthnicityList)
+            foreach (var _Ethnicity in model.AppearanceSearchSettings.ethnicitylist)
             {
                 _Ethnicity.Selected = YourEthnicityValues != null ? YourEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
             }
@@ -513,7 +513,7 @@ namespace Shell.MVC2.Data
 
             var YourHairColorValues = EnumerableYourHairColor != null ? new HashSet<int?>(EnumerableYourHairColor) : null;
 
-            foreach (var _HairColor in model.AppearanceSearchSettings.HairColorList)
+            foreach (var _HairColor in model.AppearanceSearchSettings.haircolorlist)
             {
                 _HairColor.Selected = YourHairColorValues != null ? YourHairColorValues.Contains(_HairColor.HairColorID) : false;
             }
@@ -522,7 +522,7 @@ namespace Shell.MVC2.Data
 
             var YourEyeColorValues = EnumerableYourEyeColor != null ? new HashSet<int?>(EnumerableYourEyeColor) : null;
 
-            foreach (var _EyeColor in model.AppearanceSearchSettings.EyeColorList)
+            foreach (var _EyeColor in model.AppearanceSearchSettings.eyecolorlist)
             {
                 _EyeColor.Selected = YourEyeColorValues != null ? YourEyeColorValues.Contains(_EyeColor.EyeColorID) : false;
             }
@@ -542,8 +542,8 @@ namespace Shell.MVC2.Data
                 ProfileDataToUpdate.HairColorID = model.AppearanceSettings.HairColorID;
 
                 //now update the search settings 
-                SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.LookingForHeightMin;
-                SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.LookingForHeightMax;
+                SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.heightmin;
+                SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
 
                 UpdateSearchSettingsEyeColor(SelectedYourEyeColorIds, ProfileDataToUpdate);
                 UpdateSearchSettingsHairColor(SelectedYourHairColorIds, ProfileDataToUpdate);
@@ -595,7 +595,7 @@ namespace Shell.MVC2.Data
 
             var YourHotFeatureValues = EnumerableYourHotFeature != null ? new HashSet<int?>(EnumerableYourHotFeature) : null;
 
-            foreach (var _HotFeature in model.AppearanceSearchSettings.HotFeatureList)
+            foreach (var _HotFeature in model.AppearanceSearchSettings.hotfeaturelist)
             {
                 _HotFeature.Selected = YourHotFeatureValues != null ? YourHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
             }
@@ -604,7 +604,7 @@ namespace Shell.MVC2.Data
 
             var MyHotFeatureValues = EnumerableMyHotFeature != null ? new HashSet<int?>(EnumerableMyHotFeature) : null;
 
-            foreach (var _HotFeature in model.AppearanceSettings.MyHotFeatureList)
+            foreach (var _HotFeature in model.AppearanceSettings.Myhotfeaturelist)
             {
                 _HotFeature.Selected = MyHotFeatureValues != null ? MyHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
             }
@@ -695,7 +695,7 @@ namespace Shell.MVC2.Data
 
             var YourLookingForValues = EnumerableYourLookingFor != null ? new HashSet<int?>(EnumerableYourLookingFor) : null;
 
-            foreach (var _LookingFor in model.LifeStyleSearchSettings.LookingForList)
+            foreach (var _LookingFor in model.LifeStyleSearchSettings.lookingforlist)
             {
                 _LookingFor.Selected = YourLookingForValues != null ? YourLookingForValues.Contains(_LookingFor.LookingForID) : false;
             }
@@ -704,7 +704,7 @@ namespace Shell.MVC2.Data
 
             var YourLivingSituationValues = EnumerableYourLivingSituation != null ? new HashSet<int?>(EnumerableYourLivingSituation) : null;
 
-            foreach (var _LivingSituation in model.LifeStyleSearchSettings.LivingSituationList)
+            foreach (var _LivingSituation in model.LifeStyleSearchSettings.livingsituationlist)
             {
                 _LivingSituation.Selected = YourLivingSituationValues != null ? YourLivingSituationValues.Contains(_LivingSituation.LivingSituationID) : false;
             }
@@ -713,7 +713,7 @@ namespace Shell.MVC2.Data
 
             var YourMaritalStatusValues = EnumerableYourMaritalStatus != null ? new HashSet<int?>(EnumerableYourMaritalStatus) : null;
 
-            foreach (var _MaritalStatus in model.LifeStyleSearchSettings.MaritalStatusList)
+            foreach (var _MaritalStatus in model.LifeStyleSearchSettings.maritalstatuslist)
             {
                 _MaritalStatus.Selected = YourMaritalStatusValues != null ? YourMaritalStatusValues.Contains(_MaritalStatus.MaritalStatusID) : false;
             }
@@ -800,7 +800,7 @@ namespace Shell.MVC2.Data
 
             var YourWantsKidsValues = EnumerableYourWantsKids != null ? new HashSet<int?>(EnumerableYourWantsKids) : null;
 
-            foreach (var _WantsKids in model.LifeStyleSearchSettings.WantsKidsList)
+            foreach (var _WantsKids in model.LifeStyleSearchSettings.wantskidslist)
             {
                 _WantsKids.Selected = YourWantsKidsValues != null ? YourWantsKidsValues.Contains(_WantsKids.WantsKidsID) : false;
             }
@@ -810,7 +810,7 @@ namespace Shell.MVC2.Data
 
             var YourHaveKidsValues = EnumerableYourHaveKids != null ? new HashSet<int?>(EnumerableYourHaveKids) : null;
 
-            foreach (var _HaveKids in model.LifeStyleSearchSettings.HaveKidsList)
+            foreach (var _HaveKids in model.LifeStyleSearchSettings.havekidslist)
             {
                 _HaveKids.Selected = YourHaveKidsValues != null ? YourHaveKidsValues.Contains(_HaveKids.HaveKidsID) : false;
             }
@@ -901,7 +901,7 @@ namespace Shell.MVC2.Data
 
             var YourIncomeLevelValues = EnumerableYourIncomeLevel != null ? new HashSet<int?>(EnumerableYourIncomeLevel) : null;
 
-            foreach (var _IncomeLevel in model.LifeStyleSearchSettings.IncomeLevelList)
+            foreach (var _IncomeLevel in model.LifeStyleSearchSettings.incomelevellist)
             {
                 _IncomeLevel.Selected = YourIncomeLevelValues != null ? YourIncomeLevelValues.Contains(_IncomeLevel.IncomeLevelID) : false;
             }
@@ -911,7 +911,7 @@ namespace Shell.MVC2.Data
 
             var YourEmploymentStatusValues = EnumerableYourEmploymentStatus != null ? new HashSet<int?>(EnumerableYourEmploymentStatus) : null;
 
-            foreach (var _EmploymentStatus in model.LifeStyleSearchSettings.EmploymentStatusList)
+            foreach (var _EmploymentStatus in model.LifeStyleSearchSettings.employmentstatuslist)
             {
                 _EmploymentStatus.Selected = YourEmploymentStatusValues != null ? YourEmploymentStatusValues.Contains(_EmploymentStatus.EmploymentStatusID) : false;
             }
@@ -997,7 +997,7 @@ namespace Shell.MVC2.Data
 
             var YourProfessionValues = EnumerableYourProfession != null ? new HashSet<int?>(EnumerableYourProfession) : null;
 
-            foreach (var _Profession in model.LifeStyleSearchSettings.ProfessionList)
+            foreach (var _Profession in model.LifeStyleSearchSettings.professionlist)
             {
                 _Profession.Selected = YourProfessionValues != null ? YourProfessionValues.Contains(_Profession.ProfessionID) : false;
             }
@@ -1007,7 +1007,7 @@ namespace Shell.MVC2.Data
 
             var YourEducationLevelValues = EnumerableYourEducationLevel != null ? new HashSet<int?>(EnumerableYourEducationLevel) : null;
 
-            foreach (var _EducationLevel in model.LifeStyleSearchSettings.EducationLevelList)
+            foreach (var _EducationLevel in model.LifeStyleSearchSettings.educationlevellist)
             {
                 _EducationLevel.Selected = YourEducationLevelValues != null ? YourEducationLevelValues.Contains(_EducationLevel.EducationLevelID) : false;
             }
@@ -1098,7 +1098,7 @@ namespace Shell.MVC2.Data
 
             var YourExerciseValues = EnumerableYourExercise != null ? new HashSet<int?>(EnumerableYourExercise) : null;
 
-            foreach (var _Exercise in model.CharacterSearchSettings.ExerciseList)
+            foreach (var _Exercise in model.CharacterSearchSettings.exerciselist)
             {
                 _Exercise.Selected = YourExerciseValues != null ? YourExerciseValues.Contains(_Exercise.ExerciseID) : false;
             }
@@ -1107,7 +1107,7 @@ namespace Shell.MVC2.Data
 
             var YourDrinksValues = EnumerableYourDrinks != null ? new HashSet<int?>(EnumerableYourDrinks) : null;
 
-            foreach (var _Drinks in model.CharacterSearchSettings.DrinksList)
+            foreach (var _Drinks in model.CharacterSearchSettings.drinkslist)
             {
                 _Drinks.Selected = YourDrinksValues != null ? YourDrinksValues.Contains(_Drinks.DrinksID) : false;
             }
@@ -1116,7 +1116,7 @@ namespace Shell.MVC2.Data
 
             var YourDietValues = EnumerableYourDiet != null ? new HashSet<int?>(EnumerableYourDiet) : null;
 
-            foreach (var _Diet in model.CharacterSearchSettings.DietList)
+            foreach (var _Diet in model.CharacterSearchSettings.dietlist)
             {
                 _Diet.Selected = YourDietValues != null ? YourDietValues.Contains(_Diet.DietID) : false;
             }
@@ -1125,7 +1125,7 @@ namespace Shell.MVC2.Data
 
             var YourSmokesValues = EnumerableYourSmokes != null ? new HashSet<int?>(EnumerableYourSmokes) : null;
 
-            foreach (var _Smokes in model.CharacterSearchSettings.SmokesList)
+            foreach (var _Smokes in model.CharacterSearchSettings.smokeslist)
             {
                 _Smokes.Selected = YourSmokesValues != null ? YourSmokesValues.Contains(_Smokes.SmokesID) : false;
             }
@@ -1225,7 +1225,7 @@ namespace Shell.MVC2.Data
 
             var YourHobbyValues = EnumerableYourHobby != null ? new HashSet<int?>(EnumerableYourHobby) : null;
 
-            foreach (var _Hobby in model.CharacterSearchSettings.HobbyList)
+            foreach (var _Hobby in model.CharacterSearchSettings.hobbylist)
             {
                 _Hobby.Selected = YourHobbyValues != null ? YourHobbyValues.Contains(_Hobby.HobbyID) : false;
             }
@@ -1235,7 +1235,7 @@ namespace Shell.MVC2.Data
 
             var YourSignValues = EnumerableYourSign != null ? new HashSet<int?>(EnumerableYourSign) : null;
 
-            foreach (var _Sign in model.CharacterSearchSettings.SignList)
+            foreach (var _Sign in model.CharacterSearchSettings.signlist)
             {
                 _Sign.Selected = YourSignValues != null ? YourSignValues.Contains(_Sign.SignID) : false;
             }
@@ -1325,7 +1325,7 @@ namespace Shell.MVC2.Data
 
             var YourReligiousAttendanceValues = EnumerableYourReligiousAttendance != null ? new HashSet<int?>(EnumerableYourReligiousAttendance) : null;
 
-            foreach (var _ReligiousAttendance in model.CharacterSearchSettings.ReligiousAttendanceList)
+            foreach (var _ReligiousAttendance in model.CharacterSearchSettings.religiousattendancelist)
             {
                 _ReligiousAttendance.Selected = YourReligiousAttendanceValues != null ? YourReligiousAttendanceValues.Contains(_ReligiousAttendance.ReligiousAttendanceID) : false;
             }
@@ -1335,7 +1335,7 @@ namespace Shell.MVC2.Data
 
             var YourReligionValues = EnumerableYourReligion != null ? new HashSet<int?>(EnumerableYourReligion) : null;
 
-            foreach (var _Religion in model.CharacterSearchSettings.ReligionList)
+            foreach (var _Religion in model.CharacterSearchSettings.religionlist)
             {
                 _Religion.Selected = YourReligionValues != null ? YourReligionValues.Contains(_Religion.ReligionID) : false;
             }
@@ -1423,7 +1423,7 @@ namespace Shell.MVC2.Data
 
             var YourHumorValues = EnumerableYourHumor != null ? new HashSet<int?>(EnumerableYourHumor) : null;
 
-            foreach (var _Humor in model.CharacterSearchSettings.HumorList)
+            foreach (var _Humor in model.CharacterSearchSettings.humorlist)
             {
                 _Humor.Selected = YourHumorValues != null ? YourHumorValues.Contains(_Humor.HumorID) : false;
             }
@@ -1433,7 +1433,7 @@ namespace Shell.MVC2.Data
 
             var YourPoliticalViewValues = EnumerableYourPoliticalView != null ? new HashSet<int?>(EnumerableYourPoliticalView) : null;
 
-            foreach (var _PoliticalView in model.CharacterSearchSettings.PoliticalViewList)
+            foreach (var _PoliticalView in model.CharacterSearchSettings.politicalviewlist)
             {
                 _PoliticalView.Selected = YourPoliticalViewValues != null ? YourPoliticalViewValues.Contains(_PoliticalView.PoliticalViewID) : false;
             }
@@ -1492,7 +1492,7 @@ namespace Shell.MVC2.Data
 
 
 
-        private void UpdateProfileDataEthnicity(int?[] selectedEthnicity, profiledata ProfileDataToUpdate)
+        private void UpdateProfileDataEthnicity(int?[] selectedEthnicity, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedEthnicity == null)
             {
@@ -1535,7 +1535,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateProfileDataHotFeature(int?[] selectedHotFeature, profiledata ProfileDataToUpdate)
+        private void UpdateProfileDataHotFeature(int?[] selectedHotFeature, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedHotFeature == null)
             {
@@ -1578,7 +1578,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateProfileDataHobby(int?[] selectedHobby, profiledata ProfileDataToUpdate)
+        private void UpdateProfileDataHobby(int?[] selectedHobby, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedHobby == null)
             {
@@ -1621,7 +1621,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateProfileDataLookingFor(int?[] selectedLookingFor, profiledata ProfileDataToUpdate)
+        private void UpdateProfileDataLookingFor(int?[] selectedLookingFor, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedLookingFor == null)
             {
@@ -1670,7 +1670,7 @@ namespace Shell.MVC2.Data
 
         #region "checkbox updated functions searchsettings values for all lists"
 
-        private void UpdateSearchSettingsGenders(int?[] selectedGenders, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsGenders(int?[] selectedGenders, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedGenders == null)
             {
@@ -1712,7 +1712,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsShowMe(int?[] selectedShowMe, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsShowMe(int?[] selectedShowMe, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedShowMe == null)
             {
@@ -1756,7 +1756,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsSortByTypes(int?[] selectedSortBy, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsSortByTypes(int?[] selectedSortBy, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedSortBy == null)
             {
@@ -1800,7 +1800,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsBodyTypes(int?[] selectedBodyTypes, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsBodyTypes(int?[] selectedBodyTypes, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedBodyTypes == null)
             {
@@ -1868,7 +1868,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsEthnicity(int?[] selectedEthnicity, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsEthnicity(int?[] selectedEthnicity, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedEthnicity == null)
             {
@@ -1911,7 +1911,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsHairColor(int?[] selectedHairColor, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsHairColor(int?[] selectedHairColor, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedHairColor == null)
             {
@@ -1955,7 +1955,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsEyeColor(int?[] selectedEyeColor, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsEyeColor(int?[] selectedEyeColor, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedEyeColor == null)
             {
@@ -2000,7 +2000,7 @@ namespace Shell.MVC2.Data
         }
 
         //Usee the search settings ID as parameter instead I guess upate all of em ugh!!
-        private void UpdateSearchSettingsHotFeature(int?[] selectedHotFeature, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsHotFeature(int?[] selectedHotFeature, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedHotFeature == null)
             {
@@ -2044,7 +2044,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsDiet(int?[] selectedDiet, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsDiet(int?[] selectedDiet, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedDiet == null)
             {
@@ -2088,7 +2088,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsDrinks(int?[] selectedDrinks, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsDrinks(int?[] selectedDrinks, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedDrinks == null)
             {
@@ -2132,7 +2132,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsExercise(int?[] selectedExercise, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsExercise(int?[] selectedExercise, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedExercise == null)
             {
@@ -2176,7 +2176,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsHobby(int?[] selectedHobby, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsHobby(int?[] selectedHobby, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedHobby == null)
             {
@@ -2220,7 +2220,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsHumor(int?[] selectedHumor, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsHumor(int?[] selectedHumor, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedHumor == null)
             {
@@ -2264,7 +2264,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsPoliticalView(int?[] selectedPoliticalView, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsPoliticalView(int?[] selectedPoliticalView, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedPoliticalView == null)
             {
@@ -2308,7 +2308,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsReligion(int?[] selectedReligion, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsReligion(int?[] selectedReligion, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedReligion == null)
             {
@@ -2352,7 +2352,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsReligiousAttendance(int?[] selectedReligiousAttendance, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsReligiousAttendance(int?[] selectedReligiousAttendance, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedReligiousAttendance == null)
             {
@@ -2396,7 +2396,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsSign(int?[] selectedSign, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsSign(int?[] selectedSign, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedSign == null)
             {
@@ -2440,7 +2440,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsSmokes(int?[] selectedSmokes, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsSmokes(int?[] selectedSmokes, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedSmokes == null)
             {
@@ -2484,7 +2484,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsEducationLevel(int?[] selectedEducationLevel, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsEducationLevel(int?[] selectedEducationLevel, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedEducationLevel == null)
             {
@@ -2528,7 +2528,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsEmploymentStatus(int?[] selectedEmploymentStatus, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsEmploymentStatus(int?[] selectedEmploymentStatus, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedEmploymentStatus == null)
             {
@@ -2572,7 +2572,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsHaveKids(int?[] selectedHaveKids, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsHaveKids(int?[] selectedHaveKids, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedHaveKids == null)
             {
@@ -2616,7 +2616,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsIncomeLevel(int?[] selectedIncomeLevel, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsIncomeLevel(int?[] selectedIncomeLevel, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedIncomeLevel == null)
             {
@@ -2660,7 +2660,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsLivingSituation(int?[] selectedLivingSituation, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsLivingSituation(int?[] selectedLivingSituation, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedLivingSituation == null)
             {
@@ -2704,7 +2704,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsLookingFor(int?[] selectedLookingFor, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsLookingFor(int?[] selectedLookingFor, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedLookingFor == null)
             {
@@ -2748,7 +2748,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsMaritalStatus(int?[] selectedMaritalStatus, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsMaritalStatus(int?[] selectedMaritalStatus, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedMaritalStatus == null)
             {
@@ -2792,7 +2792,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsProfession(int?[] selectedProfession, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsProfession(int?[] selectedProfession, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedProfession == null)
             {
@@ -2836,7 +2836,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        private void UpdateSearchSettingsWantsKids(int?[] selectedWantsKids, profiledata ProfileDataToUpdate)
+        private void UpdateSearchSettingsWantsKids(int?[] selectedWantsKids, profilemetadata  ProfileDataToUpdate)
         {
             if (selectedWantsKids == null)
             {

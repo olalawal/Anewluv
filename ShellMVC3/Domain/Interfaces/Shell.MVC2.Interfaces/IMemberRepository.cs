@@ -14,7 +14,7 @@ namespace Shell.MVC2.Data
 
        //TO Do posibly move this to a separate service for benchmarking
        //member viewmodoem mapping and registration models mappers
-        MembersViewModel mapmember(string profileid);       
+        MembersViewModel mapmember(int profileid);       
         MembersViewModel mapguest();
         RegisterModel mapregistration(MembersViewModel membersmodel);     
         RegisterModel mapjainrainregistration(rpxprofile profile, MembersViewModel membersmodel);
@@ -24,9 +24,9 @@ namespace Shell.MVC2.Data
 
        //initial profile stuffs
         Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyusername(string username);
-        profiledata getprofiledatabyprofileid(string profileid) ;
-        searchsetting getperfectmatchsearchsettingsbyprofileid(string profileid);
-        searchsetting createmyperfectmatchsearchsettingsbyprofileid(string profileid);       
+        profiledata getprofiledatabyprofileid(int profileid) ;
+        searchsetting getperfectmatchsearchsettingsbyprofileid(int profileid);
+        searchsetting createmyperfectmatchsearchsettingsbyprofileid(int profileid);       
      
        //get full profile stuff       
         string getgenderbyscreenname(string strScreenName);            
@@ -36,15 +36,15 @@ namespace Shell.MVC2.Data
       //Message and Email Quota stuff
        // Description:	Updates the users logout time
        // added 1/18/2010 ola lawal
-        bool checkifquoutareachedandupdate(string profileID) ; 
+        bool checkifquoutareachedandupdate(int profileid) ; 
        //Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
        //update the database i.e create folders and change profile status from guest to active ?!
         bool createmailboxfolders(string strProfileID);
         bool activateprofile(string strProfileID);      
      
        //updates the profile with a password that is presumed to be already encyrpted
-        bool updatepassword(string profileID, string encryptedpassword);       
-        bool addnewopenidforprofile(string profileID, string openidIdentifer, string openidProvidername); 
+        bool updatepassword(int profileid, string encryptedpassword);       
+        bool addnewopenidforprofile(int profileid, string openidIdentifer, string openidProvidername); 
        //check if profile is activated 
         bool checkifprofileisactivated(string strProfileID);   
        //check if mailbox folder exist
@@ -54,15 +54,15 @@ namespace Shell.MVC2.Data
        //********************************************
        // Description:	Updates the users logout time
        // added 1/18/2010 ola lawal
-        bool updateuserlogouttime(string profileID, string sessionID);
+        bool updateuserlogouttime(int profileid, string sessionID);
        //get the last time the user logged in from profile
-        Nullable<DateTime> getmemberlastlogintime(string profileid);
+        Nullable<DateTime> getmemberlastlogintime(int profileid);
       
        //updates all the areas  that handle when a user logs in 
        // added 1/18/2010 ola lawal
        //also updates the last log in and profile data
         bool updateuserlogintime(string username, string sessionID);       
-        bool updateuserlogintimebyprofileid(string ProfileID, string sessionID);
+        bool updateuserlogintimebyprofileid(int profileid, string sessionID);
        
        //date time functions '
        //***********************************************************
@@ -71,7 +71,7 @@ namespace Shell.MVC2.Data
        //Ola Lawal 7/10/2009 feel free to drill down even to the day
         string getlastloggedinstring(DateTime LoginDate); 
        //returns true if somone logged on
-        bool getuseronlinestatus(string profileid);
+        bool getuseronlinestatus(int profileid);
        
        //other standard verifcation methods added here
        /// <summary>
@@ -80,12 +80,12 @@ namespace Shell.MVC2.Data
        /// </summary>       
         bool checkifscreennamealreadyexists(string strScreenName);   
        //5-20-2012 added to check if a user email is registered       
-        bool checkifprofileidalreadyexists(string profileID);     
+        bool checkifprofileidalreadyexists(int profileid);     
         string validatesecurityansweriscorrect(string strProfileID, int SecurityQuestionID, string strSecurityAnswer);  
         int getprofileidbyusername(string strusername);
         int getprofileidbyscreenname(string strscreenname);   
-        string getusernamebyprofileid(string profileid);       
-        string getscreennamebyprofileid(string profileid);  
+        string getusernamebyprofileid(int profileid);       
+        string getscreennamebyprofileid(int profileid);  
         string getscreennamebyusername(string username);      
         bool checkifemailalreadyexists(string strEmail);
        // added by Deshola on 5/17/2011       
@@ -106,9 +106,9 @@ namespace Shell.MVC2.Data
        //Hereis where the members Repository stuff that was in the MVC project starts at
        //************************************************************************************
 
-        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyprofileid(string ProfileId);         
-        bool deactivateprofile(string profileid);
-        visiblitysetting getprofilevisibilitysettingsbyprofileid(string ProfileID);          
+        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyprofileid(int profileid);         
+        bool deactivateprofile(int profileid);
+        visiblitysetting getprofilevisibilitysettingsbyprofileid(int profileid);          
      
      
        //TO DO move these functions to a Matches or Search Services Area and repoisitory eventually

@@ -294,90 +294,90 @@ namespace Shell.MVC2.Data
 
                 foreach (var item in PerfectMatchSettings.ethnicitys )
                 {
-                    CriteriaModel.AppearanceSearchSettings.EthnicityList.Add(item.ethnicity.description );
+                    CriteriaModel.AppearanceSearchSettings.ethnicitylist.Add(item.ethnicity.description );
                 }
 
                 foreach (var item in PerfectMatchSettings.bodytypes )
                 {
-                    CriteriaModel.AppearanceSearchSettings.BodyTypesList.Add(item.bodytype.description );
+                    CriteriaModel.AppearanceSearchSettings.bodytypeslist.Add(item.bodytype.description );
                 }
 
                 foreach (var item in PerfectMatchSettings.eyecolors )
                 {
-                    CriteriaModel.AppearanceSearchSettings.EyeColorList.Add(item.eyecolor.description );
+                    CriteriaModel.AppearanceSearchSettings.eyecolorlist.Add(item.eyecolor.description );
                 }
 
                 foreach (var item in PerfectMatchSettings.haircolors )
                 {
-                    CriteriaModel.AppearanceSearchSettings.HairColorList.Add(item.haircolor.description );
+                    CriteriaModel.AppearanceSearchSettings.haircolorlist.Add(item.haircolor.description );
                 }
 
 
                 foreach (var item in PerfectMatchSettings.hotfeature )
                 {
-                    CriteriaModel.AppearanceSearchSettings.HotFeatureList.Add(item.hotfeature.description);
+                    CriteriaModel.AppearanceSearchSettings.hotfeaturelist.Add(item.hotfeature.description);
                 }
 
                 //populate lifestyle values here
 
                 foreach (var item in PerfectMatchSettings.educationlevels )
-                { CriteriaModel.LifeStyleSearchSettings.EducationLevelList.Add(item.educationlevel.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.educationlevellist.Add(item.educationlevel.description ); }
 
                 foreach (var item in PerfectMatchSettings.lookingfor )
-                { CriteriaModel.LifeStyleSearchSettings.LookingForList.Add(item.lookingfor.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.lookingforlist.Add(item.lookingfor.description ); }
 
                 foreach (var item in PerfectMatchSettings.employmentstatus )
-                { CriteriaModel.LifeStyleSearchSettings.EmploymentStatusList.Add(item.employmentstatus.description); }
+                { CriteriaModel.LifeStyleSearchSettings.employmentstatuslist.Add(item.employmentstatus.description); }
 
                 foreach (var item in PerfectMatchSettings.havekids )
-                { CriteriaModel.LifeStyleSearchSettings.HaveKidsList.Add(item.havekids.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.havekidslist.Add(item.havekids.description ); }
 
                 foreach (var item in PerfectMatchSettings.livingstituations )
-                { CriteriaModel.LifeStyleSearchSettings.LivingSituationList.Add(item.livingsituation.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.livingsituationlist.Add(item.livingsituation.description ); }
 
                 foreach (var item in PerfectMatchSettings.maritalstatuses )
-                { CriteriaModel.LifeStyleSearchSettings.MaritalStatusList.Add(item.maritalstatus.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.maritalstatuslist.Add(item.maritalstatus.description ); }
 
                 foreach (var item in PerfectMatchSettings.wantkids )
-                { CriteriaModel.LifeStyleSearchSettings.WantsKidsList.Add(item.wantskids.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.wantskidslist.Add(item.wantskids.description ); }
 
                 foreach (var item in PerfectMatchSettings.professions )
-                { CriteriaModel.LifeStyleSearchSettings.ProfessionList.Add(item.profession.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.professionlist.Add(item.profession.description ); }
 
                 foreach (var item in PerfectMatchSettings.incomelevels )
-                { CriteriaModel.LifeStyleSearchSettings.IncomeLevelList.Add(item.incomelevel.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.incomelevellist.Add(item.incomelevel.description ); }
 
                 //Character settings for search here
                 foreach (var item in PerfectMatchSettings.diets )
-                { CriteriaModel.CharacterSearchSettings.DietList.Add(item.diet.description ); }
+                { CriteriaModel.CharacterSearchSettings.dietlist.Add(item.diet.description ); }
 
                 foreach (var item in PerfectMatchSettings.humors )
-                { CriteriaModel.CharacterSearchSettings.HumorList.Add(item.humor.description ); }
+                { CriteriaModel.CharacterSearchSettings.humorlist.Add(item.humor.description ); }
 
                 foreach (var item in PerfectMatchSettings.hobbies )
-                { CriteriaModel.CharacterSearchSettings.HobbyList.Add(item.hobby.description ); }
+                { CriteriaModel.CharacterSearchSettings.hobbylist.Add(item.hobby.description ); }
 
                 foreach (var item in PerfectMatchSettings.drinks )
-                { CriteriaModel.CharacterSearchSettings.DrinksList.Add(item.drink.description ); }
+                { CriteriaModel.CharacterSearchSettings.drinkslist.Add(item.drink.description ); }
 
                 //FIX after database update
                 foreach (var item in PerfectMatchSettings.exercises )
-                { CriteriaModel.CharacterSearchSettings.ExerciseList.Add(item.exercise.description ); }
+                { CriteriaModel.CharacterSearchSettings.exerciselist.Add(item.exercise.description ); }
 
                 foreach (var item in PerfectMatchSettings.smokes )
-                { CriteriaModel.CharacterSearchSettings.SmokesList.Add(item.smokes.description ); }
+                { CriteriaModel.CharacterSearchSettings.smokeslist.Add(item.smokes.description ); }
 
                 foreach (var item in PerfectMatchSettings.signs )
-                { CriteriaModel.CharacterSearchSettings.SignList.Add(item.sign.description ); }
+                { CriteriaModel.CharacterSearchSettings.signlist.Add(item.sign.description ); }
 
                 foreach (var item in PerfectMatchSettings.politicalviews )
-                { CriteriaModel.CharacterSearchSettings.PoliticalViewList.Add(item.politicalview.description ; }
+                { CriteriaModel.CharacterSearchSettings.politicalviewlist.Add(item.politicalview.description ; }
 
                 foreach (var item in PerfectMatchSettings.religions )
-                { CriteriaModel.CharacterSearchSettings.ReligionList.Add(item.religion.description); }
+                { CriteriaModel.CharacterSearchSettings.religionlist.Add(item.religion.description); }
 
                 foreach (var item in PerfectMatchSettings.religiousattendances )
-                { CriteriaModel.CharacterSearchSettings.ReligiousAttendanceList.Add(item.religiousattendance.description ); }
+                { CriteriaModel.CharacterSearchSettings.religiousattendancelist.Add(item.religiousattendance.description ); }
 
 
                 return CriteriaModel;

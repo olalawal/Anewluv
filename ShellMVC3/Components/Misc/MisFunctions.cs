@@ -557,26 +557,26 @@ namespace Misc
                 //populate collections tied to profilemetadata
 
 
-                //handle favorites
-                foreach (Dating.Server.Data.Models.favorite  favoritesitem in olddb.favorites)
-                {
-                    var favoritesobject = new Shell.MVC2.Domain.Entities.Anewluv.favorite();
+                ////handle favorites
+                //foreach (Dating.Server.Data.Models.favorite  favoritesitem in olddb.favorites)
+                //{
+                //    var favoritesobject = new Shell.MVC2.Domain.Entities.Anewluv.favorite();
 
-                   //add the realted proflemetadatas 
-                    favoritesobject.profilemetadata  = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.ProfileID).FirstOrDefault();
-                    favoritesobject.favoriteprofilemetadata   = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.FavoriteID ).FirstOrDefault();
+                //   //add the realted proflemetadatas 
+                //    favoritesobject.profilemetadata  = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.ProfileID).FirstOrDefault();
+                //    favoritesobject.favoriteprofilemetadata   = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.FavoriteID ).FirstOrDefault();
 
-                    favoritesobject.creationdate = favoritesitem.FavoriteDate.GetValueOrDefault();
-                    favoritesobject.modificationdate = null;
-                    favoritesobject.viewdate = favoritesitem.FavoriteViewedDate ;                    
-                    favoritesobject.deletedbymemberdate = null;
-                    favoritesobject.deletedbyfavoritedate = null; 
+                //    favoritesobject.creationdate = favoritesitem.FavoriteDate.GetValueOrDefault();
+                //    favoritesobject.modificationdate = null;
+                //    favoritesobject.viewdate = favoritesitem.FavoriteViewedDate ;                    
+                //    favoritesobject.deletedbymemberdate = null;
+                //    favoritesobject.deletedbyfavoritedate = null; 
 
-                    //add the object to profile object
-                    context.favorites.Add(favoritesobject);
-                    //save data one per row
-                    context.SaveChanges();
-                }
+                //    //add the object to profile object
+                //    context.favorites.Add(favoritesobject);
+                //    //save data one per row
+                //    context.SaveChanges();
+                //}
 
 
 
@@ -594,7 +594,7 @@ namespace Misc
 
         }
 
-        public static void ConvertProfileDataMetadataCollectionsSearchSettings()
+        public static void ConvertProfileSearchSettingsCollections()
         {
             var olddb = new AnewluvFtsEntities();
             var postaldb = new PostalData2Entities();

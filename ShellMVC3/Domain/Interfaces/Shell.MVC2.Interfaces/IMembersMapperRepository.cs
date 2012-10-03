@@ -10,11 +10,11 @@ namespace Shell.MVC2.Interfaces
     {
 
     
-        MemberSearchViewModel GetMemberSearchViewModel(string profileId);
+        MemberSearchViewModel GetMemberSearchViewModel(int profileid);
      
         List<MemberSearchViewModel> GetMemberSearchViewModels(List<string> profileIds);
    
-        ProfileBrowseModel GetProfileBrowseModel(string viewerprofileId, string profileId);
+        ProfileBrowseModel GetProfileBrowseModel(string viewerprofileId, int profileid);
   
         List<ProfileBrowseModel> GetProfileBrowseModels(string viewerprofileId, List<string> profileIds);
    

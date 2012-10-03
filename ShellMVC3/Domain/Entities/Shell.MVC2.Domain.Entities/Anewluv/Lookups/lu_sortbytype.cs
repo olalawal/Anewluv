@@ -12,6 +12,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public int id { get; set; }        
         public string description { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public bool Selected { get; set; }
+        public bool selected { get; set; }
     }
 }

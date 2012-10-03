@@ -130,7 +130,7 @@ $(function () {
 
  <div id="PartialContainderForEditApperance1">
      @{  List<SelectListItem> Heights = CachingFactory.SharedObjectHelper.GetMetricHeightList() ;  } 
-     @{  List<SelectListItem> BodyTypes = CachingFactory.SharedObjectHelper.GetBodyTypesList () ;  } 
+     @{  List<SelectListItem> BodyTypes = CachingFactory.SharedObjectHelper.Getbodytypeslist () ;  } 
     
     <div id="log"></div>
      <div class="Describe_what_makes_aboutEdit">
@@ -173,8 +173,8 @@ $(function () {
 			</div>
 			<div class="clearFloat"></div>
 			<div id="height1YouComboBox_win_MyQSEappearnce">
-            @(Html.Telerik().ComboBoxFor(model => Model.AppearanceSearchSettings.LookingForHeightMin )
-                                    .Name("Model.AppearanceSearchSettings.LookingForHeightMin")
+            @(Html.Telerik().ComboBoxFor(model => Model.AppearanceSearchSettings.heightmin )
+                                    .Name("Model.AppearanceSearchSettings.heightmin")
                     .HtmlAttributes(new { style = string.Format("width: 125px") })
                                    .BindTo(Heights) 
                      .AutoFill(true)
@@ -182,8 +182,8 @@ $(function () {
             </div> 
             
 			<div id="height2YouComboBox_win_MyQSEappearnce">
-             @(Html.Telerik().ComboBoxFor(model => Model.AppearanceSearchSettings.LookingForHeightMax  )
-                                                   .Name("Model.AppearanceSearchSettings.LookingForHeightMax")
+             @(Html.Telerik().ComboBoxFor(model => Model.AppearanceSearchSettings.heightmax  )
+                                                   .Name("Model.AppearanceSearchSettings.heightmax")
                     .HtmlAttributes(new { style = string.Format("width: 125px") })
                                    .BindTo(Heights) 
                      .AutoFill(true)
@@ -201,7 +201,7 @@ $(function () {
             <table style="width: 95%"  class="CheckboxLabelText"  > 
                 <tr> </tr> 
                @{ int cnt = 0; } 
-               @foreach(var showme in Model.AppearanceSearchSettings.BodyTypesList)                   
+               @foreach(var showme in Model.AppearanceSearchSettings.bodytypeslist)                   
                  { 
                   if (cnt == 3 || cnt == 6 || cnt == 9 || cnt == 12 || cnt == 15) 
                   { 

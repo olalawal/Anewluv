@@ -175,7 +175,7 @@
 
 
  <div id="PartialContainderForEditApperance1">
-     @{  List<SelectListItem> Diets = CachingFactory.SharedObjectHelper.GetDietList();  } 
+     @{  List<SelectListItem> Diets = CachingFactory.SharedObjectHelper.Getdietlist();  } 
      @{  List<SelectListItem> Excercises = CachingFactory.SharedObjectHelper.GetExerciseList() ;  } 
         @{  List<SelectListItem> Drinks = CachingFactory.SharedObjectHelper.GetDrinksList();  } 
      @{  List<SelectListItem> Smokes = CachingFactory.SharedObjectHelper.GetSmokesList() ;  } 
@@ -280,7 +280,7 @@
              <table style="width: 95%"  class="CheckboxLabelText"  > 
                 <tr> </tr> 
                     @{ int cnt2 = 0; } 
-               @foreach(var showme in Model.CharacterSearchSettings.DietList  )                   
+               @foreach(var showme in Model.CharacterSearchSettings.dietlist  )                   
                  { 
                    if (cnt2 == 2 || cnt2 == 4 || cnt2 == 6 || cnt2 == 8 || cnt2 == 10) 
                    {  <tr></tr> }                  
@@ -315,7 +315,7 @@
             <table style="width: 95%"  class="CheckboxLabelText"  > 
                 <tr> </tr> 
             @{ int cnt1 = 0; } 
-               @foreach(var showme in Model.CharacterSearchSettings.ExerciseList  )                   
+               @foreach(var showme in Model.CharacterSearchSettings.exerciselist  )                   
                  { 
                   if (cnt1 == 2 || cnt1 == 4 || cnt1 == 6 || cnt1 == 8 || cnt1 == 10) 
                   { <tr></tr> }                   
@@ -364,7 +364,7 @@
              <table style="width: 95%"  class="CheckboxLabelText"  > 
                 <tr> </tr> 
                @{ int cnt3 = 0; } 
-               @foreach(var showme in Model.CharacterSearchSettings.DrinksList  )                   
+               @foreach(var showme in Model.CharacterSearchSettings.drinkslist  )                   
                  { 
                   if (cnt3 == 2 || cnt3 == 4 || cnt3 == 6 || cnt3 == 8 || cnt3 == 10)
                   {   <tr></tr> }                   
@@ -398,7 +398,7 @@
             <table style="width: 95%"  class="CheckboxLabelText"  > 
                 <tr> </tr> 
                @{ int cnt4 = 0; } 
-               @foreach (var showme in Model.CharacterSearchSettings.SmokesList)
+               @foreach (var showme in Model.CharacterSearchSettings.smokeslist)
                {
                    if (cnt4 == 2 || cnt4 == 4 || cnt4 == 6 || cnt4 == 8 || cnt4 == 10)
                    {

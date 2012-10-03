@@ -12,15 +12,15 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     {
 
         //populate character settings here
-        public List<string> DietList = new List<string>();
-        public List<string> HumorList = new List<string>();
-        public List<string> HobbyList = new List<string>();
-        public List<string> DrinksList = new List<string>();
-        public List<string> ExerciseList = new List<string>();
-        public List<string> SmokesList = new List<string>();
-        public List<string> SignList = new List<string>();
-        public List<string> PoliticalViewList = new List<string>();
-        public List<string> ReligionList = new List<string>();
-        public List<string> ReligiousAttendanceList = new List<string>();
+        public List<string> dietlist = new List<string>();
+        public List<string> humorlist = new List<string>();
+        public List<string> hobbylist = new List<string>();
+        public List<string> drinkslist = new List<string>();
+        public List<string> exerciselist = new List<string>();
+        public List<string> smokeslist = new List<string>();
+        public List<string> signlist = new List<string>();
+        public List<string> politicalviewlist = new List<string>();
+        public List<string> religionlist = new List<string>();
+        public List<string> religiousattendancelist = new List<string>();
     }
 }

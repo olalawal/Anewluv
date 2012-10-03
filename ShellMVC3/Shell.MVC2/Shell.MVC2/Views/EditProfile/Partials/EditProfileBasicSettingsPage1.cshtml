@@ -58,7 +58,7 @@
             <table style="width: 100%"> 
                 <tr> </tr> 
              @* <%: int cnt = 0 %> *@
-                @foreach(var gender in Model.BasicSearchSettings.LookingForGendersList )                   
+                @foreach(var gender in Model.BasicSearchSettings.genderslist )                   
                  { 
                   @* <%: if(cnt++ %=3 == 0 %>*@
  
@@ -93,8 +93,8 @@
 
 						<div class="clearFloat"></div>
 			<div id="age1ComboBox_win_aboutEdit">
-              @(Html.Telerik().ComboBoxFor(model => Model.BasicSearchSettings.LookingForAgeMin)
-                                    .Name("Model.BasicSearchSettings.LookingForAgeMin")
+              @(Html.Telerik().ComboBoxFor(model => Model.BasicSearchSettings.agemin)
+                                    .Name("Model.BasicSearchSettings.agemin")
                     .HtmlAttributes(new { style = string.Format("width: 75px") })          
                     .BindTo(Ages ) 
                      .AutoFill(true)
@@ -106,8 +106,8 @@
 			</div>
 			<div id="Age2ComboBox_win_aboutEdit">
             
-                  @(Html.Telerik().ComboBoxFor(model => Model.BasicSearchSettings.LookingForAgeMax)
-                                    .Name("Model.BasicSearchSettings.LookingForAgeMax")
+                  @(Html.Telerik().ComboBoxFor(model => Model.BasicSearchSettings.agemax)
+                                    .Name("Model.BasicSearchSettings.agemax")
                     .HtmlAttributes(new { style = string.Format("width: 75px") })          
                     .BindTo(Ages) 
                      .AutoFill(true)

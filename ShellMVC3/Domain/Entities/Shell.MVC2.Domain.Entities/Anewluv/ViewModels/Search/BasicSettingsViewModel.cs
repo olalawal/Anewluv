@@ -11,38 +11,38 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     public class BasicSettingsViewModel
     {
 
-        public class ShowMeCheckBox
-        {
-            public int ShowMeID { get; set; }
-            public string ShowMeName { get; set; }
-            public bool Selected { get; set; }
-        }
+        //public class ShowMeCheckBox
+        //{
+        //    public int ShowMeID { get; set; }
+        //    public string ShowMeName { get; set; }
+        //    public bool selected { get; set; }
+        //}
 
-        public class GenderCheckBox
-        {
-            public int GenderID { get; set; }
-            public string GenderName { get; set; }
-            public bool Selected { get; set; }
-        }
+        //public class GenderCheckBox
+        //{
+        //    public int GenderID { get; set; }
+        //    public string GenderName { get; set; }
+        //    public bool selected { get; set; }
+        //}
 
-        public class SortByTypeCheckBox
-        {
-            public int SortByTypeID { get; set; }
-            public string SortByTypeName { get; set; }
-            public bool Selected { get; set; }
-        }
+        //public class SortByTypeCheckBox
+        //{
+        //    public int SortByTypeID { get; set; }
+        //    public string SortByTypeName { get; set; }
+        //    public bool selected { get; set; }
+        //}
 
-        public string ProfileID { get; set; }
+        public string profileid { get; set; }
 
-        public string SearchName { get; set; }
+        public string searchname { get; set; }
 
-        public int SearchRank { get; set; }
+        public int searchrank { get; set; }
 
         [Range(0, 5000, ErrorMessage = "DistanceFrom must be a postive number no greater than 5000")]
-        public int DistanceFromMe { get; set; }
+        public int distancefromme { get; set; }
 
-        public int LookingForAgeMax { get; set; }
-        public int LookingForAgeMin { get; set; }
+        public int agemax { get; set; }
+        public int agemin { get; set; }
 
         //TODO remove this and populate from app fabric 
         //bound list items here
@@ -53,22 +53,23 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         // [DisplayName("Gender")]
         // public string LookingForGender { get; set; }
 
-        public bool MyPerfectMatch { get; set; }
-        public bool SystemMatch { get; set; }
-        public bool SavedSearch { get; set; }
-        public int CountryId { get; set; }
-        public string CityStateProvince { get; set; }
-        public string PostalCode { get; set; }
+        public bool myperfectmatch { get; set; }
+        public bool systemmatch { get; set; }
+        public bool savedsearch { get; set; }
+        public int countryid { get; set; }
+        public string citystateprovince { get; set; }
+        public string postalcode { get; set; }
 
-
+        public string aboutme { get; set; }
+        public string mycatchyintroline { get; set; }
       
 
         //add the propeties for bound litsts here
-        public IList<lu_showme> ShowMeList = new List<ShowMeCheckBox>();
-        public IList<SortByTypeCheckBox> SortByList = new List<SortByTypeCheckBox>();
+        public  IList<lu_showme> showmelist =         new List<lu_showme>();
+        public  IList<lu_sortbytype> sortbytypelist = new List<lu_sortbytype>();
         //gender is now allowing multiple selections
 
-        public IList<GenderCheckBox> LookingForGendersList { get; set; }
+        public IList<lu_gender> genderslist = new List<lu_gender>();
 
         // public SelectList Genders { get; set; }
 

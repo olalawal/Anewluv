@@ -24,37 +24,37 @@ namespace Shell.MVC2.Interfaces
 
 
              
-      int getwhoiaminterestedincount(string profileid);
+      int getwhoiaminterestedincount(int profileid);
              
-      int getwhoisinterestedinmecount(string profileid);
+      int getwhoisinterestedinmecount(int profileid);
        
-      int getwhoisinterestedinmenewcount(string profileid);
+      int getwhoisinterestedinmenewcount(int profileid);
         
-       List<MemberSearchViewModel> getinterests(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getinterests(int profileid, int? Page, int? NumberPerPage);
 
-       List<MemberSearchViewModel> getwhoisinterestedinme(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getwhoisinterestedinme(int profileid, int? Page, int? NumberPerPage);
 
-       List<MemberSearchViewModel> getwhoisinterestedinmenew(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getwhoisinterestedinmenew(int profileid, int? Page, int? NumberPerPage);
 
-       List<MemberSearchViewModel> getmutualinterests(string profileid, string targetprofileid);
+       List<MemberSearchViewModel> getmutualinterests(int profileid, string targetprofileid);
              
-        bool checkinterest(string profileid, string targetprofileid);
+        bool checkinterest(int profileid, string targetprofileid);
        
-        bool addinterest(string profileid, string targetprofileid);
+        bool addinterest(int profileid, string targetprofileid);
      
-        bool removeinterestbyprofileid(string profileid, string interestprofile_id);
+        bool removeinterestbyprofileid(int profileid, string interestprofile_id);
               
-        bool removeinterestbyinterestprofileid(string interestprofile_id, string profileid);
+        bool removeinterestbyinterestprofileid(string interestprofile_id, int profileid);
      
-        bool restoreinterestbyprofileid(string profileid, string interestprofile_id);
+        bool restoreinterestbyprofileid(int profileid, string interestprofile_id);
       
-        bool restoreinterestbyinterestprofileid(string interestprofile_id, string profileid);
+        bool restoreinterestbyinterestprofileid(string interestprofile_id, int profileid);
         
-        bool removeinterestsbyprofileidandscreennames(string profileid, List<String> screennames);
+        bool removeinterestsbyprofileidandscreennames(int profileid, List<String> screennames);
       
-        bool restoreinterestsbyprofileidandscreennames(string profileid, List<String> screennames);
+        bool restoreinterestsbyprofileidandscreennames(int profileid, List<String> screennames);
             
-        bool updateinterestviewstatus(string profileid, string targetprofileid);
+        bool updateinterestviewstatus(int profileid, string targetprofileid);
      
 
 
@@ -62,98 +62,98 @@ namespace Shell.MVC2.Interfaces
                     
         #region "peek methods"
          
-      int getwhoipeekedatcount(string profileid);
+      int getwhoipeekedatcount(int profileid);
           
-      int getwhopeekedatmecount(string profileid);
+      int getwhopeekedatmecount(int profileid);
           
-      int getwhoeekedatmenewcount(string profileid);
+      int getwhoeekedatmenewcount(int profileid);
     
-       List<MemberSearchViewModel> getwhopeekedatme(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getwhopeekedatme(int profileid, int? Page, int? NumberPerPage);
    
-         List <MemberSearchViewModel> getwhopeekedatmenew(string profileid, int? Page, int? NumberPerPage);   
+         List <MemberSearchViewModel> getwhopeekedatmenew(int profileid, int? Page, int? NumberPerPage);   
     
-       List<MemberSearchViewModel> getwhoipeekedat(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getwhoipeekedat(int profileid, int? Page, int? NumberPerPage);
  
-      List<MemberSearchViewModel> getmutualpeeks(string profileid, string targetprofileid);
+      List<MemberSearchViewModel> getmutualpeeks(int profileid, string targetprofileid);
            
-        bool checkpeek(string profileid, string targetprofileid);
+        bool checkpeek(int profileid, string targetprofileid);
  
-        bool addpeek(string profileid, string targetprofileid);
+        bool addpeek(int profileid, string targetprofileid);
       
-        bool removepeekbyprofileid(string profileid, string peekprofile_id);
+        bool removepeekbyprofileid(int profileid, string peekprofile_id);
             
-        bool removepeekbypeekprofileid( string peekprofile_id,string profileid);
+        bool removepeekbypeekprofileid( string peekprofile_id,int profileid);
        
-        bool restorepeekbyprofileid(string profileid, string peekprofile_id);
+        bool restorepeekbyprofileid(int profileid, string peekprofile_id);
       
-        bool restorepeekbypeekprofileid(string peekprofile_id,string profileid);
+        bool restorepeekbypeekprofileid(string peekprofile_id,int profileid);
             
-        bool removepeeksbyprofileidandscreennames(string profileid, List<String> screennames);
+        bool removepeeksbyprofileidandscreennames(int profileid, List<String> screennames);
             
-        bool restorepeeksbyprofileidandscreennames(string profileid, List<String> screennames);
+        bool restorepeeksbyprofileidandscreennames(int profileid, List<String> screennames);
 
-        bool updatepeekviewstatus(string profileid, string targetprofileid);
+        bool updatepeekviewstatus(int profileid, string targetprofileid);
       
         #endregion 
 
         #region "block methods"
 
-         int getwhoiblockedcount(string profileid);
+         int getwhoiblockedcount(int profileid);
 
-       List<MemberSearchViewModel> getwhoiblocked(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getwhoiblocked(int profileid, int? Page, int? NumberPerPage);
    
                    
-      List<MemberSearchViewModel> getmutualblocks(string profileid, string targetprofileid);
+      List<MemberSearchViewModel> getmutualblocks(int profileid, string targetprofileid);
   
-        bool checkblock(string profileid, string targetprofileid);
+        bool checkblock(int profileid, string targetprofileid);
      
-        bool addblock(string profileid, string targetprofileid);    
+        bool addblock(int profileid, string targetprofileid);    
 
-        bool removeblock(string profileid, string blockprofile_id);
+        bool removeblock(int profileid, string blockprofile_id);
      
-        bool restoreblock(string profileid, string blockprofile_id);
+        bool restoreblock(int profileid, string blockprofile_id);
      
-        bool removeblocksbyscreennames(string profileid, List<String> screennames);
+        bool removeblocksbyscreennames(int profileid, List<String> screennames);
     
-        bool restoreblocksbyscreennames(string profileid, List<String> screennames);
+        bool restoreblocksbyscreennames(int profileid, List<String> screennames);
         
-        bool updateblockreviewstatus(string profileid,string targetprofileid, string reviewerid);
+        bool updateblockreviewstatus(int profileid,string targetprofileid, string reviewerid);
      
         #endregion   
 
         #region "Like methods"
      
-      int getwhoilikecount(string profileid);
+      int getwhoilikecount(int profileid);
        
-      int getwholikesmecount(string profileid);
+      int getwholikesmecount(int profileid);
            
-      int getwhoislikesmenewcount(string profileid);
+      int getwhoislikesmenewcount(int profileid);
     
-       List <MemberSearchViewModel> getwholikesmenew(string profileid, int? Page, int? NumberPerPage); 
+       List <MemberSearchViewModel> getwholikesmenew(int profileid, int? Page, int? NumberPerPage); 
       
-        List <MemberSearchViewModel> getwholikesme(string profileid, int? Page, int? NumberPerPage);
+        List <MemberSearchViewModel> getwholikesme(int profileid, int? Page, int? NumberPerPage);
                 
-       List<MemberSearchViewModel> getwhoilike(string profileid, int? Page, int? NumberPerPage);
+       List<MemberSearchViewModel> getwhoilike(int profileid, int? Page, int? NumberPerPage);
        
-      List<MemberSearchViewModel> getmutuallikes(string profileid, string targetprofileid);
+      List<MemberSearchViewModel> getmutuallikes(int profileid, string targetprofileid);
              
-        bool checklike(string profileid, string targetprofileid);
+        bool checklike(int profileid, string targetprofileid);
       
-        bool addlike(string profileid, string targetprofileid);
+        bool addlike(int profileid, string targetprofileid);
     
-        bool removelikebyprofileid(string profileid, string likeprofile_id) ;       
+        bool removelikebyprofileid(int profileid, string likeprofile_id) ;       
 
-        bool removelikebylikeprofileid( string likeprofile_id,string profileid);
+        bool removelikebylikeprofileid( string likeprofile_id,int profileid);
        
-        bool restorelikebyprofileid(string profileid, string likeprofile_id);
+        bool restorelikebyprofileid(int profileid, string likeprofile_id);
     
-        bool restorelikebylikeprofileid(string likeprofile_id,string profileid);
+        bool restorelikebylikeprofileid(string likeprofile_id,int profileid);
        
-        bool removelikesbyprofileidandscreennames(string profileid, List<String> screennames);
+        bool removelikesbyprofileidandscreennames(int profileid, List<String> screennames);
 
-        bool restorelikesbyprofileidandscreennames(string profileid, List<String> screennames);
+        bool restorelikesbyprofileidandscreennames(int profileid, List<String> screennames);
     
-        bool updatelikeviewstatus(string profileid, string targetprofileid);
+        bool updatelikeviewstatus(int profileid, string targetprofileid);
        
 
         #endregion

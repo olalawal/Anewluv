@@ -24,7 +24,7 @@
             <table style="width: 95%"  class="CheckboxLabelText"  > 
                 <tr> </tr> 
                @{ int cnt = 0; } 
-               @foreach(var showme in Model.BasicSearchSettings.ShowMeList)                   
+               @foreach(var showme in Model.BasicSearchSettings.showmelist)                   
                  { 
                     if(cnt++  == 3 ) {
                      Response.Write("</tr> <tr>")

@@ -12,11 +12,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //appereance search settings 
         public string HeightMax { get; set; }
         public string HeightMin { get; set; }
-        public List<string> EthnicityList = new List<string>();
-        public List<string> BodyTypesList = new List<string>();
+        public List<string> ethnicitylist = new List<string>();
+        public List<string> bodytypeslist = new List<string>();
 
-        public List<string> EyeColorList = new List<string>();
-        public List<string> HairColorList = new List<string>();
-        public List<string> HotFeatureList = new List<string>();
+        public List<string> eyecolorlist = new List<string>();
+        public List<string> haircolorlist = new List<string>();
+        public List<string> hotfeaturelist = new List<string>();
     }
 }

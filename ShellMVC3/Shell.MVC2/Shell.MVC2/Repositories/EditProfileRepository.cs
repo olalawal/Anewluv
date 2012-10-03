@@ -89,7 +89,7 @@ namespace Shell.MVC2.Models
 
 
         #region "Edit profile Basic Settings Updates here
-        public EditProfileSettingsViewModel EditProfileBasicSettingsPage1Update(EditProfileSettingsViewModel model,
+        public bool EditProfileBasicSettingsPage1Update(EditProfileSettingsViewModel model,
             FormCollection formCollection, int?[] SelectedGenderIds, string _ProfileID)
         {
 
@@ -106,12 +106,12 @@ namespace Shell.MVC2.Models
             //var MyCatchyIntroLine = formCollection["MyCatchyIntroLine"];
             var AboutMe = model.BasicProfileSettings.AboutMe;
             var MyCatchyIntroLine = model.BasicProfileSettings.MyCatchyIntroLine;
-            var LookingForAgeMin = model.BasicSearchSettings.LookingForAgeMin;
-            var LookingforAgeMax = model.BasicSearchSettings.LookingForAgeMax;
+            var agemin = model.BasicSearchSettings.agemin;
+            var agemax = model.BasicSearchSettings.agemax;
             //get current values from DB in case some values were not updated
             model.BasicProfileSettings  =  new EditProfileBasicSettingsModel(ProfileDataToUpdate);            
             //test if thoe are empty
-            // var testLookingForAgeFrom = formCollection["BasicSearchSettings.LookingForAgeMin"];
+            // var testLookingForAgeFrom = formCollection["BasicSearchSettings.agemin"];
 
             //check if user checked at least one gender
             // bool isGenderSelected = formCollection.GetValues("SelectedGenderIds").Contains("true");  
@@ -125,14 +125,14 @@ namespace Shell.MVC2.Models
             //get map the basic search settings to the search settings pulled from databse
             model.BasicSearchSettings = new SearchModelBasicSettings(SearchSettingsToUpdate);
             //update the searchmodl settings with current settings
-            model.BasicSearchSettings.LookingForAgeMin = LookingForAgeMin;
-            model.BasicSearchSettings.LookingForAgeMax = LookingforAgeMax;
+            model.BasicSearchSettings.agemin = agemin;
+            model.BasicSearchSettings.agemax = agemax;
             //update gender values as well 
             IEnumerable<int?> myEnumerable = SelectedGenderIds;
 
             var GenderValues = myEnumerable != null ? new HashSet<int?>(myEnumerable) : null;
 
-            foreach (var _Gender in model.BasicSearchSettings.LookingForGendersList)
+            foreach (var _Gender in model.BasicSearchSettings.genderslist)
             {
                 _Gender.Selected = GendersValues != null ? GenderValues.Contains(_Gender.GenderID) : false;
             }
@@ -171,8 +171,8 @@ namespace Shell.MVC2.Models
                 //detrmine if we are in edit or add mode for search settings for perfect match
                 //if its null add a new entity  
                 //noew update searchsettings text values
-                SearchSettingsToUpdate.AgeMax = LookingforAgeMax;
-                SearchSettingsToUpdate.AgeMin = LookingForAgeMin;
+                SearchSettingsToUpdate.AgeMax = agemax;
+                SearchSettingsToUpdate.AgeMin = agemin;
 
                 SearchSettingsToUpdate.LastUpdateDate = DateTime.Now; //addded time stamp for updates this should be somone where else tho ?
                 //TO DO move this code to searchssettings Repositoury
@@ -196,7 +196,7 @@ namespace Shell.MVC2.Models
         }
 
 
-        public EditProfileSettingsViewModel EditProfileBasicSettingsPage2Update(EditProfileSettingsViewModel model,
+        public bool EditProfileBasicSettingsPage2Update(EditProfileSettingsViewModel model,
                 FormCollection formCollection,
                int?[] SelectedShowMeIds, int?[] SelectedSortByIds, string _ProfileID)
         {
@@ -230,7 +230,7 @@ namespace Shell.MVC2.Models
 
             var ShowMeTypeValues = myEnumerableShowmes != null ? new HashSet<int?>(myEnumerableShowmes) : null;
 
-            foreach (var _ShowMeType in model.BasicSearchSettings.ShowMeList)
+            foreach (var _ShowMeType in model.BasicSearchSettings.showmelist)
             {
                 _ShowMeType.Selected = ShowMeTypeValues != null ? ShowMeTypeValues.Contains(_ShowMeType.ShowMeID) : false;
             }
@@ -326,16 +326,16 @@ namespace Shell.MVC2.Models
             model.AppearanceSettings.Height = UiHeight;
             model.AppearanceSettings.BodyTypesID = UiBodyType;
 
-            var LookingForHeightMin = model.AppearanceSearchSettings.LookingForHeightMin == -1 ? 48 : model.AppearanceSearchSettings.LookingForHeightMin;
-            var LookingForHeightMax = model.AppearanceSearchSettings.LookingForHeightMax == -1 ? 89  : model.AppearanceSearchSettings.LookingForHeightMax ;
+            var heightmin = model.AppearanceSearchSettings.heightmin == -1 ? 48 : model.AppearanceSearchSettings.heightmin;
+            var heightmax = model.AppearanceSearchSettings.heightmax == -1 ? 89  : model.AppearanceSearchSettings.heightmax ;
            
 
             //reload search settings since it seems the checkbox values are lost on postback
             //we really should just rebuild them from form collection imo
             model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
             //update the reloaded  searchmodl settings with current settings on the UI
-            model.AppearanceSearchSettings.LookingForHeightMin = LookingForHeightMin ;
-            model.AppearanceSearchSettings.LookingForHeightMax = LookingForHeightMax ;
+            model.AppearanceSearchSettings.heightmin = heightmin ;
+            model.AppearanceSearchSettings.heightmax = heightmax ;
 
 
             //update the searchmodl settings with current settings            
@@ -344,7 +344,7 @@ namespace Shell.MVC2.Models
 
             var YourBodyTypesValues = EnumerableYourBodyTypes != null ? new HashSet<int?>(EnumerableYourBodyTypes) : null;
 
-            foreach (var _BodyTypes in model.AppearanceSearchSettings.BodyTypesList )
+            foreach (var _BodyTypes in model.AppearanceSearchSettings.bodytypeslist )
             {
                 _BodyTypes.Selected = YourBodyTypesValues != null ? YourBodyTypesValues.Contains(_BodyTypes.BodyTypesID ) : false;
             }
@@ -375,8 +375,8 @@ namespace Shell.MVC2.Models
                  ProfileDataToUpdate.BodyTypeID = model.AppearanceSettings.BodyTypesID;
                 
                  //now update the search settings 
-                  SearchSettingsToUpdate.HeightMin  = model.AppearanceSearchSettings.LookingForHeightMin;
-                  SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.LookingForHeightMax;
+                  SearchSettingsToUpdate.HeightMin  = model.AppearanceSearchSettings.heightmin;
+                  SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
                   SearchSettingsToUpdate.LastUpdateDate = DateTime.Now; 
                   UpdateSearchSettingsBodyTypes (SelectedYourBodyTypesID  , ProfileDataToUpdate);            
                   
@@ -432,7 +432,7 @@ namespace Shell.MVC2.Models
 
             var MyEthnicityValues = EnumerableMyEthnicity != null ? new HashSet<int?>(EnumerableMyEthnicity) : null;
 
-            foreach (var _Ethnicity in model.AppearanceSettings.MyEthnicityList)
+            foreach (var _Ethnicity in model.AppearanceSettings.Myethnicitylist)
             {
                 _Ethnicity.Selected = MyEthnicityValues != null ? MyEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
             }
@@ -441,7 +441,7 @@ namespace Shell.MVC2.Models
 
             var YourEthnicityValues = EnumerableYourEthnicity != null ? new HashSet<int?>(EnumerableYourEthnicity) : null;
 
-            foreach (var _Ethnicity in model.AppearanceSearchSettings.EthnicityList)
+            foreach (var _Ethnicity in model.AppearanceSearchSettings.ethnicitylist)
             {
                 _Ethnicity.Selected = YourEthnicityValues != null ? YourEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
             }
@@ -529,7 +529,7 @@ namespace Shell.MVC2.Models
 
             var YourHairColorValues = EnumerableYourHairColor != null ? new HashSet<int?>(EnumerableYourHairColor) : null;
 
-            foreach (var _HairColor in model.AppearanceSearchSettings.HairColorList)
+            foreach (var _HairColor in model.AppearanceSearchSettings.haircolorlist)
             {
                 _HairColor.Selected = YourHairColorValues != null ? YourHairColorValues.Contains(_HairColor.HairColorID) : false;
             }
@@ -538,7 +538,7 @@ namespace Shell.MVC2.Models
 
             var YourEyeColorValues = EnumerableYourEyeColor != null ? new HashSet<int?>(EnumerableYourEyeColor) : null;
 
-            foreach (var _EyeColor in model.AppearanceSearchSettings.EyeColorList)
+            foreach (var _EyeColor in model.AppearanceSearchSettings.eyecolorlist)
             {
                 _EyeColor.Selected = YourEyeColorValues != null ? YourEyeColorValues.Contains(_EyeColor.EyeColorID) : false;
             }
@@ -558,8 +558,8 @@ namespace Shell.MVC2.Models
                 ProfileDataToUpdate.HairColorID  = model.AppearanceSettings.HairColorID;
 
                 //now update the search settings 
-                SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.LookingForHeightMin;
-                SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.LookingForHeightMax;
+                SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.heightmin;
+                SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
 
                 UpdateSearchSettingsEyeColor (SelectedYourEyeColorIds , ProfileDataToUpdate);
                 UpdateSearchSettingsHairColor(SelectedYourHairColorIds , ProfileDataToUpdate);
@@ -611,7 +611,7 @@ namespace Shell.MVC2.Models
 
             var YourHotFeatureValues = EnumerableYourHotFeature != null ? new HashSet<int?>(EnumerableYourHotFeature) : null;
 
-            foreach (var _HotFeature in model.AppearanceSearchSettings.HotFeatureList)
+            foreach (var _HotFeature in model.AppearanceSearchSettings.hotfeaturelist)
             {
                 _HotFeature.Selected = YourHotFeatureValues != null ? YourHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
             }
@@ -620,7 +620,7 @@ namespace Shell.MVC2.Models
 
             var MyHotFeatureValues = EnumerableMyHotFeature != null ? new HashSet<int?>(EnumerableMyHotFeature) : null;
 
-            foreach (var _HotFeature in model.AppearanceSettings.MyHotFeatureList)
+            foreach (var _HotFeature in model.AppearanceSettings.Myhotfeaturelist)
             {
                 _HotFeature.Selected = MyHotFeatureValues != null ? MyHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
             }
@@ -711,7 +711,7 @@ namespace Shell.MVC2.Models
 
             var YourLookingForValues = EnumerableYourLookingFor != null ? new HashSet<int?>(EnumerableYourLookingFor) : null;
 
-            foreach (var _LookingFor in model.LifeStyleSearchSettings.LookingForList)
+            foreach (var _LookingFor in model.LifeStyleSearchSettings.lookingforlist)
             {
                 _LookingFor.Selected = YourLookingForValues != null ? YourLookingForValues.Contains(_LookingFor.LookingForID) : false;
             }
@@ -720,7 +720,7 @@ namespace Shell.MVC2.Models
 
             var YourLivingSituationValues = EnumerableYourLivingSituation != null ? new HashSet<int?>(EnumerableYourLivingSituation) : null;
 
-            foreach (var _LivingSituation in model.LifeStyleSearchSettings.LivingSituationList)
+            foreach (var _LivingSituation in model.LifeStyleSearchSettings.livingsituationlist)
             {
                 _LivingSituation.Selected = YourLivingSituationValues != null ? YourLivingSituationValues.Contains(_LivingSituation.LivingSituationID) : false;
             }
@@ -729,7 +729,7 @@ namespace Shell.MVC2.Models
 
             var YourMaritalStatusValues = EnumerableYourMaritalStatus != null ? new HashSet<int?>(EnumerableYourMaritalStatus) : null;
 
-            foreach (var _MaritalStatus in model.LifeStyleSearchSettings.MaritalStatusList)
+            foreach (var _MaritalStatus in model.LifeStyleSearchSettings.maritalstatuslist)
             {
                 _MaritalStatus.Selected = YourMaritalStatusValues != null ? YourMaritalStatusValues.Contains(_MaritalStatus.MaritalStatusID) : false;
             }
@@ -816,7 +816,7 @@ namespace Shell.MVC2.Models
 
             var YourWantsKidsValues = EnumerableYourWantsKids != null ? new HashSet<int?>(EnumerableYourWantsKids) : null;
 
-            foreach (var _WantsKids in model.LifeStyleSearchSettings.WantsKidsList)
+            foreach (var _WantsKids in model.LifeStyleSearchSettings.wantskidslist)
             {
                 _WantsKids.Selected = YourWantsKidsValues != null ? YourWantsKidsValues.Contains(_WantsKids.WantsKidsID) : false;
             }
@@ -826,7 +826,7 @@ namespace Shell.MVC2.Models
 
             var YourHaveKidsValues = EnumerableYourHaveKids != null ? new HashSet<int?>(EnumerableYourHaveKids) : null;
 
-            foreach (var _HaveKids in model.LifeStyleSearchSettings.HaveKidsList)
+            foreach (var _HaveKids in model.LifeStyleSearchSettings.havekidslist)
             {
                 _HaveKids.Selected = YourHaveKidsValues != null ? YourHaveKidsValues.Contains(_HaveKids.HaveKidsID) : false;
             }
@@ -917,7 +917,7 @@ namespace Shell.MVC2.Models
 
             var YourIncomeLevelValues = EnumerableYourIncomeLevel != null ? new HashSet<int?>(EnumerableYourIncomeLevel) : null;
 
-            foreach (var _IncomeLevel in model.LifeStyleSearchSettings.IncomeLevelList)
+            foreach (var _IncomeLevel in model.LifeStyleSearchSettings.incomelevellist)
             {
                 _IncomeLevel.Selected = YourIncomeLevelValues != null ? YourIncomeLevelValues.Contains(_IncomeLevel.IncomeLevelID) : false;
             }
@@ -927,7 +927,7 @@ namespace Shell.MVC2.Models
 
             var YourEmploymentStatusValues = EnumerableYourEmploymentStatus != null ? new HashSet<int?>(EnumerableYourEmploymentStatus) : null;
 
-            foreach (var _EmploymentStatus in model.LifeStyleSearchSettings.EmploymentStatusList)
+            foreach (var _EmploymentStatus in model.LifeStyleSearchSettings.employmentstatuslist)
             {
                 _EmploymentStatus.Selected = YourEmploymentStatusValues != null ? YourEmploymentStatusValues.Contains(_EmploymentStatus.EmploymentStatusID) : false;
             }
@@ -1014,7 +1014,7 @@ namespace Shell.MVC2.Models
 
             var YourProfessionValues = EnumerableYourProfession != null ? new HashSet<int?>(EnumerableYourProfession) : null;
 
-            foreach (var _Profession in model.LifeStyleSearchSettings.ProfessionList)
+            foreach (var _Profession in model.LifeStyleSearchSettings.professionlist)
             {
                 _Profession.Selected = YourProfessionValues != null ? YourProfessionValues.Contains(_Profession.ProfessionID) : false;
             }
@@ -1024,7 +1024,7 @@ namespace Shell.MVC2.Models
 
             var YourEducationLevelValues = EnumerableYourEducationLevel != null ? new HashSet<int?>(EnumerableYourEducationLevel) : null;
 
-            foreach (var _EducationLevel in model.LifeStyleSearchSettings.EducationLevelList)
+            foreach (var _EducationLevel in model.LifeStyleSearchSettings.educationlevellist)
             {
                 _EducationLevel.Selected = YourEducationLevelValues != null ? YourEducationLevelValues.Contains(_EducationLevel.EducationLevelID) : false;
             }
@@ -1115,7 +1115,7 @@ namespace Shell.MVC2.Models
 
             var YourExerciseValues = EnumerableYourExercise != null ? new HashSet<int?>(EnumerableYourExercise) : null;
 
-            foreach (var _Exercise in model.CharacterSearchSettings.ExerciseList)
+            foreach (var _Exercise in model.CharacterSearchSettings.exerciselist)
             {
                 _Exercise.Selected = YourExerciseValues != null ? YourExerciseValues.Contains(_Exercise.ExerciseID) : false;
             }
@@ -1124,7 +1124,7 @@ namespace Shell.MVC2.Models
 
             var YourDrinksValues = EnumerableYourDrinks != null ? new HashSet<int?>(EnumerableYourDrinks) : null;
 
-            foreach (var _Drinks in model.CharacterSearchSettings.DrinksList)
+            foreach (var _Drinks in model.CharacterSearchSettings.drinkslist)
             {
                 _Drinks.Selected = YourDrinksValues != null ? YourDrinksValues.Contains(_Drinks.DrinksID) : false;
             }
@@ -1133,7 +1133,7 @@ namespace Shell.MVC2.Models
 
             var YourDietValues = EnumerableYourDiet != null ? new HashSet<int?>(EnumerableYourDiet) : null;
 
-            foreach (var _Diet in model.CharacterSearchSettings.DietList)
+            foreach (var _Diet in model.CharacterSearchSettings.dietlist)
             {
                 _Diet.Selected = YourDietValues != null ? YourDietValues.Contains(_Diet.DietID) : false;
             }
@@ -1142,7 +1142,7 @@ namespace Shell.MVC2.Models
 
             var YourSmokesValues = EnumerableYourSmokes != null ? new HashSet<int?>(EnumerableYourSmokes) : null;
 
-            foreach (var _Smokes in model.CharacterSearchSettings.SmokesList)
+            foreach (var _Smokes in model.CharacterSearchSettings.smokeslist)
             {
                 _Smokes.Selected = YourSmokesValues != null ? YourSmokesValues.Contains(_Smokes.SmokesID) : false;
             }
@@ -1242,7 +1242,7 @@ namespace Shell.MVC2.Models
 
             var YourHobbyValues = EnumerableYourHobby != null ? new HashSet<int?>(EnumerableYourHobby) : null;
 
-            foreach (var _Hobby in model.CharacterSearchSettings.HobbyList)
+            foreach (var _Hobby in model.CharacterSearchSettings.hobbylist)
             {
                 _Hobby.Selected = YourHobbyValues != null ? YourHobbyValues.Contains(_Hobby.HobbyID) : false;
             }
@@ -1252,7 +1252,7 @@ namespace Shell.MVC2.Models
 
             var YourSignValues = EnumerableYourSign != null ? new HashSet<int?>(EnumerableYourSign) : null;
 
-            foreach (var _Sign in model.CharacterSearchSettings.SignList)
+            foreach (var _Sign in model.CharacterSearchSettings.signlist)
             {
                 _Sign.Selected = YourSignValues != null ? YourSignValues.Contains(_Sign.SignID) : false;
             }
@@ -1342,7 +1342,7 @@ namespace Shell.MVC2.Models
 
             var YourReligiousAttendanceValues = EnumerableYourReligiousAttendance != null ? new HashSet<int?>(EnumerableYourReligiousAttendance) : null;
 
-            foreach (var _ReligiousAttendance in model.CharacterSearchSettings.ReligiousAttendanceList)
+            foreach (var _ReligiousAttendance in model.CharacterSearchSettings.religiousattendancelist)
             {
                 _ReligiousAttendance.Selected = YourReligiousAttendanceValues != null ? YourReligiousAttendanceValues.Contains(_ReligiousAttendance.ReligiousAttendanceID) : false;
             }
@@ -1352,7 +1352,7 @@ namespace Shell.MVC2.Models
 
             var YourReligionValues = EnumerableYourReligion != null ? new HashSet<int?>(EnumerableYourReligion) : null;
 
-            foreach (var _Religion in model.CharacterSearchSettings.ReligionList)
+            foreach (var _Religion in model.CharacterSearchSettings.religionlist)
             {
                 _Religion.Selected = YourReligionValues != null ? YourReligionValues.Contains(_Religion.ReligionID) : false;
             }
@@ -1440,7 +1440,7 @@ namespace Shell.MVC2.Models
 
             var YourHumorValues = EnumerableYourHumor != null ? new HashSet<int?>(EnumerableYourHumor) : null;
 
-            foreach (var _Humor in model.CharacterSearchSettings.HumorList)
+            foreach (var _Humor in model.CharacterSearchSettings.humorlist)
             {
                 _Humor.Selected = YourHumorValues != null ? YourHumorValues.Contains(_Humor.HumorID) : false;
             }
@@ -1450,7 +1450,7 @@ namespace Shell.MVC2.Models
 
             var YourPoliticalViewValues = EnumerableYourPoliticalView != null ? new HashSet<int?>(EnumerableYourPoliticalView) : null;
 
-            foreach (var _PoliticalView in model.CharacterSearchSettings.PoliticalViewList)
+            foreach (var _PoliticalView in model.CharacterSearchSettings.politicalviewlist)
             {
                 _PoliticalView.Selected = YourPoliticalViewValues != null ? YourPoliticalViewValues.Contains(_PoliticalView.PoliticalViewID) : false;
             }

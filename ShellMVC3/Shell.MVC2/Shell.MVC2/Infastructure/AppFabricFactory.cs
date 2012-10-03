@@ -1127,14 +1127,14 @@ namespace Shell.MVC2.AppFabric
 
                 } return Heights;
             }
-            public static List<SelectListItem> GetBodyTypesList()
+            public static List<SelectListItem> Getbodytypeslist()
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> BodyTypes = null;
-                try { BodyTypes = dataCache.Get("BodyTypesList") as List<SelectListItem>; }
+                try { BodyTypes = dataCache.Get("bodytypeslist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1151,18 +1151,18 @@ namespace Shell.MVC2.AppFabric
                     BodyTypes = sharedrepository.BodyTypesSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("BodyTypesList", BodyTypes);
+                    dataCache.Put("bodytypeslist", BodyTypes);
 
                 } return BodyTypes;
             }
-            public static List<SelectListItem> GetEyeColorList()
+            public static List<SelectListItem> Geteyecolorlist()
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> EyeColor = null;
-                try { EyeColor = dataCache.Get("EyeColorList") as List<SelectListItem>; }
+                try { EyeColor = dataCache.Get("eyecolorlist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1179,18 +1179,18 @@ namespace Shell.MVC2.AppFabric
                     EyeColor = sharedrepository.EyeColorSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("EyeColorList", EyeColor);
+                    dataCache.Put("eyecolorlist", EyeColor);
 
                 } return EyeColor;
             }
-            public static List<SelectListItem> GetHairColorList()
+            public static List<SelectListItem> Gethaircolorlist()
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> HairColor = null;
-                try { HairColor = dataCache.Get("HairColorList") as List<SelectListItem>; }
+                try { HairColor = dataCache.Get("haircolorlist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1207,7 +1207,7 @@ namespace Shell.MVC2.AppFabric
                     HairColor = sharedrepository.HairColorSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("HairColorList", HairColor);
+                    dataCache.Put("haircolorlist", HairColor);
 
                 } return HairColor;
             }
@@ -1215,14 +1215,14 @@ namespace Shell.MVC2.AppFabric
             #endregion
 
             #region "CriteriaCharacter lists cached here"
-            public static List<SelectListItem> GetDietList()
+            public static List<SelectListItem> Getdietlist()
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> Diet = null;
-                try { Diet = dataCache.Get("DietList") as List<SelectListItem>; }
+                try { Diet = dataCache.Get("dietlist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1239,7 +1239,7 @@ namespace Shell.MVC2.AppFabric
                     Diet = sharedrepository.DietSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("DietList", Diet);
+                    dataCache.Put("dietlist", Diet);
 
                 } return Diet;
             }
@@ -1250,7 +1250,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> Drinks = null;
-                try { Drinks = dataCache.Get("DrinksList") as List<SelectListItem>; }
+                try { Drinks = dataCache.Get("drinkslist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1267,7 +1267,7 @@ namespace Shell.MVC2.AppFabric
                     Drinks = sharedrepository.DrinksSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("DrinksList", Drinks);
+                    dataCache.Put("drinkslist", Drinks);
 
                 } return Drinks;
             }
@@ -1278,7 +1278,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> Exercise = null;
-                try { Exercise = dataCache.Get("ExerciseList") as List<SelectListItem>; }
+                try { Exercise = dataCache.Get("exerciselist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1295,7 +1295,7 @@ namespace Shell.MVC2.AppFabric
                     Exercise = sharedrepository.ExerciseSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("ExerciseList", Exercise);
+                    dataCache.Put("exerciselist", Exercise);
 
                 } return Exercise;
             }
@@ -1306,7 +1306,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> Hobby = null;
-                try { Hobby = dataCache.Get("HobbyList") as List<SelectListItem>; }
+                try { Hobby = dataCache.Get("hobbylist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1323,7 +1323,7 @@ namespace Shell.MVC2.AppFabric
                     Hobby = sharedrepository.HobbySelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("HobbyList", Hobby);
+                    dataCache.Put("hobbylist", Hobby);
 
                 } return Hobby;
             }
@@ -1334,7 +1334,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> Humor = null;
-                try { Humor = dataCache.Get("HumorList") as List<SelectListItem>; }
+                try { Humor = dataCache.Get("humorlist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1351,7 +1351,7 @@ namespace Shell.MVC2.AppFabric
                     Humor = sharedrepository.HumorSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("HumorList", Humor);
+                    dataCache.Put("humorlist", Humor);
 
                 } return Humor;
             }
@@ -1362,7 +1362,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> PoliticalView = null;
-                try { PoliticalView = dataCache.Get("PoliticalViewList") as List<SelectListItem>; }
+                try { PoliticalView = dataCache.Get("politicalviewlist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1379,7 +1379,7 @@ namespace Shell.MVC2.AppFabric
                     PoliticalView = sharedrepository.PoliticalViewSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("PoliticalViewList", PoliticalView);
+                    dataCache.Put("politicalviewlist", PoliticalView);
 
                 } return PoliticalView;
             }
@@ -1390,7 +1390,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> Religion = null;
-                try { Religion = dataCache.Get("ReligionList") as List<SelectListItem>; }
+                try { Religion = dataCache.Get("religionlist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1407,7 +1407,7 @@ namespace Shell.MVC2.AppFabric
                     Religion = sharedrepository.ReligionSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("ReligionList", Religion);
+                    dataCache.Put("religionlist", Religion);
 
                 } return Religion;
             }
@@ -1418,7 +1418,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> ReligiousAttendance = null;
-                try { ReligiousAttendance = dataCache.Get("ReligiousAttendanceList") as List<SelectListItem>; }
+                try { ReligiousAttendance = dataCache.Get("religiousattendancelist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1435,7 +1435,7 @@ namespace Shell.MVC2.AppFabric
                     ReligiousAttendance = sharedrepository.ReligiousAttendanceSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("ReligiousAttendanceList", ReligiousAttendance);
+                    dataCache.Put("religiousattendancelist", ReligiousAttendance);
 
                 } return ReligiousAttendance;
             }
@@ -1446,7 +1446,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> Sign = null;
-                try { Sign = dataCache.Get("SignList") as List<SelectListItem>; }
+                try { Sign = dataCache.Get("signlist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1463,7 +1463,7 @@ namespace Shell.MVC2.AppFabric
                     Sign = sharedrepository.SignSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("SignList", Sign);
+                    dataCache.Put("signlist", Sign);
 
                 } return Sign;
             }
@@ -1474,7 +1474,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> Smokes = null;
-                try { Smokes = dataCache.Get("SmokesList") as List<SelectListItem>; }
+                try { Smokes = dataCache.Get("smokeslist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1491,7 +1491,7 @@ namespace Shell.MVC2.AppFabric
                     Smokes = sharedrepository.SmokesSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("SmokesList", Smokes);
+                    dataCache.Put("smokeslist", Smokes);
 
                 } return Smokes;
             }
@@ -1509,7 +1509,7 @@ namespace Shell.MVC2.AppFabric
                 try
                 {
 
-                    EducationLevel = dataCache.Get("EducationLevelList") as List<SelectListItem>;
+                    EducationLevel = dataCache.Get("educationlevellist") as List<SelectListItem>;
 
                     if (EducationLevel == null)
                     {
@@ -1518,7 +1518,7 @@ namespace Shell.MVC2.AppFabric
                         EducationLevel = sharedrepository.EducationLevelSelectList;
                         // Datings context = new modelContext();
                         // model = context.models.Single(c => c.Id == id);
-                        dataCache.Put("EducationLevelList", EducationLevel);
+                        dataCache.Put("educationlevellist", EducationLevel);
                       
 
                     }
@@ -1543,7 +1543,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> EmploymentStatus = null;
-                try { EmploymentStatus = dataCache.Get("EmploymentStatusList") as List<SelectListItem>; }
+                try { EmploymentStatus = dataCache.Get("employmentstatuslist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1555,7 +1555,7 @@ namespace Shell.MVC2.AppFabric
                     EmploymentStatus = sharedrepository.EmploymentStatusSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("EmploymentStatusList", EmploymentStatus);
+                    dataCache.Put("employmentstatuslist", EmploymentStatus);
 
                 } return EmploymentStatus;
             }
@@ -1566,7 +1566,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> HaveKids = null;
-                try { HaveKids = dataCache.Get("HaveKidsList") as List<SelectListItem>; }
+                try { HaveKids = dataCache.Get("havekidslist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1578,7 +1578,7 @@ namespace Shell.MVC2.AppFabric
                     HaveKids = sharedrepository.HaveKidsSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("HaveKidsList", HaveKids);
+                    dataCache.Put("havekidslist", HaveKids);
 
                 } return HaveKids;
             }
@@ -1589,7 +1589,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> IncomeLevel = null;
-                try { IncomeLevel = dataCache.Get("IncomeLevelList") as List<SelectListItem>; }
+                try { IncomeLevel = dataCache.Get("incomelevellist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1601,7 +1601,7 @@ namespace Shell.MVC2.AppFabric
                     IncomeLevel = sharedrepository.IncomeLevelSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("IncomeLevelList", IncomeLevel);
+                    dataCache.Put("incomelevellist", IncomeLevel);
 
                 } return IncomeLevel;
             }
@@ -1612,7 +1612,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> LivingSituation = null;
-                try { LivingSituation = dataCache.Get("LivingSituationList") as List<SelectListItem>; }
+                try { LivingSituation = dataCache.Get("livingsituationlist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1624,7 +1624,7 @@ namespace Shell.MVC2.AppFabric
                     LivingSituation = sharedrepository.LivingSituationSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("LivingSituationList", LivingSituation);
+                    dataCache.Put("livingsituationlist", LivingSituation);
 
                 } return LivingSituation;
             }
@@ -1636,7 +1636,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> LookingFor = null;
-                try { LookingFor = dataCache.Get("LookingForList") as List<SelectListItem>; }
+                try { LookingFor = dataCache.Get("lookingforlist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1648,7 +1648,7 @@ namespace Shell.MVC2.AppFabric
                     LookingFor = sharedrepository.LookingForSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("LookingForList", LookingFor);
+                    dataCache.Put("lookingforlist", LookingFor);
 
                 } return LookingFor;
             }
@@ -1659,7 +1659,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> MaritalStatus = null;
-                try { MaritalStatus = dataCache.Get("MaritalStatusList") as List<SelectListItem>; }
+                try { MaritalStatus = dataCache.Get("maritalstatuslist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1671,7 +1671,7 @@ namespace Shell.MVC2.AppFabric
                     MaritalStatus = sharedrepository.MaritalStatusSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("MaritalStatusList", MaritalStatus);
+                    dataCache.Put("maritalstatuslist", MaritalStatus);
 
                 } return MaritalStatus;
             }
@@ -1682,7 +1682,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> Profession = null;
-                try { Profession = dataCache.Get("ProfessionList") as List<SelectListItem>; }
+                try { Profession = dataCache.Get("professionlist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1694,7 +1694,7 @@ namespace Shell.MVC2.AppFabric
                     Profession = sharedrepository.ProfessionSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("ProfessionList", Profession);
+                    dataCache.Put("professionlist", Profession);
 
                 } return Profession;
             }
@@ -1705,7 +1705,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<SelectListItem> WantsKids = null;
-                try { WantsKids = dataCache.Get("WantsKidsList") as List<SelectListItem>; }
+                try { WantsKids = dataCache.Get("wantskidslist") as List<SelectListItem>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1717,7 +1717,7 @@ namespace Shell.MVC2.AppFabric
                     WantsKids = sharedrepository.WantsKidsSelectList;
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("WantsKidsList", WantsKids);
+                    dataCache.Put("wantskidslist", WantsKids);
 
                 } return WantsKids;
             }
@@ -1793,28 +1793,28 @@ namespace Shell.MVC2.AppFabric
                     dataCache.Remove("GenderList");
                     dataCache.Remove("CountriesList");
                     dataCache.Remove("SecurityQuestionsList");
-                    dataCache.Remove("BodyTypesList");
-                    dataCache.Remove("EyeColorList");
-                    dataCache.Remove("HairColorList");
+                    dataCache.Remove("bodytypeslist");
+                    dataCache.Remove("eyecolorlist");
+                    dataCache.Remove("haircolorlist");
                     dataCache.Remove("MetricHeightList");
-                    dataCache.Remove("DietList");
-                    dataCache.Remove("DrinksList");
-                    dataCache.Remove("ExerciseList");
-                    dataCache.Remove("HobbyList");
-                    dataCache.Remove("HumorList");
-                    dataCache.Remove("ReligionList");
-                    dataCache.Remove("ReligiousAttendanceList");
-                    dataCache.Remove("SignList");
-                    dataCache.Remove("SmokesList");
-                    dataCache.Remove("EducationLevelList");
-                    dataCache.Remove("EmploymentStatusList");
+                    dataCache.Remove("dietlist");
+                    dataCache.Remove("drinkslist");
+                    dataCache.Remove("exerciselist");
+                    dataCache.Remove("hobbylist");
+                    dataCache.Remove("humorlist");
+                    dataCache.Remove("religionlist");
+                    dataCache.Remove("religiousattendancelist");
+                    dataCache.Remove("signlist");
+                    dataCache.Remove("smokeslist");
+                    dataCache.Remove("educationlevellist");
+                    dataCache.Remove("employmentstatuslist");
                     dataCache.Remove("HaveKidstList");
-                    dataCache.Remove("IncomeLevelList");
-                    dataCache.Remove("LivingSituationList");
+                    dataCache.Remove("incomelevellist");
+                    dataCache.Remove("livingsituationlist");
                     dataCache.Remove("AgeList");
-                    dataCache.Remove("MaritalStatusList");
-                    dataCache.Remove("ProfessionList");
-                    dataCache.Remove("LookingForList");
+                    dataCache.Remove("maritalstatuslist");
+                    dataCache.Remove("professionlist");
+                    dataCache.Remove("lookingforlist");
                     dataCache.Remove("VisibilityMailSettingsList");
                     dataCache.Remove("VisibilityStealthSettingsList");
                 }

@@ -40,7 +40,7 @@
             <table style="width: 95%"  class="CheckboxLabelText"  > 
                 <tr> </tr> 
                @{ int cnt2 = 0; } 
-               @foreach(var showme in Model.AppearanceSettings.MyHotFeatureList)                   
+               @foreach(var showme in Model.AppearanceSettings.Myhotfeaturelist)                   
                  { 
                    if (cnt2 == 3 || cnt2 == 6 || cnt2 == 9 || cnt2 == 12 || cnt2 == 15) 
                    {  <tr></tr>
@@ -82,7 +82,7 @@
              <table style="width: 95%"  class="CheckboxLabelText"  > 
                 <tr> </tr> 
                @{ int cnt3 = 0; } 
-               @foreach(var showme in Model.AppearanceSearchSettings.HotFeatureList)                   
+               @foreach(var showme in Model.AppearanceSearchSettings.hotfeaturelist)                   
                  { 
                   if (cnt3 == 3 || cnt3 == 6 || cnt3 == 9 || cnt3 == 12 || cnt3 == 15)
                   {<tr></tr> }

@@ -18,9 +18,9 @@ namespace Shell.MVC2.Interfaces
   
          int GetmailboxmessagefoldersID(int mailboxMsgId )     ;
    
-         int GetmailboxfolderID(string mailboxFolderTypeName, string profileId)    ;
+         int GetmailboxfolderID(string mailboxFolderTypeName, int profileid)    ;
    
-         mailboxmessagefolder NewmailboxmessagefolderObject(string mailboxFolderTypeName, string profileId) ;
+         mailboxmessagefolder NewmailboxmessagefolderObject(string mailboxFolderTypeName, int profileid) ;
 
          void Add(mailboxmessage mailboxmessage);
 

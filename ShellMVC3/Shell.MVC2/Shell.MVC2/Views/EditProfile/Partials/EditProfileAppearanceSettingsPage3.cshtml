@@ -67,8 +67,8 @@
 </script>
 
 <div id="PartialContainderForEditApperance1">
-     @{  List<SelectListItem> HairColors = CachingFactory.SharedObjectHelper.GetHairColorList() ;  } 
-     @{  List<SelectListItem> EyeColors = CachingFactory.SharedObjectHelper.GetEyeColorList  () ;  } 
+     @{  List<SelectListItem> HairColors = CachingFactory.SharedObjectHelper.Gethaircolorlist() ;  } 
+     @{  List<SelectListItem> EyeColors = CachingFactory.SharedObjectHelper.Geteyecolorlist  () ;  } 
     
 
      <div class="Describe_what_makes_aboutEdit">
@@ -106,7 +106,7 @@
                 <tr> </tr> 
                @{ int cnt = 0; } 
               
-               @foreach(var showme in Model.AppearanceSearchSettings.HairColorList )                   
+               @foreach(var showme in Model.AppearanceSearchSettings.haircolorlist )                   
                  { 
                   if (cnt == 4 || cnt == 8 || cnt == 12 || cnt == 12 || cnt == 15)
                       {  <tr></tr> 
@@ -165,7 +165,7 @@
             <table style="width: 95%"  class="CheckboxLabelText"  > 
                 <tr> </tr> 
                @{ int cnt2 = 0; } 
-               @foreach(var eycolor in Model.AppearanceSearchSettings.EyeColorList)                   
+               @foreach(var eycolor in Model.AppearanceSearchSettings.eyecolorlist)                   
                  { 
                    if (cnt2 == 4 || cnt2 == 8 || cnt2 == 12 || cnt2 == 12 || cnt2 == 15)
                    {   <tr></tr>  }

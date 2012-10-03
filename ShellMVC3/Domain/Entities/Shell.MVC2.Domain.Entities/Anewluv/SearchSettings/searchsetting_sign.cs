@@ -8,7 +8,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class searchsetting_sign
     {
         [Key]
-        public int id { get; set; }
+        public int? id { get; set; }
         public virtual lu_sign sign { get; set; }
      
         public virtual searchsetting  searchsetting { get; set; } 

@@ -55,7 +55,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
             {
                 public int? EthnicityID { get; set; }
                 public string EthnicityName { get; set; }
-                public bool Selected { get; set; }
+                public bool selected { get; set; }
             }
          
 
@@ -63,7 +63,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
             {
                 public int? HotFeatureID { get; set; }
                 public string HotFeatureName { get; set; }
-                public bool Selected { get; set; }
+                public bool selected { get; set; }
             }
             
             public int? EyeColorID { get; set; }
@@ -75,13 +75,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
             
             //TO DO move to appfabric list ? or maybe not
             public List<string> HeightListMetric { get; set; }
-            public List<string> HairColorList { get; set; }
-            public  List<string> EyeColorList { get; set; }
-            public List<string> BodyTypesList { get; set; }  
+            public List<string> haircolorlist { get; set; }
+            public  List<string> eyecolorlist { get; set; }
+            public List<string> bodytypeslist { get; set; }  
                       
             //lists for check boxes
-            public IList<MyEthnicityCheckBox> MyEthnicityList  = new List<MyEthnicityCheckBox>();
-            public IList<MyHotFeatureCheckBox> MyHotFeatureList = new List<MyHotFeatureCheckBox>();
+            public IList<MyEthnicityCheckBox> Myethnicitylist  = new List<MyEthnicityCheckBox>();
+            public IList<MyHotFeatureCheckBox> Myhotfeaturelist = new List<MyHotFeatureCheckBox>();
             //TODO move the character
             //public IList<MyHobbyCheckBox> MyHobbyList = new List<MyHobbyCheckBox>();
             //TO DO move to lifestyle or something
@@ -102,7 +102,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
             {
                 public int? MyLookingForID { get; set; }
                 public string MyLookingForName { get; set; }
-                public bool Selected { get; set; }
+                public bool selected { get; set; }
             }
 
             public int? EducationLevelID { get; set; }
@@ -114,13 +114,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
             public int? ProfessionID { get; set; }
             public int? WantsKidsID { get; set; }
 
-            List<string> EducationLevelList { get; set; }
-            List<string> HaveKidsList { get; set; }
-            List<string> IncomeLevelList { get; set; }
-            List<string> MaritalStatusList { get; set; }
-            List<string> ProfessionList { get; set; }
-            List<string> ReligionList { get; set; }
-            List<string> WantsKidsList { get; set; }
+            List<string> educationlevellist { get; set; }
+            List<string> havekidslist { get; set; }
+            List<string> incomelevellist { get; set; }
+            List<string> maritalstatuslist { get; set; }
+            List<string> professionlist { get; set; }
+            List<string> religionlist { get; set; }
+            List<string> wantskidslist { get; set; }
 
             //TO DO move to lifestyle or something
             public IList<MyLookingForCheckBox> MyLookingForList = new List<MyLookingForCheckBox>(); // { get; set; } 
@@ -153,24 +153,24 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
             {
                 public int? MyHobbyID { get; set; }
                 public string MyHobbyName { get; set; }
-                public bool Selected { get; set; }
+                public bool selected { get; set; }
             }
           
                       
 
-            List<string> SmokesList { get; set; }          
-            List<string> DietList { get; set; }
-            List<string> DrinksList { get; set; }
-            List<string> HumorList { get; set; }
-            List<string> ExerciseList { get; set; }
-            List<string> PoliticalViewList { get; set; }
+            List<string> smokeslist { get; set; }          
+            List<string> dietlist { get; set; }
+            List<string> drinkslist { get; set; }
+            List<string> humorlist { get; set; }
+            List<string> exerciselist { get; set; }
+            List<string> politicalviewlist { get; set; }
             List<string> RelisionList { get; set; }
-            List<string> SignList { get; set; }
-            List<string> ReligiousAttendanceList { get; set; }
+            List<string> signlist { get; set; }
+            List<string> religiousattendancelist { get; set; }
 
             //lists for check boxes
-            //public IList<MyEthnicityCheckBox> MyEthnicityList = new List<MyEthnicityCheckBox>();
-            //public IList<MyHotFeatureCheckBox> MyHotFeatureList = new List<MyHotFeatureCheckBox>();
+            //public IList<MyEthnicityCheckBox> Myethnicitylist = new List<MyEthnicityCheckBox>();
+            //public IList<MyHotFeatureCheckBox> Myhotfeaturelist = new List<MyHotFeatureCheckBox>();
             //TODO move the character
             public IList<MyHobbyCheckBox> MyHobbyList = new List<MyHobbyCheckBox>();
          
