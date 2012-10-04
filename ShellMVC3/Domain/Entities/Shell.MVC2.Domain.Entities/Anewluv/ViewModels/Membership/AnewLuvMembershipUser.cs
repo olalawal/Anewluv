@@ -19,7 +19,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
 
             DateTime _birthdate;
-            string _profileid;
+            int _profileid;
             //  string _securityquestion;
             //  string _securityanswer;
             string _ziporpostalcode;
@@ -80,7 +80,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
                 set { _country = value; }
             }
             [DataMember]
-            public string profileid
+            public int profileid
             {
                 get { return _profileid; }
                 set { _profileid = value; }

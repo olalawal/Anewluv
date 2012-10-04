@@ -24,8 +24,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
 
         public DbSet<searchsetting_havekids> searchsetting_havekids { get; set; }
+        public DbSet<searchsetting_wantkids> searchsetting_wantkids { get; set; }
         public DbSet<searchsetting_hobby> searchsetting_hobby { get; set; }
-  
+        public DbSet<searchsetting_hotfeature> searchsetting_hotfeature { get; set; }
     
       
         public DbSet<searchsetting_humor> searchsetting_humor { get; set; }

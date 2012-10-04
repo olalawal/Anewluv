@@ -14,12 +14,9 @@ namespace Shell.MVC2.Data
 
        //TO Do posibly move this to a separate service for benchmarking
        //member viewmodoem mapping and registration models mappers
-        MembersViewModel mapmember(int profileid);       
-        MembersViewModel mapguest();
-        RegisterModel mapregistration(MembersViewModel membersmodel);     
-        RegisterModel mapjainrainregistration(rpxprofile profile, MembersViewModel membersmodel);
+     
        //TO DO move to unit test
-        RegisterModel mapregistrationtest();  
+       // RegisterModel mapregistrationtest();  
        //end of profile mapping
 
        //initial profile stuffs
@@ -81,7 +78,7 @@ namespace Shell.MVC2.Data
         bool checkifscreennamealreadyexists(string strScreenName);   
        //5-20-2012 added to check if a user email is registered       
         bool checkifprofileidalreadyexists(int profileid);     
-        string validatesecurityansweriscorrect(string strProfileID, int SecurityQuestionID, string strSecurityAnswer);  
+        string validatesecurityansweriscorrect(int strProfileID, int SecurityQuestionID, string strSecurityAnswer);  
         int getprofileidbyusername(string strusername);
         int getprofileidbyscreenname(string strscreenname);   
         string getusernamebyprofileid(int profileid);       

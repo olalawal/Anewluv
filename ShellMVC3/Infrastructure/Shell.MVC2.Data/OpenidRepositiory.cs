@@ -19,7 +19,7 @@ using System.Web.Script.Serialization;
 
 namespace Shell.MVC2.Data
 {
-    public class JainrainRepository : MemberRepositoryBase, IMailRepository
+    public class JainrainRepository : MemberRepositoryBase
     {
 
 

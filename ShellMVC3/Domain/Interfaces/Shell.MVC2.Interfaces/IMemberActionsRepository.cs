@@ -36,25 +36,25 @@ namespace Shell.MVC2.Interfaces
 
        List<MemberSearchViewModel> getwhoisinterestedinmenew(int profileid, int? Page, int? NumberPerPage);
 
-       List<MemberSearchViewModel> getmutualinterests(int profileid, string targetprofileid);
+       List<MemberSearchViewModel> getmutualinterests(int profileid, int targetprofileid);
              
-        bool checkinterest(int profileid, string targetprofileid);
+        bool checkinterest(int profileid, int targetprofileid);
        
-        bool addinterest(int profileid, string targetprofileid);
+        bool addinterest(int profileid, int targetprofileid);
      
-        bool removeinterestbyprofileid(int profileid, string interestprofile_id);
+        bool removeinterestbyprofileid(int profileid, int interestprofile_id);
               
-        bool removeinterestbyinterestprofileid(string interestprofile_id, int profileid);
+        bool removeinterestbyinterestprofileid(int interestprofile_id, int profileid);
      
-        bool restoreinterestbyprofileid(int profileid, string interestprofile_id);
+        bool restoreinterestbyprofileid(int profileid, int interestprofile_id);
       
-        bool restoreinterestbyinterestprofileid(string interestprofile_id, int profileid);
+        bool restoreinterestbyinterestprofileid(int interestprofile_id, int profileid);
         
         bool removeinterestsbyprofileidandscreennames(int profileid, List<String> screennames);
       
         bool restoreinterestsbyprofileidandscreennames(int profileid, List<String> screennames);
             
-        bool updateinterestviewstatus(int profileid, string targetprofileid);
+        bool updateinterestviewstatus(int profileid, int targetprofileid);
      
 
 
@@ -74,17 +74,17 @@ namespace Shell.MVC2.Interfaces
     
        List<MemberSearchViewModel> getwhoipeekedat(int profileid, int? Page, int? NumberPerPage);
  
-      List<MemberSearchViewModel> getmutualpeeks(int profileid, string targetprofileid);
+      List<MemberSearchViewModel> getmutualpeeks(int profileid, int targetprofileid);
            
-        bool checkpeek(int profileid, string targetprofileid);
+        bool checkpeek(int profileid, int targetprofileid);
  
-        bool addpeek(int profileid, string targetprofileid);
+        bool addpeek(int profileid, int targetprofileid);
       
-        bool removepeekbyprofileid(int profileid, string peekprofile_id);
+        bool removepeekbyprofileid(int profileid, int peekprofile_id);
             
         bool removepeekbypeekprofileid( string peekprofile_id,int profileid);
        
-        bool restorepeekbyprofileid(int profileid, string peekprofile_id);
+        bool restorepeekbyprofileid(int profileid, int peekprofile_id);
       
         bool restorepeekbypeekprofileid(string peekprofile_id,int profileid);
             
@@ -92,7 +92,7 @@ namespace Shell.MVC2.Interfaces
             
         bool restorepeeksbyprofileidandscreennames(int profileid, List<String> screennames);
 
-        bool updatepeekviewstatus(int profileid, string targetprofileid);
+        bool updatepeekviewstatus(int profileid, int targetprofileid);
       
         #endregion 
 
@@ -103,21 +103,21 @@ namespace Shell.MVC2.Interfaces
        List<MemberSearchViewModel> getwhoiblocked(int profileid, int? Page, int? NumberPerPage);
    
                    
-      List<MemberSearchViewModel> getmutualblocks(int profileid, string targetprofileid);
+      List<MemberSearchViewModel> getmutualblocks(int profileid, int targetprofileid);
   
-        bool checkblock(int profileid, string targetprofileid);
+        bool checkblock(int profileid, int targetprofileid);
      
-        bool addblock(int profileid, string targetprofileid);    
+        bool addblock(int profileid, int targetprofileid);    
 
-        bool removeblock(int profileid, string blockprofile_id);
+        bool removeblock(int profileid, int blockprofile_id);
      
-        bool restoreblock(int profileid, string blockprofile_id);
+        bool restoreblock(int profileid, int blockprofile_id);
      
         bool removeblocksbyscreennames(int profileid, List<String> screennames);
     
         bool restoreblocksbyscreennames(int profileid, List<String> screennames);
         
-        bool updateblockreviewstatus(int profileid,string targetprofileid, string reviewerid);
+        bool updateblockreviewstatus(int profileid,int targetprofileid, string reviewerid);
      
         #endregion   
 
@@ -135,13 +135,13 @@ namespace Shell.MVC2.Interfaces
                 
        List<MemberSearchViewModel> getwhoilike(int profileid, int? Page, int? NumberPerPage);
        
-      List<MemberSearchViewModel> getmutuallikes(int profileid, string targetprofileid);
+      List<MemberSearchViewModel> getmutuallikes(int profileid, int targetprofileid);
              
-        bool checklike(int profileid, string targetprofileid);
+        bool checklike(int profileid, int targetprofileid);
       
-        bool addlike(int profileid, string targetprofileid);
+        bool addlike(int profileid, int targetprofileid);
     
-        bool removelikebyprofileid(int profileid, string likeprofile_id) ;       
+        bool removelikebyprofileid(int profileid, int likeprofile_id) ;       
 
         bool removelikebylikeprofileid( string likeprofile_id,int profileid);
        
@@ -153,7 +153,7 @@ namespace Shell.MVC2.Interfaces
 
         bool restorelikesbyprofileidandscreennames(int profileid, List<String> screennames);
     
-        bool updatelikeviewstatus(int profileid, string targetprofileid);
+        bool updatelikeviewstatus(int profileid, int targetprofileid);
        
 
         #endregion

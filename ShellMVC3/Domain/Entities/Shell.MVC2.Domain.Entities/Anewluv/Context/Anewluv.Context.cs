@@ -18,17 +18,20 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<block> blocks { get; set; }
         public DbSet<blocknotes> blocknotes { get; set; }
         public DbSet<communicationquota> communicationquotas { get; set; }
+       
         public DbSet<profiledata_ethnicity> ethnicities { get; set; }
-        public DbSet<favorite> favorites { get; set; }
-        public DbSet<friend> friends { get; set;}
         public DbSet<profiledata_hobby> hobbies { get; set; }
         public DbSet<profiledata_hotfeature> hotfeatures { get; set; }
+        public DbSet<profiledata_lookingfor> lookingfor { get; set; }
+      
+
+        public DbSet<favorite> favorites { get; set; }
+        public DbSet<friend> friends { get; set;}      
         public DbSet<hotlist> hotlists { get; set; }
         public DbSet<interest> interests { get; set; }
         public DbSet<like> likes { get; set; }
         public DbSet<profileactivity> profileactivity { get; set; }
         public DbSet<profileactivitygeodata > profileactivitygeodata { get; set; }
-        public DbSet<profiledata_lookingfor> lookingfor { get; set; }
         public DbSet<mailupdatefreqency> mailupdatefreqencies { get; set; }
         public DbSet<membersinrole> membersinroles { get; set; }
         public DbSet<openid> opendIds { get; set; }

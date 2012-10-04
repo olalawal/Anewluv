@@ -13,7 +13,12 @@ using System.Data;
 
 namespace Shell.MVC2.Data
 {
-   public  class EditProfileRepository : MemberRepositoryBase , IMemberRepository 
+
+
+/// <summary>
+/// TO DO split off search settings methods , if needed they should be references as an interface
+/// </summary>
+   public  class EditProfileRepository : MemberRepositoryBase  
     {
 
        
@@ -726,16 +731,13 @@ namespace Shell.MVC2.Data
            var  newmodel2 = this.getbasicsettingsviewmodel(profile.id);  
 
            newmodel = EditProfileBasicSettingsPage1Update(newmodel, profile, SearchSettingsToUpdate);
-           newmodel = EditProfileBasicSettingsPage2Update(newmodel, profile);
+           newmodel = EditProfileBasicSettingsPage2Update(newmodel, profile, SearchSettingsToUpdate);
           return newmodel;
        }
        private BasicSettingsViewModel EditProfileBasicSettingsPage1Update(BasicSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings)
        {
 
-           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
-
          
-
            //get all the values that should post from page 1
            //var AboutMe = formCollection["Editor"];  
            //var MyCatchyIntroLine = formCollection["MyCatchyIntroLine"];
@@ -764,64 +766,28 @@ namespace Shell.MVC2.Data
            //update the searchmodl settings with current settings
            newmodel.agemin = agemin;
            newmodel.agemax = agemax;
-           //update gender values as well 
-           //IEnumerable<int?> myEnumerable = SelectedGenderIds;
-
-          // var GenderValues = myEnumerable != null ? new HashSet<int?>(myEnumerable) : null;
-
-         //  foreach (var _Gender in  newGendersValues) //model.BasicSearchSettings.genderslist)
-          // {
-          //     _Gender.selected = GendersValues != null ? GendersValues.Contains(e=>e.id ==  _Gender.id) : false;
-          // }
-
-           //TO DO move this to client side validaton
-           //now validate and update the page the page we are on
-          // if (GendersValues == null)
-         //  {
-               //  ModelState.AddModelError("selectedId", "You have to select at least one gender!");
-               //add errors to model
-          //     model.CurrentErrors.Add("You have to select at least one gender!");
-          //     return model;
-        //   }
-
-
-
-           //var ModelToUpdate = db.ProfileDatas
-           //   .Where(i => i.ProfileID == membersmodel.profiledata.ProfileID)
-           // .Select(p => new
-           // {
-           //     profiledata = p,
-           //     SearchSettings = p.SearchSettings.Where(i => i.MyPerfectMatch == true).FirstOrDefault()
-           // }).SingleOrDefault();
-
+          
+         
            try
            {
                //link the profiledata entities
-
-
                profile.modificationdate  = DateTime.Now;
                //manually update model i think
                //set properties in the about me
                profile.profiledata.aboutme = AboutMe;
                profile.profiledata.mycatchyintroLine  = MyCatchyIntroLine;
-
                //detrmine if we are in edit or add mode for search settings for perfect match
                //if its null add a new entity  
                //noew update searchsettings text values
                oldsearchsettings.agemax = agemax;
                oldsearchsettings.agemin = agemin;
-
                oldsearchsettings.lastupdatedate  = DateTime.Now; //addded time stamp for updates this should be somone where else tho ?
                //TO DO move this code to searchssettings Repositoury
-               this.UpdateSearchSettingsGenders(newmodel.genderslist.ToList(), oldsearchsettings);
+               this.updatesearchsettingsgenders(newmodel.genderslist.ToList(), oldsearchsettings);
                //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
                db.SaveChanges();
                //TOD DO
                //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-               //update session too just in case
-
-               //  CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
-               // model.CurrentErrors.Clear();
                return newmodel ;
            }
            catch (DataException)
@@ -832,80 +798,38 @@ namespace Shell.MVC2.Data
            }
            return null;
        }
-       private BasicSettingsViewModel EditProfileBasicSettingsPage2Update(BasicSettingsViewModel newmodel, profile profile)
+       private BasicSettingsViewModel EditProfileBasicSettingsPage2Update(BasicSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings)
        {
+           
 
-
-
-        
-
-           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
-
-           var DistanceFromMe = model.BasicSearchSettings.DistanceFromMe;
+           var DistanceFromMe = newmodel.distancefromme;
            //re populate the models
            //build Basic Profile Settings from Submited view 
            // model.BasicProfileSettings. = AboutMe;
-           model.BasicProfileSettings = new EditProfileBasicSettingsModel(ProfileDataToUpdate);
+         
 
            //reload search settings since it seems the checkbox values are lost on postback
-           //we really should just rebuild them from form collection imo
-           model.BasicSearchSettings = new SearchModelBasicSettings(SearchSettingsToUpdate);
+           //we really should just rebuild them from form collection imo        
            //update the searchmodl settings with current settings on the UI
-           model.BasicSearchSettings.DistanceFromMe = DistanceFromMe;
-
+         
 
            //update show me and sortby with correct values from UI as well
            //this code is just for serv side validation does nothing atm
-
            //showme next
-           IEnumerable<int?> myEnumerableShowmes = SelectedShowMeIds;
-
-           var ShowMeTypeValues = myEnumerableShowmes != null ? new HashSet<int?>(myEnumerableShowmes) : null;
-
-           foreach (var _ShowMeType in model.BasicSearchSettings.showmelist)
-           {
-               _ShowMeType.Selected = ShowMeTypeValues != null ? ShowMeTypeValues.Contains(_ShowMeType.ShowMeID) : false;
-           }
-
-
-           IEnumerable<int?> myEnumerableSortBys = SelectedSortByIds;
-
-           var SortByTypeValues = myEnumerableSortBys != null ? new HashSet<int?>(myEnumerableSortBys) : null;
-
-           foreach (var _SortByType in model.BasicSearchSettings.SortByList)
-           {
-               _SortByType.Selected = SortByTypeValues != null ? SortByTypeValues.Contains(_SortByType.SortByTypeID) : false;
-           }
-
-
-
+         
 
            try
            {
                //link the profiledata entities
-               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+               profile.modificationdate = DateTime.Now;
 
-               ////Add searchh settings as well if its not null
-               //if (ModelToUpdate.SearchSettings == null)
-               //{
-               //    SearchSetting NewSearchSettings = new SearchSetting();
-               //    ProfileDataToUpdate.SearchSettings.Add(NewSearchSettings);
-               //}
-               //else
-               //{
-               //    ProfileDataToUpdate.SearchSettings.Add(ModelToUpdate.SearchSettings);
-               //}
-
-               //detrmine if we are in edit or add mode for search settings for perfect match
-               //if its null add a new entity  
-               //noew update searchsettings text values
-               SearchSettingsToUpdate.DistanceFromMe = model.BasicSearchSettings.DistanceFromMe;
+               oldsearchsettings.distancefromme = newmodel.distancefromme;
 
 
-               //TO DO move this code to searchssettings Repositoury
-               UpdateSearchSettingsShowMe(SelectedShowMeIds, ProfileDataToUpdate);
-               UpdateSearchSettingsSortByTypes(SelectedSortByIds, ProfileDataToUpdate);
-               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+               //TO DO move this code to searchssettings Repositoury             
+                 this.updatesearchsettingsshowme(newmodel.showmelist.ToList(), oldsearchsettings);
+                 this.updatesearchsettingssortbytype(newmodel.sortbytypelist.ToList(), oldsearchsettings);
+               oldsearchsettings.lastupdatedate  = DateTime.Now;
 
                //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
                db.SaveChanges();
@@ -916,17 +840,1223 @@ namespace Shell.MVC2.Data
                //  membersmodel.profiledata = ProfileDataToUpdate;
                //  CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,ProfileDataToUpdate  );
 
-               model.CurrentErrors.Clear();
-               return model;
+               //model.CurrentErrors.Clear();
+               return newmodel;
            }
            catch (DataException)
            {
                //Log the error (add a variable name after DataException) 
-               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-               return model;
+               //model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               //return model;
            }
-
+           return null;
        }
+       #endregion
+
+
+       #region "other editpages to implement"
+       //#region "Edit profile Appeareance Settings Updates here"
+
+       //public EditProfileSettingsViewModel EditProfileAppearanceSettingsPage1Update(EditProfileSettingsViewModel model,
+       //FormCollection formCollection, int?[] SelectedYourBodyTypesID, string _ProfileID)
+       //{
+
+       //    profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+       //    if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+       //    SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+       //    // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
+
+       //    //TO DO finde a better way to do this I guess get the current
+
+       //    //re populate the models TO DO not sure this is needed index valiues are stored
+       //    //if there are checkbox values on basic settings we would need to reload as well
+       //    //build Basic Profile Settings from Submited view 
+       //    // model.BasicProfileSettings. = AboutMe;
+       //    //relaod appreadnce settings as needed
+       //    var UiHeight = model.AppearanceSettings.Height;
+       //    var UiBodyType = model.AppearanceSettings.BodyTypesID;
+
+       //    model.AppearanceSettings = new EditProfileAppearanceSettingsModel(ProfileDataToUpdate);
+
+       //    //noew updated the reloaded model with the saved higit on UI
+       //    model.AppearanceSettings.Height = UiHeight;
+       //    model.AppearanceSettings.BodyTypesID = UiBodyType;
+
+       //    var heightmin = model.AppearanceSearchSettings.heightmin == -1 ? 48 : model.AppearanceSearchSettings.heightmin;
+       //    var heightmax = model.AppearanceSearchSettings.heightmax == -1 ? 89 : model.AppearanceSearchSettings.heightmax;
+
+
+       //    //reload search settings since it seems the checkbox values are lost on postback
+       //    //we really should just rebuild them from form collection imo
+       //    model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
+       //    //update the reloaded  searchmodl settings with current settings on the UI
+       //    model.AppearanceSearchSettings.heightmin = heightmin;
+       //    model.AppearanceSearchSettings.heightmax = heightmax;
+
+
+       //    //update the searchmodl settings with current settings            
+       //    //update body types mine For UI
+       //    IEnumerable<int?> EnumerableYourBodyTypes = SelectedYourBodyTypesID;
+
+       //    var YourBodyTypesValues = EnumerableYourBodyTypes != null ? new HashSet<int?>(EnumerableYourBodyTypes) : null;
+
+       //    foreach (var _BodyTypes in model.AppearanceSearchSettings.bodytypeslist)
+       //    {
+       //        _BodyTypes.Selected = YourBodyTypesValues != null ? YourBodyTypesValues.Contains(_BodyTypes.BodyTypesID) : false;
+       //    }
+
+
+       //    try
+       //    {
+       //        //link the profiledata entities
+       //        ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+
+       //        //search settings will never be null anymore , should have been created before we got here and added the members model
+       //        //Add searchh settings as well if its not null
+       //        //if (ModelToUpdate.SearchSettings == null)
+       //        //{
+       //        //    SearchSetting NewSearchSettings = new SearchSetting();
+       //        //    ProfileDataToUpdate.SearchSettings.Add(NewSearchSettings);
+       //        //}
+       //        //else
+       //        //{
+       //        //    ProfileDataToUpdate.SearchSettings.Add(ModelToUpdate.SearchSettings);
+       //        //}
+
+       //        //detrmine if we are in edit or add mode for search settings for perfect match
+       //        //if its null add a new entity  
+       //        //noew update searchsettings text values
+       //        //update my settings 
+       //        ProfileDataToUpdate.Height = Convert.ToInt32(model.AppearanceSettings.Height);
+       //        ProfileDataToUpdate.BodyTypeID = model.AppearanceSettings.BodyTypesID;
+
+       //        //now update the search settings 
+       //        SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.heightmin;
+       //        SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
+       //        SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+       //        UpdateSearchSettingsBodyTypes(SelectedYourBodyTypesID, ProfileDataToUpdate);
+
+
+       //        //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+       //        int changes = db.SaveChanges();
+
+       //        //TOD DO
+       //        //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+       //        //update session too just in case
+       //        //membersmodel.profiledata = ProfileDataToUpdate;               
+
+       //        //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,ProfileDataToUpdate  );
+       //        model.CurrentErrors.Clear();
+       //        return model;
+       //    }
+       //    catch (DataException)
+       //    {
+       //        //Log the error (add a variable name after DataException) 
+       //        model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+       //        return model;
+       //    }
+
+       //}
+
+       //public EditProfileSettingsViewModel EditProfileAppearanceSettingsPage2Update(EditProfileSettingsViewModel model,
+       //     FormCollection formCollection, int?[] SelectedYourEthnicityIds, int?[] SelectedMyEthnicityIds, string _ProfileID
+       //    )
+       //{
+
+
+       //    profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+       //    if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+       //    SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+       //    //re populate the models TO DO not sure this is needed index valiues are stored
+       //    //if there are checkbox values on basic settings we would need to reload as well
+       //    //build Basic Profile Settings from Submited view 
+       //    // model.BasicProfileSettings. = AboutMe;
+       //    model.AppearanceSettings = new EditProfileAppearanceSettingsModel(ProfileDataToUpdate);
+
+
+       //    //reload search settings since it seems the checkbox values are lost on postback
+       //    //we really should just rebuild them from form collection imo
+       //    model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
+
+
+
+       //    //update the searchmodl settings with current settings            
+       //    //update UI display values with current displayed values as well for check boxes
+
+       //    IEnumerable<int?> EnumerableMyEthnicity = SelectedMyEthnicityIds;
+
+       //    var MyEthnicityValues = EnumerableMyEthnicity != null ? new HashSet<int?>(EnumerableMyEthnicity) : null;
+
+       //    foreach (var _Ethnicity in model.AppearanceSettings.Myethnicitylist)
+       //    {
+       //        _Ethnicity.Selected = MyEthnicityValues != null ? MyEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
+       //    }
+
+       //    IEnumerable<int?> EnumerableYourEthnicity = SelectedYourEthnicityIds;
+
+       //    var YourEthnicityValues = EnumerableYourEthnicity != null ? new HashSet<int?>(EnumerableYourEthnicity) : null;
+
+       //    foreach (var _Ethnicity in model.AppearanceSearchSettings.ethnicitylist)
+       //    {
+       //        _Ethnicity.Selected = YourEthnicityValues != null ? YourEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
+       //    }
+
+
+       //    try
+       //    {
+       //        //link the profiledata entities
+       //        ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+
+       //        ////Add searchh settings as well if its not null
+       //        //if (ModelToUpdate.SearchSettings == null)
+       //        //{
+       //        //    SearchSetting NewSearchSettings = new SearchSetting();
+       //        //    ProfileDataToUpdate.SearchSettings.Add(NewSearchSettings);
+       //        //}
+       //        //else
+       //        //{
+       //        //    ProfileDataToUpdate.SearchSettings.Add(ModelToUpdate.SearchSettings);
+       //        //}
+
+       //        UpdateSearchSettingsEthnicity(SelectedYourEthnicityIds, ProfileDataToUpdate);
+       //        UpdateProfileDataEthnicity(SelectedMyEthnicityIds, ProfileDataToUpdate);
+       //        SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+
+       //        //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+       //        db.SaveChanges();
+
+       //        //TOD DO
+       //        //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+       //        //update session too just in case
+       //        //membersmodel.profiledata = ProfileDataToUpdate;
+       //        //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID ,ProfileDataToUpdate );
+
+       //        model.CurrentErrors.Clear();
+       //        return model;
+       //    }
+       //    catch (DataException)
+       //    {
+       //        //Log the error (add a variable name after DataException) 
+       //        model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+       //        return model;
+       //    }
+
+       //}
+
+       //public EditProfileSettingsViewModel EditProfileAppearanceSettingsPage3Update(EditProfileSettingsViewModel model,
+       //     FormCollection formCollection, int?[] SelectedYourEyeColorIds,
+       //    int?[] SelectedYourHairColorIds,
+       //    string _ProfileID)
+       //{
+
+       //    profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+       //    if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+       //    SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+
+       //    //reload search settings since it seems the checkbox values are lost on postback
+       //    //we really should just rebuild them from form collection imo
+
+
+       //    //re populate the models TO DO not sure this is needed index valiues are stored
+       //    //if there are checkbox values on basic settings we would need to reload as well
+       //    //build Basic Profile Settings from Submited view 
+       //    // model.BasicProfileSettings. = AboutMe;
+       //    //temp store values on UI also handle ANY case here !!
+       //    //just for conistiancy.
+       //    var EyColorID = model.AppearanceSettings.EyeColorID;
+       //    var HairCOlorID = model.AppearanceSettings.HairColorID;
+       //    model.AppearanceSettings = new EditProfileAppearanceSettingsModel(ProfileDataToUpdate);
+       //    model.AppearanceSettings.HairColorID = HairCOlorID;
+       //    model.AppearanceSettings.EyeColorID = EyColorID;
+
+
+       //    //reload search settings since it seems the checkbox values are lost on postback
+       //    //we really should just rebuild them from form collection imo
+       //    model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
+       //    //update the reloaded  searchmodl settings with current settings on the UI
+
+
+       //    //update the searchmodl settings with current settings            
+       //    //update UI display values with current displayed values as well for check boxes
+       //    IEnumerable<int?> EnumerableYourHairColor = SelectedYourHairColorIds;
+
+       //    var YourHairColorValues = EnumerableYourHairColor != null ? new HashSet<int?>(EnumerableYourHairColor) : null;
+
+       //    foreach (var _HairColor in model.AppearanceSearchSettings.haircolorlist)
+       //    {
+       //        _HairColor.Selected = YourHairColorValues != null ? YourHairColorValues.Contains(_HairColor.HairColorID) : false;
+       //    }
+
+       //    IEnumerable<int?> EnumerableYourEyeColor = SelectedYourEyeColorIds;
+
+       //    var YourEyeColorValues = EnumerableYourEyeColor != null ? new HashSet<int?>(EnumerableYourEyeColor) : null;
+
+       //    foreach (var _EyeColor in model.AppearanceSearchSettings.eyecolorlist)
+       //    {
+       //        _EyeColor.Selected = YourEyeColorValues != null ? YourEyeColorValues.Contains(_EyeColor.EyeColorID) : false;
+       //    }
+
+       //    //UI updates done
+
+       //    //get active profile data 
+
+
+
+       //    try
+       //    {
+       //        ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+
+       //        //update my settings 
+       //        ProfileDataToUpdate.EyeColorID = model.AppearanceSettings.EyeColorID;
+       //        ProfileDataToUpdate.HairColorID = model.AppearanceSettings.HairColorID;
+
+       //        //now update the search settings 
+       //        SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.heightmin;
+       //        SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
+
+       //        UpdateSearchSettingsEyeColor(SelectedYourEyeColorIds, ProfileDataToUpdate);
+       //        UpdateSearchSettingsHairColor(SelectedYourHairColorIds, ProfileDataToUpdate);
+
+       //        SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+       //        //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+       //        db.SaveChanges();
+
+       //        //TOD DO
+       //        //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+       //        //update session too just in case
+       //        // membersmodel.profiledata = ProfileDataToUpdate;
+       //        // CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, membersmodel.Profile.ProfileID);
+
+       //        model.CurrentErrors.Clear();
+       //        return model;
+       //    }
+       //    catch (DataException)
+       //    {
+       //        //Log the error (add a variable name after DataException) 
+       //        model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+       //        return model;
+       //    }
+       //}
+
+       //public EditProfileSettingsViewModel EditProfileAppearanceSettingsPage4Update(EditProfileSettingsViewModel model,
+       //     FormCollection formCollection, int?[] SelectedYourHotFeatureIds, int?[] SelectedMyHotFeatureIds, string _ProfileID)
+       //{
+
+       //    profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+       //    if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+       //    SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+       //    //no validation needed just save 
+       //    //TOD DO move this to a function i think or repository for search and have it populate those there
+       //    //repopulate checkboxes for postback
+       //    //reload search settings since it seems the checkbox values are lost on postback
+       //    //we really should just rebuild them from form collection imo
+
+       //    //reload the Apppearance values
+       //    model.AppearanceSettings = new EditProfileAppearanceSettingsModel(ProfileDataToUpdate);
+
+       //    model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
+
+       //    //update the searchmodl settings with current settings            
+       //    //update UI display values with current displayed values as well for check boxes
+       //    IEnumerable<int?> EnumerableYourHotFeature = SelectedYourHotFeatureIds;
+
+       //    var YourHotFeatureValues = EnumerableYourHotFeature != null ? new HashSet<int?>(EnumerableYourHotFeature) : null;
+
+       //    foreach (var _HotFeature in model.AppearanceSearchSettings.hotfeaturelist)
+       //    {
+       //        _HotFeature.Selected = YourHotFeatureValues != null ? YourHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
+       //    }
+
+       //    IEnumerable<int?> EnumerableMyHotFeature = SelectedMyHotFeatureIds;
+
+       //    var MyHotFeatureValues = EnumerableMyHotFeature != null ? new HashSet<int?>(EnumerableMyHotFeature) : null;
+
+       //    foreach (var _HotFeature in model.AppearanceSettings.Myhotfeaturelist)
+       //    {
+       //        _HotFeature.Selected = MyHotFeatureValues != null ? MyHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
+       //    }
+
+       //    //UI updates done
+
+       //    //get active profile data 
+       //    //get active profile data 
+
+
+       //    try
+       //    {
+       //        //link the profiledata entities
+
+       //        ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+       //        //now update the search settings 
+       //        UpdateSearchSettingsHotFeature(SelectedYourHotFeatureIds, ProfileDataToUpdate);
+       //        UpdateProfileDataHotFeature(SelectedMyHotFeatureIds, ProfileDataToUpdate);
+
+       //        SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+       //        //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+       //        db.SaveChanges();
+
+       //        //TOD DO
+       //        //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+       //        //update session too just in case
+       //        //membersmodel.profiledata = ProfileDataToUpdate;
+       //        // CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID ,ProfileDataToUpdate );
+
+       //        model.CurrentErrors.Clear();
+       //        return model;
+       //    }
+       //    catch (DataException)
+       //    {
+       //        //Log the error (add a variable name after DataException) 
+       //        model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+       //        return model;
+       //    }
+       //}
+
+       //#endregion
+
+
+//       #region "Edit profile LifeStyle Settings Updates here"
+
+//       public EditProfileSettingsViewModel EditProfileLifeStyleSettingsPage1Update(EditProfileSettingsViewModel model,
+//       FormCollection formCollection, int?[] SelectedYourMaritalStatusIds, int?[] SelectedYourLivingSituationIds,
+//           int?[] SelectedYourLookingForIds, int?[] SelectedMyLookingForIds, string _ProfileID)
+//       {
+//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           //re populate the models TO DO not sure this is needed index valiues are stored
+//           //if there are checkbox values on basic settings we would need to reload as well
+//           //build Basic Profile Settings from Submited view 
+//           // model.BasicProfileSettings. = AboutMe;
+//           //temp store values on UI also handle ANY case here !!
+//           //just for conistiancy.
+//           var MyMaritalStatusID = model.LifeStyleSettings.MaritalStatusID;
+//           var MyLivingSituationID = model.LifeStyleSettings.LivingSituationID;
+//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(ProfileDataToUpdate);
+//           model.LifeStyleSettings.MaritalStatusID = MyMaritalStatusID;
+//           model.LifeStyleSettings.LivingSituationID = MyLivingSituationID;
+
+
+//           //reload search settings since it seems the checkbox values are lost on postback
+//           //we really should just rebuild them from form collection imo
+//           model.LifeStyleSearchSettings = new SearchModelLifeStyleSettings(SearchSettingsToUpdate);
+//           //update the reloaded  searchmodl settings with current settings on the UI
+
+
+//           //update the searchmodl settings with current settings            
+//           //update UI display values with current displayed values as well for check boxes
+
+//           IEnumerable<int?> EnumerableMyLookingFor = SelectedMyLookingForIds;
+
+//           var MyLookingForValues = EnumerableMyLookingFor != null ? new HashSet<int?>(EnumerableMyLookingFor) : null;
+
+//           foreach (var _LookingFor in model.LifeStyleSettings.MyLookingForList)
+//           {
+//               _LookingFor.Selected = MyLookingForValues != null ? MyLookingForValues.Contains(_LookingFor.MyLookingForID) : false;
+//           }
+
+
+//           IEnumerable<int?> EnumerableYourLookingFor = SelectedYourLookingForIds;
+
+//           var YourLookingForValues = EnumerableYourLookingFor != null ? new HashSet<int?>(EnumerableYourLookingFor) : null;
+
+//           foreach (var _LookingFor in model.LifeStyleSearchSettings.lookingforlist)
+//           {
+//               _LookingFor.Selected = YourLookingForValues != null ? YourLookingForValues.Contains(_LookingFor.LookingForID) : false;
+//           }
+
+//           IEnumerable<int?> EnumerableYourLivingSituation = SelectedYourLivingSituationIds;
+
+//           var YourLivingSituationValues = EnumerableYourLivingSituation != null ? new HashSet<int?>(EnumerableYourLivingSituation) : null;
+
+//           foreach (var _LivingSituation in model.LifeStyleSearchSettings.livingsituationlist)
+//           {
+//               _LivingSituation.Selected = YourLivingSituationValues != null ? YourLivingSituationValues.Contains(_LivingSituation.LivingSituationID) : false;
+//           }
+
+//           IEnumerable<int?> EnumerableYourMaritalStatus = SelectedYourMaritalStatusIds;
+
+//           var YourMaritalStatusValues = EnumerableYourMaritalStatus != null ? new HashSet<int?>(EnumerableYourMaritalStatus) : null;
+
+//           foreach (var _MaritalStatus in model.LifeStyleSearchSettings.maritalstatuslist)
+//           {
+//               _MaritalStatus.Selected = YourMaritalStatusValues != null ? YourMaritalStatusValues.Contains(_MaritalStatus.MaritalStatusID) : false;
+//           }
+
+
+
+//           // profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           //  SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           try
+//           {
+//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+//               ProfileDataToUpdate.MaritalStatusID = Convert.ToInt32(model.LifeStyleSettings.MaritalStatusID);
+//               ProfileDataToUpdate.LivingSituationID = model.LifeStyleSettings.LivingSituationID;
+
+
+//               UpdateProfileDataLookingFor(SelectedMyLookingForIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsLookingFor(SelectedYourLookingForIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsMaritalStatus(SelectedYourMaritalStatusIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsLivingSituation(SelectedYourLivingSituationIds, ProfileDataToUpdate);
+//               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+
+
+//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               int changes = db.SaveChanges();
+
+//               //TOD DO
+//               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+//               //update session too just in case
+//               //membersmodel.profiledata = ProfileDataToUpdate;
+
+//               CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
+
+
+//               model.CurrentErrors.Clear();
+//               return model;
+//           }
+//           catch (DataException)
+//           {
+//               //Log the error (add a variable name after DataException) 
+//               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+//               return model;
+//           }
+
+//       }
+
+//       public EditProfileSettingsViewModel EditProfileLifeStyleSettingsPage2Update(EditProfileSettingsViewModel model,
+//   FormCollection formCollection, int?[] SelectedYourHaveKidsIds, int?[] SelectedYourWantsKidsIds,
+//        string _ProfileID)
+//       {
+//           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
+
+//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           //re populate the models TO DO not sure this is needed index valiues are stored
+//           //if there are checkbox values on basic settings we would need to reload as well
+//           //build Basic Profile Settings from Submited view 
+//           // model.BasicProfileSettings. = AboutMe;
+//           //temp store values on UI also handle ANY case here !!
+//           //just for conistiancy.
+//           var MyWantKidsID = model.LifeStyleSettings.WantsKidsID;
+//           var MyHaveKidsID = model.LifeStyleSettings.HaveKidsId;
+//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(ProfileDataToUpdate);
+//           model.LifeStyleSettings.WantsKidsID = MyWantKidsID;
+//           model.LifeStyleSettings.HaveKidsId = MyHaveKidsID;
+
+
+//           //reload search settings since it seems the checkbox values are lost on postback
+//           //we really should just rebuild them from form collection imo
+//           model.LifeStyleSearchSettings = new SearchModelLifeStyleSettings(SearchSettingsToUpdate);
+//           //update the reloaded  searchmodl settings with current settings on the UI
+
+
+//           //update the searchmodl settings with current settings            
+//           //update UI display values with current displayed values as well for check boxes
+
+
+
+//           IEnumerable<int?> EnumerableYourWantsKids = SelectedYourWantsKidsIds;
+
+//           var YourWantsKidsValues = EnumerableYourWantsKids != null ? new HashSet<int?>(EnumerableYourWantsKids) : null;
+
+//           foreach (var _WantsKids in model.LifeStyleSearchSettings.wantskidslist)
+//           {
+//               _WantsKids.Selected = YourWantsKidsValues != null ? YourWantsKidsValues.Contains(_WantsKids.WantsKidsID) : false;
+//           }
+
+
+//           IEnumerable<int?> EnumerableYourHaveKids = SelectedYourHaveKidsIds;
+
+//           var YourHaveKidsValues = EnumerableYourHaveKids != null ? new HashSet<int?>(EnumerableYourHaveKids) : null;
+
+//           foreach (var _HaveKids in model.LifeStyleSearchSettings.havekidslist)
+//           {
+//               _HaveKids.Selected = YourHaveKidsValues != null ? YourHaveKidsValues.Contains(_HaveKids.HaveKidsID) : false;
+//           }
+
+
+
+//           //profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           // SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           try
+//           {
+
+
+
+//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+
+//               ProfileDataToUpdate.WantsKidsID = Convert.ToInt32(model.LifeStyleSettings.WantsKidsID);
+//               ProfileDataToUpdate.HaveKidsId = model.LifeStyleSettings.HaveKidsId;
+
+
+
+//               UpdateSearchSettingsWantsKids(SelectedYourWantsKidsIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsHaveKids(SelectedYourHaveKidsIds, ProfileDataToUpdate);
+
+//               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+
+//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               int changes = db.SaveChanges();
+
+//               //TOD DO
+//               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+//               //update session too just in case
+//               //membersmodel.profiledata = ProfileDataToUpdate;
+
+//               // CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, membersmodel.Profile.ProfileID);
+
+
+//               model.CurrentErrors.Clear();
+//               return model;
+//           }
+//           catch (DataException)
+//           {
+//               //Log the error (add a variable name after DataException) 
+//               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+//               return model;
+//           }
+
+//       }
+
+
+//       public EditProfileSettingsViewModel EditProfileLifeStyleSettingsPage3Update(EditProfileSettingsViewModel model,
+//FormCollection formCollection, int?[] SelectedYourEmploymentStatusIds, int?[] SelectedYourIncomeLevelIds,
+//     string _ProfileID)
+//       {
+//           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
+
+//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           //re populate the models TO DO not sure this is needed index valiues are stored
+//           //if there are checkbox values on basic settings we would need to reload as well
+//           //build Basic Profile Settings from Submited view 
+//           // model.BasicProfileSettings. = AboutMe;
+//           //temp store values on UI also handle ANY case here !!
+//           //just for conistiancy.
+//           var MyIncomeLevelID = model.LifeStyleSettings.IncomeLevelID;
+//           var MyEmploymentStatusID = model.LifeStyleSettings.EmploymentStatusID;
+//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(ProfileDataToUpdate);
+//           model.LifeStyleSettings.IncomeLevelID = MyIncomeLevelID;
+//           model.LifeStyleSettings.EmploymentStatusID = MyEmploymentStatusID;
+
+
+//           //reload search settings since it seems the checkbox values are lost on postback
+//           //we really should just rebuild them from form collection imo
+//           model.LifeStyleSearchSettings = new SearchModelLifeStyleSettings(SearchSettingsToUpdate);
+//           //update the reloaded  searchmodl settings with current settings on the UI
+
+
+//           //update the searchmodl settings with current settings            
+//           //update UI display values with current displayed values as well for check boxes
+
+
+
+//           IEnumerable<int?> EnumerableYourIncomeLevel = SelectedYourIncomeLevelIds;
+
+//           var YourIncomeLevelValues = EnumerableYourIncomeLevel != null ? new HashSet<int?>(EnumerableYourIncomeLevel) : null;
+
+//           foreach (var _IncomeLevel in model.LifeStyleSearchSettings.incomelevellist)
+//           {
+//               _IncomeLevel.Selected = YourIncomeLevelValues != null ? YourIncomeLevelValues.Contains(_IncomeLevel.IncomeLevelID) : false;
+//           }
+
+
+//           IEnumerable<int?> EnumerableYourEmploymentStatus = SelectedYourEmploymentStatusIds;
+
+//           var YourEmploymentStatusValues = EnumerableYourEmploymentStatus != null ? new HashSet<int?>(EnumerableYourEmploymentStatus) : null;
+
+//           foreach (var _EmploymentStatus in model.LifeStyleSearchSettings.employmentstatuslist)
+//           {
+//               _EmploymentStatus.Selected = YourEmploymentStatusValues != null ? YourEmploymentStatusValues.Contains(_EmploymentStatus.EmploymentStatusID) : false;
+//           }
+
+
+
+//           //profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           // SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           try
+//           {
+//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+
+//               ProfileDataToUpdate.IncomeLevelID = Convert.ToInt32(model.LifeStyleSettings.IncomeLevelID);
+//               ProfileDataToUpdate.EmploymentSatusID = model.LifeStyleSettings.EmploymentStatusID;
+
+
+
+//               UpdateSearchSettingsIncomeLevel(SelectedYourIncomeLevelIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsEmploymentStatus(SelectedYourEmploymentStatusIds, ProfileDataToUpdate);
+//               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+
+
+//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               int changes = db.SaveChanges();
+
+//               //TOD DO
+//               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+//               //update session too just in case
+//               // membersmodel.profiledata = ProfileDataToUpdate;
+//               //CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, membersmodel.Profile.ProfileID);
+
+
+//               model.CurrentErrors.Clear();
+//               return model;
+//           }
+//           catch (DataException)
+//           {
+//               //Log the error (add a variable name after DataException) 
+//               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+//               return model;
+//           }
+
+//       }
+
+//       public EditProfileSettingsViewModel EditProfileLifeStyleSettingsPage4Update(EditProfileSettingsViewModel model,
+//FormCollection formCollection, int?[] SelectedYourEducationLevelIds, int?[] SelectedYourProfessionIds,
+//     string _ProfileID)
+//       {
+
+//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+//           //MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
+
+//           //re populate the models TO DO not sure this is needed index valiues are stored
+//           //if there are checkbox values on basic settings we would need to reload as well
+//           //build Basic Profile Settings from Submited view 
+//           // model.BasicProfileSettings. = AboutMe;
+//           //temp store values on UI also handle ANY case here !!
+//           //just for conistiancy.
+//           var MyProfessionID = model.LifeStyleSettings.ProfessionID;
+//           var MyEducationLevelID = model.LifeStyleSettings.EducationLevelID;
+//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(ProfileDataToUpdate);
+//           model.LifeStyleSettings.ProfessionID = MyProfessionID;
+//           model.LifeStyleSettings.EducationLevelID = MyEducationLevelID;
+
+
+//           //reload search settings since it seems the checkbox values are lost on postback
+//           //we really should just rebuild them from form collection imo
+//           model.LifeStyleSearchSettings = new SearchModelLifeStyleSettings(SearchSettingsToUpdate);
+//           //update the reloaded  searchmodl settings with current settings on the UI
+
+
+//           //update the searchmodl settings with current settings            
+//           //update UI display values with current displayed values as well for check boxes
+
+
+
+//           IEnumerable<int?> EnumerableYourProfession = SelectedYourProfessionIds;
+
+//           var YourProfessionValues = EnumerableYourProfession != null ? new HashSet<int?>(EnumerableYourProfession) : null;
+
+//           foreach (var _Profession in model.LifeStyleSearchSettings.professionlist)
+//           {
+//               _Profession.Selected = YourProfessionValues != null ? YourProfessionValues.Contains(_Profession.ProfessionID) : false;
+//           }
+
+
+//           IEnumerable<int?> EnumerableYourEducationLevel = SelectedYourEducationLevelIds;
+
+//           var YourEducationLevelValues = EnumerableYourEducationLevel != null ? new HashSet<int?>(EnumerableYourEducationLevel) : null;
+
+//           foreach (var _EducationLevel in model.LifeStyleSearchSettings.educationlevellist)
+//           {
+//               _EducationLevel.Selected = YourEducationLevelValues != null ? YourEducationLevelValues.Contains(_EducationLevel.EducationLevelID) : false;
+//           }
+
+
+
+//           //profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           // SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           try
+//           {
+
+//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+//               ProfileDataToUpdate.ProfessionID = Convert.ToInt32(model.LifeStyleSettings.ProfessionID);
+//               ProfileDataToUpdate.EducationLevelID = model.LifeStyleSettings.EducationLevelID;
+//               UpdateSearchSettingsProfession(SelectedYourProfessionIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsEducationLevel(SelectedYourEducationLevelIds, ProfileDataToUpdate);
+
+
+//               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               int changes = db.SaveChanges();
+
+//               //TOD DO
+//               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+//               //update session too just in case
+//               //membersmodel.profiledata = ProfileDataToUpdate;
+
+//               //CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, membersmodel.Profile.ProfileID);
+
+
+//               model.CurrentErrors.Clear();
+//               return model;
+//           }
+//           catch (DataException)
+//           {
+//               //Log the error (add a variable name after DataException) 
+//               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+//               return model;
+//           }
+
+//       }
+
+//       #endregion
+
+
+//       #region "Edit profile Character Settings Updates here"
+
+//       public EditProfileSettingsViewModel EditProfileCharacterSettingsPage1Update(EditProfileSettingsViewModel model,
+//       FormCollection formCollection, int?[] SelectedYourDietIds, int?[] SelectedYourDrinksIds,
+//           int?[] SelectedYourExerciseIds, int?[] SelectedYourSmokesIds, string _ProfileID)
+//       {
+//           //5-10-2012 moved this to get these items first.
+//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           SearchSetting SearchSettingsToUpdate = membersrepository.GetPerFectMatchSearchSettingsByProfileID(_ProfileID);// db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           //MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
+
+//           //re populate the models TO DO not sure this is needed index valiues are stored
+//           //if there are checkbox values on basic settings we would need to reload as well
+//           //build Basic Profile Settings from Submited view 
+//           // model.BasicProfileSettings. = AboutMe;
+//           //temp store values on UI also handle ANY case here !!
+//           //just for conistiancy.
+//           var MyDietID = model.CharacterSettings.DietID;
+//           var MyDrinksID = model.CharacterSettings.DrinksID;
+//           var MyExerciseID = model.CharacterSettings.ExerciseID;
+//           var MySmokesID = model.CharacterSettings.SmokesID;
+//           //TO DO read from name value collection to incrfeate efficency
+//           model.CharacterSettings = new EditProfileCharacterSettingsModel(ProfileDataToUpdate);
+//           model.CharacterSettings.DietID = MyDietID;
+//           model.CharacterSettings.DrinksID = MyDrinksID;
+//           model.CharacterSettings.ExerciseID = MyExerciseID;
+//           model.CharacterSettings.SmokesID = MySmokesID;
+
+
+//           //reload search settings since it seems the checkbox values are lost on postback
+//           //we really should just rebuild them from form collection imo
+//           model.CharacterSearchSettings = new SearchModelCharacterSettings(SearchSettingsToUpdate);
+//           //update the reloaded  searchmodl settings with current settings on the UI
+
+
+
+//           IEnumerable<int?> EnumerableYourExercise = SelectedYourExerciseIds;
+
+//           var YourExerciseValues = EnumerableYourExercise != null ? new HashSet<int?>(EnumerableYourExercise) : null;
+
+//           foreach (var _Exercise in model.CharacterSearchSettings.exerciselist)
+//           {
+//               _Exercise.Selected = YourExerciseValues != null ? YourExerciseValues.Contains(_Exercise.ExerciseID) : false;
+//           }
+
+//           IEnumerable<int?> EnumerableYourDrinks = SelectedYourDrinksIds;
+
+//           var YourDrinksValues = EnumerableYourDrinks != null ? new HashSet<int?>(EnumerableYourDrinks) : null;
+
+//           foreach (var _Drinks in model.CharacterSearchSettings.drinkslist)
+//           {
+//               _Drinks.Selected = YourDrinksValues != null ? YourDrinksValues.Contains(_Drinks.DrinksID) : false;
+//           }
+
+//           IEnumerable<int?> EnumerableYourDiet = SelectedYourDietIds;
+
+//           var YourDietValues = EnumerableYourDiet != null ? new HashSet<int?>(EnumerableYourDiet) : null;
+
+//           foreach (var _Diet in model.CharacterSearchSettings.dietlist)
+//           {
+//               _Diet.Selected = YourDietValues != null ? YourDietValues.Contains(_Diet.DietID) : false;
+//           }
+
+//           IEnumerable<int?> EnumerableYourSmokes = SelectedYourSmokesIds;
+
+//           var YourSmokesValues = EnumerableYourSmokes != null ? new HashSet<int?>(EnumerableYourSmokes) : null;
+
+//           foreach (var _Smokes in model.CharacterSearchSettings.smokeslist)
+//           {
+//               _Smokes.Selected = YourSmokesValues != null ? YourSmokesValues.Contains(_Smokes.SmokesID) : false;
+//           }
+
+
+
+
+//           //profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           // SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           try
+//           {
+//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+
+//               ProfileDataToUpdate.DietID = Convert.ToInt32(model.CharacterSettings.DietID);
+//               ProfileDataToUpdate.DrinksID = model.CharacterSettings.DrinksID;
+//               ProfileDataToUpdate.ExerciseID = model.CharacterSettings.ExerciseID;
+//               ProfileDataToUpdate.SmokesID = model.CharacterSettings.SmokesID;
+
+
+//               UpdateSearchSettingsExercise(SelectedYourExerciseIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsDiet(SelectedYourDietIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsDrinks(SelectedYourDrinksIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsSmokes(SelectedYourSmokesIds, ProfileDataToUpdate);
+
+//               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+
+//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               int changes = db.SaveChanges();
+
+//               //TOD DO
+//               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+//               //update session too just in case
+//               // membersmodel.profiledata = ProfileDataToUpdate;
+
+//               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
+
+
+//               model.CurrentErrors.Clear();
+//               return model;
+//           }
+//           catch (DataException)
+//           {
+//               //Log the error (add a variable name after DataException) 
+//               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+//               return model;
+//           }
+
+//       }
+
+//       public EditProfileSettingsViewModel EditProfileCharacterSettingsPage2Update(EditProfileSettingsViewModel model,
+//   FormCollection formCollection, int?[] SelectedYourHobbyIds, int?[] SelectedMyHobbyIds, int?[] SelectedYourSignIds,
+//        string _ProfileID)
+//       {
+//           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
+//           //5-10-2012 moved this to get these items first.
+//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           SearchSetting SearchSettingsToUpdate = membersrepository.GetPerFectMatchSearchSettingsByProfileID(_ProfileID); // db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+
+//           //re populate the models TO DO not sure this is needed index valiues are stored
+//           //if there are checkbox values on basic settings we would need to reload as well
+//           //build Basic Profile Settings from Submited view 
+//           // model.BasicProfileSettings. = AboutMe;
+//           //temp store values on UI also handle ANY case here !!
+//           //just for conistiancy.
+//           var MySignID = model.CharacterSettings.SignID;
+//           model.CharacterSettings = new EditProfileCharacterSettingsModel(ProfileDataToUpdate);
+//           model.CharacterSettings.SignID = MySignID;
+
+
+
+//           //reload search settings since it seems the checkbox values are lost on postback
+//           //we really should just rebuild them from form collection imo
+//           model.CharacterSearchSettings = new SearchModelCharacterSettings(SearchSettingsToUpdate);
+//           //update the reloaded  searchmodl settings with current settings on the UI
+
+
+//           //update the searchmodl settings with current settings            
+//           //update UI display values with current displayed values as well for check boxes
+
+
+
+//           IEnumerable<int?> EnumerableMyHobby = SelectedMyHobbyIds;
+
+//           var MyHobbyValues = EnumerableMyHobby != null ? new HashSet<int?>(EnumerableMyHobby) : null;
+
+//           foreach (var _Hobby in model.CharacterSettings.MyHobbyList)
+//           {
+//               _Hobby.Selected = MyHobbyValues != null ? MyHobbyValues.Contains(_Hobby.MyHobbyID) : false;
+//           }
+
+//           IEnumerable<int?> EnumerableYourHobby = SelectedYourHobbyIds;
+
+//           var YourHobbyValues = EnumerableYourHobby != null ? new HashSet<int?>(EnumerableYourHobby) : null;
+
+//           foreach (var _Hobby in model.CharacterSearchSettings.hobbylist)
+//           {
+//               _Hobby.Selected = YourHobbyValues != null ? YourHobbyValues.Contains(_Hobby.HobbyID) : false;
+//           }
+
+
+//           IEnumerable<int?> EnumerableYourSign = SelectedYourSignIds;
+
+//           var YourSignValues = EnumerableYourSign != null ? new HashSet<int?>(EnumerableYourSign) : null;
+
+//           foreach (var _Sign in model.CharacterSearchSettings.signlist)
+//           {
+//               _Sign.Selected = YourSignValues != null ? YourSignValues.Contains(_Sign.SignID) : false;
+//           }
+
+
+
+//           // profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           // SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           try
+//           {
+
+//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+
+//               ProfileDataToUpdate.SignID = Convert.ToInt32(model.CharacterSettings.SignID);
+
+
+
+
+//               UpdateProfileDataHobby(SelectedMyHobbyIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsHobby(SelectedYourHobbyIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsSign(SelectedYourSignIds, ProfileDataToUpdate);
+
+//               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+
+//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               int changes = db.SaveChanges();
+
+//               //TOD DO
+//               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+//               //update session too just in case
+//               // membersmodel.profiledata = ProfileDataToUpdate;
+
+//               // CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
+
+//               model.CurrentErrors.Clear();
+//               return model;
+//           }
+//           catch (DataException)
+//           {
+//               //Log the error (add a variable name after DataException) 
+//               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+//               return model;
+//           }
+
+//       }
+
+
+
+//       public EditProfileSettingsViewModel EditProfileCharacterSettingsPage3Update(EditProfileSettingsViewModel model,
+//FormCollection formCollection, int?[] SelectedYourReligionIds, int?[] SelectedYourReligiousAttendanceIds,
+//     string _ProfileID)
+//       {
+//           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
+//           //5-10-2012 moved this to get these items first.
+//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           SearchSetting SearchSettingsToUpdate = membersrepository.GetPerFectMatchSearchSettingsByProfileID(_ProfileID); //db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           //re populate the models TO DO not sure this is needed index valiues are stored
+//           //if there are checkbox values on basic settings we would need to reload as well
+//           //build Basic Profile Settings from Submited view 
+//           // model.BasicProfileSettings. = AboutMe;
+//           //temp store values on UI also handle ANY case here !!
+//           //just for conistiancy.
+//           var MyReligiousAttendanceID = model.CharacterSettings.ReligiousAttendanceID;
+//           var MyReligionID = model.CharacterSettings.ReligionID;
+//           model.CharacterSettings = new EditProfileCharacterSettingsModel(ProfileDataToUpdate);
+//           model.CharacterSettings.ReligiousAttendanceID = MyReligiousAttendanceID;
+//           model.CharacterSettings.ReligionID = MyReligionID;
+
+
+//           //reload search settings since it seems the checkbox values are lost on postback
+//           //we really should just rebuild them from form collection imo
+//           model.CharacterSearchSettings = new SearchModelCharacterSettings(SearchSettingsToUpdate);
+//           //update the reloaded  searchmodl settings with current settings on the UI
+
+
+//           //update the searchmodl settings with current settings            
+//           //update UI display values with current displayed values as well for check boxes
+
+
+
+//           IEnumerable<int?> EnumerableYourReligiousAttendance = SelectedYourReligiousAttendanceIds;
+
+//           var YourReligiousAttendanceValues = EnumerableYourReligiousAttendance != null ? new HashSet<int?>(EnumerableYourReligiousAttendance) : null;
+
+//           foreach (var _ReligiousAttendance in model.CharacterSearchSettings.religiousattendancelist)
+//           {
+//               _ReligiousAttendance.Selected = YourReligiousAttendanceValues != null ? YourReligiousAttendanceValues.Contains(_ReligiousAttendance.ReligiousAttendanceID) : false;
+//           }
+
+
+//           IEnumerable<int?> EnumerableYourReligion = SelectedYourReligionIds;
+
+//           var YourReligionValues = EnumerableYourReligion != null ? new HashSet<int?>(EnumerableYourReligion) : null;
+
+//           foreach (var _Religion in model.CharacterSearchSettings.religionlist)
+//           {
+//               _Religion.Selected = YourReligionValues != null ? YourReligionValues.Contains(_Religion.ReligionID) : false;
+//           }
+
+
+
+//           //   profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           //  SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           try
+//           {
+//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+
+//               ProfileDataToUpdate.ReligiousAttendanceID = Convert.ToInt32(model.CharacterSettings.ReligiousAttendanceID);
+//               ProfileDataToUpdate.ReligionID = Convert.ToInt32(model.CharacterSettings.ReligionID);
+//               ProfileDataToUpdate.EmploymentSatusID = model.CharacterSettings.ReligionID;
+
+
+//               UpdateSearchSettingsReligiousAttendance(SelectedYourReligiousAttendanceIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsReligion(SelectedYourReligionIds, ProfileDataToUpdate);
+
+//               //added modifciation date 1-9-2012 , confirm that it works as an inclided
+//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+//               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+
+//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               int changes = db.SaveChanges();
+
+//               //TOD DO
+//               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+//               //update session too just in case
+//               // membersmodel.profiledata = ProfileDataToUpdate;
+
+//               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
+
+
+//               model.CurrentErrors.Clear();
+//               return model;
+//           }
+//           catch (DataException)
+//           {
+//               //Log the error (add a variable name after DataException) 
+//               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+//               return model;
+//           }
+
+//       }
+
+//       public EditProfileSettingsViewModel EditProfileCharacterSettingsPage4Update(EditProfileSettingsViewModel model,
+//FormCollection formCollection, int?[] SelectedYourPoliticalViewIds, int?[] SelectedYourHumorIds,
+//     string _ProfileID)
+//       {
+//           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
+//           //5-10-2012 moved this to get these items first.
+//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           SearchSetting SearchSettingsToUpdate = membersrepository.GetPerFectMatchSearchSettingsByProfileID(_ProfileID); //db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+//           //re populate the models TO DO not sure this is needed index valiues are stored
+//           //if there are checkbox values on basic settings we would need to reload as well
+//           //build Basic Profile Settings from Submited view 
+//           // model.BasicProfileSettings. = AboutMe;
+//           //temp store values on UI also handle ANY case here !!
+//           //just for conistiancy.
+//           var MyHumorID = model.CharacterSettings.HumorID;
+//           var MyPoliticalViewID = model.CharacterSettings.PoliticalViewID;
+//           model.CharacterSettings = new EditProfileCharacterSettingsModel(ProfileDataToUpdate);
+//           model.CharacterSettings.HumorID = MyHumorID;
+//           model.CharacterSettings.PoliticalViewID = MyPoliticalViewID;
+
+
+//           //reload search settings since it seems the checkbox values are lost on postback
+//           //we really should just rebuild them from form collection imo
+//           model.CharacterSearchSettings = new SearchModelCharacterSettings(SearchSettingsToUpdate);
+//           //update the reloaded  searchmodl settings with current settings on the UI
+
+
+//           //update the searchmodl settings with current settings            
+//           //update UI display values with current displayed values as well for check boxes
+
+
+
+//           IEnumerable<int?> EnumerableYourHumor = SelectedYourHumorIds;
+
+//           var YourHumorValues = EnumerableYourHumor != null ? new HashSet<int?>(EnumerableYourHumor) : null;
+
+//           foreach (var _Humor in model.CharacterSearchSettings.humorlist)
+//           {
+//               _Humor.Selected = YourHumorValues != null ? YourHumorValues.Contains(_Humor.HumorID) : false;
+//           }
+
+
+//           IEnumerable<int?> EnumerableYourPoliticalView = SelectedYourPoliticalViewIds;
+
+//           var YourPoliticalViewValues = EnumerableYourPoliticalView != null ? new HashSet<int?>(EnumerableYourPoliticalView) : null;
+
+//           foreach (var _PoliticalView in model.CharacterSearchSettings.politicalviewlist)
+//           {
+//               _PoliticalView.Selected = YourPoliticalViewValues != null ? YourPoliticalViewValues.Contains(_PoliticalView.PoliticalViewID) : false;
+//           }
+
+
+
+//           // profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           //   SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+//           try
+//           {
+//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+
+//               ProfileDataToUpdate.HumorID = Convert.ToInt32(model.CharacterSettings.HumorID);
+//               ProfileDataToUpdate.PoliticalViewID = Convert.ToInt32(model.CharacterSettings.PoliticalViewID);
+//               ProfileDataToUpdate.EmploymentSatusID = model.CharacterSettings.PoliticalViewID;
+
+
+
+//               UpdateSearchSettingsHumor(SelectedYourHumorIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsPoliticalView(SelectedYourPoliticalViewIds, ProfileDataToUpdate);
+
+
+
+//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               int changes = db.SaveChanges();
+
+//               //TOD DO
+//               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+//               //update session too just in case
+//               // membersmodel.profiledata = ProfileDataToUpdate;
+
+//               CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
+
+
+//               model.CurrentErrors.Clear();
+//               return model;
+//           }
+//           catch (DataException)
+//           {
+//               //Log the error (add a variable name after DataException) 
+//               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+//               return model;
+//           }
+
+//       }
+
+//       #endregion
        #endregion
 
        //TO DO move to search setting repo i think
@@ -935,7 +2065,7 @@ namespace Shell.MVC2.Data
 
 
        //10-3-2012 oawlal made the functuon far more generic so it will work alot better for perefect match or any search setting 
-       private void UpdateSearchSettingsGenders(List<lu_gender> selectedgenders, searchsetting currentsearchsetting)
+       private void updatesearchsettingsgenders(List<lu_gender> selectedgenders, searchsetting currentsearchsetting)
        {
            if (selectedgenders == null)
            {
@@ -979,1168 +2109,1118 @@ namespace Shell.MVC2.Data
        }
 
        //show me
-       private void UpdateSearchSettingsShowMe(int?[] selectedShowMe, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsshowme(List<lu_showme> selectedshowme, searchsetting currentsearchsetting)
        {
-           if (selectedShowMe == null)
+           if (selectedshowme == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_ShowMe  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_ShowMe CurrentSearchSettings_ShowMe = db.SearchSettings_ShowMe.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedShowMeHS = new HashSet<int?>(selectedShowMe);
-           //get the values for this members searchsettings ShowMe
-           var SearchSettingsShowMe = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_ShowMe.Select(c => c.ShowMeID));
-           foreach (var ShowMe in db.ShowMes)
+           // var selectedshowmeHS = new HashSet<int?>(selectedshowme);
+           //get the values for this members searchsettings showme
+           //var SearchSettingsshowme = new HashSet<int?>(currentsearchsetting.showme.Select(c => c.id));
+           foreach (var showme in db.lu_showme)
            {
-               if (selectedShowMeHS.Contains(ShowMe.ShowMeID))
+               if (selectedshowme.Contains(showme) )
                {
-                   if (!SearchSettingsShowMe.Contains(ShowMe.ShowMeID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.showme.Any(p => p.id == showme.id))
                    {
 
-                       //SearchSettings_ShowMe.ShowMeID = ShowMe.ShowMeID;
-                       var temp = new SearchSettings_ShowMe();
-                       temp.ShowMeID = ShowMe.ShowMeID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_ShowMe", temp);
+                       //SearchSettings_showme.showmeID = showme.showmeID;
+                       var temp = new searchsetting_showme();
+                       temp.id = showme.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_showme.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsShowMe.Contains(ShowMe.ShowMeID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.showme.Any(p => p.id == showme.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_ShowMe.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_showme.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == showme.id).First();
+                       db.searchsetting_showme.Remove(temp);
 
                    }
                }
            }
        }
        //sort by
-       private void UpdateSearchSettingsSortByTypes(int?[] selectedSortBy, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingssortbytype(List<lu_sortbytype> selectedsortbytype, searchsetting currentsearchsetting)
        {
-           if (selectedSortBy == null)
+           if (selectedsortbytype == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_SortBy  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_sortbytype  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_SortBy CurrentSearchSettings_SortBy = db.SearchSettings_SortBy.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_sortbytype CurrentSearchSettings_sortbytype = db.SearchSettings_sortbytype.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedSortByHS = new HashSet<int?>(selectedSortBy);
-           //get the values for this members searchsettings SortBy
-           var SearchSettingsSortBy = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_SortByType.Select(c => c.SortByTypeID));
-           foreach (var SortBy in db.SortByTypes)
+           // var selectedsortbytypeHS = new HashSet<int?>(selectedsortbytype);
+           //get the values for this members searchsettings sortbytype
+           //var SearchSettingssortbytype = new HashSet<int?>(currentsearchsetting.sortbytype.Select(c => c.id));
+           foreach (var sortbytype in db.lu_sortbytype)
            {
-               if (selectedSortByHS.Contains(SortBy.SortByTypeID))
+               if (selectedsortbytype.Contains(sortbytype))
                {
-                   if (!SearchSettingsSortBy.Contains(SortBy.SortByTypeID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.sortbytypes.Any(p => p.id == sortbytype.id))
                    {
 
-                       //SearchSettings_SortBy.SortByID = SortBy.SortByID;
-                       var temp = new SearchSettings_SortByType();
-                       temp.SortByTypeID = SortBy.SortByTypeID;
-                       temp.SearchSettingsID = SearchSettingsID;
-                       //  var dd =   db.ProfileDatas.Where(p=>p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p=>p.SearchSettingsID == SearchSettingsID).First().SearchSettings_SortByType.First();
+                       //SearchSettings_sortbytype.sortbytypeID = sortbytype.sortbytypeID;
+                       var temp = new searchsetting_sortbytype();
+                       temp.id = sortbytype.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_sortbytype.Add(temp);
 
-                       db.AddObject("SearchSettings_SortByType", temp);
                    }
                }
                else
-               {
-                   if (SearchSettingsSortBy.Contains(SortBy.SortByTypeID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.sortbytypes.Any(p => p.id == sortbytype.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_SortByType.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_sortbytype.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == sortbytype.id).First();
+                       db.searchsetting_sortbytype.Remove(temp);
 
                    }
                }
            }
        }
        //body types
-       private void UpdateSearchSettingsBodyTypes(int?[] selectedBodyTypes, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsbodytype(List<lu_bodytype> selectedbodytype, searchsetting currentsearchsetting)
        {
-           if (selectedBodyTypes == null)
+           if (selectedbodytype == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_BodyTypes  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_bodytype  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_BodyTypes CurrentSearchSettings_BodyTypes = db.SearchSettings_BodyTypes.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_bodytype CurrentSearchSettings_bodytype = db.SearchSettings_bodytype.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedBodyTypesHS = new HashSet<int?>(selectedBodyTypes);
-           //get the values for this members searchsettings BodyTypes
-           var SearchSettingsBodyTypes = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_BodyTypes.Select(c => c.BodyTypesID));
-           foreach (var BodyTypes in db.CriteriaAppearance_Bodytypes)
+           // var selectedbodytypeHS = new HashSet<int?>(selectedbodytype);
+           //get the values for this members searchsettings bodytype
+           //var SearchSettingsbodytype = new HashSet<int?>(currentsearchsetting.bodytype.Select(c => c.id));
+           foreach (var bodytype in db.lu_bodytype)
            {
-               if (selectedBodyTypesHS.Contains(BodyTypes.BodyTypesID))
+               if (selectedbodytype.Contains(bodytype))
                {
-                   if (!SearchSettingsBodyTypes.Contains(BodyTypes.BodyTypesID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.bodytypes.Any(p => p.id == bodytype.id))
                    {
 
-                       //SearchSettings_BodyTypes.BodyTypesID = BodyTypes.BodyTypesID;
-                       var temp = new SearchSettings_BodyTypes();
-                       temp.BodyTypesID = BodyTypes.BodyTypesID;
-                       temp.SearchSettingsID = SearchSettingsID;
-                       //  temp.SearchSettings_BodyTypeID = BodyTypes.SearchSettings_BodyTypeID;
-                       // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Ethnicity.Add(SearchSettings_BodyTypes);
-                       // SearchSettingsGender.SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-                       //var dd =   db.ProfileDatas.Where(p=>p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p=>p.SearchSettingsID == SearchSettingsID).First().SearchSettings_BodyTypes.First();
-
-                       db.AddObject("SearchSettings_BodyTypes", temp);
-
-
-                       // You do not have to call the Load method to load the details for the order,
-                       // because  lazy loading is set to true 
-                       // by the constructor of the AdventureWorksEntities object. 
-                       // With  lazy loading set to true the related objects are loaded when
-                       // you access the navigation property. In this case SalesOrderDetails.
-
-                       // Delete the first item in the order.
-
-
-
+                       //SearchSettings_bodytype.bodytypeID = bodytype.bodytypeID;
+                       var temp = new searchsetting_bodytype();
+                       temp.id = bodytype.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_bodytype.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsBodyTypes.Contains(BodyTypes.BodyTypesID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.bodytypes.Any(p => p.id == bodytype.id))
                    {
-                       //SearchSettings_BodyTypes.BodyTypesID  = BodyTypes.BodyTypesID;
-                       // var temp = new SearchSettings_BodyTypes();
-                       // temp.BodyTypesID = BodyTypes.BodyTypesID;
-                       //temp.SearchSettingsID = BodyTypes.SearchSettingsID;
-                       //temp.SearchSettings_BodyTypeID = BodyTypes.SearchSettings_BodyTypeID;
-                       // temp.SearchSettings_BodyTypeID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_BodyTypes.Where(p => p.SearchSettingsID == 18 && p.BodyTypesID == BodyTypes.BodyTypesID).FirstOrDefault();
-                       // temp.SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-                       //  var CurrentBodyType =  db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).SingleOrDefault().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).SingleOrDefault().SearchSettings_BodyTypes.Remove(temp);
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_BodyTypes.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_bodytype.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == bodytype.id).First();
+                       db.searchsetting_bodytype.Remove(temp);
 
                    }
                }
            }
        }
        //etnicity
-       private void UpdateSearchSettingsEthnicity(int?[] selectedEthnicity, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsethnicity(List<lu_ethnicity> selectedethnicity, searchsetting currentsearchsetting)
        {
-           if (selectedEthnicity == null)
+           if (selectedethnicity == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Ethnicity  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_ethnicity  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_Ethnicity CurrentSearchSettings_Ethnicity = db.SearchSettings_Ethnicity.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_ethnicity CurrentSearchSettings_ethnicity = db.SearchSettings_ethnicity.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedEthnicityHS = new HashSet<int?>(selectedEthnicity);
-           //get the values for this members searchsettings Ethnicity
-           var SearchSettingsEthnicity = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Ethnicity.Select(c => c.EthicityID));
-           foreach (var Ethnicity in db.CriteriaAppearance_Ethnicity)
+           // var selectedethnicityHS = new HashSet<int?>(selectedethnicity);
+           //get the values for this members searchsettings ethnicity
+           //var SearchSettingsethnicity = new HashSet<int?>(currentsearchsetting.ethnicity.Select(c => c.id));
+           foreach (var ethnicity in db.lu_ethnicity)
            {
-               if (selectedEthnicityHS.Contains(Ethnicity.EthnicityID))
+               if (selectedethnicity.Contains(ethnicity))
                {
-                   if (!SearchSettingsEthnicity.Contains(Ethnicity.EthnicityID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.ethnicitys.Any(p => p.id == ethnicity.id))
                    {
 
-                       //SearchSettings_Ethnicity.EthnicityID = Ethnicity.EthnicityID;
-                       var temp = new SearchSettings_Ethnicity();
-                       temp.EthicityID = Ethnicity.EthnicityID;
-                       temp.SearchSettingsID = SearchSettingsID;
+                       //SearchSettings_ethnicity.ethnicityID = ethnicity.ethnicityID;
+                       var temp = new searchsetting_ethnicity();
+                       temp.id = ethnicity.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_ethnicity.Add(temp);
 
-                       db.AddObject("SearchSettings_Ethnicity", temp);
                    }
                }
                else
-               {
-                   if (SearchSettingsEthnicity.Contains(Ethnicity.EthnicityID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.ethnicitys.Any(p => p.id == ethnicity.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_Ethnicity.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_ethnicity.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == ethnicity.id).First();
+                       db.searchsetting_ethnicity.Remove(temp);
 
                    }
                }
            }
        }
        //hair color
-       private void UpdateSearchSettingsHairColor(int?[] selectedHairColor, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingshaircolor(List<lu_haircolor> selectedhaircolor, searchsetting currentsearchsetting)
        {
-           if (selectedHairColor == null)
+           if (selectedhaircolor == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_HairColor  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_haircolor  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_HairColor CurrentSearchSettings_HairColor = db.SearchSettings_HairColor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_haircolor CurrentSearchSettings_haircolor = db.SearchSettings_haircolor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedHairColorHS = new HashSet<int?>(selectedHairColor);
-           //get the values for this members searchsettings HairColor
-           var SearchSettingsHairColor = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_HairColor.Select(c => c.HairColorID));
-           foreach (var HairColor in db.CriteriaAppearance_HairColor)
+           // var selectedhaircolorHS = new HashSet<int?>(selectedhaircolor);
+           //get the values for this members searchsettings haircolor
+           //var SearchSettingshaircolor = new HashSet<int?>(currentsearchsetting.haircolor.Select(c => c.id));
+           foreach (var haircolor in db.lu_haircolor)
            {
-               if (selectedHairColorHS.Contains(HairColor.HairColorID))
+               if (selectedhaircolor.Contains(haircolor))
                {
-                   if (!SearchSettingsHairColor.Contains(HairColor.HairColorID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.haircolors.Any(p => p.id == haircolor.id))
                    {
 
-                       //SearchSettings_HairColor.HairColorID = HairColor.HairColorID;
-                       var temp = new SearchSettings_HairColor();
-                       temp.HairColorID = HairColor.HairColorID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_HairColor", temp);
+                       //SearchSettings_haircolor.haircolorID = haircolor.haircolorID;
+                       var temp = new searchsetting_haircolor();
+                       temp.id = haircolor.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_haircolor.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsHairColor.Contains(HairColor.HairColorID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.haircolors.Any(p => p.id == haircolor.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_HairColor.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_haircolor.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == haircolor.id).First();
+                       db.searchsetting_haircolor.Remove(temp);
 
                    }
                }
            }
        }
        //eye color
-       private void UpdateSearchSettingsEyeColor(int?[] selectedEyeColor, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingseyecolor(List<lu_eyecolor> selectedeyecolor, searchsetting currentsearchsetting)
        {
-           if (selectedEyeColor == null)
+           if (selectedeyecolor == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_EyeColor  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_eyecolor  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_EyeColor CurrentSearchSettings_EyeColor = db.SearchSettings_EyeColor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_eyecolor CurrentSearchSettings_eyecolor = db.SearchSettings_eyecolor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedEyeColorHS = new HashSet<int?>(selectedEyeColor);
-           //get the values for this members searchsettings EyeColor
-           var SearchSettingsEyeColor = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_EyeColor.Select(c => c.EyeColorID));
-           foreach (var EyeColor in db.CriteriaAppearance_EyeColor)
+           // var selectedeyecolorHS = new HashSet<int?>(selectedeyecolor);
+           //get the values for this members searchsettings eyecolor
+           //var SearchSettingseyecolor = new HashSet<int?>(currentsearchsetting.eyecolor.Select(c => c.id));
+           foreach (var eyecolor in db.lu_eyecolor)
            {
-               if (selectedEyeColorHS.Contains(EyeColor.EyeColorID))
+               if (selectedeyecolor.Contains(eyecolor))
                {
-                   if (!SearchSettingsEyeColor.Contains(EyeColor.EyeColorID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.eyecolors.Any(p => p.id == eyecolor.id))
                    {
 
-                       //SearchSettings_EyeColor.EyeColorID = EyeColor.EyeColorID;
-                       var temp = new SearchSettings_EyeColor();
-                       temp.EyeColorID = EyeColor.EyeColorID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_EyeColor", temp);
+                       //SearchSettings_eyecolor.eyecolorID = eyecolor.eyecolorID;
+                       var temp = new searchsetting_eyecolor();
+                       temp.id = eyecolor.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_eyecolor.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsEyeColor.Contains(EyeColor.EyeColorID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.eyecolors.Any(p => p.id == eyecolor.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_EyeColor.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_eyecolor.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == eyecolor.id).First();
+                       db.searchsetting_eyecolor.Remove(temp);
 
                    }
                }
            }
        }
-
      //hot feature
-       private void UpdateSearchSettingsHotFeature(int?[] selectedHotFeature, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingshotfeature(List<lu_hotfeature> selectedhotfeature, searchsetting currentsearchsetting)
        {
-           if (selectedHotFeature == null)
+           if (selectedhotfeature == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_HotFeature  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_hotfeature  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_HotFeature CurrentSearchSettings_HotFeature = db.SearchSettings_HotFeature.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_hotfeature CurrentSearchSettings_hotfeature = db.SearchSettings_hotfeature.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedHotFeatureHS = new HashSet<int?>(selectedHotFeature);
-           //get the values for this members searchsettings HotFeature
-           var SearchSettingsHotFeature = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_HotFeature.Select(c => c.HotFeatureID));
-           foreach (var HotFeature in db.CriteriaCharacter_HotFeature)
+           // var selectedhotfeatureHS = new HashSet<int?>(selectedhotfeature);
+           //get the values for this members searchsettings hotfeature
+           //var SearchSettingshotfeature = new HashSet<int?>(currentsearchsetting.hotfeature.Select(c => c.id));
+           foreach (var hotfeature in db.lu_hotfeature)
            {
-               if (selectedHotFeatureHS.Contains(HotFeature.HotFeatureID))
+               if (selectedhotfeature.Contains(hotfeature))
                {
-                   if (!SearchSettingsHotFeature.Contains(HotFeature.HotFeatureID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.hotfeature.Any(p => p.id == hotfeature.id))
                    {
 
-                       //SearchSettings_HotFeature.HotFeatureID = HotFeature.HotFeatureID;
-                       var temp = new SearchSettings_HotFeature();
-                       temp.HotFeatureID = HotFeature.HotFeatureID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_HotFeature", temp);
+                       //SearchSettings_hotfeature.hotfeatureID = hotfeature.hotfeatureID;
+                       var temp = new searchsetting_hotfeature();
+                       temp.id = hotfeature.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_hotfeature.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsHotFeature.Contains(HotFeature.HotFeatureID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.hotfeature.Any(p => p.id == hotfeature.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_HotFeature.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_hotfeature.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == hotfeature.id).First();
+                       db.searchsetting_hotfeature.Remove(temp);
 
                    }
                }
            }
        }
        //diet
-       private void UpdateSearchSettingsDiet(int?[] selectedDiet, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsdiet(List<lu_diet> selecteddiet, searchsetting currentsearchsetting)
        {
-           if (selectedDiet == null)
+           if (selecteddiet == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Diet  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_diet  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_Diet CurrentSearchSettings_Diet = db.SearchSettings_Diet.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_diet CurrentSearchSettings_diet = db.SearchSettings_diet.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedDietHS = new HashSet<int?>(selectedDiet);
-           //get the values for this members searchsettings Diet
-           var SearchSettingsDiet = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Diet.Select(c => c.DietID));
-           foreach (var Diet in db.CriteriaCharacter_Diet)
+           // var selecteddietHS = new HashSet<int?>(selecteddiet);
+           //get the values for this members searchsettings diet
+           //var SearchSettingsdiet = new HashSet<int?>(currentsearchsetting.diet.Select(c => c.id));
+           foreach (var diet in db.lu_diet)
            {
-               if (selectedDietHS.Contains(Diet.DietID))
+               if (selecteddiet.Contains(diet))
                {
-                   if (!SearchSettingsDiet.Contains(Diet.DietID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.diets.Any(p => p.id == diet.id))
                    {
 
-                       //SearchSettings_Diet.DietID = Diet.DietID;
-                       var temp = new SearchSettings_Diet();
-                       temp.DietID = Diet.DietID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_Diet", temp);
+                       //SearchSettings_diet.dietID = diet.dietID;
+                       var temp = new searchsetting_diet();
+                       temp.id = diet.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_diet.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsDiet.Contains(Diet.DietID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.diets.Any(p => p.id == diet.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_Diet.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_diet.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == diet.id).First();
+                       db.searchsetting_diet.Remove(temp);
 
                    }
                }
            }
        }
        //drinks
-       private void UpdateSearchSettingsDrinks(int?[] selectedDrinks, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsdrinks(List<lu_drinks> selecteddrinks, searchsetting currentsearchsetting)
        {
-           if (selectedDrinks == null)
+           if (selecteddrinks == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Drinks  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_drinks  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_Drinks CurrentSearchSettings_Drinks = db.SearchSettings_Drinks.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_drinks CurrentSearchSettings_drinks = db.SearchSettings_drinks.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedDrinksHS = new HashSet<int?>(selectedDrinks);
-           //get the values for this members searchsettings Drinks
-           var SearchSettingsDrinks = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Drinks.Select(c => c.DrinksID));
-           foreach (var Drinks in db.CriteriaCharacter_Drinks)
+           // var selecteddrinksHS = new HashSet<int?>(selecteddrinks);
+           //get the values for this members searchsettings drinks
+           //var SearchSettingsdrinks = new HashSet<int?>(currentsearchsetting.drinks.Select(c => c.id));
+           foreach (var drinks in db.lu_drinks)
            {
-               if (selectedDrinksHS.Contains(Drinks.DrinksID))
+               if (selecteddrinks.Contains(drinks))
                {
-                   if (!SearchSettingsDrinks.Contains(Drinks.DrinksID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.drinks.Any(p => p.id == drinks.id))
                    {
 
-                       //SearchSettings_Drinks.DrinksID = Drinks.DrinksID;
-                       var temp = new SearchSettings_Drinks();
-                       temp.DrinksID = Drinks.DrinksID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_Drinks", temp);
+                       //SearchSettings_drinks.drinksID = drinks.drinksID;
+                       var temp = new searchsetting_drink();
+                       temp.id = drinks.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_drink.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsDrinks.Contains(Drinks.DrinksID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.drinks.Any(p => p.id == drinks.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_Drinks.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_drink.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == drinks.id).First();
+                       db.searchsetting_drink.Remove(temp);
 
                    }
                }
            }
        }
        //excerize
-       private void UpdateSearchSettingsExercise(int?[] selectedExercise, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsexercise(List<lu_exercise> selectedexercise, searchsetting currentsearchsetting)
        {
-           if (selectedExercise == null)
+           if (selectedexercise == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Exercise  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_exercise  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_Exercise CurrentSearchSettings_Exercise = db.SearchSettings_Exercise.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_exercise CurrentSearchSettings_exercise = db.SearchSettings_exercise.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedExerciseHS = new HashSet<int?>(selectedExercise);
-           //get the values for this members searchsettings Exercise
-           var SearchSettingsExercise = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Exercise.Select(c => c.ExerciseID));
-           foreach (var Exercise in db.CriteriaCharacter_Exercise)
+           // var selectedexerciseHS = new HashSet<int?>(selectedexercise);
+           //get the values for this members searchsettings exercise
+           //var SearchSettingsexercise = new HashSet<int?>(currentsearchsetting.exercise.Select(c => c.id));
+           foreach (var exercise in db.lu_exercise)
            {
-               if (selectedExerciseHS.Contains(Exercise.ExerciseID))
+               if (selectedexercise.Contains(exercise))
                {
-                   if (!SearchSettingsExercise.Contains(Exercise.ExerciseID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.exercises.Any(p => p.id == exercise.id))
                    {
 
-                       //SearchSettings_Exercise.ExerciseID = Exercise.ExerciseID;
-                       var temp = new SearchSettings_Exercise();
-                       temp.ExerciseID = Exercise.ExerciseID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_Exercise", temp);
+                       //SearchSettings_exercise.exerciseID = exercise.exerciseID;
+                       var temp = new searchsetting_exercise();
+                       temp.id = exercise.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_exercise.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsExercise.Contains(Exercise.ExerciseID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.exercises.Any(p => p.id == exercise.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_Exercise.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_exercise.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == exercise.id).First();
+                       db.searchsetting_exercise.Remove(temp);
 
                    }
                }
            }
        }
        //hobby
-       private void UpdateSearchSettingsHobby(int?[] selectedHobby, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingshobby(List<lu_hobby> selectedhobby, searchsetting currentsearchsetting)
        {
-           if (selectedHobby == null)
+           if (selectedhobby == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Hobby  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_hobby  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_Hobby CurrentSearchSettings_Hobby = db.SearchSettings_Hobby.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_hobby CurrentSearchSettings_hobby = db.SearchSettings_hobby.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedHobbyHS = new HashSet<int?>(selectedHobby);
-           //get the values for this members searchsettings Hobby
-           var SearchSettingsHobby = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Hobby.Select(c => c.HobbyID));
-           foreach (var Hobby in db.CriteriaCharacter_Hobby)
+           // var selectedhobbyHS = new HashSet<int?>(selectedhobby);
+           //get the values for this members searchsettings hobby
+           //var SearchSettingshobby = new HashSet<int?>(currentsearchsetting.hobby.Select(c => c.id));
+           foreach (var hobby in db.lu_hobby)
            {
-               if (selectedHobbyHS.Contains(Hobby.HobbyID))
+               if (selectedhobby.Contains(hobby))
                {
-                   if (!SearchSettingsHobby.Contains(Hobby.HobbyID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.hobbies.Any(p => p.id == hobby.id))
                    {
 
-                       //SearchSettings_Hobby.HobbyID = Hobby.HobbyID;
-                       var temp = new SearchSettings_Hobby();
-                       temp.HobbyID = Hobby.HobbyID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_Hobby", temp);
+                       //SearchSettings_hobby.hobbyID = hobby.hobbyID;
+                       var temp = new searchsetting_hobby();
+                       temp.id = hobby.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_hobby.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsHobby.Contains(Hobby.HobbyID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.hobbies.Any(p => p.id == hobby.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_Hobby.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_hobby.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == hobby.id).First();
+                       db.searchsetting_hobby.Remove(temp);
 
                    }
                }
            }
        }
        //humor
-       private void UpdateSearchSettingsHumor(int?[] selectedHumor, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingshumor(List<lu_humor> selectedhumor, searchsetting currentsearchsetting)
        {
-           if (selectedHumor == null)
+           if (selectedhumor == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Humor  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_humor  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_Humor CurrentSearchSettings_Humor = db.SearchSettings_Humor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_humor CurrentSearchSettings_humor = db.SearchSettings_humor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedHumorHS = new HashSet<int?>(selectedHumor);
-           //get the values for this members searchsettings Humor
-           var SearchSettingsHumor = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Humor.Select(c => c.HumorID));
-           foreach (var Humor in db.CriteriaCharacter_Humor)
+           // var selectedhumorHS = new HashSet<int?>(selectedhumor);
+           //get the values for this members searchsettings humor
+           //var SearchSettingshumor = new HashSet<int?>(currentsearchsetting.humor.Select(c => c.id));
+           foreach (var humor in db.lu_humor)
            {
-               if (selectedHumorHS.Contains(Humor.HumorID))
+               if (selectedhumor.Contains(humor))
                {
-                   if (!SearchSettingsHumor.Contains(Humor.HumorID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.humors.Any(p => p.id == humor.id))
                    {
 
-                       //SearchSettings_Humor.HumorID = Humor.HumorID;
-                       var temp = new SearchSettings_Humor();
-                       temp.HumorID = Humor.HumorID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_Humor", temp);
+                       //SearchSettings_humor.humorID = humor.humorID;
+                       var temp = new searchsetting_humor();
+                       temp.id = humor.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_humor.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsHumor.Contains(Humor.HumorID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.humors.Any(p => p.id == humor.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_Humor.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_humor.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == humor.id).First();
+                       db.searchsetting_humor.Remove(temp);
 
                    }
                }
            }
        }
        //political view
-       private void UpdateSearchSettingsPoliticalView(int?[] selectedPoliticalView, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingspoliticalview(List<lu_politicalview> selectedpoliticalview, searchsetting currentsearchsetting)
        {
-           if (selectedPoliticalView == null)
+           if (selectedpoliticalview == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_PoliticalView  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_politicalview  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_PoliticalView CurrentSearchSettings_PoliticalView = db.SearchSettings_PoliticalView.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_politicalview CurrentSearchSettings_politicalview = db.SearchSettings_politicalview.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedPoliticalViewHS = new HashSet<int?>(selectedPoliticalView);
-           //get the values for this members searchsettings PoliticalView
-           var SearchSettingsPoliticalView = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_PoliticalView.Select(c => c.PoliticalViewID));
-           foreach (var PoliticalView in db.CriteriaCharacter_PoliticalView)
+           // var selectedpoliticalviewHS = new HashSet<int?>(selectedpoliticalview);
+           //get the values for this members searchsettings politicalview
+           //var SearchSettingspoliticalview = new HashSet<int?>(currentsearchsetting.politicalview.Select(c => c.id));
+           foreach (var politicalview in db.lu_politicalview)
            {
-               if (selectedPoliticalViewHS.Contains(PoliticalView.PoliticalViewID))
+               if (selectedpoliticalview.Contains(politicalview))
                {
-                   if (!SearchSettingsPoliticalView.Contains(PoliticalView.PoliticalViewID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.politicalviews.Any(p => p.id == politicalview.id))
                    {
 
-                       //SearchSettings_PoliticalView.PoliticalViewID = PoliticalView.PoliticalViewID;
-                       var temp = new SearchSettings_PoliticalView();
-                       temp.PoliticalViewID = PoliticalView.PoliticalViewID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_PoliticalView", temp);
+                       //SearchSettings_politicalview.politicalviewID = politicalview.politicalviewID;
+                       var temp = new searchsetting_politicalview();
+                       temp.id = politicalview.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_politicalview.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsPoliticalView.Contains(PoliticalView.PoliticalViewID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.politicalviews.Any(p => p.id == politicalview.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_PoliticalView.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_politicalview.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == politicalview.id).First();
+                       db.searchsetting_politicalview.Remove(temp);
 
                    }
                }
            }
        }
        //relegion
-       private void UpdateSearchSettingsReligion(int?[] selectedReligion, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsreligion(List<lu_religion> selectedreligion, searchsetting currentsearchsetting)
        {
-           if (selectedReligion == null)
+           if (selectedreligion == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Religion  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_religion  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_Religion CurrentSearchSettings_Religion = db.SearchSettings_Religion.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_religion CurrentSearchSettings_religion = db.SearchSettings_religion.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedReligionHS = new HashSet<int?>(selectedReligion);
-           //get the values for this members searchsettings Religion
-           var SearchSettingsReligion = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Religion.Select(c => c.ReligionID));
-           foreach (var Religion in db.CriteriaCharacter_Religion)
+           // var selectedreligionHS = new HashSet<int?>(selectedreligion);
+           //get the values for this members searchsettings religion
+           //var SearchSettingsreligion = new HashSet<int?>(currentsearchsetting.religion.Select(c => c.id));
+           foreach (var religion in db.lu_religion)
            {
-               if (selectedReligionHS.Contains(Religion.religionID))
+               if (selectedreligion.Contains(religion))
                {
-                   if (!SearchSettingsReligion.Contains(Religion.religionID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.religions.Any(p => p.id == religion.id))
                    {
 
-                       //SearchSettings_Religion.ReligionID = Religion.ReligionID;
-                       var temp = new SearchSettings_Religion();
-                       temp.ReligionID = Religion.religionID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_Religion", temp);
+                       //SearchSettings_religion.religionID = religion.religionID;
+                       var temp = new searchsetting_religion();
+                       temp.id = religion.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_religion.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsReligion.Contains(Religion.religionID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.religions.Any(p => p.id == religion.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_Religion.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_religion.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == religion.id).First();
+                       db.searchsetting_religion.Remove(temp);
 
                    }
                }
            }
        }
        //relegious attendance
-       private void UpdateSearchSettingsReligiousAttendance(int?[] selectedReligiousAttendance, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsreligiousattendance(List<lu_religiousattendance> selectedreligiousattendance, searchsetting currentsearchsetting)
        {
-           if (selectedReligiousAttendance == null)
+           if (selectedreligiousattendance == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_ReligiousAttendance  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_religiousattendance  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_ReligiousAttendance CurrentSearchSettings_ReligiousAttendance = db.SearchSettings_ReligiousAttendance.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_religiousattendance CurrentSearchSettings_religiousattendance = db.SearchSettings_religiousattendance.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedReligiousAttendanceHS = new HashSet<int?>(selectedReligiousAttendance);
-           //get the values for this members searchsettings ReligiousAttendance
-           var SearchSettingsReligiousAttendance = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_ReligiousAttendance.Select(c => c.ReligiousAttendanceID));
-           foreach (var ReligiousAttendance in db.CriteriaCharacter_ReligiousAttendance)
+           // var selectedreligiousattendanceHS = new HashSet<int?>(selectedreligiousattendance);
+           //get the values for this members searchsettings religiousattendance
+           //var SearchSettingsreligiousattendance = new HashSet<int?>(currentsearchsetting.religiousattendance.Select(c => c.id));
+           foreach (var religiousattendance in db.lu_religiousattendance)
            {
-               if (selectedReligiousAttendanceHS.Contains(ReligiousAttendance.ReligiousAttendanceID))
+               if (selectedreligiousattendance.Contains(religiousattendance))
                {
-                   if (!SearchSettingsReligiousAttendance.Contains(ReligiousAttendance.ReligiousAttendanceID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.religiousattendances.Any(p => p.id == religiousattendance.id))
                    {
 
-                       //SearchSettings_ReligiousAttendance.ReligiousAttendanceID = ReligiousAttendance.ReligiousAttendanceID;
-                       var temp = new SearchSettings_ReligiousAttendance();
-                       temp.ReligiousAttendanceID = ReligiousAttendance.ReligiousAttendanceID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_ReligiousAttendance", temp);
+                       //SearchSettings_religiousattendance.religiousattendanceID = religiousattendance.religiousattendanceID;
+                       var temp = new searchsetting_religiousattendance();
+                       temp.id = religiousattendance.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_religiousattendance.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsReligiousAttendance.Contains(ReligiousAttendance.ReligiousAttendanceID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.religiousattendances.Any(p => p.id == religiousattendance.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_ReligiousAttendance.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_religiousattendance.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == religiousattendance.id).First();
+                       db.searchsetting_religiousattendance.Remove(temp);
 
                    }
                }
            }
        }
        //sign
-       private void UpdateSearchSettingsSign(int?[] selectedSign, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingssign(List<lu_sign> selectedsign, searchsetting currentsearchsetting)
        {
-           if (selectedSign == null)
+           if (selectedsign == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Sign  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_sign  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_Sign CurrentSearchSettings_Sign = db.SearchSettings_Sign.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_sign CurrentSearchSettings_sign = db.SearchSettings_sign.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedSignHS = new HashSet<int?>(selectedSign);
-           //get the values for this members searchsettings Sign
-           var SearchSettingsSign = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Sign.Select(c => c.SignID));
-           foreach (var Sign in db.CriteriaCharacter_Sign)
+           // var selectedsignHS = new HashSet<int?>(selectedsign);
+           //get the values for this members searchsettings sign
+           //var SearchSettingssign = new HashSet<int?>(currentsearchsetting.sign.Select(c => c.id));
+           foreach (var sign in db.lu_sign)
            {
-               if (selectedSignHS.Contains(Sign.SignID))
+               if (selectedsign.Contains(sign))
                {
-                   if (!SearchSettingsSign.Contains(Sign.SignID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.signs.Any(p => p.id == sign.id))
                    {
 
-                       //SearchSettings_Sign.SignID = Sign.SignID;
-                       var temp = new SearchSettings_Sign();
-                       temp.SignID = Sign.SignID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_Sign", temp);
+                       //SearchSettings_sign.signID = sign.signID;
+                       var temp = new searchsetting_sign();
+                       temp.id = sign.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_sign.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsSign.Contains(Sign.SignID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.signs.Any(p => p.id == sign.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_Sign.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_sign.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == sign.id).First();
+                       db.searchsetting_sign.Remove(temp);
 
                    }
                }
            }
        }
        //smokes
-       private void UpdateSearchSettingsSmokes(int?[] selectedSmokes, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingssmokes(List<lu_smokes> selectedsmokes, searchsetting currentsearchsetting)
        {
-           if (selectedSmokes == null)
+           if (selectedsmokes == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Smokes  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_smokes  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_Smokes CurrentSearchSettings_Smokes = db.SearchSettings_Smokes.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_smokes CurrentSearchSettings_smokes = db.SearchSettings_smokes.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedSmokesHS = new HashSet<int?>(selectedSmokes);
-           //get the values for this members searchsettings Smokes
-           var SearchSettingsSmokes = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Smokes.Select(c => c.SmokesID));
-           foreach (var Smokes in db.CriteriaCharacter_Smokes)
+           // var selectedsmokesHS = new HashSet<int?>(selectedsmokes);
+           //get the values for this members searchsettings smokes
+           //var SearchSettingssmokes = new HashSet<int?>(currentsearchsetting.smokes.Select(c => c.id));
+           foreach (var smokes in db.lu_smokes)
            {
-               if (selectedSmokesHS.Contains(Smokes.SmokesID))
+               if (selectedsmokes.Contains(smokes))
                {
-                   if (!SearchSettingsSmokes.Contains(Smokes.SmokesID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.smokes.Any(p => p.id == smokes.id))
                    {
 
-                       //SearchSettings_Smokes.SmokesID = Smokes.SmokesID;
-                       var temp = new SearchSettings_Smokes();
-                       temp.SmokesID = Smokes.SmokesID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_Smokes", temp);
+                       //SearchSettings_smokes.smokesID = smokes.smokesID;
+                       var temp = new searchsetting_smokes();
+                       temp.id = smokes.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_smokes.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsSmokes.Contains(Smokes.SmokesID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.smokes.Any(p => p.id == smokes.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_Smokes.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_smokes.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == smokes.id).First();
+                       db.searchsetting_smokes.Remove(temp);
 
                    }
                }
            }
        }
        //education level
-       private void UpdateSearchSettingsEducationLevel(int?[] selectedEducationLevel, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingseducationlevel(List<lu_educationlevel> selectededucationlevel, searchsetting currentsearchsetting)
        {
-           if (selectedEducationLevel == null)
+           if (selectededucationlevel == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_EducationLevel  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_educationlevel  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_EducationLevel CurrentSearchSettings_EducationLevel = db.SearchSettings_EducationLevel.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_educationlevel CurrentSearchSettings_educationlevel = db.SearchSettings_educationlevel.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedEducationLevelHS = new HashSet<int?>(selectedEducationLevel);
-           //get the values for this members searchsettings EducationLevel
-           var SearchSettingsEducationLevel = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_EducationLevel.Select(c => c.EducationLevelID));
-           foreach (var EducationLevel in db.CriteriaLife_EducationLevel)
+           // var selectededucationlevelHS = new HashSet<int?>(selectededucationlevel);
+           //get the values for this members searchsettings educationlevel
+           //var SearchSettingseducationlevel = new HashSet<int?>(currentsearchsetting.educationlevel.Select(c => c.id));
+           foreach (var educationlevel in db.lu_educationlevel)
            {
-               if (selectedEducationLevelHS.Contains(EducationLevel.EducationLevelID))
+               if (selectededucationlevel.Contains(educationlevel))
                {
-                   if (!SearchSettingsEducationLevel.Contains(EducationLevel.EducationLevelID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.educationlevels.Any(p => p.id == educationlevel.id))
                    {
 
-                       //SearchSettings_EducationLevel.EducationLevelID = EducationLevel.EducationLevelID;
-                       var temp = new SearchSettings_EducationLevel();
-                       temp.EducationLevelID = EducationLevel.EducationLevelID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_EducationLevel", temp);
+                       //SearchSettings_educationlevel.educationlevelID = educationlevel.educationlevelID;
+                       var temp = new searchsetting_educationlevel();
+                       temp.id = educationlevel.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_educationlevel.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsEducationLevel.Contains(EducationLevel.EducationLevelID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.educationlevels.Any(p => p.id == educationlevel.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_EducationLevel.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_educationlevel.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == educationlevel.id).First();
+                       db.searchsetting_educationlevel.Remove(temp);
 
                    }
                }
            }
        }
        //employment status
-       private void UpdateSearchSettingsEmploymentStatus(int?[] selectedEmploymentStatus, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsemploymentstatus(List<lu_employmentstatus> selectedemploymentstatus, searchsetting currentsearchsetting)
        {
-           if (selectedEmploymentStatus == null)
+           if (selectedemploymentstatus == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_EmploymentStatus  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_employmentstatus  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_EmploymentStatus CurrentSearchSettings_EmploymentStatus = db.SearchSettings_EmploymentStatus.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_employmentstatus CurrentSearchSettings_employmentstatus = db.SearchSettings_employmentstatus.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedEmploymentStatusHS = new HashSet<int?>(selectedEmploymentStatus);
-           //get the values for this members searchsettings EmploymentStatus
-           var SearchSettingsEmploymentStatus = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_EmploymentStatus.Select(c => c.EmploymentStatusID));
-           foreach (var EmploymentStatus in db.CriteriaLife_EmploymentStatus)
+           // var selectedemploymentstatusHS = new HashSet<int?>(selectedemploymentstatus);
+           //get the values for this members searchsettings employmentstatus
+           //var SearchSettingsemploymentstatus = new HashSet<int?>(currentsearchsetting.employmentstatus.Select(c => c.id));
+           foreach (var employmentstatus in db.lu_employmentstatus)
            {
-               if (selectedEmploymentStatusHS.Contains(EmploymentStatus.EmploymentSatusID))
+               if (selectedemploymentstatus.Contains(employmentstatus))
                {
-                   if (!SearchSettingsEmploymentStatus.Contains(EmploymentStatus.EmploymentSatusID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.employmentstatus.Any(p => p.id == employmentstatus.id))
                    {
 
-                       //SearchSettings_EmploymentStatus.EmploymentStatusID = EmploymentStatus.EmploymentStatusID;
-                       var temp = new SearchSettings_EmploymentStatus();
-                       temp.EmploymentStatusID = EmploymentStatus.EmploymentSatusID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_EmploymentStatus", temp);
+                       //SearchSettings_employmentstatus.employmentstatusID = employmentstatus.employmentstatusID;
+                       var temp = new searchsetting_employmentstatus();
+                       temp.id = employmentstatus.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_employmentstatus.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsEmploymentStatus.Contains(EmploymentStatus.EmploymentSatusID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.employmentstatus.Any(p => p.id == employmentstatus.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_EmploymentStatus.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_employmentstatus.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == employmentstatus.id).First();
+                       db.searchsetting_employmentstatus.Remove(temp);
 
                    }
                }
            }
        }
        //have kids
-       private void UpdateSearchSettingsHaveKids(int?[] selectedHaveKids, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingshavekids(List<lu_havekids> selectedhavekids, searchsetting currentsearchsetting)
        {
-           if (selectedHaveKids == null)
+           if (selectedhavekids == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_HaveKids  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_havekids  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_HaveKids CurrentSearchSettings_HaveKids = db.SearchSettings_HaveKids.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_havekids CurrentSearchSettings_havekids = db.SearchSettings_havekids.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedHaveKidsHS = new HashSet<int?>(selectedHaveKids);
-           //get the values for this members searchsettings HaveKids
-           var SearchSettingsHaveKids = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_HaveKids.Select(c => c.HaveKidsID));
-           foreach (var HaveKids in db.CriteriaLife_HaveKids)
+           // var selectedhavekidsHS = new HashSet<int?>(selectedhavekids);
+           //get the values for this members searchsettings havekids
+           //var SearchSettingshavekids = new HashSet<int?>(currentsearchsetting.havekids.Select(c => c.id));
+           foreach (var havekids in db.lu_havekids)
            {
-               if (selectedHaveKidsHS.Contains(HaveKids.HaveKidsId))
+               if (selectedhavekids.Contains(havekids))
                {
-                   if (!SearchSettingsHaveKids.Contains(HaveKids.HaveKidsId))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.havekids.Any(p => p.id == havekids.id))
                    {
 
-                       //SearchSettings_HaveKids.HaveKidsID = HaveKids.HaveKidsID;
-                       var temp = new SearchSettings_HaveKids();
-                       temp.HaveKidsID = HaveKids.HaveKidsId;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_HaveKids", temp);
+                       //SearchSettings_havekids.havekidsID = havekids.havekidsID;
+                       var temp = new searchsetting_havekids();
+                       temp.id = havekids.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_havekids.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsHaveKids.Contains(HaveKids.HaveKidsId))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.havekids.Any(p => p.id == havekids.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_HaveKids.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_havekids.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == havekids.id).First();
+                       db.searchsetting_havekids.Remove(temp);
 
                    }
                }
            }
        }
        //income level
-       private void UpdateSearchSettingsIncomeLevel(int?[] selectedIncomeLevel, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsincomelevel(List<lu_incomelevel> selectedincomelevel, searchsetting currentsearchsetting)
        {
-           if (selectedIncomeLevel == null)
+           if (selectedincomelevel == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_IncomeLevel  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_incomelevel  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_IncomeLevel CurrentSearchSettings_IncomeLevel = db.SearchSettings_IncomeLevel.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_incomelevel CurrentSearchSettings_incomelevel = db.SearchSettings_incomelevel.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedIncomeLevelHS = new HashSet<int?>(selectedIncomeLevel);
-           //get the values for this members searchsettings IncomeLevel
-           var SearchSettingsIncomeLevel = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_IncomeLevel.Select(c => c.ImcomeLevelID));
-           foreach (var IncomeLevel in db.CriteriaLife_IncomeLevel)
+           // var selectedincomelevelHS = new HashSet<int?>(selectedincomelevel);
+           //get the values for this members searchsettings incomelevel
+           //var SearchSettingsincomelevel = new HashSet<int?>(currentsearchsetting.incomelevel.Select(c => c.id));
+           foreach (var incomelevel in db.lu_incomelevel)
            {
-               if (selectedIncomeLevelHS.Contains(IncomeLevel.IncomeLevelID))
+               if (selectedincomelevel.Contains(incomelevel))
                {
-                   if (!SearchSettingsIncomeLevel.Contains(IncomeLevel.IncomeLevelID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.incomelevels.Any(p => p.id == incomelevel.id))
                    {
 
-                       //SearchSettings_IncomeLevel.IncomeLevelID = IncomeLevel.IncomeLevelID;
-                       var temp = new SearchSettings_IncomeLevel();
-                       temp.ImcomeLevelID = IncomeLevel.IncomeLevelID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_IncomeLevel", temp);
+                       //SearchSettings_incomelevel.incomelevelID = incomelevel.incomelevelID;
+                       var temp = new searchsetting_incomelevel();
+                       temp.id = incomelevel.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_incomelevel.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsIncomeLevel.Contains(IncomeLevel.IncomeLevelID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.incomelevels.Any(p => p.id == incomelevel.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_IncomeLevel.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_incomelevel.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == incomelevel.id).First();
+                       db.searchsetting_incomelevel.Remove(temp);
 
                    }
                }
            }
        }
        //living situation
-       private void UpdateSearchSettingsLivingSituation(int?[] selectedLivingSituation, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingslivingsituation(List<lu_livingsituation> selectedlivingsituation, searchsetting currentsearchsetting)
        {
-           if (selectedLivingSituation == null)
+           if (selectedlivingsituation == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_LivingSituation  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_livingsituation  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_LivingSituation CurrentSearchSettings_LivingSituation = db.SearchSettings_LivingSituation.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_livingsituation CurrentSearchSettings_livingsituation = db.SearchSettings_livingsituation.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedLivingSituationHS = new HashSet<int?>(selectedLivingSituation);
-           //get the values for this members searchsettings LivingSituation
-           var SearchSettingsLivingSituation = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_LivingStituation.Select(c => c.LivingStituationID));
-           foreach (var LivingSituation in db.CriteriaLife_LivingSituation)
+           // var selectedlivingsituationHS = new HashSet<int?>(selectedlivingsituation);
+           //get the values for this members searchsettings livingsituation
+           //var SearchSettingslivingsituation = new HashSet<int?>(currentsearchsetting.livingsituation.Select(c => c.id));
+           foreach (var livingsituation in db.lu_livingsituation)
            {
-               if (selectedLivingSituationHS.Contains(LivingSituation.LivingSituationID))
+               if (selectedlivingsituation.Contains(livingsituation))
                {
-                   if (!SearchSettingsLivingSituation.Contains(LivingSituation.LivingSituationID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.livingstituations.Any(p => p.id == livingsituation.id))
                    {
 
-                       //SearchSettings_LivingSituation.LivingSituationID = LivingSituation.LivingSituationID;
-                       var temp = new SearchSettings_LivingStituation();
-                       temp.LivingStituationID = LivingSituation.LivingSituationID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_LivingStituation", temp);
+                       //SearchSettings_livingsituation.livingsituationID = livingsituation.livingsituationID;
+                       var temp = new searchsetting_livingstituation ();
+                       temp.id = livingsituation.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_livingstituation.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsLivingSituation.Contains(LivingSituation.LivingSituationID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.livingstituations.Any(p => p.id == livingsituation.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_LivingStituation.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_livingstituation.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == livingsituation.id).First();
+                       db.searchsetting_livingstituation .Remove(temp);
 
                    }
                }
            }
        }
        //lookingfor
-       private void UpdateSearchSettingsLookingFor(int?[] selectedLookingFor, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingslookingfor(List<lu_lookingfor> selectedlookingfor, searchsetting currentsearchsetting)
        {
-           if (selectedLookingFor == null)
+           if (selectedlookingfor == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_LookingFor  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_lookingfor  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_LookingFor CurrentSearchSettings_LookingFor = db.SearchSettings_LookingFor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_lookingfor CurrentSearchSettings_lookingfor = db.SearchSettings_lookingfor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedLookingForHS = new HashSet<int?>(selectedLookingFor);
-           //get the values for this members searchsettings LookingFor
-           var SearchSettingsLookingFor = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_LookingFor.Select(c => c.LookingForID));
-           foreach (var LookingFor in db.CriteriaLife_LookingFor)
+           // var selectedlookingforHS = new HashSet<int?>(selectedlookingfor);
+           //get the values for this members searchsettings lookingfor
+           //var SearchSettingslookingfor = new HashSet<int?>(currentsearchsetting.lookingfor.Select(c => c.id));
+           foreach (var lookingfor in db.lu_lookingfor)
            {
-               if (selectedLookingForHS.Contains(LookingFor.LookingForID))
+               if (selectedlookingfor.Contains(lookingfor))
                {
-                   if (!SearchSettingsLookingFor.Contains(LookingFor.LookingForID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.lookingfor.Any(p => p.id == lookingfor.id))
                    {
 
-                       //SearchSettings_LookingFor.LookingForID = LookingFor.LookingForID;
-                       var temp = new SearchSettings_LookingFor();
-                       temp.LookingForID = LookingFor.LookingForID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_LookingFor", temp);
+                       //SearchSettings_lookingfor.lookingforID = lookingfor.lookingforID;
+                       var temp = new searchsetting_lookingfor();
+                       temp.id = lookingfor.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_lookingfor.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsLookingFor.Contains(LookingFor.LookingForID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.lookingfor.Any(p => p.id == lookingfor.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_LookingFor.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_lookingfor.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == lookingfor.id).First();
+                       db.searchsetting_lookingfor.Remove(temp);
 
                    }
                }
            }
        }
        //maritial status
-       private void UpdateSearchSettingsMaritalStatus(int?[] selectedMaritalStatus, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsmaritalstatus(List<lu_maritalstatus> selectedmaritalstatus, searchsetting currentsearchsetting)
        {
-           if (selectedMaritalStatus == null)
+           if (selectedmaritalstatus == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_MaritalStatus  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_maritalstatus  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_MaritalStatus CurrentSearchSettings_MaritalStatus = db.SearchSettings_MaritalStatus.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_maritalstatus CurrentSearchSettings_maritalstatus = db.SearchSettings_maritalstatus.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedMaritalStatusHS = new HashSet<int?>(selectedMaritalStatus);
-           //get the values for this members searchsettings MaritalStatus
-           var SearchSettingsMaritalStatus = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_MaritalStatus.Select(c => c.MaritalStatusID));
-           foreach (var MaritalStatus in db.CriteriaLife_MaritalStatus)
+           // var selectedmaritalstatusHS = new HashSet<int?>(selectedmaritalstatus);
+           //get the values for this members searchsettings maritalstatus
+           //var SearchSettingsmaritalstatus = new HashSet<int?>(currentsearchsetting.maritalstatus.Select(c => c.id));
+           foreach (var maritalstatus in db.lu_maritalstatus)
            {
-               if (selectedMaritalStatusHS.Contains(MaritalStatus.MaritalStatusID))
+               if (selectedmaritalstatus.Contains(maritalstatus))
                {
-                   if (!SearchSettingsMaritalStatus.Contains(MaritalStatus.MaritalStatusID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.maritalstatuses.Any(p => p.id == maritalstatus.id))
                    {
 
-                       //SearchSettings_MaritalStatus.MaritalStatusID = MaritalStatus.MaritalStatusID;
-                       var temp = new SearchSettings_MaritalStatus();
-                       temp.MaritalStatusID = MaritalStatus.MaritalStatusID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_MaritalStatus", temp);
+                       //SearchSettings_maritalstatus.maritalstatusID = maritalstatus.maritalstatusID;
+                       var temp = new searchsetting_maritalstatus();
+                       temp.id = maritalstatus.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_maritalstatus.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsMaritalStatus.Contains(MaritalStatus.MaritalStatusID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.maritalstatuses.Any(p => p.id == maritalstatus.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_MaritalStatus.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_maritalstatus.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == maritalstatus.id).First();
+                       db.searchsetting_maritalstatus.Remove(temp);
 
                    }
                }
            }
        }
        //profession
-       private void UpdateSearchSettingsProfession(int?[] selectedProfession, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingsprofession(List<lu_profession> selectedprofession, searchsetting currentsearchsetting)
        {
-           if (selectedProfession == null)
+           if (selectedprofession == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Profession  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_profession  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_Profession CurrentSearchSettings_Profession = db.SearchSettings_Profession.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_profession CurrentSearchSettings_profession = db.SearchSettings_profession.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedProfessionHS = new HashSet<int?>(selectedProfession);
-           //get the values for this members searchsettings Profession
-           var SearchSettingsProfession = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Profession.Select(c => c.ProfessionID));
-           foreach (var Profession in db.CriteriaLife_Profession)
+           // var selectedprofessionHS = new HashSet<int?>(selectedprofession);
+           //get the values for this members searchsettings profession
+           //var SearchSettingsprofession = new HashSet<int?>(currentsearchsetting.profession.Select(c => c.id));
+           foreach (var profession in db.lu_profession)
            {
-               if (selectedProfessionHS.Contains(Profession.ProfessionID))
+               if (selectedprofession.Contains(profession))
                {
-                   if (!SearchSettingsProfession.Contains(Profession.ProfessionID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.professions.Any(p => p.id == profession.id))
                    {
 
-                       //SearchSettings_Profession.ProfessionID = Profession.ProfessionID;
-                       var temp = new SearchSettings_Profession();
-                       temp.ProfessionID = Profession.ProfessionID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_Profession", temp);
+                       //SearchSettings_profession.professionID = profession.professionID;
+                       var temp = new searchsetting_profession();
+                       temp.id = profession.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_profession.Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsProfession.Contains(Profession.ProfessionID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.professions.Any(p => p.id == profession.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_Profession.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_profession.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == profession.id).First();
+                       db.searchsetting_profession.Remove(temp);
 
                    }
                }
            }
        }
        //wants kids
-       private void UpdateSearchSettingsWantsKids(int?[] selectedWantsKids, profilemetadata ProfileDataToUpdate)
+       private void updatesearchsettingswantskids(List<lu_wantskids> selectedwantskids, searchsetting currentsearchsetting)
        {
-           if (selectedWantsKids == null)
+           if (selectedwantskids == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_WantsKids  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_wantskids  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           int SearchSettingsID = ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettingsID;
-           //SearchSettings_WantsKids CurrentSearchSettings_WantsKids = db.SearchSettings_WantsKids.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_wantskids CurrentSearchSettings_wantskids = db.SearchSettings_wantskids.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedWantsKidsHS = new HashSet<int?>(selectedWantsKids);
-           //get the values for this members searchsettings WantsKids
-           var SearchSettingsWantsKids = new HashSet<int?>(ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_WantKids.Select(c => c.WantKidsID));
-           foreach (var WantsKids in db.CriteriaLife_WantsKids)
+           // var selectedwantskidsHS = new HashSet<int?>(selectedwantskids);
+           //get the values for this members searchsettings wantskids
+           //var SearchSettingswantskids = new HashSet<int?>(currentsearchsetting.wantskids.Select(c => c.id));
+           foreach (var wantskids in db.lu_wantskids)
            {
-               if (selectedWantsKidsHS.Contains(WantsKids.WantsKidsID))
+               if (selectedwantskids.Contains(wantskids))
                {
-                   if (!SearchSettingsWantsKids.Contains(WantsKids.WantsKidsID))
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.wantkids.Any(p => p.id == wantskids.id))
                    {
 
-                       //SearchSettings_WantsKids.WantsKidsID = WantsKids.WantsKidsID;
-                       var temp = new SearchSettings_WantKids();
-                       temp.WantKidsID = WantsKids.WantsKidsID;
-                       temp.SearchSettingsID = SearchSettingsID;
-
-                       db.AddObject("SearchSettings_WantKids", temp);
+                       //SearchSettings_wantskids.wantskidsID = wantskids.wantskidsID;
+                       var temp = new searchsetting_wantkids();
+                       temp.id = wantskids.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_wantkids. Add(temp);
 
                    }
                }
                else
-               {
-                   if (SearchSettingsWantsKids.Contains(WantsKids.WantsKidsID))
+               { //exists means we want to remove it
+                   if (currentsearchsetting.wantkids.Any(p => p.id == wantskids.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().SearchSettings.Where(p => p.SearchSettingsID == SearchSettingsID).First().SearchSettings_WantKids.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.searchsetting_wantkids.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == wantskids.id).First();
+                       db.searchsetting_wantkids.Remove(temp);
 
                    }
                }
@@ -2151,180 +3231,178 @@ namespace Shell.MVC2.Data
        #region "Checkbox Update Functions for profiledata many to many"
 
 
-
-       private void UpdateProfileDataEthnicity(int?[] selectedEthnicity, profilemetadata  ProfileDataToUpdate)
+       //profiledata ethnicity
+       private void updatprofilemetatdataethnicity(List<lu_ethnicity> selectedethnicity, profilemetadata currentprofilemetadata)
        {
-           if (selectedEthnicity == null)
+           if (selectedethnicity == null)
            {
-               // ProfileDataToUpdate.profiledata.FirstOrDefault().ProfileData_Ethnicity  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           string ProfileDataID = ProfileDataToUpdate.ProfileID;
-           //ProfileData_Ethnicity CurrentProfileData_Ethnicity = db.ProfileData_Ethnicity.Where(s => s.ProfileDataID == ProfileDataID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedEthnicityHS = new HashSet<int?>(selectedEthnicity);
-           //get the values for this members profiledata Ethnicity
-           var ProfileDataEthnicity = new HashSet<int?>(ProfileDataToUpdate.ProfileData_Ethnicity.Select(c => c.EthnicityID));
-           foreach (var Ethnicity in db.CriteriaAppearance_Ethnicity)
+           // var selectedshowmeHS = new HashSet<int?>(selectedshowme);
+           //get the values for this members searchsettings showme
+           //var SearchSettingsshowme = new HashSet<int?>(currentsearchsetting.showme.Select(c => c.id));
+           foreach (var ethnicity in db.lu_ethnicity)
            {
-               if (selectedEthnicityHS.Contains(Ethnicity.EthnicityID))
+               if (selectedethnicity.Contains(ethnicity))
                {
-                   if (!ProfileDataEthnicity.Contains(Ethnicity.EthnicityID))
+                   //does not exist so we will add it
+                   if (!currentprofilemetadata.ethnicities.Any(p => p.id == ethnicity.id))
                    {
 
-                       //ProfileData_Ethnicity.EthnicityID = Ethnicity.EthnicityID;
-                       var temp = new ProfileData_Ethnicity();
-                       temp.EthnicityID = Ethnicity.EthnicityID;
-                       temp.ProfileID = ProfileDataID;
+                       //SearchSettings_showme.showmeID = showme.showmeID;
+                       var temp = new profiledata_ethnicity();
+                       temp.id = ethnicity.id;
+                       temp.profile_id = currentprofilemetadata.id;
+                       db.ethnicities.Add(temp);
 
-                       db.AddObject("ProfileData_Ethnicity", temp);
                    }
                }
                else
-               {
-                   if (ProfileDataEthnicity.Contains(Ethnicity.EthnicityID))
+               { //exists means we want to remove it
+                   if (currentprofilemetadata.ethnicities.Any(p => p.id == ethnicity.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().ProfileData_Ethnicity.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.ethnicities.Where(p => p.profile_id == currentprofilemetadata.id && p.ethnicty.id == ethnicity.id).First();
+                       db.ethnicities.Remove(temp);
 
                    }
                }
            }
        }
-
-       private void UpdateProfileDataHotFeature(int?[] selectedHotFeature, profilemetadata  ProfileDataToUpdate)
+       //profiledata hotfeature
+       private void updatprofilemetatdatahotfeature(List<lu_hotfeature> selectedhotfeature, profilemetadata currentprofilemetadata)
        {
-           if (selectedHotFeature == null)
+           if (selectedhotfeature == null)
            {
-               // ProfileDataToUpdate.profiledata.FirstOrDefault().ProfileData_HotFeature  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           string ProfileDataID = ProfileDataToUpdate.ProfileID;
-           //ProfileData_HotFeature CurrentProfileData_HotFeature = db.ProfileData_HotFeature.Where(s => s.ProfileDataID == ProfileDataID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedHotFeatureHS = new HashSet<int?>(selectedHotFeature);
-           //get the values for this members profiledata HotFeature
-           var ProfileDataHotFeature = new HashSet<int?>(ProfileDataToUpdate.ProfileData_HotFeature.Select(c => c.HotFeatureID));
-           foreach (var HotFeature in db.CriteriaCharacter_HotFeature)
+           // var selectedshowmeHS = new HashSet<int?>(selectedshowme);
+           //get the values for this members searchsettings showme
+           //var SearchSettingsshowme = new HashSet<int?>(currentsearchsetting.showme.Select(c => c.id));
+           foreach (var hotfeature in db.lu_hotfeature)
            {
-               if (selectedHotFeatureHS.Contains(HotFeature.HotFeatureID))
+               if (selectedhotfeature.Contains(hotfeature))
                {
-                   if (!ProfileDataHotFeature.Contains(HotFeature.HotFeatureID))
+                   //does not exist so we will add it
+                   if (!currentprofilemetadata.ethnicities.Any(p => p.id == hotfeature.id))
                    {
 
-                       //ProfileData_HotFeature.HotFeatureID = HotFeature.HotFeatureID;
-                       var temp = new ProfileData_HotFeature();
-                       temp.HotFeatureID = HotFeature.HotFeatureID;
-                       temp.ProfileID = ProfileDataID;
+                       //SearchSettings_showme.showmeID = showme.showmeID;
+                       var temp = new profiledata_hotfeature();
+                       temp.id = hotfeature.id;
+                       temp.profile_id = currentprofilemetadata.id;
+                       db.hotfeatures.Add(temp);
 
-                       db.AddObject("ProfileData_HotFeature", temp);
                    }
                }
                else
-               {
-                   if (ProfileDataHotFeature.Contains(HotFeature.HotFeatureID))
+               { //exists means we want to remove it
+                   if (currentprofilemetadata.hotfeatures.Any(p => p.id == hotfeature.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().ProfileData_HotFeature.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.hotfeatures.Where(p => p.profile_id == currentprofilemetadata.id && p.hotfeature.id == hotfeature.id).First();
+                       db.hotfeatures.Remove(temp);
 
                    }
                }
            }
        }
-
-       private void UpdateProfileDataHobby(int?[] selectedHobby, profilemetadata  ProfileDataToUpdate)
+       //profiledata hobby
+       private void updatprofilemetatdatahobby(List<lu_hobby> selectedhobby, profilemetadata currentprofilemetadata)
        {
-           if (selectedHobby == null)
+           if (selectedhobby == null)
            {
-               // ProfileDataToUpdate.profiledata.FirstOrDefault().ProfileData_Hobby  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           string ProfileDataID = ProfileDataToUpdate.ProfileID;
-           //ProfileData_Hobby CurrentProfileData_Hobby = db.ProfileData_Hobby.Where(s => s.ProfileDataID == ProfileDataID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedHobbyHS = new HashSet<int?>(selectedHobby);
-           //get the values for this members profiledata Hobby
-           var ProfileDataHobby = new HashSet<int?>(ProfileDataToUpdate.ProfileData_Hobby.Select(c => c.HobbyID));
-           foreach (var Hobby in db.CriteriaCharacter_Hobby)
+           // var selectedshowmeHS = new HashSet<int?>(selectedshowme);
+           //get the values for this members searchsettings showme
+           //var SearchSettingsshowme = new HashSet<int?>(currentsearchsetting.showme.Select(c => c.id));
+           foreach (var hobby in db.lu_hobby)
            {
-               if (selectedHobbyHS.Contains(Hobby.HobbyID))
+               if (selectedhobby.Contains(hobby))
                {
-                   if (!ProfileDataHobby.Contains(Hobby.HobbyID))
+                   //does not exist so we will add it
+                   if (!currentprofilemetadata.ethnicities.Any(p => p.id == hobby.id))
                    {
 
-                       //ProfileData_Hobby.HobbyID = Hobby.HobbyID;
-                       var temp = new ProfileData_Hobby();
-                       temp.HobbyID = Hobby.HobbyID;
-                       temp.ProfileID = ProfileDataID;
+                       //SearchSettings_showme.showmeID = showme.showmeID;
+                       var temp = new profiledata_hobby();
+                       temp.id = hobby.id;
+                       temp.profile_id = currentprofilemetadata.id;
+                       db.hobbies .Add(temp);
 
-                       db.AddObject("ProfileData_Hobby", temp);
                    }
                }
                else
-               {
-                   if (ProfileDataHobby.Contains(Hobby.HobbyID))
+               { //exists means we want to remove it
+                   if (currentprofilemetadata.hobbies.Any(p => p.id == hobby.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().ProfileData_Hobby.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.hobbies.Where(p => p.profile_id == currentprofilemetadata.id && p.hobby.id == hobby.id).First();
+                       db.hobbies.Remove(temp);
 
                    }
                }
            }
        }
-
-       private void UpdateProfileDataLookingFor(int?[] selectedLookingFor, profilemetadata  ProfileDataToUpdate)
+       //profiledata lookingfor
+       private void updatprofilemetatdatalookingfor(List<lu_lookingfor> selectedlookingfor, profilemetadata currentprofilemetadata)
        {
-           if (selectedLookingFor == null)
+           if (selectedlookingfor == null)
            {
-               // ProfileDataToUpdate.profiledata.FirstOrDefault().ProfileData_LookingFor  = new List<gender>(); 
+               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           string ProfileDataID = ProfileDataToUpdate.ProfileID;
-           //ProfileData_LookingFor CurrentProfileData_LookingFor = db.ProfileData_LookingFor.Where(s => s.ProfileDataID == ProfileDataID).FirstOrDefault();
+           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           var selectedLookingForHS = new HashSet<int?>(selectedLookingFor);
-           //get the values for this members profiledata LookingFor
-           var ProfileDataLookingFor = new HashSet<int?>(ProfileDataToUpdate.ProfileData_LookingFor.Select(c => c.LookingForID));
-           foreach (var LookingFor in db.CriteriaLife_LookingFor)
+           // var selectedshowmeHS = new HashSet<int?>(selectedshowme);
+           //get the values for this members searchsettings showme
+           //var SearchSettingsshowme = new HashSet<int?>(currentsearchsetting.showme.Select(c => c.id));
+           foreach (var lookingfor in db.lu_lookingfor)
            {
-               if (selectedLookingForHS.Contains(LookingFor.LookingForID))
+               if (selectedlookingfor.Contains(lookingfor))
                {
-                   if (!ProfileDataLookingFor.Contains(LookingFor.LookingForID))
+                   //does not exist so we will add it
+                   if (!currentprofilemetadata.ethnicities.Any(p => p.id == lookingfor.id))
                    {
 
-                       //ProfileData_LookingFor.LookingForID = LookingFor.LookingForID;
-                       var temp = new ProfileData_LookingFor();
-                       temp.LookingForID = LookingFor.LookingForID;
-                       temp.ProfileID = ProfileDataID;
+                       //SearchSettings_showme.showmeID = showme.showmeID;
+                       var temp = new profiledata_lookingfor();
+                       temp.id = lookingfor.id;
+                       temp.profile_id = currentprofilemetadata.id;
+                       db.lookingfor.Add(temp);
 
-                       db.AddObject("ProfileData_LookingFor", temp);
                    }
                }
                else
-               {
-                   if (ProfileDataLookingFor.Contains(LookingFor.LookingForID))
+               { //exists means we want to remove it
+                   if (currentprofilemetadata.lookingfor.Any(p => p.id == lookingfor.id))
                    {
-
-                       var Temp = db.ProfileDatas.Where(p => p.ProfileID == ProfileDataToUpdate.ProfileID).First().ProfileData_LookingFor.First();
-                       db.DeleteObject(Temp);
+                       var temp = db.lookingfor.Where(p => p.profile_id == currentprofilemetadata.id && p.lookingfor.id == lookingfor.id).First();
+                       db.lookingfor.Remove(temp);
 
                    }
                }
            }
        }
-
-
 
        #endregion
 
@@ -2332,11 +3410,14 @@ namespace Shell.MVC2.Data
 
        #region "profile visisiblity settings update here"
 
-       public bool UpdateProfileVisibilitySettings(ProfileVisiblitySetting model)
+       public bool UpdateProfileVisibilitySettings(visiblitysetting  model)
        {
-           if (model.ProfileID != null)
+           if (model.id  != null)
            {
-               datingservice.UpdateProfileVisiblitySetting(model);
+               
+               //Impement on member service ?
+              // datingservice.UpdateProfileVisiblitySetting(model);
+
 
                return true;
            }

@@ -66,7 +66,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         public override bool ValidateUser(string username, string password)
         {
 
-            IQueryable<profile> myQuery = default(IQueryable<profile>);
+            IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
            
             //first you have to get the encrypted sctring by email address and username 
             string encryptedPassword = "";
@@ -159,7 +159,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //dynamic user = datingcontext.profiles.Where(u => u.username == username && u.Password == Common.Encryption.EncodePasswordWithSalt(password, username).FirstOrDefault());
                 // Return user IsNot Nothing
                 //string encryptedPassword = Common.Encryption.EncodePasswordWithSalt(password, username);
-                IQueryable<profile> myQuery = default(IQueryable<profile>);
+            IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
                 //Dim ctx As New Entities()
                 myQuery = _datingcontext.profiles.Where(p => p.username == username);//&& p.ProfileStatusID == 2);
 
@@ -185,7 +185,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
             //open ID members are already verifed but it is posublethat a member who is not activated tries to use open ID
             //so they could be in order status 1
-           var  myprofile = _datingcontext.profiles.Where(p => p.id  == VerifedEmail && p.status.id   <= 2).FirstOrDefault();
+           var  myprofile = _datingcontext.profiles.Where(p => p.emailaddress   == VerifedEmail && p.status.id   <= 2).FirstOrDefault();
 
             //check for the openIDidenfier , to see if it was used before , if it was do nothing but normal updates for user
            var myopenIDstore = myprofile.openids.Where(p => p.openididentifier == openidIdentifer && p.openidprovidername == openidProvidername && p.active == true).FirstOrDefault();
@@ -194,7 +194,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
            if (myopenIDstore == null && myprofile != null)
            //add the openID provider if its a new one
            {
-               _memberepository.addnewopenidforprofile(VerifedEmail, openidIdentifer, openidProvidername);
+               _memberepository.addnewopenidforprofile(myprofile.id , openidIdentifer, openidProvidername);
            }
 
             //first you have to get the encrypted sctring by email address and username 
@@ -209,7 +209,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
            // myQuery = datingcontext.profiles.Where(p => p.ProfileID == VerifedEmail && p.ProfileStatusID == 2);
             if (myprofile != null)
             {
-                _memberepository.updateuserlogintimebyprofileid(VerifedEmail, HttpContext.Current.Session.SessionID);
+                _memberepository.updateuserlogintimebyprofileid(myprofile.id, HttpContext.Current.Session.SessionID);
                return true;
             }
             else
@@ -293,9 +293,9 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
                 using (AnewluvContext  dbContext = new  AnewluvContext())
                 {
-                  
 
-               profile ObjProfileEntity = new profile();
+
+                    Shell.MVC2.Domain.Entities.Anewluv.profile ObjProfileEntity = new Shell.MVC2.Domain.Entities.Anewluv.profile();
                profiledata objprofileDataEntity = new profiledata();
                //TO DO new entity for OPEN ID data
                int countryID = 0;
@@ -318,7 +318,8 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 var tempCityAndStateProvince = city.Split(',');
              
                 //Build the profile data table
-                objprofileDataEntity.id  = email;
+               // objprofileDataEntity.id  = ;
+                objprofileDataEntity.profile.emailaddress = email;
                 objprofileDataEntity.latitude  = latitude ;
                 objprofileDataEntity.longitude  = longitude; //_GpsData.longitude;
                 objprofileDataEntity.city  = tempCityAndStateProvince[0];
@@ -344,7 +345,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //changed the encryption to something stronger
                 //make username upper so that we can get actual mateches withoute user having to type in a case sensitive username
                     ObjProfileEntity.password  = (openidIdentifer !="") ?Common.Encryption.encryptString(password) : openidIdentifer;
-                ObjProfileEntity.id   = email;
+               // ObjProfileEntity.id   = email;
                 ObjProfileEntity.screenname  = screenname;
                 //need to add a new feild
                 ObjProfileEntity.activationcode   = activationcode;
@@ -360,8 +361,9 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
                 //TOD DO add open ID identifier as well Profider type to ssoProvider table 
 
-                  dbContext.profiledatas.Add (objprofileDataEntity);
-                  dbContext.profiles.Add (ObjProfileEntity);
+                   dbContext.profiles.Add(ObjProfileEntity);
+                  dbContext.profiledata.Add (objprofileDataEntity);
+                  
 
                   dbContext.SaveChanges();
                   
@@ -387,27 +389,27 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         {
 
 
-            return this.ResetPasswordCustom(profileID);
+            return this.ResetPasswordCustom(Convert.ToInt16(profileID));
              
         }
 
         //handles reseting password duties.  First verifys that security uqestion was correct for the profile ID, the generated a password
         // using the local generatepassword method the send the encyrpted passwoerd and profile ID to the dating service so it can be updated in the DB
         //finally returns the new password to the calling functon or an empty string if failure.
-        public string ResetPasswordCustom(string profileid)
+        public string ResetPasswordCustom(int profileid)
         {
 
           //  if (securityquestionID == null) return "";
 
           // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
-            var username = _memberepository.getusernamebyprofileid (profileid);
+            var username = _memberepository.getusernamebyprofileid ( Convert.ToInt16(profileid));
             var generatedpassword = "";
             if (username != "")
             {
                 //we have the generated password now update the user's account with new password
 
                 generatedpassword = GeneratePassword();
-                _memberepository.updatepassword(profileid, Common.Encryption.encryptString(generatedpassword));
+                _memberepository.updatepassword(Convert.ToInt16(profileid), Common.Encryption.encryptString(generatedpassword));
 
 
                 //'reset the password 
@@ -432,8 +434,8 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                    // dbContext.Dispose();
 
                     //get profile and profile datas
-                    profile ObjProfileEntity = dbContext.profiles.Where(p => p.id  == u.Email).FirstOrDefault();
-                    profiledata objprofileDateEntity = dbContext.profiledatas.Where(p => p.id  == u.Email).FirstOrDefault();
+                    Shell.MVC2.Domain.Entities.Anewluv.profile ObjProfileEntity = dbContext.profiles.Where(p => p.id == Convert.ToInt16(u.profileid)).FirstOrDefault();
+                    profiledata objprofileDateEntity = dbContext.profiledata.Where(p => p.id  == Convert.ToInt16( u.profileid)).FirstOrDefault();
                     
                      new GpsData();
 
@@ -543,7 +545,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         public AnewLuvMembershipUser GetUserCustom(string username, bool userIsOnline)
         {
             Object providerUserKey = null;  //we dont use this
-            profile u = new profile();
+            Shell.MVC2.Domain.Entities.Anewluv.profile u = new Shell.MVC2.Domain.Entities.Anewluv.profile();
 
             //using (AnewluvContext datingcontext = new AnewluvContext())
             //{
@@ -571,7 +573,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
          usr = new AnewLuvMembershipUser("AnewluvContext",
                                        username,
                                        providerUserKey,
-                                      u.id ,
+                                      u.emailaddress  ,
                                       u.securityanswer ,                                    
                                       "",
                                       true,
@@ -610,7 +612,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         }
 
   
-        public void UpdateUserCustom(string username,string ProfileID,
+        public void UpdateUserCustom(string username,int ProfileID,
                 string password,
                 string securityQuestion,
                 string securityAnswer,
@@ -656,13 +658,13 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
         public string GetusernamebyProfileID(string profileid)
         {
-            return _memberepository.getusernamebyprofileid (profileid);
+            return _memberepository.getusernamebyprofileid ( Convert.ToInt16(profileid));
         }
 
         public string GetScreenNamebyProfileID(string profileid)
         {
 
-            return _memberepository.getscreennamebyprofileid(profileid);
+            return _memberepository.getscreennamebyprofileid(Convert.ToInt16(profileid));
         }
 
         public string GetScreenNamebyusername(string username)

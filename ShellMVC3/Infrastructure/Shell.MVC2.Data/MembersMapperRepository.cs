@@ -35,7 +35,7 @@ namespace Shell.MVC2.Data
         }
 
         // constructor
-        public MemberSearchViewModel GetMemberSearchViewModel(string profileId)
+        public MemberSearchViewModel GetMemberSearchViewModel(int profileId)
         {
             if (profileId != null)
             {
@@ -84,7 +84,7 @@ namespace Shell.MVC2.Data
             }
             return null;
         }
-        public List<MemberSearchViewModel> GetMemberSearchViewModels(List<string> profileIds)
+        public List<MemberSearchViewModel> GetMemberSearchViewModels(List<int> profileIds)
         {
 
             List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
@@ -133,7 +133,7 @@ namespace Shell.MVC2.Data
             }
             return models;
         }
-        public ProfileBrowseModel GetProfileBrowseModel(string viewerprofileId, string profileId)
+        public ProfileBrowseModel GetProfileBrowseModel(int viewerprofileId, int profileId)
         {
 
 
@@ -155,7 +155,7 @@ namespace Shell.MVC2.Data
 
             return NewProfileBrowseModel;
         }
-        public List<ProfileBrowseModel> GetProfileBrowseModels(string viewerprofileId, List<string> profileIds)
+        public List<ProfileBrowseModel> GetProfileBrowseModels(string viewerprofileId, List<int> profileIds)
         {
             List<ProfileBrowseModel> BrowseModels = new List<ProfileBrowseModel>();
 
@@ -465,11 +465,11 @@ namespace Shell.MVC2.Data
             QuickSearchModel.mySelectedCurrentPage = 1;
             //added state province with comma 
 
-            QuickSearchModel.MySelectedCity = Model.profiledata.city;
-            QuickSearchModel.MySelectedMaxDistanceFromMe = Model.profiledata.searchsettings.FirstOrDefault().distancefromme != null ? Model.MaxDistanceFromMe : 1000;
+            QuickSearchModel.MySelectedCity = Model.Profile.profiledata.city;
+            QuickSearchModel.MySelectedMaxDistanceFromMe = Model.Profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme != null ? Model.MaxDistanceFromMe : 1000;
 
-            QuickSearchModel.MySelectedFromAge = Model.profiledata.searchsettings.FirstOrDefault().agemin != null ? Model.profiledata.searchsettings.FirstOrDefault().agemin.GetValueOrDefault() : 18;
-            QuickSearchModel.MyselectedToAge = Model.profiledata.searchsettings.FirstOrDefault().agemax != null ? Model.profiledata.searchsettings.FirstOrDefault().agemax.GetValueOrDefault() : 99; ;
+            QuickSearchModel.MySelectedFromAge = Model.Profile.profilemetadata.searchsettings.FirstOrDefault().agemin != null ? Model.Profile.profilemetadata.searchsettings.FirstOrDefault().agemin.GetValueOrDefault() : 18;
+            QuickSearchModel.MyselectedToAge = Model.Profile.profilemetadata.searchsettings.FirstOrDefault().agemax != null ? Model.Profile.profilemetadata.searchsettings.FirstOrDefault().agemax.GetValueOrDefault() : 99; ;
 
 
             QuickSearchModel.MySelectedIamGenderID = Model.profiledata.gender.id ;

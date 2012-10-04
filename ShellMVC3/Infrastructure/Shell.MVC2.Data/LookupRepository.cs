@@ -22,7 +22,7 @@ using Shell.MVC2.Interfaces;
 
 namespace Shell.MVC2.Data
 {
-    public class LookupRepository : MemberRepositoryBase, IGeoRepository
+    public class LookupRepository : MemberRepositoryBase
     {
         // private AnewluvContext _db;
         //TO DO move from ria servives
@@ -78,7 +78,7 @@ namespace Shell.MVC2.Data
         //}
 
 
-        public List<string> GendersSelectList
+        public List<lu_gender> GendersSelectList
         {
             get
             {
@@ -93,11 +93,11 @@ namespace Shell.MVC2.Data
 
 
 
-                temp = _datingcontext.lu_genders.OrderBy(x => x.description).Select desc  ToList();
+              return _datingcontext.lu_gender.OrderBy(x => x.description).ToList();
                                                      
 
 
-                return temp;
+               // return temp;
 #endif
 
             }

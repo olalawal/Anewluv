@@ -47,7 +47,7 @@ namespace Shell.MVC2.Interfaces
                  out MembershipCreateStatus status);
 
     
-         string ResetPassword(int profileid, string answer);
+         string ResetPassword(string profileid, string answer);
 
         //handles reseting password duties.  First verifys that security uqestion was correct for the profile ID, the generated a password
         // using the local generatepassword method the send the encyrpted passwoerd and profile ID to the dating service so it can be updated in the DB

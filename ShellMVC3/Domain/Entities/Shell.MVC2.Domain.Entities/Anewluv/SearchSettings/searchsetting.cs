@@ -33,7 +33,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual ICollection<searchsetting_exercise>  exercises { get; set; }        
         public virtual ICollection<searchsetting_eyecolor>  eyecolors { get; set; }        
         public virtual ICollection<searchsetting_gender>  genders { get; set; }        
-        public virtual ICollection<searchsetting_haircolor>  haircolors { get; set; }        
+        public virtual ICollection<searchsetting_haircolor>  haircolors { get; set; }
+        public virtual ICollection<searchsetting_hotfeature> hotfeatures { get; set; }  
         public virtual ICollection<searchsetting_havekids>  havekids { get; set; }        
         public virtual ICollection<searchsetting_hobby>  hobbies { get; set; }        
         public virtual ICollection<searchsetting_hotfeature>  hotfeature { get; set; }        
