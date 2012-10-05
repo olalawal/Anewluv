@@ -6,7 +6,7 @@ using Shell.MVC2.Infrastructure;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
-    public class mailmodel
+    public class mailviewmodel
     {
        
 
@@ -30,9 +30,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public string city { get; set; }
         public string state { get; set; }
         public DateTime? creationdate { get; set; }
-        public string sender_id { get; set; }
+        public int sender_id { get; set; }
         public string senderscreenname { get; set; }
-        public string recipient_id { get; set; }
+        public int recipient_id { get; set; }
         public string recipientscreenname { get; set; }
         public DateTime? readdate { get; set; }
         public DateTime? replieddate { get; set; }

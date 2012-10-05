@@ -30,11 +30,11 @@ namespace Shell.MVC2.Data
             membersrepository = _membersrepository;
         }
         // Query Methods
-        public IQueryable<mailmessagemodel> ReplyEmail1(int? id, int mailboxMsgFldId)
+        public List<mailmessageviewmodel> replyemail1(int? id, int mailboxMsgFldId)
         {
             var allMail =
                   from m in db.mailboxmessages.Where(x => x.id == id)
-                    select new mailmessagemodel  
+                    select new mailmessageviewmodel  
                     {
                         
                          mailboxmessage_id  = m.id,
@@ -49,14 +49,14 @@ namespace Shell.MVC2.Data
                         senderscreenname  = (from p in db.profiles where (p.id  == m.recipient_id ) select p.screenname ).FirstOrDefault(),
                         recipientscreenname  = (from p in db.profiles where (p.id  == m.sender_id ) select p.screenname ).FirstOrDefault()
                     };
-            return allMail;
+            return allMail.ToList();
         }
 // tobe deleted
-        public IQueryable<mailmessagemodel> ReplyEmail(int? id)
+        public List<mailmessageviewmodel> replyemail(int? id)
         {
             var allMail =
                   from m in db.mailboxmessages.Where(x => x.id  == id)
-                  select new mailmessagemodel
+                  select new mailmessageviewmodel
                   {
 
                        mailboxmessage_id  = m.id ,
@@ -70,32 +70,32 @@ namespace Shell.MVC2.Data
                       senderscreenname  = (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname).FirstOrDefault(),
                       recipientscreenname = (from p in db.profiles where (p.id == m.sender_id ) select p.screenname).FirstOrDefault()
                   };
-            return allMail;
+            return allMail.ToList();
         }
-        public int GetmailboxmessagefoldersID(int mailboxMsgId ) {
+        public int getmailboxmessagefoldersid(int mailboxMsgId ) {
             return (from p in db.mailboxmessagefolders
                     where p.mailboxmessage.id  == mailboxMsgId
-                    && p.mailboxfolder.foldertype.name == "Inbox"
-                    select p.id).FirstOrDefault();  
+                    && p.mailboxfolder.foldertype.defaultfolder.id == (int)defaultmailboxfoldertypeEnum.Inbox 
+                    select p.mailboxfolder_id).FirstOrDefault();  
         }
 
-        public int GetmailboxfolderID(string mailboxFolderTypeName, string profileId)
+        public int getmailboxfolderid(string mailboxFolderTypeName, int profileId)
         {
             return (from i in db.mailboxfolders
                     where i.foldertype.name == mailboxFolderTypeName && i.profiled_id == profileId
                     select i.id).FirstOrDefault();
         }
 
-        public mailboxmessagefolder NewmailboxmessagefolderObject(string mailboxFolderTypeName, string profileId)
+        public mailboxmessagefolder newmailboxmessagefolderobject(string mailboxFolderTypeName, int profileId)
         {
-            int fldId = GetmailboxfolderID(mailboxFolderTypeName, profileId); // Retrieve specific mailboxfolderId by its mailboxFolderTypename and ProfileID
+            int fldId = getmailboxfolderid(mailboxFolderTypeName, profileId); // Retrieve specific mailboxfolderId by its mailboxFolderTypename and ProfileID
 
             //create mailbox folders if we have a null mailbox folders for a user
             if (fldId == 0)
             {
                    //TO do move this to a mail repop
                    membersrepository.createmailboxfolders (profileId);
-                   return NewmailboxmessagefolderObject(mailboxFolderTypeName, profileId);
+                   return newmailboxmessagefolderobject(mailboxFolderTypeName, profileId);
                 
 
             }
@@ -105,7 +105,7 @@ namespace Shell.MVC2.Data
             
             mailboxmessagefolder fld_mailboxmessagefolder = new mailboxmessagefolder() // Create a new mailboxmessagefolder object
             {
-                id = fldId,
+                mailboxfolder_id  = fldId,
                  readdate  = null,
                  replieddate  = null,
                  flaggeddate  = null,
@@ -116,7 +116,7 @@ namespace Shell.MVC2.Data
             return fld_mailboxmessagefolder;
         }
 
-        public void Add(mailboxmessage mailboxmessage)
+        public void add(mailboxmessage mailboxmessage)
         {
             db.mailboxmessages.Add (mailboxmessage); //Updating the context
         }
@@ -138,17 +138,17 @@ namespace Shell.MVC2.Data
         //
         // Query Methods
 
-        public string getUserID(string User)
+        public string getuserid(string User)
         {
 
             return (from p in db.profiles
                     where p.username  == User
-                    select p.id).FirstOrDefault();
+                    select p.id).FirstOrDefault().ToString();
         }
 
-        public int getAllMailCountbyfolderid(int folderid, string profile_id)
+        public int getallmailcountbyfolderid(int folderid, int profile_id)
         {
-            IEnumerable<mailmodel > models = null;
+            IEnumerable<mailviewmodel > models = null;
 
             //return (from i in db.mailboxmessagefolders
             //             .Where(u => u.mailboxfolderID == u.mailboxfolder.mailboxfolderID
@@ -164,19 +164,19 @@ namespace Shell.MVC2.Data
                      join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id  == u.mailboxfolder.id
                          && u.mailboxfolder.profiled_id == profile_id )
                      on m.id  equals f.mailboxmessage_id
-                       select new mailmodel 
+                       select new mailviewmodel 
                      {
 
                          sender_id = m.sender_id,
                          recipient_id = m.recipient_id,
-                          mailboxmessagefolder_id     = f.id ,
+                          mailboxmessagefolder_id     = f.mailboxfolder_id ,
                          mailboxfolder_id  = f.mailboxfolder.id,
-                         senderstatus_id    = m.sender.status.id , //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                          recipientstatus_id = m.recipeint.status.id,
+                         senderstatus_id    = m.sender.profile.status.id , //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                         recipientstatus_id = m.recipeint.profile.status.id,
                          blockstatus =  (db.blocks.Where(i=>i.profile_id  == profile_id && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id !=null) ? true: false,
                          creationdate = m.creationdate,
-                         senderscreenname =  m.sender.screenname  , //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                         recipientscreenname = m.recipeint.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+                         senderscreenname =  m.sender.profile.screenname  , //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                         recipientscreenname = m.recipeint.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
 
                      });
 
@@ -187,27 +187,27 @@ namespace Shell.MVC2.Data
 
         }
 
-        public int GetNewMailCountbyfolderid(int folderid, string profile_id)
+        public int getnewmailcountbyfolderid(int folderid, int profile_id)
         {
-            IEnumerable<mailmodel> models = null;
+            IEnumerable<mailviewmodel> models = null;
 
             models = (from m in db.mailboxmessages
                       join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
                           && u.mailboxfolder.profiled_id == profile_id && u.readdate == null)
                       on m.id equals f.mailboxmessage_id
-                      select new mailmodel
+                      select new mailviewmodel
                       {
 
                           sender_id = m.sender_id,
                           recipient_id = m.recipient_id,
-                           mailboxmessagefolder_id  = f.id,
+                          mailboxmessagefolder_id = f.mailboxfolder_id,
                           mailboxfolder_id = f.mailboxfolder.id,
-                          senderstatus_id = m.sender.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                          recipientstatus_id = m.recipeint.status.id,
+                          senderstatus_id = m.sender.profile.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                          recipientstatus_id = m.recipeint.profile.status.id,
                           blockstatus = (db.blocks.Where(i => i.profile_id == profile_id && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
                           creationdate = m.creationdate,
-                          senderscreenname = m.sender.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                          recipientscreenname = m.recipeint.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+                          senderscreenname = m.sender.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                          recipientscreenname = m.recipeint.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
 
                       });
             
@@ -216,26 +216,26 @@ namespace Shell.MVC2.Data
         }
 
         //TO DO find a way to use ENUM for these names 
-        public IEnumerable<mailmodel> GetAllMailbydefaultmailboxfoldertypeMail(string foldertypename, string profile_id)
+        //TO DO re-wite code based on EF code first composite table queries
+        public List<mailviewmodel> getallmailbydefaultmailboxfoldertypemail(string foldertypename, int profile_id)
         {
 
             
-            IEnumerable<mailmodel> models = null;
+            IEnumerable<mailviewmodel> models = null;
 
             models = (from m in db.mailboxmessages
-                     join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
+                     join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id 
                          && u.mailboxfolder.foldertype.name == foldertypename && u.mailboxfolder.profiled_id == profile_id)
                       on m.id equals f.mailboxmessage_id
                      orderby m.creationdate descending
-                      select new mailmodel
+                      select new mailviewmodel
                       {
 
                           mailboxfoldername  = f.mailboxfolder.foldertype.name ,
                           mailboxmessageid  = m.id ,
                           sender_id = m.sender_id,
                           body = m.body,
-                          subject = m.subject,
-                          mailboxmessagefolder_id  = f.id ,
+                          subject = m.subject,                         
                           mailboxfolder_id = f.mailboxfolder.id ,
                           age  = m.sender.profiledata.birthdate, //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
                           city = m.sender.profiledata.city ,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
@@ -244,11 +244,11 @@ namespace Shell.MVC2.Data
                           recipient_id = m.recipient_id,
                           readdate    = f.readdate ,
                           replieddate = f.replieddate ,   
-                          senderstatus_id = m.sender.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                          recipientstatus_id = m.recipeint.status.id,
+                          senderstatus_id = m.sender.profile.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                          recipientstatus_id = m.recipeint.profile.status.id,
                           blockstatus = (db.blocks.Where(i => i.profile_id == profile_id && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,                        
-                          senderscreenname = m.sender.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                          recipientscreenname = m.recipeint.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+                          senderscreenname = m.sender.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                          recipientscreenname = m.recipeint.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
 
                       });
 
@@ -257,7 +257,7 @@ namespace Shell.MVC2.Data
 
         }
 
-        public IEnumerable<mailmodel> GetAllMailbyfolder(int folderid, string profile_id)
+        public List<mailviewmodel> getallmailbyfolder(int folderid, int profile_id)
         {
 
 
@@ -265,15 +265,14 @@ namespace Shell.MVC2.Data
                       join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
                           && u.mailboxfolder.profiled_id == profile_id && u.readdate == null && u.mailboxfolder.id == folderid )
                       on m.id equals f.mailboxmessage_id
-                      select new mailmodel
+                      select new mailviewmodel
                       {
 
                           mailboxfoldername  = f.mailboxfolder.foldertype.name ,
                           mailboxmessageid  = m.id ,
                           sender_id = m.sender_id,
                           body = m.body,
-                          subject = m.subject,
-                          mailboxmessagefolder_id  = f.id ,
+                          subject = m.subject,                        
                           mailboxfolder_id = f.mailboxfolder.id ,
                           age  = m.sender.profiledata.birthdate, //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
                           city = m.sender.profiledata.city ,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
@@ -282,11 +281,11 @@ namespace Shell.MVC2.Data
                           recipient_id = m.recipient_id,
                           readdate    = f.readdate ,
                           replieddate = f.replieddate ,   
-                          senderstatus_id = m.sender.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                          recipientstatus_id = m.recipeint.status.id,
+                          senderstatus_id = m.sender.profile.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                          recipientstatus_id = m.recipeint.profile.status.id,
                           blockstatus = (db.blocks.Where(i => i.profile_id == profile_id && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,                        
-                          senderscreenname = m.sender.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                          recipientscreenname = m.recipeint.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+                          senderscreenname = m.sender.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                          recipientscreenname = m.recipeint.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
 
                       });
 
@@ -294,17 +293,17 @@ namespace Shell.MVC2.Data
         }
 
         //TO DO read out the description feild from enum using sample code
-        public IEnumerable<mailmodel> GetMailMsgThreadByUserID(int uniqueId, string profile_id)
+        public IEnumerable<mailviewmodel> getmailmsgthreadbyuserid(int uniqueId, int profile_id)
         {
 
-            IEnumerable<mailmodel> model = null;
+            IEnumerable<mailviewmodel> model = null;
 
             model = (from m in db.mailboxmessages.Where(x => x.uniqueid == uniqueId)
                      join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder.foldertype.name != "Deleted"
                      && u.mailboxfolder.profiled_id == profile_id)
                        on m.id equals f.mailboxmessage_id
                      orderby m.creationdate ascending
-                     select new mailmodel
+                     select new mailviewmodel
                      {
 
                          mailboxfoldername = f.mailboxfolder.foldertype.name,
@@ -312,7 +311,6 @@ namespace Shell.MVC2.Data
                          sender_id = m.sender_id,
                          body = m.body,
                          subject = m.subject,
-                         mailboxmessagefolder_id = f.id,
                          mailboxfolder_id = f.mailboxfolder.id,
                          age = m.sender.profiledata.birthdate, //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
                          city = m.sender.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
@@ -321,12 +319,11 @@ namespace Shell.MVC2.Data
                          recipient_id = m.recipient_id,
                          readdate = f.readdate,
                          replieddate = f.replieddate,
-                         senderstatus_id = m.sender.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                         recipientstatus_id = m.recipeint.status.id,
+                         senderstatus_id = m.sender.profile.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                         recipientstatus_id = m.recipeint.profile.status.id,
                          blockstatus = (db.blocks.Where(i => i.profile_id == profile_id && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
-                         senderscreenname = m.sender.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                         recipientscreenname = m.recipeint.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
-
+                         senderscreenname = m.sender.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                         recipientscreenname = m.recipeint.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
                      });
 
 
@@ -341,7 +338,7 @@ namespace Shell.MVC2.Data
         /// </summary>
         /// <param name="mailmodels"></param>
         /// <returns></returns>
-         private List<mailmodel> filtermailmodels (IEnumerable<mailmodel> mailmodels)
+         private List<mailviewmodel> filtermailmodels (IEnumerable<mailviewmodel> mailmodels)
         {
             return mailmodels.Where(p => (p.senderstatus_id != (int)profilestatusEnum.Banned | p.senderstatus_id != (int)profilestatusEnum.Inactive))
                             .Where(p => p.senderscreenname != null)

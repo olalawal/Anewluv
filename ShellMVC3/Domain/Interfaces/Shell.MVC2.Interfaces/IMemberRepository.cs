@@ -36,16 +36,16 @@ namespace Shell.MVC2.Data
         bool checkifquoutareachedandupdate(int profileid) ; 
        //Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
        //update the database i.e create folders and change profile status from guest to active ?!
-        bool createmailboxfolders(string strProfileID);
-        bool activateprofile(string strProfileID);      
+        bool createmailboxfolders(int strProfileID);
+        bool activateprofile(int strProfileID);      
      
        //updates the profile with a password that is presumed to be already encyrpted
         bool updatepassword(int profileid, string encryptedpassword);       
         bool addnewopenidforprofile(int profileid, string openidIdentifer, string openidProvidername); 
        //check if profile is activated 
-        bool checkifprofileisactivated(string strProfileID);   
+        bool checkifprofileisactivated(int strProfileID);   
        //check if mailbox folder exist
-        bool checkifmailboxfoldersarecreated(string strProfileID);     
+        bool checkifmailboxfoldersarecreated(int strProfileID);     
 
       //DateTimeFUcntiosn for longin etc "
        //********************************************
@@ -87,17 +87,17 @@ namespace Shell.MVC2.Data
         bool checkifemailalreadyexists(string strEmail);
        // added by Deshola on 5/17/2011       
      //   byte[] GetGalleryPhotobyPhotoID(Guid strPhotoID);   
-     //   byte[] GetGalleryPhotobyProfileID(string strProfileID); 
+     //   byte[] GetGalleryPhotobyProfileID(int strProfileID); 
     //    byte[] GetGalleryPhotobyScreenName(string strScreenName);
     //    byte[] GetGalleryImagebyNormalizedScreenName(string strScreenName);   
        // bool InsertPhotoCustom(Shell.MVC2.Domain.Entities.Anewluv.photo newphoto);
-       // bool CheckIfPhotoCaptionAlreadyExists(string strProfileID, string strPhotoCaption);  
+       // bool CheckIfPhotoCaptionAlreadyExists(int strProfileID, string strPhotoCaption);  
        /// <summary>
        /// Determines wethare an activation code matches the value in the database for a given profileID
        /// </summary>
-        bool checkifactivationcodeisvalid(string strProfileID, string strActivationCode);      
-      //  bool CheckForGalleryPhotobyProfileID(string strProfileID);
-      //  bool CheckForUploadedPhotobyProfileID(string strProfileID);
+        bool checkifactivationcodeisvalid(int strProfileID, string strActivationCode);      
+      //  bool CheckForGalleryPhotobyProfileID(int strProfileID);
+      //  bool CheckForUploadedPhotobyProfileID(int strProfileID);
 
 
        //Hereis where the members Repository stuff that was in the MVC project starts at

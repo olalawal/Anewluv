@@ -12,32 +12,32 @@ namespace Shell.MVC2.Interfaces
      public interface  IMailRepository
     {
 
-         IQueryable<mailmessagemodel> ReplyEmail1(int? id, int mailboxMsgFldId)  ;
+         List<mailmessageviewmodel> replyemail1(int? id, int mailboxMsgFldId)  ;
 
-         IQueryable<mailmessagemodel> ReplyEmail(int? id)  ;    
+         List<mailmessageviewmodel> replyemail(int? id);    
   
-         int GetmailboxmessagefoldersID(int mailboxMsgId )     ;
+         int getmailboxmessagefoldersid(int mailboxMsgId )     ;
    
-         int GetmailboxfolderID(string mailboxFolderTypeName, int profileid)    ;
+         int getmailboxfolderid(string mailboxFolderTypeName, int profileid)    ;
    
-         mailboxmessagefolder NewmailboxmessagefolderObject(string mailboxFolderTypeName, int profileid) ;
+         mailboxmessagefolder newmailboxmessagefolderobject(string mailboxFolderTypeName, int profileid) ;
 
-         void Add(mailboxmessage mailboxmessage);
+         void add(mailboxmessage mailboxmessage);
 
-         string getUserID(string User);
+         string getuserid(string User);
         
-         int getAllMailCountbyfolderid(int folderid, string profile_id);
+         int getallmailcountbyfolderid(int folderid, int profile_id);
 
-         int GetNewMailCountbyfolderid(int folderid, string profile_id)    ;    
+         int getnewmailcountbyfolderid(int folderid, int profile_id)    ;    
 
         //TO DO find a way to use ENUM for these names 
-         List<mailmodel> GetAllMailbydefaultmailboxfoldertypeMail(string foldertypename, string profile_id);
+         List<mailviewmodel> getallmailbydefaultmailboxfoldertypemail(string foldertypename, int profile_id);
 
-         List<mailmodel> GetAllMailbyfolder(int folderid, string profile_id) ;      
+         List<mailviewmodel> getallmailbyfolder(int folderid, int profile_id);      
 
 
         //TO DO read out the description feild from enum using sample code
-         List<mailmodel> GetMailMsgThreadByUserID(int uniqueId, string profile_id);
+         List<mailviewmodel> getmailmsgthreadbyuserid(int uniqueId, int profile_id);
 
  
      

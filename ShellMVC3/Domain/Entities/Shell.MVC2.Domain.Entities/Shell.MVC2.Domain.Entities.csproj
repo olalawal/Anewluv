@@ -152,8 +152,8 @@
     <Compile Include="Anewluv\ViewModels\ContactUsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\EditProfileModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\EditProfileVisibilitySettingsModel.cs" />
-    <Compile Include="Anewluv\Mail\ViewModels\mailmodel.cs" />
-    <Compile Include="Anewluv\Mail\ViewModels\mailmessagemodel.cs" />
+    <Compile Include="Anewluv\Mail\ViewModels\mailviewmodel.cs" />
+    <Compile Include="Anewluv\Mail\ViewModels\mailmessageviewmodel.cs" />
     <Compile Include="Anewluv\ViewModels\Mail\MailModel.cs" />
     <Compile Include="Anewluv\ViewModels\MemberSearchViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\MembershipUserViewModel.cs" />
