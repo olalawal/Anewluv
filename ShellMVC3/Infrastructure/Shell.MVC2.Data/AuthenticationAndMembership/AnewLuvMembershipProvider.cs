@@ -612,7 +612,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         }
 
   
-        public void UpdateUserCustom(string username,int ProfileID,
+        public void UpdateUserCustom(string username,string ProfileID,
                 string password,
                 string securityQuestion,
                 string securityAnswer,

@@ -509,5 +509,303 @@ namespace Shell.MVC2.Data
             return Model;
         }
 
+
+
+        public MembersViewModel MapMember(string ProfileID)
+        {
+
+          
+
+
+        
+            MembersViewModel model = new MembersViewModel();
+
+            // IEnumerable<CityStateProvince> CityStateProvince ;
+            // MailModelRepository mailrepository = new MailModelRepository();
+            //var myProfile = membersrepository.GetProfileDataByProfileID(ProfileID).profile;
+            // var perfectmatchsearchsettings = membersrepository.GetPerFectMatchSearchSettingsByProfileID(ProfileID);
+
+            // model.Profile = myProfile;
+            //Profile data will be on the include
+            model.profile   = membersrepository.getprofilebyprofileid(Convert.ToInt16(ProfileID));
+
+            //TO DO this should be a try cacth with exception handling
+
+
+            try
+            {
+                //TO DO do away with this since we already have the profile via include from the profile DATA
+               // model.Profile = model.profile;
+
+                //   model.ProfileData.SearchSettings(perfectmatchsearchsettings);
+                //4-28-2012 added mapping for profile visiblity
+                model.profilevisiblity  = model.profile.profiledata.visibilitysettings ;
+
+                //on first load this should always be false
+                //to DO   DO  we still need this
+                model.profilestatusmessageshown = false;
+
+                model.mygenderid = model.profiledata.gender.id ;
+                //this should come from search settings eventually on the full blown model of this.
+                //create hase list of genders they are looking for, if it is null add the default
+
+                //TO DO change this to use membererepo
+                model.lookingforgendersid = (model.profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?             
+                new HashSet<int>(model.profile.profilemetadata.searchsettings.FirstOrDefault().genders.Select(c => c.id.GetValueOrDefault())) : null;          
+                if (model.lookingforgendersid.Count == 0)
+                {
+                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(model.profile.profiledata.gender.id ));
+                }
+
+                //set selected value
+                //model.Countries. = model.ProfileData.CountryID;
+
+                //geographical data poulated here
+                model.mycountryname = membersrepository.GetMyCountry(model.ProfileData);
+                model.mycountryid = model.ProfileData.CountryID;
+                model.mycity = model.ProfileData.City;
+                
+                //TO DO items need to be populated with real values, in this case change model to double for latt
+                model.mylatitude = model.ProfileData.Latitude.ToString(); //model.Lattitude
+                model.mylongitude = model.ProfileData.Longitude.ToString();
+                //update 9-21-2011 get fro search settings
+                model.maxdistancefromme = model.ProfileData.SearchSettings.FirstOrDefault() != null ? model.ProfileData.SearchSettings.FirstOrDefault().DistanceFromMe.GetValueOrDefault() : 500;
+                
+                //mail counters
+                model.mymailcount = mailrepository.MailCount("Sent", model.Profile.ProfileID).ToString();
+                model.whomailedme = mailrepository.MailCount("Inbox", model.Profile.ProfileID).ToString();
+                model.whomailedmenewcount = mailrepository.NewMailCount("Inbox", model.Profile.ProfileID).ToString();
+
+                //model.WhoMailedMeNewCount =  
+                //interests
+                model.myintrestcount = membersrepository.GetMyInterestCount(model.ProfileData);
+                model.whoisinterestedinmecount = membersrepository.GetWhoisInterestedinMeCount(model.ProfileData);
+                model.whoisinterestedinmenewcount = membersrepository.GetWhoisInterestedinMeNewCount(model.ProfileData);
+                //peeks
+                model.mypeekscount = membersrepository.GetMypeekCount(model.ProfileData);
+                model.whopeekededatmecount = membersrepository.GetWhoPeekedatmeCount(model.ProfileData); ;
+                model.whopeekedatmenewcount = membersrepository.GetWhoPeekedatmeNewCount(model.ProfileData);
+                //likes
+                model.wholikesmenewcount = membersrepository.GetWhoLikesMeCount(model.ProfileData);
+                model.wholikesmecount = membersrepository.GetWhoLikesMeCount(model.ProfileData);
+                model.whoilikecount = membersrepository.GetWhoIlikeCount(model.ProfileData);
+
+                //blocks
+                model.myblockcount = membersrepository.GetMyblockCount(model.ProfileData);
+
+                //instantiate models for city state province and quick search
+                // get users search setttings
+                //model.MyQuickSearch = QuickSearchModel;
+
+
+
+                // now instantiate city state province
+                // model.MyQuickSearch.MySelectedCityStateProvince = CityStateProvince();
+                model = membersrepository.GetDefaultQuickSearchSettingsMembers(model);
+
+                //added 5-10-2012
+                //we dont want to add search setttings to the members model?
+                //TO do remove profiledata at some point
+                //check if the user has a profile search settings value in stored DB if not add one and save it
+                if (model.ProfileData.SearchSettings.Count == 0)
+                {
+                    membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(ProfileID);
+                    //update the profile data with the updated value
+                    //TO DO stop storing profileData
+                    model.ProfileData = membersrepository.GetProfileDataByProfileID(ProfileID);
+
+                }
+
+                //*** start binding collections here ******
+                //do this last since we need values populated first
+
+
+                // var pp = new PaginatedList<MemberSearchViewModel>();
+
+                //sets up the inital paging for your matches
+                //  var productPagedList = pp.GetPageableList(model.MyMatches, 1,4);
+                //   MyMatchesPaged.AsPagination(1, 4);
+
+                // model.MyMatches = productPagedList;  // set quick matches
+
+                return model;
+            }
+            //TO DO log the error
+            catch
+            {
+
+
+            }
+
+
+            return null;
+
+
+        }
+
+        
+        public MembersViewModel MapGuest()
+        {
+            MembersViewModel model = new MembersViewModel();
+
+    
+            QuickSearchModel QuickSearchModel = new QuickSearchModel();
+            // IEnumerable<CityStateProvince> CityStateProvince ;
+
+            model.MyQuickSearch = QuickSearchModel;
+
+
+            return model;
+
+
+
+            //   model.MyMatchesPaged = null;
+            //  model.MyMatches = null;
+            // return model;
+        }
+
+        public RegisterModel MapRegistration(MembersViewModel membersmodel)
+        {
+
+            // MembersRepository membersrepository = new MembersRepository();
+
+
+            RegisterModel model = new RegisterModel();
+            //QuickSearchModel QuickSearchModel = new QuickSearchModel();
+            // IEnumerable<CityStateProvince> CityStateProvince ;
+            model.City = membersmodel.MyQuickSearch.MySelectedCity;
+            model.Country = membersmodel.MyQuickSearch.MySelectedCountryName;
+            model.longitude = membersmodel.MyQuickSearch.MySelectedLongitude;
+            model.lattitude = membersmodel.MyQuickSearch.MySelectedLongitude;
+            model.PostalCodeStatus = membersmodel.MyQuickSearch.MySelectedPostalCodeStatus;
+
+            // model.SecurityAnswer = "moma";
+            //5/8/2011  set other defualt values here
+            //model.RegistrationPhotos.PhotoStatus = "";
+            // model.PostalCodeStatus = false;
+            return model;
+
+        }
+
+        public RegisterModel MapJainRainRegistration( MembersViewModel membersmodel)
+        {
+
+           
+            RegisterModel model = new RegisterModel();
+            //QuickSearchModel QuickSearchModel = new QuickSearchModel();
+            // IEnumerable<CityStateProvince> CityStateProvince ;
+            model.openidIdentifer = profile.Identifier;
+            model.openidProvider = profile.ProviderName;
+
+
+            //model.Ages = sharedrepository.AgesSelectList();
+            // model.Genders = sharedrepository.GendersSelectList();
+            // model.Countries = sharedrepository.CountrySelectList();
+            // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
+            //test values
+            model.BirthDate = DateTime.Parse(profile.birthday);
+
+            model.Email = profile.verifiedEmail;
+            model.ConfirmEmail = profile.verifiedEmail;
+            model.Gender = Extensions.ConvertGenderName(profile.gender).ToString();
+
+
+            // model.Password = "kayode02";
+            //model.ConfirmPassword = "kayode02";
+            model.ScreenName = profile.DisplayName;
+            model.UserName = profile.PreferredUsername;
+            model.City = membersmodel.MyCityStateProvince;
+
+
+            model.Country = membersmodel.MyCountryName;
+            model.longitude = Convert.ToDouble(membersmodel.MyLongitude);
+            model.lattitude = Convert.ToDouble(membersmodel.MyLatitude);
+            model.PostalCodeStatus = membersmodel.MyPostalCodeStatus;
+            model.ZipOrPostalCode = membersmodel.MyPostalCode;
+
+
+            //added passwords temporary hack
+            model.Password = "ssoUser";
+
+            //5/29/2012
+
+            //get the photo info
+            // model.SecurityAnswer = "moma";
+            //5/8/2011  set other defualt values here
+            //model.RegistrationPhotos.PhotoStatus = "";
+            // model.PostalCodeStatus = false;
+            PhotoViewModel photoVM = new PhotoViewModel();
+            //initlaize photos object
+            photoVM.Photos = new List<Photo>();
+            Shell.MVC2.Models.Photo photo = new Shell.MVC2.Models.Photo();
+            //right now we are only uploading one photo 
+            if (profile.photo != "")
+                photo = (membersrepository.UploadProfileImage(profile.photo, profile.PreferredUsername));
+
+            if (photo.ActualImage.Length > 0)
+            {
+                photoVM.Photos.Add(photo);
+                model.RegistrationPhotos = photoVM;
+            }
+
+
+
+
+            //make sure photos is not empty
+            //  if (membersmodel.MyPhotos == null)
+            // { //add new photo model to members model
+            //    var photolist = new List<Photo>();
+            //    membersmodel.MyPhotos = photolist;
+            // }
+
+
+
+            return model;
+
+        }
+
+
+
+        public RegisterModel MapRegistrationTest()
+        {
+
+            // MembersRepository membersrepository = new MembersRepository();
+
+
+            RegisterModel model = new RegisterModel();
+            //QuickSearchModel QuickSearchModel = new QuickSearchModel();
+            // IEnumerable<CityStateProvince> CityStateProvince ;
+
+
+
+            //model.Ages = sharedrepository.AgesSelectList();
+            // model.Genders = sharedrepository.GendersSelectList();
+            // model.Countries = sharedrepository.CountrySelectList();
+            // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
+            //test values
+            model.BirthDate = DateTime.Parse("1/1/1983");
+
+            model.Email = "ola_lawal@lyahoo.com";
+            model.ConfirmEmail = "ola_lawal@lyahoo.com";
+            // model.Gender = "Male";
+            model.Password = "kayode02";
+            model.ConfirmPassword = "kayode02";
+            model.ScreenName = "test1";
+            model.UserName = "olalaw";
+
+            // model.SecurityAnswer = "moma";
+
+            //5/8/2011  set other defualt values here
+            //model.RegistrationPhotos.PhotoStatus = "";
+
+            // model.PostalCodeStatus = false;
+
+
+            return model;
+
+
+        }
+
+
     }
 }

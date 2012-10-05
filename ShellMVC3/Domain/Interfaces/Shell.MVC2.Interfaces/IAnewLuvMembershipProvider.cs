@@ -64,7 +64,7 @@ namespace Shell.MVC2.Interfaces
     
          string GeneratePassword();
 
-         void UpdateUserCustom(string username, int profileid,
+         void UpdateUserCustom(string username, string profileid,
                 string password,
                 string securityQuestion,
                 string securityAnswer,
