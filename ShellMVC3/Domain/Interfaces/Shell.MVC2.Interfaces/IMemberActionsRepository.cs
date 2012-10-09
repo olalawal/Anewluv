@@ -82,7 +82,7 @@ namespace Shell.MVC2.Interfaces
       
         bool removepeekbyprofileid(int profileid, int peekprofile_id);
             
-        bool removepeekbypeekprofileid( string peekprofile_id,int profileid);
+        bool removepeekbypeekprofileid( int peekprofile_id,int profileid);
        
         bool restorepeekbyprofileid(int profileid, int peekprofile_id);
       
@@ -117,7 +117,7 @@ namespace Shell.MVC2.Interfaces
     
         bool restoreblocksbyscreennames(int profileid, List<String> screennames);
         
-        bool updateblockreviewstatus(int profileid,int targetprofileid, string reviewerid);
+        bool updateblockreviewstatus(int profileid,int targetprofileid, int reviewerid);
      
         #endregion   
 
@@ -143,11 +143,11 @@ namespace Shell.MVC2.Interfaces
     
         bool removelikebyprofileid(int profileid, int likeprofile_id) ;       
 
-        bool removelikebylikeprofileid( string likeprofile_id,int profileid);
+        bool removelikebylikeprofileid( int likeprofile_id,int profileid);
        
-        bool restorelikebyprofileid(int profileid, string likeprofile_id);
+        bool restorelikebyprofileid(int profileid, int likeprofile_id);
     
-        bool restorelikebylikeprofileid(string likeprofile_id,int profileid);
+        bool restorelikebylikeprofileid(int likeprofile_id,int profileid);
        
         bool removelikesbyprofileidandscreennames(int profileid, List<String> screennames);
 

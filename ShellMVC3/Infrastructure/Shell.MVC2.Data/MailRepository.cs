@@ -252,7 +252,7 @@ namespace Shell.MVC2.Data
 
                       });
 
-            return filtermailmodels(models);
+            return filtermailmodels(models).ToList();
 
 
         }
@@ -293,7 +293,7 @@ namespace Shell.MVC2.Data
         }
 
         //TO DO read out the description feild from enum using sample code
-        public IEnumerable<mailviewmodel> getmailmsgthreadbyuserid(int uniqueId, int profile_id)
+        public List<mailviewmodel> getmailmsgthreadbyuserid(int uniqueId, int profile_id)
         {
 
             IEnumerable<mailviewmodel> model = null;
@@ -347,6 +347,10 @@ namespace Shell.MVC2.Data
                            
 
         }
+
+
+
+
     }
     
        

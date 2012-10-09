@@ -101,7 +101,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public profiledata profiledata { get; set; }
 
         [DataMember]
-        public QuickSearchModel myquicksearch { get; set; }
+        public quicksearchmodel myquicksearch { get; set; }
 
         public RegisterModel register { get; set; }
 

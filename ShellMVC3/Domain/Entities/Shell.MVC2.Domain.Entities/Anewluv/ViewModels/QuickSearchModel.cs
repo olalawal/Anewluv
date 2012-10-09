@@ -8,38 +8,38 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
     [Serializable]
     [DataContract]
-    public class QuickSearchModel
+    public class quicksearchmodel
     {
 
         //current values selected from User Interface , we bind them to the user 
         //viewmodel for now unless we run into memory issues and effecinery, then they will expire with the view
 
-        public int MySelectedIamGenderID { get; set; }
+        public int myselectediamgenderid { get; set; }
 
-        public int MySelectedSeekingGenderID { get; set; }
-        public int MySelectedFromAge { get; set; }
-        public int MyselectedToAge { get; set; }
+        public int myselectedseekinggenderid { get; set; }
+        public int myselectedfromage { get; set; }
+        public int myselectedtoage { get; set; }
 
 
-        public string MySelectedCountryName { get; set; }
-        public int MySelectedCountryID { get; set; }
-        public string MySelectedPostalCode { get; set; }
+        public string myselectedcountryname { get; set; }
+        public int myselectedcountryid { get; set; }
+        public string myselectedpostalcode { get; set; }
         //added 10/17/20011 so we can toggle postalcode box similar to register
-        public Boolean MySelectedPostalCodeStatus { get; set; }
+        public Boolean myselectedpostalcodestatus { get; set; }
 
-        public string MySelectedCity { get; set; }
-        public Boolean MySelectedPhotoStatus { get; set; }
-        public string MySelectedCityStateProvince { get; set; }
-        public double? MySelectedMaxDistanceFromMe { get; set; }
+        public string myselectedcity { get; set; }
+        public Boolean myselectedphotostatus { get; set; }
+        public string myselectedcitystateprovince { get; set; }
+        public double? myselectedmaxdistancefromme { get; set; }
 
         //gps data added 10/17/2011
-        public double? MySelectedLongitude { get; set; }
-        public double? MySelectedLatitude { get; set; }
+        public double? myselectedlongitude { get; set; }
+        public double? myselectedlatitude { get; set; }
 
 
         // private MembersRepository membersrepository;
-        public int mySelectedPageSize { get; set; }
-        public int? mySelectedCurrentPage { get; set; }
+        public int myselectedpagesize { get; set; }
+        public int? myselectedcurrentpage { get; set; }
         //add flag to let us know that the data comes from geocoinding ?
         public bool geocodeddata { get; set; }
 

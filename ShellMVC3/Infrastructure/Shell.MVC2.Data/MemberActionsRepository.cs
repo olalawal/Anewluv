@@ -296,10 +296,10 @@ namespace Shell.MVC2.Data
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public IEnumerable<MemberSearchViewModel> getmutualinterests(int profileid, int targetprofileid)
+          public List<MemberSearchViewModel> getmutualinterests(int profileid, int targetprofileid)
         {
             IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
-            return mutualinterests;
+            return mutualinterests.ToList();
 
         }
         /// <summary>
@@ -878,10 +878,10 @@ namespace Shell.MVC2.Data
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public IEnumerable<MemberSearchViewModel> getmutualpeeks(int profileid, int targetprofileid)
+          public List<MemberSearchViewModel> getmutualpeeks(int profileid, int targetprofileid)
         {
             IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
-            return mutualinterests;
+            return mutualinterests.ToList();
 
         }
         /// <summary>
@@ -1320,10 +1320,10 @@ namespace Shell.MVC2.Data
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public IEnumerable<MemberSearchViewModel> getmutualblocks(int profileid, int targetprofileid)
+          public List<MemberSearchViewModel> getmutualblocks(int profileid, int targetprofileid)
         {
             IEnumerable<MemberSearchViewModel> mutualblocks = default(IEnumerable<MemberSearchViewModel>);
-            return mutualblocks;
+            return mutualblocks.ToList();
 
         }
         /// <summary>
@@ -1534,7 +1534,7 @@ namespace Shell.MVC2.Data
         ///  Update block with a view     
         /// </summary 
         /// 
-        public bool updateblockreviewstatus(int profileid,int targetprofileid, string reviewerid)
+        public bool updateblockreviewstatus(int profileid,int targetprofileid, int reviewerid)
         {
 
             //get the profile
@@ -1826,10 +1826,10 @@ namespace Shell.MVC2.Data
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public IEnumerable<MemberSearchViewModel> getmutuallikes(int profileid, int targetprofileid)
+          public List<MemberSearchViewModel> getmutuallikes(int profileid, int targetprofileid)
         {
-            IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
-            return mutualinterests;
+            IEnumerable<MemberSearchViewModel> mutuallikes = default(IEnumerable<MemberSearchViewModel>);
+            return mutuallikes.ToList();
 
         }
         /// <summary>
