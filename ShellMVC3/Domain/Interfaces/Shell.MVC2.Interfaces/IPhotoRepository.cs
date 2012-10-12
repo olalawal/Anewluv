@@ -55,9 +55,9 @@ namespace Shell.MVC2.Interfaces
        
         bool checkforgalleryphotobyprofileid(int intProfileID);       
        
-        bool checkforuploadedphotobyprofileid(int intProfileID);   
-       
-        photo uploadprofileimage(string _imageUrl, string caption); 
+        bool checkforuploadedphotobyprofileid(int intProfileID);
+
+        byte[] getimagebytesfromurl(string _imageUrl,string source); 
       
     }
 }

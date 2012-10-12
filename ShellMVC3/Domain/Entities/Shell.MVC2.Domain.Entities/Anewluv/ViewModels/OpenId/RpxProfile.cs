@@ -15,33 +15,33 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
             /// <summary>
             /// Display name
             /// </summary>
-            public string DisplayName { get; set; }
+            public string displayname { get; set; }
 
             /// <summary>
             /// Preferred username
             /// </summary>
-            public string PreferredUsername { get; set; }
+            public string preferredusername { get; set; }
 
             /// <summary>
             /// Url
             /// </summary>
-            public string Url { get; set; }
+            public string url { get; set; }
 
             /// <summary>
             /// Provider name
             /// </summary>
-            public string ProviderName { get; set; }
+            public string providername { get; set; }
 
             /// <summary>
             /// Identifier
             /// </summary>
-            public string Identifier { get; set; }
+            public string identifier { get; set; }
 
 
              /// <summary>
             /// verifiedEmail
             /// </summary>
-            public string verifiedEmail { get; set; }
+            public string verifiedemail { get; set; }
 
              /// <summary>
             /// photo

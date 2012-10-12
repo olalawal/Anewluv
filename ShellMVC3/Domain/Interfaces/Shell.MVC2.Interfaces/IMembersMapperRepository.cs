@@ -10,17 +10,17 @@ namespace Shell.MVC2.Interfaces
     {
 
     
-        MemberSearchViewModel GetMemberSearchViewModel(int profileid);
+        MemberSearchViewModel getmembersearchviewmodel(int profileid);
      
-        List<MemberSearchViewModel> GetMemberSearchViewModels(List<string> profileIds);
+        List<MemberSearchViewModel> getmembersearchviewmodels(List<int> profileIds);
    
-        ProfileBrowseModel GetProfileBrowseModel(string viewerprofileId, int profileid);
+        ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileid);
   
-        List<ProfileBrowseModel> GetProfileBrowseModels(string viewerprofileId, List<string> profileIds);
+        List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds);
    
-        ProfileCriteriaModel GetProfileCriteriaModel(MemberSearchViewModel p);
-       
-        ProfileCriteriaModel GetProfileCriteriaModel();
+        ProfileCriteriaModel getprofilecriteriamodel(int profileid);
+       //overload for above
+        ProfileCriteriaModel getprofilecriteriamodel();
 
         MembersViewModel mapmember(int profileid);
 
@@ -29,7 +29,10 @@ namespace Shell.MVC2.Interfaces
         RegisterModel mapregistration(MembersViewModel membersmodel);
 
        //TO DO this should be using profileID or a composite model , add rpxprofile to members model
-        RegisterModel mapjainrainregistration(rpxprofile profile, MembersViewModel membersmodel);
+        RegisterModel mapjainrainregistration(MembersViewModel membersmodel);
+
+       //exposed methods that use cache, we should prpbbaly hdie the other methods that are not cached
+        MembersViewModel getmemberdata(int profileid);
 
     }
 }

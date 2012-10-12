@@ -11,6 +11,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Infrastructure;
 using Shell.MVC2.Interfaces;
 
+using Shell.MVC2.AppFabric;
 
 
 
@@ -22,17 +23,20 @@ namespace Shell.MVC2.Data
         private IGeoRepository georepository;
         private IPhotoRepository photorepository;
         private IMemberRepository membersrepository;
+        private IMemberActionsRepository memberactionsrepository;
         private IMailRepository mailrepository;
         // private AnewluvContext _db;
         //TO DO move from ria servives
         private AnewluvContext  datingcontext;
 
        public MembersMapperRepository(IGeoRepository _georepository, IPhotoRepository
-           _photorepository, IMemberRepository _membersrepository, IMailRepository  _mailrepository,AnewluvContext _datingcontext)
+           _photorepository, IMemberRepository _membersrepository, IMemberActionsRepository 
+           _memberactionsrepository,IMailRepository _mailrepository, AnewluvContext _datingcontext)
         {
             georepository = _georepository;
             photorepository = _photorepository;
             membersrepository = _membersrepository;
+            memberactionsrepository = _memberactionsrepository ;
             mailrepository = _mailrepository;
             datingcontext = _datingcontext;
         }
@@ -136,7 +140,7 @@ namespace Shell.MVC2.Data
             }
             return models;
         }
-        public ProfileBrowseModel GetProfileBrowseModel(int viewerprofileId, int profileId)
+        public ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileId)
         {
 
 
@@ -524,9 +528,10 @@ namespace Shell.MVC2.Data
             return Model;
         }
 
+        //TOD modifiy client to not bind from this model but load values asycnh
 
-
-        public MembersViewModel mapmember(string ProfileID)
+        //Modifiy client to grab all the values Asynch, i.e counts and all other values should be loaded via AJAS calls to the service
+        public MembersViewModel mapmember(int ProfileID)
         {
 
             MembersViewModel model = new MembersViewModel();
@@ -585,20 +590,21 @@ namespace Shell.MVC2.Data
 
                 //model.WhoMailedMeNewCount =  
                 //interests
-                model.myintrestcount = membersrepository.GetMyInterestCount(model.profiledata);
-                model.whoisinterestedinmecount = membersrepository.GetWhoisInterestedinMeCount(model.profiledata);
-                model.whoisinterestedinmenewcount = membersrepository.GetWhoisInterestedinMeNewCount(model.profiledata);
+               //TO DO move all these to ajax calls on client
+                model.myintrestcount =   memberactionsrepository.getwhoiaminterestedincount(model.profile.id).ToString();
+                model.whoisinterestedinmecount = memberactionsrepository.getwhoisinterestedinmecount(model.profile.id).ToString();
+                model.whoisinterestedinmenewcount = memberactionsrepository.getwhoisinterestedinmenewcount(model.profile.id).ToString();
                 //peeks
-                model.mypeekscount = membersrepository.GetMypeekCount(model.profiledata);
-                model.whopeekededatmecount = membersrepository.GetWhoPeekedatmeCount(model.profiledata); ;
-                model.whopeekedatmenewcount = membersrepository.GetWhoPeekedatmeNewCount(model.profiledata);
+                model.mypeekscount = memberactionsrepository.getwhoipeekedatcount(model.profile.id).ToString();
+                model.whopeekededatmecount = memberactionsrepository.getwhopeekedatmecount(model.profile.id).ToString();
+                model.whopeekedatmenewcount = memberactionsrepository.getwhopeekedatmenewcount(model.profile.id).ToString();
                 //likes
-                model.wholikesmenewcount = membersrepository.GetWhoLikesMeCount(model.profiledata);
-                model.wholikesmecount = membersrepository.GetWhoLikesMeCount(model.profiledata);
-                model.whoilikecount = membersrepository.GetWhoIlikeCount(model.profiledata);
+                model.wholikesmenewcount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
+                model.wholikesmecount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
+                model.whoilikecount = memberactionsrepository.getwhoilikecount(model.profile.id).ToString();
 
                 //blocks
-                model.myblockcount = membersrepository.GetMyblockCount(model.profiledata);
+                model.myblockcount = memberactionsrepository.getwhoiblockedcount (model.profile.id).ToString();
 
                 //instantiate models for city state province and quick search
                 // get users search setttings
@@ -608,18 +614,18 @@ namespace Shell.MVC2.Data
 
                 // now instantiate city state province
                 // model.MyQuickSearch.MySelectedCityStateProvince = CityStateProvince();
-                model = membersrepository.GetDefaultQuickSearchSettingsMembers(model);
+               // model = membersrepository.getdefaultquicksearchsettingsmembers(model);
 
                 //added 5-10-2012
                 //we dont want to add search setttings to the members model?
                 //TO do remove profiledata at some point
                 //check if the user has a profile search settings value in stored DB if not add one and save it
-                if (model.profiledata.SearchSettings.Count == 0)
+                if (model.profile.profilemetadata.searchsettings.Count == 0)
                 {
-                    membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(ProfileID);
+                    membersrepository.createmyperfectmatchsearchsettingsbyprofileid(model.profile.id);
                     //update the profile data with the updated value
                     //TO DO stop storing profiledata
-                    model.profiledata = membersrepository.GetprofiledataByProfileID(ProfileID);
+                    model.profiledata = membersrepository.getprofiledatabyprofileid(model.profile.id);
 
                 }
 
@@ -659,7 +665,7 @@ namespace Shell.MVC2.Data
             quicksearchmodel quicksearchmodel = new quicksearchmodel();
             // IEnumerable<CityStateProvince> CityStateProvince ;
 
-            model.MyQuickSearch = quicksearchmodel;
+            model.myquicksearch = quicksearchmodel;
 
 
             return model;
@@ -680,11 +686,11 @@ namespace Shell.MVC2.Data
             RegisterModel model = new RegisterModel();
             //quicksearchmodel quicksearchmodel = new quicksearchmodel();
             // IEnumerable<CityStateProvince> CityStateProvince ;
-            model.City = membersmodel.MyQuickSearch.MySelectedCity;
-            model.Country = membersmodel.MyQuickSearch.MySelectedCountryName;
-            model.longitude = membersmodel.MyQuickSearch.MySelectedLongitude;
-            model.lattitude = membersmodel.MyQuickSearch.MySelectedLongitude;
-            model.PostalCodeStatus = membersmodel.MyQuickSearch.MySelectedPostalCodeStatus;
+            model.City = membersmodel.myquicksearch.myselectedcity;
+            model.Country = membersmodel.myquicksearch.myselectedcountryname;
+            model.longitude = membersmodel.myquicksearch.myselectedlongitude;
+            model.lattitude = membersmodel.myquicksearch.myselectedlongitude;
+            model.PostalCodeStatus = membersmodel.myquicksearch.myselectedpostalcodestatus;
 
             // model.SecurityAnswer = "moma";
             //5/8/2011  set other defualt values here
@@ -701,8 +707,8 @@ namespace Shell.MVC2.Data
             RegisterModel model = new RegisterModel();
             //quicksearchmodel quicksearchmodel = new quicksearchmodel();
             // IEnumerable<CityStateProvince> CityStateProvince ;
-            model.openidIdentifer = profile.Identifier;
-            model.openidProvider = profile.ProviderName;
+            model.openidIdentifer = membersmodel.rpxmodel.identifier ;
+            model.openidProvider =membersmodel.rpxmodel.providername;
 
 
             //model.Ages = sharedrepository.AgesSelectList();
@@ -710,25 +716,25 @@ namespace Shell.MVC2.Data
             // model.Countries = sharedrepository.CountrySelectList();
             // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
             //test values
-            model.BirthDate = DateTime.Parse(profile.birthday);
+            model.BirthDate = DateTime.Parse(membersmodel.rpxmodel.birthday);
 
-            model.Email = profile.verifiedEmail;
-            model.ConfirmEmail = profile.verifiedEmail;
-            model.Gender = Extensions.ConvertGenderName(profile.gender).ToString();
+            model.Email =membersmodel.rpxmodel.verifiedemail;
+            model.ConfirmEmail =membersmodel.rpxmodel.verifiedemail;
+            model.Gender = Extensions.ConvertGenderName(membersmodel.rpxmodel.gender).ToString();
 
 
             // model.Password = "kayode02";
             //model.ConfirmPassword = "kayode02";
-            model.ScreenName = profile.DisplayName;
-            model.UserName = profile.PreferredUsername;
-            model.City = membersmodel.MyCityStateProvince;
+            model.ScreenName =membersmodel.rpxmodel.displayname;
+            model.UserName =membersmodel.rpxmodel.preferredusername;
+            model.City = membersmodel.mycitystateprovince;
 
 
-            model.Country = membersmodel.MyCountryName;
-            model.longitude = Convert.ToDouble(membersmodel.MyLongitude);
-            model.lattitude = Convert.ToDouble(membersmodel.MyLatitude);
-            model.PostalCodeStatus = membersmodel.MyPostalCodeStatus;
-            model.ZipOrPostalCode = membersmodel.MyPostalCode;
+            model.Country = membersmodel.mycountryname;
+            model.longitude = Convert.ToDouble(membersmodel.mylongitude);
+            model.lattitude = Convert.ToDouble(membersmodel.mylatitude);
+            model.PostalCodeStatus = membersmodel.mypostalcodestatus;
+            model.ZipOrPostalCode = membersmodel.mypostalcode;
 
 
             //added passwords temporary hack
@@ -741,37 +747,38 @@ namespace Shell.MVC2.Data
             //5/8/2011  set other defualt values here
             //model.RegistrationPhotos.PhotoStatus = "";
             // model.PostalCodeStatus = false;
-            PhotoViewModel photoVM = new PhotoViewModel();
-            //initlaize photos object
-            photoVM.Photos = new List<Photo>();
-            Shell.MVC2.Models.Photo photo = new Shell.MVC2.Models.Photo();
+             PhotoUploadViewModel photouploadvm = new PhotoUploadViewModel();
+            //initlaize PhotoUploadViewModel object          
+             photouploadvm.profileid = membersmodel.profile.id; //set the profileID  
+             photouploadvm.photosuploaded  = new List<PhotoUploadModel>();
+             PhotoUploadModel  photobeinguploaded = new PhotoUploadModel();
+            
             //right now we are only uploading one photo 
-            if (profile.photo != "")
-                photo = (membersrepository.UploadProfileImage(profile.photo, profile.PreferredUsername));
-
-            if (photo.ActualImage.Length > 0)
-            {
-                photoVM.Photos.Add(photo);
-                model.RegistrationPhotos = photoVM;
+            //for now we are using URL from each, we can hanlde mutiple provider formats that might return a byte using the source paremater
+            //or the openID provider name to customize
+            if (membersmodel.rpxmodel.photo  != "")
+            {   //build the photobeinguploaded object
+                photobeinguploaded.image =  photorepository.getimagebytesfromurl(membersmodel.rpxmodel.photo,"");
+                photobeinguploaded.imagetype =  datingcontext.lu_photoimagetype.Where(p=>p.id  == (int)photoimagetypeEnum.Jpeg).FirstOrDefault();
+                photobeinguploaded.creationdate = DateTime.Now;
+                photobeinguploaded.caption = membersmodel.rpxmodel.preferredusername;
+                //TO DO rename this to upload image from URL ?
+               
+               //add to repository
+               photorepository.addphotos(photouploadvm);
             }
-
-
-
-
             //make sure photos is not empty
             //  if (membersmodel.MyPhotos == null)
             // { //add new photo model to members model
             //    var photolist = new List<Photo>();
             //    membersmodel.MyPhotos = photolist;
             // }
-
-
-
+            //don't pass back photos for now
+            
+            
             return model;
 
         }
-
-
 
         public RegisterModel mapregistrationtest()
         {
@@ -813,6 +820,10 @@ namespace Shell.MVC2.Data
 
         }
 
-
+        //APp fabric mapped methods
+        public MembersViewModel getmemberdata(int profileid)
+        {
+           return CachingFactory.MembersViewModelHelper.getmemberdata(profileid, this);
+        }
     }
 }

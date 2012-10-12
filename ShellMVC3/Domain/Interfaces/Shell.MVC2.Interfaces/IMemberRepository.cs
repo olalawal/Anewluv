@@ -79,8 +79,9 @@ namespace Shell.MVC2.Data
        //5-20-2012 added to check if a user email is registered       
         bool checkifprofileidalreadyexists(int profileid);     
         string validatesecurityansweriscorrect(int strProfileID, int SecurityQuestionID, string strSecurityAnswer);  
-        int getprofileidbyusername(string strusername);
-        int getprofileidbyscreenname(string strscreenname);   
+        int? getprofileidbyusername(string strusername);
+        int? getprofileidbyscreenname(string strscreenname);
+        int? getprofileidbyssessionid(string sessionid);
         string getusernamebyprofileid(int profileid);       
         string getscreennamebyprofileid(int profileid);  
         string getscreennamebyusername(string username);      
@@ -118,6 +119,8 @@ namespace Shell.MVC2.Data
          List<MemberSearchViewModel> getemailmatches(MembersViewModel model);
          List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model);
           
-      
+      //mapper calls that use the appfabric cache
+
+
     }
 }

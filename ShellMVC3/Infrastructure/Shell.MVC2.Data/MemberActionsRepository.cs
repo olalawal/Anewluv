@@ -679,7 +679,7 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total peeks
         /// </summary>       
-        public int getwhoeekedatmenewcount(int profileid)
+        public int getwhopeekedatmenewcount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
@@ -1114,7 +1114,7 @@ namespace Shell.MVC2.Data
         }
 
         /// <summary>
-        ///  //Removes an iterest i.e makes you not interested in that person anymore
+        ///  //Removes a peek i.e makes is seem like you never peeeked at  anymore
         ///  //removed multiples 
         /// </summary 
         public bool restorepeeksbyprofileidandscreennames(int profileid, List<String> screennames)

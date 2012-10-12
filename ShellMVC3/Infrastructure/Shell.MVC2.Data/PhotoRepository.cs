@@ -46,6 +46,38 @@ namespace Shell.MVC2.Data
             return query;
         }
 
+        public List<PhotoEditModel> getphotosbyprofileidandstatus(string profile_id, photoapprovalstatusEnum status)
+        {
+            // Retrieve All User's Photos that are not approved.
+            //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
+
+            // Retrieve All User's Approved Photo's that are not Private and approved.
+            //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
+
+            var model = (from p in _datingcontext.photos.Where(a => a.approvalstatus.id == (int)status)
+                         select new PhotoEditModel
+                         {
+                             photoid = p.id,
+                             profileid = p.profile_id,
+                             screenname = p.profilemetadata.profile.screenname,
+                             aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             profileimagetype = p.imagetype.description,
+                             imagecaption = p.imagecaption,
+                             photodate = p.creationdate,
+                             photostatusid = p.photostatus.id,
+                             checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
+                         });
+
+
+           
+
+
+            return (model.OrderByDescending(u => u.photodate).ToList();
+
+
+
+        }
+
         public List<PhotoEditModel> getpagedphotosbyprofileidstatus(string profile_id, photoapprovalstatusEnum status,
                                                                     int page, int pagesize)
         {
@@ -720,12 +752,12 @@ namespace Shell.MVC2.Data
 
 
         /// <summary>
-        /// dont think this is used
+        /// gets the bytes of an image from a URL, useeful in grabbing images from 3rd parties such as FB
         /// </summary>
         /// <param name="_imageUrl"></param>
         /// <param name="caption"></param>
         /// <returns></returns>
-        public photo uploadprofileimage(string _imageUrl, string caption)
+        public byte[] getimagebytesfromurl(string _imageUrl, string source)
         {
 
             //get current profileID from cache
@@ -737,14 +769,15 @@ namespace Shell.MVC2.Data
             // membersmodel = (_ProfileID != null) ? CachingFactory.MembersViewModelHelper.GetMemberData(_ProfileID) : null;
 
             //add the files to a temporary photo model and store it in session for now?
-            var photo = new photo();
+           // var photo = new photo();
 
             string imageUrl = _imageUrl;
+            byte[] imageBytes;
             // string saveLocation = @"C:\someImage.jpg";
 
             try
             {
-                byte[] imageBytes;
+               
                 HttpWebRequest imageRequest = (HttpWebRequest)WebRequest.Create(imageUrl);
                 WebResponse imageResponse = imageRequest.GetResponse();
                 Stream responseStream = imageResponse.GetResponseStream();
@@ -757,7 +790,8 @@ namespace Shell.MVC2.Data
                 responseStream.Close();
                 imageResponse.Close();
 
-                photo.imagecaption = caption;
+                return imageBytes;
+                //photo.imagecaption = caption;
                 //photo.ImageUploaded = file;
                 // photo.ProfileImage = imageBytes;
             }
@@ -772,7 +806,7 @@ namespace Shell.MVC2.Data
             }
 
 
-            return photo;
+            return null;
         }         
 
     }

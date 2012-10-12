@@ -66,7 +66,7 @@ namespace Shell.MVC2.Interfaces
           
       int getwhopeekedatmecount(int profileid);
           
-      int getwhoeekedatmenewcount(int profileid);
+      int getwhopeekedatmenewcount(int profileid);
     
        List<MemberSearchViewModel> getwhopeekedatme(int profileid, int? Page, int? NumberPerPage);
    
@@ -86,7 +86,7 @@ namespace Shell.MVC2.Interfaces
        
         bool restorepeekbyprofileid(int profileid, int peekprofile_id);
       
-        bool restorepeekbypeekprofileid(string peekprofile_id,int profileid);
+        bool restorepeekbypeekprofileid(int peekprofile_id,int profileid);
             
         bool removepeeksbyprofileidandscreennames(int profileid, List<String> screennames);
             

@@ -10,6 +10,8 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Infrastructure;
 
+using Shell.MVC2.AppFabric;
+
 namespace Shell.MVC2.Data
 {
    public  class MemberRepository : MemberRepositoryBase , IMemberRepository 
@@ -919,11 +921,16 @@ namespace Shell.MVC2.Data
     }
 
 
-    public int getprofileidbyusername(string strusername)
+       /// <summary>
+       /// added ability to grab from appfabric cache
+       /// </summary>
+       /// <param name="strusername"></param>
+       /// <returns></returns>
+    public int? getprofileidbyusername(string strusername)
     {
         //IQueryable<profile> myQuery = default(IQueryable<profile>);
-       return this._datingcontext.profiles.Where(p => p.username  == strusername ).FirstOrDefault().id;
-
+       //return this._datingcontext.profiles.Where(p => p.username  == strusername ).FirstOrDefault().id;
+       return CachingFactory.getprofileidbyusername(strusername,this._datingcontext);
         //if (myQuery.Count() > 0)
         //{
         //    return myQuery.FirstOrDefault().id.ToString();
@@ -934,13 +941,15 @@ namespace Shell.MVC2.Data
         //}
     }
                  
-    public int getprofileidbyscreenname(string strscreenname)
+    public int? getprofileidbyscreenname(string strscreenname)
     {
-        return (from p in db.profiles
-                where p.screenname == strscreenname
-                select p.id).FirstOrDefault();
+        return CachingFactory.getprofileidbyscreenname(strscreenname, this._datingcontext);
     }
 
+    public int? getprofileidbyssessionid(string strsessionid)
+    {
+        return CachingFactory.getprofileidbysessionid(strsessionid);
+    }
    
     public string getusernamebyprofileid(int profileid)
     {

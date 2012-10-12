@@ -73,8 +73,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     public class MembersViewModel
     {
 
-        //
-        rpxprofile rpxmodel { get; set; }
+        //added to hold RPX /OpenID data
+        public rpxprofile rpxmodel { get; set; }
 
         //ADD A STATE VIEWMODEL AS WELL  to determine weather the member is in 
         //activation, logeed on or registration mode , that way we can use the same partial views and 
