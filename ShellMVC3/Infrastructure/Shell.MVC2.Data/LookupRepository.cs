@@ -12,7 +12,10 @@ using System.Data;
 using System.Data.Entity;
 using System.Web;
 
+using Shell.MVC2.Infrastructure;
+
 using Shell.MVC2.Interfaces;
+using Shell.MVC2.AppFabric ;
 
 
 
@@ -22,7 +25,7 @@ using Shell.MVC2.Interfaces;
 
 namespace Shell.MVC2.Data
 {
-    public class LookupRepository : MemberRepositoryBase
+    public class LookupRepository : MemberRepositoryBase, ILookupRepository
     {
         // private AnewluvContext _db;
         //TO DO move from ria servives
@@ -37,10 +40,7 @@ namespace Shell.MVC2.Data
             _memberrepository = memberrepository;
         }
 
-
-
-
-
+        
         #region "Load Other misc stuff such as list of pages etc"
 
         public List<systempagesetting> GetSystemPageSettingList
@@ -69,6 +69,66 @@ namespace Shell.MVC2.Data
 
         #endregion
 
+        #region "generic lookup and collections"
+
+        public List<lu_gender> genderlist
+        {
+            get
+            {
+
+
+#if DISCONECTED
+                List<lu_gender> genderlist = new List<lu_gender>();
+                genderlist.Add(new lu_gender { description = "Male",  id  = 1, selected   = false });
+                genderlist.Add(new lu_gender { description = "Female", id = 2, selected = false });
+                return genderlist;
+                
+#else
+
+
+
+                return _datingcontext.lu_gender.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
+            }
+        }
+       
+        public List<age> agelist
+        {
+            get
+            {
+               return  CachingFactory.SharedObjectHelper.getagelist();
+            }
+        }
+
+        public List<age> createagelist
+        {
+    
+        get
+        {
+    
+        List<age> tmplist = new List<age>();
+                    // Loop over the int List and modify it.
+                    //insert the first one as ANY
+                    tmplist.Add(new age { ageindex = "0", agevalue = "Any" });
+
+                    for (int i = 18; i < 100; i++)
+                    {
+
+                        var CurrentAge = new age { ageindex = i.ToString(), agevalue = i.ToString() };
+                        tmplist.Add(CurrentAge);
+                    }
+                    return tmplist;
+            }
+
+         }
+
+        #endregion
+
         #region "Shared Collections retrived here"
 
         //public SelectList GendersSelectList()
@@ -76,328 +136,409 @@ namespace Shell.MVC2.Data
         //    SelectList genders = new SelectList(_datingcontext.GetGenders().ToList(), "GenderID", "GenderName");
         //    return genders;
         //}
-
-
-        public List<lu_gender> GendersSelectList
-        {
-            get
-            {
-                List<string> temp = new List<string>();
-
-#if DISCONECTED
-                temp.Add(new string() { Text = "Male", Value = "1", Selected = false });
-                temp.Add(new string() { Text = "Female", Value = "2", Selected = true });
-                return temp;
-
-#else
-
-
-
-              return _datingcontext.lu_gender.OrderBy(x => x.description).ToList();
-                                                     
-
-
-               // return temp;
-#endif
-
-            }
-        }
-
-
-        public List<string> VisibilityMailSettingsList
-        {
-            get
-            {
-                List<string> temp = new List<string>();
-
-
-
-                temp.Add(new string { Text = "Yes", Value = "1", Selected = true });
-                temp.Add(new string { Text = "No", Value = "0", Selected = false });
-                return temp;
-
-
-            }
-        }
-
-        public List<string> VisibilityStealthSettingsList
-        {
-            get
-            {
-                List<string> temp = new List<string>();
-
-                temp.Add(new string() { Text = "Unhide", Value = "1", Selected = true });
-                temp.Add(new string() { Text = "Hide", Value = "0", Selected = false });
-                return temp;
-
-
-            }
-        }
-
-        public List<string> SecurityQuestionSelectList
-        {
-
-
-            get
-            {
-#if DISCONECTED
-               List<string> temp = new List<string>() ;
-
-         
-                temp.Add(new string() { Text = "Mothers maiden name", Value = "1", Selected = false });
-                temp.Add(new string() { Text = "Favorite book", Value = "2", Selected = true });
-
-                return temp;
-
-        
-
-#else
-                return _datingcontext.GetSecurityQuestions().OrderBy(x => x.SecurityQuestionText).ToSelectList(x => x.SecurityQuestionText, x => x.SecurityQuestionID.ToString(),
-                                                                   "Select A Security Question");
-#endif
-
-
-
-            }
-        }
-
-
-
-
-        public List<string> AgesSelectList
-        {
-
-            get
-            {
-                List<Age> tmplist = new List<Age>();
-                // Loop over the int List and modify it.
-
-                for (int i = 18; i < 100; i++)
-                {
-
-                    var CurrentAge = new Age { AgeIndex = i.ToString(), AgeValue = i.ToString() };
-                    tmplist.Add(CurrentAge);
-                }
-
-                return tmplist.OrderBy(x => x.AgeValue).ToSelectList(x => x.AgeValue, x => x.AgeIndex.ToString(),
-                                                     null);
-            }
-        }
-
-
-
-
-
-
+                
         #region "Criteria Appearance dropdowns"
 
-        public List<string> HeightMetricSelectList()
+        public List<MetricHeights> heightmetricselectlist
         {
 
-            List<MetricHeights> temp = new List<MetricHeights>();
-
-
-            // Loop over the int List and modify it.
-
-            for (int i = 48; i < 89; i++)
+            get
             {
+                List<MetricHeights> templist = new List<MetricHeights>();
+                // Loop over the int List and modify it.
+                //insert the first one as ANY
+                templist.Add(new MetricHeights { heightindex = "0", heightvalue = "Any" });
 
-                var CurrentHeight = new MetricHeights { HeightIndex = i.ToString(), HeightValue = Extensions.ToFeetInches(i) };
-                temp.Add(CurrentHeight);
+                for (int i = 48; i < 89; i++)
+                {
 
+                    var CurrentHeight = new MetricHeights { heightindex = i.ToString(), heightvalue = Extensions.ToFeetInches(i) };
+                    templist.Add(CurrentHeight);
+
+                }
+
+                return templist;
             }
-
-            List<string> temp2;
-            temp2 = temp.ToSelectList(x => x.HeightValue.ToString(), x => x.HeightIndex,
-                                                 "Any");
-            temp2.Insert(0, new string
-            {
-                Text = "Any",
-                Value = "-1",
-                Selected = true
-            });
-
-            return temp2;
 
         }
 
-        public List<string> BodyTypesSelectList
+        public List<lu_ethnicity> ethnicitylist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaAppearance_Bodytypes().OrderBy(x => x.BodyTypeName).ToSelectList(x => x.BodyTypeName, x => x.BodyTypesID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_ethnicity> ethnicitylist = new List<lu_ethnicity>();
+                ethnicitylist.Add(new lu_ethnicity { description = "Male",  id  = 1, selected   = false });
+                ethnicitylist.Add(new lu_ethnicity { description = "Female", id = 2, selected = false });
+                return ethnicitylist;
+                
+#else
 
+
+
+                return _datingcontext.lu_ethnicity.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
 
             }
         }
-
-        public List<string> EyeColorSelectList
+        public List<lu_bodytype> bodytypelist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaAppearance_EyeColor().OrderBy(x => x.EyeColorName).ToSelectList(x => x.EyeColorName, x => x.EyeColorID.ToString(), "Any"
-                                                     );
-                return temp;
+
+#if DISCONECTED
+                List<lu_bodytype> bodytypelist = new List<lu_bodytype>();
+                bodytypelist.Add(new lu_bodytype { description = "Male",  id  = 1, selected   = false });
+                bodytypelist.Add(new lu_bodytype { description = "Female", id = 2, selected = false });
+                return bodytypelist;
+                
+#else
+
+
+
+                return _datingcontext.lu_bodytype.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
             }
         }
-
-        public List<string> HairColorSelectList
+        public List<lu_eyecolor> eyecolorlist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaAppearance_HairColor().OrderBy(x => x.HairColorName).ToSelectList(x => x.HairColorName, x => x.HairColorID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_eyecolor> eyecolorlist = new List<lu_eyecolor>();
+                eyecolorlist.Add(new lu_eyecolor { description = "Male",  id  = 1, selected   = false });
+                eyecolorlist.Add(new lu_eyecolor { description = "Female", id = 2, selected = false });
+                return eyecolorlist;
+                
+#else
 
+
+
+                return _datingcontext.lu_eyecolor.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
+            }
+        }      
+        public List<lu_haircolor> haircolorlist
+        {
+            get
+            {
+
+
+#if DISCONECTED
+                List<lu_haircolor> haircolorlist = new List<lu_haircolor>();
+                haircolorlist.Add(new lu_haircolor { description = "Male",  id  = 1, selected   = false });
+                haircolorlist.Add(new lu_haircolor { description = "Female", id = 2, selected = false });
+                return haircolorlist;
+                
+#else
+
+
+
+                return _datingcontext.lu_haircolor.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
+            }
+        }
+        public List<lu_gender> genderlist
+        {
+            get
+            {
+
+
+#if DISCONECTED
+                List<lu_gender> genderlist = new List<lu_gender>();
+                genderlist.Add(new lu_gender { description = "Male",  id  = 1, selected   = false });
+                genderlist.Add(new lu_gender { description = "Female", id = 2, selected = false });
+                return genderlist;
+                
+#else
+
+
+
+                return _datingcontext.lu_gender.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
 
             }
         }
         #endregion
 
-
         #region "Criteria Character Dropdowns"
 
-        public List<string> DietSelectList
+        public List<lu_diet> dietlist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaCharacter_Diet().OrderBy(x => x.DietID).ToSelectList(x => x.DietName, x => x.DietID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_diet> dietlist = new List<lu_diet>();
+                dietlist.Add(new lu_diet { description = "Male",  id  = 1, selected   = false });
+                dietlist.Add(new lu_diet { description = "Female", id = 2, selected = false });
+                return dietlist;
+                
+#else
 
+
+
+                return _datingcontext.lu_diet.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
 
             }
         }
-
-        public List<string> DrinksSelectList
+        public List<lu_drinks> drinkslist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaCharacter_Drinks().OrderBy(x => x.DrinksID).ToSelectList(x => x.DrinksName, x => x.DrinksID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_drinks> drinkslist = new List<lu_drinks>();
+                drinkslist.Add(new lu_drinks { description = "Male",  id  = 1, selected   = false });
+                drinkslist.Add(new lu_drinks { description = "Female", id = 2, selected = false });
+                return drinkslist;
+                
+#else
 
+
+
+                return _datingcontext.lu_drinks.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
 
             }
         }
-
-        public List<string> ExerciseSelectList
+        public List<lu_exercise> exerciselist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaCharacter_Exercise().OrderBy(x => x.ExerciseID).ToSelectList(x => x.ExerciseName, x => x.ExerciseID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_exercise> exerciselist = new List<lu_exercise>();
+                exerciselist.Add(new lu_exercise { description = "Male",  id  = 1, selected   = false });
+                exerciselist.Add(new lu_exercise { description = "Female", id = 2, selected = false });
+                return exerciselist;
+                
+#else
+
+
+
+                return _datingcontext.lu_exercise.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
             }
         }
-
-        public List<string> HobbySelectList
+        public List<lu_hobby> hobbylist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaCharacter_Hobby().OrderBy(x => x.HobbyID).ToSelectList(x => x.HobbyName, x => x.HobbyID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_hobby> hobbylist = new List<lu_hobby>();
+                hobbylist.Add(new lu_hobby { description = "Male",  id  = 1, selected   = false });
+                hobbylist.Add(new lu_hobby { description = "Female", id = 2, selected = false });
+                return hobbylist;
+                
+#else
+
+
+
+                return _datingcontext.lu_hobby.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
             }
         }
-
-        public List<string> HumorSelectList
+        public List<lu_humor> humorlist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaCharacter_Humor().OrderBy(x => x.HumorID).ToSelectList(x => x.HumorName, x => x.HumorID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_humor> humorlist = new List<lu_humor>();
+                humorlist.Add(new lu_humor { description = "Male",  id  = 1, selected   = false });
+                humorlist.Add(new lu_humor { description = "Female", id = 2, selected = false });
+                return humorlist;
+                
+#else
+
+
+
+                return _datingcontext.lu_humor.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
             }
         }
-
-        public List<string> PoliticalViewSelectList
+        public List<lu_politicalview> politicalviewlist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaCharacter_PoliticalView().OrderBy(x => x.PoliticalViewID).ToSelectList(x => x.PoliticalViewName, x => x.PoliticalViewID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_politicalview> politicalviewlist = new List<lu_politicalview>();
+                politicalviewlist.Add(new lu_politicalview { description = "Male",  id  = 1, selected   = false });
+                politicalviewlist.Add(new lu_politicalview { description = "Female", id = 2, selected = false });
+                return politicalviewlist;
+                
+#else
+
+
+
+                return _datingcontext.lu_politicalview.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
             }
         }
-
-        public List<string> ReligionSelectList
+        public List<lu_religion> religionlist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaCharacter_Religion().OrderBy(x => x.religionID).ToSelectList(x => x.religionName, x => x.religionID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_religion> religionlist = new List<lu_religion>();
+                religionlist.Add(new lu_religion { description = "Male",  id  = 1, selected   = false });
+                religionlist.Add(new lu_religion { description = "Female", id = 2, selected = false });
+                return religionlist;
+                
+#else
+
+
+
+                return _datingcontext.lu_religion.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
             }
         }
-
-        public List<string> ReligiousAttendanceSelectList
+        public List<lu_religiousattendance> religiousattendancelist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaCharacter_ReligiousAttendance().OrderBy(x => x.ReligiousAttendanceID).ToSelectList(x => x.ReligiousAttendanceName, x => x.ReligiousAttendanceID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_religiousattendance> religiousattendancelist = new List<lu_religiousattendance>();
+                religiousattendancelist.Add(new lu_religiousattendance { description = "Male",  id  = 1, selected   = false });
+                religiousattendancelist.Add(new lu_religiousattendance { description = "Female", id = 2, selected = false });
+                return religiousattendancelist;
+                
+#else
+
+
+
+                return _datingcontext.lu_religiousattendance.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
             }
         }
-
-        public List<string> SignSelectList
+        public List<lu_sign> signlist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaCharacter_Sign().OrderBy(x => x.SignName).ToSelectList(x => x.SignName, x => x.SignID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_sign> signlist = new List<lu_sign>();
+                signlist.Add(new lu_sign { description = "Male",  id  = 1, selected   = false });
+                signlist.Add(new lu_sign { description = "Female", id = 2, selected = false });
+                return signlist;
+                
+#else
+
+
+
+                return _datingcontext.lu_sign.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
             }
         }
-
-        public List<string> SmokesSelectList
+        public List<lu_smokes> smokeslist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaCharacter_Smokes().OrderBy(x => x.SmokesID).ToSelectList(x => x.SmokesName, x => x.SmokesID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_smokes> smokeslist = new List<lu_smokes>();
+                smokeslist.Add(new lu_smokes { description = "Male",  id  = 1, selected   = false });
+                smokeslist.Add(new lu_smokes { description = "Female", id = 2, selected = false });
+                return smokeslist;
+                
+#else
+
+
+
+                return _datingcontext.lu_smokes.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
             }
         }
 
@@ -406,145 +547,233 @@ namespace Shell.MVC2.Data
 
         #region "Criteria Lifestyle Dropdowns"
 
-
-        public List<string> EducationLevelSelectList
+        public List<lu_educationlevel> educationlevellist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaLife_EducationLevel().OrderBy(x => x.EducationLevelID).ToSelectList(x => x.EducationLevelName, x => x.EducationLevelID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_educationlevel> educationlevellist = new List<lu_educationlevel>();
+                educationlevellist.Add(new lu_educationlevel { description = "Male",  id  = 1, selected   = false });
+                educationlevellist.Add(new lu_educationlevel { description = "Female", id = 2, selected = false });
+                return educationlevellist;
+                
+#else
+
+
+
+                return _datingcontext.lu_educationlevel.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
             }
         }
-
-        public List<string> EmploymentStatusSelectList
+        public List<lu_employmentstatus> employmentstatuslist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaLife_EmploymentStatus().OrderBy(x => x.EmploymentSatusID).ToSelectList(x => x.EmploymentStatusName, x => x.EmploymentSatusID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_employmentstatus> employmentstatuslist = new List<lu_employmentstatus>();
+                employmentstatuslist.Add(new lu_employmentstatus { description = "Male",  id  = 1, selected   = false });
+                employmentstatuslist.Add(new lu_employmentstatus { description = "Female", id = 2, selected = false });
+                return employmentstatuslist;
+                
+#else
 
+
+
+                return _datingcontext.lu_employmentstatus.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
 
             }
         }
-
-        public List<string> HaveKidsSelectList
+        public List<lu_havekids> havekidslist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaLife_HaveKids().OrderBy(x => x.HaveKidsName).ToSelectList(x => x.HaveKidsName, x => x.HaveKidsId.ToString(), "Any"
-                                                     );
 
-                return temp;
-            }
-        }
+#if DISCONECTED
+                List<lu_havekids> havekidslist = new List<lu_havekids>();
+                havekidslist.Add(new lu_havekids { description = "Male",  id  = 1, selected   = false });
+                havekidslist.Add(new lu_havekids { description = "Female", id = 2, selected = false });
+                return havekidslist;
+                
+#else
 
-        public List<string> IncomeLevelSelectList
-        {
 
-            get
-            {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaLife_IncomeLevel().OrderBy(x => x.IncomeLevelID).ToSelectList(x => x.IncomeLevelName, x => x.IncomeLevelID.ToString(), "Any"
-                                                     );
+                return _datingcontext.lu_havekids.OrderBy(x => x.description).ToList();
 
-                return temp;
 
+
+                // return temp;
+#endif
 
             }
         }
-
-        public List<string> LivingSituationSelectList
+        public List<lu_incomelevel> incomelevellist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaLife_LivingSituation().OrderBy(x => x.LivingSituationID).ToSelectList(x => x.LivingSituationName, x => x.LivingSituationID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_incomelevel> incomelevellist = new List<lu_incomelevel>();
+                incomelevellist.Add(new lu_incomelevel { description = "Male",  id  = 1, selected   = false });
+                incomelevellist.Add(new lu_incomelevel { description = "Female", id = 2, selected = false });
+                return incomelevellist;
+                
+#else
 
+
+
+                return _datingcontext.lu_incomelevel.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
 
             }
         }
-
-        public List<string> MaritalStatusSelectList
+        public List<lu_livingsituation> livingsituationlist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaLife_MaritalStatus().OrderBy(x => x.MaritalStatusID).ToSelectList(x => x.MaritalStatusName, x => x.MaritalStatusID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_livingsituation> livingsituationlist = new List<lu_livingsituation>();
+                livingsituationlist.Add(new lu_livingsituation { description = "Male",  id  = 1, selected   = false });
+                livingsituationlist.Add(new lu_livingsituation { description = "Female", id = 2, selected = false });
+                return livingsituationlist;
+                
+#else
 
+
+
+                return _datingcontext.lu_livingsituation.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
 
             }
         }
-
-
-        public List<string> LookingForSelectList
+        public List<lu_lookingfor> lookingforlist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaLife_LookingFor().OrderBy(x => x.LookingForID).ToSelectList(x => x.LookingForName, x => x.LookingForID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_lookingfor> lookingforlist = new List<lu_lookingfor>();
+                lookingforlist.Add(new lu_lookingfor { description = "Male",  id  = 1, selected   = false });
+                lookingforlist.Add(new lu_lookingfor { description = "Female", id = 2, selected = false });
+                return lookingforlist;
+                
+#else
 
+
+
+                return _datingcontext.lu_lookingfor.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
 
             }
         }
-
-        public List<string> ProfessionSelectList
+        public List<lu_maritalstatus> maritalstatuslist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaLife_Profession().OrderBy(x => x.ProfessionID).ToSelectList(x => x.ProfiessionName, x => x.ProfessionID.ToString(), "Any"
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_maritalstatus> maritalstatuslist = new List<lu_maritalstatus>();
+                maritalstatuslist.Add(new lu_maritalstatus { description = "Male",  id  = 1, selected   = false });
+                maritalstatuslist.Add(new lu_maritalstatus { description = "Female", id = 2, selected = false });
+                return maritalstatuslist;
+                
+#else
 
+
+
+                return _datingcontext.lu_maritalstatus.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
 
             }
         }
-
-
-        public List<string> WantsKidsSelectList
+        public List<lu_profession> professionlist
         {
             get
             {
-                List<string> temp;
 
-                temp = _datingcontext.GetCriteriaLife_WantsKids().OrderBy(x => x.WantsKidsName).ToSelectList(x => x.WantsKidsName, x => x.WantsKidsID.ToString(), null
-                                                     );
 
-                return temp;
+#if DISCONECTED
+                List<lu_profession> professionlist = new List<lu_profession>();
+                professionlist.Add(new lu_profession { description = "Male",  id  = 1, selected   = false });
+                professionlist.Add(new lu_profession { description = "Female", id = 2, selected = false });
+                return professionlist;
+                
+#else
 
+
+
+                return _datingcontext.lu_profession.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
 
             }
         }
+        public List<lu_wantskids> wantskidslist
+        {
+            get
+            {
+
+
+#if DISCONECTED
+                List<lu_wantskids> wantskidslist = new List<lu_wantskids>();
+                wantskidslist.Add(new lu_wantskids { description = "Male",  id  = 1, selected   = false });
+                wantskidslist.Add(new lu_wantskids { description = "Female", id = 2, selected = false });
+                return wantskidslist;
+                
+#else
+
+
+
+                return _datingcontext.lu_wantskids.OrderBy(x => x.description).ToList();
+
+
+
+                // return temp;
+#endif
+
+            }
+        }
+
         #endregion
-
-
-
-
 
         public List<string> CountrySelectList(string CountryName)
         {
@@ -579,8 +808,6 @@ namespace Shell.MVC2.Data
 
 
         }
-
-
 
         #region GetFilteredCitiesOld
         //public SelectList GetFilteredCitiesOld(string filter, string Country, int offset)
@@ -627,7 +854,7 @@ namespace Shell.MVC2.Data
             {
                 var customers = _georepository.GetCityListDynamic(Country, filter, "").Take(50);
 
-                temp = ((from s in customers.ToList() select new CityStateProvince { StateProvince = s.City + "," + s.State_Province, City = s.City }).ToSelectList(x => x.StateProvince, x => x.StateProvince, null
+                temp = ((from s in customers.ToList() select new CityStateProvince { stateprovince = s.City + "," + s.State_Province, city = s.City }).ToSelectList(x => x.stateprovince, x => x.stateprovince, null
                                                                 ));
                 return temp;
 
@@ -681,21 +908,7 @@ namespace Shell.MVC2.Data
 
         #region "Search Settings Collections Here"
 
-        //public IList<ShowMe> ShowMeCheckBoxList()
-        //{
-        //    IList<ShowMe> test;
-        //    test = _datingcontext.GetShowMes().ToList();
-        //    return test;
-        //}
-
-        //public  List<SortByType> SortByCheckBoxList()
-        //{
-        //    List<SortByType> test;
-        //    test = _datingcontext.GetSortByTypes().ToList();
-        //    return test;
-        //}
-
-
+       
 
         #endregion
 

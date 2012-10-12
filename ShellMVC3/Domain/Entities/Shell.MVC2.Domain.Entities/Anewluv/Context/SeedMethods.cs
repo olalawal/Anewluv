@@ -80,6 +80,21 @@ namespace Shell.MVC2.Domain.Entities.Migrations
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
+
+
+
+            //flagyesno
+            //filter an enum for not set since that is the zero value i.e  
+            var flagyesnoqry = from flagyesnoEnum  value in Enum.GetValues(typeof(flagyesnoEnum))
+                            where value != flagyesnoEnum.NotSet
+                            orderby value // to sort by value; remove otherwise 
+                            select value;
+            flagyesnoqry.ToList().ForEach(kvp => context.lu_flagyesno.AddOrUpdate(new lu_flagyesno()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
             //photoapprovalstatuss
             //filter an enum for not set since that is the zero value i.e  
             var photoapprovalstatusqry = from photoapprovalstatusEnum value in Enum.GetValues(typeof(photoapprovalstatusEnum))

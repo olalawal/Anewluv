@@ -27,41 +27,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
 
 
-    #region Models
-
-
-
-
-    //ComplexTypes
-    public class Age
-    {
-        public string agevalue { get; set; }
-        public string ageindex { get; set; }
-    }
-
-    public class MetricHeights
-    {
-        public string heightvalue { get; set; }
-        public string heightindex { get; set; }
-    }
-
-
-
-
-
-    public class Distance
-    {
-        public int distancevalue;
-        public int distanceindex;
-
-    }
-
-    public class CityStateProvince
-    {
-        public string city { get; set; }
-        public string stateprovince { get; set; }
-
-    }
 
 
     //10-4-2012 jainrain added to model
@@ -191,8 +156,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     }
 
 
-
-    #endregion
 
 
 

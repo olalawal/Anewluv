@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="Anewluv\abusereport.cs" />
     <Compile Include="Anewluv\abusereportnotes.cs" />
+    <Compile Include="Anewluv\Lookups\enums\flagyesno.cs" />
+    <Compile Include="Anewluv\Lookups\lu_flagyesno.cs" />
     <Compile Include="Anewluv\Lookups\lu_photoimagetype.cs" />
     <Compile Include="Anewluv\Lookups\enums\photoimagetype.cs" />
     <Compile Include="Anewluv\profileactivitygeodata.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="Anewluv\Lookups\lu_securityleveltype.cs" />
     <Compile Include="Anewluv\Lookups\lu_defaultmailboxfolder.cs" />
     <Compile Include="Anewluv\Mail\ViewModels\EmailMatchesViewModel.cs" />
+    <Compile Include="Anewluv\SharedModels\SharedModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
     <Compile Include="Anewluv\photoconversion.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\bodytype.cs" />

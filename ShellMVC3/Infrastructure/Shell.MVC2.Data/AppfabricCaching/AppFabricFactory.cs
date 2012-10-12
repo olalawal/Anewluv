@@ -226,15 +226,15 @@ namespace Shell.MVC2.AppFabric
 
             //clear out guest data
             MembersViewModelHelper.RemoveGuestData(context);
-            ProfileBrowseModelsHelper.RemoveGuestResults(context);
+            //ProfileBrowseModelsHelper.removeguestresults(context);
             //clear out member data if member is authenticated
             //TO DO worry about maybe to deleted this to wonder about peristing it?
             //Due to speed considerations
 
             if (_ProfileID != null)
             {
-                MembersViewModelHelper.RemoveMemberData(_ProfileID);
-                ProfileBrowseModelsHelper.RemoveMemberResults(_ProfileID);
+             //   MembersViewModelHelper.RemoveMemberData(_ProfileID);
+             //   ProfileBrowseModelsHelper.RemoveMemberResults(_ProfileID);
             }
 
             return true;
@@ -927,18 +927,18 @@ namespace Shell.MVC2.AppFabric
         public static class SharedObjectHelper
         {
 
-            public static List<string> getagelist()
+            public static List<age> getagelist(ILookupRepository lookupreposoitory)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<string> Ages = null;
+                List<age> ageslist = null;
 
 
 
                 //if we still have no datacahe do tis
-                try { if (dataCache != null) Ages = dataCache.Get("AgeList") as List<string>; }
+                try { if (dataCache != null) ageslist = dataCache.Get("agelist") as List<age>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -948,19 +948,20 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Ages == null)
+                if (ageslist == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
-                    //remafill the ages list from the repositry and exit
-                    Ages = sharedrepository.AgesSelectList;
+                    
+
+                    ageslist = lookupreposoitory.createagelist 
+                    
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
 
                     //if we still have no datacahe no need to do the put
                     if (dataCache != null)
-                        dataCache.Put("AgeList", Ages);
+                        dataCache.Put("agelist", ageslist);
 
-                } return Ages;
+                } return ageslist;
             }
 
             public static List<lu_gender> GetGenderList()
