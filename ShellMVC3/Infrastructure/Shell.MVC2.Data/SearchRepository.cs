@@ -16,7 +16,7 @@ namespace Shell.MVC2.Data
     /// <summary>
     /// we will move anything that updates search to public/private methdos here eventually
     /// </summary>
-   public  class SearchRepository : MemberRepositoryBase 
+   public  class SearchRepository : MemberRepositoryBase ,ISearchRepository 
     {
 
        

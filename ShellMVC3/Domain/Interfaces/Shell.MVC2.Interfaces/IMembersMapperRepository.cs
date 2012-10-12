@@ -26,13 +26,29 @@ namespace Shell.MVC2.Interfaces
 
         MembersViewModel mapguest();
 
+        RegisterModel mapregistrationtest();
+
         RegisterModel mapregistration(MembersViewModel membersmodel);
 
        //TO DO this should be using profileID or a composite model , add rpxprofile to members model
         RegisterModel mapjainrainregistration(MembersViewModel membersmodel);
 
        //exposed methods that use cache, we should prpbbaly hdie the other methods that are not cached
-        MembersViewModel getmemberdata(int profileid);
+        MembersViewModel getmemberdatafromcache(int profileid);
+
+        MembersViewModel getguestdatafromcache(string sessionid);
+
+        MembersViewModel updatememberdatafromcache(MembersViewModel model);
+
+       //send the full model to app fapbric
+        MembersViewModel updatememberprofiledatabyprofileidfromcache(int profileid);
+
+        MembersViewModel updateguestdatafromcache(MembersViewModel model);
+
+        bool removememberdatafromcache(string profileid);
+
+       //cacheing of search stuff
+
 
     }
 }

@@ -73,6 +73,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     public class MembersViewModel
     {
 
+        //Added session ID
+        public string sessionid { get; set; }
+
         //added to hold RPX /OpenID data
         public rpxprofile rpxmodel { get; set; }
 

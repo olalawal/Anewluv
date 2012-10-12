@@ -442,7 +442,7 @@ namespace Shell.MVC2.AppFabric
             }
             //Items for guests are just dumped in the session area not the members region
             //and they are id'd by session ID
-            public static MembersViewModel GetGuestData(HttpContextBase context)
+            public static MembersViewModel getguestdata(string sessionid, IMembersMapperRepository membersmapperepository)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -450,14 +450,14 @@ namespace Shell.MVC2.AppFabric
 
                 MembersViewModel model = null;
                 try { 
-                    if (dataCache != null)  model = dataCache.Get("MembersViewModel" + context.Session.SessionID, "Guests") as MembersViewModel;
+                    if (dataCache != null)  model = dataCache.Get("MembersViewModel" +sessionid, "Guests") as MembersViewModel;
 
                     //generate your fictional exception
                     //int x = 1;
                     //int y = 0;
                     //int z = x / y;
 
-
+                    
                     if (model == null)
                     {
                         //not sure what needs to be initialized for guests , if anything initlize it here
@@ -465,14 +465,15 @@ namespace Shell.MVC2.AppFabric
                         // GuestRepository guestrepo = new GuestRepository();
                         // model = guestrepo.MapGuest();
                         //also map the guest members viewmodel
-                        var mm = new ViewModelMapper();
-                        model = mm.MapGuest();
+                       // var mm = new ViewModelMapper();
+                       
+                        model = membersmapperepository.mapguest();
 
                         //poulate the model from the view model mapper
-                        ViewModelMapper Mapper = new ViewModelMapper();
+                       // ViewModelMapper Mapper = new ViewModelMapper();
 #if DEBUG
                                                 Console.WriteLine("Debug version");
-                                               model.Register = Mapper.MapRegistrationTest();
+                                                model.register = membersmapperepository.mapregistrationtest();
                                                //model.Register = Mapper.MapRegistration();
 #else
                         model.Register = Mapper.MapRegistration(model);
@@ -481,7 +482,7 @@ namespace Shell.MVC2.AppFabric
                         if (dataCache != null)
                         {
                             //store the model if null
-                            dataCache.Put("MembersViewModel" + context.Session.SessionID, model, "Guests");
+                            dataCache.Put("MembersViewModel" +sessionid, model, "Guests");
 
                         }
                     } return model;
@@ -509,7 +510,7 @@ namespace Shell.MVC2.AppFabric
 
             //11-1-2011 added this so we can retive profileID that was was not tied to a sign in action
             //TO do proabbaly we should use this instead going forward since it works both ways
-            public static bool SaveProfileIDBySessionID(string ProfileID, HttpContextBase context)
+            public static bool saveprofileidbysessionid(string ProfileID, HttpContextBase context)
             {
 
 
@@ -538,9 +539,8 @@ namespace Shell.MVC2.AppFabric
 
             //updates the model in session with any new data
             //TO DO verify that the P contians profile ID
-            public static MembersViewModel UpdateMemberData(MembersViewModel p, string ProfileID)
+            public static MembersViewModel updatememberdata(MembersViewModel p,IMembersMapperRepository  membersmapperepository)
             {
-
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
@@ -560,17 +560,17 @@ namespace Shell.MVC2.AppFabric
                         //    //throw new InvalidOperationException();
                         //    return null;
                         //}
-                        if (p == null && ( ProfileID !=null | ProfileID != ""))
+                        if (p == null && (p.profile.id != null | p.profile == null))
                         {
 
                             //remap the user data if cache is empty
-                            var mm = new ViewModelMapper();
-                            p = mm.MapMember(ProfileID);
+                            //var mm = new ViewModelMapper();
+                            p = membersmapperepository.mapmember(p.profile.id);
 
                         }
-                        else if (p != null && (ProfileID != null | ProfileID != ""))
+                        else if (p != null && (p.profile.id != null | p.profile == null ))
                         {
-                            dataCache.Put("MembersViewModel" + ProfileID, p);
+                            dataCache.Put("MembersViewModel" + p.profile.id, p);
                         }
 
                     //handle cases were we are just updating bits for the viewmodel. QuickSearch and Account right now would be what is 
@@ -605,7 +605,7 @@ namespace Shell.MVC2.AppFabric
 
             //updates the model in session with any new data
             //TO DO verify that the P contians profile ID
-            public static MembersViewModel UpdateMemberProfileDataByProfileID(string ProfileID, profiledata profiledata)
+            public static MembersViewModel updatememberprofiledatabyprofile(profile profilemodel, IMembersMapperRepository membersmapperepository)
             {
                 MembersViewModel model = new MembersViewModel();
                 DataCache dataCache;
@@ -613,8 +613,8 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
 
                 //get the current prodile data
-                model = GetMemberData(ProfileID);
-                model.profiledata = profiledata;
+                model = membersmapperepository.getmemberdata(profilemodel.id);
+                model.profiledata = model.profile.profiledata ;
 
                 //  MembersViewModel oldMembersViewModel = new MembersViewModel();
                 //  try { oldMembersViewModel = dataCache.Get("MembersViewModel" + _ProfileID) as MembersViewModel; }
@@ -633,7 +633,7 @@ namespace Shell.MVC2.AppFabric
                 //check if account model is empty as well if it is refresh it
                 //  oldMembersViewModel.Account = (p.Account.BirthDate  != null) ? p.Account  : oldMembersViewModel.Account;
 
-                dataCache.Put("MembersViewModel" + ProfileID, model);
+                dataCache.Put("MembersViewModel" + profilemodel.id, model);
 
                 return model;
 
@@ -645,7 +645,7 @@ namespace Shell.MVC2.AppFabric
             //updates the model in session with any new data
             //TO DO verify that the P contians profile ID
 
-            public static MembersViewModel UpdateGuestData(MembersViewModel p, HttpContextBase context)
+            public static MembersViewModel updateguestdata(MembersViewModel p, IMembersMapperRepository membersmapperrepository)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -663,12 +663,12 @@ namespace Shell.MVC2.AppFabric
                 if (p == null)
                 {
                     //remap the user data if cache is empty
-                    var mm = new ViewModelMapper();
+                   // var mm = new ViewModelMapper();
                     //TO DO update map guest to scrape UI data
                     //Mapguest will probbaly get geo data like what country city state thier IP matches and any cookie data we can scrap or facebook data
                     // oldMembersViewModel = mm.MapGuest(); //default values probbaly just for test don't map anything in this case since 
                     //we do not want to populate data yet
-                    p = mm.MapGuest();
+                    p = membersmapperrepository.mapguest();
                 }
 
                 //now update and save
@@ -686,7 +686,7 @@ namespace Shell.MVC2.AppFabric
 
                 // Datings context = new modelContext();
                 // model = context.models.Single(c => c.Id == id);
-                dataCache.Put("MembersViewModel" + context.Session.SessionID, p, "Guests");
+                dataCache.Put("MembersViewModel" + p.sessionid , p, "Guests");
 
                 return p;
 
@@ -695,7 +695,7 @@ namespace Shell.MVC2.AppFabric
 
             }
 
-            public static bool RemoveMemberData(string ProfileID)
+            public static bool removememberdata(int profileid)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -703,7 +703,7 @@ namespace Shell.MVC2.AppFabric
 
 
 
-                try { dataCache.Remove("MembersViewModel" + ProfileID); }
+                try { dataCache.Remove("MembersViewModel" + profileid); }
                 catch (DataCacheException)
                 {
                     return false;
@@ -754,17 +754,13 @@ namespace Shell.MVC2.AppFabric
         public static class ProfileBrowseModelsHelper
         {
 
-
-
-
-
-            public static List<ProfileBrowseModel> GetMemberResults(string ProfileID)
+            public static List<ProfileBrowseModel> getmembercurrentsearchresults(string profileid, ISearchRepository  searchrepository)
             {
                 DataCache dataCache;
                 dataCache = GetCache;
 
                 List<ProfileBrowseModel> model = null;
-                try { model = dataCache.Get("ProfileBrowseModel" + ProfileID) as List<ProfileBrowseModel>; }
+                try { model = dataCache.Get("ProfileBrowseModel" + profileid) as List<ProfileBrowseModel>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -779,7 +775,7 @@ namespace Shell.MVC2.AppFabric
 
                     //remap the user data if cache is empty
                     model = new List<ProfileBrowseModel>();
-
+                    //return memberactionsrepository.
                     //No need to put empty data
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
@@ -791,14 +787,14 @@ namespace Shell.MVC2.AppFabric
 
             //Items for guests are just dumped in the session area not the members region
             //and they are id'd by session ID
-            public static List<ProfileBrowseModel> GetGuestResults(HttpContextBase context)
+            public static List<ProfileBrowseModel> getguestresults(string sessionid)
             {
 
                 DataCache dataCache;
                 dataCache = GetCache;
 
                 List<ProfileBrowseModel> model = null;
-                try { model = dataCache.Get("ProfileBrowseModel" + context.Session.SessionID, "Guests") as List<ProfileBrowseModel>; }
+                try { model = dataCache.Get("ProfileBrowseModel" +sessionid, "Guests") as List<ProfileBrowseModel>; }
                 catch (DataCacheException)
                 {
                     //load from DB or something
@@ -828,12 +824,12 @@ namespace Shell.MVC2.AppFabric
             //updates the model in session with any new data
             //TO DO verify that the P contians profile ID
             //Basically it is a save
-            public static bool AddMemberResults(List<ProfileBrowseModel> p, string ProfileID)
+            public static bool addmembersearchresults(List<ProfileBrowseModel> p, string profileid)
             {
                 DataCache dataCache;
                 dataCache = GetCache;
 
-                try { dataCache.Put("ProfileBrowseModel" + ProfileID, p); }
+                try { dataCache.Put("ProfileBrowseModel" + profileid, p); }
                 catch (DataCacheException)
                 {
                     //Log error
@@ -853,12 +849,12 @@ namespace Shell.MVC2.AppFabric
 
             }
 
-            public static bool AddGuestResults(List<ProfileBrowseModel> p, HttpContextBase context)
+            public static bool addguestsearchresults(List<ProfileBrowseModel> p, string sessionid)
             {
                 DataCache dataCache;
                 dataCache = GetCache;
 
-                try { dataCache.Put("ProfileBrowseModel" + context.Session.SessionID, p, "Guests"); }
+                try { dataCache.Put("ProfileBrowseModel" + sessionid, "Guests"); }
                 catch (DataCacheException)
                 {
                     //Log error
@@ -878,9 +874,7 @@ namespace Shell.MVC2.AppFabric
 
             }
 
-
-
-            public static bool RemoveMemberResults(string ProfileID)
+            public static bool removemembersearchresults(string profileid)
             {
                 DataCache dataCache;
                 dataCache = GetCache;
@@ -903,12 +897,12 @@ namespace Shell.MVC2.AppFabric
 
 
             }
-            public static bool RemoveGuestResults(HttpContextBase context)
+            public static bool removeguestsearchresults(string sessionid)
             {
                 DataCache dataCache;
                 dataCache = GetCache;
 
-                try { dataCache.Remove("ProfileBrowseModel" + context.Session.SessionID, "Guests"); }
+                try { dataCache.Remove("ProfileBrowseModel" + sessionid, "Guests"); }
                 catch (DataCacheException)
                 {
                     return false;
@@ -926,35 +920,6 @@ namespace Shell.MVC2.AppFabric
 
             }
 
-
-
-            //OLD Inproc Session Code
-            //public static void Add(List<ProfileBrowseModel> p, HttpContextBase context)
-            //{
-            //    if (context.Session["ProfileBrowseModels"] == null)
-            //        context.Session.Add("ProfileBrowseModels", p);
-
-            //}
-
-            ////updates the model in session with any new data
-            //public static void Update(List<ProfileBrowseModel> p, HttpContextBase context)
-            //{
-            //    if (context.Session["ProfileBrowseModels"] == null)
-            //        context.Session.Add("ProfileBrowseModels", p);
-            //    //if its not null we only want to merge empty values keep values that are not null
-
-            //    var oldmodel = (List<ProfileBrowseModel>)context.Session["ProfileBrowseModels"];
-            //    //dynamic added items to update 
-            //    //update the quuck search view modelsearch thingy  , if its not empty , as well as all the other viewmodels that may be empty              
-            //    //  oldmodel.d = (p.quickSearch != null) ? p.quickSearch : oldmodel.quickSearch;               
-            //    //oldmodel.Register.RegistrationPhotos = (p.Register.RegistrationPhotos != null) ? p.Register.RegistrationPhotos : oldmodel.Register.RegistrationPhotos;
-            //    //now update session  
-            //    context.Session.Add("ProfileBrowseModels", oldmodel);
-
-            //}
-
-
-
         }
 
         //only runs on application start, if the objects are not found then we will want to 
@@ -962,18 +927,18 @@ namespace Shell.MVC2.AppFabric
         public static class SharedObjectHelper
         {
 
-            public static List<SelectListItem> GetAgeList()
+            public static List<string> getagelist()
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Ages = null;
+                List<string> Ages = null;
 
 
 
                 //if we still have no datacahe do tis
-                try { if (dataCache != null) Ages = dataCache.Get("AgeList") as List<SelectListItem>; }
+                try { if (dataCache != null) Ages = dataCache.Get("AgeList") as List<string>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -998,7 +963,7 @@ namespace Shell.MVC2.AppFabric
                 } return Ages;
             }
 
-            public static List<SelectListItem> GetGenderList()
+            public static List<lu_gender> GetGenderList()
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1007,10 +972,10 @@ namespace Shell.MVC2.AppFabric
 
 
 
-                List<SelectListItem> Genders = null;
+                List<lu_gender> Genders = null;
 
 
-                try { if (dataCache != null) Genders = dataCache.Get("GenderList") as List<SelectListItem>; }
+                try { if (dataCache != null) Genders = dataCache.Get("GenderList") as List<lu_gender>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
