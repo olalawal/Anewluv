@@ -43,7 +43,7 @@ namespace Shell.MVC2.Data
         
         #region "Load Other misc stuff such as list of pages etc"
 
-        public List<systempagesetting> GetSystemPageSettingList
+        public List<systempagesetting> getsystempagesettinglist
         {
 
             get
@@ -61,17 +61,23 @@ namespace Shell.MVC2.Data
                             return temp;
 
 #else  //load list from database
-                temp = _datingcontext.systempagesettings.ToList();
+                temp = CachingFactory.CssStyleSelector.getsystempagesettingslist(_datingcontext);
                 return temp;
 #endif
             }
+        }
+
+        public static string getbodycssbypagename(string pagename)
+        {
+        
+                return CachingFactory.CssStyleSelector.getbodycssbypagename(pagename,_datingcontext).ToString();
         }
 
         #endregion
 
         #region "generic lookup and collections"
 
-        public List<lu_gender> genderlist
+        public List<lu_gender> getgenderlist
         {
             get
             {
@@ -87,7 +93,7 @@ namespace Shell.MVC2.Data
 
 
 
-                return _datingcontext.lu_gender.OrderBy(x => x.description).ToList();
+                return CachingFactory.SharedObjectHelper.getgenderlist(_datingcontext);
 
 
 
@@ -95,41 +101,26 @@ namespace Shell.MVC2.Data
 #endif
 
             }
-        }
-       
-        public List<age> agelist
+        }       
+        public List<age> getagelist
         {
             get
             {
                return  CachingFactory.SharedObjectHelper.getagelist();
             }
         }
-
-        public List<age> createagelist
+        public List<metricheight> getmetricheightlist
         {
-    
-        get
-        {
-    
-        List<age> tmplist = new List<age>();
-                    // Loop over the int List and modify it.
-                    //insert the first one as ANY
-                    tmplist.Add(new age { ageindex = "0", agevalue = "Any" });
 
-                    for (int i = 18; i < 100; i++)
-                    {
-
-                        var CurrentAge = new age { ageindex = i.ToString(), agevalue = i.ToString() };
-                        tmplist.Add(CurrentAge);
-                    }
-                    return tmplist;
+            get
+            {
+                return CachingFactory.SharedObjectHelper.getmetricheightlist();
             }
 
-         }
+        }
 
         #endregion
 
-        #region "Shared Collections retrived here"
 
         //public SelectList GendersSelectList()
         //{
@@ -139,55 +130,9 @@ namespace Shell.MVC2.Data
                 
         #region "Criteria Appearance dropdowns"
 
-        public List<MetricHeights> heightmetricselectlist
-        {
-
-            get
-            {
-                List<MetricHeights> templist = new List<MetricHeights>();
-                // Loop over the int List and modify it.
-                //insert the first one as ANY
-                templist.Add(new MetricHeights { heightindex = "0", heightvalue = "Any" });
-
-                for (int i = 48; i < 89; i++)
-                {
-
-                    var CurrentHeight = new MetricHeights { heightindex = i.ToString(), heightvalue = Extensions.ToFeetInches(i) };
-                    templist.Add(CurrentHeight);
-
-                }
-
-                return templist;
-            }
-
-        }
-
-        public List<lu_ethnicity> ethnicitylist
-        {
-            get
-            {
 
 
-#if DISCONECTED
-                List<lu_ethnicity> ethnicitylist = new List<lu_ethnicity>();
-                ethnicitylist.Add(new lu_ethnicity { description = "Male",  id  = 1, selected   = false });
-                ethnicitylist.Add(new lu_ethnicity { description = "Female", id = 2, selected = false });
-                return ethnicitylist;
-                
-#else
-
-
-
-                return _datingcontext.lu_ethnicity.OrderBy(x => x.description).ToList();
-
-
-
-                // return temp;
-#endif
-
-            }
-        }
-        public List<lu_bodytype> bodytypelist
+        public List<lu_bodytype> getbodytypelist
         {
             get
             {
@@ -203,7 +148,7 @@ namespace Shell.MVC2.Data
 
 
 
-                return _datingcontext.lu_bodytype.OrderBy(x => x.description).ToList();
+                return CachingFactory.SharedObjectHelper.getbodytypelist(_datingcontext);
 
 
 
@@ -212,7 +157,32 @@ namespace Shell.MVC2.Data
 
             }
         }
-        public List<lu_eyecolor> eyecolorlist
+        public List<lu_ethnicity> getethnicitylist
+        {
+            get
+            {
+
+
+#if DISCONECTED
+                List<lu_ethnicity> ethnicitylist = new List<lu_ethnicity>();
+                ethnicitylist.Add(new lu_ethnicity { description = "Male",  id  = 1, selected   = false });
+                ethnicitylist.Add(new lu_ethnicity { description = "Female", id = 2, selected = false });
+                return ethnicitylist;
+                
+#else
+
+
+
+                return CachingFactory.SharedObjectHelper.getethnicitylist(_datingcontext);
+
+
+
+                // return temp;
+#endif
+
+            }
+        }
+        public List<lu_eyecolor> geteyecolorlist
         {
             get
             {
@@ -228,7 +198,7 @@ namespace Shell.MVC2.Data
 
 
 
-                return _datingcontext.lu_eyecolor.OrderBy(x => x.description).ToList();
+                return CachingFactory.SharedObjectHelper.geteyecolorlist(_datingcontext);
 
 
 
@@ -236,8 +206,8 @@ namespace Shell.MVC2.Data
 #endif
 
             }
-        }      
-        public List<lu_haircolor> haircolorlist
+        }
+        public List<lu_haircolor> gethaircolorlist
         {
             get
             {
@@ -253,7 +223,7 @@ namespace Shell.MVC2.Data
 
 
 
-                return _datingcontext.lu_haircolor.OrderBy(x => x.description).ToList();
+                return CachingFactory.SharedObjectHelper.gethaircolorlist(_datingcontext);
 
 
 
@@ -261,32 +231,8 @@ namespace Shell.MVC2.Data
 #endif
 
             }
-        }
-        public List<lu_gender> genderlist
-        {
-            get
-            {
-
-
-#if DISCONECTED
-                List<lu_gender> genderlist = new List<lu_gender>();
-                genderlist.Add(new lu_gender { description = "Male",  id  = 1, selected   = false });
-                genderlist.Add(new lu_gender { description = "Female", id = 2, selected = false });
-                return genderlist;
-                
-#else
-
-
-
-                return _datingcontext.lu_gender.OrderBy(x => x.description).ToList();
-
-
-
-                // return temp;
-#endif
-
-            }
-        }
+        }       
+        
         #endregion
 
         #region "Criteria Character Dropdowns"
@@ -775,6 +721,10 @@ namespace Shell.MVC2.Data
 
         #endregion
 
+
+        #region "Geodate collections and lists"
+
+
         public List<string> CountrySelectList(string CountryName)
         {
             List<string> temp;
@@ -906,9 +856,10 @@ namespace Shell.MVC2.Data
 
         #endregion
 
+
         #region "Search Settings Collections Here"
 
-       
+
 
         #endregion
 

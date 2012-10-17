@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 //using System.ServiceModel;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using Shell.MVC2.Domain.Entities.Anewluv;
 using System.Text;
 using Dating.Server.Data.Models;
 
@@ -19,6 +20,7 @@ namespace Shell.MVC2.Interfaces
        //gets the country list and orders it
        //added sorting
         List<Country_PostalCode_List> GetCountry_PostalCode_ListAndOrderByCountry();
+        List<country> getcountrylist();//10-15-2012 ned method to for drop down lists
        /// <summary>
        /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
        /// </summary>

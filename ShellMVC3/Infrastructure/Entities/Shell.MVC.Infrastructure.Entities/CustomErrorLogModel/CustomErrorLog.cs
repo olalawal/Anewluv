@@ -13,8 +13,8 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 
          public CustomErrorLog() 
           {
-              LogSeverity = new lu_logSeverity();
-              Application = new lu_application();
+            //  LogSeverity = new lu_logSeverity();
+            //  Application = new lu_application();
           
           } 
             
@@ -72,8 +72,8 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
           public static CustomErrorLog Create(Action<CustomErrorLog> init)
           {
               CustomErrorLog CustomErrorLog = new CustomErrorLog();
-              CustomErrorLog.LogSeverity = new lu_logSeverity();
-              CustomErrorLog.Application = new lu_application();
+            //  CustomErrorLog.LogSeverity = new lu_logSeverity();
+            //  CustomErrorLog.Application = new lu_application();
 
               init(CustomErrorLog);
               return CustomErrorLog;

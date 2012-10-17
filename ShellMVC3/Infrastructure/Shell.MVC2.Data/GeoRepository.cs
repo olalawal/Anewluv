@@ -7,6 +7,7 @@ using System.Text;
 using Dating.Server.Data.Services;
 using Dating.Server.Data.Models;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using Shell.MVC2.Domain.Entities.Anewluv;
 
 using Shell.MVC2.Interfaces;
 using System.Data.EntityClient;
@@ -78,15 +79,29 @@ namespace Shell.MVC2.Data
         //added sorting
         public List<Country_PostalCode_List> GetCountry_PostalCode_ListAndOrderByCountry()
         {
-            List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
-
-           
+            List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);           
             myQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName != "").OrderBy(p => p.CountryName).ToList();
-
-
 
             return myQuery;
         }
+
+        public List<country> getcountrylist()
+        {
+            List<country> tmplist = new List<country>();
+            // Loop over the int List and modify it.
+            //insert the first one as ANY
+            tmplist.Add(new country {  countryindex  = "0", countryvalue   = "Any" });
+
+            foreach (Country_PostalCode_List item in  this.GetCountry_PostalCode_ListAndOrderByCountry())
+            {
+
+                var currentcountry = new country { countryindex   = item.CountryID.ToString(), countryvalue   =  item.CountryName };
+                tmplist.Add(currentcountry);
+            }
+            return tmplist;
+        
+        }
+
         /// <summary>
         /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
         /// </summary>

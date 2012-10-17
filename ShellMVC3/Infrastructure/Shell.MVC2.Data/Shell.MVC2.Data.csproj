@@ -160,6 +160,10 @@
     <Compile Include="UserRepairRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Components\LoggingLibrary\LoggingLibrary.csproj">
+      <Project>{FF7B929D-6086-4509-9095-396845569906}</Project>
+      <Name>LoggingLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Components\VbCommon\Common.vbproj">
       <Project>{6E4CE4F1-2703-4013-ADB6-D73BF51E2C82}</Project>
       <Name>Common %28Common\Common%29</Name>

@@ -17,7 +17,7 @@ using Shell.MVC2.AppFabric;
 
 namespace Shell.MVC2.Data
 {
-    public class MembersMapperRepository : IMembersMapperRepository
+    public class MembersMapperRepository : MemberRepositoryBase, IMembersMapperRepository
     {
         //TO DO do this a different way I think
         private IGeoRepository georepository;
@@ -27,18 +27,19 @@ namespace Shell.MVC2.Data
         private IMailRepository mailrepository;
         // private AnewluvContext _db;
         //TO DO move from ria servives
-        private AnewluvContext  datingcontext;
+       // private AnewluvContext  datingcontext;
 
        public MembersMapperRepository(IGeoRepository _georepository, IPhotoRepository
-           _photorepository, IMemberRepository _membersrepository, IMemberActionsRepository 
-           _memberactionsrepository,IMailRepository _mailrepository, AnewluvContext _datingcontext)
+           _photorepository, IMemberRepository _membersrepository, IMemberActionsRepository
+           _memberactionsrepository, IMailRepository _mailrepository, AnewluvContext datingcontext)
+            : base(datingcontext)
         {
             georepository = _georepository;
             photorepository = _photorepository;
             membersrepository = _membersrepository;
             memberactionsrepository = _memberactionsrepository ;
             mailrepository = _mailrepository;
-            datingcontext = _datingcontext;
+           // datingcontext = _datingcontext;
         }
 
         // constructor
@@ -160,7 +161,6 @@ namespace Shell.MVC2.Data
 
             return NewProfileBrowseModel;
         }
-
         //returns a list of profile browsemodles for a given user
         public List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds)
         {
@@ -470,8 +470,6 @@ namespace Shell.MVC2.Data
             return CriteriaModel;
 
         }
-
-
         //gets search settings
         //TO DO this function is just setting temp values for now
         //9 -21- 2011 added code to get age at least from search settings , more values to follow
@@ -528,9 +526,179 @@ namespace Shell.MVC2.Data
             return Model;
         }
 
+        //registration model update and mapping
+        public RegisterModel getregistermodel(MembersViewModel membersmodel)
+        {
+
+            // MembersRepository membersrepository = new MembersRepository();
+
+
+            RegisterModel model = new RegisterModel();
+            //quicksearchmodel quicksearchmodel = new quicksearchmodel();
+            // IEnumerable<CityStateProvince> CityStateProvince ;
+            model.City = membersmodel.myquicksearch.myselectedcity;
+            model.Country = membersmodel.myquicksearch.myselectedcountryname;
+            model.longitude = membersmodel.myquicksearch.myselectedlongitude;
+            model.lattitude = membersmodel.myquicksearch.myselectedlongitude;
+            model.PostalCodeStatus = membersmodel.myquicksearch.myselectedpostalcodestatus;
+
+            // model.SecurityAnswer = "moma";
+            //5/8/2011  set other defualt values here
+            //model.RegistrationPhotos.PhotoStatus = "";
+            // model.PostalCodeStatus = false;
+            return model;
+
+        }
+        public RegisterModel getregistermodelopenid(MembersViewModel membersmodel)
+        {
+
+
+            RegisterModel model = new RegisterModel();
+            //quicksearchmodel quicksearchmodel = new quicksearchmodel();
+            // IEnumerable<CityStateProvince> CityStateProvince ;
+            model.openidIdentifer = membersmodel.rpxmodel.identifier;
+            model.openidProvider = membersmodel.rpxmodel.providername;
+
+
+            //model.Ages = sharedrepository.AgesSelectList();
+            // model.Genders = sharedrepository.GendersSelectList();
+            // model.Countries = sharedrepository.CountrySelectList();
+            // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
+            //test values
+            model.BirthDate = DateTime.Parse(membersmodel.rpxmodel.birthday);
+
+            model.Email = membersmodel.rpxmodel.verifiedemail;
+            model.ConfirmEmail = membersmodel.rpxmodel.verifiedemail;
+            model.Gender = Extensions.ConvertGenderName(membersmodel.rpxmodel.gender).ToString();
+
+
+            // model.Password = "kayode02";
+            //model.ConfirmPassword = "kayode02";
+            model.ScreenName = membersmodel.rpxmodel.displayname;
+            model.UserName = membersmodel.rpxmodel.preferredusername;
+            model.City = membersmodel.mycitystateprovince;
+
+
+            model.Country = membersmodel.mycountryname;
+            model.longitude = Convert.ToDouble(membersmodel.mylongitude);
+            model.lattitude = Convert.ToDouble(membersmodel.mylatitude);
+            model.PostalCodeStatus = membersmodel.mypostalcodestatus;
+            model.ZipOrPostalCode = membersmodel.mypostalcode;
+
+
+            //added passwords temporary hack
+            model.Password = "ssoUser";
+
+            //5/29/2012
+
+            //get the photo info
+            // model.SecurityAnswer = "moma";
+            //5/8/2011  set other defualt values here
+            //model.RegistrationPhotos.PhotoStatus = "";
+            // model.PostalCodeStatus = false;
+            PhotoUploadViewModel photouploadvm = new PhotoUploadViewModel();
+            //initlaize PhotoUploadViewModel object          
+            photouploadvm.profileid = membersmodel.profile.id; //set the profileID  
+            photouploadvm.photosuploaded = new List<PhotoUploadModel>();
+            PhotoUploadModel photobeinguploaded = new PhotoUploadModel();
+
+            //right now we are only uploading one photo 
+            //for now we are using URL from each, we can hanlde mutiple provider formats that might return a byte using the source paremater
+            //or the openID provider name to customize
+            if (membersmodel.rpxmodel.photo != "")
+            {   //build the photobeinguploaded object
+                photobeinguploaded.image = photorepository.getimagebytesfromurl(membersmodel.rpxmodel.photo, "");
+                photobeinguploaded.imagetype = _datingcontext.lu_photoimagetype.Where(p => p.id == (int)photoimagetypeEnum.Jpeg).FirstOrDefault();
+                photobeinguploaded.creationdate = DateTime.Now;
+                photobeinguploaded.caption = membersmodel.rpxmodel.preferredusername;
+                //TO DO rename this to upload image from URL ?
+
+                //add to repository
+                photorepository.addphotos(photouploadvm);
+            }
+            //make sure photos is not empty
+            //  if (membersmodel.MyPhotos == null)
+            // { //add new photo model to members model
+            //    var photolist = new List<Photo>();
+            //    membersmodel.MyPhotos = photolist;
+            // }
+            //don't pass back photos for now
+
+
+            return model;
+
+        }
+        public RegisterModel getregistermodeltest()
+        {
+
+            // MembersRepository membersrepository = new MembersRepository();
+
+
+            RegisterModel model = new RegisterModel();
+            //quicksearchmodel quicksearchmodel = new quicksearchmodel();
+            // IEnumerable<CityStateProvince> CityStateProvince ;
+
+
+
+            //model.Ages = sharedrepository.AgesSelectList();
+            // model.Genders = sharedrepository.GendersSelectList();
+            // model.Countries = sharedrepository.CountrySelectList();
+            // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
+            //test values
+            model.BirthDate = DateTime.Parse("1/1/1983");
+
+            model.Email = "ola_lawal@lyahoo.com";
+            model.ConfirmEmail = "ola_lawal@lyahoo.com";
+            // model.Gender = "Male";
+            model.Password = "kayode02";
+            model.ConfirmPassword = "kayode02";
+            model.ScreenName = "test1";
+            model.UserName = "olalaw";
+
+            // model.SecurityAnswer = "moma";
+
+            //5/8/2011  set other defualt values here
+            //model.RegistrationPhotos.PhotoStatus = "";
+
+            // model.PostalCodeStatus = false;
+
+
+            return model;
+
+
+        }
+
+        
         //TOD modifiy client to not bind from this model but load values asycnh
 
-        //Modifiy client to grab all the values Asynch, i.e counts and all other values should be loaded via AJAS calls to the service
+        //other member viewmodl methods
+        MembersViewModel updatememberdata(MembersViewModel model)
+        {
+            return CachingFactory.MembersViewModelHelper.updatememberdata(model, this);
+        }
+        MembersViewModel updatememberdatabyprofileid(int profileid)
+        {
+            return CachingFactory.MembersViewModelHelper.updatememberprofiledatabyprofile(profileid,this);
+        }
+        MembersViewModel updateguestdata(MembersViewModel model)
+        {
+            return CachingFactory.MembersViewModelHelper.updateguestdata(model,this);
+        }       
+        bool removeguestdata(string sessionid)
+        {
+           return CachingFactory.MembersViewModelHelper.removeguestdata(sessionid)
+        }
+        //cacheing of search stuff
+        MembersViewModel getguestdata(string sessionid)
+        {
+            return CachingFactory.MembersViewModelHelper.getguestdata(sessionid, this);
+        }
+        public MembersViewModel getmemberdata(int profileid)
+        {
+           return CachingFactory.MembersViewModelHelper.getmemberdata(profileid, this  );
+        }
+
+        //functions not exposed via WCF or otherwise
         public MembersViewModel mapmember(int ProfileID)
         {
 
@@ -541,57 +709,57 @@ namespace Shell.MVC2.Data
             // var perfectmatchsearchsettings = membersrepository.GetPerFectMatchSearchSettingsByProfileID(ProfileID);
             // model.Profile = myProfile;
             //Profile data will be on the include
-            model.profile   = membersrepository.getprofilebyprofileid(Convert.ToInt16(ProfileID));
+            model.profile = membersrepository.getprofilebyprofileid(Convert.ToInt16(ProfileID));
             //TO DO this should be a try cacth with exception handling
 
             try
             {
                 //TO DO do away with this since we already have the profile via include from the profile DATA
-               // model.Profile = model.profile;
+                // model.Profile = model.profile;
 
                 //   model.profiledata.SearchSettings(perfectmatchsearchsettings);
                 //4-28-2012 added mapping for profile visiblity
-                model.profilevisiblity  = model.profile.profiledata.visibilitysettings ;
+                model.profilevisiblity = model.profile.profiledata.visibilitysettings;
 
                 //on first load this should always be false
                 //to DO   DO  we still need this
                 model.profilestatusmessageshown = false;
 
-                model.mygenderid = model.profiledata.gender.id ;
+                model.mygenderid = model.profiledata.gender.id;
                 //this should come from search settings eventually on the full blown model of this.
                 //create hase list of genders they are looking for, if it is null add the default
 
                 //TO DO change this to use membererepo
-                model.lookingforgendersid = (model.profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?             
-                new HashSet<int>(model.profile.profilemetadata.searchsettings.FirstOrDefault().genders.Select(c => c.id.GetValueOrDefault())) : null;          
+                model.lookingforgendersid = (model.profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?
+                new HashSet<int>(model.profile.profilemetadata.searchsettings.FirstOrDefault().genders.Select(c => c.id.GetValueOrDefault())) : null;
                 if (model.lookingforgendersid.Count == 0)
                 {
-                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(model.profile.profiledata.gender.id ));
+                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(model.profile.profiledata.gender.id));
                 }
 
                 //set selected value
                 //model.Countries. = model.profiledata.CountryID;
 
                 //geographical data poulated here
-                model.mycountryname = georepository.GetCountryNameByCountryId(model.profiledata.countryid );
+                model.mycountryname = georepository.GetCountryNameByCountryId(model.profiledata.countryid);
                 model.mycountryid = model.profiledata.countryid;
                 model.mycity = model.profiledata.city;
-                
+
                 //TO DO items need to be populated with real values, in this case change model to double for latt
-                model.mylatitude = model.profiledata.latitude .ToString(); //model.Lattitude
+                model.mylatitude = model.profiledata.latitude.ToString(); //model.Lattitude
                 model.mylongitude = model.profiledata.longitude.ToString();
                 //update 9-21-2011 get fro search settings
                 model.maxdistancefromme = model.profile.profilemetadata.searchsettings.FirstOrDefault() != null ? model.profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
-                
+
                 //mail counters
-                model.mymailcount = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Sent , model.profile.id).ToString();
+                model.mymailcount = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Sent, model.profile.id).ToString();
                 model.whomailedme = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
                 model.whomailedmenewcount = mailrepository.getnewmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
 
                 //model.WhoMailedMeNewCount =  
                 //interests
-               //TO DO move all these to ajax calls on client
-                model.myintrestcount =   memberactionsrepository.getwhoiaminterestedincount(model.profile.id).ToString();
+                //TO DO move all these to ajax calls on client
+                model.myintrestcount = memberactionsrepository.getwhoiaminterestedincount(model.profile.id).ToString();
                 model.whoisinterestedinmecount = memberactionsrepository.getwhoisinterestedinmecount(model.profile.id).ToString();
                 model.whoisinterestedinmenewcount = memberactionsrepository.getwhoisinterestedinmenewcount(model.profile.id).ToString();
                 //peeks
@@ -604,7 +772,7 @@ namespace Shell.MVC2.Data
                 model.whoilikecount = memberactionsrepository.getwhoilikecount(model.profile.id).ToString();
 
                 //blocks
-                model.myblockcount = memberactionsrepository.getwhoiblockedcount (model.profile.id).ToString();
+                model.myblockcount = memberactionsrepository.getwhoiblockedcount(model.profile.id).ToString();
 
                 //instantiate models for city state province and quick search
                 // get users search setttings
@@ -614,7 +782,7 @@ namespace Shell.MVC2.Data
 
                 // now instantiate city state province
                 // model.MyQuickSearch.MySelectedCityStateProvince = CityStateProvince();
-               // model = membersrepository.getdefaultquicksearchsettingsmembers(model);
+                // model = membersrepository.getdefaultquicksearchsettingsmembers(model);
 
                 //added 5-10-2012
                 //we dont want to add search setttings to the members model?
@@ -655,13 +823,11 @@ namespace Shell.MVC2.Data
 
 
         }
-
-        
         public MembersViewModel mapguest()
         {
             MembersViewModel model = new MembersViewModel();
 
-    
+
             quicksearchmodel quicksearchmodel = new quicksearchmodel();
             // IEnumerable<CityStateProvince> CityStateProvince ;
 
@@ -677,153 +843,5 @@ namespace Shell.MVC2.Data
             // return model;
         }
 
-        public RegisterModel mapregistration(MembersViewModel membersmodel)
-        {
-
-            // MembersRepository membersrepository = new MembersRepository();
-
-
-            RegisterModel model = new RegisterModel();
-            //quicksearchmodel quicksearchmodel = new quicksearchmodel();
-            // IEnumerable<CityStateProvince> CityStateProvince ;
-            model.City = membersmodel.myquicksearch.myselectedcity;
-            model.Country = membersmodel.myquicksearch.myselectedcountryname;
-            model.longitude = membersmodel.myquicksearch.myselectedlongitude;
-            model.lattitude = membersmodel.myquicksearch.myselectedlongitude;
-            model.PostalCodeStatus = membersmodel.myquicksearch.myselectedpostalcodestatus;
-
-            // model.SecurityAnswer = "moma";
-            //5/8/2011  set other defualt values here
-            //model.RegistrationPhotos.PhotoStatus = "";
-            // model.PostalCodeStatus = false;
-            return model;
-
-        }
-
-        public RegisterModel mapjainrainregistration( MembersViewModel membersmodel)
-        {
-
-           
-            RegisterModel model = new RegisterModel();
-            //quicksearchmodel quicksearchmodel = new quicksearchmodel();
-            // IEnumerable<CityStateProvince> CityStateProvince ;
-            model.openidIdentifer = membersmodel.rpxmodel.identifier ;
-            model.openidProvider =membersmodel.rpxmodel.providername;
-
-
-            //model.Ages = sharedrepository.AgesSelectList();
-            // model.Genders = sharedrepository.GendersSelectList();
-            // model.Countries = sharedrepository.CountrySelectList();
-            // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
-            //test values
-            model.BirthDate = DateTime.Parse(membersmodel.rpxmodel.birthday);
-
-            model.Email =membersmodel.rpxmodel.verifiedemail;
-            model.ConfirmEmail =membersmodel.rpxmodel.verifiedemail;
-            model.Gender = Extensions.ConvertGenderName(membersmodel.rpxmodel.gender).ToString();
-
-
-            // model.Password = "kayode02";
-            //model.ConfirmPassword = "kayode02";
-            model.ScreenName =membersmodel.rpxmodel.displayname;
-            model.UserName =membersmodel.rpxmodel.preferredusername;
-            model.City = membersmodel.mycitystateprovince;
-
-
-            model.Country = membersmodel.mycountryname;
-            model.longitude = Convert.ToDouble(membersmodel.mylongitude);
-            model.lattitude = Convert.ToDouble(membersmodel.mylatitude);
-            model.PostalCodeStatus = membersmodel.mypostalcodestatus;
-            model.ZipOrPostalCode = membersmodel.mypostalcode;
-
-
-            //added passwords temporary hack
-            model.Password = "ssoUser";
-
-            //5/29/2012
-
-            //get the photo info
-            // model.SecurityAnswer = "moma";
-            //5/8/2011  set other defualt values here
-            //model.RegistrationPhotos.PhotoStatus = "";
-            // model.PostalCodeStatus = false;
-             PhotoUploadViewModel photouploadvm = new PhotoUploadViewModel();
-            //initlaize PhotoUploadViewModel object          
-             photouploadvm.profileid = membersmodel.profile.id; //set the profileID  
-             photouploadvm.photosuploaded  = new List<PhotoUploadModel>();
-             PhotoUploadModel  photobeinguploaded = new PhotoUploadModel();
-            
-            //right now we are only uploading one photo 
-            //for now we are using URL from each, we can hanlde mutiple provider formats that might return a byte using the source paremater
-            //or the openID provider name to customize
-            if (membersmodel.rpxmodel.photo  != "")
-            {   //build the photobeinguploaded object
-                photobeinguploaded.image =  photorepository.getimagebytesfromurl(membersmodel.rpxmodel.photo,"");
-                photobeinguploaded.imagetype =  datingcontext.lu_photoimagetype.Where(p=>p.id  == (int)photoimagetypeEnum.Jpeg).FirstOrDefault();
-                photobeinguploaded.creationdate = DateTime.Now;
-                photobeinguploaded.caption = membersmodel.rpxmodel.preferredusername;
-                //TO DO rename this to upload image from URL ?
-               
-               //add to repository
-               photorepository.addphotos(photouploadvm);
-            }
-            //make sure photos is not empty
-            //  if (membersmodel.MyPhotos == null)
-            // { //add new photo model to members model
-            //    var photolist = new List<Photo>();
-            //    membersmodel.MyPhotos = photolist;
-            // }
-            //don't pass back photos for now
-            
-            
-            return model;
-
-        }
-
-        public RegisterModel mapregistrationtest()
-        {
-
-            // MembersRepository membersrepository = new MembersRepository();
-
-
-            RegisterModel model = new RegisterModel();
-            //quicksearchmodel quicksearchmodel = new quicksearchmodel();
-            // IEnumerable<CityStateProvince> CityStateProvince ;
-
-
-
-            //model.Ages = sharedrepository.AgesSelectList();
-            // model.Genders = sharedrepository.GendersSelectList();
-            // model.Countries = sharedrepository.CountrySelectList();
-            // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
-            //test values
-            model.BirthDate = DateTime.Parse("1/1/1983");
-
-            model.Email = "ola_lawal@lyahoo.com";
-            model.ConfirmEmail = "ola_lawal@lyahoo.com";
-            // model.Gender = "Male";
-            model.Password = "kayode02";
-            model.ConfirmPassword = "kayode02";
-            model.ScreenName = "test1";
-            model.UserName = "olalaw";
-
-            // model.SecurityAnswer = "moma";
-
-            //5/8/2011  set other defualt values here
-            //model.RegistrationPhotos.PhotoStatus = "";
-
-            // model.PostalCodeStatus = false;
-
-
-            return model;
-
-
-        }
-
-        //APp fabric mapped methods
-        public MembersViewModel getmemberdata(int profileid)
-        {
-           return CachingFactory.MembersViewModelHelper.getmemberdata(profileid, this);
-        }
     }
 }

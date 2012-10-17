@@ -12,12 +12,12 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         //added conttructor to replace create method imo
         public message()
         {
-	        recipients = new List<address>();
-	        messagetype = new lu_messageType();
-	        template = new lu_template();
-	        systemAddress = new systemAddress();
-	        creationDate = DateTime.Now;
-	        sent = false;
+	      //  recipients = new List<address>();
+	      //  messagetype = new lu_messageType();
+	      //  template = new lu_template();
+	       // systemAddress = new systemAddress();
+	       // creationDate = DateTime.Now;
+	      //  sent = false;
          }
 
 
@@ -40,9 +40,9 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         {
             var message = new message();
             //address.MessageAddressID = Guid.NewGuid();
-            message.messagetype = new lu_messageType();
-            message.template = new lu_template();
-            message.recipients = new List<address>();
+            //message.messagetype = new lu_messageType();
+          //  message.template = new lu_template();
+          //  message.recipients = new List<address>();
             message.creationDate = DateTime.Now;
             message.sent =false;           
             init(message); return message;

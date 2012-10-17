@@ -189,14 +189,10 @@ namespace LoggingLibrary
                 oLogEntry.QueryString  = context.Request.QueryString.ToString();
             }
 
-            using (new OperationContextScope((IContextChannel)LoggingServiceProxy))
-            {
-                oLogEntry.id = 2;
-                oLogEntry.id = (int)severityLevelvalue;
-            }
+         
                  
-                     oLogEntry.Application.id    = 2;
-                 oLogEntry.LogSeverity.id  = (int)severityLevelvalue;
+                 oLogEntry.application_id = this.iApplicationID ;
+                 oLogEntry.logseverity_id   = (int)severityLevelvalue;
                 
                 //replace with profile ID if we dont have it
                 if (OrderNumber != null & !object.ReferenceEquals(OrderNumber, string.Empty))

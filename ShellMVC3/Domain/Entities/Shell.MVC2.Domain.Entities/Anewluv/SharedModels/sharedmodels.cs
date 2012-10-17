@@ -39,7 +39,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public string ageindex { get; set; }
     }
 
-    public class metricheights
+    public class metricheight
     {
         public string heightvalue { get; set; }
         public string heightindex { get; set; }
@@ -49,6 +49,21 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         public int distancevalue;
         public int distanceindex;
+
+    }
+
+
+    public class city
+    {
+        public string cityvalue { get; set; }
+        public string cityindex { get; set; }
+
+    }
+
+    public class country
+    {
+        public string countryvalue { get; set; }
+        public string countryindex { get; set; }
 
     }
 

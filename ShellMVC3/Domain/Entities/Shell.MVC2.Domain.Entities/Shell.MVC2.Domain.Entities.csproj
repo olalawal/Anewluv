@@ -93,7 +93,8 @@
     <Compile Include="Anewluv\Lookups\lu_securityleveltype.cs" />
     <Compile Include="Anewluv\Lookups\lu_defaultmailboxfolder.cs" />
     <Compile Include="Anewluv\Mail\ViewModels\EmailMatchesViewModel.cs" />
-    <Compile Include="Anewluv\SharedModels\SharedModel.cs" />
+    <Compile Include="Anewluv\SharedModels\generatedlists.cs" />
+    <Compile Include="Anewluv\SharedModels\sharedmodels.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
     <Compile Include="Anewluv\photoconversion.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\bodytype.cs" />

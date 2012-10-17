@@ -10,13 +10,8 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 
 namespace LoggingLibrary
 {
-    public static class CustomExceptionTypes
+    public class CustomExceptionTypes
     {
-
-        
-
-
-       
 
         [Serializable]
         public   class JavaScriptException : Exception
@@ -45,7 +40,7 @@ namespace LoggingLibrary
 
 
         [Serializable]
-        public  class AccountException : Exception, ISerializable
+        public class AccountException : Exception, ISerializable
         {
 
             private MembersViewModel Model;

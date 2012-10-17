@@ -8,6 +8,7 @@ using System.Collections;
 using System.Threading;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using LoggingLibrary;
 
 
 using Shell.MVC2.Interfaces;
@@ -122,7 +123,7 @@ namespace Shell.MVC2.AppFabric
         }
         
         //make sure that any regions needed exist as well
-        return CreateAewLuvRegions(cache);
+        return createaewluvregions(cache);
 #endif
 
             }
@@ -214,18 +215,18 @@ namespace Shell.MVC2.AppFabric
                }
 
                //make sure that any regions needed exist as well
-               return CreateAewLuvRegions(cache);
+               return createaewluvregions(cache);
 
 #endif
             }
 
         }
 
-        public static bool ClearCurrentSessionCache(string _ProfileID, HttpContextBase context)
+        public static bool clearcurrentsessioncache(string _ProfileID, HttpContextBase context)
         {
 
             //clear out guest data
-            MembersViewModelHelper.RemoveGuestData(context);
+            MembersViewModelHelper.removeguestdata(context);
             //ProfileBrowseModelsHelper.removeguestresults(context);
             //clear out member data if member is authenticated
             //TO DO worry about maybe to deleted this to wonder about peristing it?
@@ -245,7 +246,7 @@ namespace Shell.MVC2.AppFabric
 
         //only creating a region for guests since we want scalablituy for members
         //named caches in version 1.0 are limited to cache servers cannot be on clusters
-        public static DataCache CreateAewLuvRegions(DataCache NamedCache)
+        public static DataCache createaewluvregions(DataCache NamedCache)
         {
 
             // Always test if region exists;
@@ -368,7 +369,7 @@ namespace Shell.MVC2.AppFabric
 
 
             int? _profileid = null;
-            try { _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + sessionid); }
+            try { _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + sessionid)); }
             catch (DataCacheException)
             {
                 throw new InvalidOperationException();
@@ -407,7 +408,7 @@ namespace Shell.MVC2.AppFabric
                 try
                 {
 
-                    if (dataCache != null) model = dataCache.Get("MembersViewModel" + profileid) as MembersViewModel;
+                    if (dataCache != null) model = dataCache.Get("membersviewmodel" + profileid) as MembersViewModel;
 
                     //TO do check if the model has changed since the last time it was loaded 
                     //create a method in members repo that checks to see if something has been updated since last activity?
@@ -420,7 +421,7 @@ namespace Shell.MVC2.AppFabric
                             model = membersmapperepository.mapmember(profileid);
                             // Datings context = new modelContext();
                             // model = context.models.Single(c => c.Id == id);
-                            dataCache.Put("MembersViewModel" + profileid, model);
+                            dataCache.Put("membersviewmodel" + profileid, model);
                         }
                         else
                         {
@@ -450,7 +451,7 @@ namespace Shell.MVC2.AppFabric
 
                 MembersViewModel model = null;
                 try { 
-                    if (dataCache != null)  model = dataCache.Get("MembersViewModel" +sessionid, "Guests") as MembersViewModel;
+                    if (dataCache != null)  model = dataCache.Get("membersviewmodel" +sessionid, "Guests") as MembersViewModel;
 
                     //generate your fictional exception
                     //int x = 1;
@@ -473,7 +474,7 @@ namespace Shell.MVC2.AppFabric
                        // ViewModelMapper Mapper = new ViewModelMapper();
 #if DEBUG
                                                 Console.WriteLine("Debug version");
-                                                model.register = membersmapperepository.mapregistrationtest();
+                                                model.register = membersmapperepository.getregistermodeltest();
                                                //model.Register = Mapper.MapRegistration();
 #else
                         model.Register = Mapper.MapRegistration(model);
@@ -482,23 +483,23 @@ namespace Shell.MVC2.AppFabric
                         if (dataCache != null)
                         {
                             //store the model if null
-                            dataCache.Put("MembersViewModel" +sessionid, model, "Guests");
+                            dataCache.Put("membersviewmodel" +sessionid, model, "Guests");
 
                         }
                     } return model;
 
                 }
-                // try { if (dataCache != null)  model = dataCache.Get("MembersViewModel" + context.Session.SessionID, "Guests") as MembersViewModel; }
+                // try { if (dataCache != null)  model = dataCache.Get("membersviewmodel" + context.Session.SessionID, "Guests") as MembersViewModel; }
 
                 catch (DataCacheException)
                 {
-                    throw new CacheingException("A problem occured accessing the Appfabric Cache", model);
+                    throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", model);
                     //log the datachae type of excpetion here and mark it handled and logged
                 }
                 catch (Exception ex)
                 {
-                    var message = String.Format("Something went wrong with the cache method GetGuestData with this object or user :  {0}", context.User.Identity.Name );
-                    throw new AccountException(model, message, ex);
+                    var message = String.Format("Something went wrong with the cache method GetGuestData with this sessionid :  {0}", sessionid );
+                    throw new LoggingLibrary.CustomExceptionTypes.AccountException(model, message, ex);
  
                    // throw new Exception(message, ex); 
                    
@@ -553,7 +554,7 @@ namespace Shell.MVC2.AppFabric
                         //int x = 1;
                         //int y = 0;
                         //  MembersViewModel oldMembersViewModel = new MembersViewModel();
-                        //  try { oldMembersViewModel = dataCache.Get("MembersViewModel" + _ProfileID) as MembersViewModel; }
+                        //  try { oldMembersViewModel = dataCache.Get("membersviewmodel" + _ProfileID) as MembersViewModel; }
                         //catch (DataCacheException)
                         //{
                         //    //Log error
@@ -570,7 +571,7 @@ namespace Shell.MVC2.AppFabric
                         }
                         else if (p != null && (p.profile.id != null | p.profile == null ))
                         {
-                            dataCache.Put("MembersViewModel" + p.profile.id, p);
+                            dataCache.Put("membersviewmodel" + p.profile.id, p);
                         }
 
                     //handle cases were we are just updating bits for the viewmodel. QuickSearch and Account right now would be what is 
@@ -584,13 +585,13 @@ namespace Shell.MVC2.AppFabric
                 }
                 catch (DataCacheException)
                 {
-                    throw new CacheingException("A problem occured accessing the Appfabric Cache", p);
+                    throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", p);
                     //log the datachae type of excpetion here and mark it handled and logged
                 }
                 catch (Exception ex)
                 {
-                    var message = String.Format("Something went wrong with the cache method UpdateMemberData with this object or user :  {0}", ProfileID);
-                    throw new AccountException(p, message, ex);
+                    var message = String.Format("Something went wrong with the cache method UpdateMemberData with this object or user :  {0}", p.profile.id);
+                    throw new LoggingLibrary.CustomExceptionTypes.AccountException(p, message, ex);
 
                     // throw new Exception(message, ex); 
 
@@ -603,9 +604,9 @@ namespace Shell.MVC2.AppFabric
 
             }
 
-            //updates the model in session with any new data
+            //updates the model in catche with any new data i.e after a save
             //TO DO verify that the P contians profile ID
-            public static MembersViewModel updatememberprofiledatabyprofile(profile profilemodel, IMembersMapperRepository membersmapperepository)
+            public static MembersViewModel updatememberprofiledatabyprofile(int profileid, IMembersMapperRepository  membersmapperepository)
             {
                 MembersViewModel model = new MembersViewModel();
                 DataCache dataCache;
@@ -613,11 +614,13 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
 
                 //get the current prodile data
-                model = membersmapperepository.getmemberdata(profilemodel.id);
+
+
+                model = membersmapperepository.mapmember(profileid);
                 model.profiledata = model.profile.profiledata ;
 
                 //  MembersViewModel oldMembersViewModel = new MembersViewModel();
-                //  try { oldMembersViewModel = dataCache.Get("MembersViewModel" + _ProfileID) as MembersViewModel; }
+                //  try { oldMembersViewModel = dataCache.Get("membersviewmodel" + _ProfileID) as MembersViewModel; }
                 //catch (DataCacheException)
                 //{
                 //    //Log error
@@ -633,7 +636,7 @@ namespace Shell.MVC2.AppFabric
                 //check if account model is empty as well if it is refresh it
                 //  oldMembersViewModel.Account = (p.Account.BirthDate  != null) ? p.Account  : oldMembersViewModel.Account;
 
-                dataCache.Put("MembersViewModel" + profilemodel.id, model);
+                dataCache.Put("membersviewmodel" + model.profile.id, model);
 
                 return model;
 
@@ -644,7 +647,6 @@ namespace Shell.MVC2.AppFabric
 
             //updates the model in session with any new data
             //TO DO verify that the P contians profile ID
-
             public static MembersViewModel updateguestdata(MembersViewModel p, IMembersMapperRepository membersmapperrepository)
             {
                 DataCache dataCache;
@@ -653,7 +655,7 @@ namespace Shell.MVC2.AppFabric
 
 
                 //MembersViewModel oldMembersViewModel = null;
-                // try { oldMembersViewModel = dataCache.Get("MembersViewModel" + context.Session.SessionID, "Guests") as MembersViewModel; }
+                // try { oldMembersViewModel = dataCache.Get("membersviewmodel" + context.Session.SessionID, "Guests") as MembersViewModel; }
                 //catch (DataCacheException)
                 //{
                 //    //Log error
@@ -686,7 +688,7 @@ namespace Shell.MVC2.AppFabric
 
                 // Datings context = new modelContext();
                 // model = context.models.Single(c => c.Id == id);
-                dataCache.Put("MembersViewModel" + p.sessionid , p, "Guests");
+                dataCache.Put("membersviewmodel" + p.sessionid , p, "Guests");
 
                 return p;
 
@@ -694,16 +696,15 @@ namespace Shell.MVC2.AppFabric
 
 
             }
-
-            public static bool removememberdata(int profileid)
+           
+            public static bool removeguestdata(string sessionid)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
 
 
-
-                try { dataCache.Remove("MembersViewModel" + profileid); }
+                try { dataCache.Remove("membersviewmodel" + sessionid, "Guests"); }
                 catch (DataCacheException)
                 {
                     return false;
@@ -720,47 +721,18 @@ namespace Shell.MVC2.AppFabric
 
 
             }
-
-            public static bool RemoveGuestData(HttpContextBase context)
-            {
-                DataCache dataCache;
-                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
-                dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
-
-
-                try { dataCache.Remove("MembersViewModel" + context.Session.SessionID, "Guests"); }
-                catch (DataCacheException)
-                {
-                    return false;
-                    throw new InvalidOperationException();
-
-                }
-                catch (Exception ex)
-                {
-                    //put cleanup code here
-                    throw (ex);
-                }
-                return true;
-
-
-
-            }
-
-
-
 
         }
 
         public static class ProfileBrowseModelsHelper
         {
-
             public static List<ProfileBrowseModel> getmembercurrentsearchresults(string profileid, ISearchRepository  searchrepository)
             {
                 DataCache dataCache;
                 dataCache = GetCache;
 
                 List<ProfileBrowseModel> model = null;
-                try { model = dataCache.Get("ProfileBrowseModel" + profileid) as List<ProfileBrowseModel>; }
+                try { model = dataCache.Get("profilebrowsemodel" + profileid) as List<ProfileBrowseModel>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -779,12 +751,11 @@ namespace Shell.MVC2.AppFabric
                     //No need to put empty data
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    // dataCache.Put("ProfileBrowseModel" + ProfileID, model);
+                    // dataCache.Put("profilebrowsemodel" + ProfileID, model);
 
 
                 } return model;
             }
-
             //Items for guests are just dumped in the session area not the members region
             //and they are id'd by session ID
             public static List<ProfileBrowseModel> getguestresults(string sessionid)
@@ -794,7 +765,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetCache;
 
                 List<ProfileBrowseModel> model = null;
-                try { model = dataCache.Get("ProfileBrowseModel" +sessionid, "Guests") as List<ProfileBrowseModel>; }
+                try { model = dataCache.Get("profilebrowsemodel" +sessionid, "Guests") as List<ProfileBrowseModel>; }
                 catch (DataCacheException)
                 {
                     //load from DB or something
@@ -815,12 +786,11 @@ namespace Shell.MVC2.AppFabric
                     //No need to put empty data
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    // dataCache.Put("ProfileBrowseModel" + ProfileID, model);
+                    // dataCache.Put("profilebrowsemodel" + ProfileID, model);
                 } return model;
 
 
             }
-
             //updates the model in session with any new data
             //TO DO verify that the P contians profile ID
             //Basically it is a save
@@ -829,7 +799,7 @@ namespace Shell.MVC2.AppFabric
                 DataCache dataCache;
                 dataCache = GetCache;
 
-                try { dataCache.Put("ProfileBrowseModel" + profileid, p); }
+                try { dataCache.Put("profilebrowsemodel" + profileid, p); }
                 catch (DataCacheException)
                 {
                     //Log error
@@ -848,13 +818,12 @@ namespace Shell.MVC2.AppFabric
 
 
             }
-
             public static bool addguestsearchresults(List<ProfileBrowseModel> p, string sessionid)
             {
                 DataCache dataCache;
                 dataCache = GetCache;
 
-                try { dataCache.Put("ProfileBrowseModel" + sessionid, "Guests"); }
+                try { dataCache.Put("profilebrowsemodel" + sessionid, "Guests"); }
                 catch (DataCacheException)
                 {
                     //Log error
@@ -873,13 +842,12 @@ namespace Shell.MVC2.AppFabric
 
 
             }
-
             public static bool removemembersearchresults(string profileid)
             {
                 DataCache dataCache;
                 dataCache = GetCache;
 
-                try { dataCache.Remove("ProfileBrowseModel" + ProfileID); }
+                try { dataCache.Remove("profilebrowsemodel" + profileid); }
                 catch (DataCacheException)
                 {
                     return false;
@@ -902,7 +870,7 @@ namespace Shell.MVC2.AppFabric
                 DataCache dataCache;
                 dataCache = GetCache;
 
-                try { dataCache.Remove("ProfileBrowseModel" + sessionid, "Guests"); }
+                try { dataCache.Remove("profilebrowsemodel" + sessionid, "Guests"); }
                 catch (DataCacheException)
                 {
                     return false;
@@ -919,15 +887,170 @@ namespace Shell.MVC2.AppFabric
 
 
             }
-
         }
+
+
+        /// <summary>
+        /// This class helps us determine what pages use what styles etc - comes from a appsettings file
+        /// </summary>
+        public static class CssStyleSelector
+        {
+
+            public static string getbodycssbypagename(string pagename,AnewluvContext context)
+            {
+
+
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                //TO DO put in cache or something ? or return from shared object deal
+                string CssSyle = "StandardWhiteBackground";  //default
+                List<systempagesetting> pages = null;
+
+
+                //if we still have no datacahe do tis
+                try
+                {
+
+                    if (dataCache != null) pages = dataCache.Get("SystemPageSettingsList") as List<systempagesetting>;
+
+
+                    if (pages == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        // Ages = context.AgesSelectList;
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+                        //if we still have no datacahe no need to do the put
+                        // if (dataCache == null) return Ages;
+                        pages = context.systempagesettings.Where(p => p.bodycssstylename != "").ToList();
+                        if (dataCache != null)
+                            dataCache.Put("SystemPageSettingsList", pages);
+                    }
+
+
+                    //TO DO 
+                    //finde the matchv
+
+                    var results = from item in pages
+                                  where (item.title  == pagename.Trim())
+                                  select item;
+
+                    //return the default white background if none found
+                    if (results.Count() == 0) return CssSyle;
+
+                    //else return the value from cache or database
+                    return results.FirstOrDefault().bodycssstylename.Trim();
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+
+
+            }
+
+            public static List<systempagesetting> getsystempagesettingslist(AnewluvContext context)
+            {
+
+
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                //TO DO put in cache or something ? or return from shared object deal
+               
+                List<systempagesetting> pages = null;
+
+
+                //if we still have no datacahe do tis
+                try
+                {
+
+                    if (dataCache != null) pages = dataCache.Get("SystemPageSettingsList") as List<systempagesetting>;
+
+
+                    if (pages == null)
+                    {
+                        //context context = new context();
+                        //remafill the ages list from the repositry and exit
+                        // Ages = context.AgesSelectList;
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+                        //if we still have no datacahe no need to do the put
+                        // if (dataCache == null) return Ages;
+                        pages = context.systempagesettings.Where(p => p.bodycssstylename != "").ToList();
+                        if (dataCache != null)
+                            dataCache.Put("SystemPageSettingsList", pages);
+                    }
+
+
+                    return pages;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+
+
+            }
+        }
+
 
         //only runs on application start, if the objects are not found then we will want to 
         //add all thier getters and setters here 
         public static class SharedObjectHelper
         {
+            //generic functions
+            public static List<lu_gender> getgenderlist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-            public static List<age> getagelist(ILookupRepository lookupreposoitory)
+                List<lu_gender> genders = null;
+                try { if (dataCache != null) genders = dataCache.Get("genderlist") as List<lu_gender>; }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+                if (genders == null)
+                {
+                    // context context = new context();
+                    //remafill the Genders list from the repositry and exit
+                    genders = context.lu_gender.OrderBy(x => x.description).ToList();
+                    // Datings context = new modelContext();
+                    // model = context.models.Single(c => c.Id == id);
+
+
+                    //if we still have no datacahe do tis
+                    if (dataCache != null)
+                        dataCache.Put("genderlist", genders);
+
+                } return genders;
+            }
+            public static List<age> getagelist()
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -950,9 +1073,9 @@ namespace Shell.MVC2.AppFabric
                 }
                 if (ageslist == null)
                 {
-                    
 
-                    ageslist = lookupreposoitory.createagelist 
+
+                    ageslist = generatedlists.ageslist();
                     
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
@@ -963,20 +1086,14 @@ namespace Shell.MVC2.AppFabric
 
                 } return ageslist;
             }
-
-            public static List<lu_gender> GetGenderList()
+            public static List<metricheight> getmetricheightlist()
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-
-
-
-                List<lu_gender> Genders = null;
-
-
-                try { if (dataCache != null) Genders = dataCache.Get("GenderList") as List<lu_gender>; }
+                List<metricheight> heights = null;
+                try { heights = dataCache.Get("metricheightlist") as List<metricheight>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -986,69 +1103,26 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Genders == null)
+                if (heights == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
-                    //remafill the Genders list from the repositry and exit
-                    Genders = sharedrepository.GendersSelectList;
+                   // context context = new context();
+                    //remafill the ages list from the repositry and exit
+                    heights = generatedlists.metricheights();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
+                    dataCache.Put("metricheightlist", heights);
 
-
-                    //if we still have no datacahe do tis
-                    if (dataCache != null)
-                        dataCache.Put("GenderList", Genders);
-
-                } return Genders;
-            }
-
-            public static List<SelectListItem> GetCountrysList()
-            {
-                DataCache dataCache;
-                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
-                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
-
-                List<SelectListItem> Countrys = null;
-
-
-
-
-                try { if (dataCache != null) Countrys = dataCache.Get("CountriesList") as List<SelectListItem>; }
-                catch (DataCacheException)
-                {
-                    throw new InvalidOperationException();
-                }
-                catch (Exception ex)
-                {
-                    //put cleanup code here
-                    throw (ex);
-                }
-                if (Countrys == null)
-                {
-                    SharedRepository sharedrepository = new SharedRepository();
-                    //remafill the Countrys list from the repositry and exit
-
-                    Countrys = sharedrepository.CountrySelectList();
-
-                    //if we still have no datacahe do tis
-
-                    // Datings context = new modelContext();
-                    // model = context.models.Single(c => c.Id == id);
-                    if (dataCache != null)
-                        dataCache.Put("CountriesList", Countrys);
-
-                } return Countrys;
-            }
-
-            public static List<SelectListItem> GetSecurityQuestionsList()
+                } return heights;
+            }           
+            public static List<lu_securityquestion> getsecurityquestionslist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();              
 
-                List<SelectListItem> SecurityQuestionsList = null;
+                List<lu_securityquestion> securityquestionslist = null;
 
-                try { if (dataCache != null)  SecurityQuestionsList = dataCache.Get("SecurityQuestionsList") as List<SelectListItem>; }
+                try { if (dataCache != null)  securityquestionslist = dataCache.Get("securityquestionslist") as List<lu_securityquestion>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1058,33 +1132,33 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (SecurityQuestionsList == null)
+                if (securityquestionslist == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                   // context context = new context();
                     //remafill the SecurityQuestions s list from the repositry and exit
 
-                    SecurityQuestionsList = sharedrepository.SecurityQuestionSelectList;
+                    securityquestionslist = context.lu_securityquestion.OrderBy(x => x.description).ToList();
 
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
                     if (dataCache != null)
-                        dataCache.Put("SecurityQuestionsList", SecurityQuestionsList);
+                        dataCache.Put("securityquestionslist", securityquestionslist);
 
                 }
-                return SecurityQuestionsList;
+                return securityquestionslist;
             }
 
 
             #region "Creiteria Apperance lists cached here"
 
-            public static List<SelectListItem> GetMetricHeightList()
+            public static List<lu_bodytype> getbodytypelist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Heights = null;
-                try { Heights = dataCache.Get("MetricHeightList") as List<SelectListItem>; }
+                List<lu_bodytype> bodytype = null;
+                try { bodytype = dataCache.Get("bodytypelist") as List<lu_bodytype>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1094,25 +1168,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Heights == null)
+                if (bodytype == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    Heights = sharedrepository.HeightMetricSelectList();
+                    bodytype  = context.lu_bodytype.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("MetricHeightList", Heights);
+                    dataCache.Put("bodytypelist", bodytype);
 
-                } return Heights;
+                } return bodytype;
             }
-            public static List<SelectListItem> Getbodytypeslist()
+            public static List<lu_ethnicity> getethnicitylist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> BodyTypes = null;
-                try { BodyTypes = dataCache.Get("bodytypeslist") as List<SelectListItem>; }
+                List<lu_ethnicity> ethnicity = null;
+                try { ethnicity = dataCache.Get("ethnicitylist") as List<lu_ethnicity>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1122,25 +1196,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (BodyTypes == null)
+                if (ethnicity == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    BodyTypes = sharedrepository.BodyTypesSelectList;
+                    ethnicity = context.lu_ethnicity.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("bodytypeslist", BodyTypes);
+                    dataCache.Put("ethnicitylist", ethnicity);
 
-                } return BodyTypes;
+                } return ethnicity;
             }
-            public static List<SelectListItem> Geteyecolorlist()
+            public static List<lu_eyecolor> geteyecolorlist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> EyeColor = null;
-                try { EyeColor = dataCache.Get("eyecolorlist") as List<SelectListItem>; }
+                List<lu_eyecolor> eyecolor = null;
+                try { eyecolor = dataCache.Get("eyecolorlist") as List<lu_eyecolor>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1150,25 +1224,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (EyeColor == null)
+                if (eyecolor == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    EyeColor = sharedrepository.EyeColorSelectList;
+                    eyecolor = context.lu_eyecolor.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("eyecolorlist", EyeColor);
+                    dataCache.Put("eyecolorlist", eyecolor);
 
-                } return EyeColor;
+                } return eyecolor;
             }
-            public static List<SelectListItem> Gethaircolorlist()
+            public static List<lu_haircolor> gethaircolorlist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> HairColor = null;
-                try { HairColor = dataCache.Get("haircolorlist") as List<SelectListItem>; }
+                List<lu_haircolor> haircolor = null;
+                try { haircolor = dataCache.Get("haircolorlist") as List<lu_haircolor>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1178,29 +1252,29 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (HairColor == null)
+                if (haircolor == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    HairColor = sharedrepository.HairColorSelectList;
+                    haircolor = context.lu_haircolor.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("haircolorlist", HairColor);
+                    dataCache.Put("haircolorlist", haircolor);
 
-                } return HairColor;
+                } return haircolor;
             }
 
             #endregion
 
             #region "CriteriaCharacter lists cached here"
-            public static List<SelectListItem> Getdietlist()
+            public static List<lu_diet> getdietlist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Diet = null;
-                try { Diet = dataCache.Get("dietlist") as List<SelectListItem>; }
+                List<lu_diet> diet = null;
+                try { diet = dataCache.Get("dietlist") as List<lu_diet>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1210,25 +1284,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Diet == null)
+                if (diet == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    Diet = sharedrepository.DietSelectList;
+                    diet = context.lu_diet.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("dietlist", Diet);
+                    dataCache.Put("dietlist", diet);
 
-                } return Diet;
+                } return diet;
             }
-            public static List<SelectListItem> GetDrinksList()
+            public static List<lu_drinks> getdrinkslist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Drinks = null;
-                try { Drinks = dataCache.Get("drinkslist") as List<SelectListItem>; }
+                List<lu_drinks> drinks = null;
+                try { drinks = dataCache.Get("drinkslist") as List<lu_drinks>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1238,25 +1312,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Drinks == null)
+                if (drinks == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    Drinks = sharedrepository.DrinksSelectList;
+                    drinks = context.lu_drinks.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("drinkslist", Drinks);
+                    dataCache.Put("drinkslist", drinks);
 
-                } return Drinks;
+                } return drinks;
             }
-            public static List<SelectListItem> GetExerciseList()
+            public static List<lu_exercise> getexerciselist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Exercise = null;
-                try { Exercise = dataCache.Get("exerciselist") as List<SelectListItem>; }
+                List<lu_exercise> exercise = null;
+                try { exercise = dataCache.Get("exerciselist") as List<lu_exercise>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1266,25 +1340,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Exercise == null)
+                if (exercise == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    Exercise = sharedrepository.ExerciseSelectList;
+                    exercise = context.lu_exercise.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("exerciselist", Exercise);
+                    dataCache.Put("exerciselist", exercise);
 
-                } return Exercise;
+                } return exercise;
             }
-            public static List<SelectListItem> GetHobbyList()
+            public static List<lu_hobby> gethobbylist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Hobby = null;
-                try { Hobby = dataCache.Get("hobbylist") as List<SelectListItem>; }
+                List<lu_hobby> hobby = null;
+                try { hobby = dataCache.Get("hobbylist") as List<lu_hobby>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1294,25 +1368,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Hobby == null)
+                if (hobby == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    Hobby = sharedrepository.HobbySelectList;
+                    hobby = context.lu_hobby.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("hobbylist", Hobby);
+                    dataCache.Put("hobbylist", hobby);
 
-                } return Hobby;
+                } return hobby;
             }
-            public static List<SelectListItem> GetHumorList()
+            public static List<lu_humor> gethumorlist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Humor = null;
-                try { Humor = dataCache.Get("humorlist") as List<SelectListItem>; }
+                List<lu_humor> humor = null;
+                try { humor = dataCache.Get("humorlist") as List<lu_humor>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1322,25 +1396,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Humor == null)
+                if (humor == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    Humor = sharedrepository.HumorSelectList;
+                    humor = context.lu_humor.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("humorlist", Humor);
+                    dataCache.Put("humorlist", humor);
 
-                } return Humor;
+                } return humor;
             }
-            public static List<SelectListItem> GetPoliticalViewList()
+            public static List<lu_politicalview> getpoliticalviewlist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> PoliticalView = null;
-                try { PoliticalView = dataCache.Get("politicalviewlist") as List<SelectListItem>; }
+                List<lu_politicalview> politicalview = null;
+                try { politicalview = dataCache.Get("politicalviewlist") as List<lu_politicalview>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1350,25 +1424,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (PoliticalView == null)
+                if (politicalview == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    PoliticalView = sharedrepository.PoliticalViewSelectList;
+                    politicalview = context.lu_politicalview.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("politicalviewlist", PoliticalView);
+                    dataCache.Put("politicalviewlist", politicalview);
 
-                } return PoliticalView;
+                } return politicalview;
             }
-            public static List<SelectListItem> GetReligionList()
+            public static List<lu_religion> getreligionlist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Religion = null;
-                try { Religion = dataCache.Get("religionlist") as List<SelectListItem>; }
+                List<lu_religion> religion = null;
+                try { religion = dataCache.Get("religionlist") as List<lu_religion>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1378,25 +1452,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Religion == null)
+                if (religion == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    Religion = sharedrepository.ReligionSelectList;
+                    religion = context.lu_religion.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("religionlist", Religion);
+                    dataCache.Put("religionlist", religion);
 
-                } return Religion;
+                } return religion;
             }
-            public static List<SelectListItem> GetReligiousAttendanceList()
+            public static List<lu_religiousattendance> getreligiousattendancelist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> ReligiousAttendance = null;
-                try { ReligiousAttendance = dataCache.Get("religiousattendancelist") as List<SelectListItem>; }
+                List<lu_religiousattendance> religiousattendance = null;
+                try { religiousattendance = dataCache.Get("religiousattendancelist") as List<lu_religiousattendance>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1406,25 +1480,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (ReligiousAttendance == null)
+                if (religiousattendance == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    ReligiousAttendance = sharedrepository.ReligiousAttendanceSelectList;
+                    religiousattendance = context.lu_religiousattendance.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("religiousattendancelist", ReligiousAttendance);
+                    dataCache.Put("religiousattendancelist", religiousattendance);
 
-                } return ReligiousAttendance;
+                } return religiousattendance;
             }
-            public static List<SelectListItem> GetSignList()
+            public static List<lu_sign> getsignlist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Sign = null;
-                try { Sign = dataCache.Get("signlist") as List<SelectListItem>; }
+                List<lu_sign> sign = null;
+                try { sign = dataCache.Get("signlist") as List<lu_sign>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1434,25 +1508,25 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Sign == null)
+                if (sign == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    Sign = sharedrepository.SignSelectList;
+                    sign = context.lu_sign.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("signlist", Sign);
+                    dataCache.Put("signlist", sign);
 
-                } return Sign;
+                } return sign;
             }
-            public static List<SelectListItem> GetSmokesList()
+            public static List<lu_smokes> getsmokeslist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Smokes = null;
-                try { Smokes = dataCache.Get("smokeslist") as List<SelectListItem>; }
+                List<lu_smokes> smokes = null;
+                try { smokes = dataCache.Get("smokeslist") as List<lu_smokes>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1462,45 +1536,30 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (Smokes == null)
+                if (smokes == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    Smokes = sharedrepository.SmokesSelectList;
+                    smokes = context.lu_smokes.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("smokeslist", Smokes);
+                    dataCache.Put("smokeslist", smokes);
 
-                } return Smokes;
+                } return smokes;
             }
 
             #endregion
 
             #region "Criteria Lifestyle lists cached here"
-            public static List<SelectListItem> GetEducationLevelList()
+
+            public static List<lu_educationlevel> geteducationlevellist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> EducationLevel = null;
-                try
-                {
-
-                    EducationLevel = dataCache.Get("educationlevellist") as List<SelectListItem>;
-
-                    if (EducationLevel == null)
-                    {
-                        SharedRepository sharedrepository = new SharedRepository();
-                        //remafill the ages list from the repositry and exit
-                        EducationLevel = sharedrepository.EducationLevelSelectList;
-                        // Datings context = new modelContext();
-                        // model = context.models.Single(c => c.Id == id);
-                        dataCache.Put("educationlevellist", EducationLevel);
-                      
-
-                    }
-                }
+                List<lu_educationlevel> educationlevel = null;
+                try { educationlevel = dataCache.Get("educationlevellist") as List<lu_educationlevel>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1509,248 +1568,282 @@ namespace Shell.MVC2.AppFabric
                 {
                     //put cleanup code here
                     throw (ex);
-                  
                 }
-                return EducationLevel;
+                if (educationlevel == null)
+                {
+                    //context context = new context();
+                    //remafill the ages list from the repositry and exit
+                    educationlevel = context.lu_educationlevel.OrderBy(x => x.description).ToList();
+                    // Datings context = new modelContext();
+                    // model = context.models.Single(c => c.Id == id);
+                    dataCache.Put("educationlevellist", educationlevel);
 
+                } return educationlevel;
             }
-            public static List<SelectListItem> GetEmploymentStatusList()
+            public static List<lu_employmentstatus> getemploymentstatuslist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> EmploymentStatus = null;
-                try { EmploymentStatus = dataCache.Get("employmentstatuslist") as List<SelectListItem>; }
+                List<lu_employmentstatus> employmentstatus = null;
+                try { employmentstatus = dataCache.Get("employmentstatuslist") as List<lu_employmentstatus>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
                 }
-                if (EmploymentStatus == null)
+                catch (Exception ex)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //put cleanup code here
+                    throw (ex);
+                }
+                if (employmentstatus == null)
+                {
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    EmploymentStatus = sharedrepository.EmploymentStatusSelectList;
+                    employmentstatus = context.lu_employmentstatus.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("employmentstatuslist", EmploymentStatus);
+                    dataCache.Put("employmentstatuslist", employmentstatus);
 
-                } return EmploymentStatus;
+                } return employmentstatus;
             }
-            public static List<SelectListItem> GetHaveKidsList()
+            public static List<lu_havekids> gethavekidslist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> HaveKids = null;
-                try { HaveKids = dataCache.Get("havekidslist") as List<SelectListItem>; }
+                List<lu_havekids> havekids = null;
+                try { havekids = dataCache.Get("havekidslist") as List<lu_havekids>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
                 }
-                if (HaveKids == null)
+                catch (Exception ex)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //put cleanup code here
+                    throw (ex);
+                }
+                if (havekids == null)
+                {
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    HaveKids = sharedrepository.HaveKidsSelectList;
+                    havekids = context.lu_havekids.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("havekidslist", HaveKids);
+                    dataCache.Put("havekidslist", havekids);
 
-                } return HaveKids;
+                } return havekids;
             }
-            public static List<SelectListItem> GetIncomeLevelList()
+            public static List<lu_incomelevel> getincomelevellist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> IncomeLevel = null;
-                try { IncomeLevel = dataCache.Get("incomelevellist") as List<SelectListItem>; }
+                List<lu_incomelevel> incomelevel = null;
+                try { incomelevel = dataCache.Get("incomelevellist") as List<lu_incomelevel>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
                 }
-                if (IncomeLevel == null)
+                catch (Exception ex)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //put cleanup code here
+                    throw (ex);
+                }
+                if (incomelevel == null)
+                {
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    IncomeLevel = sharedrepository.IncomeLevelSelectList;
+                    incomelevel = context.lu_incomelevel.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("incomelevellist", IncomeLevel);
+                    dataCache.Put("incomelevellist", incomelevel);
 
-                } return IncomeLevel;
+                } return incomelevel;
             }
-            public static List<SelectListItem> GetLivingSituationList()
+            public static List<lu_livingsituation> getlivingsituationlist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> LivingSituation = null;
-                try { LivingSituation = dataCache.Get("livingsituationlist") as List<SelectListItem>; }
+                List<lu_livingsituation> livingsituation = null;
+                try { livingsituation = dataCache.Get("livingsituationlist") as List<lu_livingsituation>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
                 }
-                if (LivingSituation == null)
+                catch (Exception ex)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //put cleanup code here
+                    throw (ex);
+                }
+                if (livingsituation == null)
+                {
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    LivingSituation = sharedrepository.LivingSituationSelectList;
+                    livingsituation = context.lu_livingsituation.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("livingsituationlist", LivingSituation);
+                    dataCache.Put("livingsituationlist", livingsituation);
 
-                } return LivingSituation;
+                } return livingsituation;
             }
-
-            public static List<SelectListItem> GetLookingForList()
+            public static List<lu_lookingfor> getlookingforlist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> LookingFor = null;
-                try { LookingFor = dataCache.Get("lookingforlist") as List<SelectListItem>; }
+                List<lu_lookingfor> lookingfor = null;
+                try { lookingfor = dataCache.Get("lookingforlist") as List<lu_lookingfor>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
                 }
-                if (LookingFor == null)
+                catch (Exception ex)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //put cleanup code here
+                    throw (ex);
+                }
+                if (lookingfor == null)
+                {
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    LookingFor = sharedrepository.LookingForSelectList;
+                    lookingfor = context.lu_lookingfor.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("lookingforlist", LookingFor);
+                    dataCache.Put("lookingforlist", lookingfor);
 
-                } return LookingFor;
+                } return lookingfor;
             }
-            public static List<SelectListItem> GetMaritalStatusList()
+            public static List<lu_maritalstatus> getmaritalstatuslist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> MaritalStatus = null;
-                try { MaritalStatus = dataCache.Get("maritalstatuslist") as List<SelectListItem>; }
+                List<lu_maritalstatus> maritalstatus = null;
+                try { maritalstatus = dataCache.Get("maritalstatuslist") as List<lu_maritalstatus>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
                 }
-                if (MaritalStatus == null)
+                catch (Exception ex)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //put cleanup code here
+                    throw (ex);
+                }
+                if (maritalstatus == null)
+                {
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    MaritalStatus = sharedrepository.MaritalStatusSelectList;
+                    maritalstatus = context.lu_maritalstatus.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("maritalstatuslist", MaritalStatus);
+                    dataCache.Put("maritalstatuslist", maritalstatus);
 
-                } return MaritalStatus;
+                } return maritalstatus;
             }
-            public static List<SelectListItem> GetProfessionList()
+            public static List<lu_profession> getprofessionlist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> Profession = null;
-                try { Profession = dataCache.Get("professionlist") as List<SelectListItem>; }
+                List<lu_profession> profession = null;
+                try { profession = dataCache.Get("professionlist") as List<lu_profession>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
                 }
-                if (Profession == null)
+                catch (Exception ex)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //put cleanup code here
+                    throw (ex);
+                }
+                if (profession == null)
+                {
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    Profession = sharedrepository.ProfessionSelectList;
+                    profession = context.lu_profession.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("professionlist", Profession);
+                    dataCache.Put("professionlist", profession);
 
-                } return Profession;
+                } return profession;
             }
-            public static List<SelectListItem> GetWantsKidsList()
+            public static List<lu_wantskids> getwantskidslist(AnewluvContext context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> WantsKids = null;
-                try { WantsKids = dataCache.Get("wantskidslist") as List<SelectListItem>; }
+                List<lu_wantskids> wantskids = null;
+                try { wantskids = dataCache.Get("wantskidslist") as List<lu_wantskids>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
                 }
-                if (WantsKids == null)
+                catch (Exception ex)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
+                    //put cleanup code here
+                    throw (ex);
+                }
+                if (wantskids == null)
+                {
+                    //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    WantsKids = sharedrepository.WantsKidsSelectList;
+                    wantskids = context.lu_wantskids.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("wantskidslist", WantsKids);
+                    dataCache.Put("wantskidslist", wantskids);
 
-                } return WantsKids;
+                } return wantskids;
             }
+
             #endregion
+            
+         
 
-            #region "lists for visibily settings that can be used else where"
+            #region "Geodata lists"
 
-            public static List<SelectListItem> GetVisibilityMailSettingsList()
+            public static List<country> getcountrieslist(IGeoRepository georepository)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<SelectListItem> VisibilityMailSettings = null;
-                try { if (dataCache != null) VisibilityMailSettings = dataCache.Get("VisibilityMailSettingsList") as List<SelectListItem>; }
+                List<country> countrys = null;
+
+                try { if (dataCache != null) countrys = dataCache.Get("countrieslist") as List<country>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
                 }
-                if (VisibilityMailSettings == null)
+                catch (Exception ex)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
-                    //remafill the ages list from the repositry and exit
-                    VisibilityMailSettings = sharedrepository.VisibilityMailSettingsList;
-                    // Datings context = new modelContext();
-                    // model = context.models.Single(c => c.Id == id);
-                    if (dataCache != null)
-                        dataCache.Put("VisibilityMailSettingsList", VisibilityMailSettings);
-
-                } return VisibilityMailSettings;
-            }
-
-            public static List<SelectListItem> GetVisibilityStealthSettingsList()
-            {
-                DataCache dataCache;
-                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
-                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
-
-                List<SelectListItem> VisibilityStealthSettings = null;
-                try { if (dataCache != null) VisibilityStealthSettings = dataCache.Get("VisibilityStealthSettingsList") as List<SelectListItem>; }
-                catch (DataCacheException)
-                {
-                    throw new InvalidOperationException();
+                    //put cleanup code here
+                    throw (ex);
                 }
-                if (VisibilityStealthSettings == null)
+                if (countrys == null)
                 {
-                    SharedRepository sharedrepository = new SharedRepository();
-                    //remafill the ages list from the repositry and exit
-                    VisibilityStealthSettings = sharedrepository.VisibilityStealthSettingsList;
+                   // context context = new context();
+                    //remafill the Countrys list from the repositry and exit
+
+                    countrys = georepository.getcountrylist();
+
+                    //if we still have no datacahe do tis
+
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
                     if (dataCache != null)
-                        dataCache.Put("VisibilityStealthSettingsList", VisibilityStealthSettings);
+                        dataCache.Put("countrieslist", countrys);
 
-                } return VisibilityStealthSettings;
+                } return countrys;
             }
 
             #endregion
@@ -1766,15 +1859,14 @@ namespace Shell.MVC2.AppFabric
                 try
                 {
 
-
-                    dataCache.Remove("AgeList");
-                    dataCache.Remove("GenderList");
-                    dataCache.Remove("CountriesList");
-                    dataCache.Remove("SecurityQuestionsList");
+                    dataCache.Remove("agelist");
+                    dataCache.Remove("genderlist");
+                    dataCache.Remove("countrieslist");
+                    dataCache.Remove("securityquestionslist");
                     dataCache.Remove("bodytypeslist");
                     dataCache.Remove("eyecolorlist");
                     dataCache.Remove("haircolorlist");
-                    dataCache.Remove("MetricHeightList");
+                    dataCache.Remove("metricheightlist");
                     dataCache.Remove("dietlist");
                     dataCache.Remove("drinkslist");
                     dataCache.Remove("exerciselist");
@@ -1786,15 +1878,14 @@ namespace Shell.MVC2.AppFabric
                     dataCache.Remove("smokeslist");
                     dataCache.Remove("educationlevellist");
                     dataCache.Remove("employmentstatuslist");
-                    dataCache.Remove("HaveKidstList");
+                    dataCache.Remove("havekidstlist");
                     dataCache.Remove("incomelevellist");
-                    dataCache.Remove("livingsituationlist");
-                    dataCache.Remove("AgeList");
+                    dataCache.Remove("livingsituationlist");                 
                     dataCache.Remove("maritalstatuslist");
                     dataCache.Remove("professionlist");
                     dataCache.Remove("lookingforlist");
-                    dataCache.Remove("VisibilityMailSettingsList");
-                    dataCache.Remove("VisibilityStealthSettingsList");
+                  //  dataCache.Remove("VisibilityMailSettingsList");
+                  //  dataCache.Remove("VisibilityStealthSettingsList");
                 }
 
                 catch (DataCacheException)
@@ -1810,79 +1901,63 @@ namespace Shell.MVC2.AppFabric
 
             }
 
+            //these shoul just be regular lookups
+            #region "lists for visibily settings that can be used else where"
 
+            //public static List<visiblitysetting> getvisibilitymailsettingslist(AnewluvContext context)
+            //{
+            //    DataCache dataCache;
+            //    //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+            //    dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+            //    List<visiblitysetting> visibilitymailsettings = null;
+            //    try { if (dataCache != null) visibilitymailsettings = dataCache.Get("visibilitymailsettingslist") as List<visiblitysetting>; }
+            //    catch (DataCacheException)
+            //    {
+            //        throw new InvalidOperationException();
+            //    }
+            //    if (visibilitymailsettings == null)
+            //    {
+            //        //context context = new context();
+            //        //remafill the ages list from the repositry and exit
+            //        visibilitymailsettings = context.visibilitysettings.Where(p=>p.OrderBy(x => x.description).ToList();
+            //        // Datings context = new modelContext();
+            //        // model = context.models.Single(c => c.Id == id);
+            //        if (dataCache != null)
+            //            dataCache.Put("visibilitymailsettingslist", visibilitymailsettings);
+
+            //    } return VisibilityMailSettings;
+            //}
+            //public static List<visiblitysetting> getvisibilitystealthsettingslist()
+            //{
+            //    DataCache dataCache;
+            //    //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+            //    dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+            //    List<SelectListItem> VisibilityStealthSettings = null;
+            //    try { if (dataCache != null) VisibilityStealthSettings = dataCache.Get("VisibilityStealthSettingsList") as List<SelectListItem>; }
+            //    catch (DataCacheException)
+            //    {
+            //        throw new InvalidOperationException();
+            //    }
+            //    if (VisibilityStealthSettings == null)
+            //    {
+            //        context context = new context();
+            //        //remafill the ages list from the repositry and exit
+            //        VisibilityStealthSettings = context.VisibilityStealthSettingsList;
+            //        // Datings context = new modelContext();
+            //        // model = context.models.Single(c => c.Id == id);
+            //        if (dataCache != null)
+            //            dataCache.Put("VisibilityStealthSettingsList", VisibilityStealthSettings);
+
+            //    } return VisibilityStealthSettings;
+            //}
+
+            #endregion
         }
 
 
-        /// <summary>
-        /// This class helps us determine what pages use what styles etc - comes from a appsettings file
-        /// </summary>
-        public static class CssStyleSelector
-        {
-
-            public static string GetBodyCssByPageName(string pagename)
-            {
-               
-
-                DataCache dataCache;
-                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
-                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
-
-                //TO DO put in cache or something ? or return from shared object deal
-                string CssSyle = "StandardWhiteBackground";  //default
-                List<SystemPageSetting> pages = null;
-
-
-                //if we still have no datacahe do tis
-                try 
-                { 
-                    
-                if (dataCache != null) pages = dataCache.Get("SystemPageSettingsList") as List<SystemPageSetting>; 
-              
-
-                if (pages == null)
-                {
-                    SharedRepository sharedrepository = new SharedRepository();
-                    //remafill the ages list from the repositry and exit
-                   // Ages = sharedrepository.AgesSelectList;
-                    // Datings context = new modelContext();
-                    // model = context.models.Single(c => c.Id == id);
-
-                    //if we still have no datacahe no need to do the put
-                   // if (dataCache == null) return Ages;
-                    pages = sharedrepository.GetSystemPageSettingList;
-                    if (dataCache != null)
-                        dataCache.Put("SystemPageSettingsList", pages);
-                }
-
-
-                //TO DO 
-                //finde the matchv
-
-                var results = from item in pages 
-                              where (item.Titile ==pagename.Trim()) 
-                select item;
-
-                //return the default white background if none found
-                if (results.Count()  == 0) return CssSyle;
-                         
-                //else return the value from cache or database
-                return results.FirstOrDefault().BodyCssSyleName.Trim()  ;
-                }
-                catch (DataCacheException)
-                {
-                    throw new InvalidOperationException();
-                }
-                catch (Exception ex)
-                {
-                    //put cleanup code here
-                    throw (ex);
-                }
-            
-              
-
-        }
-        }
+       
     }
     
 }

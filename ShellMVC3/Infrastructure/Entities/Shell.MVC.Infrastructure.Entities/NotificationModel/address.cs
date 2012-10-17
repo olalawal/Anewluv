@@ -11,10 +11,10 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
         public address()
 {
-	messages = new List<message>();
-	addressType = new lu_addressType();
-	creationDate = DateTime.Now;
-	active = true;
+	//messages = new List<message>();
+//	addressType = new lu_addressType();
+	//creationDate = DateTime.Now;
+	//active = true;
 }
 
 
@@ -36,7 +36,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
             //address.MessageAddressID = Guid.NewGuid();
             address.creationDate = DateTime.Now;          
             address.active = true;
-            address.messages = new List<message>();
+         //   address.messages = new List<message>();
             init(address); return address; 
         } 
     
