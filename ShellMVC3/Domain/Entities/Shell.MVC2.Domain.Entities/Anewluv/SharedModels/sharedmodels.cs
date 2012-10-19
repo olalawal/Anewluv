@@ -69,10 +69,19 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
     public class citystateprovince
     {
-        public string city { get; set; }
-        public string stateprovince { get; set; }
+        public string  stateprovinceindex { get; set; }
+         public string stateprovince { get; set; }
 
     }
+
+
+    public class postalcodes
+    {
+        public string postalcodevalue { get; set; }
+        public string postalcodevalueindex { get; set; }
+
+    }
+
 
 
 

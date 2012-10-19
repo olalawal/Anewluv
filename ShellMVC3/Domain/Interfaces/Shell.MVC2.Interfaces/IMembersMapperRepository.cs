@@ -35,7 +35,7 @@ namespace Shell.MVC2.Interfaces
        // MembersViewModel updatemembersviewmodel(MembersViewModel model);
        //send the full model to app fapbric      
         MembersViewModel updatememberdata(MembersViewModel model);
-        MembersViewModel updatememberdatabyprofileid(string profileid);  
+        MembersViewModel updatememberdatabyprofileid(int profileid);  
         bool updateguestdata(MembersViewModel model);
         bool removeguestdata(string sessionid);
        //cacheing of search stuff

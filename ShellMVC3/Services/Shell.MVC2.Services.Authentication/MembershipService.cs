@@ -7,6 +7,7 @@ using Dating.Server.Data.Models;
 using System.Web.Security;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Services.Contracts;
+using Shell.MVC2.Domain.Entities.Anewluv;
 
 namespace Shell.MVC2.Services.Authentication
 {
@@ -95,7 +96,7 @@ namespace Shell.MVC2.Services.Authentication
             
             public string ResetPasswordCustom(string profileid)
             {
-               return _anewluvmembershipprovider.ResetPasswordCustom(profileid);
+               return _anewluvmembershipprovider.ResetPasswordCustom(Convert.ToInt16(profileid));
             }
 
        

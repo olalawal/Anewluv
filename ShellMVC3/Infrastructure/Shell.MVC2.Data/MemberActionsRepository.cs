@@ -2143,7 +2143,7 @@ namespace Shell.MVC2.Data
         ////updated do not use the data from the members stuff since we are correctly populating values now , just find the lat long for the city and country entered
         //public List<MemberSearchViewModel> GetQuickSearchMembers(int intAgeFrom, int intAgeTo,
         //                                            string strLookingForSelectedGenderName, int intSelectedCountryId,
-        //                                            string strSelectedCity, string strSelectedStateProvince, double MaxDistanceFromMe, bool HasPhoto, MembersViewModel model)
+        //                                            string strSelectedCity, string strSelectedStateProvince, double maxdistancefromme, bool HasPhoto, MembersViewModel model)
         //{
         //    List<MemberSearchViewModel> MemberSearchViewmodels;
 
@@ -2221,7 +2221,7 @@ namespace Shell.MVC2.Data
 
 
         //    //these could be added to where if as well, also limits values if they did selected all
-        //    var Profiles = (MaxDistanceFromMe > 0 && strSelectedCity != "ALL") ? (from q in MemberSearchViewmodels.Where(a => a.DistanceFromMe <= MaxDistanceFromMe) select q) : MemberSearchViewmodels.Take(500);
+        //    var Profiles = (maxdistancefromme > 0 && strSelectedCity != "ALL") ? (from q in MemberSearchViewmodels.Where(a => a.DistanceFromMe <= maxdistancefromme) select q) : MemberSearchViewmodels.Take(500);
         //    //     Profiles; ; 
         //    // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
         //    //               Profiles;

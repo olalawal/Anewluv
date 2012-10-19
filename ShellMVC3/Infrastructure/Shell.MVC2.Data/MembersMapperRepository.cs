@@ -292,24 +292,24 @@ namespace Shell.MVC2.Data
 
 
                 //basic search settings here
-                CriteriaModel.BasicSearchSettings.MaxDistanceFromMe = (PerfectMatchSettings == null || PerfectMatchSettings.distancefromme == null) ? 500 : PerfectMatchSettings.distancefromme ;
-                CriteriaModel.BasicSearchSettings.SeekingAgeMin = (PerfectMatchSettings == null || PerfectMatchSettings.agemin == null) ? 18 : PerfectMatchSettings.agemin;
-                CriteriaModel.BasicSearchSettings.SeekingAgeMax = (PerfectMatchSettings == null || PerfectMatchSettings.agemax == null) ? 99 : PerfectMatchSettings.agemax;
+                CriteriaModel.BasicSearchSettings.maxdistancefromme  = (PerfectMatchSettings == null || PerfectMatchSettings.distancefromme == null) ? 500 : PerfectMatchSettings.distancefromme ;
+                CriteriaModel.BasicSearchSettings.seekingagemin = (PerfectMatchSettings == null || PerfectMatchSettings.agemin == null) ? 18 : PerfectMatchSettings.agemin;
+                CriteriaModel.BasicSearchSettings.seekingagemax = (PerfectMatchSettings == null || PerfectMatchSettings.agemax == null) ? 99 : PerfectMatchSettings.agemax;
 
                 //TO DO add this to search settings for now use what is in profiledata
                 //These will come from search settings table in the future at some point
-                CriteriaModel.BasicSearchSettings.Country = georepository.GetCountryNameByCountryId((byte)metadata.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
-                CriteriaModel.BasicSearchSettings.CityStateProvince = (metadata.profiledata.stateprovince == null) ? "Ask Me" : metadata.profiledata.stateprovince;
-                CriteriaModel.BasicSearchSettings.PostalCode  = metadata.profiledata.postalcode;  //this could be for countries withoute p codes
+                CriteriaModel.BasicSearchSettings.country = georepository.GetCountryNameByCountryId((byte)metadata.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
+                CriteriaModel.BasicSearchSettings.citystateprovince = (metadata.profiledata.stateprovince == null) ? "Ask Me" : metadata.profiledata.stateprovince;
+                CriteriaModel.BasicSearchSettings.postalcode  = metadata.profiledata.postalcode;  //this could be for countries withoute p codes
 
                 //populate list values
                 foreach (var item in PerfectMatchSettings.genders )
                 {
-                    CriteriaModel.BasicSearchSettings.GendersList.Add(item.gender.description );
+                    CriteriaModel.BasicSearchSettings.genderslist.Add(item.gender.description );
                 }
                 //appearance search settings here
-                CriteriaModel.AppearanceSearchSettings.HeightMax = (PerfectMatchSettings == null || PerfectMatchSettings.heightmax == null) ? Extensions.ToFeetInches(48) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmax);
-                CriteriaModel.AppearanceSearchSettings.HeightMin = (PerfectMatchSettings == null || PerfectMatchSettings.heightmin == null) ? Extensions.ToFeetInches(89) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmin);
+                CriteriaModel.AppearanceSearchSettings.heightmax = (PerfectMatchSettings == null || PerfectMatchSettings.heightmax == null) ? Extensions.ToFeetInches(48) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmax);
+                CriteriaModel.AppearanceSearchSettings.heightmin = (PerfectMatchSettings == null || PerfectMatchSettings.heightmin == null) ? Extensions.ToFeetInches(89) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmin);
 
                 foreach (var item in PerfectMatchSettings.ethnicitys )
                 {
@@ -672,24 +672,24 @@ namespace Shell.MVC2.Data
         //TOD modifiy client to not bind from this model but load values asycnh
 
         //other member viewmodl methods
-        MembersViewModel updatememberdata(MembersViewModel model)
+        public MembersViewModel updatememberdata(MembersViewModel model)
         {
             return CachingFactory.MembersViewModelHelper.updatememberdata(model, this);
         }
-        MembersViewModel updatememberdatabyprofileid(int profileid)
+        public MembersViewModel updatememberdatabyprofileid(int profileid)
         {
             return CachingFactory.MembersViewModelHelper.updatememberprofiledatabyprofile(profileid,this);
         }
-        MembersViewModel updateguestdata(MembersViewModel model)
+        public bool updateguestdata(MembersViewModel model)
         {
             return CachingFactory.MembersViewModelHelper.updateguestdata(model,this);
-        }       
-        bool removeguestdata(string sessionid)
+        }
+        public bool removeguestdata(string sessionid)
         {
-           return CachingFactory.MembersViewModelHelper.removeguestdata(sessionid)
+            return CachingFactory.MembersViewModelHelper.removeguestdata(sessionid);
         }
         //cacheing of search stuff
-        MembersViewModel getguestdata(string sessionid)
+       public MembersViewModel getguestdata(string sessionid)
         {
             return CachingFactory.MembersViewModelHelper.getguestdata(sessionid, this);
         }

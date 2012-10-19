@@ -27,7 +27,6 @@ namespace Shell.MVC2.Services.Media
             {
                 _photorepo = photorepo;
                 _apikey  = HttpContext.Current.Request.QueryString["apikey"];
-
                 throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
                
             }

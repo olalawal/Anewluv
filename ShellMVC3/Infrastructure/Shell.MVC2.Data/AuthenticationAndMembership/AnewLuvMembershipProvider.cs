@@ -633,7 +633,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
         public bool checkifmailboxfoldersarecreated(string profileid)
         {
-            return _memberepository.checkifmailboxfoldersarecreated(profileid);
+            return _memberepository.checkifmailboxfoldersarecreated( Convert.ToInt16(profileid));
         }
 
         public bool CheckIfEmailAlreadyExists(string email)
@@ -643,17 +643,17 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
         public bool CheckIfProfileisActivated(string profileid)
         {
-            return _memberepository.checkifprofileisactivated(profileid);
+            return _memberepository.checkifprofileisactivated(Convert.ToInt16(profileid));
         }
 
         public bool ActivateProfile(string profileid)
         {
-            return _memberepository.activateprofile(profileid);
+            return _memberepository.activateprofile(Convert.ToInt16(profileid));
         }
 
         public bool createmailboxfolders(string profileid)
         {
-            return _memberepository.createmailboxfolders(profileid);
+            return _memberepository.createmailboxfolders(Convert.ToInt16(profileid));
         }
 
         public string GetusernamebyProfileID(string profileid)

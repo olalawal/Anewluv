@@ -222,11 +222,11 @@ namespace Shell.MVC2.AppFabric
 
         }
 
-        public static bool clearcurrentsessioncache(string _ProfileID, HttpContextBase context)
+        public static bool clearcurrentsessioncache(string _ProfileID, string sessionid)
         {
 
             //clear out guest data
-            MembersViewModelHelper.removeguestdata(context);
+            MembersViewModelHelper.removeguestdata(sessionid);
             //ProfileBrowseModelsHelper.removeguestresults(context);
             //clear out member data if member is authenticated
             //TO DO worry about maybe to deleted this to wonder about peristing it?
@@ -647,7 +647,7 @@ namespace Shell.MVC2.AppFabric
 
             //updates the model in session with any new data
             //TO DO verify that the P contians profile ID
-            public static MembersViewModel updateguestdata(MembersViewModel p, IMembersMapperRepository membersmapperrepository)
+            public static bool updateguestdata(MembersViewModel p, IMembersMapperRepository membersmapperrepository)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -690,7 +690,7 @@ namespace Shell.MVC2.AppFabric
                 // model = context.models.Single(c => c.Id == id);
                 dataCache.Put("membersviewmodel" + p.sessionid , p, "Guests");
 
-                return p;
+                return true;
 
 
 

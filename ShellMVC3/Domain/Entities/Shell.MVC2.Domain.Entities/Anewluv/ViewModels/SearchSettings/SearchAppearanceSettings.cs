@@ -10,8 +10,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
      public class SearchAppearanceSettings
     {
         //appereance search settings 
-        public string HeightMax { get; set; }
-        public string HeightMin { get; set; }
+        public string heightmax { get; set; }
+        public string heightmin { get; set; }
         public List<string> ethnicitylist = new List<string>();
         public List<string> bodytypeslist = new List<string>();
 

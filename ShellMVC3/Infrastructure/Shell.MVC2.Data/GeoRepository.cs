@@ -52,8 +52,8 @@ namespace Shell.MVC2.Data
             //countryID = postaldataservicecontext.GetCountryIdByCountryName(model.GeoRegisterModel.Country);
 
             //check if the  city and country match
-            if (model.GeoRegisterModel.Country == model.GeoMembersModel.MyQuickSearch.MySelectedCountryName && 
-                tempCityAndStateProvince[0] == model.GeoMembersModel.MyQuickSearch.MySelectedCity)
+            if (model.GeoRegisterModel.Country == model.GeoMembersModel.myquicksearch.myselectedcountryname && 
+                tempCityAndStateProvince[0] == model.GeoMembersModel.myquicksearch.myselectedcity)
             {
                 if (model.GeoRegisterModel.lattitude  != null | model.GeoRegisterModel.lattitude  == 0)
                     return model.GeoRegisterModel;

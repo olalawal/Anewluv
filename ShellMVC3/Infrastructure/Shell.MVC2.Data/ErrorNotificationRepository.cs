@@ -67,7 +67,7 @@ namespace Shell.MVC2.Data
               message=  (message.Create (c =>
                {
                    c.id = (int)MessageTemplateEnum.GenericErrorMessage;
-                   c.messageType.id = (int)MessageTypeEnum.DeveloperError;
+                   c.messagetype.id = (int)MessageTypeEnum.DeveloperError;
                    c.body = c.template == null ? TemplateParser.RazorFileTemplate("", ref customerror) :
                                                         TemplateParser.RazorDBTemplate(message.template.razorTemplateBody, ref customerror);
                    c.subject = string.Format("An error occured");
@@ -85,13 +85,12 @@ namespace Shell.MVC2.Data
               { 
                id = (int)MessageTemplateEnum.GenericErrorMessage,
                 template = new lu_template { id = 1},
-                    messageType = new lu_messageType { id = (int)MessageTypeEnum.DeveloperError},
-                   body == null ? TemplateParser.RazorFileTemplate("", ref customerror) :
-                                                        TemplateParser.RazorDBTemplate(message.template.razorTemplateBody, ref customerror);
-                   subject = string.Format("An error occured");
-                   recipients = recipientEmailAddresss.ToList();
-                   sendingApplication = "ErrorNotificationService";
-                   systemAddress = SystemSenderAddress;
+                     messagetype  = new lu_messageType { id = (int)MessageTypeEnum.DeveloperError},
+                   body  = message.template.razorTemplateBody == null ? TemplateParser.RazorFileTemplate("", ref customerror) : TemplateParser.RazorDBTemplate(message.template.razorTemplateBody, ref customerror),
+                     subject  = string.Format("An error occured"),
+                   recipients = recipientEmailAddresss.ToList(),
+                   sendingApplication = "ErrorNotificationService",
+                   systemAddress = SystemSenderAddress
               
               };
 
@@ -137,7 +136,7 @@ namespace Shell.MVC2.Data
                     SmtpClient smtp = new SmtpClient();
                     smtp.Host = !string.IsNullOrEmpty(message.systemAddress.hostName) ? mailMessage.Sender.Host : message.systemAddress.hostIp;
                     //smtp.Credentials()
-                    smtp.Credentials = new System.Net.NetworkCredential(message.systemAddress.credentialusername, message.systemAddress.credentialPassword);
+                    smtp.Credentials = new System.Net.NetworkCredential(message.systemAddress.credentialUserName, message.systemAddress.credentialPassword);
                     smtp.Send(mailMessage);
                     isEmailSendSuccessfully = true;
                 }

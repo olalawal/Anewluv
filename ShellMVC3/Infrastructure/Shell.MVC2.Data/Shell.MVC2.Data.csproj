@@ -146,7 +146,6 @@
     <Compile Include="SearchRepository.cs" />
     <Compile Include="OpenidRepositiory.cs" />
     <Compile Include="MailRepository.cs" />
-    <Compile Include="ChatRepository.cs" />
     <Compile Include="ErrorLoggingRepository.cs" />
     <Compile Include="ErrorNotificationRepository.cs" />
     <Compile Include="InfoNotificationRepository.cs" />

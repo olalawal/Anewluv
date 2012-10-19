@@ -72,7 +72,7 @@ namespace Shell.MVC2.Data
            
 
 
-            return (model.OrderByDescending(u => u.photodate).ToList();
+            return (model.OrderByDescending(u => u.photodate).ToList());
 
 
 

@@ -43,11 +43,10 @@ namespace Shell.MVC2.Data
         
         #region "Load Other misc stuff such as list of pages etc"
 
-        public List<systempagesetting> getsystempagesettinglist
+        public List<systempagesetting> getsystempagesettinglist()
         {
 
-            get
-            {
+           
                 List<systempagesetting> temp = new List<systempagesetting>();
 
 #if DISCONECTED
@@ -64,10 +63,10 @@ namespace Shell.MVC2.Data
                 temp = CachingFactory.CssStyleSelector.getsystempagesettingslist(_datingcontext);
                 return temp;
 #endif
-            }
+            
         }
 
-        public static string getbodycssbypagename(string pagename)
+        public string getbodycssbypagename(string pagename)
         {
         
                 return CachingFactory.CssStyleSelector.getbodycssbypagename(pagename,_datingcontext).ToString();
@@ -77,11 +76,9 @@ namespace Shell.MVC2.Data
 
         #region "generic lookup and collections"
 
-        public List<lu_gender> getgenderlist
+        public List<lu_gender> getgenderlist()
         {
-            get
-            {
-
+           
 
 #if DISCONECTED
                 List<lu_gender> genderlist = new List<lu_gender>();
@@ -100,22 +97,20 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }       
-        public List<age> getagelist
+        public List<age> getageslist()
         {
-            get
-            {
+            
                return  CachingFactory.SharedObjectHelper.getagelist();
-            }
+            
         }
-        public List<metricheight> getmetricheightlist
+        public List<metricheight> getmetricheightlist()
         {
 
-            get
-            {
+            
                 return CachingFactory.SharedObjectHelper.getmetricheightlist();
-            }
+            
 
         }
 
@@ -132,10 +127,9 @@ namespace Shell.MVC2.Data
 
 
 
-        public List<lu_bodytype> getbodytypelist
+        public List<lu_bodytype> getbodytypelist()
         {
-            get
-            {
+          
 
 
 #if DISCONECTED
@@ -155,12 +149,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_ethnicity> getethnicitylist
+        public List<lu_ethnicity> getethnicitylist()
         {
-            get
-            {
+           
 
 
 #if DISCONECTED
@@ -176,16 +169,15 @@ namespace Shell.MVC2.Data
                 return CachingFactory.SharedObjectHelper.getethnicitylist(_datingcontext);
 
 
-
+        }
                 // return temp;
 #endif
 
-            }
-        }
-        public List<lu_eyecolor> geteyecolorlist
+            
+        
+        public List<lu_eyecolor> geteyecolorlist()
         {
-            get
-            {
+           
 
 
 #if DISCONECTED
@@ -206,12 +198,10 @@ namespace Shell.MVC2.Data
 #endif
 
             }
-        }
-        public List<lu_haircolor> gethaircolorlist
+        
+        public List<lu_haircolor> gethaircolorlist()
         {
-            get
-            {
-
+           
 
 #if DISCONECTED
                 List<lu_haircolor> haircolorlist = new List<lu_haircolor>();
@@ -230,18 +220,16 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }       
         
         #endregion
 
         #region "Criteria Character Dropdowns"
 
-        public List<lu_diet> dietlist
+        public List<lu_diet> getdietlist()
         {
-            get
-            {
-
+           
 
 #if DISCONECTED
                 List<lu_diet> dietlist = new List<lu_diet>();
@@ -260,13 +248,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_drinks> drinkslist
+        public List<lu_drinks> getdrinkslist()
         {
-            get
-            {
-
+           
 
 #if DISCONECTED
                 List<lu_drinks> drinkslist = new List<lu_drinks>();
@@ -285,12 +271,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_exercise> exerciselist
+        public List<lu_exercise> getexerciselist()
         {
-            get
-            {
+            
 
 
 #if DISCONECTED
@@ -310,12 +295,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_hobby> hobbylist
+        public List<lu_hobby> gethobbylist()
         {
-            get
-            {
+            
 
 
 #if DISCONECTED
@@ -335,13 +319,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_humor> humorlist
+        public List<lu_humor> gethumorlist()
         {
-            get
-            {
-
+           
 
 #if DISCONECTED
                 List<lu_humor> humorlist = new List<lu_humor>();
@@ -360,13 +342,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_politicalview> politicalviewlist
+        public List<lu_politicalview> getpoliticalviewlist()
         {
-            get
-            {
-
+           
 
 #if DISCONECTED
                 List<lu_politicalview> politicalviewlist = new List<lu_politicalview>();
@@ -385,13 +365,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_religion> religionlist
+        public List<lu_religion> getreligionlist()
         {
-            get
-            {
-
+          
 
 #if DISCONECTED
                 List<lu_religion> religionlist = new List<lu_religion>();
@@ -410,13 +388,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_religiousattendance> religiousattendancelist
+        public List<lu_religiousattendance> getreligiousattendancelist()
         {
-            get
-            {
-
+          
 
 #if DISCONECTED
                 List<lu_religiousattendance> religiousattendancelist = new List<lu_religiousattendance>();
@@ -435,12 +411,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_sign> signlist
+        public List<lu_sign> getsignlist()
         {
-            get
-            {
+            
 
 
 #if DISCONECTED
@@ -460,13 +435,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_smokes> smokeslist
+        public List<lu_smokes> getsmokeslist()
         {
-            get
-            {
-
+           
 
 #if DISCONECTED
                 List<lu_smokes> smokeslist = new List<lu_smokes>();
@@ -485,7 +458,7 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
 
 
@@ -493,10 +466,9 @@ namespace Shell.MVC2.Data
 
         #region "Criteria Lifestyle Dropdowns"
 
-        public List<lu_educationlevel> educationlevellist
+        public List<lu_educationlevel> geteducationlevellist()
         {
-            get
-            {
+            
 
 
 #if DISCONECTED
@@ -516,14 +488,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+           
         }
-        public List<lu_employmentstatus> employmentstatuslist
+        public List<lu_employmentstatus> getemploymentstatuslist()
         {
-            get
-            {
-
-
+           
 #if DISCONECTED
                 List<lu_employmentstatus> employmentstatuslist = new List<lu_employmentstatus>();
                 employmentstatuslist.Add(new lu_employmentstatus { description = "Male",  id  = 1, selected   = false });
@@ -541,13 +510,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_havekids> havekidslist
+        public List<lu_havekids> gethavekidslist()
         {
-            get
-            {
-
+          
 
 #if DISCONECTED
                 List<lu_havekids> havekidslist = new List<lu_havekids>();
@@ -566,12 +533,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_incomelevel> incomelevellist
+        public List<lu_incomelevel> getincomelevellist()
         {
-            get
-            {
+           
 
 
 #if DISCONECTED
@@ -591,13 +557,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_livingsituation> livingsituationlist
+        public List<lu_livingsituation> getlivingsituationlist()
         {
-            get
-            {
-
+           
 
 #if DISCONECTED
                 List<lu_livingsituation> livingsituationlist = new List<lu_livingsituation>();
@@ -616,12 +580,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_lookingfor> lookingforlist
+        public List<lu_lookingfor> getlookingforlist()
         {
-            get
-            {
+            
 
 
 #if DISCONECTED
@@ -641,12 +604,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_maritalstatus> maritalstatuslist
+        public List<lu_maritalstatus> getmaritalstatuslist()
         {
-            get
-            {
+            
 
 
 #if DISCONECTED
@@ -666,13 +628,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
-        public List<lu_profession> professionlist
+        public List<lu_profession> getprofessionlist()
         {
-            get
-            {
-
+           
 
 #if DISCONECTED
                 List<lu_profession> professionlist = new List<lu_profession>();
@@ -691,12 +651,11 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+           
         }
-        public List<lu_wantskids> wantskidslist
+        public List<lu_wantskids> getwantskidslist()
         {
-            get
-            {
+           
 
 
 #if DISCONECTED
@@ -716,30 +675,21 @@ namespace Shell.MVC2.Data
                 // return temp;
 #endif
 
-            }
+            
         }
 
         #endregion
 
 
-        #region "Geodate collections and lists"
+     
 
 
-        public List<string> CountrySelectList(string CountryName)
-        {
-            List<string> temp;
-
-            temp = _georepository.GetCountry_PostalCode_ListAndOrderByCountry().ToSelectList(x => x.CountryName, x => x.CountryName,
-                                                      "Any");
-
-            return temp;
-
-        }
-        public List<string> CountrySelectList()
+       
+        public List<country> getcountrylist()
         {
 
 
-            List<string> temp = new List<string>();
+           
 #if DISCONECTED
                         temp.Add(new string() { Text = "United States", Value = "44", Selected = false });
                         temp.Add(new string() { Text = "Canada", Value = "43", Selected = true });
@@ -747,9 +697,7 @@ namespace Shell.MVC2.Data
 
 #else
 
-            temp = _georepository.GetCountry_PostalCode_ListAndOrderByCountry().OrderBy(x => x.CountryName).ToSelectList(x => x.CountryName, x => x.CountryName,
-                                                  "Any");
-            return temp;
+            return _georepository.getcountrylist();  
 #endif
 
 
@@ -758,54 +706,23 @@ namespace Shell.MVC2.Data
 
 
         }
-
-        #region GetFilteredCitiesOld
-        //public SelectList GetFilteredCitiesOld(string filter, string Country, int offset)
-        //{
-        //    var customers = _georepository.GetCityListDynamic(Country, filter, "");
-
-        //    SelectList customersList = new SelectList((from s in customers.Take(50).ToList() select new { CityProvince = s.City + "," + s.State_Province }), "CityProvince", "CityProvince", "ALL");
-
-        //    return customersList;
-        //}
-
-
-        public List<string> GetFilteredCitiesOld(string filter, string Country, int offset)
+        public List<citystateprovince > getfilteredcitiesold(string filter, string Country, int offset)
         {
 
             var customers = _georepository.GetCityListDynamic(Country, filter, "");
 
-            return ((from s in customers.Take(50).ToList() select new { CityProvince = s.City + "," + s.State_Province }).ToSelectList(x => x.CityProvince, x => x.CityProvince,
-                                                     "ALL"));
+            return ((from s in customers.Take(50).ToList() select new citystateprovince  {  stateprovince   = s.City + "," + s.State_Province }).ToList());
 
         }
-
-
-        #endregion
-
-        #region GetFilteredCities
-        //public SelectList GetFilteredCities(string filter, string Country, int offset)
-        //{
-        //    //public CityPostalCode MySelectedCityPostalCode
-
-        //    var customers = _georepository.GetCityListDynamic(Country, filter, "").Take(50);
-
-        //    SelectList customersList = new SelectList((from s in customers.ToList() select new CityStateProvince { StateProvince = s.City + "," + s.State_Province, City = s.City }), "StateProvince", "StateProvince", false);
-
-        //    return customersList;
-        //}
-
-
-        public List<string> GetFilteredCities(string filter, string Country, int offset)
+        public List<citystateprovince> getfilteredcities(string filter, string Country, int offset)
         {
 
-            List<string> temp;
+            List<citystateprovince> temp;
             try
             {
                 var customers = _georepository.GetCityListDynamic(Country, filter, "").Take(50);
 
-                temp = ((from s in customers.ToList() select new CityStateProvince { stateprovince = s.City + "," + s.State_Province, city = s.City }).ToSelectList(x => x.stateprovince, x => x.stateprovince, null
-                                                                ));
+                temp = (from s in customers.ToList() select new citystateprovince { stateprovince = s.City + "," + s.State_Province }).ToList();
                 return temp;
 
             }
@@ -814,54 +731,25 @@ namespace Shell.MVC2.Data
                 // status = MembershipCreateStatus.ProviderError;
                 //  newUser = null;
                 //throw ex;
-
                 return null;
             }
 
         }
-
-
-
-
-
-        // ViewData["accountlist"] = 
-        //new SelectList((from s in time.Anagrafica_Dipendente.ToList() select new { ID_Dipendente=s.ID_Dipendente,FullName = s.Surname + " " + s.Name}), "ID_Dipendente", "FullName", null);
-
-        #endregion
-
-        #region GetFilteredPostalCodes
-        //public SelectList GetFilteredPostalCodes(string filter, string Country, string City, int offset)
-        //{
-        //    var customers = _georepository.GetPostalCodesByCountryAndCityPrefixDynamic(Country, City, filter);
-
-        //   // SelectList customersList = new SelectList(customers.Skip(offset).Take(25), "PostalCode", "PostalCode", false);
-
-        //    SelectList customersList = new SelectList(customers.ToList(), "PostalCode", "PostalCode", false);
-
-
-        //    return customersList;
-        //}
-
-
-        public List<string> GetFilteredPostalCodes(string filter, string Country, string City, int offset)
+        public List<postalcodes> getfilteredpostalcodes(string filter, string Country, string City, int offset)
         {
 
             var customers = _georepository.GetPostalCodesByCountryAndCityPrefixDynamic(Country, City, filter);
 
-            return (customers.Skip(offset).Take(25).ToSelectList(x => x.PostalCode, x => x.PostalCode, ""));
+            return ((from s in customers.Skip(offset).Take(25).ToList() select new postalcodes { postalcodevalue = s.PostalCode }).ToList());
 
         }
 
-        #endregion
+      
 
-        #endregion
-
-
-        #region "Search Settings Collections Here"
+   
 
 
-
-        #endregion
+  
 
 
     }

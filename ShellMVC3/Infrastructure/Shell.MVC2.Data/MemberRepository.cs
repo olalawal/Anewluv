@@ -212,11 +212,7 @@ namespace Shell.MVC2.Data
              }
    
              //get full profile stuff
-       //*****************************************************
-   
-
-            
-           
+            //*****************************************************
             
              public string getgenderbyphotoid(Guid guid)
              {
@@ -581,7 +577,7 @@ namespace Shell.MVC2.Data
                     DateTime currenttime = DateTime.Now;
 
                     //get the profileid from userID
-                    int profileid = getprofileidbyusername(username);
+                    int? profileid = getprofileidbyusername(username);
                     try
                     {
                         //update all other sessions that were not properly logged out
@@ -600,7 +596,7 @@ namespace Shell.MVC2.Data
 
 
                         //noew aslo update the logtime and then 
-                        myLogtime.profile_id  = profileid;
+                        myLogtime.profile_id  = profileid.GetValueOrDefault();
                         myLogtime.sessionid  = sessionID;
                         myLogtime.logintime  = currenttime;
                         this._datingcontext.userlogtimes.Add(myLogtime);
@@ -1051,7 +1047,7 @@ namespace Shell.MVC2.Data
             //set default perfect match distance as 100 for now later as we get more members lower
             //TO DO move this to a db setting or resourcer file
             if (perfectmatchsearchsettings.distancefromme   == null | perfectmatchsearchsettings.distancefromme   == 0)
-                model.MaxDistanceFromMe  = 500;
+                model.maxdistancefromme  = 500;
 
             //TO DO add this code to search after types have been made into doubles
             //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
@@ -1068,8 +1064,8 @@ namespace Shell.MVC2.Data
             int intheightmax = perfectmatchsearchsettings.heightmax  != null ? perfectmatchsearchsettings.heightmax.GetValueOrDefault() : 100;
             bool blEvaluateHeights = intheightmin >0 ? true : false;
             //convert lattitudes from string (needed for JSON) to bool
-            double? myLongitude = (model.MyLongitude != "")?  Convert.ToDouble(model.MyLongitude) : 0;
-            double? myLattitude = (model.MyLongitude  != "")?  Convert.ToDouble(model.MyLongitude ):0;
+            double? myLongitude = (model.mylongitude != "")?  Convert.ToDouble(model.mylongitude) : 0;
+            double? myLattitude = (model.mylongitude  != "")?  Convert.ToDouble(model.mylongitude ):0;
             //get the rest of the values if they are needed in calculations
 
          
@@ -1132,7 +1128,7 @@ namespace Shell.MVC2.Data
                           //** end of visiblity settings ***
                           
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)) //using whereIF predicate function 
-                            .WhereIf(LookingForGenderValues.Count == 0, z=>z.gender.id  == model.LookingForGendersID.FirstOrDefault())    
+                            .WhereIf(LookingForGenderValues.Count == 0, z=>z.gender.id  == model.lookingforgenderid)    
                             //TO DO add the rest of the filitering here 
                             //Appearance filtering                         
                             .WhereIf(blEvaluateHeights, z=> z.height  > intheightmin && z.height  <= intheightmax) //Only evealuate if the user searching actually has height values they look for                         
@@ -1162,7 +1158,7 @@ namespace Shell.MVC2.Data
 
           //  var temp = MemberSearchViewmodels;
             //these could be added to where if as well, also limits values if they did selected all
-            var Profiles = (model.MaxDistanceFromMe  > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme  <= model.MaxDistanceFromMe ) select q) : MemberSearchViewmodels.Take(500);
+            var Profiles = (model.maxdistancefromme  > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme  <= model.maxdistancefromme ) select q) : MemberSearchViewmodels.Take(500);
             //     Profiles; ; 
             // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
             //               Profiles;
@@ -1195,7 +1191,7 @@ namespace Shell.MVC2.Data
             //set default perfect match distance as 100 for now later as we get more members lower
             //TO DO move this to a db setting or resourcer file
             if (perfectmatchsearchsettings.distancefromme  == null | perfectmatchsearchsettings.distancefromme == 0)
-                model.MaxDistanceFromMe  = 500;
+                model.maxdistancefromme  = 500;
 
             //TO DO add this code to search after types have been made into doubles
             //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
@@ -1213,8 +1209,8 @@ namespace Shell.MVC2.Data
             bool blEvaluateHeights = intheightmin > 0 ? true : false;
             //get the rest of the values if they are needed in calculations
             //convert lattitudes from string (needed for JSON) to bool           
-            double? myLongitude = (model.MyLongitude != "") ? Convert.ToDouble(model.MyLongitude) : 0;
-            double? myLattitude = (model.MyLatitude  != "") ? Convert.ToDouble(model.MyLongitude ) : 0;
+            double? myLongitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
+            double? myLattitude = (model.mylatitude  != "") ? Convert.ToDouble(model.mylongitude ) : 0;
 
 
             //set variables
@@ -1252,11 +1248,11 @@ namespace Shell.MVC2.Data
 
             MemberSearchViewmodels = (from x in db.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id )) //using whereIF predicate function 
-                            .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.LookingForGendersID.FirstOrDefault())
+                            .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.lookingforgenderid )
                             //Appearance filtering not implemented yet                        
                             .WhereIf(blEvaluateHeights, z => z.height  > intheightmin && z.height  <= intheightmax) //Only evealuate if the user searching actually has height values they look for 
                             //we have to filter on the back end now since we cant use UDFs
-                            // .WhereIf(model.MaxDistanceFromMe  > 0, a => db.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.Maxdistancefromme)
+                            // .WhereIf(model.maxdistancefromme  > 0, a => db.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
                                       join f in db.profiles on x.id  equals f.id 
                                       select new MemberSearchViewModel
                                       {
@@ -1285,7 +1281,7 @@ namespace Shell.MVC2.Data
 
 
             //these could be added to where if as well, also limits values if they did selected all
-           // var Profiles = (model.Maxdistancefromme > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.Maxdistancefromme) select q) : MemberSearchViewmodels;
+           // var Profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.maxdistancefromme) select q) : MemberSearchViewmodels;
             //     Profiles; ; 
             // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
             //               Profiles;
@@ -1311,7 +1307,7 @@ namespace Shell.MVC2.Data
             //set default perfect match distance as 100 for now later as we get more members lower
             //TO DO move this to a db setting or resourcer file
             if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
-                model.MaxDistanceFromMe  = 500;
+                model.maxdistancefromme  = 500;
 
             //TO DO add this code to search after types have been made into doubles
             //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
@@ -1330,8 +1326,8 @@ namespace Shell.MVC2.Data
             DateTime max = today.AddYears(-(intAgeFrom + 1));
             DateTime min = today.AddYears(-intAgeTo);
             //convert lattitudes from string (needed for JSON) to bool
-            double? myLongitude = (model.MyLongitude != "") ? Convert.ToDouble(model.MyLongitude) : 0;
-            double? myLattitude = (model.MyLatitude != "") ? Convert.ToDouble(model.MyLatitude) : 0;
+            double? myLongitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
+            double? myLattitude = (model.mylatitude != "") ? Convert.ToDouble(model.mylatitude) : 0;
 
 
 
@@ -1345,7 +1341,7 @@ namespace Shell.MVC2.Data
             //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
             MemberSearchViewmodels = (from x in db.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id )) //using whereIF predicate function 
-                            .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.LookingForGendersID.FirstOrDefault())                            
+                            .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.lookingforgenderid )                            
 
                                       join f in db.profiles on x.id equals f.id
                                       select new MemberSearchViewModel
@@ -1373,7 +1369,7 @@ namespace Shell.MVC2.Data
 
 
             //these could be added to where if as well, also limits values if they did selected all
-            var Profiles = (model.MaxDistanceFromMe  > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.MaxDistanceFromMe ) select q) : MemberSearchViewmodels.Take(500);
+            var Profiles = (model.maxdistancefromme  > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.maxdistancefromme ) select q) : MemberSearchViewmodels.Take(500);
             //     Profiles; ; 
             // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
             //               Profiles;

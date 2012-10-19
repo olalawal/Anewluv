@@ -86,37 +86,13 @@ namespace Shell.MVC2.Interfaces
 
             #endregion
 
-             List<string> getcountryselectlist(string countryname);
-
-             List<string> getcountryselectlist();
-           
-            #region getfilteredcitiesold
-
-
-             List<string> getfilteredcitiesold(string filter, string country, int offset);
-            
-
-            #endregion
-
-            #region GetFilteredCities
-
-             List<string> getfilteredcities(string filter, string country, int offset);
-            
-            #endregion
-
-            #region getfilteredpostalcodes
-            
-
-             List<string> getfilteredpostalcodes(string filter, string country, string City, int offset);
-            
-            #endregion
+            // List<string> getcountrylist(string countryname);
+             List<country> getcountrylist();
+             List<citystateprovince> getfilteredcitiesold(string filter, string country, int offset);
+             List<citystateprovince> getfilteredcities(string filter, string country, int offset);
+             List<postalcodes> getfilteredpostalcodes(string filter, string country, string City, int offset);
 
 
-            #region "Search Settings Collections Here"
-
-
-
-            #endregion
 
 
         }
