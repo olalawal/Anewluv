@@ -30,7 +30,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
              ctorArg => new AnewLuvMembershipProvider(ctorArg.Inject<AnewLuvFTSEntities>(),ctorArg.Inject<IGeoRepository>(),ctorArg.Inject<IMemberRepository>()));
 
             //services
-           Kernel.Bind<IMembershipProvider>().ToSelf();
+           Kernel.Bind<IAuthenticationService>().ToSelf();
          
       }
 	}

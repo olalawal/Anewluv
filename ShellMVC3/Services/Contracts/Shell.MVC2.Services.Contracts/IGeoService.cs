@@ -8,6 +8,7 @@ using System.ServiceModel.Web;
 using System.Text;
 using Dating.Server.Data.Models;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using Shell.MVC2.Domain.Entities.Anewluv;
 
 namespace Shell.MVC2.Services.Contracts
 {
@@ -17,62 +18,74 @@ namespace Shell.MVC2.Services.Contracts
     {
         [WebGet]
         [OperationContract]
-        string GetCountryNameByCountryId(int countryId);
-
-
-        // TODO: Add your service operations here
-
-        [WebInvoke]
+        string getcountrynamebycountryid(int countryId);
+        [WebInvoke ]
         [OperationContract]
-        RegisterModel VerifyOrUpdateRegistrationGeoData(ValidateRegistrationGeoDataModel model);
+        RegisterModel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model);
         //gets the country list and orders it
         //added sorting
         [WebGet]
         [OperationContract]
-         List<Country_PostalCode_List> GetCountry_PostalCode_ListAndOrderByCountry();
+        List<Country_PostalCode_List> getcountry_postalcode_listandorderbycountry();
+        [WebGet]
+        [OperationContract]
+        List<country> getcountrylist();//10-15-2012 ned method to for drop down lists
         /// <summary>
         /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
         /// </summary>
-        ///   
+        ///       
         [WebGet]
         [OperationContract]
-         int GetCountry_PostalCodeStatusByCountryName(string strCountryName);
-       
-               
+        int getcountry_postalcodestatusbycountryname(string strCountryName);
         [WebGet]
         [OperationContract]
-        int GetCountryIdByCountryName(string strCountryName);
-
+        string getcountrynamebycountryid(int strCountryID);
         [WebGet]
         [OperationContract]
-         List<CityList> GetCityListDynamic(string strCountryName, string strPrefixText, string strPostalcode);
+        int getcountryidbycountryname(string strCountryName);
         [WebGet]
         [OperationContract]
-         List<GpsData> GetGpsDataByCountryPostalCodeandCity(string strCountryName, string strPostalcode, string strCity);
+        List<CityList> getcitylistdynamic(string strCountryName, string strPrefixText, string strPostalcode);
         [WebGet]
         [OperationContract]
-         List<GpsData> GetGpsDataByCountryAndCity(string strCountryName, string strCity);
+        List<GpsData> getgpsdatabycountrypostalcodeandcity(string strCountryName, string strPostalcode, string strCity);
         [WebGet]
         [OperationContract]
-         GpsData GetGpsDataSingleByCityCountryAndPostalCode(string strCountryName, string strPostalcode, string strCity);
+        List<GpsData> getgpsdatabycountryandcity(string strCountryName, string strCity);
         [WebGet]
         [OperationContract]
-         List<PostalCodeList> GetPostalCodesByCountryAndCityPrefixDynamic(string strCountryName, string strCity, string StrprefixText);
+        GpsData getgpsdatasinglebycitycountryandpostalcode(string strCountryName, string strPostalcode, string strCity);
+        [WebGet]
+        [OperationContract]
+        List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string strCountryName, string strCity, string StrprefixText);
         //gets the single geo code as string
         [WebGet]
         [OperationContract]
-         string GetGeoPostalCodebyCountryNameAndCity(string strCountryName, string strCity);
+        string getgeopostalcodebycountrynameandcity(string strCountryName, string strCity);
         [WebGet]
         [OperationContract]
-         bool ValidatePostalCodeByCOuntryandCity(string strCountryName, string strCity, string StrPostalCode);
+        bool validatepostalcodebycountryandcity(string strCountryName, string strCity, string StrPostalCode);
         [WebGet]
         [OperationContract]
-         List<PostalCodeList> GetPostalCodesByCountryAndLatLongDynamic(string strCountryName, string strlattitude, string strlongitude);
+        List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string strCountryName, string strlattitude, string strlongitude);
         [WebGet]
         [OperationContract]
-         List<PostalCodeList> GetPostalCodesByCountryNameCityandStateProvinceDynamic(string strCountryName, string strCity, string strStateProvince);
-     
-        
+        List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string strCountryName, string strCity, string strStateProvince);
+
+        //TO DO move these lookups to geo
+        // List<string> getcountrylist(string countryname);
+        [WebGet]
+        [OperationContract]
+        List<country> getcountrylist();
+        [WebGet]
+        [OperationContract]
+        List<citystateprovince> getfilteredcitiesold(string filter, string country, int offset);
+        [WebGet]
+        [OperationContract]
+        List<citystateprovince> getfilteredcities(string filter, string country, int offset);
+        [WebGet]
+        [OperationContract]
+        List<postalcodes> getfilteredpostalcodes(string filter, string country, string City, int offset);
 
     }
 

@@ -5,15 +5,28 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using Shell.MVC2.Services.Contracts;
+using Shell.MVC2.Interfaces;
+using Shell.MVC2.Data;
+using System.Web;
+using System.Net;
 
 namespace Shell.MVC2.Services.Dating
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
-    public class MemberService : IMemberService
+    public class MemberService : IMemberRepository
     {
-        public void DoWork()
-        {
-        }
+
+
+        private IMemberRepository  _memberrepository;
+        private string _apikey;
+
+        public MemberService(IMemberRepository memberrepository)
+            {
+                _memberrepository = memberrepository;
+                _apikey  = HttpContext.Current.Request.QueryString["apikey"];
+                throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+               
+            }
 
 
         //modifed to get search settings as well 

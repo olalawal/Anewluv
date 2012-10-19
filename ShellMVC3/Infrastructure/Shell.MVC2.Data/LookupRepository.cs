@@ -29,14 +29,14 @@ namespace Shell.MVC2.Data
     {
         // private AnewluvContext _db;
         //TO DO move from ria servives
-        private IGeoRepository _georepository;
+       // private IGeoRepository _georepository;
         private IMemberRepository _memberrepository;
 
 
-        public LookupRepository(AnewluvContext datingcontext, IMemberRepository memberrepository, IGeoRepository georepository)
+        public LookupRepository(AnewluvContext datingcontext, IMemberRepository memberrepository)
             : base(datingcontext)
         {
-            _georepository = georepository;
+           // _georepository = georepository;
             _memberrepository = memberrepository;
         }
 
@@ -684,66 +684,7 @@ namespace Shell.MVC2.Data
      
 
 
-       
-        public List<country> getcountrylist()
-        {
-
-
-           
-#if DISCONECTED
-                        temp.Add(new string() { Text = "United States", Value = "44", Selected = false });
-                        temp.Add(new string() { Text = "Canada", Value = "43", Selected = true });
-                        return temp;
-
-#else
-
-            return _georepository.getcountrylist();  
-#endif
-
-
-
-
-
-
-        }
-        public List<citystateprovince > getfilteredcitiesold(string filter, string Country, int offset)
-        {
-
-            var customers = _georepository.GetCityListDynamic(Country, filter, "");
-
-            return ((from s in customers.Take(50).ToList() select new citystateprovince  {  stateprovince   = s.City + "," + s.State_Province }).ToList());
-
-        }
-        public List<citystateprovince> getfilteredcities(string filter, string Country, int offset)
-        {
-
-            List<citystateprovince> temp;
-            try
-            {
-                var customers = _georepository.GetCityListDynamic(Country, filter, "").Take(50);
-
-                temp = (from s in customers.ToList() select new citystateprovince { stateprovince = s.City + "," + s.State_Province }).ToList();
-                return temp;
-
-            }
-            catch (Exception ex)
-            {
-                // status = MembershipCreateStatus.ProviderError;
-                //  newUser = null;
-                //throw ex;
-                return null;
-            }
-
-        }
-        public List<postalcodes> getfilteredpostalcodes(string filter, string Country, string City, int offset)
-        {
-
-            var customers = _georepository.GetPostalCodesByCountryAndCityPrefixDynamic(Country, City, filter);
-
-            return ((from s in customers.Skip(offset).Take(25).ToList() select new postalcodes { postalcodevalue = s.PostalCode }).ToList());
-
-        }
-
+      
       
 
    

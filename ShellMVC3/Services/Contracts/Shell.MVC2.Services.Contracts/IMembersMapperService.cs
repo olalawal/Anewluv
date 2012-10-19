@@ -13,29 +13,81 @@ namespace Shell.MVC2.Services.Contracts
     [ServiceContract]
     public interface IMembersMapperService
     {
-          [WebGet]
-        [OperationContract]
-        MemberSearchViewModel MapMemberSearchViewModel(string profileId);
-         [WebGet]
-        [OperationContract]
-        List<MemberSearchViewModel> MapMemberSearchViewModels(List<string> profileIds);
-         
+
         [WebGet]
         [OperationContract]
-        ProfileBrowseModel MapProfileBrowseModel(string viewerprofileId, string profileId);
-
-          [WebGet]
+        MemberSearchViewModel getmembersearchviewmodel(int profileid);
+       
+        [WebInvoke ]
         [OperationContract]
-        List<ProfileBrowseModel> MapProfileBrowseModels(string viewerprofileId, List<string> profileIds);
-
-          [WebGet]
+        List<MemberSearchViewModel> getmembersearchviewmodels(List<int> profileIds);
+        [WebGet]
         [OperationContract]
-        ProfileCriteriaModel MapProfileCriteriaModel(MemberSearchViewModel p);
-
-          [WebGet]
+        ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileid);
+        [WebInvoke]
         [OperationContract]
-        ProfileCriteriaModel MapProfileCriteriaModel();
-        // TODO: Add your service operations here
+        List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds);
+        [WebGet]
+        [OperationContract]
+        ProfileCriteriaModel getprofilecriteriamodel(int profileid);       //overload for above
+        [WebGet]
+        [OperationContract]
+        ProfileCriteriaModel getprofilecriteriamodel();
+        [WebInvoke]
+        [OperationContract]
+        MembersViewModel getdefaultquicksearchsettingsmembers(MembersViewModel Model);
+        //populate search settings for guests 
+        [WebInvoke]
+        [OperationContract]
+        MembersViewModel getdefaultsearchsettingsguest(MembersViewModel Model);
+
+
+
+
+        //registration model mapping
+        [WebInvoke]
+        [OperationContract]
+        RegisterModel getregistermodel(MembersViewModel membersmodel);
+        [WebInvoke]
+        [OperationContract]
+        //TO DO this should be using profileID or a composite model , add rpxprofile to members model
+        RegisterModel getregistermodelopenid(MembersViewModel membersmodel);
+        //exposed methods that use cache, we should prpbbaly hdie the other methods that are not cached
+        [WebGet]
+        [OperationContract]
+        RegisterModel getregistermodeltest();
+
+
+
+        // MembersViewModel updatemembersviewmodel(MembersViewModel model);
+        //send the full model to app fapbric   
+        [WebInvoke]
+        [OperationContract]
+        MembersViewModel updatememberdata(MembersViewModel model);
+        [WebInvoke]
+        [OperationContract]
+        MembersViewModel updatememberdatabyprofileid(int profileid);
+        [WebInvoke]
+        [OperationContract]
+        bool updateguestdata(MembersViewModel model);
+        [WebInvoke]
+        [OperationContract]
+        bool removeguestdata(string sessionid);
+        //cacheing of search stuff
+        [WebGet]
+        [OperationContract]
+        MembersViewModel getguestdata(string sessionid);
+        [WebGet]
+        [OperationContract]
+        MembersViewModel getmemberdata(int profileid);
+
+        //mapping functions for members VM
+        [WebGet]
+        [OperationContract]
+        MembersViewModel mapmember(int profileid);
+        [WebGet]
+        [OperationContract]
+        MembersViewModel mapguest();
     }
 
 }

@@ -12,7 +12,7 @@ using Shell.MVC2.Domain.Entities.Anewluv;
 namespace Shell.MVC2.Services.Authentication
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
-    public class MembershipService : IMembershipProvider 
+    public class MembershipService : IAuthenticationService 
     {
 
         private IAnewLuvMembershipProvider _anewluvmembershipprovider;
