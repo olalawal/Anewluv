@@ -6,9 +6,14 @@ using System.ServiceModel;
 using System.Text;
 using Shell.MVC2.Services.Contracts;
 using Shell.MVC2.Interfaces;
-using Shell.MVC2.Data;
+
+
+
 using System.Web;
 using System.Net;
+
+using Shell.MVC2.Domain.Entities.Anewluv;
+using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 
 namespace Shell.MVC2.Services.Dating
 {
@@ -17,7 +22,7 @@ namespace Shell.MVC2.Services.Dating
     {
 
 
-        private IMemberRepository  _memberrepository;
+        private IMemberRepository _memberrepository;
         private string _apikey;
 
         public MemberService(IMemberRepository memberrepository)
@@ -36,20 +41,20 @@ namespace Shell.MVC2.Services.Dating
         public profiledata getprofiledatabyprofileid(int profileid)
         {
 
-
+            return _memberrepository.getprofiledatabyprofileid(profileid);
 
         }
 
         public searchsetting getperfectmatchsearchsettingsbyprofileid(int profileid)
         {
 
-
+            return _memberrepository.getperfectmatchsearchsettingsbyprofileid(profileid);
         }
 
         public searchsetting createmyperfectmatchsearchsettingsbyprofileid(int profileid)
         {
 
-
+            return _memberrepository.createmyperfectmatchsearchsettingsbyprofileid(profileid);
 
         }
 
@@ -58,7 +63,7 @@ namespace Shell.MVC2.Services.Dating
 
         public string getgenderbyphotoid(Guid guid)
         {
-
+            return _memberrepository.getgenderbyphotoid(guid);
         }
 
         //TO DO this needs to be  linked to roles
@@ -68,7 +73,7 @@ namespace Shell.MVC2.Services.Dating
         // added 1/18/2010 ola lawal
         public bool checkifquoutareachedandupdate(int profileid)
         {
-
+            return _memberrepository.checkifquoutareachedandupdate(profileid);
         }
 
         // "Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
@@ -76,30 +81,30 @@ namespace Shell.MVC2.Services.Dating
         //update the database i.e create folders and change profile status from guest to active ?!
         public bool createmailboxfolders(int intprofileid)
         {
-
+            return _memberrepository.createmailboxfolders(intprofileid);
 
         }
 
         public bool activateprofile(int intprofileid)
         {
-
+            return _memberrepository.activateprofile(intprofileid);
         }
 
         public bool deactivateprofile(int intprofileid)
         {
-
+            return _memberrepository.deactivateprofile(intprofileid);
         }
         //updates the profile with a password that is presumed to be already encyrpted
         public bool updatepassword(int profileid, string encryptedpassword)
         {
-
+            return _memberrepository.updatepassword(profileid, encryptedpassword);
 
         }
 
         public bool addnewopenidforprofile(int profileid, string openidIdentifer, string openidProvidername)
         {
 
-
+            return _memberrepository.addnewopenidforprofile(profileid, openidIdentifer, openidProvidername);
 
         }
 
@@ -107,7 +112,7 @@ namespace Shell.MVC2.Services.Dating
         public bool checkifprofileisactivated(int intprofileid)
         {
 
-
+            return _memberrepository.checkifprofileisactivated(intprofileid);
 
         }
 
@@ -115,7 +120,7 @@ namespace Shell.MVC2.Services.Dating
         public bool checkifmailboxfoldersarecreated(int intprofileid)
         {
 
-
+            return _memberrepository.checkifmailboxfoldersarecreated(intprofileid);
 
         }
 
@@ -126,7 +131,7 @@ namespace Shell.MVC2.Services.Dating
         // added 1/18/2010 ola lawal
         public bool updateuserlogouttime(int profileid, string sessionID)
         {
-
+          return  _memberrepository.updateuserlogouttime(profileid, sessionID);
 
         }
 
@@ -135,7 +140,7 @@ namespace Shell.MVC2.Services.Dating
         public Nullable<DateTime> getmemberlastlogintime(int profileid)
         {
 
-
+            return _memberrepository.getmemberlastlogintime(profileid);
 
         }
 
@@ -146,12 +151,12 @@ namespace Shell.MVC2.Services.Dating
         public bool updateuserlogintime(string username, string sessionID)
         {
 
-
+            return _memberrepository.updateuserlogintime(username, sessionID);
         }
 
         public bool updateuserlogintimebyprofileid(int intprofileid, string sessionID)
         {
-
+            return _memberrepository.updateuserlogintimebyprofileid(intprofileid, sessionID);
         }
 
         //date time functions '
@@ -163,14 +168,14 @@ namespace Shell.MVC2.Services.Dating
         public string getlastloggedinstring(DateTime logindate)
         {
 
-
+            return _memberrepository.getlastloggedinstring(logindate);
 
         }
 
         //returns true if somone logged on
         public bool getuseronlinestatus(int profileid)
         {
-
+            return _memberrepository.getuseronlinestatus(profileid);
         }
 
 
@@ -184,7 +189,7 @@ namespace Shell.MVC2.Services.Dating
 
         public bool checkifscreennamealreadyexists(string strscreenname)
         {
-
+            return _memberrepository.checkifscreennamealreadyexists(strscreenname);
 
         }
 
@@ -192,18 +197,18 @@ namespace Shell.MVC2.Services.Dating
 
         public bool checkifprofileidalreadyexists(int profileid)
         {
-
+            return _memberrepository.checkifprofileidalreadyexists(profileid);
 
         }
 
         public bool checkifusernamealreadyexists(string strusername)
         {
-
+            return _memberrepository.checkifusernamealreadyexists(strusername);
         }
 
         public string validatesecurityansweriscorrect(int intprofileid, int SecurityQuestionID, string strSecurityAnswer)
         {
-
+            return _memberrepository.validatesecurityansweriscorrect(intprofileid, SecurityQuestionID, strSecurityAnswer);
         }
 
         /// <summary>
@@ -211,34 +216,27 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>
         public bool checkifactivationcodeisvalid(int intprofileid, string strActivationCode)
         {
-
+            return _memberrepository.checkifactivationcodeisvalid(intprofileid, strActivationCode);
         }
 
 
         public profile getprofilebyusername(string username)
         {
 
-
+            return _memberrepository.getprofilebyusername(username);
         }
 
 
-        public profile getprofilebyscreenname(string username)
+        public int? getprofileidbyusername(string User)
         {
-
-
-
-        }
-
-        public int getProfileIdbyusername(string User)
-        {
-
+            return _memberrepository.getprofileidbyusername(User);
 
         }
 
 
         public profile getprofilebyprofileid(int profileid)
         {
-
+            return _memberrepository.getprofilebyprofileid(profileid);
 
         }
 
@@ -250,35 +248,38 @@ namespace Shell.MVC2.Services.Dating
         /// <returns></returns>
         public int? getprofileidbyusername(string strusername)
         {
-
+            return _memberrepository.getprofileidbyusername(strusername);
         }
 
         public int? getprofileidbyscreenname(string strscreenname)
         {
+            return _memberrepository.getprofileidbyscreenname(strscreenname);
         }
 
         public int? getprofileidbyssessionid(string strsessionid)
         {
-
+            return _memberrepository.getprofileidbyssessionid(strsessionid);
         }
 
         public string getusernamebyprofileid(int profileid)
         {
-
+            return _memberrepository.getusernamebyprofileid(profileid);
         }
 
         public string getscreennamebyprofileid(int profileid)
         {
-
+            return _memberrepository.getscreennamebyprofileid(profileid);
         }
 
         public string getscreennamebyusername(string username)
         {
+            return _memberrepository.getscreennamebyusername(username);
+        
         }
 
         public bool checkifemailalreadyexists(string strEmail)
         {
-
+            return _memberrepository.checkifemailalreadyexists(strEmail);
         }
 
 
@@ -291,7 +292,7 @@ namespace Shell.MVC2.Services.Dating
 
         public string getgenderbyscreenname(string screenname)
         {
-
+            return _memberrepository.getgenderbyscreenname(screenname);
         }
 
 
@@ -299,7 +300,7 @@ namespace Shell.MVC2.Services.Dating
 
         public visiblitysetting getprofilevisibilitysettingsbyprofileid(int profileid)
         {
-
+            return _memberrepository.getprofilevisibilitysettingsbyprofileid(profileid);
 
         }
 
@@ -309,7 +310,7 @@ namespace Shell.MVC2.Services.Dating
         {
 
 
-
+            return _memberrepository.getquickmatches(model);
 
 
 
@@ -323,7 +324,7 @@ namespace Shell.MVC2.Services.Dating
 
 
 
-
+            return _memberrepository.getemailmatches(model);
 
 
 
@@ -331,7 +332,7 @@ namespace Shell.MVC2.Services.Dating
         public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model)
         {
 
-
+            return _memberrepository.getquickmatcheswhenquickmatchesempty(model);
 
         }
        

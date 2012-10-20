@@ -55,6 +55,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interfaces", "Interfaces", "{6DF8392F-B474-4E8D-8B08-C82F4D1A3768}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.DependencyResolution.Ninject", "..\Infrastructure\Ninject\Shell.MVC2.DependencyResolution.Ninject\Shell.MVC2.DependencyResolution.Ninject.csproj", "{0145184E-916D-4DB2-BB19-E069DF0F1F36}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C} = {D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Media", "..\Services\Shell.MVC2.Services.MediaService\Shell.MVC2.Services.Media.csproj", "{D748E13C-887B-40C9-812C-67210746638B}"
 EndProject

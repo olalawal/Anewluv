@@ -6,7 +6,7 @@ using Dating.Server.Data.Models;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 
-namespace Shell.MVC2.Data
+namespace Shell.MVC2.Interfaces
 {
    public interface IMemberRepository
    {
@@ -75,7 +75,8 @@ namespace Shell.MVC2.Data
        /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
        /// 5/5/2012 als added check that the screen name withoute spaces does not match an existing one with no spaces either
        /// </summary>       
-        bool checkifscreennamealreadyexists(string strScreenName);   
+        bool checkifscreennamealreadyexists(string strScreenName);
+        bool checkifusernamealreadyexists(string strusername);  
        //5-20-2012 added to check if a user email is registered       
         bool checkifprofileidalreadyexists(int profileid);     
         string validatesecurityansweriscorrect(int strProfileID, int SecurityQuestionID, string strSecurityAnswer);  

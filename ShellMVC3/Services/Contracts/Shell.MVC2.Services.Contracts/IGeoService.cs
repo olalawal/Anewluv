@@ -27,9 +27,7 @@ namespace Shell.MVC2.Services.Contracts
         [WebGet]
         [OperationContract]
         List<Country_PostalCode_List> getcountry_postalcode_listandorderbycountry();
-        [WebGet]
-        [OperationContract]
-        List<country> getcountrylist();//10-15-2012 ned method to for drop down lists
+    
         /// <summary>
         /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
         /// </summary>
@@ -37,9 +35,7 @@ namespace Shell.MVC2.Services.Contracts
         [WebGet]
         [OperationContract]
         int getcountry_postalcodestatusbycountryname(string strCountryName);
-        [WebGet]
-        [OperationContract]
-        string getcountrynamebycountryid(int strCountryID);
+        
         [WebGet]
         [OperationContract]
         int getcountryidbycountryname(string strCountryName);

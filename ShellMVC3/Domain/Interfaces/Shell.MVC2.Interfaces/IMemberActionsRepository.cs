@@ -101,7 +101,8 @@ namespace Shell.MVC2.Interfaces
          int getwhoiblockedcount(int profileid);
 
        List<MemberSearchViewModel> getwhoiblocked(int profileid, int? Page, int? NumberPerPage);
-   
+
+       List<MemberSearchViewModel> getwhoblockedme(int profileid, int? Page, int? NumberPerPage);
                    
       List<MemberSearchViewModel> getmutualblocks(int profileid, int targetprofileid);
   

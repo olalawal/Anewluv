@@ -26,7 +26,7 @@ namespace Shell.MVC2.Interfaces
        /// </summary>
        ///       
         int getcountry_postalcodestatusbycountryname(string strCountryName);
-        string getcountrynamebycountryid(int strCountryID)   ;
+     
         int getcountryidbycountryname(string strCountryName);
         List<CityList> getcitylistdynamic(string strCountryName, string strPrefixText, string strPostalcode);
         List<GpsData> getgpsdatabycountrypostalcodeandcity(string strCountryName, string strPostalcode, string strCity);
@@ -42,10 +42,8 @@ namespace Shell.MVC2.Interfaces
              
     
  //Moved from lookup service
-        List<citystateprovince> getfilteredcitiesold(string filter, string country, int offset);
-    
-        List<citystateprovince> getfilteredcities(string filter, string country, int offset);
-    
+        List<citystateprovince> getfilteredcitiesold(string filter, string country, int offset);    
+        List<citystateprovince> getfilteredcities(string filter, string country, int offset);    
         List<postalcodes> getfilteredpostalcodes(string filter, string country, string City, int offset);
     }
 }

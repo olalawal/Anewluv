@@ -83,9 +83,7 @@ namespace Shell.MVC2.Data
             myQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName != "").OrderBy(p => p.CountryName).ToList();
 
             return myQuery;
-        }
-
-       
+        }      
 
         /// <summary>
         /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
@@ -99,22 +97,7 @@ namespace Shell.MVC2.Data
 
             return myQuery.FirstOrDefault().PostalCodes.Value;
         }      
-        public string getcountrynamebycountryid(int strCountryID)
-        {
-            List<Country_PostalCode_List> CountryCodeQuery = default(List<Country_PostalCode_List>);
-
-            CountryCodeQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryID  == strCountryID).ToList();
-
-            if (CountryCodeQuery.Count() > 0)
-            {
-                return CountryCodeQuery.FirstOrDefault().CountryName.ToString();
-
-            }
-            else
-            {
-                return "";
-            }
-        }               
+      
         public int getcountryidbycountryname(string strCountryName)
         {
             List<Country_PostalCode_List> CountryCodeQuery = default(List<Country_PostalCode_List>);
@@ -131,7 +114,6 @@ namespace Shell.MVC2.Data
                 return 0;
             }
         }
-
         //Dynamic LINQ to Entites quries 
         //*****************************************************************************************************************************************
         public List<CityList> getcitylistdynamic(string strCountryName, string strPrefixText, string strPostalcode)
@@ -727,7 +709,6 @@ namespace Shell.MVC2.Data
             //Return Me.ObjectContext.citylis
             return functionReturnValue;
         }
-
         public List<country> getcountrylist()
         {
 

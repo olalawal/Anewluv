@@ -118,7 +118,7 @@
     <Compile Include="Anewluv\LookupsCriteria\Enums\educationlevel.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\smokes.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\sign.cs" />
-    <Compile Include="Anewluv\securityquestion.cs" />
+    <Compile Include="Anewluv\Lookups\lu_securityquestion.cs" />
     <Compile Include="Anewluv\Lookups\lu_showme.cs" />
     <Compile Include="Anewluv\SearchSettings\searchsetting_lookingfor.cs" />
     <Compile Include="Anewluv\SearchSettings\searchsetting_maritalstatus.cs" />

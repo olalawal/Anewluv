@@ -311,7 +311,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                //conver the unquiqe coountry Name to an ID
                 using (PostalDataService postaldbContext = new PostalDataService())
                 {  //store country ID for use later
-                    countryID =  _georepository.GetCountryIdByCountryName(country);               
+                    countryID =  _georepository.getcountryidbycountryname(country);               
                 }
 
                 //split up the city from state province
@@ -451,10 +451,10 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
                     //conver the unquiqe coountry Name to an ID
                      //store country ID for use later 
-                     int  countryID = _georepository.GetCountryIdByCountryName(u.country);
+                     int  countryID = _georepository.getcountryidbycountryname(u.country);
 
                         //get the longidtue and latttude 
-                     GpsData _GpsData =  _georepository.GetGpsDataSingleByCityCountryAndPostalCode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
+                     GpsData _GpsData =  _georepository.getgpsdatasinglebycitycountryandpostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
 
 
 

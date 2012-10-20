@@ -298,7 +298,7 @@ namespace Shell.MVC2.Data
 
                 //TO DO add this to search settings for now use what is in profiledata
                 //These will come from search settings table in the future at some point
-                CriteriaModel.BasicSearchSettings.country = georepository.GetCountryNameByCountryId((byte)metadata.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
+                CriteriaModel.BasicSearchSettings.country = georepository.getcountrynamebycountryid((byte)metadata.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
                 CriteriaModel.BasicSearchSettings.citystateprovince = (metadata.profiledata.stateprovince == null) ? "Ask Me" : metadata.profiledata.stateprovince;
                 CriteriaModel.BasicSearchSettings.postalcode  = metadata.profiledata.postalcode;  //this could be for countries withoute p codes
 
@@ -495,7 +495,7 @@ namespace Shell.MVC2.Data
             quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(Model.profiledata.gender.id);
             quicksearchmodel.myselectedcountryname = Model.mycountryname; //use same country for now
             //add the postal code status here as well
-            quicksearchmodel.myselectedpostalcodestatus = (georepository.GetCountry_PostalCodeStatusByCountryName(Model.mycountryname) == 1) ? true : false;
+            quicksearchmodel.myselectedpostalcodestatus = (georepository.getcountry_postalcodestatusbycountryname(Model.mycountryname) == 1) ? true : false;
 
             //TO do get this from search settings
             //default for has photos only get this from the 
@@ -741,7 +741,7 @@ namespace Shell.MVC2.Data
                 //model.Countries. = model.profiledata.CountryID;
 
                 //geographical data poulated here
-                model.mycountryname = georepository.GetCountryNameByCountryId(model.profiledata.countryid);
+                model.mycountryname = georepository.getcountrynamebycountryid(model.profiledata.countryid);
                 model.mycountryid = model.profiledata.countryid;
                 model.mycity = model.profiledata.city;
 
