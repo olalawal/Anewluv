@@ -128,7 +128,7 @@ namespace Shell.MVC2.Interfaces
        
       int getwholikesmecount(int profileid);
            
-      int getwhoislikesmenewcount(int profileid);
+      int getwholikesmenewcount(int profileid);
     
        List <MemberSearchViewModel> getwholikesmenew(int profileid, int? Page, int? NumberPerPage); 
       

@@ -6,7 +6,13 @@ using System.ServiceModel;
 using System.Text;
 using Shell.MVC2.Interfaces;
 using Dating.Server.Data.Models;
-using Dating.Server.Data.ViewModels;
+
+using System.Web;
+using System.Net;
+
+using Shell.MVC2.Domain.Entities.Anewluv;
+using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+
 using Shell.MVC2.Services.Contracts;
 
 
@@ -18,89 +24,122 @@ namespace Shell.MVC2.Services.Dating
 
         public class GeoService :  IGeoService
         {
-            private IGeoRepository _geoRepo;
+            private IGeoRepository _georepository;
+            private string _apikey;
 
-            public GeoService(IGeoRepository geoRepo)
+            public GeoService(IGeoRepository georepository)
             {
-                _geoRepo = geoRepo;
+                _georepository = georepository;
+                _apikey = HttpContext.Current.Request.QueryString["apikey"];
+                throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
             }
 
-         
+
+            public string getcountrynamebycountryid(int countryId)
+            {
+             return _georepository.
+            }
+            public RegisterModel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model)
+            {
+  return _georepository.
+
+            }
             //gets the country list and orders it
             //added sorting
-            public List<Country_PostalCode_List> GetCountry_PostalCode_ListAndOrderByCountry()
+            public List<Country_PostalCode_List> getcountry_postalcode_listandorderbycountry()
             {
-                return _geoRepo.GetCountry_PostalCode_ListAndOrderByCountry();
+                return _georepository.
             }
 
             /// <summary>
             /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
             /// </summary>
             /// 
-          
-            public int GetCountry_PostalCodeStatusByCountryName(string strCountryName)
-            {
-                return _geoRepo.GetCountry_PostalCodeStatusByCountryName(strCountryName);
+            public int getcountry_postalcodestatusbycountryname(string strCountryName)
+            {  return _georepository.
             }
 
-          
-            public string GetCountryNameByCountryId(int intCountryID)
-            {
-                return _geoRepo.GetCountryNameByCountryId(intCountryID);
+            public int getcountryidbycountryname(string strCountryName)
+            {  return _georepository.
             }
-            
-          
-            public int GetCountryIdByCountryName(string strCountryName)
+            //Dynamic LINQ to Entites quries 
+            //*****************************************************************************************************************************************
+            public List<CityList> getcitylistdynamic(string strCountryName, string strPrefixText, string strPostalcode)
             {
-                return _geoRepo.GetCountryIdByCountryName(strCountryName);
-            }
+                 return _georepository.
 
-            public List<CityList> GetCityListDynamic(string strCountryName, string strPrefixText, string strPostalcode)
-            {
-                return _geoRepo.GetCityListDynamic(strCountryName, strPrefixText, strPostalcode);
+
+
+
             }
-            public List<GpsData> GetGpsDataByCountryPostalCodeandCity(string strCountryName, string strPostalcode, string strCity)
+            public List<GpsData> getgpsdatabycountrypostalcodeandcity(string strCountryName, string strPostalcode, string strCity)
             {
-                return _geoRepo.GetGpsDataByCountryPostalCodeandCity(strCountryName, strPostalcode, strCity);
+                  return _georepository.
             }
-            public List<GpsData> GetGpsDataByCountryAndCity(string strCountryName, string strCity)
+            public List<GpsData> getgpsdatabycountryandcity(string strCountryName, string strCity)
             {
-                return _geoRepo.GetGpsDataByCountryAndCity(strCountryName, strCity);
+                 return _georepository.
             }
-            public GpsData GetGpsDataSingleByCityCountryAndPostalCode(string strCountryName, string strPostalcode, string strCity)
+            public GpsData getgpsdatasinglebycitycountryandpostalcode(string strCountryName, string strPostalcode, string strCity)
             {
-                return _geoRepo.GetGpsDataSingleByCityCountryAndPostalCode(strCountryName, strPostalcode, strCity);
+               
+
+
+                  return _georepository.
+               
+
+
+
             }
-            public List<PostalCodeList> GetPostalCodesByCountryAndCityPrefixDynamic(string strCountryName, string strCity, string StrprefixText)
+            public List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string strCountryName, string strCity, string StrprefixText)
             {
-                return _geoRepo.GetPostalCodesByCountryAndCityPrefixDynamic(strCountryName, strCity, StrprefixText);
+                  return _georepository.
             }
             //gets the single geo code as string
-            public string GetGeoPostalCodebyCountryNameAndCity(string strCountryName, string strCity)
+            public string getgeopostalcodebycountrynameandcity(string strCountryName, string strCity)
             {
-                return _geoRepo.GetGeoPostalCodebyCountryNameAndCity(strCountryName, strCity);
-            }
-            public bool ValidatePostalCodeByCOuntryandCity(string strCountryName, string strCity, string StrPostalCode)
-            {
-                return _geoRepo.ValidatePostalCodeByCOuntryandCity(strCountryName, strCity, StrPostalCode);
-            }
 
-            public RegisterModel VerifyOrUpdateRegistrationGeoData(ValidateRegistrationGeoDataModel model)
-        {
-            return _geoRepo.VerifyOrUpdateRegistrationGeoData(model);
-        }
-            
-            
-            public List<PostalCodeList> GetPostalCodesByCountryAndLatLongDynamic(string strCountryName, string strlattitude, string strlongitude)
-            {
-                return _geoRepo.GetPostalCodesByCountryAndLatLongDynamic(strCountryName, strlattitude, strlongitude);
+
+  return _georepository.
 
             }
-
-            public List<PostalCodeList> GetPostalCodesByCountryNameCityandStateProvinceDynamic(string strCountryName, string strCity, string strStateProvince)
+            public bool validatepostalcodebycountryandcity(string strCountryName, string strCity, string StrPostalCode)
             {
-                return _geoRepo.GetPostalCodesByCountryNameCityandStateProvinceDynamic(strCountryName, strCity, strStateProvince);
+                
+                       return _georepository.
             }
+            public List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string strCountryName, string strlattitude, string strlongitude)
+            {
+                  return _georepository.
+            }
+            public List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string strCountryName, string strCity, string strStateProvince)
+            {
+                  return _georepository.
+            }
+            public List<country> getcountrylist()
+            {
+
+  return _georepository.
+            }
+            public List<citystateprovince> getfilteredcitiesold(string filter, string Country, int offset)
+            {
+
+                return _georepository.
+            }
+            public List<citystateprovince> getfilteredcities(string filter, string Country, int offset)
+            {
+
+                
+                  return _georepository.
+
+            }
+            public List<postalcodes> getfilteredpostalcodes(string filter, string Country, string City, int offset)
+            {
+
+                  return _georepository.
+
+            }
+
      
         }
     }

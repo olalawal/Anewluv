@@ -535,7 +535,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwhoilikecount(int profileid)
         {
-             return _memberactionsrepository.
+            return _memberactionsrepository.getwhoilikecount (profileid);
         }
 
         //count methods first
@@ -544,8 +544,8 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwholikesmecount(int profileid)
         {
-          
-            return _memberactionsrepository.
+
+            return _memberactionsrepository.getwholikesmecount(profileid);
         }
 
         //count methods first
@@ -554,7 +554,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwhoislikesmenewcount(int profileid)
         {
-            return _memberactionsrepository.
+            return _memberactionsrepository.getwholikesmenewcount(profileid);
         }
 
         #endregion
@@ -566,7 +566,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>
         public List<MemberSearchViewModel> getwholikesmenew(int profileid, int? Page, int? NumberPerPage)
         {
-             return _memberactionsrepository.
+            return _memberactionsrepository.getwholikesmenew(profileid, Page, NumberPerPage);
 
         }
 
@@ -576,7 +576,7 @@ namespace Shell.MVC2.Services.Dating
         public List<MemberSearchViewModel> getwholikesme(int profileid, int? Page, int? NumberPerPage)
         {
 
-             return _memberactionsrepository.
+            return _memberactionsrepository.getwholikesme(profileid, Page, NumberPerPage);
         }
 
 
@@ -585,7 +585,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public List<MemberSearchViewModel> getwhoilike(int profileid, int? Page, int? NumberPerPage)
         {
-            return _memberactionsrepository.
+            return _memberactionsrepository.getwhoilike(profileid, Page, NumberPerPage);
         }
 
 
@@ -599,7 +599,7 @@ namespace Shell.MVC2.Services.Dating
         //work on this later
         public List<MemberSearchViewModel> getmutuallikes(int profileid, int targetprofileid)
         {
-         return _memberactionsrepository.
+            return _memberactionsrepository.getmutuallikes(profileid, targetprofileid);
 
         }
         /// <summary>
@@ -607,7 +607,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary        
         public bool checklike(int profileid, int targetprofileid)
         {
-       return _memberactionsrepository.
+            return _memberactionsrepository.checklike(profileid, targetprofileid);
        }
 
         /// <summary>
@@ -617,7 +617,7 @@ namespace Shell.MVC2.Services.Dating
         {
 
 
-             return _memberactionsrepository.
+            return _memberactionsrepository.addlike(profileid, targetprofileid);
 
 
         }
@@ -630,7 +630,7 @@ namespace Shell.MVC2.Services.Dating
         public bool removelikebyprofileid(int profileid, int likeprofile_id)
         {
 
-           return _memberactionsrepository.
+            return _memberactionsrepository.removelikebylikeprofileid(profileid, likeprofile_id);
         }
 
         /// <summary>
@@ -641,8 +641,8 @@ namespace Shell.MVC2.Services.Dating
         public bool removelikebylikeprofileid(int likeprofile_id, int profileid)
         {
 
-         
-     return _memberactionsrepository.
+
+            return _memberactionsrepository.removelikebylikeprofileid(likeprofile_id, profileid);
 
         }
 
@@ -653,7 +653,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public bool restorelikebyprofileid(int profileid, int likeprofile_id)
         {
- return _memberactionsrepository.
+            return _memberactionsrepository.restorelikebyprofileid(profileid, likeprofile_id);
         }
 
         /// <summary>
@@ -664,8 +664,8 @@ namespace Shell.MVC2.Services.Dating
         public bool restorelikebylikeprofileid(int likeprofile_id, int profileid)
         {
 
-          
- return _memberactionsrepository.
+
+            return _memberactionsrepository.restorelikebylikeprofileid(likeprofile_id, profileid);
 
         }
 
@@ -675,7 +675,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public bool removelikesbyprofileidandscreennames(int profileid, List<String> screennames)
         {
-             return _memberactionsrepository.
+            return _memberactionsrepository.removelikesbyprofileidandscreennames(profileid, screennames);
         }
 
         /// <summary>
@@ -685,8 +685,8 @@ namespace Shell.MVC2.Services.Dating
         public bool restorelikesbyprofileidandscreennames(int profileid, List<String> screennames)
         {
 
-          
-        return _memberactionsrepository.
+
+            return _memberactionsrepository.restorelikesbyprofileidandscreennames(profileid, screennames);
         }
 
         /// <summary>
@@ -694,7 +694,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public bool updatelikeviewstatus(int profileid, int targetprofileid)
         {
- return _memberactionsrepository.
+            return _memberactionsrepository.updatelikeviewstatus(profileid, targetprofileid);
 
         }
 

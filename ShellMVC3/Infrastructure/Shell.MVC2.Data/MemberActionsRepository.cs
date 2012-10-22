@@ -1632,7 +1632,7 @@ namespace Shell.MVC2.Data
         /// <summary>
         /// count all total likes
         /// </summary>       
-        public int getwhoislikesmenewcount(int profileid)
+        public int getwholikesmenewcount(int profileid)
         {
             int? count = null;
             int defaultvalue = 0;
