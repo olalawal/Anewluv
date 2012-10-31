@@ -14,26 +14,35 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum exerciseEnum : int
+    public enum politicalviewEnum : int
     {
         [Description("NotSet")]
         [EnumMember]
         NotSet,
-        [Description("Any")] 
+        [Description("Doesn't Matter")] 
         [EnumMember]
-        Any ,
-        [Description("1-2 times a week")]
+        DoesntMatter ,
+        [Description("Liberal")]
         [EnumMember]
-        OneToTwoTimesAweek,
-        [Description("3-4 times a week")]
+        Liberal,
+        [Description("Conservative")]
         [EnumMember]
-        ThreeToFourTimesAweek,
-        [Description("Never")]
+        Conservative,
+        [Description("Independant")]
         [EnumMember]
-        Never,
-        [Description("5 or more times a week")]
+        Independant,
+        [Description("Very Liberal")]
+        [EnumMember]     
+        VeryLiberal,
+        [Description("Ultra Conservative")]
         [EnumMember]
-        FiveormoreTimesAweek
+        UltraConservative,
+        [Description("Middle of Road")]
+        [EnumMember]
+        MiddleofRoad,
+        [Description("TreeHugger / Green Party")]
+        [EnumMember]
+        TreeHuggerGreenParty
     }
 
 

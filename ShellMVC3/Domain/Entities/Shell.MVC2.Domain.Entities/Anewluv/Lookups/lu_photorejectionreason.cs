@@ -14,7 +14,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual ICollection<photo> photos { get; set; }
         public string description { get; set; }
         public string userMessage { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+       [NotMapped]
         public bool selected { get; set; }
     }
 }

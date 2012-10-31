@@ -219,6 +219,19 @@ namespace Shell.MVC2.Domain.Entities.Migrations
             }));
 
 
+               //securityquestions
+            //filter an enum for not set since that is the zero value i.e  
+            var securityquestionqry = from securityquestionEnum value in Enum.GetValues(typeof(securityquestionEnum))                            
+                               orderby value // to sort by value; remove otherwise 
+                               select value;
+            securityquestionqry.ToList().ForEach(kvp => context.lu_securityquestion.AddOrUpdate(new lu_securityquestion()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+            
+
             //showmes
             //filter an enum for not set since that is the zero value i.e  
             var showmeqry = from showmeEnum value in Enum.GetValues(typeof(showmeEnum))
@@ -316,6 +329,18 @@ namespace Shell.MVC2.Domain.Entities.Migrations
                                 orderby value // to sort by value; remove otherwise 
                                 select value;
             ethnicityqry.ToList().ForEach(kvp => context.lu_ethnicity.AddOrUpdate(new lu_ethnicity()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+            //exercises
+            //filter an enum for not set since that is the zero value i.e  
+            var exerciseqry = from exerciseEnum value in Enum.GetValues(typeof(exerciseEnum))
+                               where value != exerciseEnum.NotSet
+                               orderby value // to sort by value; remove otherwise 
+                               select value;
+            exerciseqry.ToList().ForEach(kvp => context.lu_exercise.AddOrUpdate(new lu_exercise()
             {
                 id = (int)kvp,
                 description = EnumExtensionMethods.ToDescription(kvp)
@@ -468,6 +493,22 @@ namespace Shell.MVC2.Domain.Entities.Migrations
                 id = (int)kvp,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
+
+
+
+            //politicals
+            //filter an enum for not set since that is the zero value i.e  
+            var politicalqry = from politicalviewEnum value in Enum.GetValues(typeof(politicalviewEnum))
+                              where value != politicalviewEnum.NotSet
+                              orderby value // to sort by value; remove otherwise 
+                              select value;
+            politicalqry.ToList().ForEach(kvp => context.lu_politicalview.AddOrUpdate(new lu_politicalview()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+
 
             //religiousattendances
             //filter an enum for not set since that is the zero value i.e  

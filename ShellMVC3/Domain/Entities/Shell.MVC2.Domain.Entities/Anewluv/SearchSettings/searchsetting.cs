@@ -37,7 +37,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual ICollection<searchsetting_hotfeature> hotfeatures { get; set; }  
         public virtual ICollection<searchsetting_havekids>  havekids { get; set; }        
         public virtual ICollection<searchsetting_hobby>  hobbies { get; set; }        
-        public virtual ICollection<searchsetting_hotfeature>  hotfeature { get; set; }        
+        //public virtual ICollection<searchsetting_hotfeature>  hotfeature { get; set; }        
         public virtual ICollection<searchsetting_humor>  humors { get; set; }        
         public virtual ICollection<searchsetting_incomelevel>  incomelevels { get; set; }        
         public virtual ICollection<searchsetting_livingstituation>  livingstituations { get; set; }        

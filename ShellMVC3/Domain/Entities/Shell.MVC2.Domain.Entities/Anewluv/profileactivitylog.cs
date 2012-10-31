@@ -19,7 +19,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public string actionname { get; set; } //MVC type action name
         //public string timestamp { get; set; }
         public virtual lu_activitytype activitytype { get; set; } //TO DO convert to object and lookup
-        public string profileactivitygeodata_id { get; set; }
+        public int profileactivitygeodata_id { get; set; }
         public virtual profileactivitygeodata profileactivitygeodata { get; set; }
     }
 }

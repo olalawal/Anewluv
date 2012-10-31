@@ -10,7 +10,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [Key]
         public int id { get; set; }
         public string description { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+       [NotMapped]
         public bool selected { get; set; }
 
    }

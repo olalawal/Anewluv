@@ -12,7 +12,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public int id { get; set; }
         public string description { get; set; }
         public lu_photostatus photostatus { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+       [NotMapped]
         public bool selected { get; set; }
       
         //use the ID

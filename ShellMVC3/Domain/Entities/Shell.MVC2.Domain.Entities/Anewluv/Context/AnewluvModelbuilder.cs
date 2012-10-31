@@ -363,7 +363,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
             //prfoile part is optional for profile activity since non registered  can log information as well
             modelBuilder.Entity<profile>().HasMany(p => p.profileactivity )
-           .WithOptional(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+           .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<profile>().HasMany(p => p.openids)
           .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);

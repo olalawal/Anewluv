@@ -14,21 +14,23 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum securityquestionEnum : int
+    public enum securityleveltypeEnum : int
     {
-        [Description("Your Mothers Maiden Name")]
+        [Description("NotSet")]
         [EnumMember]
-        YourMothersMaidenName,
-        [Description("What State Were you Born In")] 
+        NotSet,
+        [Description("Public")] 
         [EnumMember]
-        WhatStateWereyouBornIn,
-        [Description("Your Favorite Food")]
+        Public,
+        [Description("Private")]
         [EnumMember]
-        YourFavoriteFood,
-        [Description("Your Favorite Movie")]
+        Private,
+        [Description("Likes")]
         [EnumMember]
-        YourFavoriteMovie,
-     
+        Likes,
+        [Description("Intrests")]
+        [EnumMember]
+        Intrests
      
         
     }
