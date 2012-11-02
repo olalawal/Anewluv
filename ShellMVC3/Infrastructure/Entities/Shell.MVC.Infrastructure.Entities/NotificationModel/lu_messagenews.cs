@@ -10,15 +10,15 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
 
 
-    [DataContract]
-    public class lu_addresstype
+
+    public class lu_messagenews
     {
         //we generate this manually from enums for now
-       [Key]
+        [Key]
         public int id { get; set; }
- 
         public string description { get; set; }
-
+        public DateTime creationdate { get; set; }
+        public bool? curentmessagenews { get; set; }
 
     }
 }

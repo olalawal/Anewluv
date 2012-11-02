@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.ComponentModel;
 
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
@@ -13,13 +14,13 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     [DataContract]
     public enum ApplicationEnum : int
     {
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         Echain = 1,
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         WebApp = 2,
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         LoggingService = 3,
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         NotificationService = 4
     }
 

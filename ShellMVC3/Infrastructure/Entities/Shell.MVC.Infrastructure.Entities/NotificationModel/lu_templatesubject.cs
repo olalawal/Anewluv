@@ -10,8 +10,8 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
 
 
-    [DataContract]
-    public class lu_messagetype
+
+    public class lu_templatesubject
     {
         /// <summary>
         /// This is an enumeration type for the log severity types we track
@@ -20,7 +20,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
 
         //we generate this manually from enums for now
-     [Key]
+      
         public int id { get; set; }      
         public string description { get; set; }         
         public bool active { get; set; }       
@@ -29,13 +29,13 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
 
 
-        public static lu_messagetype Create(Action<lu_messagetype> init)
+        public static lu_templatesubject Create(Action<lu_templatesubject> init)
         {
-            var messagetype = new lu_messagetype();
+            var messagesubject = new lu_templatesubject();
             //address.MessageAddressID = Guid.NewGuid();
-            messagetype.creationdate = DateTime.Now;          
-            messagetype.active = true;
-            init(messagetype); return messagetype;
+            messagesubject.creationdate = DateTime.Now;
+            messagesubject.active = true;
+            init(messagesubject); return messagesubject;
         }
 
         //  //use create method it like this 

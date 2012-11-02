@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.ComponentModel;
 
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
@@ -16,13 +17,13 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     /// </summary>    
     /// 
     [DataContract ]
-    public enum MessageSystemAddressTypeEnum : int
+    public enum messagesystemaddresstypeenum : int
     {
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         DoNotReplyAddress = 1,
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         ExternalSenderAddress = 2,
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         SupportSenderAddress = 3,
 
     }

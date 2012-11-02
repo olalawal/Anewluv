@@ -129,14 +129,8 @@
     <value>Administrator@nmedia.com</value>
     <comment>seccomdary email for admins</comment>
   </data>
-  <data name="ContactUsAdminMessageBody" xml:space="preserve">
-    <value>The Member {0} sent the following message: &lt;p&gt;&lt;/p&gt; &lt;b&gt; &lt;/br&gt;  subject:  {1}  &lt;/b&gt; &lt;/br&gt; Message : &lt;/br&gt; {2}</value>
-  </data>
   <data name="ContactUsAdminMessageSubject" xml:space="preserve">
     <value>A new Question from a user has been recived at Anewluv.com! Please respond </value>
-  </data>
-  <data name="ContactUsMessageBody" xml:space="preserve">
-    <value>Dear {0} ,&lt;p&gt;&lt;/p&gt; Thank you for contacting us at Anewluv.com, your message has been added to the support ticket list and you will get a response from our support staff within 24 hours &lt;p&gt;&lt;/p&gt; The Anewluv.com Support Team</value>
   </data>
   <data name="ContactUsMessageSubject" xml:space="preserve">
     <value>You Question or Comment has been accepted on Anewluv.com! (No Action Required)</value>

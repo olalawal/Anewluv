@@ -97,29 +97,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Member {0} sent the following message: &lt;p&gt;&lt;/p&gt; &lt;b&gt; &lt;/br&gt;  subject:  {1}  &lt;/b&gt; &lt;/br&gt; Message : &lt;/br&gt; {2}.
-        /// </summary>
-        internal static string ContactUsAdminMessageBody {
-            get {
-                return ResourceManager.GetString("ContactUsAdminMessageBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A new Question from a user has been recived at Anewluv.com! Please respond .
         /// </summary>
         internal static string ContactUsAdminMessageSubject {
             get {
                 return ResourceManager.GetString("ContactUsAdminMessageSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0} ,&lt;p&gt;&lt;/p&gt; Thank you for contacting us at Anewluv.com, your message has been added to the support ticket list and you will get a response from our support staff within 24 hours &lt;p&gt;&lt;/p&gt; The Anewluv.com Support Team.
-        /// </summary>
-        internal static string ContactUsMessageBody {
-            get {
-                return ResourceManager.GetString("ContactUsMessageBody", resourceCulture);
             }
         }
         

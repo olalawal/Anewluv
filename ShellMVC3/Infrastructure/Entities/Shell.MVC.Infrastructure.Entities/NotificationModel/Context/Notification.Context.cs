@@ -14,12 +14,14 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     public class NotificationContext : DbContext
     {
         public DbSet<message> messages { get; set; }
-        public DbSet<lu_messageType> lu_messageType { get; set; }
+        public DbSet<lu_messagetype> lu_messagetype { get; set; }
+        public DbSet< lu_templatebody> lu_messagebody { get; set; }
+        public DbSet<lu_templatesubject> lu_messagesubject { get; set; }
         public DbSet<lu_template> lu_template { get; set; }
         public DbSet<address> address { get; set; }
-        public DbSet<lu_addressType> lu_addressType { get; set; }
+        public DbSet<lu_addresstype> lu_addresstype { get; set; }
         public DbSet<systemAddress> systemAddresses { get; set; }
-        public DbSet<lu_systemAddressType> lu_systemAddressType { get; set; }
+        public DbSet<lu_systemaddresstype> lu_systemaddresstype { get; set; }
 
 
         public NotificationContext()
@@ -35,17 +37,17 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<message>().ToTable("messages", schemaName: "Logging");
-            modelBuilder.Entity<address>().ToTable("messageAddresses", schemaName: "Logging");
-            modelBuilder.Entity<systemAddress>().ToTable("messageSystemAddresses", schemaName: "Logging");
-            modelBuilder.Entity<lu_template>().ToTable("lu_messageTemplate", schemaName: "Logging");
-            modelBuilder.Entity<lu_messageType>().ToTable("lu_messageType", schemaName: "Logging");
-            modelBuilder.Entity<lu_systemAddressType>().ToTable("lu_messageSystemAddressType", schemaName: "Logging");
+            //modelBuilder.Entity<message>().ToTable("messages", schemaName: "Logging");
+            //modelBuilder.Entity<address>().ToTable("messageAddresses", schemaName: "Logging");
+           // modelBuilder.Entity<systemAddress>().ToTable("messageSystemAddresses", schemaName: "Logging");
+           // modelBuilder.Entity<lu_template>().ToTable("lu_messageTemplate", schemaName: "Logging");
+           // modelBuilder.Entity<lu_messagetype>().ToTable("lu_messageType", schemaName: "Logging");
+          //  modelBuilder.Entity<lu_systemAddressType>().ToTable("lu_messageSystemAddressType", schemaName: "Logging");
 
             //code to build the many to many relastion ship between messages and addresses.  This would be automatically generated if we did not use a schema
             modelBuilder.Entity<message>().HasMany<address>(r => r.recipients).WithMany(u => u.messages).Map(m =>
              {
-                 m.ToTable("messageaddresses", schemaName: "Logging");
+                 m.ToTable("messageaddresses");
                  m.MapLeftKey("messageId");
                  m.MapRightKey("addressId");
 

@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
-    [DataContract]
-    public class message
+    public class news
     {
      
         //added conttructor to replace create method imo
-        public message()
+        public news()
         {
 	      //  recipients = new List<address>();
 	      //  messagetype = new lu_messageType();
@@ -26,14 +24,8 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
         [Key]
         public int id { get; set; }     
-        public virtual lu_messagetype  messagetype { get; set; }       
-        public virtual lu_template  template { get; set; }
-        public virtual systemAddress systemAddress { get; set; }
-        public virtual ICollection<address > recipients { get; set; }
-        public string sendingApplication { get; set; }  //TO do convert applications to enum as well
-        public string body { get; set; }
-        public string subject { get; set; }
-        public object attachMents { get; set; }      
+        public virtual lu_newstype   newstype { get; set; }  
+        public virtual string newsmessage { get; set; }      
         public DateTime creationDate { get; set; }
         public bool? sent { get; set; }
 

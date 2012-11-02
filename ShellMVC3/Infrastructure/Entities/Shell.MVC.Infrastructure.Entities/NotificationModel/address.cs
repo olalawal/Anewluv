@@ -20,21 +20,21 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
         [Key]
         public int id { get; set; }       
-        public virtual lu_addressType addressType { get; set; }
+        public virtual lu_addresstype addresstype { get; set; }
         public virtual ICollection<message> messages { get; set; }    
-        public string emailAddress { get; set; }
+        public string emailaddress { get; set; }
         public string username { get; set; }
-        public string otherIdentifer { get; set; }  //use this for chat notifications maybe
+        public string otheridentifer { get; set; }  //use this for chat notifications maybe
         public bool active { get; set; }
-        public DateTime creationDate { get; set; }
-        public DateTime? removalDate { get; set; }
+        public DateTime creationdate { get; set; }
+        public DateTime? removaldate { get; set; }
        
         public static address Create(Action<address> init)
         {
             var address = new address();
           
             //address.MessageAddressID = Guid.NewGuid();
-            address.creationDate = DateTime.Now;          
+            address.creationdate = DateTime.Now;          
             address.active = true;
          //   address.messages = new List<message>();
             init(address); return address; 

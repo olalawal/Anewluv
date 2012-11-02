@@ -1098,7 +1098,7 @@ namespace Shell.MVC2.Data
             LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.haircolors.Select(c => c.id.GetValueOrDefault())) : LookingForHairColorValues;
 
             HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
-            LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.hotfeature.Select(c => c.id.GetValueOrDefault())) : LookingForHotFeatureValues;
+            LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.hotfeatures .Select(c => c.id.GetValueOrDefault())) : LookingForHotFeatureValues;
 
         
             //******** visiblitysettings test code ************************
@@ -1171,6 +1171,7 @@ namespace Shell.MVC2.Data
             //final ordering 
             Profiles = Profiles.OrderByDescending(p => p.hasgalleryphoto  == true).ThenByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);
 
+            //TO DO find another way to do this maybe check and see if parsed values are empty or something or return a cached list?
             //11/20/2011 handle case where  no profiles were found
             if (Profiles.Count() == 0 )
             return getquickmatcheswhenquickmatchesempty(model);
@@ -1242,9 +1243,9 @@ namespace Shell.MVC2.Data
             LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.haircolors.Select(c => c.id.GetValueOrDefault())) : LookingForHairColorValues;
 
             HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
-            LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.hotfeature.Select(c => c.id.GetValueOrDefault())) : LookingForHotFeatureValues;
+            LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.hotfeatures.Select(c => c.id.GetValueOrDefault())) : LookingForHotFeatureValues;
 
-
+            //add more values as we get more members 
 
             MemberSearchViewmodels = (from x in db.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id )) //using whereIF predicate function 
@@ -1290,10 +1291,10 @@ namespace Shell.MVC2.Data
             //final ordering 
             var Profiles = MemberSearchViewmodels.OrderByDescending(p => p.hasgalleryphoto  == true).ThenByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).Take(4);
 
+            //TO DO find another way to do this maybe check and see if parsed values are empty or something or return a cached list?
             //11/20/2011 handle case where  no profiles were found
-           // if (Profiles.Count() == 0)
-            //    return GetQuickMatchesWhenQuickMatchesEmpty(model);
-
+            if (Profiles.Count() == 0)
+                return getquickmatcheswhenquickmatchesempty(model);
 
             return Profiles.ToList();
 

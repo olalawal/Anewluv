@@ -9,29 +9,21 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
 
    
-
+    [DataContract]
     public class lu_template
     {
         //we generate this manually from enums for now
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-       [DataMember ]
+     
+ [Key]
        public int id { get; set; }
-       [DataMember]
-       public string description { get; set; }
-       [DataMember]
-       public string physicalLocation { get; set; }
-       [DataMember]
-       public DateTime creationDate { get; set; }
-       [DataMember]
-       public DateTime? removalDate { get; set; }
-       [DataMember]
-       public bool active { get; set; }
-       [DataMember]
-       public string razorTemplateBody { get; set; }
-       [DataMember]
-       public string stringTemplateSubject { get; set; }
-       [DataMember]
-       public string stringTemplateBody { get; set; }
+       public string description { get; set; }    
+       public string physicalLocation { get; set; }   
+       public DateTime creationDate { get; set; }   
+       public DateTime? removalDate { get; set; }     
+       public bool active { get; set; }    
+       public string razorTemplateBody { get; set; } 
+       public virtual lu_templatebody bodystring { get; set; }
+       public virtual lu_templatesubject subjectstring { get; set; }
 
         public static lu_template Create(Action<lu_template> init)
         {

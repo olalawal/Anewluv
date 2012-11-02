@@ -11,13 +11,12 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
   
 
-
-    public class lu_systemAddressType
+    [DataContract]
+    public class lu_systemaddresstype
     {
         //we generate this manually from enums for now
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int id { get; set; }
-        [DataMember]
+       [Key]
+        public int id { get; set; }    
         public string description { get; set; }
 
 

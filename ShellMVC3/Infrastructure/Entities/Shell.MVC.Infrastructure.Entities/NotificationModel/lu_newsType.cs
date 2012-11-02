@@ -10,13 +10,12 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
 
 
-    [DataContract]
-    public class lu_addresstype
+
+    public class lu_newstype
     {
         //we generate this manually from enums for now
-       [Key]
         public int id { get; set; }
- 
+        [DataMember]
         public string description { get; set; }
 
 

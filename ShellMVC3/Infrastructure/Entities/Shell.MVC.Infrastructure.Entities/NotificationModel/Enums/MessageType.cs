@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.ComponentModel;
 
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
@@ -14,28 +15,30 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     /// </summary>
     /// 
     [DataContract]
-    public enum MessageTypeEnum : int
+    public enum messagetypeenum : int
     {
-        [EnumMember]
+        [Description("System Update")][EnumMember]
         GlobalSystemUpdate = 1,
-        [EnumMember]
+        [Description("Admin Update")][EnumMember]
         SysAdminUpdate = 2,
-        [EnumMember]
+        [Description("Admin Error ")][EnumMember]
         SysAdminError = 3,
-        [EnumMember]
+        [Description("Developer Update")][EnumMember]
         DeveloperUpdate = 4,
-        [EnumMember]
+        [Description("Developer Error")][EnumMember]
         DeveloperError = 5,
-        [EnumMember]
+        [Description("Global Error")][EnumMember]
         GlobalError = 6,
-        [EnumMember]
+        [Description("Project Manager Update")][EnumMember]
         ProjectManagerUpdate = 7,
-        [EnumMember]
+        [Description("QA Update")][EnumMember]
         QAUpdate = 8,
-        [EnumMember]
+        [Description("Members Update")][EnumMember]
         UserUpdate = 9,
-        [EnumMember]
+        [Description("Member Global Update")][EnumMember]
         GlobalUserUpdate = 10,
+        [Description("Member News Update")][EnumMember]
+        NewsUpdate = 10,
 
     }
 

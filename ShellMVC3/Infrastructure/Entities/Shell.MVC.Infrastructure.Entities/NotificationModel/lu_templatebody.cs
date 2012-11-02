@@ -10,32 +10,27 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
 
 
-    [DataContract]
-    public class lu_messagetype
+
+    public class lu_templatebody
     {
-        /// <summary>
-        /// This is an enumeration type for the log severity types we track
-        /// this is parsed into database values when the context is created
-        /// </summary>
-
-
+       
         //we generate this manually from enums for now
-     [Key]
+        [Key]
         public int id { get; set; }      
         public string description { get; set; }         
         public bool active { get; set; }       
-        public DateTime creationdate { get; set; }  
-        public DateTime? removaldate { get; set; }
+        public DateTime creationDate { get; set; }  
+        public DateTime? removalDate { get; set; }
 
 
 
-        public static lu_messagetype Create(Action<lu_messagetype> init)
+        public static lu_templatebody Create(Action<lu_templatebody> init)
         {
-            var messagetype = new lu_messagetype();
+            var messagebody = new lu_templatebody();
             //address.MessageAddressID = Guid.NewGuid();
-            messagetype.creationdate = DateTime.Now;          
-            messagetype.active = true;
-            init(messagetype); return messagetype;
+            messagebody.creationDate = DateTime.Now;
+            messagebody.active = true;
+            init(messagebody); return messagebody;
         }
 
         //  //use create method it like this 

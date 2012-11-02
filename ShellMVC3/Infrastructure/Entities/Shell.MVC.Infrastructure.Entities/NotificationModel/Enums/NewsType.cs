@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
-using System.ComponentModel;
 
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
@@ -14,15 +13,15 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum messageaddresstypeenum : int
+    public enum MessageAddressTypeEnum : int
     {
-        [Description("NotSet")][EnumMember]
+        [EnumMember]
         Developer = 1,
-        [Description("NotSet")][EnumMember]
+        [EnumMember]
         SystemAdmin = 2,
-        [Description("NotSet")][EnumMember]
+        [EnumMember]
         ProjectLead = 3,
-        [Description("NotSet")][EnumMember]
+        [EnumMember]
         QualityAsurance = 4
     }
 

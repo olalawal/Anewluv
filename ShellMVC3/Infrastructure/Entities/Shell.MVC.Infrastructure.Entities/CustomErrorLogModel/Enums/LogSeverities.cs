@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.ComponentModel;
 
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
@@ -15,13 +16,13 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     [DataContract]
     public enum LogSeverityEnum : int
     {
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         Information = 1,
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         Warning = 2,
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         CriticalError = 3,
-        [EnumMember]
+        [Description("NotSet")][EnumMember]
         MaxSeverity = 4
     }
 

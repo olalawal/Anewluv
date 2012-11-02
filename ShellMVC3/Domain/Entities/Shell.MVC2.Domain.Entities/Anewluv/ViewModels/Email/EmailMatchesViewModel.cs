@@ -11,7 +11,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email
             
        // public MembersRepository _membersrepository  { get; set; }
         //no contructor here will be populated in Notification service
-        public EmailMatchesViewModel(string ProfileID)
+        public EmailMatchesViewModel()
             {
 
                // _membersrepository = new MembersRepository();
@@ -31,7 +31,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email
 
             public List<MemberSearchViewModel> EmailMatches { get;  set; }
             public MemberSearchViewModel FeaturedMember { get; set; } //Stores the featured member that applys to this user 
-            public MembersViewModel MemebersViewModel { get; set; }  //lits this members data
+            public MembersViewModel MembersViewModel { get; set; }  //lits this members data
             public EmailViewModel  EmailViewModel { get; set; }         
             public bool HasMatches { get; set; }  //tels you if there are any matches 
     }

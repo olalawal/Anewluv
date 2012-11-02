@@ -100,6 +100,7 @@
     <Compile Include="Anewluv\ViewModels\Account\LocalPasswordModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\RegisterExternalLoginModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\ExternalLogin.cs" />
+    <Compile Include="Anewluv\ViewModels\Email\EmailEnums\subjecttype.cs" />
     <Compile Include="Anewluv\ViewModels\Email\EmailMatchesViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Email\EmailViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
