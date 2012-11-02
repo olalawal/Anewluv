@@ -94,9 +94,14 @@
     <Compile Include="Anewluv\Lookups\enums\showme.cs" />
     <Compile Include="Anewluv\Lookups\lu_securityleveltype.cs" />
     <Compile Include="Anewluv\Lookups\lu_defaultmailboxfolder.cs" />
-    <Compile Include="Anewluv\Mail\ViewModels\EmailMatchesViewModel.cs" />
     <Compile Include="Anewluv\SharedModels\generatedlists.cs" />
     <Compile Include="Anewluv\SharedModels\sharedmodels.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\UserProfile.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\LocalPasswordModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\RegisterExternalLoginModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\ExternalLogin.cs" />
+    <Compile Include="Anewluv\ViewModels\Email\EmailMatchesViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Email\EmailViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
     <Compile Include="Anewluv\photoconversion.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\bodytype.cs" />
@@ -160,7 +165,6 @@
     <Compile Include="Anewluv\ViewModels\Editprofile\EditProfileVisibilitySettingsModel.cs" />
     <Compile Include="Anewluv\Mail\ViewModels\mailviewmodel.cs" />
     <Compile Include="Anewluv\Mail\ViewModels\mailmessageviewmodel.cs" />
-    <Compile Include="Anewluv\ViewModels\Mail\MailModel.cs" />
     <Compile Include="Anewluv\ViewModels\MemberSearchViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\MembershipUserViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\MembersViewModel.cs" />

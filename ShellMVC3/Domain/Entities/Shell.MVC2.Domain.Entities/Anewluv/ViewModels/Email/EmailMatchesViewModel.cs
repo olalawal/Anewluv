@@ -1,32 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Shell.MVC2.Models;
+using System.Text;
 
-
-
-using System.Reflection;
-
-
-
-
-
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email
 {
     public class EmailMatchesViewModel
     {
-           
-       // public MembersRepository _membersrepository  { get; set; }
 
+            
+       // public MembersRepository _membersrepository  { get; set; }
+        //no contructor here will be populated in Notification service
         public EmailMatchesViewModel(string ProfileID)
             {
 
                // _membersrepository = new MembersRepository();
-
                 //this.MailModel = new MailModel();            
-                //this.EmailMatches = new List<MemberSearchViewModel>();
-             
+                //this.EmailMatches = new List<MemberSearchViewModel>();             
                 ////get the weekly matches for this user 
                 ////get the membersviewmodel for this person
                 //MembersViewModel model = new MembersViewModel();
@@ -36,13 +26,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
                 //this.MailModel.UserName = model.Profile.UserName;
                 //this.EmailMatches = _membersrepository.GetEmailMatches(model);
                 ////determine if we have matches to show
-                //this.HasMatches = ( this.EmailMatches.Count > 0) ? true : false;
-                
+                //this.HasMatches = ( this.EmailMatches.Count > 0) ? true : false;                
             }
 
             public List<MemberSearchViewModel> EmailMatches { get;  set; }
-            public MailModel MailModel { get;  set; }
-            public bool HasMatches { get; set; }
-          
+            public MemberSearchViewModel FeaturedMember { get; set; } //Stores the featured member that applys to this user 
+            public MembersViewModel MemebersViewModel { get; set; }  //lits this members data
+            public EmailViewModel  EmailViewModel { get; set; }         
+            public bool HasMatches { get; set; }  //tels you if there are any matches 
     }
 }
