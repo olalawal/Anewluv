@@ -129,12 +129,6 @@
     <value>Administrator@nmedia.com</value>
     <comment>seccomdary email for admins</comment>
   </data>
-  <data name="ContactUsAdminMessageSubject" xml:space="preserve">
-    <value>A new Question from a user has been recived at Anewluv.com! Please respond </value>
-  </data>
-  <data name="ContactUsMessageSubject" xml:space="preserve">
-    <value>You Question or Comment has been accepted on Anewluv.com! (No Action Required)</value>
-  </data>
   <data name="DefaultEmailSender" xml:space="preserve">
     <value>DoNotReply@AnewLuv.com</value>
     <comment>outgoing email routing address</comment>
@@ -142,29 +136,14 @@
   <data name="DefaultSupportEmail" xml:space="preserve">
     <value>Support@Anewluv.com,anewluvhelp@mail.com,ola_lawal@yahoo.com</value>
   </data>
-  <data name="PhotoUploadedAdminMessageBody" xml:space="preserve">
-    <value>A new photo for the user {0} has been uploaded to AnewLuv.com</value>
-  </data>
   <data name="PhotoUploadedAdminMessageSubject" xml:space="preserve">
     <value>A new Photo has been uploaded on Anewluv.com! Please Aprove this Photo.</value>
   </data>
   <data name="PhotoUploadedMessageSubject" xml:space="preserve">
     <value>AnewLuv.com *Your Photo has been uploaded *</value>
   </data>
-  <data name="ProfileActivatedAdminMessageSubject" xml:space="preserve">
-    <value>A Profile has been Activated!</value>
-  </data>
-  <data name="ProfileActivatedMessageSubject" xml:space="preserve">
-    <value>Your Profile has been Activated on AnewLuv.com</value>
-  </data>
   <data name="ProfileBlockedMessageAdminSubject" xml:space="preserve">
     <value>A Member has blocked another Member</value>
-  </data>
-  <data name="ProfileCreatedAdminMessageSubject" xml:space="preserve">
-    <value>A new Profile has been created !</value>
-  </data>
-  <data name="ProfileCreatedMessageSubject" xml:space="preserve">
-    <value>AnewLuv.com * Action Required * : Your new profile needs to be activated</value>
   </data>
   <data name="ProfileInterestReceivedMessageAdminSubject" xml:space="preserve">
     <value>A Member has sent an Interest to another  </value>
@@ -187,24 +166,9 @@
   <data name="ProfileReceivedMailMessageAdminSubject" xml:space="preserve">
     <value>Members have Communicated ! </value>
   </data>
-  <data name="ProfileReceivedMailMessageSubject" xml:space="preserve">
-    <value>You have a new message on Anewluv.com!</value>
-  </data>
-  <data name="RecoverAccountAdminMessageSubject" xml:space="preserve">
-    <value>An Account has been recovered on Anewluv.com</value>
-  </data>
-  <data name="RecoverAccountMessageSubject" xml:space="preserve">
-    <value>Your Account has been Recovered on AnewLuv.com</value>
-  </data>
   <data name="SendEmails" xml:space="preserve">
     <value>Yes</value>
     <comment>stops emails from being sent out in debug mode</comment>
-  </data>
-  <data name="ProfileActivationCodeRecoveredAdminMessageSubject" xml:space="preserve">
-    <value>A Profile ActivationCode has been Recovered!</value>
-  </data>
-  <data name="ProfileActivationCodeRecoveredMessageSubject" xml:space="preserve">
-    <value>AnewLuv.com * Action Required * : Your new profile needs to be activated</value>
   </data>
   <data name="AdminEmailPhotos" xml:space="preserve">
     <value>ola.lawal@gmail.com,welaworks@mail.com,anewluvadmin@nmedia.com</value>
@@ -214,10 +178,7 @@
     <value>Your photo was not Approved on AnewLuv.com!</value>
   </data>
   <data name="ProfileCreatedJainRainAdminMessageSubject" xml:space="preserve">
-    <value>A new Profile has been created via Jain raid using {0} !</value>
-  </data>
-  <data name="ProfileCreatedJainRainMessageSubject" xml:space="preserve">
-    <value>Thank you for creating a profile on AnewLuv.com</value>
+    <value />
   </data>
   <data name="SpamBlockedAdminMessageSubject" xml:space="preserve">
     <value>Message was blocked on Anewluv.com by {0}</value>
