@@ -18,88 +18,139 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     [DataContract]
     public enum templateenum : int
     {
-        [Description("GenericErrorMessage")]
+        [Description("Generic error message")]
         [EnumMember]
         GenericErrorMessage = 1,
-        [Description("MemberContactUsMemberMesage")]
+
+        [Description("ContactUs Member Mesage")]
         [EnumMember]
         MemberContactUsMemberMesage = 2,
-        [Description("MemberContactUsAdminMessage")]
+
+        [Description("ContactUs Admin Message ")]
         [EnumMember]
         MemberContactUsAdminMessage = 3,
-        [Description("MemberCreatedMemberConfirmation")]
+
+        [Description("Profile Created Member Notification")]
         [EnumMember]
-        MemberCreatedMemberConfirmation = 4,
-        [Description("MemberCreatedAdminNotification")]
+        MemberCreatedMemberNotification = 4,
+
+        [Description("Profile Created Admin Notification")]
         [EnumMember]
         MemberCreatedAdminNotification = 5,
-        [Description("MemberCreatedJianRainOrOPenIDMemberConfirmation")]
+
+        [Description("Profile Created via OpenID or JainRain Member Notification")]
         [EnumMember]
-        MemberCreatedJianRainOrOPenIDMemberConfirmation = 6,
-        [Description("MemberCreatedJainRanOrOpenIDAdminNotification")]
+        MemberCreatedJianRainOrOPenIDMemberNotification = 6,
+
+        [Description("Profile Created via OpenID or JainRain Admin Notification")]
         [EnumMember]
         MemberCreatedJainRanOrOpenIDAdminNotification = 7,
-        [Description("MemberPasswordChangeMemberConfirmation")]
+
+        [Description("Account Recovered/Password Change Member Notification")]
         [EnumMember]
-        MemberPasswordChangeMemberConfirmation = 8,
-        [Description("MemberPasswordChangedAdminNotification")]
+        MemberPasswordChangeMemberNotification = 8,
+
+        [Description("Account Recovered/Password Change Admin Notification")]
         [EnumMember]
         MemberPasswordChangedAdminNotification = 9,
-        [Description("NotSet")]
+
+        [Description("Profile Activated Member Notification")]
         [EnumMember]
-        MemberActivatedMemberConfirmation = 10,
-        [Description("NotSet")]
+        MemberActivatedMemberNotification = 10,
+
+        [Description("Profile Activated Admin Notification")]
         [EnumMember]
         MemberActivatedAdminNotification = 11,
-        [Description("NotSet")]
+
+        [Description("ActivationCode Recovered Member Notification")]
         [EnumMember]
-        MemberActivationCodeRecoveredMemberConfirmation = 12,
-        [Description("NotSet")]
+        MemberActivationCodeRecoveredMemberNotification = 12,
+
+        [Description("ActivationCode Recovered Admin Notification")]
         [EnumMember]
         MemberActivationCodeRecoveredAdminNotification = 13,
-        [Description("NotSet")]
+
+        [Description("Email Message Recived Member Notification")]
         [EnumMember]
-        MemberRecivedEmailMessageConfirmation = 14,
-        [Description("NotSet")]
+        MemberRecivedEmailMessageMemberNotification = 14,
+
+        [Description("Email Message Recived Admin Notification")]
         [EnumMember]
         MemberRecivedEmailMessageAdminNotification = 15,
-        [Description("NotSet")]
+
+        [Description("Peek Recived Member Notification")]
         [EnumMember]
-        MemberRecivedPeekMemberConfirmation = 16,
-        [Description("NotSet")]
+        MemberRecivedPeekMemberNotification = 16,
+
+        [Description("Peek Recived Admin Notification")]
         [EnumMember]
         MemberRecivedPeekAdminNotification = 17,
-        [Description("NotSet")]
+
+        [Description("Like Recived Member Notification")]
         [EnumMember]
-        MemberRecivedLikeMemberConfirmation = 18,
-        [Description("NotSet")]
+        MemberRecivedLikeMemberNotification = 18,
+
+        [Description("Like Recived Admin Notification")]
         [EnumMember]
         MemberRecivedLikeAdminNotification = 19,
-        [Description("NotSet")]
+
+        [Description("Interest Recived Member Notification")]
         [EnumMember]
-        MemberRecivedInterestMemberConfirmation = 20,
-        [Description("NotSet")]
+        MemberRecivedInterestMemberNotification = 20,
+
+        [Description("Interest Recived Admin Notification")]
         [EnumMember]
         MemberRecivedInterestAdminNotification = 21,
-        [Description("NotSet")]
-        [EnumMember]
-        MemberMatchesSentMemberConfirmation = 22,
-        [Description("NotSet")]
-        [EnumMember]
-        MemberMatchestSentAdminNotificaton = 23,
-        [Description("NotSet")]
-        [EnumMember]
-        MemberChatRequestRecivedMemberConfirmation = 24,
-        [Description("NotSet")]
-        [EnumMember]
-        MemberChatRequestRecivedAdminNotification = 25,
-        [Description("MemberChatMessageRecivedMemberConfirmation")]
-        [EnumMember]
-        MemberChatMessageRecivedMemberConfirmation = 26,
-        [Description("MemberChatMessageRecivedAdminNotification")]
-        [EnumMember]
-        MemberChatMessageRecivedAdminNotification = 27,
 
+        [Description("Chat Request Recived Member Notification")]
+        [EnumMember]
+        MemberRecivedChatRequestMemberNotification = 22,
+
+        [Description("Chat Request Recived Admin Notification")]
+        [EnumMember]
+        MemberRecivedChatRequestAdminNotification = 23,
+
+        [Description("Chat Message Recived Member Notification")]
+        [EnumMember]
+        MemberRecivedOfflineChatMessageMemberNotification = 24,
+
+        [Description("Chat Message Recived Admin Notification")]
+        [EnumMember]
+        MemberRecivedOfflineChatMessageAdminNotification = 25, //Photo
+
+        [Description("Photo Rejection Member Notification")]
+        [EnumMember]
+        MemberPhotoRejectedMemberNotification = 26,
+
+        [Description("Photo Rejection Admin Notification")]
+        [EnumMember]
+        MemberPhotoRejectedAdminNotification = 27,
+
+        [Description("Photo Uploaded Member Notification")]
+        [EnumMember]
+        MemberPhotoUploadedMemberNotification = 28,
+
+        [Description("Photo Uploaded Admin Notification")]
+        [EnumMember]
+        MemberPhotoUploadedAdminNotification = 29,
+
+        [Description("Matches Sent Member Notification")]
+        [EnumMember]
+        MemberMatchesSentMemberNotification = 30,
+
+        [Description("Matches Sent Admin Notification")]
+        [EnumMember]
+        MemberMatchestSentAdminNotificaton = 31,
+
+        [Description("Spam blocked Admin Notification")]
+        [EnumMember]
+        MemberSpamBlockedAdminNotification = 32,
+
+        [Description("Member Blocked Admin Notification")]
+        MemberBlockedAdminNotification = 33,
+
+        [Description("Photo Approved Admin Notification")]
+        MemberPhotoApprovedAdminNotification = 34,
 
     }
 

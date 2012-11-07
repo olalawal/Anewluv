@@ -14,15 +14,15 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum messageaddresstypeenum : int
+    public enum addresstypeenum : int
     {
-        [Description("NotSet")][EnumMember]
+        [Description("Developer")][EnumMember]
         Developer = 1,
-        [Description("NotSet")][EnumMember]
+        [Description("System Admin")][EnumMember]
         SystemAdmin = 2,
-        [Description("NotSet")][EnumMember]
+        [Description("Project Lead")][EnumMember]
         ProjectLead = 3,
-        [Description("NotSet")][EnumMember]
+        [Description("QA")][EnumMember]
         QualityAsurance = 4
     }
 

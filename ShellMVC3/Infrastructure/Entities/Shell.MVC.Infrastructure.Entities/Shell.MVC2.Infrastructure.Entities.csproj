@@ -58,14 +58,14 @@
     <Compile Include="NotificationModel\Context\NotificationModelbuilder.cs" />
     <Compile Include="NotificationModel\Context\SeedMethods.cs" />
     <Compile Include="NotificationModel\messagedetail.cs" />
-    <Compile Include="NotificationModel\Enums\messagenews.cs" />
-    <Compile Include="NotificationModel\lu_messagenews.cs" />
+    <Compile Include="NotificationModel\Enums\news.cs" />
+    <Compile Include="NotificationModel\lu_news.cs" />
     <Compile Include="NotificationModel\lu_templatebody.cs" />
     <Compile Include="NotificationModel\lu_templatesubject.cs" />
     <Compile Include="NotificationModel\Enums\templatebody.cs" />
     <Compile Include="NotificationModel\Enums\templatesubject.cs" />
-    <Compile Include="NotificationModel\Enums\messageaddresstype.cs" />
-    <Compile Include="NotificationModel\Enums\messagesystemaddresstype.cs" />
+    <Compile Include="NotificationModel\Enums\addresstype.cs" />
+    <Compile Include="NotificationModel\Enums\systemaddresstype.cs" />
     <Compile Include="NotificationModel\Enums\template.cs" />
     <Compile Include="UserRepairLogModel\UserRepairLog.Context.cs" />
     <Compile Include="UserRepairLogModel\UserRepairLog.cs" />
@@ -74,7 +74,7 @@
     <Compile Include="NotificationModel\message.cs" />
     <Compile Include="NotificationModel\address.cs" />
     <Compile Include="NotificationModel\lu_addresstype.cs" />
-    <Compile Include="NotificationModel\systemAddress.cs" />
+    <Compile Include="NotificationModel\lu_systemaddress.cs" />
     <Compile Include="NotificationModel\lu_systemaddresstype.cs" />
     <Compile Include="NotificationModel\lu_template.cs" />
     <Compile Include="NotificationModel\lu_messagetype.cs" />
@@ -89,6 +89,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Documentation\Migration Instructions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
+      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
+      <Name>Shell.MVC2.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

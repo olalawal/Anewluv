@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Shell.MVC2.Infrastructure;
 
+
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
     public class SeedMethods
@@ -14,33 +15,25 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         public static void seedgenerallookups(NotificationContext  context)
         {
 
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
-
-            //Put the data to be loaded here
-            // if (!context.Database.Exists())//|| !context.Database.CompatibleWithModel(false))
-            // {
-            //context.Database.Delete();
-            //context.Database.Create();
-            //populate the lookup table for log sAddress Types
+         
             var AddressTypeList = Enum.GetValues(typeof(messageaddresstypeenum))
            .Cast<messageaddresstypeenum>()
             .ToDictionary(t => (int)t, t => t.ToString()).ToList();
             // var jobInstanceStateList = EnumExtensions.ConvertEnumToDictionary<LogSeverityEnum >().ToList(); 
             AddressTypeList.ForEach(kvp => context.lu_addresstype.AddOrUpdate(new lu_addresstype()
             {
-                  id = kvp.Key,
-                description = kvp.Value
+                id = kvp.Key,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+            var messageaddresstypeqry = from messageaddresstypeenum value in Enum.GetValues(typeof(messageaddresstypeenum))
+                               //   where value != messageaddresstypeenum.NotSet
+                                  orderby value // to sort by value; remove otherwise 
+                                  select value;
+            messageaddresstypeqry.ToList().ForEach(kvp => context.lu_messageaddresstype.AddOrUpdate(new lu_messageaddresstype()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
 
@@ -101,7 +94,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
                 c.createdBy = "olawal";
                 c.hostName = "";
                 c.credentialPassword = "kayode02";
-                c.creationDate = DateTime.Now;
+                c.creationdate = DateTime.Now;
                 c.id = (int)messagesystemaddresstypeenum.DoNotReplyAddress;
             }
             ));

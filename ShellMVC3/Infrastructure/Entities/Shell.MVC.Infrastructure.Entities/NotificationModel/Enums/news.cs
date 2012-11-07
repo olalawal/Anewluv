@@ -16,7 +16,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     /// </summary>
     /// 
     [DataContract]
-    public enum messagenewsenum : int
+    public enum newsenum : int
     {
         [EnumMember]
         [Description("We have updated alot on the site please log in to see the new changes !")]

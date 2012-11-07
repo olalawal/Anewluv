@@ -19,8 +19,8 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         public int id { get; set; }      
         public string description { get; set; }         
         public bool active { get; set; }       
-        public DateTime creationDate { get; set; }  
-        public DateTime? removalDate { get; set; }
+        public DateTime creationdate { get; set; }  
+        public DateTime? removaldate { get; set; }
 
 
 
@@ -28,7 +28,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         {
             var messagebody = new lu_templatebody();
             //address.MessageAddressID = Guid.NewGuid();
-            messagebody.creationDate = DateTime.Now;
+            messagebody.creationdate = DateTime.Now;
             messagebody.active = true;
             init(messagebody); return messagebody;
         }

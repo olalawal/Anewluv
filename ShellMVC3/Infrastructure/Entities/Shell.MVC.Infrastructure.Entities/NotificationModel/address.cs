@@ -13,7 +13,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
 	//messages = new List<message>();
 //	addressType = new lu_addressType();
-	//creationDate = DateTime.Now;
+	//creationdate = DateTime.Now;
 	//active = true;
 }
 

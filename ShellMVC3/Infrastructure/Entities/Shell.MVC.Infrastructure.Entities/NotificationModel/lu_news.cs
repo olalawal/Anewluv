@@ -11,7 +11,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
 
 
-    public class lu_messagenews
+    public class lu_news
     {
         //we generate this manually from enums for now
         [Key]

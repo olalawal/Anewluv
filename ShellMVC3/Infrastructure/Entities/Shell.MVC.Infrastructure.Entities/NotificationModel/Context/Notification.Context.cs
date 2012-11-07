@@ -13,17 +13,24 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
     public class NotificationContext : DbContext
     {
-        public DbSet<message> messages { get; set; }
-        public DbSet<lu_messagetype> lu_messagetype { get; set; }
-        public DbSet< lu_templatebody> lu_messagebody { get; set; }
-        public DbSet<lu_templatesubject> lu_messagesubject { get; set; }
-        public DbSet<lu_template> lu_template { get; set; }
         public DbSet<address> address { get; set; }
         public DbSet<lu_addresstype> lu_addresstype { get; set; }
-        public DbSet<systemAddress> systemAddresses { get; set; }
+        public DbSet<lu_messagetype> lu_messagetype { get; set; }
+        public DbSet<lu_news> lu_news { get; set; }
+        public DbSet<lu_systemaddresstype> lu_systemaddresses { get; set; }
+        public DbSet<lu_template> lu_template { get; set; }
+        public DbSet<lu_templatebody> lu_messagebody { get; set; }
+        public DbSet<lu_templatesubject> lu_messagesubject { get; set; }     
+        public DbSet<message> messages { get; set; }
+
+
+       
+       
+    
+       
         public DbSet<lu_systemaddresstype> lu_systemaddresstype { get; set; }
-
-
+              
+  
         public NotificationContext()
             : base("name=NotificationContext")
         {

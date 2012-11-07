@@ -6,27 +6,27 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
-    public class systemAddress
+    public class systemaddress
     {
         
         [Key]
         public int id { get; set; }      
-        public virtual lu_systemAddressType systemAddressType { get; set; }              
-        public string emailAddress { get; set; }
-        public string hostIp { get; set; }
-        public string hostName { get; set; }
-        public string createdBy { get; set; }   
-        public string credentialUserName { get; set; }
-        public string credentialPassword { get; set; }    //salt password  plain text for now   
+        public virtual lu_systemaddresstype systemaddresstype { get; set; }              
+        public string emailaddress { get; set; }
+        public string hostip { get; set; }
+        public string hostname { get; set; }
+        public string createdby { get; set; }   
+        public string credentialusername { get; set; }
+        public string credentialpassword { get; set; }    //salt password  plain text for now   
         public bool active { get; set; }       
-        public DateTime creationDate { get; set; }
-        public DateTime? removalDate { get; set; }
+        public DateTime creationdate { get; set; }
+        public DateTime? removaldate { get; set; }
 
-        public static systemAddress Create(Action<systemAddress> init)
+        public static systemaddress Create(Action<systemaddress> init)
         {
-            var systemaddress = new systemAddress();
+            var systemaddress = new systemaddress();
             //address.MessageAddressID = Guid.NewGuid();
-            systemaddress.creationDate = DateTime.Now;
+            systemaddress.creationdate = DateTime.Now;
            // systemaddress.RemovalDate = DateTime.Now;
             systemaddress.active = true;
             init(systemaddress); return systemaddress;

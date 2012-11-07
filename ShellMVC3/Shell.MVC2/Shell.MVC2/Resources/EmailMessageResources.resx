@@ -136,35 +136,8 @@
   <data name="DefaultSupportEmail" xml:space="preserve">
     <value>Support@Anewluv.com,anewluvhelp@mail.com,ola_lawal@yahoo.com</value>
   </data>
-  <data name="PhotoUploadedAdminMessageSubject" xml:space="preserve">
-    <value>A new Photo has been uploaded on Anewluv.com! Please Aprove this Photo.</value>
-  </data>
   <data name="PhotoUploadedMessageSubject" xml:space="preserve">
     <value>AnewLuv.com *Your Photo has been uploaded *</value>
-  </data>
-  <data name="ProfileBlockedMessageAdminSubject" xml:space="preserve">
-    <value>A Member has blocked another Member</value>
-  </data>
-  <data name="ProfileInterestReceivedMessageAdminSubject" xml:space="preserve">
-    <value>A Member has sent an Interest to another  </value>
-  </data>
-  <data name="ProfileInterestReceivedMessageSubject" xml:space="preserve">
-    <value>You have a new Interest on Anewluv.com!</value>
-  </data>
-  <data name="ProfileLikeReceivedMessageAdminSubject" xml:space="preserve">
-    <value>A Member has sent a Like to another Member!</value>
-  </data>
-  <data name="ProfileLikeReceivedMessageSubject" xml:space="preserve">
-    <value>You have a new Like on Anewluv.com!</value>
-  </data>
-  <data name="ProfilePeekReceivedMessageAdminSubject" xml:space="preserve">
-    <value>A Member has Peeked at another Member! </value>
-  </data>
-  <data name="ProfilePeekReceivedMessageSubject" xml:space="preserve">
-    <value>You have a new peek  on Anewluv.com!</value>
-  </data>
-  <data name="ProfileReceivedMailMessageAdminSubject" xml:space="preserve">
-    <value>Members have Communicated ! </value>
   </data>
   <data name="SendEmails" xml:space="preserve">
     <value>Yes</value>
@@ -173,12 +146,6 @@
   <data name="AdminEmailPhotos" xml:space="preserve">
     <value>ola.lawal@gmail.com,welaworks@mail.com,anewluvadmin@nmedia.com</value>
     <comment>email of administrators ola, kelly and default admin</comment>
-  </data>
-  <data name="PhotoRejectedMessageSubject" xml:space="preserve">
-    <value>Your photo was not Approved on AnewLuv.com!</value>
-  </data>
-  <data name="ProfileCreatedJainRainAdminMessageSubject" xml:space="preserve">
-    <value />
   </data>
   <data name="SpamBlockedAdminMessageSubject" xml:space="preserve">
     <value>Message was blocked on Anewluv.com by {0}</value>

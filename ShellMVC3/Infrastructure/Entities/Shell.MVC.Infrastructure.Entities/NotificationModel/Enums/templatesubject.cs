@@ -63,7 +63,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         [EnumMember]
         MemberActivatedAdminNotification = 11,
 
-        [Description("AnewLuv.com * Action Required * : Your new profile needs to be activated")
+        [Description("AnewLuv.com * Action Required * : Your new profile needs to be activated")]
         [EnumMember]
         MemberActivationCodeRecoveredMemberNotification = 12,
 
@@ -73,87 +73,85 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
         [Description("You have a new Email message on Anewluv.com!")]
         [EnumMember]
-        MemberRecivedEmailMessageNotification = 14,
+        MemberRecivedEmailMessageMemberNotification = 14,
 
         [Description("Members have Communicated via AnewLuv Email! ")]
         [EnumMember]
         MemberRecivedEmailMessageAdminNotification = 15,
 
-        [Description("Dear {0}, <p></p> <p></p>The member {1} has peeked at your profile on AnewLuv.com, Please log into your account to view {1}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}\">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("You have a new peek  on Anewluv.com!")]
         [EnumMember]
         MemberRecivedPeekMemberNotification = 16,
 
-        [Description("The  Member {0} has received a Peek from the member {1}")]
+        [Description("A Member has Peeked at another Member!")]
         [EnumMember]
         MemberRecivedPeekAdminNotification = 17,
 
-        [Description("Dear {0}, <p></p>The member {1} has likes you on AnewLuv.com, Please log into your account to view {1}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}\">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("You have a new Like on Anewluv.com!")]
         [EnumMember]
         MemberRecivedLikeMemberNotification = 18,
-        [Description("The Member {0} has received a Like from the member {1}")]
+
+        [Description("A Member has sent a Like to another Member!")]
         [EnumMember]
         MemberRecivedLikeAdminNotification = 19,
 
-        [Description("Dear {0}, <p></p>The member {1} has expressed interest your profile on AnewLuv.com, Please log into your account and to view {1}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("You have a new Interest on AnewLuv ")]
         [EnumMember]
         MemberRecivedInterestMemberNotification = 20,
 
-        [Description("The Member {0} has received an Interest from the Member, {1}")]
+        [Description("A Member has sent an Interest to another member ")]
         [EnumMember]
         MemberRecivedInterestAdminNotification = 21,
 
-        [Description("Dear {0}, <p></p>The member {1} has wants to chat with you on AnewLuv.com, Please log into your account and check your chat requests to respond</br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("You have a new Chat Request on Anewluv")]
         [EnumMember]
         MemberRecivedChatRequestMemberNotification = 22,
 
-        [Description("The Member {0} has received a chat request from the Member, {1}")]
+        [Description("A member has sent a Chat Request to Another member")]
         [EnumMember]
         MemberRecivedChatRequestAdminNotification = 23,
 
-        [Description("Dear {0}, <p></p>The member {1} has sent you an offline Chat message on AnewLuv.com, Please log into your account to view {1}'s Chat message </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("You have new Chat message on AnewLuv")]
         [EnumMember]
         MemberRecivedOfflineChatMessageMemberNotification = 24,
 
-        [Description("The Member {0} has received an offline chat request from the Member, {1}")]
+        [Description("A member has sent a Chat Request to another member")]
         [EnumMember]
         MemberRecivedOfflineChatMessageAdminNotification = 25, //Photo
 
-        [Description("Dear {0} ,</br> Thank you for uploading your photo to  Anewluv.com </br>Unfortunately your photo did not meed our terms of service, please read the terms of service for acceptable photo formats and content. <p></p> This is the reason why : <p></p> <b>  {1} </b>")]
+        [Description("Your photo was not Approved on AnewLuv.com! **Action May Be Required**")]
         [EnumMember]
         MemberPhotoRejectedMemberNotification = 26,
 
-        [Description("The member {0} has had thier photo rejected by the admin user with username {1}")]
+        [Description("A photo was rejected by an AnewLuv Admin")]
         [EnumMember]
         MemberPhotoRejectedAdminNotification = 27,
 
-        [Description("Dear {0} ,</br> Thank you for uploading your photo to  Anewluv.com Please allow up to 24 hours for your photo to be aproved.")]
+        [Description("AnewLuv.com *Your Photo has been uploaded *")]
         [EnumMember]
         MemberPhotoUploadedMemberNotification = 28,
 
-        [Description("A new photo for the user {0} has been uploaded to AnewLuv.com")]
+        [Description("A new Photo has been uploaded on Anewluv.com! Please Aprove this Photo.")]
         [EnumMember]
-        MemberPhotoUploadedAdminNotification = 29,
+        MemberPhotoUploadedAdminNotification = 29,        
 
-        [Description("The member {0} has had thier photo rejected by the admin user with username {1}")]
+        [Description("Your latest compatiblity matches on AnewLuv</a></b>")]
         [EnumMember]
-        MemberPhotoRejectedAdminNotification = 30,
+        MemberMatchesSentMemberNotification = 30,
 
-        [Description("Dear {0} , <p></p>Here are you {1} new matches for date : {2}  </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={0} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Member compatiblity matches sent")]
         [EnumMember]
-        MemberMatchesSentMemberNotification = 31,
+        MemberMatchestSentAdminNotificaton = 31,
 
-        [Description("The member {0} has recived {1} matches for the date : {2}")]
+        [Description("Message was blocked on Anewluv.com by {0}")]
         [EnumMember]
-        MemberMatchestSentAdminNotificaton = 32,
+        MemberSpamBlockedAdminNotification = 32,
 
-        [Description("A message from the user {0} was blocked becase of the reason: {1}")]
-        [EnumMember]
-        MemberSpamBlockedAdminNotification = 33,
+        [Description("A Member has blocked another Member")]
+        MemberBlockedAdminNotification = 33,
 
-        [Description("The  Member {0} has been blocked by the member {1}")]
-        MemberBlockedAdminNotification = 34,
-
-
+        [Description("A photo has been approved by an Admin on AnewLuv")]
+        MemberPhotoApprovedAdminNotification = 34,
     }
 
 

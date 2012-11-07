@@ -17,13 +17,13 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     /// </summary>    
     /// 
     [DataContract ]
-    public enum messagesystemaddresstypeenum : int
+    public enum systemaddresstypeenum : int
     {
-        [Description("NotSet")][EnumMember]
+        [Description("Do not reply address ")][EnumMember]
         DoNotReplyAddress = 1,
-        [Description("NotSet")][EnumMember]
+        [Description("External sender address")][EnumMember]
         ExternalSenderAddress = 2,
-        [Description("NotSet")][EnumMember]
+        [Description("Support sender address")][EnumMember]
         SupportSenderAddress = 3,
 
     }

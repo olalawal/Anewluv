@@ -59,7 +59,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         MemberActivationCodeRecoveredAdminNotification = 13,
         [Description("Dear {0}, <p></p>The member {1} has sent you an Email message on AnewLuv.com, Please log into your account to view {1}'s Email message </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
-        MemberRecivedEmailMessageNotification = 14,
+        MemberRecivedEmailMessageMemberNotification = 14,
         [Description("The Member {0} has received an Email Message from the member {1}")]
         [EnumMember]
         MemberRecivedEmailMessageAdminNotification = 15,
@@ -103,22 +103,22 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         [EnumMember]
         MemberPhotoUploadedMemberNotification = 28,
         [Description("A new photo for the user {0} has been uploaded to AnewLuv.com")]
-        [EnumMember]
-        MemberPhotoUploadedAdminNotification = 29,
-        [Description("The member {0} has had thier photo rejected by the admin user with username {1}")]
-        [EnumMember]
-        MemberPhotoRejectedAdminNotification = 30,
+        [EnumMember]       
+        MemberPhotoRejectedAdminNotification = 29,
         [Description("Dear {0} , <p></p>Here are you {1} new matches for date : {2}  </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={0} \">Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
-        MemberMatchesSentMemberNotification = 31,
+        MemberMatchesSentMemberNotification = 30,
         [Description("The member {0} has recived {1} matches for the date : {2}")]
         [EnumMember]
-        MemberMatchestSentAdminNotificaton = 32,      
+        MemberMatchestSentAdminNotificaton = 31,      
         [Description("A message from the user {0} was blocked becase of the reason: {1}")]
         [EnumMember]
-        MemberSpamBlockedAdminNotification = 33,
+        MemberSpamBlockedAdminNotification = 32,
         [Description("The  Member {0} has been blocked by the member {1}")]
-        MemberBlockedAdminNotification = 34,
+        MemberBlockedAdminNotification = 33,
+
+        [Description("A photo from the user {0} has been approved by {1} on AnewLuv")]
+        MemberPhotoApprovedAdminNotification = 34,
 
     }
 

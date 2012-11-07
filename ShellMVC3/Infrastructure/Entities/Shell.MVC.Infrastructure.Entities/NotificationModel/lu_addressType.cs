@@ -15,8 +15,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     {
         //we generate this manually from enums for now
        [Key]
-        public int id { get; set; }
- 
+        public int id { get; set; } 
         public string description { get; set; }
 
 

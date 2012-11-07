@@ -17,11 +17,11 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
  [Key]
        public int id { get; set; }
        public string description { get; set; }    
-       public string physicalLocation { get; set; }   
-       public DateTime creationDate { get; set; }   
-       public DateTime? removalDate { get; set; }     
+       public string physicallocation { get; set; }   
+       public DateTime creationdate { get; set; }   
+       public DateTime? removaldate { get; set; }     
        public bool active { get; set; }    
-       public string razorTemplateBody { get; set; } 
+       public string razortemplatebody { get; set; } 
        public virtual lu_templatebody bodystring { get; set; }
        public virtual lu_templatesubject subjectstring { get; set; }
 
@@ -29,7 +29,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         {
             var messagetemplate = new lu_template();
             //address.MessageAddressID = Guid.NewGuid();
-            messagetemplate.creationDate = DateTime.Now;
+            messagetemplate.creationdate = DateTime.Now;
             messagetemplate.active = true;
             init(messagetemplate); return messagetemplate;
         }

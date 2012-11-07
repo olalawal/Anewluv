@@ -18,7 +18,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 	      //  messagetype = new lu_messageType();
 	      //  template = new lu_template();
 	       // systemAddress = new systemAddress();
-	       // creationDate = DateTime.Now;
+	       // creationdate = DateTime.Now;
 	      //  sent = false;
          }
 
@@ -28,13 +28,13 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         public int id { get; set; }     
         public virtual lu_messagetype  messagetype { get; set; }       
         public virtual lu_template  template { get; set; }
-        public virtual systemAddress systemAddress { get; set; }
+        public virtual systemaddress systemaddress { get; set; }
         public virtual ICollection<address > recipients { get; set; }
         public string sendingApplication { get; set; }  //TO do convert applications to enum as well
         public string body { get; set; }
         public string subject { get; set; }
         public object attachMents { get; set; }      
-        public DateTime creationDate { get; set; }
+        public DateTime creationdate { get; set; }
         public bool? sent { get; set; }
 
         public static message Create(Action<message> init)
@@ -44,7 +44,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
             //message.messagetype = new lu_messageType();
           //  message.template = new lu_template();
           //  message.recipients = new List<address>();
-            message.creationDate = DateTime.Now;
+            message.creationdate = DateTime.Now;
             message.sent =false;           
             init(message); return message;
         }
