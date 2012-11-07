@@ -14,7 +14,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum abusetypeEnum : int
+    public enum subjectypeEnum : int
     {
         [Description("NotSet")]
         [EnumMember]

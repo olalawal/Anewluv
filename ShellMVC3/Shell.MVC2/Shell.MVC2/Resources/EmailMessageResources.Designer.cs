@@ -133,15 +133,6 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear {0} ,&lt;/br&gt; Thank you for uploading your photo to  Anewluv.com &lt;/br&gt;Unfortunately your photo did not meed our terms of service, please read the terms of service for acceptable photo formats and content. &lt;p&gt;&lt;/p&gt; This is the reason why : &lt;p&gt;&lt;/p&gt; &lt;b&gt;  {1} &lt;/b&gt;.
-        /// </summary>
-        internal static string PhotoRejectedMessageBody {
-            get {
-                return ResourceManager.GetString("PhotoRejectedMessageBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Your photo was not Approved on AnewLuv.com!.
         /// </summary>
         internal static string PhotoRejectedMessageSubject {
@@ -169,29 +160,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear {0} ,&lt;/br&gt; Thank you for uploading your photo to  Anewluv.com Please allow up to 24 hours for your photo to be aproved..
-        /// </summary>
-        internal static string PhotoUploadedMessageBody {
-            get {
-                return ResourceManager.GetString("PhotoUploadedMessageBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to AnewLuv.com *Your Photo has been uploaded *.
         /// </summary>
         internal static string PhotoUploadedMessageSubject {
             get {
                 return ResourceManager.GetString("PhotoUploadedMessageSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The  profile for the user {0} has been &lt;b&gt; Activated &lt;/b&gt; on AnewLuv.com.
-        /// </summary>
-        internal static string ProfileActivatedAdminMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileActivatedAdminMessageBody", resourceCulture);
             }
         }
         
@@ -205,29 +178,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear {0} ,&lt;p&gt;&lt;/p&gt;  Your account has been activated on AnewLuv.com , You can now log in to your account at &lt;p&gt;&lt;/p&gt; &lt;a href=&quot;http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}&quot;&gt;Login to AnewLuv.com&lt;/a&gt;  &lt;p&gt;&lt;/p&gt;&lt;a href=&quot;http://www.anewluv.com&quot;&gt;Anewluv.com &lt;/a&gt;.
-        /// </summary>
-        internal static string ProfileActivatedMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileActivatedMessageBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Your Profile has been Activated on AnewLuv.com.
         /// </summary>
         internal static string ProfileActivatedMessageSubject {
             get {
                 return ResourceManager.GetString("ProfileActivatedMessageSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A Profile ActivationCode for the user {0} has been recovered on AnewLuv.com.
-        /// </summary>
-        internal static string ProfileActivationCodeRecoveredAdminMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileActivationCodeRecoveredAdminMessageBody", resourceCulture);
             }
         }
         
@@ -241,29 +196,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear {0} ,&lt;p&gt;&lt;/p&gt;   Please click on the link below to activate your profile. &lt;b&gt;If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page &lt;/b&gt; &lt;/br&gt; Your user name is: &lt;b&gt; {1} &lt;/b&gt; and Your activation code is:  &lt;b&gt;  {2} &lt;/b&gt;  &lt;p&gt;&lt;/p&gt;  - The AnewLuv.com Team &lt;p&gt;&lt;/p&gt;  .
-        /// </summary>
-        internal static string ProfileActivationCodeRecoveredMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileActivationCodeRecoveredMessageBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to AnewLuv.com * Action Required * : Your new profile needs to be activated.
         /// </summary>
         internal static string ProfileActivationCodeRecoveredMessageSubject {
             get {
                 return ResourceManager.GetString("ProfileActivationCodeRecoveredMessageSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The  Member {0} has been blocked by another member..
-        /// </summary>
-        internal static string ProfileBlockedMessageAdminBody {
-            get {
-                return ResourceManager.GetString("ProfileBlockedMessageAdminBody", resourceCulture);
             }
         }
         
@@ -277,29 +214,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A new profile for the user {0} has been created on AnewLuv.com.
-        /// </summary>
-        internal static string ProfileCreatedAdminMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileCreatedAdminMessageBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A new Profile has been created !.
         /// </summary>
         internal static string ProfileCreatedAdminMessageSubject {
             get {
                 return ResourceManager.GetString("ProfileCreatedAdminMessageSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A new profile for the user {0} has been created on AnewLuv.com .
-        /// </summary>
-        internal static string ProfileCreatedJainRainAdminMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileCreatedJainRainAdminMessageBody", resourceCulture);
             }
         }
         
@@ -313,29 +232,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear {0} ,&lt;p&gt;&lt;/p&gt; Thank you for creating a profile at &lt;a href=&quot;www.anewluv.com&quot;&gt;Anewluv.com &lt;/a&gt; &lt;p&gt;&lt;/p&gt;&lt;a href=&quot;www.anewluv.com&quot;&gt;Anewluv.com &lt;/a&gt;   provides a new and refereshing way to  meet people from all walks of life.  &lt;p&gt;&lt;/p&gt; You have &lt;b&gt; FREE &lt;/b&gt; access to our exclusive geo-targeting system to link up with members from all around the world! &lt;p&gt;&lt;/p&gt;  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  &lt;p&gt;&lt;/p&gt; Our system sp [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ProfileCreatedJainRainMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileCreatedJainRainMessageBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Thank you for creating a profile on AnewLuv.com.
         /// </summary>
         internal static string ProfileCreatedJainRainMessageSubject {
             get {
                 return ResourceManager.GetString("ProfileCreatedJainRainMessageSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0} ,&lt;p&gt;&lt;/p&gt; Thank you for creating a profile at &lt;a href=&quot;www.anewluv.com&quot;&gt;Anewluv.com &lt;/a&gt; &lt;p&gt;&lt;/p&gt;&lt;a href=&quot;www.anewluv.com&quot;&gt;Anewluv.com &lt;/a&gt;   provides a new and refereshing way to  meet people from all walks of life.  &lt;p&gt;&lt;/p&gt; You have &lt;b&gt; FREE &lt;/b&gt; access to our exclusive geo-targeting system to link up with members from all around the world! &lt;p&gt;&lt;/p&gt;  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  &lt;p&gt;&lt;/p&gt; Our system sp [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ProfileCreatedMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileCreatedMessageBody", resourceCulture);
             }
         }
         
@@ -349,29 +250,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The  Member {0} has received an Interest from the Member, {1}.
-        /// </summary>
-        internal static string ProfileInterestReceivedMessageAdminBody {
-            get {
-                return ResourceManager.GetString("ProfileInterestReceivedMessageAdminBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A Member has sent an Interest to another  .
         /// </summary>
         internal static string ProfileInterestReceivedMessageAdminSubject {
             get {
                 return ResourceManager.GetString("ProfileInterestReceivedMessageAdminSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0}, &lt;p&gt;&lt;/p&gt;A member  has expressed interest in your profile on AnewLuv.com, Please log into your account and check your new interests on your home page to see who is interested in you. &lt;/br&gt;&lt;p&gt;&lt;/p&gt; &lt;b&gt;&lt;a href=&quot;http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}&quot;&gt;Log on to your Account on www.Anewluv.com&lt;/a&gt;&lt;/b&gt;.
-        /// </summary>
-        internal static string ProfileInterestReceivedMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileInterestReceivedMessageBody", resourceCulture);
             }
         }
         
@@ -385,29 +268,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The  Member {0} has received a Like from the member {1}.
-        /// </summary>
-        internal static string ProfileLikeReceivedlMessageAdminBody {
-            get {
-                return ResourceManager.GetString("ProfileLikeReceivedlMessageAdminBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A Member has sent a Like to another Member!.
         /// </summary>
         internal static string ProfileLikeReceivedMessageAdminSubject {
             get {
                 return ResourceManager.GetString("ProfileLikeReceivedMessageAdminSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0}, &lt;p&gt;&lt;/p&gt;A member  likes you  on AnewLuv.com, Please log into your account and check the new Likes  on your home page to see who that member is. &lt;/br&gt;&lt;p&gt;&lt;/p&gt; &lt;b&gt;&lt;a href=&quot;http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}&quot;&gt;Log on to your Account on www.Anewluv.com&lt;/a&gt;&lt;/b&gt;.
-        /// </summary>
-        internal static string ProfileLikeReceivedMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileLikeReceivedMessageBody", resourceCulture);
             }
         }
         
@@ -421,29 +286,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The  Member {0} has received a Peek from the member {1}.
-        /// </summary>
-        internal static string ProfilePeekReceivedlMessageAdminBody {
-            get {
-                return ResourceManager.GetString("ProfilePeekReceivedlMessageAdminBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A Member has Peeked at another Member! .
         /// </summary>
         internal static string ProfilePeekReceivedMessageAdminSubject {
             get {
                 return ResourceManager.GetString("ProfilePeekReceivedMessageAdminSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0}, &lt;p&gt;&lt;/p&gt;A member  has viewed your profile on AnewLuv.com, Please log into your account to see who viewed you &lt;/br&gt;&lt;p&gt;&lt;/p&gt; &lt;b&gt;&lt;a href=&quot;http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}&quot;&gt;Log on to your Account on www.Anewluv.com&lt;/a&gt;&lt;/b&gt;.
-        /// </summary>
-        internal static string ProfilePeekReceivedMessageBody {
-            get {
-                return ResourceManager.GetString("ProfilePeekReceivedMessageBody", resourceCulture);
             }
         }
         
@@ -457,29 +304,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The  Member {0} has received a Message from the member {1}.
-        /// </summary>
-        internal static string ProfileReceivedMailMessageAdminBody {
-            get {
-                return ResourceManager.GetString("ProfileReceivedMailMessageAdminBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Members have Communicated ! .
         /// </summary>
         internal static string ProfileReceivedMailMessageAdminSubject {
             get {
                 return ResourceManager.GetString("ProfileReceivedMailMessageAdminSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0}, &lt;p&gt;&lt;/p&gt;A member  has sent you a message on AnewLuv.com, Please log into your account to view the message &lt;/br&gt;&lt;p&gt;&lt;/p&gt; &lt;b&gt;&lt;a href=&quot;http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}&quot;&gt;Log on to your Account on www.Anewluv.com&lt;/a&gt;&lt;/b&gt;.
-        /// </summary>
-        internal static string ProfileReceivedMailMessageBody {
-            get {
-                return ResourceManager.GetString("ProfileReceivedMailMessageBody", resourceCulture);
             }
         }
         
@@ -493,29 +322,11 @@ namespace Shell.MVC2.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The User  {0} has been Recoverd their password and login information on AnewLuv.com.
-        /// </summary>
-        internal static string RecoverAccountAdminMessageBody {
-            get {
-                return ResourceManager.GetString("RecoverAccountAdminMessageBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to An Account has been recovered on Anewluv.com.
         /// </summary>
         internal static string RecoverAccountAdminMessageSubject {
             get {
                 return ResourceManager.GetString("RecoverAccountAdminMessageSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0} ,&lt;p&gt;&lt;/p&gt; Your account has been recovered on AnewLuv.com , Your Username is &lt;b&gt; {1} &lt;/b&gt;  and your new password is &lt;b&gt; {2} &lt;/b&gt;,  You can now log in to your account at &lt;/br&gt;&lt;p&gt;&lt;/p&gt; &lt;b&gt;&lt;a href=&quot;http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}&quot; &gt;Log on to your Account on www.Anewluv.com&lt;/a&gt;&lt;/b&gt;.
-        /// </summary>
-        internal static string RecoverAccountMessageBody {
-            get {
-                return ResourceManager.GetString("RecoverAccountMessageBody", resourceCulture);
             }
         }
         
@@ -534,15 +345,6 @@ namespace Shell.MVC2.Resources {
         internal static string SendEmails {
             get {
                 return ResourceManager.GetString("SendEmails", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A message from the user {0} was blocked becase {1}.
-        /// </summary>
-        internal static string SpamBlockedAdminMessageBody {
-            get {
-                return ResourceManager.GetString("SpamBlockedAdminMessageBody", resourceCulture);
             }
         }
         

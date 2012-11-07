@@ -18,63 +18,113 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     [DataContract]
     public enum templatebodyenum : int
     {
-        [Description("The Member {0} has generated the following error </br> Error: </br> {1} ")][EnumMember]
+        [Description("The Member <b>{0}</b> has generated the following error </br> Error: </br> {1} ")]
+        [EnumMember]
         GenericErrorMessage = 1,
-        [Description("Dear {0} ,<p></p> Thank you for contacting us at Anewluv.com, your message has been added to the support ticket list and you will get a response from our support staff within 24 hours <p></p> The Anewluv.com Support Team")]
+        [Description("Dear <b>{0}</b> ,<p></p> Thank you for contacting us at Anewluv.com, your message has been added to the support ticket list and you will get a response from our support staff within 24 hours <p></p> The Anewluv.com Support Team")]
         [EnumMember]
         MemberContactUsMemberMesage = 2,
         [Description("The Member {0} sent the following message: <p></p> <b> </br>  subject:  {1}  </b> </br> Message : </br> {2}")]
         [EnumMember]
         MemberContactUsAdminMessage = 3,
-        [Description("NotSet")][EnumMember]
-        MemberCreatedMemberConfirmation = 4,
-        [Description("NotSet")][EnumMember]
+        [Description("Dear <b>{0}</b> ,<p></p> Thank you for creating a profile at <a href=\"www.anewluv.com\">Anewluv.com </a> <p></p><a href=\"www.anewluv.com\">Anewluv.com </a>   provides a new and refereshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> So get started today!  Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page </b> </br> Your user name is: <b> {1} </b> and Your activation code is:  <b>  {2} </b>  <p></p>  - The AnewLuv.com Team <p></p>  ")]
+        [EnumMember]
+        MemberCreatedMemberNotification = 4,
+        [Description("A new profile for the user <b>{0}</b> has been created on AnewLuv.com")]
+        [EnumMember]
         MemberCreatedAdminNotification = 5,
-        [Description("NotSet")][EnumMember]
-        MemberCreatedJianRainOrOPenIDMemberConfirmation = 6,
-        [Description("NotSet")][EnumMember]
-        UseCreatedJainRanOrOpenIDAdminNotification = 7,
-        [Description("NotSet")][EnumMember]
-        MemberPasswordChangeMemberConfirmation = 8,
-        [Description("NotSet")][EnumMember]
+        [Description("Dear <b>{0}</b> ,<p></p> Thank you for creating a profile at <a href=\"www.anewluv.com\">Anewluv.com </a> <p></p><a href=\"www.anewluv.com\">Anewluv.com </a>   provides a new and refereshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> You profile has already been activated since you signed in with {1} , please make sure you information was correctly uploaded by checking your profile details on our website  </b> </br> Your user name is: <b> {2} </b><p></p>  - The AnewLuv.com Team <p></p>  ")]
+        [EnumMember]
+        MemberCreatedJianRainOrOPenIDMemberNotification = 6,
+        [Description("A new profile for the user <b>{0}</b> has been created on AnewLuv.com via OpenID or JainRain ")]
+        [EnumMember]
+        MemberCreatedJainRanOrOpenIDAdminNotification = 7,
+        [Description("Dear {0} ,<p></p> Your account and password has been recovered on AnewLuv.com , Your Username is <b> {1} </b>  and your new password is <b> {2} </b>,  You can now log in to your account at </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}\" >Log on to your Account on www.Anewluv.com</a></b>")]
+        [EnumMember]
+        MemberPasswordChangeMemberNotification = 8,
+        [Description("An Account has been recovered on Anewluv.com by the user <b>{0}</b>")]
+        [EnumMember]
         MemberPasswordChangedAdminNotification = 9,
-        [Description("NotSet")][EnumMember]
-        MemberActivatedMemberConfirmation = 10,
-        [Description("NotSet")][EnumMember]
+        [Description("Dear {0} ,<p></p>  Your account has been activated on AnewLuv.com , You can now log in to your account at <p></p> <a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Login to AnewLuv.com</a>  <p></p><a href=\"http://www.anewluv.com \">Anewluv.com </a>")]
+        [EnumMember]
+        MemberActivatedMemberNotification = 10,
+        [Description("The  profile for the user {0} has been <b> Activated </b> on AnewLuv.com")]
+        [EnumMember]
         MemberActivatedAdminNotification = 11,
-        [Description("NotSet")][EnumMember]
-        MemberActivationCodeRecoveredMemberConfirmation = 12,
-        [Description("NotSet")][EnumMember]
+        [Description("Dear {0} ,<p></p>   Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page </b> </br> Your user name is: <b> {1} </b> and Your activation code is:  <b>  {2} </b>  <p></p>  - The AnewLuv.com Team <p></p>  ")]
+        [EnumMember]
+        MemberActivationCodeRecoveredMemberNotification = 12,
+        [Description("A Profile ActivationCode for the user {0} has been recovered on AnewLuv.com")]
+        [EnumMember]
         MemberActivationCodeRecoveredAdminNotification = 13,
-        [Description("NotSet")][EnumMember]
-        MemberRecivedEmailMessageConfirmation = 14,
-        [Description("NotSet")][EnumMember]
+        [Description("Dear {0}, <p></p>The member {1} has sent you an Email message on AnewLuv.com, Please log into your account to view {1}'s Email message </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [EnumMember]
+        MemberRecivedEmailMessageNotification = 14,
+        [Description("The Member {0} has received an Email Message from the member {1}")]
+        [EnumMember]
         MemberRecivedEmailMessageAdminNotification = 15,
-        [Description("NotSet")][EnumMember]
-        MemberRecivedPeekMemberConfirmation = 16,
-        [Description("NotSet")][EnumMember]
+        [Description("Dear {0}, <p></p> <p></p>The member {1} has peeked at your profile on AnewLuv.com, Please log into your account to view {1}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}\">Log on to your Account on www.Anewluv.com</a></b>")]
+        [EnumMember]
+        MemberRecivedPeekMemberNotification = 16,
+        [Description("The  Member {0} has received a Peek from the member {1}")]
+        [EnumMember]
         MemberRecivedPeekAdminNotification = 17,
-        [Description("NotSet")][EnumMember]
-        MemberRecivedLikeMemberConfirmation = 18,
-        [Description("NotSet")][EnumMember]
+        [Description("Dear {0}, <p></p>The member {1} has likes you on AnewLuv.com, Please log into your account to view {1}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}\">Log on to your Account on www.Anewluv.com</a></b>")]
+        [EnumMember]
+        MemberRecivedLikeMemberNotification = 18,
+        [Description("The Member {0} has received a Like from the member {1}")]
+        [EnumMember]
         MemberRecivedLikeAdminNotification = 19,
-        [Description("NotSet")][EnumMember]
-        MemberRecivedInterestMemberConfirmation = 20,
-        [Description("NotSet")][EnumMember]
+        [Description("Dear {0}, <p></p>The member {1} has expressed interest your profile on AnewLuv.com, Please log into your account and to view {1}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [EnumMember]
+        MemberRecivedInterestMemberNotification = 20,
+        [Description("The Member {0} has received an Interest from the Member, {1}")]
+        [EnumMember]
         MemberRecivedInterestAdminNotification = 21,
-        [Description("NotSet")][EnumMember]
-        MemberMatchesSentMemberConfirmation = 22,
-        [Description("NotSet")][EnumMember]
+        [Description("Dear {0}, <p></p>The member {1} has wants to chat with you on AnewLuv.com, Please log into your account and check your chat requests to respond</br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [EnumMember]
+        MemberRecivedChatRequestMemberNotification = 20,
+        [Description("The Member {0} has received a chat request from the Member, {1}")]
+        [EnumMember]
+        MemberRecivedChatRequestAdminNotification = 21,
+        [Description("Dear {0}, <p></p>The member {1} has sent you an offline Chat message on AnewLuv.com, Please log into your account to view {1}'s Chat message </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [EnumMember]
+        MemberRecivedOfflineChatMessageMemberNotification = 21,
+       [Description("The Member {0} has received an offline chat request from the Member, {1}")]
+       [EnumMember]
+       MemberRecivedOfflineChatMessageAdminNotification = 21,
+       [Description("Dear {0} ,</br> Thank you for uploading your photo to  Anewluv.com </br>Unfortunately your photo did not meed our terms of service, please read the terms of service for acceptable photo formats and content. <p></p> This is the reason why : <p></p> <b>  {1} </b>")]
+       [EnumMember]
+       MemberPhotoRejectedMemberNotification = 22,
+       [Description("The member {0} has had thier photo rejected by the admin user with username {1}")]
+       [EnumMember]
+       MemberPhotoRejectedAdminNotification = 22,
+       [Description("Dear {0} ,</br> Thank you for uploading your photo to  Anewluv.com Please allow up to 24 hours for your photo to be aproved.")]
+       [EnumMember]
+       MemberPhotoUploadedMemberNotification = 22,
+       [Description("The member {0} has had thier photo rejected by the admin user with username {1}")]
+       [EnumMember]
+       MemberPhotoRejectedAdminNotification = 22,
+
+
+        [Description("Dear {0} , <p></p>Here are you {1} new matches for date : {2}  </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={0} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [EnumMember]
+        MemberMatchesSentMemberNotification = 22,
+        [Description("The member {0} has recived {1} matches for the date : {2}")][EnumMember]
         MemberMatchestSentAdminNotificaton = 23,
         [Description("NotSet")][EnumMember]
-        MemberChatRequestRecivedMemberConfirmation = 24,
+        MemberChatRequestRecivedMemberNotification = 24,
         [Description("NotSet")][EnumMember]
         MemberChatRequestRecivedAdminNotification = 25,
         [Description("NotSet")][EnumMember]
-        MemberChatMessageRecivedMemberConfirmation = 26,
+        MemberChatMessageRecivedMemberNotification = 26,
         [Description("NotSet")][EnumMember]
         MemberChatMessageRecivedAdminNotification = 27,
-
+        [Description("A message from the user {0} was blocked becase of the reason: {1}")]
+        [EnumMember]
+        MemberSpamBlockedAdminNotification = 22,
+        [Description("The  Member {0} has been blocked by the member {1}")]
+        MemberBlockedAdminNotification = 22,
 
     }
 
