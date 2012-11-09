@@ -18,7 +18,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         public DbSet<lu_addresstype> lu_addresstype { get; set; }
         public DbSet<lu_messagetype> lu_messagetype { get; set; }
         public DbSet<lu_news> lu_news { get; set; }
-        public DbSet<lu_systemaddresstype> lu_systemaddresses { get; set; }
+        public DbSet<lu_systemaddresstype> lu_systemaddresstype { get; set; }
         public DbSet<lu_template> lu_template { get; set; }
         public DbSet<lu_templatebody> lu_templatebody { get; set; }
         public DbSet<lu_templatesubject> lu_templatesubject { get; set; }     
@@ -29,7 +29,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
        
     
        
-        public DbSet<lu_systemaddresstype> lu_systemaddresstype { get; set; }
+  
               
   
         public NotificationContext()

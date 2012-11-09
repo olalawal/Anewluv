@@ -19,7 +19,7 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     public class lu_logSeverity
     {
         //we generate this manually from enums for now
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+       [Key]
         [DataMember()]
         public int id { get; set; }
 

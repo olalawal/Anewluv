@@ -27,8 +27,8 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
 
             //systemddress
-            modelBuilder.Entity<systemaddress>().HasRequired(a => a.systemaddresstype )
-            .WithMany().HasForeignKey(a => a.systemaddresstype_id  );
+          //  modelBuilder.Entity<systemaddress>().HasRequired(a => a.systemaddresstype)
+           // .WithMany().HasForeignKey(a => a.systemaddresstype_id  );
 
            //many to many for address and recipeints
            modelBuilder.Entity<address>()

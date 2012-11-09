@@ -11,7 +11,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         
         [Key]
         public int id { get; set; }
-        public int systemaddresstype_id { get; set; }
+        //public int systemaddresstype_id { get; set; }
         public virtual lu_systemaddresstype systemaddresstype { get; set; }              
         public string emailaddress { get; set; }
         public string hostip { get; set; }
@@ -20,7 +20,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         public string credentialusername { get; set; }
         public string credentialpassword { get; set; }    //salt password  plain text for now   
         public bool active { get; set; }       
-        public DateTime creationdate { get; set; }
+        public DateTime? creationdate { get; set; }
         public DateTime? removaldate { get; set; }
 
         public static systemaddress Create(Action<systemaddress> init)

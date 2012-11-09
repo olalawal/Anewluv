@@ -22,9 +22,8 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         //we generate this manually from enums for now
       
         public int id { get; set; }      
-        public string description { get; set; }         
-        public bool active { get; set; }       
-        public DateTime creationdate { get; set; }  
+        public string description { get; set; }  
+        public DateTime? creationdate { get; set; }  
         public DateTime? removaldate { get; set; }
 
 
@@ -33,8 +32,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         {
             var messagesubject = new lu_templatesubject();
             //address.MessageAddressID = Guid.NewGuid();
-            messagesubject.creationdate = DateTime.Now;
-            messagesubject.active = true;
+            messagesubject.creationdate = DateTime.Now;         
             init(messagesubject); return messagesubject;
         }
 

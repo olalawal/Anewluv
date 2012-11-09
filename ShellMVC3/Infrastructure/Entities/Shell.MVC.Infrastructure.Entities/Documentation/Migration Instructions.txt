@@ -26,19 +26,19 @@ I like how it checks for the schema to exist and if it does’nt creates a new o
 
 Sample migraation command.
 
-PM> Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel" -verbose 
+PM> Update-Database -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel" -verbose 
 
 
 if you dont care if any data is deleted use the -force flag. and If you are having problems with previous migrations you can delete the migrations
 table that is created in SQL
 
-Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel" -verbose –force
-Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose –force
+Update-Database -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel" -verbose –force
+Update-Database -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose –force
 
 check the model updating model for custom database migration settings i.e schema and object relationships
  
 
  added this code to configure migrations to be constally updated on db changes automatically
- add-Migration -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" ConfigurationNotificationModelInitial
- add-Migration  -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel"  ConfigurationCustomerrorLogModelInitial
+ add-Migration -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" ConfigurationNotificationModelInitial
+ add-Migration  -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel"  ConfigurationCustomerrorLogModelInitial
 
