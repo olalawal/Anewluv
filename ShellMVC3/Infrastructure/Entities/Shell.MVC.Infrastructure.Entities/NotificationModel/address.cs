@@ -20,7 +20,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
         [Key]
         public int id { get; set; }
-        public int addresstype_id { get; set; }
+        //public int addresstype_id { get; set; }
         public virtual lu_addresstype addresstype { get; set; }
         public virtual ICollection<message> messages { get; set; }    
         public string emailaddress { get; set; }

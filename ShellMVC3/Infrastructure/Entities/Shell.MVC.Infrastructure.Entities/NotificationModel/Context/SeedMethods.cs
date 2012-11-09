@@ -25,7 +25,10 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
               addresstypeqry.ToList().ForEach(kvp => context.lu_addresstype.AddOrUpdate(new lu_addresstype()
                 {
                     id = (int)kvp,
-                    description = EnumExtensionMethods.ToDescription(kvp)
+                    description = EnumExtensionMethods.ToDescription(kvp),
+                    creationdate = DateTime.Now ,
+                     active = true 
+                    
                 }));
 
             //message type lookup
@@ -36,7 +39,9 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
               messagetypeqry.ToList().ForEach(kvp => context.lu_messagetype.AddOrUpdate(new lu_messagetype()
               {
                   id = (int)kvp,
-                  description = EnumExtensionMethods.ToDescription(kvp)
+                  description = EnumExtensionMethods.ToDescription(kvp),
+                    creationdate = DateTime.Now ,
+                     active = true 
               }));
 
 
@@ -48,7 +53,9 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
               newsqry.ToList().ForEach(kvp => context.lu_news.AddOrUpdate(new lu_news()
               {
                   id = (int)kvp,
-                  description = EnumExtensionMethods.ToDescription(kvp)
+                  description = EnumExtensionMethods.ToDescription(kvp),
+                    creationdate = DateTime.Now ,
+                     active = true 
               }));
 
 
@@ -60,22 +67,13 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
               systemaddresstypeqry.ToList().ForEach(kvp => context.lu_systemaddresstype.AddOrUpdate(new lu_systemaddresstype()
               {
                   id = (int)kvp,
-                  description = EnumExtensionMethods.ToDescription(kvp)
+                  description = EnumExtensionMethods.ToDescription(kvp),                  
+                  creationdate = DateTime.Now,
+                  active = true 
+                    
               }));
 
-
-              //template lookup
-              var templateqry = from templateenum value in Enum.GetValues(typeof(templateenum))
-                                   //   where value != messagetemplateenum.NotSet
-                                   orderby value // to sort by value; remove otherwise 
-                                   select value;
-              templateqry.ToList().ForEach(kvp => context.lu_template.AddOrUpdate(new lu_template()
-              {
-                  id = (int)kvp,
-                  description = EnumExtensionMethods.ToDescription(kvp)
-              }));
-
-
+                        
               //templatebody lookup
               var templatebodyqry = from templatebodyenum value in Enum.GetValues(typeof(templatebodyenum))
                                    //   where value != messagetemplatebodyenum.NotSet
@@ -84,7 +82,9 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
               templatebodyqry.ToList().ForEach(kvp => context.lu_templatebody.AddOrUpdate(new lu_templatebody()
               {
                   id = (int)kvp,
-                  description = EnumExtensionMethods.ToDescription(kvp)
+                  description = EnumExtensionMethods.ToDescription(kvp),
+                  creationdate = DateTime.Now,
+                  active = true 
               }));
 
 
@@ -96,9 +96,11 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
               templatesubjectqry.ToList().ForEach(kvp => context.lu_templatesubject.AddOrUpdate(new lu_templatesubject()
               {
                   id = (int)kvp,
-                  description = EnumExtensionMethods.ToDescription(kvp)
+                  description = EnumExtensionMethods.ToDescription(kvp),
+                  creationdate = DateTime.Now,
+                  active = true 
               }));
-
+            
 
 
 
@@ -115,13 +117,31 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
                 c.hostname = "";
                 c.credentialpassword = "kayode02";
                 c.creationdate = DateTime.Now;
-                c.id = (int)systemaddresstypeenum.DoNotReplyAddress;
+                c.systemaddresstype.id = (int)systemaddresstypeenum.DoNotReplyAddress;
+               
             }
             ));
 
             //add a few templates 
             //TO DO use razor 
             //use create the System email addresses here 
+
+            //DO this last since it gets values from previous seeded body values
+            //template lookup
+            var templateqry = from templateenum value in Enum.GetValues(typeof(templateenum))
+                              //   where value != messagetemplateenum.NotSet
+                              orderby value // to sort by value; remove otherwise 
+                              select value;
+            templateqry.ToList().ForEach(kvp => context.lu_template.AddOrUpdate(new lu_template()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp),
+                active= true ,
+                creationdate = DateTime.Now ,
+                bodystring = context.lu_templatebody.Where(p => p.id == (int)kvp).First(),
+                subjectstring  = context.lu_templatesubject.Where(p => p.id == (int)kvp).First()
+
+            }));
 
 
             //context.SaveChanges();

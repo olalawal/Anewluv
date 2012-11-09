@@ -19,7 +19,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         public string createdby { get; set; }   
         public string credentialusername { get; set; }
         public string credentialpassword { get; set; }    //salt password  plain text for now   
-        public bool active { get; set; }       
+        public bool? active { get; set; }       
         public DateTime? creationdate { get; set; }
         public DateTime? removaldate { get; set; }
 

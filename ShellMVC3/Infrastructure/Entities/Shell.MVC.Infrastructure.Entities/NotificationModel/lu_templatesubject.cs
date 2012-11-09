@@ -22,7 +22,8 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         //we generate this manually from enums for now
       
         public int id { get; set; }      
-        public string description { get; set; }  
+        public string description { get; set; }
+        public bool? active { get; set; }  
         public DateTime? creationdate { get; set; }  
         public DateTime? removaldate { get; set; }
 

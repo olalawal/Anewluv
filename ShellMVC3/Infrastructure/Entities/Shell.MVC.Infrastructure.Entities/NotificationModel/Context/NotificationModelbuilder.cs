@@ -30,6 +30,32 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
           //  modelBuilder.Entity<systemaddress>().HasRequired(a => a.systemaddresstype)
            // .WithMany().HasForeignKey(a => a.systemaddresstype_id  );
 
+            //set up required fiel lookups
+            modelBuilder.Entity<systemaddress >()
+          .HasRequired(t => t.systemaddresstype )
+          .WithRequiredPrincipal();
+
+            modelBuilder.Entity<address>()
+           .HasRequired(t => t.addresstype )
+           .WithRequiredPrincipal();
+
+            modelBuilder.Entity<message>()
+           .HasRequired(t => t.messagetype )
+           .WithRequiredPrincipal();
+
+            modelBuilder.Entity<message>()
+        .HasRequired(t => t.messagetype)
+        .WithRequiredPrincipal();
+
+            modelBuilder.Entity<message>()
+        .HasRequired(t => t.systemaddress)
+        .WithRequiredPrincipal();
+
+            modelBuilder.Entity<message>()
+   .HasRequired(t => t.template)
+   .WithRequiredPrincipal();
+
+
            //many to many for address and recipeints
            modelBuilder.Entity<address>()
                 .HasMany(p => p.messages  )
@@ -44,19 +70,19 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
             
             //other stuff for address
            //adddress
-           modelBuilder.Entity<address>().HasRequired(a => a.addresstype)
-           .WithMany().HasForeignKey(a => a.addresstype_id);
+        //   modelBuilder.Entity<address>().HasRequired(a => a.addresstype)
+        //   .WithMany().HasForeignKey(a => a.addresstype_id);
 
-            //other stuff for messages
-           //mesages
-           modelBuilder.Entity<message>().HasRequired(a => a.messagetype )
-           .WithMany().HasForeignKey(a => a.messagetype_id );
+        //    //other stuff for messages
+        //   //mesages
+        //   modelBuilder.Entity<message>().HasRequired(a => a.messagetype )
+        //   .WithMany().HasForeignKey(a => a.messagetype_id );
 
-           modelBuilder.Entity<message>().HasRequired(a => a.template )
-         .WithMany().HasForeignKey(a => a.template_id );
+        //   modelBuilder.Entity<message>().HasRequired(a => a.template )
+        // .WithMany().HasForeignKey(a => a.template_id );
             
-           modelBuilder.Entity<message>().HasRequired(a => a.systemaddress )
-        .WithMany().HasForeignKey(a => a.systemaddress_id );
+        //   modelBuilder.Entity<message>().HasRequired(a => a.systemaddress )
+        //.WithMany().HasForeignKey(a => a.systemaddress_id );
 
             
         

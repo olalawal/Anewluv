@@ -23,7 +23,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
      [Key]
         public int id { get; set; }      
         public string description { get; set; }         
-        public bool active { get; set; }       
+        public bool? active { get; set; }       
         public DateTime? creationdate { get; set; }  
         public DateTime? removaldate { get; set; }
 

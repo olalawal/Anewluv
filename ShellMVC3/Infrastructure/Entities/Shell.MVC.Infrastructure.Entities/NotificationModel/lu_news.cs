@@ -18,6 +18,8 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         public int id { get; set; }
         public string description { get; set; }
         public DateTime? creationdate { get; set; }
+        public bool? active { get; set; }  
+        public DateTime? removaldate { get; set; }
         public bool? curentmessagenews { get; set; }
 
     }
