@@ -28,7 +28,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
             //activitylog and geo data
             modelBuilder.Entity<profileactivity>().HasRequired(a => a.profileactivitygeodata )
-                .WithMany().HasForeignKey(a => a.profileactivitygeodata_id ); 
+           .WithMany().HasForeignKey(a => a.profileactivitygeodata_id ); 
    
 
 

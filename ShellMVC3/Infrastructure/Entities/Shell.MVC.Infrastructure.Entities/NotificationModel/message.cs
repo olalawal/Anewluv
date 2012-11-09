@@ -21,16 +21,17 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 	       // creationdate = DateTime.Now;
 	      //  sent = false;
          }
-
-
-
+        
         [Key]
-        public int id { get; set; }     
-        public virtual lu_messagetype  messagetype { get; set; }       
+        public int id { get; set; }
+        public int messagetype_id { get; set; }   
+        public virtual lu_messagetype  messagetype { get; set; }
+        public int template_id { get; set; }  
         public virtual lu_template  template { get; set; }
+        public int systemaddress_id { get; set; }
         public virtual systemaddress systemaddress { get; set; }
         public virtual ICollection<address > recipients { get; set; }
-        public string sendingApplication { get; set; }  //TO do convert applications to enum as well
+        public string sendingapplication { get; set; }  //TO do convert applications to enum as well
         public string body { get; set; }
         public string subject { get; set; }
         public object attachMents { get; set; }      

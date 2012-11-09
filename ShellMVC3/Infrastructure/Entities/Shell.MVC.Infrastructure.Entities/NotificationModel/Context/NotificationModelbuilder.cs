@@ -26,27 +26,39 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-            //activitylog and geo data
-            modelBuilder.Entity<profileactivity>().HasRequired(a => a.profileactivitygeodata )
-                .WithMany().HasForeignKey(a => a.profileactivitygeodata_id ); 
-   
+            //systemddress
+            modelBuilder.Entity<systemaddress>().HasRequired(a => a.systemaddresstype )
+            .WithMany().HasForeignKey(a => a.systemaddresstype_id  );
 
+           //many to many for address and recipeints
+           modelBuilder.Entity<address>()
+                .HasMany(p => p.messages  )
+                .WithMany(t => t.recipients )
+                .Map(mc =>
+                   {
+                       mc.ToTable("addressmessages");
+                       mc.MapLeftKey("recipient_id");
+                       mc.MapRightKey("message_id");
 
+                   });
+            
+            //other stuff for address
+           //adddress
+           modelBuilder.Entity<address>().HasRequired(a => a.addresstype)
+           .WithMany().HasForeignKey(a => a.addresstype_id);
 
-            //abusereports
-            modelBuilder.Entity<profilemetadata>().HasMany(p=>p.abusereportadded)
-           .WithRequired(z=>z.abusereporter ).HasForeignKey(t=>t.abusereporter_id).WillCascadeOnDelete(false);
-           //.HasForeignKey(p => p.abuser_id ).WillCascadeOnDelete(false);
-            modelBuilder.Entity<profilemetadata>().HasMany(p => p.abusereports)
-            .WithRequired(z => z.abuser).HasForeignKey(t => t.abuser_id ).WillCascadeOnDelete(false);
+            //other stuff for messages
+           //mesages
+           modelBuilder.Entity<message>().HasRequired(a => a.messagetype )
+           .WithMany().HasForeignKey(a => a.messagetype_id );
 
+           modelBuilder.Entity<message>().HasRequired(a => a.template )
+         .WithMany().HasForeignKey(a => a.template_id );
+            
+           modelBuilder.Entity<message>().HasRequired(a => a.systemaddress )
+        .WithMany().HasForeignKey(a => a.systemaddress_id );
 
-       
-
-         
-
-
-
+            
         
         }
 

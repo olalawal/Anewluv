@@ -74,7 +74,7 @@
     <Compile Include="NotificationModel\message.cs" />
     <Compile Include="NotificationModel\address.cs" />
     <Compile Include="NotificationModel\lu_addresstype.cs" />
-    <Compile Include="NotificationModel\lu_systemaddress.cs" />
+    <Compile Include="NotificationModel\systemaddress.cs" />
     <Compile Include="NotificationModel\lu_systemaddresstype.cs" />
     <Compile Include="NotificationModel\lu_template.cs" />
     <Compile Include="NotificationModel\lu_messagetype.cs" />

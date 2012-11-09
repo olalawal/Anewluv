@@ -10,7 +10,8 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     {
         
         [Key]
-        public int id { get; set; }      
+        public int id { get; set; }
+        public int systemaddresstype_id { get; set; }
         public virtual lu_systemaddresstype systemaddresstype { get; set; }              
         public string emailaddress { get; set; }
         public string hostip { get; set; }

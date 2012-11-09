@@ -16,68 +16,88 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         {
 
          
-            var AddressTypeList = Enum.GetValues(typeof(messageaddresstypeenum))
-           .Cast<messageaddresstypeenum>()
-            .ToDictionary(t => (int)t, t => t.ToString()).ToList();
-            // var jobInstanceStateList = EnumExtensions.ConvertEnumToDictionary<LogSeverityEnum >().ToList(); 
-            AddressTypeList.ForEach(kvp => context.lu_addresstype.AddOrUpdate(new lu_addresstype()
-            {
-                id = kvp.Key,
-                description = EnumExtensionMethods.ToDescription(kvp)
-            }));
-
-            var messageaddresstypeqry = from messageaddresstypeenum value in Enum.GetValues(typeof(messageaddresstypeenum))
+       
+            //addresstype lookup
+            var addresstypeqry = from addresstypeenum value in Enum.GetValues(typeof(addresstypeenum))
                                //   where value != messageaddresstypeenum.NotSet
                                   orderby value // to sort by value; remove otherwise 
                                   select value;
-            messageaddresstypeqry.ToList().ForEach(kvp => context.lu_messageaddresstype.AddOrUpdate(new lu_messageaddresstype()
-            {
-                id = (int)kvp,
-                description = EnumExtensionMethods.ToDescription(kvp)
-            }));
+              addresstypeqry.ToList().ForEach(kvp => context.lu_addresstype.AddOrUpdate(new lu_addresstype()
+                {
+                    id = (int)kvp,
+                    description = EnumExtensionMethods.ToDescription(kvp)
+                }));
+
+            //message type lookup
+              var messagetypeqry = from messagetypeenum value in Enum.GetValues(typeof(messagetypeenum))
+                                   //   where value != messagemessagetypeenum.NotSet
+                                   orderby value // to sort by value; remove otherwise 
+                                   select value;
+              messagetypeqry.ToList().ForEach(kvp => context.lu_messagetype.AddOrUpdate(new lu_messagetype()
+              {
+                  id = (int)kvp,
+                  description = EnumExtensionMethods.ToDescription(kvp)
+              }));
 
 
-            //populate the lookup table for System Address Types
-            var SystemAddressTypeList = Enum.GetValues(typeof(messagesystemaddresstypeenum))
-              .Cast<messagesystemaddresstypeenum>()
-               .ToDictionary(t => (int)t, t => t.ToString()).ToList();
-            // var jobInstanceStateList = EnumExtensions.ConvertEnumToDictionary<LogSeverityEnum >().ToList(); 
-            SystemAddressTypeList.ForEach(kvp => context.lu_systemaddresstype.AddOrUpdate(new lu_systemaddresstype()
-            {
-                id = kvp.Key,
-                description = kvp.Value
-            }));
+              //news lookup
+              var newsqry = from newsenum value in Enum.GetValues(typeof(newsenum))
+                                   //   where value != messagenewsenum.NotSet
+                                   orderby value // to sort by value; remove otherwise 
+                                   select value;
+              newsqry.ToList().ForEach(kvp => context.lu_news.AddOrUpdate(new lu_news()
+              {
+                  id = (int)kvp,
+                  description = EnumExtensionMethods.ToDescription(kvp)
+              }));
 
 
-            //PopulateMessage Type lookups
-            //populate the lookup table for System Address Types  , use the new create method
-            //we need a later step to add the body of the string format values or the razor template
-            var MessageTemplateList = Enum.GetValues(typeof(templateenum))
-              .Cast<templateenum>()
-               .ToDictionary(t => (int)t, t => t.ToString()).ToList();
-            // var jobInstanceStateList = EnumExtensions.ConvertEnumToDictionary<LogSeverityEnum >().ToList(); 
-            MessageTemplateList.ForEach(kvp => context.lu_template.AddOrUpdate(lu_template.Create(c =>
-            {
-                c.id = kvp.Key;
-                c.description = kvp.Value;
+              //systemaddresstype lookup
+              var systemaddresstypeqry = from systemaddresstypeenum value in Enum.GetValues(typeof(systemaddresstypeenum))
+                                   //   where value != messagesystemaddresstypeenum.NotSet
+                                   orderby value // to sort by value; remove otherwise 
+                                   select value;
+              systemaddresstypeqry.ToList().ForEach(kvp => context.lu_systemaddresstype.AddOrUpdate(new lu_systemaddresstype()
+              {
+                  id = (int)kvp,
+                  description = EnumExtensionMethods.ToDescription(kvp)
+              }));
 
-            }
-            )));
 
-            //PopulateMessage Type lookups
-            //populate the lookup table for System Address Types  , use the new create method
-            var MessageTypeList = Enum.GetValues(typeof(messagetypeenum))
-              .Cast<messagetypeenum>()
-               .ToDictionary(t => (int)t, t => t.ToString()).ToList();
-            // var jobInstanceStateList = EnumExtensions.ConvertEnumToDictionary<LogSeverityEnum >().ToList(); 
-            MessageTypeList.ForEach(kvp => context.lu_messagetype.AddOrUpdate(lu_messagetype.Create(c =>
-            {
-                c.id = kvp.Key;
-                c.description = kvp.Value;
+              //template lookup
+              var templateqry = from templateenum value in Enum.GetValues(typeof(templateenum))
+                                   //   where value != messagetemplateenum.NotSet
+                                   orderby value // to sort by value; remove otherwise 
+                                   select value;
+              templateqry.ToList().ForEach(kvp => context.lu_template.AddOrUpdate(new lu_template()
+              {
+                  id = (int)kvp,
+                  description = EnumExtensionMethods.ToDescription(kvp)
+              }));
 
-            }
-            )));
-            
+
+              //templatebody lookup
+              var templatebodyqry = from templatebodyenum value in Enum.GetValues(typeof(templatebodyenum))
+                                   //   where value != messagetemplatebodyenum.NotSet
+                                   orderby value // to sort by value; remove otherwise 
+                                   select value;
+              templatebodyqry.ToList().ForEach(kvp => context.lu_templatebody.AddOrUpdate(new lu_templatebody()
+              {
+                  id = (int)kvp,
+                  description = EnumExtensionMethods.ToDescription(kvp)
+              }));
+
+
+              //templatesubject lookup
+              var templatesubjectqry = from templatesubjectenum value in Enum.GetValues(typeof(templatesubjectenum))
+                                   //   where value != messagetemplatesubjectenum.NotSet
+                                   orderby value // to sort by value; remove otherwise 
+                                   select value;
+              templatesubjectqry.ToList().ForEach(kvp => context.lu_templatesubject.AddOrUpdate(new lu_templatesubject()
+              {
+                  id = (int)kvp,
+                  description = EnumExtensionMethods.ToDescription(kvp)
+              }));
 
 
 
@@ -86,16 +106,16 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
           
             //use create the System email addresses here 
-            context.systemAddresses.AddOrUpdate(p => p.emailAddress, systemAddress.Create(c =>
+            context.systemaddress.AddOrUpdate(p => p.emailaddress, systemaddress.Create(c =>
             {
 
-                c.emailAddress = "AnewLuvDoNotReply@nmedia.com";
-                c.hostIp = "192.168.0.114";
-                c.createdBy = "olawal";
-                c.hostName = "";
-                c.credentialPassword = "kayode02";
+                c.emailaddress = "AnewLuvDoNotReply@nmedia.com";
+                c.hostip = "192.168.0.114";
+                c.createdby = "olawal";
+                c.hostname = "";
+                c.credentialpassword = "kayode02";
                 c.creationdate = DateTime.Now;
-                c.id = (int)messagesystemaddresstypeenum.DoNotReplyAddress;
+                c.id = (int)systemaddresstypeenum.DoNotReplyAddress;
             }
             ));
 
@@ -109,26 +129,6 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
 
 
-            //9-12-2012
-            //added for profile activity type
-            //activitytype
-            //filter an enum for not set since that is the zero value i.e  
-            var activitytypeqry = from activitytypeenum value in Enum.GetValues(typeof(activitytypeEnum))
-                               where value != activitytypeEnum.NotSet
-                               orderby value // to sort by value; remove otherwise 
-                               select value;
-            activitytypeqry.ToList().ForEach(kvp => context.lu_activitytype.AddOrUpdate(new lu_activitytype()
-            {
-                id = (int)kvp,
-                description = EnumExtensionMethods.ToDescription(kvp)
-            }));
-
-           
-
-
-
-
-           
           
         }
 

@@ -13,11 +13,20 @@ namespace Shell.MVC2.Data
 
         private NotificationContext _notificationcontext;
 
+
         public InfoNotificationRepository(NotificationContext notificationcontext)
         {
             _notificationcontext = notificationcontext;
         }
 
+       public message sendemailtemplateinfo(messagetypeenum messagetype,string recipient,string sender)
+        {
+            message newmessagedetail = new message();
 
+            
+
+
+           return newmessagedetail ;
+        }
     }
 }

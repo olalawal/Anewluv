@@ -10,5 +10,9 @@ namespace Shell.MVC2.Services.Contracts
     [ServiceContract]
     public interface IInfoNotificationService 
     {
+
+
+
+
     }
 }

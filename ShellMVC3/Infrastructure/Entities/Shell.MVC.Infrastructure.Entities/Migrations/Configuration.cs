@@ -22,8 +22,7 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
 
         protected override void Seed(NotificationModel.NotificationContext context)
         {
-            
-
+            SeedMethods.seedgenerallookups(context);
 
         }
 

@@ -103,8 +103,8 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         [EnumMember]
         MemberPhotoUploadedMemberNotification = 28,
         [Description("A new photo for the user {0} has been uploaded to AnewLuv.com")]
-        [EnumMember]       
-        MemberPhotoRejectedAdminNotification = 29,
+        [EnumMember]
+        MemberPhotoUploadedAdminNotification = 29,
         [Description("Dear {0} , <p></p>Here are you {1} new matches for date : {2}  </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={0} \">Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberMatchesSentMemberNotification = 30,
