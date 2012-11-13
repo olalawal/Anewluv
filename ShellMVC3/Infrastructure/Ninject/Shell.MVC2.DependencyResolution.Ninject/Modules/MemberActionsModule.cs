@@ -17,7 +17,7 @@ using Dating.Server.Data.Models ;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
-
+using Shell.MVC2.Domain.Entities.Anewluv;
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
 	public class MemberActionsModule : NinjectModule
@@ -27,7 +27,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
                 
            
             Kernel.Bind<IMemberActionsRepository>().ToConstructor(
-             ctorArg => new MemberActionsRepository(ctorArg.Inject<AnewLuvFTSEntities>()));
+             ctorArg => new MemberActionsRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository >()));
 
 
 			//services

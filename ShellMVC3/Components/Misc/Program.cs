@@ -15,7 +15,11 @@ namespace Misc
 
            //MisFunctions.FixBadUserGeoData();
           //FixBadUserGeoData();
-            MisFunctions.ConvertDatabase ();
+            MisFunctions.ConvertFlatProfileandprofiledata();
+            MisFunctions.ConvertProfileCollections();
+            MisFunctions.ConvertProfileMetaDataBasicCollections();
+            MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
+            MisFunctions.ConvertProfileSearchSettingsCollections();
         }
     }
 }

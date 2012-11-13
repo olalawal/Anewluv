@@ -12,11 +12,12 @@ using Shell.MVC2.Interfaces;
 using Dating.Server.Data.Services;
 
 //to do do away with this when we go to code first , we would pull this from entities 
-using Dating.Server.Data.Models ;
+//using Dating.Server.Data.Models ;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
 using Shell.MVC2.Services.Contracts;
+using Shell.MVC2.Domain.Entities.Anewluv;
 
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
@@ -31,7 +32,13 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
            
 
             Kernel.Bind<IMembersMapperRepository>().ToConstructor(
-             ctorArg => new MembersMapperRepository(ctorArg.Inject<IGeoRepository>(),ctorArg.Inject<IPhotoRepository>(),ctorArg.Inject<DatingService>()));
+             ctorArg => new MembersMapperRepository(
+                 ctorArg.Inject<IGeoRepository>(),
+                 ctorArg.Inject<IPhotoRepository>(),
+                 ctorArg.Inject<IMemberRepository>(),
+                 ctorArg.Inject<IMemberActionsRepository >(),
+                  ctorArg.Inject<IMailRepository>(),
+                 ctorArg.Inject<AnewluvContext>()));
 
 			//services
             Kernel.Bind<IMembersMapperService>().ToSelf();

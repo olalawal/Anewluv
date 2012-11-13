@@ -14,6 +14,7 @@ using Dating.Server.Data.Services;
 //to do do away with this when we go to code first , we would pull this from entities 
 using Dating.Server.Data.Models ;
 using Shell.MVC2.Services.Contracts;
+using Shell.MVC2.Domain.Entities.Anewluv ;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
@@ -25,7 +26,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 		public override void Load()
 		{                
            
-            Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewLuvFTSEntities>()));
+            Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>( )));
 			//services
             Kernel.Bind<IMemberService>().ToSelf();
          

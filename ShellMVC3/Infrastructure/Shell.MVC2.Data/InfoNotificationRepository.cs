@@ -19,12 +19,10 @@ namespace Shell.MVC2.Data
             _notificationcontext = notificationcontext;
         }
 
-       public message sendemailtemplateinfo(messagetypeenum messagetype,string recipient,string sender)
+       public message sendemailtemplateinfo(templateenum template,string recipient,string sender)
         {
             message newmessagedetail = new message();
-
-            
-
+            newmessagedetail.template = _notificationcontext.lu_template.Where(p => p.id == (int)template).FirstOrDefault();
 
            return newmessagedetail ;
         }

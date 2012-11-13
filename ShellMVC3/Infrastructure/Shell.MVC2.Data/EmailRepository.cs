@@ -49,8 +49,8 @@ namespace Shell.MVC2.Data
 
        private EmailViewModel createemailviewmodel(MembersViewModel model,messagetypeenum messagetype)
        {
-
-
+EmailViewModel dd = new EmailViewModel();
+return dd;
        }
 
     }

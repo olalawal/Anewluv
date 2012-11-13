@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IEmailRepository.cs" />
+    <Compile Include="IEmailRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ISearchRepository.cs" />
     <Compile Include="IChatRepository.cs" />
     <Compile Include="IAnewLuvMembershipProvider.cs" />

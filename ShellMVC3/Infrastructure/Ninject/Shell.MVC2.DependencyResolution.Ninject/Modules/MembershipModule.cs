@@ -17,6 +17,7 @@ using Shell.MVC2.Services.Contracts;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
+using Shell.MVC2.Domain.Entities.Anewluv;
 
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
@@ -27,7 +28,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
                 //AnewLuvFTSEntities datingcontext, IGeoRepository georepository, IMemberRepository memberepository
            
            Kernel.Bind<IAnewLuvMembershipProvider>().ToConstructor(
-             ctorArg => new AnewLuvMembershipProvider(ctorArg.Inject<AnewLuvFTSEntities>(),ctorArg.Inject<IGeoRepository>(),ctorArg.Inject<IMemberRepository>()));
+             ctorArg => new AnewLuvMembershipProvider(ctorArg.Inject<AnewluvContext>(),ctorArg.Inject<IGeoRepository>(),ctorArg.Inject<IMemberRepository>()));
 
             //services
            Kernel.Bind<IAuthenticationService>().ToSelf();
