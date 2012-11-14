@@ -261,7 +261,7 @@ namespace Shell.MVC2.Data
                     //pilot how to show the rest of the values 
                     //sample of doing string values
                     var allhotfeature = db.lu_hotfeature;
-                    var hotfeaturevalues = new HashSet<int>(p.hotfeature.Select(c => c.id.GetValueOrDefault()));
+                    var hotfeaturevalues = new HashSet<int>(p.hotfeatures.Select(c => c.id.GetValueOrDefault()));
                     //foreach (var item in p.hotfeature )
                     //{
                     //    (item.hotfeature.hotfeatureName);
@@ -2387,7 +2387,7 @@ namespace Shell.MVC2.Data
                if (selectedhotfeature.Contains(hotfeature))
                {
                    //does not exist so we will add it
-                   if (!currentsearchsetting.hotfeature.Any(p => p.id == hotfeature.id))
+                   if (!currentsearchsetting.hotfeatures.Any(p => p.id == hotfeature.id))
                    {
 
                        //SearchSettings_hotfeature.hotfeatureID = hotfeature.hotfeatureID;
@@ -2400,7 +2400,7 @@ namespace Shell.MVC2.Data
                }
                else
                { //exists means we want to remove it
-                   if (currentsearchsetting.hotfeature.Any(p => p.id == hotfeature.id))
+                   if (currentsearchsetting.hotfeatures.Any(p => p.id == hotfeature.id))
                    {
                        var temp = db.searchsetting_hotfeature.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == hotfeature.id).First();
                        db.searchsetting_hotfeature.Remove(temp);

@@ -10,6 +10,8 @@ using Shell.MVC2.Infrastructure.Interfaces;
 //using Shell.MVC2.Services.Notification;
 using Shell.MVC2.Infrastructure.Entities.NotificationModel;
 using Shell.MVC2.Services.Contracts;
+using Shell.MVC2.Domain.Entities.Anewluv;
+using Shell.MVC2.Interfaces;
 
 
 
@@ -24,11 +26,13 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
     {
         public override void Load()
         {
-
-        
+                    
 
             Kernel.Bind<IInfoNotificationRepository>().ToConstructor(
-             ctorArg => new InfoNotificationRepository(ctorArg.Inject<NotificationContext>()));
+             ctorArg => new InfoNotificationRepository(ctorArg.Inject<NotificationContext>(),
+                 ctorArg.Inject<AnewluvContext>(),
+                 ctorArg.Inject<IMemberRepository>(), ctorArg.Inject<IMembersMapperRepository>() 
+                 ));
           
             Kernel.Bind<IInfoNotificationService>().ToSelf();
 

@@ -14,7 +14,7 @@ namespace Shell.MVC2.Interfaces
     public interface IEmailRepository
     {
 
-        EmailMatchesViewModel getemailmatches(MembersViewModel model);
+        EmailViewModel getemailmatches(MembersViewModel model);
     
     }
 }

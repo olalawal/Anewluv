@@ -332,7 +332,7 @@ namespace Shell.MVC2.Data
                 }
 
 
-                foreach (var item in PerfectMatchSettings.hotfeature )
+                foreach (var item in PerfectMatchSettings.hotfeatures )
                 {
                     CriteriaModel.AppearanceSearchSettings.hotfeaturelist.Add(item.hotfeature.description);
                 }
@@ -689,7 +689,7 @@ namespace Shell.MVC2.Data
             return CachingFactory.MembersViewModelHelper.removeguestdata(sessionid);
         }
         //cacheing of search stuff
-       public MembersViewModel getguestdata(string sessionid)
+        public MembersViewModel getguestdata(string sessionid)
         {
             return CachingFactory.MembersViewModelHelper.getguestdata(sessionid, this);
         }

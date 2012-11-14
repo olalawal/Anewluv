@@ -41,6 +41,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -53,6 +54,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Entities\Shell.MVC2.Domain.Entities\Shell.MVC2.Domain.Entities.csproj">
+      <Project>{3413A2BC-A142-4383-A9BD-72145457C6CB}</Project>
+      <Name>Shell.MVC2.Domain.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Entities\Shell.MVC.Infrastructure.Entities\Shell.MVC2.Infrastructure.Entities.csproj">
       <Project>{92B7DBBB-2313-4C2E-88AB-970751B229F1}</Project>
       <Name>Shell.MVC2.Infrastructure.Entities</Name>

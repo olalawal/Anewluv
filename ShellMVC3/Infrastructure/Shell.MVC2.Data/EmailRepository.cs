@@ -34,12 +34,12 @@ namespace Shell.MVC2.Data
             _membersmapperrepository = membersmapperrepository;
         }
 
-       public  EmailMatchesViewModel getemailmatches(int profileid)
+       public  EmailViewModel getemailmatches(int profileid)
         {
 
            MembersViewModel model = _membersmapperrepository.getmemberdata(profileid);
           
-           EmailMatchesViewModel returnmodel = new EmailMatchesViewModel();
+           EmailViewModel returnmodel = new EmailViewModel();
            returnmodel.EmailMatches = _membersrepository.getemailmatches(model);
            //fill in the rest of the email model values 
 

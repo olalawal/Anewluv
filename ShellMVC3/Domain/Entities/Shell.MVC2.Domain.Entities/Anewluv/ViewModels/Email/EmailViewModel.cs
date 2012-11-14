@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email
 {
-    public class EmailViewModel
+    public class EmailModel
     {
         public string to { get; set; }
         public string from { get; set; }  //only used in contact us

@@ -5,13 +5,13 @@ using System.Text;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email
 {
-    public class EmailMatchesViewModel
+    public class EmailViewModel
     {
 
             
        // public MembersRepository _membersrepository  { get; set; }
         //no contructor here will be populated in Notification service
-        public EmailMatchesViewModel()
+        public EmailViewModel()
             {
 
                // _membersrepository = new MembersRepository();
@@ -32,7 +32,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email
             public List<MemberSearchViewModel> EmailMatches { get;  set; }
             public MemberSearchViewModel FeaturedMember { get; set; } //Stores the featured member that applys to this user 
             public MembersViewModel MembersViewModel { get; set; }  //lits this members data
-            public EmailViewModel  EmailViewModel { get; set; }         
+            public EmailModel memberEmailViewModel { get; set; }
+            public EmailModel adminEmailViewModel { get; set; }
             public bool HasMatches { get; set; }  //tels you if there are any matches 
     }
 }

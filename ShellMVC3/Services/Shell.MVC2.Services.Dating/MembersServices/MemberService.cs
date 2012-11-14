@@ -227,11 +227,11 @@ namespace Shell.MVC2.Services.Dating
         }
 
 
-        public int? getprofileidbyusername(string User)
-        {
-            return _memberrepository.getprofileidbyusername(User);
+        //public int? getprofileidbyusername(string User)
+        //{
+        //    return _memberrepository.getprofileidbyusername(User);
 
-        }
+        //}
 
 
         public profile getprofilebyprofileid(int profileid)

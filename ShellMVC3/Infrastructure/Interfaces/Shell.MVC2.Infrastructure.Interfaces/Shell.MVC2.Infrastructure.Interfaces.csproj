@@ -48,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Domain\Entities\Shell.MVC2.Domain.Entities\Shell.MVC2.Domain.Entities.csproj">
+      <Project>{3413A2BC-A142-4383-A9BD-72145457C6CB}</Project>
+      <Name>Shell.MVC2.Domain.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Entities\Shell.MVC.Infrastructure.Entities\Shell.MVC2.Infrastructure.Entities.csproj">
       <Project>{92B7DBBB-2313-4C2E-88AB-970751B229F1}</Project>
       <Name>Shell.MVC2.Infrastructure.Entities</Name>

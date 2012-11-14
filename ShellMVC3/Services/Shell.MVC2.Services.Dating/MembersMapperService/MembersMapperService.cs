@@ -11,6 +11,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Services.Contracts;
+using System.Web;
 
 namespace Shell.MVC2.Services.Dating
 {
@@ -24,9 +25,114 @@ namespace Shell.MVC2.Services.Dating
         public MembersMapperService(IMembersMapperRepository mapmembermapperrepo)
             {
                 _mapmembermapperrepo = mapmembermapperrepo;
+                _apikey = HttpContext.Current.Request.QueryString["apikey"];
+
+                //TO implement API KEY validation
+                //  throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+               
             }
 
 
+        // constructor
+        public MemberSearchViewModel getmembersearchviewmodel(int profileId)
+        {
+            return _mapmembermapperrepo.getmembersearchviewmodel(profileId);
+        }
+        public List<MemberSearchViewModel> getmembersearchviewmodels(List<int> profileIds)
+        {
+            return _mapmembermapperrepo.getmembersearchviewmodels(profileIds);
+        }
+        public ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileId)
+        {
+            return _mapmembermapperrepo.getprofilebrowsemodel(viewerprofileId, profileId);
+        }
+        //returns a list of profile browsemodles for a given user
+        public List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds)
+        {
+            return _mapmembermapperrepo.getprofilebrowsemodels(viewerprofileId, profileIds);
+        }
+        // constructor
+        //4-12-2012 added screen name
+        //4-18-2012 added search settings
+        public ProfileCriteriaModel getprofilecriteriamodel(int profileid)
+        {
+            return _mapmembermapperrepo.getprofilecriteriamodel(profileid);          
+
+        }
+        //use an overload to return values if a user is not logged in i.e
+        //no current profiledata exists to retrive
+        public ProfileCriteriaModel getprofilecriteriamodel()
+        {
+
+            return _mapmembermapperrepo.getprofilecriteriamodel();
+        }
+        //gets search settings
+        //TO DO this function is just setting temp values for now
+        //9 -21- 2011 added code to get age at least from search settings , more values to follow
+        public MembersViewModel getdefaultquicksearchsettingsmembers(MembersViewModel Model)
+        {
+            return _mapmembermapperrepo.getdefaultquicksearchsettingsmembers(Model);
+        }
+        //populate search settings for guests 
+        public MembersViewModel getdefaultsearchsettingsguest(MembersViewModel Model)
+        {
+            return _mapmembermapperrepo.getdefaultsearchsettingsguest(Model);
+        }
+
+        //registration model update and mapping
+        public RegisterModel getregistermodel(MembersViewModel membersmodel)
+        {
+            return _mapmembermapperrepo.getregistermodel(membersmodel);          
+        }
+        public RegisterModel getregistermodelopenid(MembersViewModel membersmodel)
+        {
+            return _mapmembermapperrepo.getregistermodelopenid(membersmodel);
+        }
+        public RegisterModel getregistermodeltest()
+        {
+            return _mapmembermapperrepo.getregistermodeltest();
+        }
+
+        //TOD modifiy client to not bind from this model but load values asycnh
+        //other member viewmodl methods
+        public MembersViewModel updatememberdata(MembersViewModel model)
+        {
+            return _mapmembermapperrepo.updatememberdata(model);
+        }
+        public MembersViewModel updatememberdatabyprofileid(int profileid)
+        {
+            return _mapmembermapperrepo.updatememberdatabyprofileid(profileid);
+        }
+        public bool updateguestdata(MembersViewModel model)
+        {
+            return _mapmembermapperrepo.updateguestdata(model);
+        }
+        public bool removeguestdata(string sessionid)
+        {
+            return _mapmembermapperrepo.removeguestdata(sessionid);
+        }
+        //cacheing of search stuff
+        public MembersViewModel getguestdata(string sessionid)
+        {
+            return _mapmembermapperrepo.getguestdata(sessionid);
+        }
+        public MembersViewModel getmemberdata(int profileid)
+        {
+            return _mapmembermapperrepo.getmemberdata(profileid);
+        }
+
+        //functions not exposed via WCF or otherwise
+        public MembersViewModel mapmember(int ProfileID)
+        {
+            return _mapmembermapperrepo.mapmember(ProfileID);
+           
+
+        }
+
+        public MembersViewModel mapguest()
+        {
+            return _mapmembermapperrepo.mapguest();
+        }
 
     }
 }
