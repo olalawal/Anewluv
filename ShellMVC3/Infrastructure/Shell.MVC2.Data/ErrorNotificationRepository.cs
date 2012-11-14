@@ -41,8 +41,8 @@ namespace Shell.MVC2.Data
 				//Dim recipeints As New List(Of String)
 
 				// recipeints = context.MessageSystemAddresses.Where(Function(c) c.SystemAddressType = CInt(AddressType))
-				dynamic recipientEmailAddresss = (from x in (_notificationcontext.address.Where(f => f.id == Convert.ToInt32(MessageAddressTypeEnum.Developer))) select x);
-				dynamic SystemSenderAddress = (from x in (_notificationcontext.systemAddresses.Where(f => f.id == Convert.ToInt32(MessageSystemAddressTypeEnum.DoNotReplyAddress))) select x).First();
+                dynamic recipientEmailAddresss = (from x in (_notificationcontext.address.Where(f => f.id == Convert.ToInt32(addresstypeenum.Developer))) select x);
+				dynamic SystemSenderAddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == Convert.ToInt32(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
 
 				// Perform validation on the updated order before applying the changes.
 				message message = new message();
@@ -66,14 +66,14 @@ namespace Shell.MVC2.Data
                   //use create method it like this 
               message=  (message.Create (c =>
                {
-                   c.id = (int)MessageTemplateEnum.GenericErrorMessage;
-                   c.messagetype.id = (int)MessageTypeEnum.DeveloperError;
+                   c.id = (int)templateenum.GenericErrorMessage;
+                   c.messagetype.id = (int)messagetypeenum.DeveloperError;
                    c.body = c.template == null ? TemplateParser.RazorFileTemplate("", ref customerror) :
-                                                        TemplateParser.RazorDBTemplate(message.template.razorTemplateBody, ref customerror);
+                                                        TemplateParser.RazorDBTemplate(message.template.razortemplatebody, ref customerror);
                    c.subject = string.Format("An error occured");
                    c.recipients = recipientEmailAddresss.ToList();
-                   c.sendingApplication = "ErrorNotificationService";
-                   c.systemAddress = SystemSenderAddress;
+                   c.sendingapplication  = "ErrorNotificationService";
+                   c.systemaddress = SystemSenderAddress;
                }));
 
                // c.body = c.template == null ? TemplateParser.RazorFileTemplate("", ref customerror) :
@@ -83,14 +83,14 @@ namespace Shell.MVC2.Data
 
               var messsage = new message 
               { 
-               id = (int)MessageTemplateEnum.GenericErrorMessage,
+               id = (int)templateenum.GenericErrorMessage,
                 template = new lu_template { id = 1},
-                     messagetype  = new lu_messageType { id = (int)MessageTypeEnum.DeveloperError},
-                   body  = message.template.razorTemplateBody == null ? TemplateParser.RazorFileTemplate("", ref customerror) : TemplateParser.RazorDBTemplate(message.template.razorTemplateBody, ref customerror),
+                     messagetype  = new lu_messagetype { id = (int)messagetypeenum.DeveloperError},
+                   body  = message.template.razortemplatebody == null ? TemplateParser.RazorFileTemplate("", ref customerror) : TemplateParser.RazorDBTemplate(message.template.razortemplatebody, ref customerror),
                      subject  = string.Format("An error occured"),
                    recipients = recipientEmailAddresss.ToList(),
-                   sendingApplication = "ErrorNotificationService",
-                   systemAddress = SystemSenderAddress
+                   sendingapplication = "ErrorNotificationService",
+                   systemaddress = SystemSenderAddress
               
               };
 
@@ -128,15 +128,15 @@ namespace Shell.MVC2.Data
                 foreach (address recip_loopVariable in message.recipients)
                 {
                    var recip = recip_loopVariable;
-                   System.Net.Mail.MailMessage mailMessage = new System.Net.Mail.MailMessage(message.systemAddress.emailAddress, recip_loopVariable.emailAddress );
+                   System.Net.Mail.MailMessage mailMessage = new System.Net.Mail.MailMessage(message.systemaddress.emailaddress, recip_loopVariable.emailaddress );
                     mailMessage.IsBodyHtml = true;
                     mailMessage.Subject = message.subject;
                     mailMessage.Body = message.body;
 
                     SmtpClient smtp = new SmtpClient();
-                    smtp.Host = !string.IsNullOrEmpty(message.systemAddress.hostName) ? mailMessage.Sender.Host : message.systemAddress.hostIp;
+                    smtp.Host = !string.IsNullOrEmpty(message.systemaddress.hostname) ? mailMessage.Sender.Host : message.systemaddress.hostip;
                     //smtp.Credentials()
-                    smtp.Credentials = new System.Net.NetworkCredential(message.systemAddress.credentialUserName, message.systemAddress.credentialPassword);
+                    smtp.Credentials = new System.Net.NetworkCredential(message.systemaddress.credentialusername, message.systemaddress.credentialpassword);
                     smtp.Send(mailMessage);
                     isEmailSendSuccessfully = true;
                 }
