@@ -16,12 +16,8 @@ namespace Shell.MVC2.Web.AuthenticationService.ServiceHostFactories
     {
         protected override IKernel CreateContainer()
         {
-            IKernel container = new StandardKernel();
-            container.Load<NinjectModules.DatingContextModule>();
-            container.Load<NinjectModules.PostalDataContextModule>();  
-            container.Load<NinjectModules.MembersModule>();
-            container.Load<NinjectModules.GeoModule>();
-            container.Load<NinjectModules.MembershipModule>();
+            IKernel container = new StandardKernel();           
+            container.Load<NinjectModules.MembershipModule>();        
             return container;
         }
 

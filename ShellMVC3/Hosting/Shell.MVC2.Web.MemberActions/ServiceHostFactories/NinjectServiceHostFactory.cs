@@ -16,7 +16,7 @@ namespace Shell.MVC2.Web.MembersActionsService.ServiceHostFactories
         protected override IKernel CreateContainer()
         {
             IKernel container = new StandardKernel();
-            container.Load<NinjectModules.DatingContextModule>();       
+          //  container.Load<NinjectModules.DatingContextModule>();       
             container.Load<NinjectModules.MemberActionsModule>();
             return container;
         }

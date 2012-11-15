@@ -165,17 +165,25 @@ namespace Shell.MVC2.Services.Media
         }
 
 
+           public byte[] getimagebytesfromurl(string _imageUrl, string source)
+        {
+
+            return _photorepo.getimagebytesfromurl(_imageUrl, source);
+
+        }
+
+
         /// <summary>
         /// dont think this is used
         /// </summary>
         /// <param name="_imageUrl"></param>
         /// <param name="caption"></param>
         /// <returns></returns>
-        public photo uploadprofileimage(string _imageUrl, string caption)
-        {
-            return _photorepo.uploadprofileimage(_imageUrl, caption);
+        //public photo uploadprofileimage(string _imageUrl, string caption)
+        //{
+        //    return _photorepo.uploadprofileimage(_imageUrl, caption);
            
-        }         
+        //}         
         
 
 

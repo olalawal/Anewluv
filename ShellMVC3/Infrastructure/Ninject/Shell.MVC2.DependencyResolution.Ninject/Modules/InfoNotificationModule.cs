@@ -12,6 +12,7 @@ using Shell.MVC2.Infrastructure.Entities.NotificationModel;
 using Shell.MVC2.Services.Contracts;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Interfaces;
+using Dating.Server.Data.Models;
 
 
 
@@ -26,7 +27,30 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
     {
         public override void Load()
         {
-                    
+
+
+
+          //this.Bind<CustomErrorLogContext>().ToConstructor(x => new CustomErrorLogContext());
+            Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>()));
+            Kernel.Bind<IGeoRepository>().ToConstructor(ctorArg => new GeoRepository(ctorArg.Inject<PostalData2Entities>()));
+            Kernel.Bind<IPhotoRepository>().ToConstructor(
+            ctorArg => new PhotoRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
+            Kernel.Bind<IMailRepository>().ToConstructor(
+            ctorArg => new MailRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
+            Kernel.Bind<IMemberActionsRepository>().ToConstructor(
+          ctorArg => new MemberActionsRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
+
+            Kernel.Bind<IMembersMapperRepository>().ToConstructor(
+             ctorArg => new MembersMapperRepository(
+                 ctorArg.Inject<IGeoRepository>(),
+                 ctorArg.Inject<IPhotoRepository>(),
+                 ctorArg.Inject<IMemberRepository>(),
+                 ctorArg.Inject<IMemberActionsRepository>(),
+                  ctorArg.Inject<IMailRepository>(),
+                 ctorArg.Inject<AnewluvContext>()));
+
+
+
 
             Kernel.Bind<IInfoNotificationRepository>().ToConstructor(
              ctorArg => new InfoNotificationRepository(ctorArg.Inject<NotificationContext>(),
