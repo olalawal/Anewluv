@@ -15,7 +15,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public int abuser_id { get; set; }
         public virtual profilemetadata abuser { get; set; }
         public virtual profilemetadata abusereporter { get; set; }    
-        public DateTime creationdate { get; set; }
+        public DateTime? creationdate { get; set; }
         public ICollection<abusereportnotes> notes { get; set; }
 
 

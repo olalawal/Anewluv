@@ -16,7 +16,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual profilemetadata profilemetadata { get; set; }
         public virtual lu_notetype notetype { get; set; }
         public string note { get; set; }
-        public DateTime creationdate { get; set; }
+        public DateTime? creationdate { get; set; }
         public DateTime? reviewdate { get; set; }
 
 

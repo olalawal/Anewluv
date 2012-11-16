@@ -40,6 +40,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.abusereports)
             .WithRequired(z => z.abuser).HasForeignKey(t => t.abuser_id ).WillCascadeOnDelete(false);
 
+            //11-17-2012 olawal added requured lookup
+            modelBuilder.Entity<abusereport>()
+            .HasRequired(t => t.abusetype);
+
 
             // map required relationships abusereportnotes
             //**************************************
@@ -51,6 +55,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<abusereportnotes>().HasRequired(p => p.profilemetadata)
             .WithMany()
             .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
+
+            //11-17-2012 olawal added requured lookup
+            modelBuilder.Entity<abusereportnotes >()
+            .HasRequired(t => t.notetype );
 
 
             //  //map requierd  relationshipds for favorite
@@ -144,24 +152,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<mailupdatefreqency>()
            .HasRequired(t => t.profilemetadata );
 
-            //membersinrole
-             //map requierd  relationshipds for membersinrole
-             //**************************************
-         //   modelBuilder.Entity<profile>().HasMany(p => p.memberroles)
-           //.WithRequired(c => c.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
-  
+            //Members in role required lookup
+            //11-17-2012 olawal added requured lookup
+            modelBuilder.Entity<membersinrole>()
+            .HasRequired(t => t.role );
 
-            //openid
-            //  //map requierd  relationshipds for openid
-            //  //**************************************
-         //   modelBuilder.Entity<openid>()
-         //  .HasRequired(t => t.profile);
 
-            //photo complex model requered field mappings
-            // map required relationships to profile metadata
-            //**************************************
-          //  modelBuilder.Entity<photo>().HasRequired(t => t.profilemetadata).WithMany(z => z.photos )
-           //.HasForeignKey(p => p.profile_id ).WillCascadeOnDelete(false);
+
 
 
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.photos )
@@ -186,7 +183,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //********************************************
             modelBuilder.Entity<photoconversion>()
            .HasRequired(p => p.formattype);
-           
+
+            //Map required photo to photo conversion
+            modelBuilder.Entity<photoconversion>()
+            .HasRequired(p => p.photo).WithMany().HasForeignKey(z => z.photo_id);
+
+            
+
+
              //confgure 1 to 1 required relatonship woth photo type
             //********************************************
             modelBuilder.Entity<lu_photoformat>()
