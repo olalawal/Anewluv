@@ -27,7 +27,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         public string username { get; set; }
         public string otheridentifer { get; set; }  //use this for chat notifications maybe
         public bool active { get; set; }
-        public DateTime creationdate { get; set; }
+        public DateTime? creationdate { get; set; }
         public DateTime? removaldate { get; set; }
        
         public static address Create(Action<address> init)

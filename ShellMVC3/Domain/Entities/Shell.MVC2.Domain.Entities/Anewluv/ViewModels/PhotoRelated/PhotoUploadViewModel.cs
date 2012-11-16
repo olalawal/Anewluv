@@ -9,6 +9,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
  
     [DataContract]
+    [Serializable]
     public class PhotoUploadViewModel
     {
         public PhotoUploadViewModel()

@@ -41,4 +41,4 @@ check the model updating model for custom database migration settings i.e schema
  added this code to configure migrations to be constally updated on db changes automatically
  add-Migration -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" ConfigurationNotificationModelInitial
  add-Migration  -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel"  ConfigurationCustomerrorLogModelInitial
-
+ Update-Database -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose

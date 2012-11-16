@@ -14,7 +14,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     public class lu_addresstype
     {
         //we generate this manually from enums for now
-       [Key]
+        [Key]
         public int id { get; set; } 
         public string description { get; set; }
         public bool? active { get; set; }

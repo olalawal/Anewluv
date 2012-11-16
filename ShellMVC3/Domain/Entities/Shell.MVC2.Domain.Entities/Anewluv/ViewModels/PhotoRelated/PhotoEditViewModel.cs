@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
- 
+    [Serializable]
     [DataContract]
     public class PhotoEditViewModel
     {

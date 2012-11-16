@@ -27,10 +27,11 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         {
             var systemaddress = new systemaddress();
             //address.MessageAddressID = Guid.NewGuid();
-            systemaddress.creationdate = DateTime.Now;
+            //systemaddress.creationdate = DateTime.Now;
            // systemaddress.RemovalDate = DateTime.Now;
-            systemaddress.active = true;
-            init(systemaddress); return systemaddress;
+           // systemaddress.active = true;
+           // init(systemaddress); return systemaddress;
+            return systemaddress;
         }
 
         //  //use create method it like this 

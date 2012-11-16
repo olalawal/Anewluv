@@ -13,7 +13,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
         //current values selected from User Interface , we bind them to the user 
         //viewmodel for now unless we run into memory issues and effecinery, then they will expire with the view
-
+          [DataMember]
         public int myselectediamgenderid { get; set; }
 
         public int myselectedseekinggenderid { get; set; }

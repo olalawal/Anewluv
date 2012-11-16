@@ -22,8 +22,8 @@ namespace Shell.MVC2.Services.Contracts
         //int WriteLogEntry(CustomErrorLog logEntry);
 
         //temporary method for use by designer to get the message information formated for them
-        [WebGet]
-        [OperationContract]
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebGet(UriTemplate = "/getgenericemailviewmodel/", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
         EmailViewModel getgenericemailviewmodel();
 
         [WebGet]

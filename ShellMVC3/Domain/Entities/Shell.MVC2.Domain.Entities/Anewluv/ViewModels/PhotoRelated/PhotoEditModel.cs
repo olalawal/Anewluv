@@ -9,6 +9,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     //10-29-2011 moved the  edit photo stuff here but it is not edit only, probably should be in photomodel
    
    [DataContract ]
+    [Serializable ]
     public class PhotoEditModel
     {
         [DataMember]

@@ -106,42 +106,42 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
             //Add generic data I.e email system sender and a few email addresses to use to send stuff               
 
-          
-            //use create the System email addresses here 
-            context.systemaddress.AddOrUpdate(p => p.emailaddress, systemaddress.Create(c =>
-            {
 
-                c.emailaddress = "AnewLuvDoNotReply@nmedia.com";
-                c.hostip = "192.168.0.114";
-                c.createdby = "olawal";
-                c.hostname = "";
-                c.credentialpassword = "kayode02";
-                c.creationdate = DateTime.Now;
-                c.systemaddresstype.id = (int)systemaddresstypeenum.DoNotReplyAddress;
-               
-            }
-            ));
+              //use create the System email addresses here 
+              context.systemaddress.AddOrUpdate( new systemaddress()
+              {
 
-            //add a few templates 
-            //TO DO use razor 
-            //use create the System email addresses here 
+                  emailaddress = "AnewLuvDoNotReply@nmedia.com",
+                  hostip = "192.168.0.114",
+                  createdby = "olawal",
+                  hostname = "",
+                  credentialpassword = "kayode02",
+                  creationdate = DateTime.Now,
+                  systemaddresstype =  context.lu_systemaddresstype.Where(z=>z.id ==(int)systemaddresstypeenum.DoNotReplyAddress).FirstOrDefault()
 
-            //DO this last since it gets values from previous seeded body values
-            //template lookup
-            var templateqry = from templateenum value in Enum.GetValues(typeof(templateenum))
-                              //   where value != messagetemplateenum.NotSet
-                              orderby value // to sort by value; remove otherwise 
-                              select value;
-            templateqry.ToList().ForEach(kvp => context.lu_template.AddOrUpdate(new lu_template()
-            {
-                id = (int)kvp,
-                description = EnumExtensionMethods.ToDescription(kvp),
-                active= true ,
-                creationdate = DateTime.Now ,
-                bodystring = context.lu_templatebody.Where(p => p.id == (int)kvp).First(),
-                subjectstring  = context.lu_templatesubject.Where(p => p.id == (int)kvp).First()
+              }
+              );
 
-            }));
+              //add a few templates 
+              //TO DO use razor 
+              //use create the System email addresses here 
+
+              //DO this last since it gets values from previous seeded body values
+              //template lookup
+              var templateqry = from templateenum value in Enum.GetValues(typeof(templateenum))
+                                //   where value != messagetemplateenum.NotSet
+                                orderby value // to sort by value; remove otherwise 
+                                select value;
+              templateqry.ToList().ForEach(kvp => context.lu_template.AddOrUpdate(new lu_template()
+              {
+                  id = (int)kvp,
+                  description = EnumExtensionMethods.ToDescription(kvp),
+                  active = true,
+                  creationdate = DateTime.Now,
+                  bodystring = context.lu_templatebody.Where(p => p.id == (int)kvp).First(),
+                  subjectstring = context.lu_templatesubject.Where(p => p.id == (int)kvp).First()
+
+              }));
 
 
             //context.SaveChanges();

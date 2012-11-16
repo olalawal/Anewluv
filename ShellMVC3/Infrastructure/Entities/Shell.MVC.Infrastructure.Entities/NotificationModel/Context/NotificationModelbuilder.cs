@@ -31,29 +31,29 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
            // .WithMany().HasForeignKey(a => a.systemaddresstype_id  );
 
             //set up required fiel lookups
-            modelBuilder.Entity<systemaddress >()
-          .HasRequired(t => t.systemaddresstype )
-          .WithRequiredPrincipal();
+            modelBuilder.Entity<systemaddress>()
+          .HasRequired(t => t.systemaddresstype);
+          
 
             modelBuilder.Entity<address>()
-           .HasRequired(t => t.addresstype )
-           .WithRequiredPrincipal();
+           .HasRequired(t => t.addresstype);
+            
 
             modelBuilder.Entity<message>()
-           .HasRequired(t => t.messagetype )
-           .WithRequiredPrincipal();
+           .HasRequired(t => t.messagetype );
+
 
             modelBuilder.Entity<message>()
-        .HasRequired(t => t.messagetype)
-        .WithRequiredPrincipal();
+           .HasRequired(t => t.messagetype);
+
 
             modelBuilder.Entity<message>()
-        .HasRequired(t => t.systemaddress)
-        .WithRequiredPrincipal();
+        .HasRequired(t => t.systemaddress);
+
 
             modelBuilder.Entity<message>()
-   .HasRequired(t => t.template)
-   .WithRequiredPrincipal();
+   .HasRequired(t => t.template);
+
 
 
            //many to many for address and recipeints

@@ -101,8 +101,8 @@
     <Compile Include="Anewluv\ViewModels\Account\RegisterExternalLoginModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\ExternalLogin.cs" />
     <Compile Include="Anewluv\ViewModels\Email\EmailEnums\subjecttype.cs" />
-    <Compile Include="Anewluv\ViewModels\Email\EmailMatchesViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Email\EmailViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Email\EmailModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
     <Compile Include="Anewluv\photoconversion.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\bodytype.cs" />

@@ -17,30 +17,41 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     {
 
         //added stuff for photo VMS
+           [DataMember]
         public PhotoEditViewModel profilephotos { get; set; }
 
 
         //added stuff from visiblity table
+           [DataMember]
         public Boolean? ProfileVisibility { get; set; }
 
 
 
 
         //added date feilds for times of events
-
+           [DataMember]
         public DateTime? interestdate { get; set; }
+           [DataMember]
         public DateTime? peekdate { get; set; }
+           [DataMember]
         public DateTime? likedate { get; set; }
+           [DataMember]
         public DateTime? blockdate { get; set; }
 
+           [DataMember]
         public DateTime? birthdate { get; set; }
+           [DataMember]
         public DateTime? creationdate { get; set; }
+           [DataMember]
         public DateTime? lastlogindate { get; set; }
+           [DataMember]
         public int? lookingforid { get; set; }
+           [DataMember]
         public profile profile { get; set; }
+         [DataMember]
         public profiledata profiledata { get; set; }
         //added a conttructor with profile ID for building this item since its one per page now
-
+         [DataMember]
         public searchsetting  perfectmatchsettings { get; set; }
        // public EditProfilePhotosViewModel ProfilePhotos { get; set; }
         // properties       
@@ -57,28 +68,37 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //added screen name since we dont pass profile anymore
         public string screenname { get; set; }
         public string mycatchyintroline { get; set; }
+           [DataMember]
         public string aboutme { get; set; }
+           [DataMember]
         public int? genderid { get; set; }
+           [DataMember]
         public double? distancefromme { get; set; }
         //stuff I am looking for , loaded from search settings or 
         //intially loaded by system , which just picks defaults i.e
         //male would be default looking for female etc         
+           [DataMember]
         public string lookingforagefrom { get; set; }
+          [DataMember]
         public string lookingForageto { get; set; }
         //double vlaue represents the max distance i am looking for        
 
         //Zip Code for search, pull out of postal data contex
         //replace zipcode with city on the membershome page list using thier country and postal code to find cities near them          
+         [DataMember]
         public bool postalcodestatus { get; set; }  //this flag determines if the user is from a coutnry with postal codes , if they are let
         //them search by postal code otherwise hide it
-        //gps data         
+        //gps data    
+          [DataMember]
         public double? longitude { get; set; }
+          [DataMember]
         public double? latitude { get; set; }
         //convery the ID feild country to the actuall country name if it is needed 
         //addded handling to chop the value i.e trim it using the extentionmethod automatically on a get         
 
         //4-28-1added normalized screen name that replaces special chars , for now it just trims out spaces, update it to do more later
         //TO DO this is how we synch up the screen name with what is in chat since screen names can have spaces and UserNames and Identity can't
+        
         public string screennamenormalized
         {
             get
@@ -89,7 +109,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
             }
         }
-
+        
         public string screennametrimmed
         {
             get
@@ -104,6 +124,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
                 ;
             }
         }
+           [DataMember]
         public int? age
         {
             get
