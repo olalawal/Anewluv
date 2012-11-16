@@ -23,19 +23,19 @@ namespace Shell.MVC2.Services.Contracts
 
         //temporary method for use by designer to get the message information formated for them
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getgenericemailviewmodel/", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        [WebGet(UriTemplate = "/getgenericemailviewmodel", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
         EmailViewModel getgenericemailviewmodel();
 
-        [WebGet]
-        [OperationContract]
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebGet(UriTemplate = "/getcontactusemailviewmodel/{from}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
         EmailViewModel getcontactusemailviewmodel(string from);
 
-        [WebGet]
-        [OperationContract]
-        EmailViewModel getemailmatchesviewmodelbyprofileid(int profileid);
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebGet(UriTemplate = "/getemailmatchesviewmodelbyprofileid/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        EmailViewModel getemailmatchesviewmodelbyprofileid(string profileid);
 
-        [WebGet]
-        [OperationContract]
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebInvoke(UriTemplate = "/getemailviewmodelbytemplateid", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
         EmailModel getemailviewmodelbytemplateid(templateenum template);
 
     }

@@ -18,6 +18,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
     [DataContract]
     public enum templateenum : int
     {
+       
         [Description("Generic error message")]
         [EnumMember]
         GenericErrorMessage = 1,

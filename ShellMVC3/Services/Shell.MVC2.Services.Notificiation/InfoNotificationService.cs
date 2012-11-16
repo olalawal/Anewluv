@@ -45,9 +45,9 @@ namespace Shell.MVC2.Services.Notification
            return _InfoNotificationRepository.getcontactusemailviewmodel(from);
        }
 
-       public EmailViewModel getemailmatchesviewmodelbyprofileid(int profileid)
+       public EmailViewModel getemailmatchesviewmodelbyprofileid(string profileid)
        {
-           return _InfoNotificationRepository.getemailmatchesviewmodelbyprofileid (profileid);
+           return _InfoNotificationRepository.getemailmatchesviewmodelbyprofileid ( Convert.ToInt16(profileid));
        }
 
        public EmailModel getemailviewmodelbytemplateid(templateenum template)

@@ -20,6 +20,21 @@ namespace Misc
    public static class MisFunctions
     {
 
+          //synch up anew luv database with the new database 
+        //add the old database model
+        //once this is tested and working we want to move this code into migrations ins Domain.Entities
+       public static void StartDebuggingTest()
+       {
+           var olddb = new AnewluvFtsEntities();
+           var postaldb = new PostalData2Entities();
+           var context = new AnewluvContext();
+
+
+           Console.WriteLine("The debugger is ready");
+           Console.WriteLine("Press <Enter> to stop the debugging");
+           Console.ReadLine();
+
+       }
 
         //synch up anew luv database with the new database 
         //add the old database model

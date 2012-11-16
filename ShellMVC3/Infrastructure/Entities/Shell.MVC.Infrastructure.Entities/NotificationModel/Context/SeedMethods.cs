@@ -106,6 +106,8 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
             //Add generic data I.e email system sender and a few email addresses to use to send stuff               
 
+             //save this since the data is needed later for the template
+              Utils.SaveChanges(context);
 
               //use create the System email addresses here 
               context.systemaddress.AddOrUpdate( new systemaddress()

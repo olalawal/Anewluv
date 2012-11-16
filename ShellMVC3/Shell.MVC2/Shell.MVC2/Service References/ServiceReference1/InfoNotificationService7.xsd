@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email" />
+  <xs:import schemaLocation="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Infrastructure.Entities.NotificationModel" />
+  <xs:element name="getgenericemailviewmodel">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getgenericemailviewmodelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email" minOccurs="0" name="getgenericemailviewmodelResult" nillable="true" type="q1:EmailViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getcontactusemailviewmodel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="from" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getcontactusemailviewmodelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email" minOccurs="0" name="getcontactusemailviewmodelResult" nillable="true" type="q2:EmailViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getemailmatchesviewmodelbyprofileid">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getemailmatchesviewmodelbyprofileidResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email" minOccurs="0" name="getemailmatchesviewmodelbyprofileidResult" nillable="true" type="q3:EmailViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getemailviewmodelbytemplateid">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Shell.MVC2.Infrastructure.Entities.NotificationModel" minOccurs="0" name="template" type="q4:templateenum" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getemailviewmodelbytemplateidResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email" minOccurs="0" name="getemailviewmodelbytemplateidResult" nillable="true" type="q5:EmailModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

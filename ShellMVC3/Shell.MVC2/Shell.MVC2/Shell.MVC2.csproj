@@ -299,6 +299,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UxMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service References\ServiceReference1\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="SignalR\Chat.cs" />
     <Compile Include="Areas\Chat\Controllers\DefaultController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -2113,6 +2118,13 @@
     <Content Include="Scripts\modernizr.js" />
     <Content Include="Scripts\quicksilver.js" />
     <None Include="Properties\DataSources\LoggingLibrary.ServiceReference1.CompositeType.datasource" />
+    <None Include="Service References\ServiceReference1\InfoNotificationService.disco" />
+    <None Include="Service References\ServiceReference1\configuration91.svcinfo" />
+    <None Include="Service References\ServiceReference1\configuration.svcinfo" />
+    <None Include="Service References\ServiceReference1\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Shell.MVC2.Publish.xml" />
     <Content Include="Views\Home\HTMLPage1.htm" />
   </ItemGroup>
@@ -2141,6 +2153,37 @@
     <None Include="Scripts\development-bundle\demos\tabs\ajax\content4-broken.php" />
     <Content Include="Views\ActionMail\UpdateEmail.html.cshtml" />
     <Content Include="Views\ActionMail\Partials\EmailMatches.cshtml" />
+    <None Include="Service References\ServiceReference1\InfoNotificationService.wsdl" />
+    <None Include="Service References\ServiceReference1\InfoNotificationService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\InfoNotificationService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\InfoNotificationService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\InfoNotificationService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\InfoNotificationService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\InfoNotificationService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\InfoNotificationService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\InfoNotificationService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\Shell.MVC2.ServiceReference1.EmailModel.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ServiceReference1\Shell.MVC2.ServiceReference1.EmailViewModel.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Views\ActionMail\UpdateEmail.html.cshtml.old" />
     <Content Include="Views\Members\Shared\_LayoutMembersOld.cshtml" />
     <Content Include="Views\Members\CustomSearch.cshtml" />
@@ -2311,6 +2354,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ServiceReference1\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

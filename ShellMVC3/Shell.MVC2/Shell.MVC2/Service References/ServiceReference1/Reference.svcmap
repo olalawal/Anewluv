@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="22d6531b-a655-42b8-b9bb-53f5eb7992c5" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="InfoNotificationService.disco" MetadataType="Disco" ID="0700f7a8-321e-4eed-aee1-9102b2658ce3" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?disco" />
+    <MetadataFile FileName="InfoNotificationService.xsd" MetadataType="Schema" ID="64cc6a2e-8ece-4914-97fe-20dcbbc4fe5f" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd7" />
+    <MetadataFile FileName="InfoNotificationService1.xsd" MetadataType="Schema" ID="00a66bb3-9940-4b9c-8cbe-ebbed02b543d" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd1" />
+    <MetadataFile FileName="InfoNotificationService2.xsd" MetadataType="Schema" ID="48d9692e-aa14-47dd-b872-13b4b50e9c52" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd3" />
+    <MetadataFile FileName="InfoNotificationService3.xsd" MetadataType="Schema" ID="8c6091cb-e9d4-4845-9172-73f244a8d6f3" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd4" />
+    <MetadataFile FileName="InfoNotificationService.wsdl" MetadataType="Wsdl" ID="aecb003f-6a6f-41cd-a657-d007c0f1818a" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?wsdl" />
+    <MetadataFile FileName="InfoNotificationService4.xsd" MetadataType="Schema" ID="4e766aae-6893-4dd5-b18f-d66841f42415" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd6" />
+    <MetadataFile FileName="InfoNotificationService5.xsd" MetadataType="Schema" ID="b395c44b-5d0e-47df-9398-486ffd5b7709" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd5" />
+    <MetadataFile FileName="InfoNotificationService6.xsd" MetadataType="Schema" ID="51ee363a-722e-4ff9-87c2-3e400553c5eb" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd2" />
+    <MetadataFile FileName="InfoNotificationService7.xsd" MetadataType="Schema" ID="8cbdb531-5eb4-4630-b0cd-5c0ede4b3400" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

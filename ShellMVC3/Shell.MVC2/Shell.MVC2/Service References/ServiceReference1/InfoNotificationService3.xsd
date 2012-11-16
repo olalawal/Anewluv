@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="searchsetting">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="agemax" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="agemin" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="distancefromme" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="heightmax" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="heightmin" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="lastupdatedate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="myperfectmatch" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="savedsearch" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="searchname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="searchrank" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="searchsettingsid" type="xs:int" />
+      <xs:element minOccurs="0" name="systemmatch" nillable="true" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="searchsetting" nillable="true" type="tns:searchsetting" />
+  <xs:complexType name="profile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="activationcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="dailsentmessagequota" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="dailysentemailquota" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="emailaddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="failedpasswordchangeattemptcount" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="failedpasswordchangedate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="forwardmessages" nillable="true" type="xs:unsignedByte" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="logindate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="passwordChangeddate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="passwordchangecount" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="readprivacystatement" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="readtemsofuse" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="profile" nillable="true" type="tns:profile" />
+  <xs:complexType name="profiledata">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="aboutme" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="age" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="birthdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="city" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="countryid" type="xs:int" />
+      <xs:element minOccurs="0" name="countryregion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="height" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="latitude" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="longitude" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="mycatchyintroLine" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="phone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="postalcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="stateprovince" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="profiledata" nillable="true" type="tns:profiledata" />
+  <xs:complexType name="lu_photoimagetype">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_photoimagetype" nillable="true" type="tns:lu_photoimagetype" />
+  <xs:complexType name="visiblitysetting">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="agemaxvisibility" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ageminvisibility" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="chatvisiblitytointerests" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="chatvisiblitytolikes" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="chatvisiblitytomatches" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="chatvisiblitytopeeks" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="chatvisiblitytosearch" nillable="true" type="xs:boolean" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="countries" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element minOccurs="0" name="genders" nillable="true" type="tns:ArrayOflu_gender" />
+      <xs:element minOccurs="0" name="id" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="lastupdatedate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="mailchatrequest" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="mailintrests" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="maillikes" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="mailmatches" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="mailnews" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="mailpeeks" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilevisiblity" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="saveofflinechat" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="steathpeeks" nillable="true" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="visiblitysetting" nillable="true" type="tns:visiblitysetting" />
+  <xs:complexType name="ArrayOflu_gender">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="lu_gender" nillable="true" type="tns:lu_gender" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOflu_gender" nillable="true" type="tns:ArrayOflu_gender" />
+  <xs:complexType name="lu_gender">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_gender" nillable="true" type="tns:lu_gender" />
+</xs:schema>
