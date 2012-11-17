@@ -24,37 +24,37 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         [Description("Dear <b>{0}</b> ,<p></p> Thank you for contacting us at Anewluv.com, your message has been added to the support ticket list and you will get a response from our support staff within 24 hours <p></p> The Anewluv.com Support Team")]
         [EnumMember]
         MemberContactUsMemberMesage = 2,
-        [Description("The Member {0} sent the following message: <p></p> <b> </br>  subject:  {1}  </b> </br> Message : </br> {2}")]
+        [Description("The Email address {0} sent the following message: <p></p> <b> </br>  subject:  {1}  </b> </br> Message : </br> {2}")]
         [EnumMember]
         MemberContactUsAdminMessage = 3,
         [Description("Dear <b>{0}</b> ,<p></p> Thank you for creating a profile at <a href=\"www.anewluv.com\">Anewluv.com </a> <p></p><a href=\"www.anewluv.com\">Anewluv.com </a>   provides a new and refereshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> So get started today!  Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page </b> </br> Your user name is: <b> {1} </b> and Your activation code is:  <b>  {2} </b>  <p></p>  - The AnewLuv.com Team <p></p>  ")]
         [EnumMember]
         MemberCreatedMemberNotification = 4,
-        [Description("A new profile for the user <b>{0}</b> has been created on AnewLuv.com")]
+        [Description("A new profile for the user <b>{0}</b> with email  <b>{1}</b>  has been created on AnewLuv.com")]
         [EnumMember]
         MemberCreatedAdminNotification = 5,
         [Description("Dear <b>{0}</b> ,<p></p> Thank you for creating a profile at <a href=\"www.anewluv.com\">Anewluv.com </a> <p></p><a href=\"www.anewluv.com\">Anewluv.com </a>   provides a new and refereshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> You profile has already been activated since you signed in with {1} , please make sure you information was correctly uploaded by checking your profile details on our website  </b> </br> Your user name is: <b> {2} </b><p></p>  - The AnewLuv.com Team <p></p>  ")]
         [EnumMember]
         MemberCreatedJianRainOrOPenIDMemberNotification = 6,
-        [Description("A new profile for the user <b>{0}</b> has been created on AnewLuv.com via OpenID or JainRain ")]
+        [Description("A new profile for the user <b>{0}</b> with email  <b>{1}</b>  has been created on AnewLuv.com via OpenID or JainRain using: {2} ")]
         [EnumMember]
         MemberCreatedJainRanOrOpenIDAdminNotification = 7,
-        [Description("Dear {0} ,<p></p> Your account and password has been recovered on AnewLuv.com , Your Username is <b> {1} </b>  and your new password is <b> {2} </b>,  You can now log in to your account at </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1}\" >Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {0} ,<p></p> Your account and password has been recovered on AnewLuv.com , Your Username is <b> {1} </b>  and your new password is <b> {2} </b>,  You can now log in to your account at </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={3}\" >Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberPasswordChangeMemberNotification = 8,
-        [Description("An Account has been recovered on Anewluv.com by the user <b>{0}</b>")]
+        [Description("An Account has been recovered on Anewluv.com by the user <b>{0}</b> with email :<b>{1}</b>")]
         [EnumMember]
         MemberPasswordChangedAdminNotification = 9,
-        [Description("Dear {0} ,<p></p>  Your account has been activated on AnewLuv.com , You can now log in to your account at <p></p> <a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Login to AnewLuv.com</a>  <p></p><a href=\"http://www.anewluv.com \">Anewluv.com </a>")]
+        [Description("Dear {0} ,<p></p>  Your account has been activated on AnewLuv.com , You can now log in to your account at <p></p> <a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={0} \">Login to AnewLuv.com</a>  <p></p><a href=\"http://www.anewluv.com \">Anewluv.com </a>")]
         [EnumMember]
         MemberActivatedMemberNotification = 10,
-        [Description("The  profile for the user {0} has been <b> Activated </b> on AnewLuv.com")]
+        [Description("The  profile for the user {0} with email {1} has been <b> Activated </b> on AnewLuv.com")]
         [EnumMember]
         MemberActivatedAdminNotification = 11,
         [Description("Dear {0} ,<p></p>   Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page </b> </br> Your user name is: <b> {1} </b> and Your activation code is:  <b>  {2} </b>  <p></p>  - The AnewLuv.com Team <p></p>  ")]
         [EnumMember]
         MemberActivationCodeRecoveredMemberNotification = 12,
-        [Description("A Profile ActivationCode for the user {0} has been recovered on AnewLuv.com")]
+        [Description("A Profile ActivationCode for the user {0} with email address : {1} has been recovered on AnewLuv.com")]
         [EnumMember]
         MemberActivationCodeRecoveredAdminNotification = 13,
         [Description("Dear {0}, <p></p>The member {1} has sent you an Email message on AnewLuv.com, Please log into your account to view {1}'s Email message </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Log on to your Account on www.Anewluv.com</a></b>")]
@@ -96,28 +96,28 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         [Description("Dear {0} ,</br> Thank you for uploading your photo to  Anewluv.com </br>Unfortunately your photo did not meed our terms of service, please read the terms of service for acceptable photo formats and content. <p></p> This is the reason why : <p></p> <b>  {1} </b>")]
         [EnumMember]
         MemberPhotoRejectedMemberNotification = 26,
-        [Description("The member {0} has had thier photo rejected by the admin user with username {1}")]
+        [Description("The member {0} with the email address {1} has had thier photo rejected by the admin user with username {2}")]
         [EnumMember]
         MemberPhotoRejectedAdminNotification = 27,
         [Description("Dear {0} ,</br> Thank you for uploading your photo to  Anewluv.com Please allow up to 24 hours for your photo to be aproved.")]
         [EnumMember]
         MemberPhotoUploadedMemberNotification = 28,
-        [Description("A new photo for the user {0} has been uploaded to AnewLuv.com")]
+        [Description("A new photo for the user {0} with email address : {1}  has been uploaded to AnewLuv.com")]
         [EnumMember]
         MemberPhotoUploadedAdminNotification = 29,
-        [Description("Dear {0} , <p></p>Here are you {1} new matches for date : {2}  </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={0} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description("Dear {0} , <p></p>Here are your {1} new matches for date : {2}  </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={3} \">Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberMatchesSentMemberNotification = 30,
-        [Description("The member {0} has recived {1} matches for the date : {2}")]
+        [Description("The member {0} with email address {1} has recived {2} matches for the date : {2}")]
         [EnumMember]
         MemberMatchestSentAdminNotificaton = 31,      
-        [Description("A message from the user {0} was blocked becase of the reason: {1}")]
+        [Description("A message from the user {0} with email address {1) was blocked becase of the reason: {1}")]
         [EnumMember]
         MemberSpamBlockedAdminNotification = 32,
-        [Description("The  Member {0} has been blocked by the member {1}")]
+        [Description("The  Member {0} has been blocked by the member {1}, </br> block notes :  {2}")]
         MemberBlockedAdminNotification = 33,
 
-        [Description("A photo from the user {0} has been approved by {1} on AnewLuv")]
+        [Description("A photo from the user {0} with email address {1} has been approved by: {1} on AnewLuv")]
         MemberPhotoApprovedAdminNotification = 34,
 
     }

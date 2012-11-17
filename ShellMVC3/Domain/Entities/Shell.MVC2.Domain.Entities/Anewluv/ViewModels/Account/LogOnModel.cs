@@ -23,23 +23,30 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     [Serializable]
     public class LogOnModel
     {
+        [DataMember ]
         [Required]
         [DisplayName("Username")]
         public string UserName { get; set; }
 
+         [DataMember]
         [Required]
         [DataType(DataType.Password)]
         [DisplayName("Password")]
         public string Password { get; set; }
 
+         [DataMember]
         [DisplayName("Remember me?")]
         public bool RememberMe { get; set; }
 
         //New feilds added for openID
+         [DataMember]
         public string OpenIDidentifer { get; set; }
+         [DataMember]
         public string OpenIDprovidername { get; set; }
+         [DataMember]
         public bool OpenIdAuthenticated { get; set; }
+         [DataMember]
         public string ScreenName { get; set; }
-        public string ProfileID { get; set; }
+        public int ProfileID { get; set; }
     }
 }

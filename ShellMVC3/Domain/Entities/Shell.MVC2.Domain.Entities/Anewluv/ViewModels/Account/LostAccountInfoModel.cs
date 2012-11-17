@@ -25,7 +25,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     [DataContract]
     public class LostAccountInfoModel
     {
-
+         [DataMember]
         [Required]
         [DataType(DataType.EmailAddress)]      
         [DisplayName("Email")]
@@ -35,14 +35,15 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //[DataMember]
         //  public List<SelectListItem> SecurityQuestions { get; set; } 
 
-
+         [DataMember]
         [DisplayName("Security Question")]
         public string SecurityQuestion { get; set; }
 
-
+         [DataMember]
         [DisplayName("Security Answer")]
         public string SecurityAnswer { get; set; }
 
+         [DataMember]
         public bool LostPassword { get; set; }
 
 

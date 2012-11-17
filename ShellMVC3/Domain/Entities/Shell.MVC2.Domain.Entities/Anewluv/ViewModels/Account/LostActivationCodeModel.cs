@@ -24,11 +24,12 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     [DataContract][Serializable]
     public class LostActivationCodeModel
     {
-
+         [DataMember]
         [Required]
         [DataType(DataType.EmailAddress)]       
         [DisplayName("Email")]
         public string Email { get; set; }
+         [DataMember]
         public bool LostActivationCode { get; set; }
     }
     

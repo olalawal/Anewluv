@@ -24,6 +24,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     [DataContract]
     public class ContactUsModel
     {
+        [DataMember]
         [Required]
         [DisplayName("Email")]
         [EmailAddress(ErrorMessage = "Valid Email Address is required.")] 
@@ -31,17 +32,19 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [StringLength(25, ErrorMessage = "Email Address cannot be longer that 25 Characters")]
         public string Email { get; set; }
 
+         [DataMember]
         [Required]
         [DisplayName("Name")]
         [StringLength(25, ErrorMessage = " Name cannot be longer than 25 Characters and No Less than 1 ", MinimumLength = 1)]
         public string Name { get; set; }
 
-
+         [DataMember]
         [Required]   
         [DisplayName("Subject")]
         [StringLength(50, ErrorMessage = "Subject cannot be longer than 50 Characters and No Less than 5 ", MinimumLength = 5)]
         public string Subject { get; set; }
 
+         [DataMember]
         [Required]   
         [DisplayName("Message")]
         [StringLength(255, ErrorMessage = "Message cannot be longer than 255 characters or less than 10", MinimumLength = 10)]       
