@@ -12,7 +12,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         [Key]
         [DataMember]
-        public string id { get; set; }
+        public int id { get; set; }
           [DataMember]
         public int profile_id { get; set; }
         public virtual profiledata profiledata { get; set; }
@@ -31,9 +31,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
           [DataMember]
         public bool? chatvisiblitytosearch { get; set; }
           [DataMember]
-        public  ICollection<string> countries { get; set; }
+        public virtual  ICollection<visiblitysettings_country> countries { get; set; }
         [DataMember ]
-        public ICollection<lu_gender>  genders{ get; set; }
+        public virtual  ICollection<visiblitysettings_gender>  genders{ get; set; }
           [DataMember]
         public DateTime? lastupdatedate { get; set; }
           [DataMember]

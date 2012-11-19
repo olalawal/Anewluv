@@ -7,18 +7,18 @@ using System.Runtime.Serialization;
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
     [DataContract]
-    public class profiledata_ethnicity
+    public class photoalbum_securitylevel
     {
 
-        [DataMember ]
-        public virtual lu_ethnicity ethnicty { get; set; }
         [Key]
-        [DataMember]
+        [DataMember ]
         public int id { get; set; }
-          [DataMember]
-        public int profile_id { get; set; }
-          [DataMember]
-       public virtual profilemetadata  profilemetadata { get; set; }
+        [DataMember]
+        public lu_securityleveltype securityleveltype { get; set; }      
+        [DataMember]
+        public int photoalbum_id { get; set; }
+        [DataMember]
+        public virtual photoalbum photoalbum { get; set; }
         
     }
 }

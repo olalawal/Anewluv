@@ -175,7 +175,12 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             .WithRequired(z => z.photo ).HasForeignKey(t => t.photo_id ).WillCascadeOnDelete(false);
 
             //map photo relation ship with the given photo security level
-            modelBuilder.Entity<photo>().HasMany(p => p.securitylevels);
+
+            //11-17-2012 added new mappings for photo security lecvels
+            //**************************************
+            modelBuilder.Entity<photo>().HasMany(t => t.photosecuritylevels)
+            .WithRequired(p => p.photo).HasForeignKey(p => p.photo_id ).WillCascadeOnDelete(false); 
+
 
             //phot conversions
             //conversions relation ship with photo 
@@ -203,7 +208,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
            .HasForeignKey(p => p.profile_id).WillCascadeOnDelete(false);
 
             //map photoalbum relation ship with the given photo security level
-            modelBuilder.Entity<photoalbum>().HasMany(p => p.securitylevels);
+            //11-17-2012 added new mappings for photo security lecvels
+            //**************************************
+            modelBuilder.Entity<photoalbum>().HasMany(t => t.albumsecuritylevels )
+            .WithRequired(p => p.photoalbum).HasForeignKey(p => p.photoalbum_id).WillCascadeOnDelete(false); 
 
             
             //photoreview model requered field mappings
@@ -381,10 +389,16 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             modelBuilder.Entity<visiblitysetting>()
            .HasRequired(t => t.profiledata ).WithMany().HasForeignKey(z=>z.profile_id);
 
-            
-       
 
-         
+            //11-17-2012 added new mappings for genders and countries
+            //**************************************
+            modelBuilder.Entity<visiblitysetting>().HasMany(t => t.genders )
+            .WithRequired(p => p.visiblitysetting).HasForeignKey(p => p.visiblitysetting_id).WillCascadeOnDelete(false); 
+
+
+            //**************************************
+            modelBuilder.Entity<visiblitysetting>().HasMany(t => t.countries )
+           .WithRequired(p => p.visiblitysetting).HasForeignKey(p => p.visiblitysetting_id).WillCascadeOnDelete(false); 
 
 
 

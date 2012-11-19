@@ -46,26 +46,47 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
 
             //lookups for personal profile details 
-            public virtual lu_gender gender { get; set; }          
+         [DataMember]    
+            public virtual lu_gender gender { get; set; }
+         [DataMember]    
             public virtual lu_bodytype bodytype { get; set; }
+         [DataMember]    
             public virtual lu_eyecolor eyecolor { get; set; }
+         [DataMember]    
             public virtual lu_haircolor haircolor { get; set; }
+         [DataMember]    
             public virtual lu_diet diet { get; set; }
+         [DataMember]    
             public virtual lu_drinks drinking { get; set; }
+         [DataMember]    
             public virtual lu_exercise exercise { get; set; }
+         [DataMember]    
             public virtual lu_humor humor { get; set; }
+         [DataMember]    
             public virtual lu_politicalview politicalview { get; set; }
+         [DataMember]    
             public virtual lu_religion religion { get; set; }
+         [DataMember]    
             public virtual lu_religiousattendance religiousattendance { get; set; }
+         [DataMember]    
             public virtual lu_sign sign { get; set; }
+         [DataMember]    
             public virtual lu_smokes smoking { get; set; }
+         [DataMember]    
             public virtual lu_educationlevel educationlevel { get; set; }
+         [DataMember]    
             public virtual lu_employmentstatus employmentstatus { get; set; }
+         [DataMember]    
             public virtual lu_havekids kidstatus { get; set; }
+         [DataMember]    
             public virtual lu_incomelevel incomelevel { get; set; }
+         [DataMember]    
             public virtual lu_livingsituation livingsituation { get; set; }
+         [DataMember]    
             public virtual lu_maritalstatus maritalstatus { get; set; }
+         [DataMember]    
             public virtual lu_profession profession { get; set; }
+         [DataMember]    
             public virtual lu_wantskids wantsKidstatus { get; set; }
           
     }

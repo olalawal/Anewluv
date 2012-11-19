@@ -28,7 +28,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual ICollection<photoreview> reviews { get; set; }
         public virtual ICollection<photoconversion> conversions { get; set; }  
         //private public secuity is done at photo level , overides album secuity
-        public virtual ICollection<lu_securityleveltype> securitylevels { get; set; } 
+        public virtual ICollection<photo_securitylevel> photosecuritylevels { get; set; } 
 
         public DateTime creationdate { get; set; } 
         //not sure what this is for need to rember

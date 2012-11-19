@@ -11,6 +11,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class lu_gender
     {
         [Key]
+        [DataMember]
         public int id { get; set; }
       [DataMember]
         public string description { get; set; }

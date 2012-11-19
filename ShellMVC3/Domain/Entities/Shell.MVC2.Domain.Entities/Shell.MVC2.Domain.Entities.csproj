@@ -53,6 +53,10 @@
   <ItemGroup>
     <Compile Include="Anewluv\abusereport.cs" />
     <Compile Include="Anewluv\abusereportnotes.cs" />
+    <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
+    <Compile Include="Anewluv\photo_securitylevel.cs" />
+    <Compile Include="Anewluv\visiblitysettings_countries.cs" />
+    <Compile Include="Anewluv\visiblitysettings_gender.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\politicalview.cs" />
     <Compile Include="Anewluv\Lookups\enums\securityquestion.cs" />
     <Compile Include="Anewluv\Lookups\enums\flagyesno.cs" />
