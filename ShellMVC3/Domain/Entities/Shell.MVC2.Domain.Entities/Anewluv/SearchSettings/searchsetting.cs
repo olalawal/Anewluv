@@ -37,8 +37,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
          [DataMember]
         public int? searchrank { get; set; }
          [DataMember]
-        public int searchsettingsid { get; set; }
-         [DataMember]
+        //public int searchsettingsid { get; set; }
+        // [DataMember]
         public bool? systemmatch { get; set; }
         public virtual ICollection<searchsetting_bodytype> bodytypes { get; set; }        
         public virtual ICollection<searchsetting_diet> diets { get; set; }        

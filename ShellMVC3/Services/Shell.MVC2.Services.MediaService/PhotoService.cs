@@ -7,9 +7,9 @@ using System.Text;
 //using Dating.Server.Data.Models;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using System.Web;
-using Shell.MVC2.Interfaces;
+using Shell.MVC2.Interfaces ;
 using Shell.MVC2.Services.Contracts;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+
 using Shell.MVC2.Domain.Entities.Anewluv;
 using System.Net;
 
@@ -26,8 +26,8 @@ namespace Shell.MVC2.Services.Media
         public PhotoService(IPhotoRepository photorepo)
             {
                 _photorepo = photorepo;
-                _apikey  = HttpContext.Current.Request.QueryString["apikey"];
-                throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+             //   _apikey  = HttpContext.Current.Request.QueryString["apikey"];
+             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
                
             }
 
@@ -38,46 +38,44 @@ namespace Shell.MVC2.Services.Media
             return _photorepo.getallphotosbyusername(username);
         }
 
-        public List<PhotoEditModel> getphotosbyprofileidandstatus(string profile_id, photoapprovalstatusEnum status)
+        public List<PhotoEditModel> getphotosbyprofileidandstatus(string profileid, photoapprovalstatusEnum status)
         {
 
-            return _photorepo.getphotosbyprofileidandstatus(profile_id,  status);
+            return _photorepo.getphotosbyprofileidandstatus(Convert.ToInt32(profileid), status);
         }
 
-        public List<PhotoEditModel> getpagedphotosbyprofileidstatus(string profile_id, photoapprovalstatusEnum approvalstatus,
-                                                                    int page, int pagesize)
+        public List<PhotoEditModel> getpagedphotosbyprofileidstatus(string profileid, photoapprovalstatusEnum approvalstatus,
+                                                                    string page, string pagesize)
         {
-            return _photorepo.getpagedphotosbyprofileidstatus(profile_id, approvalstatus, page, pagesize);
+            return _photorepo.getpagedphotosbyprofileidstatus(Convert.ToInt32(profileid), approvalstatus, Convert.ToInt32(page), Convert.ToInt32(pagesize));
 
         }
 
-        public PhotoEditModel getsingleprofilephotobyphotoid(Guid photoid)
+        public PhotoEditModel getsingleprofilephotobyphotoid(string photoid)
         {
 
-            return _photorepo.getsingleprofilephotobyphotoid(photoid);
+            return _photorepo.getsingleprofilephotobyphotoid(Guid.Parse(photoid));
 
         }
 
         //TO DO get photo albums as well ?
         //TO DO look at this code
-        public PhotoEditViewModel getpagededitphotoviewmodel(string username, string ApprovedYes, string NotApprovedNo,
-                                                           photoapprovalstatusEnum approvalstatus, int page, int pagesize)
-        {
+        public PhotoEditViewModel getpagededitphotoviewmodelbyprofileid(string profileid, string page, string pagesize)        {
 
-            return _photorepo.getpagededitphotoviewmodel(username, ApprovedYes, NotApprovedNo, approvalstatus, page, pagesize);
+            return _photorepo.getpagededitphotoviewmodelbyprofileid(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(pagesize));
         }
 
-        public void deleteduserphoto(Guid photoid)
+        public void deleteduserphoto(string photoid)
         {
-           _photorepo.deleteduserphoto(photoid);
+            _photorepo.deleteduserphoto(Guid.Parse(photoid));
         }
-        public void makeuserphoto_private(Guid photoid)
+        public void makeuserphoto_private(string photoid)
         {
-            _photorepo.makeuserphoto_private(photoid);
+            _photorepo.makeuserphoto_private(Guid.Parse(photoid));
         }
-        public void makeuserphoto_public(Guid photoid)
+        public void makeuserphoto_public(string photoid)
         {
-            _photorepo.makeuserphoto_private(photoid);
+            _photorepo.makeuserphoto_private(Guid.Parse(photoid));
         }
 
         //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
@@ -93,10 +91,9 @@ namespace Shell.MVC2.Services.Media
         /// </summary>
         /// <param name="newphoto"></param>
         /// <returns></returns>
-        public bool addsinglephoto(PhotoUploadModel newphoto, int profileid)
+        public bool addsinglephoto(PhotoUploadModel newphoto, string profileid)
         {
-
-            return _photorepo.addsinglephoto(newphoto, profileid);
+            return _photorepo.addsinglephoto(newphoto, Convert.ToInt32(profileid));
         }
 
         //http://stackoverflow.com/questions/10484295/image-resizing-from-sql-database-on-the-fly-with-mvc2
@@ -108,12 +105,12 @@ namespace Shell.MVC2.Services.Media
         /// <param name="photouploaded"></param>
         /// <param name="formats"></param>
         /// <returns></returns>
-        public List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded)
-        {
+        //public List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded)
+        //{
 
-            return _photorepo.addphotoconverions(photo, photouploaded);
+        //    return _photorepo.addphotoconverions(photo, photouploaded);
 
-        }
+        //}
 
         public bool checkvalidjpggif(byte[] image)
         {
@@ -131,15 +128,15 @@ namespace Shell.MVC2.Services.Media
             return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName);
         }
 
-        public byte[] getgalleryimagebyphotoid(Guid strPhotoID)
+        public byte[] getgalleryimagebyphotoid(string photoid)
         {
 
-            return _photorepo.getgalleryimagebyphotoid(strPhotoID);
+            return _photorepo.getgalleryimagebyphotoid(Guid.Parse(photoid));
         }
         //TO DO normalize name
-        public byte[] getgalleryphotobyprofileid(int intProfileID)
+        public byte[] getgalleryphotobyprofileid(string profileid)
         {
-            return _photorepo.getgalleryphotobyprofileid(intProfileID);
+            return _photorepo.getgalleryphotobyprofileid(Convert.ToInt32(profileid));
 
         }
 
@@ -149,19 +146,19 @@ namespace Shell.MVC2.Services.Media
             return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName);
         }
 
-        public bool checkifphotocaptionalreadyexists(int intProfileID, string strPhotoCaption)
+        public bool checkifphotocaptionalreadyexists(string profileid, string strPhotoCaption)
         {
-            return _photorepo.checkifphotocaptionalreadyexists(intProfileID, strPhotoCaption);
+            return _photorepo.checkifphotocaptionalreadyexists(Convert.ToInt32(profileid), strPhotoCaption);
         }
 
-        public bool checkforgalleryphotobyprofileid(int intProfileID)
+        public bool checkforgalleryphotobyprofileid(string profileid)
         {
-            return _photorepo.checkforgalleryphotobyprofileid(intProfileID);
+            return _photorepo.checkforgalleryphotobyprofileid(Convert.ToInt32(profileid));
         }
 
-        public bool checkforuploadedphotobyprofileid(int intProfileID)
+        public bool checkforuploadedphotobyprofileid(string profileid)
         {
-            return _photorepo.checkforuploadedphotobyprofileid(intProfileID);
+            return _photorepo.checkforuploadedphotobyprofileid(Convert.ToInt32(profileid));
         }
 
 

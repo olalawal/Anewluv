@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PhotoService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/" />
+      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" />
+      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IPhotoService_getallphotosbyusername_InputMessage">
+    <wsdl:part name="parameters" element="tns:getallphotosbyusername" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getallphotosbyusername_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getallphotosbyusernameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getallphotosbyusername_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/" name="detail" element="q1:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getphotosbyprofileidandstatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:getphotosbyprofileidandstatus" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getphotosbyprofileidandstatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getphotosbyprofileidandstatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getphotosbyprofileidandstatus_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/" name="detail" element="q2:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagedphotosbyprofileidstatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:getpagedphotosbyprofileidstatus" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagedphotosbyprofileidstatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getpagedphotosbyprofileidstatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagedphotosbyprofileidstatus_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/" name="detail" element="q3:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getsingleprofilephotobyphotoid_InputMessage">
+    <wsdl:part name="parameters" element="tns:getsingleprofilephotobyphotoid" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getsingleprofilephotobyphotoid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getsingleprofilephotobyphotoidResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getsingleprofilephotobyphotoid_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/" name="detail" element="q4:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagededitphotoviewmodelbyprofileid_InputMessage">
+    <wsdl:part name="parameters" element="tns:getpagededitphotoviewmodelbyprofileid" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagededitphotoviewmodelbyprofileid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getpagededitphotoviewmodelbyprofileidResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagededitphotoviewmodelbyprofileid_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/" name="detail" element="q5:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_deleteduserphoto_InputMessage">
+    <wsdl:part name="parameters" element="tns:deleteduserphoto" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_deleteduserphoto_OutputMessage">
+    <wsdl:part name="parameters" element="tns:deleteduserphotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_deleteduserphoto_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/" name="detail" element="q6:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_makeuserphoto_private_InputMessage">
+    <wsdl:part name="parameters" element="tns:makeuserphoto_private" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_makeuserphoto_private_OutputMessage">
+    <wsdl:part name="parameters" element="tns:makeuserphoto_privateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_makeuserphoto_private_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/" name="detail" element="q7:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_makeuserphoto_public_InputMessage">
+    <wsdl:part name="parameters" element="tns:makeuserphoto_public" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_makeuserphoto_public_OutputMessage">
+    <wsdl:part name="parameters" element="tns:makeuserphoto_publicResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_makeuserphoto_public_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/" name="detail" element="q8:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_addphotos_InputMessage">
+    <wsdl:part name="parameters" element="tns:addphotos" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_addphotos_OutputMessage">
+    <wsdl:part name="parameters" element="tns:addphotosResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_addphotos_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/" name="detail" element="q9:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_addsinglephoto_InputMessage">
+    <wsdl:part name="parameters" element="tns:addsinglephoto" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_addsinglephoto_OutputMessage">
+    <wsdl:part name="parameters" element="tns:addsinglephotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_addsinglephoto_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/" name="detail" element="q10:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkvalidjpggif_InputMessage">
+    <wsdl:part name="parameters" element="tns:checkvalidjpggif" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkvalidjpggif_OutputMessage">
+    <wsdl:part name="parameters" element="tns:checkvalidjpggifResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkvalidjpggif_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/" name="detail" element="q11:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryphotobyscreenname_InputMessage">
+    <wsdl:part name="parameters" element="tns:getgalleryphotobyscreenname" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryphotobyscreenname_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getgalleryphotobyscreennameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryphotobyscreenname_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/" name="detail" element="q12:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryimagebyphotoid_InputMessage">
+    <wsdl:part name="parameters" element="tns:getgalleryimagebyphotoid" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryimagebyphotoid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getgalleryimagebyphotoidResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryimagebyphotoid_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q13="http://schemas.datacontract.org/2004/07/" name="detail" element="q13:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryphotobyprofileid_InputMessage">
+    <wsdl:part name="parameters" element="tns:getgalleryphotobyprofileid" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryphotobyprofileid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getgalleryphotobyprofileidResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryphotobyprofileid_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q14="http://schemas.datacontract.org/2004/07/" name="detail" element="q14:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryimagebynormalizedscreenname_InputMessage">
+    <wsdl:part name="parameters" element="tns:getgalleryimagebynormalizedscreenname" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryimagebynormalizedscreenname_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getgalleryimagebynormalizedscreennameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getgalleryimagebynormalizedscreenname_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q15="http://schemas.datacontract.org/2004/07/" name="detail" element="q15:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkifphotocaptionalreadyexists_InputMessage">
+    <wsdl:part name="parameters" element="tns:checkifphotocaptionalreadyexists" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkifphotocaptionalreadyexists_OutputMessage">
+    <wsdl:part name="parameters" element="tns:checkifphotocaptionalreadyexistsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkifphotocaptionalreadyexists_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q16="http://schemas.datacontract.org/2004/07/" name="detail" element="q16:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkforgalleryphotobyprofileid_InputMessage">
+    <wsdl:part name="parameters" element="tns:checkforgalleryphotobyprofileid" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkforgalleryphotobyprofileid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:checkforgalleryphotobyprofileidResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkforgalleryphotobyprofileid_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q17="http://schemas.datacontract.org/2004/07/" name="detail" element="q17:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkforuploadedphotobyprofileid_InputMessage">
+    <wsdl:part name="parameters" element="tns:checkforuploadedphotobyprofileid" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkforuploadedphotobyprofileid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:checkforuploadedphotobyprofileidResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_checkforuploadedphotobyprofileid_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q18="http://schemas.datacontract.org/2004/07/" name="detail" element="q18:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getimagebytesfromurl_InputMessage">
+    <wsdl:part name="parameters" element="tns:getimagebytesfromurl" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getimagebytesfromurl_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getimagebytesfromurlResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getimagebytesfromurl_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q19="http://schemas.datacontract.org/2004/07/" name="detail" element="q19:ServiceFault" />
+  </wsdl:message>
+  <wsdl:portType name="IPhotoService">
+    <wsdl:operation name="getallphotosbyusername">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getallphotosbyusername" message="tns:IPhotoService_getallphotosbyusername_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getallphotosbyusernameResponse" message="tns:IPhotoService_getallphotosbyusername_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getallphotosbyusername_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getphotosbyprofileidandstatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getphotosbyprofileidandstatus" message="tns:IPhotoService_getphotosbyprofileidandstatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getphotosbyprofileidandstatusResponse" message="tns:IPhotoService_getphotosbyprofileidandstatus_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getphotosbyprofileidandstatus_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getpagedphotosbyprofileidstatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getpagedphotosbyprofileidstatus" message="tns:IPhotoService_getpagedphotosbyprofileidstatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getpagedphotosbyprofileidstatusResponse" message="tns:IPhotoService_getpagedphotosbyprofileidstatus_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getpagedphotosbyprofileidstatus_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getsingleprofilephotobyphotoid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getsingleprofilephotobyphotoid" message="tns:IPhotoService_getsingleprofilephotobyphotoid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getsingleprofilephotobyphotoidResponse" message="tns:IPhotoService_getsingleprofilephotobyphotoid_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getsingleprofilephotobyphotoid_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getpagededitphotoviewmodelbyprofileid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileid" message="tns:IPhotoService_getpagededitphotoviewmodelbyprofileid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileidResponse" message="tns:IPhotoService_getpagededitphotoviewmodelbyprofileid_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getpagededitphotoviewmodelbyprofileid_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteduserphoto">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/deleteduserphoto" message="tns:IPhotoService_deleteduserphoto_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/deleteduserphotoResponse" message="tns:IPhotoService_deleteduserphoto_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_deleteduserphoto_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="makeuserphoto_private">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/makeuserphoto_private" message="tns:IPhotoService_makeuserphoto_private_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/makeuserphoto_privateResponse" message="tns:IPhotoService_makeuserphoto_private_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_makeuserphoto_private_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="makeuserphoto_public">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/makeuserphoto_public" message="tns:IPhotoService_makeuserphoto_public_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/makeuserphoto_publicResponse" message="tns:IPhotoService_makeuserphoto_public_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_makeuserphoto_public_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="addphotos">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/addphotos" message="tns:IPhotoService_addphotos_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/addphotosResponse" message="tns:IPhotoService_addphotos_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_addphotos_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="addsinglephoto">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/addsinglephoto" message="tns:IPhotoService_addsinglephoto_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/addsinglephotoResponse" message="tns:IPhotoService_addsinglephoto_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_addsinglephoto_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="checkvalidjpggif">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/checkvalidjpggif" message="tns:IPhotoService_checkvalidjpggif_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/checkvalidjpggifResponse" message="tns:IPhotoService_checkvalidjpggif_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_checkvalidjpggif_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getgalleryphotobyscreenname">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getgalleryphotobyscreenname" message="tns:IPhotoService_getgalleryphotobyscreenname_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getgalleryphotobyscreennameResponse" message="tns:IPhotoService_getgalleryphotobyscreenname_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getgalleryphotobyscreenname_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getgalleryimagebyphotoid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getgalleryimagebyphotoid" message="tns:IPhotoService_getgalleryimagebyphotoid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getgalleryimagebyphotoidResponse" message="tns:IPhotoService_getgalleryimagebyphotoid_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getgalleryimagebyphotoid_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getgalleryphotobyprofileid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getgalleryphotobyprofileid" message="tns:IPhotoService_getgalleryphotobyprofileid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getgalleryphotobyprofileidResponse" message="tns:IPhotoService_getgalleryphotobyprofileid_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getgalleryphotobyprofileid_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getgalleryimagebynormalizedscreenname">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getgalleryimagebynormalizedscreenname" message="tns:IPhotoService_getgalleryimagebynormalizedscreenname_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getgalleryimagebynormalizedscreennameResponse" message="tns:IPhotoService_getgalleryimagebynormalizedscreenname_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getgalleryimagebynormalizedscreenname_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="checkifphotocaptionalreadyexists">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/checkifphotocaptionalreadyexists" message="tns:IPhotoService_checkifphotocaptionalreadyexists_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/checkifphotocaptionalreadyexistsResponse" message="tns:IPhotoService_checkifphotocaptionalreadyexists_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_checkifphotocaptionalreadyexists_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="checkforgalleryphotobyprofileid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/checkforgalleryphotobyprofileid" message="tns:IPhotoService_checkforgalleryphotobyprofileid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/checkforgalleryphotobyprofileidResponse" message="tns:IPhotoService_checkforgalleryphotobyprofileid_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_checkforgalleryphotobyprofileid_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="checkforuploadedphotobyprofileid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/checkforuploadedphotobyprofileid" message="tns:IPhotoService_checkforuploadedphotobyprofileid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/checkforuploadedphotobyprofileidResponse" message="tns:IPhotoService_checkforuploadedphotobyprofileid_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_checkforuploadedphotobyprofileid_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getimagebytesfromurl">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getimagebytesfromurl" message="tns:IPhotoService_getimagebytesfromurl_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getimagebytesfromurlResponse" message="tns:IPhotoService_getimagebytesfromurl_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getimagebytesfromurl_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="soap" type="tns:IPhotoService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getallphotosbyusername">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getallphotosbyusername" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getphotosbyprofileidandstatus">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getphotosbyprofileidandstatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getpagedphotosbyprofileidstatus">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getpagedphotosbyprofileidstatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getsingleprofilephotobyphotoid">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getsingleprofilephotobyphotoid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getpagededitphotoviewmodelbyprofileid">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteduserphoto">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/deleteduserphoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="makeuserphoto_private">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/makeuserphoto_private" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="makeuserphoto_public">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/makeuserphoto_public" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addphotos">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/addphotos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addsinglephoto">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/addsinglephoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="checkvalidjpggif">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/checkvalidjpggif" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getgalleryphotobyscreenname">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getgalleryphotobyscreenname" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getgalleryimagebyphotoid">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getgalleryimagebyphotoid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getgalleryphotobyprofileid">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getgalleryphotobyprofileid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getgalleryimagebynormalizedscreenname">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getgalleryimagebynormalizedscreenname" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="checkifphotocaptionalreadyexists">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/checkifphotocaptionalreadyexists" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="checkforgalleryphotobyprofileid">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/checkforgalleryphotobyprofileid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="checkforuploadedphotobyprofileid">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/checkforuploadedphotobyprofileid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getimagebytesfromurl">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getimagebytesfromurl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PhotoService">
+    <wsdl:port name="soap" binding="tns:soap">
+      <soap:address location="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc/Soap" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

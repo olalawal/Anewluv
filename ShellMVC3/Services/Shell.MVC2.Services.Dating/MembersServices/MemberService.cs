@@ -28,8 +28,8 @@ namespace Shell.MVC2.Services.Dating
         public MemberService(IMemberRepository memberrepository)
             {
                 _memberrepository = memberrepository;
-                _apikey  = HttpContext.Current.Request.QueryString["apikey"];
-                throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+              //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
+             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
                
             }
 

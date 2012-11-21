@@ -46,7 +46,7 @@ namespace Shell.MVC2.Data
             return query;
         }
 
-        public List<PhotoEditModel> getphotosbyprofileidandstatus(string profile_id, photoapprovalstatusEnum status)
+        public List<PhotoEditModel> getphotosbyprofileidandstatus(int profile_id, photoapprovalstatusEnum status)
         {
             // Retrieve All User's Photos that are not approved.
             //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
@@ -78,7 +78,7 @@ namespace Shell.MVC2.Data
 
         }
 
-        public List<PhotoEditModel> getpagedphotosbyprofileidstatus(string profile_id, photoapprovalstatusEnum status,
+        public List<PhotoEditModel> getpagedphotosbyprofileidstatus(int profile_id, photoapprovalstatusEnum status,
                                                                     int page, int pagesize)
         {
             // Retrieve All User's Photos that are not approved.
@@ -140,10 +140,9 @@ namespace Shell.MVC2.Data
         }    
 
         //TO DO get photo albums as well ?
-        public PhotoEditViewModel getpagededitphotoviewmodel(string username, string ApprovedYes, string NotApprovedNo,
-                                                           photoapprovalstatusEnum  approvalstatus , int page, int pagesize)
+        public PhotoEditViewModel getpagededitphotoviewmodelbyprofileid(int profileid, int page, int pagesize)
         {
-            var myPhotos = getallphotosbyusername(username);
+            var myPhotos =  _datingcontext.photos.Where(z=>z.profile_id == profileid).ToList();
             var ApprovedPhotos = filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, page, pagesize);
             var NotApprovedPhotos = filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, page, pagesize);
             //TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
@@ -173,9 +172,10 @@ namespace Shell.MVC2.Data
             photo PhotoModify = _datingcontext.photos.Single(u => u.id == PhotoID);
             //check if this phot is already set private if not set it 
            // PhotoModify.photostatus.id  = 3; //private
-           if (PhotoModify.securitylevels.Any(z=>z.id  != (int)securityleveltypeEnum.Private ))
+           if (PhotoModify.photosecuritylevels.Any(z=>z.id  != (int)securityleveltypeEnum.Private ))
            {
-               PhotoModify.securitylevels.Add(new lu_securityleveltype { id = (int)securityleveltypeEnum.Private });
+               PhotoModify.photosecuritylevels.Add(new photo_securitylevel { photo_id = PhotoID ,
+                   securityleveltype = _datingcontext.lu_securityleveltype.Where(p=>p.id == (int)securityleveltypeEnum.Private).FirstOrDefault()  });
               // newsecurity.id = (int)securityleveltypeEnum.Private;
            }
            // PhotoModify.ProfileImageType = "NoStatus";
@@ -218,7 +218,8 @@ namespace Shell.MVC2.Data
                     // NewPhoto.ProfileImageType = "NoStatus";
                     //NewPhoto.photostatus.id = 1;
                     //NewPhoto.ProfileID = model.ProfileID;
-                    
+                    NewPhoto.approvalstatus = (item.approvalstatus !=null)? item.approvalstatus :null;
+
                     //TO DO move this out of RIA services to rest service
                     _datingcontext.photos.Add(NewPhoto);
                    //dont save changes yet we can possibly remove or detach photos if they are dupes
@@ -278,12 +279,18 @@ namespace Shell.MVC2.Data
                 // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
                 NewPhoto.creationdate = newphoto.creationdate;
                 NewPhoto.imagecaption = newphoto.caption;
+                //set approval status and if approved do the conversion add
+                NewPhoto.approvalstatus = (newphoto.approvalstatus != null) ? newphoto.approvalstatus : null;
+
                 //profile ID was passed with when this instance of the dispatacher was created
                 // NewPhoto.ProfileImageType = "NoStatus";
                 //NewPhoto.photostatus.id = 1;
                 //NewPhoto.ProfileID = model.ProfileID;
 
                 //TO DO move this out of RIA services to rest service
+                
+                //get the existing photos for a user to compare the size so we do not import dupes
+               // existing
                 _datingcontext.photos.Add(NewPhoto);
                 //dont save changes yet we can possibly remove or detach photos if they are dupes
                 var temp = addphotoconverions(NewPhoto, newphoto);
@@ -322,7 +329,7 @@ namespace Shell.MVC2.Data
         /// <param name="photouploaded"></param>
         /// <param name="formats"></param>
         /// <returns></returns>
-        public List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded)
+        private  List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded)
         {
             //TemporaryImageUpload tempImageUpload = new TemporaryImageUpload();             
             // tempImageUpload = _service.GetImageData(id) ?? null;
@@ -445,7 +452,7 @@ namespace Shell.MVC2.Data
         private IEnumerable<PhotoEditModel> filterphotosbysecuitylevel(List<photo> MyPhotos, securityleveltypeEnum status,
                                                                    int page, int pagesize)
         {
-            var model = (from p in MyPhotos.Where(a => a.securitylevels.Any(d => d.id == (int)status))
+            var model = (from p in MyPhotos.Where(a => a.photosecuritylevels.Any(d => d.securityleveltype.id  == (int)status))
                          select new PhotoEditModel
                          {
                              photoid = p.id,
@@ -749,7 +756,6 @@ namespace Shell.MVC2.Data
             }
             // Return CInt(myQuery.First.ScreenName)
         }
-
 
         /// <summary>
         /// gets the bytes of an image from a URL, useeful in grabbing images from 3rd parties such as FB

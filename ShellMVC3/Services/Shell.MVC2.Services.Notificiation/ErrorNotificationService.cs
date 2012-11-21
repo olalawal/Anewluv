@@ -19,7 +19,7 @@ namespace Shell.MVC2.Services.Notification
        public ErrorNotificationService(IErrorNotificationRepository errornotificationrepository)
        {
            _errornotificationrepository = errornotificationrepository;
-           _apikey = HttpContext.Current.Request.QueryString["apikey"];
+        //   _apikey = HttpContext.Current.Request.QueryString["apikey"];
 
            //TO implement API KEY validation
            //  throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);

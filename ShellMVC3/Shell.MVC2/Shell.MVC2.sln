@@ -26,6 +26,9 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Common", "..\Components\VbCommon\Common.vbproj", "{6E4CE4F1-2703-4013-ADB6-D73BF51E2C82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Misc", "..\Components\Misc\Misc.csproj", "{D1F87F9F-7628-4874-BA2D-0ADB3CA6B4F2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0F7347CA-C2A4-413D-B3F5-EEB9F1196480} = {0F7347CA-C2A4-413D-B3F5-EEB9F1196480}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{4451085F-93AF-4705-8241-03EAD0D99CE0}"
 EndProject

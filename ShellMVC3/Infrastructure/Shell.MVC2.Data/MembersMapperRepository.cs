@@ -86,7 +86,7 @@ namespace Shell.MVC2.Data
                // var Approved = editProfileRepository.GetApproved(MyPhotos, "Yes", page, ps);
                // var NotApproved = editProfileRepository.GetApproved(MyPhotos, "No", page, ps);
                // var Private = editProfileRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
-                model.profilephotos = photorepository.getpagededitphotoviewmodel(model.profile.username,"Yes", "No",photoapprovalstatusEnum.Approved , page, ps);   //editProfileRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                model.profilephotos = photorepository.getpagededitphotoviewmodelbyprofileid(model.profile.id, page, ps);   //editProfileRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
 
                return model;
             }
@@ -136,7 +136,7 @@ namespace Shell.MVC2.Data
                 // var Approved = editProfileRepository.GetApproved(MyPhotos, "Yes", page, ps);
                 // var NotApproved = editProfileRepository.GetApproved(MyPhotos, "No", page, ps);
                 // var Private = editProfileRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
-                model.profilephotos = photorepository.getpagededitphotoviewmodel(model.profile.username, "Yes", "No", photoapprovalstatusEnum.Approved, page, ps);   //editProfileRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                model.profilephotos = photorepository.getpagededitphotoviewmodelbyprofileid(model.profile.id, page, ps);
 
             }
             return models;

@@ -12,8 +12,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
 
         [Key]
-        public Guid id { get; set; }           
-      
+        public Guid id { get; set; }
+        public long size { get; set; }
         
         public virtual ICollection<photoalbum>  albums { get; set; }
         public virtual lu_photorejectionreason  rejectionreason { get; set; }
@@ -23,6 +23,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
        
         public int profile_id { get; set; }  
         public virtual profilemetadata profilemetadata { get; set; }
+       
        
         //lazy load these for now and check perforamce
         public virtual ICollection<photoreview> reviews { get; set; }

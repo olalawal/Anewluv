@@ -1,0 +1,895 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfphoto">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="photo" nillable="true" type="tns:photo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfphoto" nillable="true" type="tns:ArrayOfphoto" />
+  <xs:complexType name="photo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="albums" nillable="true" type="tns:ArrayOfphotoalbum" />
+      <xs:element minOccurs="0" name="approvalstatus" nillable="true" type="tns:lu_photoapprovalstatus" />
+      <xs:element minOccurs="0" name="conversions" nillable="true" type="tns:ArrayOfphotoconversion" />
+      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="ser:guid" />
+      <xs:element minOccurs="0" name="imagecaption" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="imagetype" nillable="true" type="tns:lu_photoimagetype" />
+      <xs:element minOccurs="0" name="photosecuritylevels" nillable="true" type="tns:ArrayOfphoto_securitylevel" />
+      <xs:element minOccurs="0" name="photostatus" nillable="true" type="tns:lu_photostatus" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="rejectionreason" nillable="true" type="tns:lu_photorejectionreason" />
+      <xs:element minOccurs="0" name="reviews" nillable="true" type="tns:ArrayOfphotoreview" />
+      <xs:element minOccurs="0" name="size" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="photo" nillable="true" type="tns:photo" />
+  <xs:complexType name="ArrayOfphotoalbum">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="photoalbum" nillable="true" type="tns:photoalbum" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfphotoalbum" nillable="true" type="tns:ArrayOfphotoalbum" />
+  <xs:complexType name="photoalbum">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="albumsecuritylevels" nillable="true" type="tns:ArrayOfphotoalbum_securitylevel" />
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="photos" nillable="true" type="tns:ArrayOfphoto" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="photoalbum" nillable="true" type="tns:photoalbum" />
+  <xs:complexType name="ArrayOfphotoalbum_securitylevel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="photoalbum_securitylevel" nillable="true" type="tns:photoalbum_securitylevel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfphotoalbum_securitylevel" nillable="true" type="tns:ArrayOfphotoalbum_securitylevel" />
+  <xs:complexType name="photoalbum_securitylevel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="photoalbum" nillable="true" type="tns:photoalbum" />
+      <xs:element minOccurs="0" name="photoalbum_id" type="xs:int" />
+      <xs:element minOccurs="0" name="securityleveltype" nillable="true" type="tns:lu_securityleveltype" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="photoalbum_securitylevel" nillable="true" type="tns:photoalbum_securitylevel" />
+  <xs:complexType name="lu_securityleveltype">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_securityleveltype" nillable="true" type="tns:lu_securityleveltype" />
+  <xs:complexType name="profilemetadata">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="abusereportadded" nillable="true" type="tns:ArrayOfabusereport" />
+      <xs:element minOccurs="0" name="abusereports" nillable="true" type="tns:ArrayOfabusereport" />
+      <xs:element minOccurs="0" name="blocks" nillable="true" type="tns:ArrayOfblock" />
+      <xs:element minOccurs="0" name="blocksadded" nillable="true" type="tns:ArrayOfblock" />
+      <xs:element minOccurs="0" name="ethnicities" nillable="true" type="tns:ArrayOfprofiledata_ethnicity" />
+      <xs:element minOccurs="0" name="favorites" nillable="true" type="tns:ArrayOffavorite" />
+      <xs:element minOccurs="0" name="favoritesadded" nillable="true" type="tns:ArrayOffavorite" />
+      <xs:element minOccurs="0" name="friends" nillable="true" type="tns:ArrayOffriend" />
+      <xs:element minOccurs="0" name="friendsadded" nillable="true" type="tns:ArrayOffriend" />
+      <xs:element minOccurs="0" name="hobbies" nillable="true" type="tns:ArrayOfprofiledata_hobby" />
+      <xs:element minOccurs="0" name="hotfeatures" nillable="true" type="tns:ArrayOfprofiledata_hotfeature" />
+      <xs:element minOccurs="0" name="hotlists" nillable="true" type="tns:ArrayOfhotlist" />
+      <xs:element minOccurs="0" name="hotlistsadded" nillable="true" type="tns:ArrayOfhotlist" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="interests" nillable="true" type="tns:ArrayOfinterest" />
+      <xs:element minOccurs="0" name="interestsadded" nillable="true" type="tns:ArrayOfinterest" />
+      <xs:element minOccurs="0" name="likes" nillable="true" type="tns:ArrayOflike" />
+      <xs:element minOccurs="0" name="likesadded" nillable="true" type="tns:ArrayOflike" />
+      <xs:element minOccurs="0" name="lookingfor" nillable="true" type="tns:ArrayOfprofiledata_lookingfor" />
+      <xs:element minOccurs="0" name="mailboxfolders" nillable="true" type="tns:ArrayOfmailboxfolder" />
+      <xs:element minOccurs="0" name="mailupdatefreqencies" nillable="true" type="tns:ArrayOfmailupdatefreqency" />
+      <xs:element minOccurs="0" name="peeks" nillable="true" type="tns:ArrayOfpeek" />
+      <xs:element minOccurs="0" name="peeksadded" nillable="true" type="tns:ArrayOfpeek" />
+      <xs:element minOccurs="0" name="photoalbums" nillable="true" type="tns:ArrayOfphotoalbum" />
+      <xs:element minOccurs="0" name="photos" nillable="true" type="tns:ArrayOfphoto" />
+      <xs:element minOccurs="0" name="ratingvalues" nillable="true" type="tns:ArrayOfratingvalue" />
+      <xs:element minOccurs="0" name="ratingvaluesadded" nillable="true" type="tns:ArrayOfratingvalue" />
+      <xs:element minOccurs="0" name="receivedmailboxmessages" nillable="true" type="tns:ArrayOfmailboxmessage" />
+      <xs:element minOccurs="0" name="searchsettings" nillable="true" type="tns:ArrayOfsearchsetting" />
+      <xs:element minOccurs="0" name="sentmailboxmessages" nillable="true" type="tns:ArrayOfmailboxmessage" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+  <xs:complexType name="ArrayOfabusereport">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="abusereport" nillable="true" type="tns:abusereport" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfabusereport" nillable="true" type="tns:ArrayOfabusereport" />
+  <xs:complexType name="abusereport">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="abuser" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="abuser_id" type="xs:int" />
+      <xs:element minOccurs="0" name="abusereporter" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="abusereporter_id" type="xs:int" />
+      <xs:element minOccurs="0" name="abusetype" nillable="true" type="tns:lu_abusetype" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="notes" nillable="true" type="tns:ArrayOfabusereportnotes" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="abusereport" nillable="true" type="tns:abusereport" />
+  <xs:complexType name="lu_abusetype">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_abusetype" nillable="true" type="tns:lu_abusetype" />
+  <xs:complexType name="ArrayOfabusereportnotes">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="abusereportnotes" nillable="true" type="tns:abusereportnotes" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfabusereportnotes" nillable="true" type="tns:ArrayOfabusereportnotes" />
+  <xs:complexType name="abusereportnotes">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="abusereport" nillable="true" type="tns:abusereport" />
+      <xs:element minOccurs="0" name="abusereport_id" type="xs:int" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="note" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="notetype" nillable="true" type="tns:lu_notetype" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="reviewdate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="abusereportnotes" nillable="true" type="tns:abusereportnotes" />
+  <xs:complexType name="lu_notetype">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_notetype" nillable="true" type="tns:lu_notetype" />
+  <xs:complexType name="ArrayOfblock">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="block" nillable="true" type="tns:block" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfblock" nillable="true" type="tns:ArrayOfblock" />
+  <xs:complexType name="block">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="blockedprofilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="blockprofile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="mutual" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="notes" nillable="true" type="tns:ArrayOfblocknotes" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="removedate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="block" nillable="true" type="tns:block" />
+  <xs:complexType name="ArrayOfblocknotes">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="blocknotes" nillable="true" type="tns:blocknotes" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfblocknotes" nillable="true" type="tns:ArrayOfblocknotes" />
+  <xs:complexType name="blocknotes">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="block" nillable="true" type="tns:block" />
+      <xs:element minOccurs="0" name="block_id" type="xs:int" />
+      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="note" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="notetype" nillable="true" type="tns:lu_notetype" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="reviewdate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="blocknotes" nillable="true" type="tns:blocknotes" />
+  <xs:complexType name="ArrayOfprofiledata_ethnicity">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="profiledata_ethnicity" nillable="true" type="tns:profiledata_ethnicity" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfprofiledata_ethnicity" nillable="true" type="tns:ArrayOfprofiledata_ethnicity" />
+  <xs:complexType name="profiledata_ethnicity">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ethnicty" nillable="true" type="tns:lu_ethnicity" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="profiledata_ethnicity" nillable="true" type="tns:profiledata_ethnicity" />
+  <xs:complexType name="lu_ethnicity">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_ethnicity" nillable="true" type="tns:lu_ethnicity" />
+  <xs:complexType name="ArrayOffavorite">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="favorite" nillable="true" type="tns:favorite" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOffavorite" nillable="true" type="tns:ArrayOffavorite" />
+  <xs:complexType name="favorite">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbyfavoritedate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="favoriteprofile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="favoriteprofilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="favorite" nillable="true" type="tns:favorite" />
+  <xs:complexType name="ArrayOffriend">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="friend" nillable="true" type="tns:friend" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOffriend" nillable="true" type="tns:ArrayOffriend" />
+  <xs:complexType name="friend">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbyfrienddate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="friendprofile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="friendprofilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="friend" nillable="true" type="tns:friend" />
+  <xs:complexType name="ArrayOfprofiledata_hobby">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="profiledata_hobby" nillable="true" type="tns:profiledata_hobby" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfprofiledata_hobby" nillable="true" type="tns:ArrayOfprofiledata_hobby" />
+  <xs:complexType name="profiledata_hobby">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="hobby" nillable="true" type="tns:lu_hobby" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="profiledata_hobby" nillable="true" type="tns:profiledata_hobby" />
+  <xs:complexType name="lu_hobby">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_hobby" nillable="true" type="tns:lu_hobby" />
+  <xs:complexType name="ArrayOfprofiledata_hotfeature">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="profiledata_hotfeature" nillable="true" type="tns:profiledata_hotfeature" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfprofiledata_hotfeature" nillable="true" type="tns:ArrayOfprofiledata_hotfeature" />
+  <xs:complexType name="profiledata_hotfeature">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="hotfeature" nillable="true" type="tns:lu_hotfeature" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="profiledata_hotfeature" nillable="true" type="tns:profiledata_hotfeature" />
+  <xs:complexType name="lu_hotfeature">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_hotfeature" nillable="true" type="tns:lu_hotfeature" />
+  <xs:complexType name="ArrayOfhotlist">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="hotlist" nillable="true" type="tns:hotlist" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfhotlist" nillable="true" type="tns:ArrayOfhotlist" />
+  <xs:complexType name="hotlist">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbyhotlistdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="hotlistprofile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="hotlistprofilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="hotlist" nillable="true" type="tns:hotlist" />
+  <xs:complexType name="ArrayOfinterest">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="interest" nillable="true" type="tns:interest" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfinterest" nillable="true" type="tns:ArrayOfinterest" />
+  <xs:complexType name="interest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbyinterestdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="interestprofile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="interestprofilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="interest" nillable="true" type="tns:interest" />
+  <xs:complexType name="ArrayOflike">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="like" nillable="true" type="tns:like" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOflike" nillable="true" type="tns:ArrayOflike" />
+  <xs:complexType name="like">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbylikedate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="likeprofile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="likeprofilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="like" nillable="true" type="tns:like" />
+  <xs:complexType name="ArrayOfprofiledata_lookingfor">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="profiledata_lookingfor" nillable="true" type="tns:profiledata_lookingfor" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfprofiledata_lookingfor" nillable="true" type="tns:ArrayOfprofiledata_lookingfor" />
+  <xs:complexType name="profiledata_lookingfor">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="lookingfor" nillable="true" type="tns:lu_lookingfor" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="profiledata_lookingfor" nillable="true" type="tns:profiledata_lookingfor" />
+  <xs:complexType name="lu_lookingfor">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_lookingfor" nillable="true" type="tns:lu_lookingfor" />
+  <xs:complexType name="ArrayOfmailboxfolder">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="mailboxfolder" nillable="true" type="tns:mailboxfolder" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfmailboxfolder" nillable="true" type="tns:ArrayOfmailboxfolder" />
+  <xs:complexType name="mailboxfolder">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="active" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="foldertype" nillable="true" type="tns:mailboxfoldertype" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="mailboxmessagesfolders" nillable="true" type="tns:ArrayOfmailboxmessagefolder" />
+      <xs:element minOccurs="0" name="profiled_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="mailboxfolder" nillable="true" type="tns:mailboxfolder" />
+  <xs:complexType name="mailboxfoldertype">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="active" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="defaultfolder" nillable="true" type="tns:lu_defaultmailboxfolder" />
+      <xs:element minOccurs="0" name="deleteddate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="maxsize" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="mailboxfoldertype" nillable="true" type="tns:mailboxfoldertype" />
+  <xs:complexType name="lu_defaultmailboxfolder">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_defaultmailboxfolder" nillable="true" type="tns:lu_defaultmailboxfolder" />
+  <xs:complexType name="ArrayOfmailboxmessagefolder">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="mailboxmessagefolder" nillable="true" type="tns:mailboxmessagefolder" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfmailboxmessagefolder" nillable="true" type="tns:ArrayOfmailboxmessagefolder" />
+  <xs:complexType name="mailboxmessagefolder">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="deleteddate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="draftdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="flaggeddate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="mailboxfolder" nillable="true" type="tns:mailboxfolder" />
+      <xs:element minOccurs="0" name="mailboxfolder_id" type="xs:int" />
+      <xs:element minOccurs="0" name="mailboxmessage" nillable="true" type="tns:mailboxmessage" />
+      <xs:element minOccurs="0" name="mailboxmessage_id" type="xs:int" />
+      <xs:element minOccurs="0" name="readdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="recent" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="replieddate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="mailboxmessagefolder" nillable="true" type="tns:mailboxmessagefolder" />
+  <xs:complexType name="mailboxmessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="body" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="mailboxmessagesfolders" nillable="true" type="tns:ArrayOfmailboxmessagefolder" />
+      <xs:element minOccurs="0" name="recipeint" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="recipient_id" type="xs:int" />
+      <xs:element minOccurs="0" name="sender" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="sender_id" type="xs:int" />
+      <xs:element minOccurs="0" name="subject" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="uniqueid" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="mailboxmessage" nillable="true" type="tns:mailboxmessage" />
+  <xs:complexType name="ArrayOfmailupdatefreqency">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="mailupdatefreqency" nillable="true" type="tns:mailupdatefreqency" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfmailupdatefreqency" nillable="true" type="tns:ArrayOfmailupdatefreqency" />
+  <xs:complexType name="mailupdatefreqency">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="updatefreqency" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="mailupdatefreqency" nillable="true" type="tns:mailupdatefreqency" />
+  <xs:complexType name="ArrayOfpeek">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="peek" nillable="true" type="tns:peek" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfpeek" nillable="true" type="tns:ArrayOfpeek" />
+  <xs:complexType name="peek">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="deletedbypeekdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="peekprofile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="peekprofilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="peek" nillable="true" type="tns:peek" />
+  <xs:complexType name="ArrayOfratingvalue">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ratingvalue" nillable="true" type="tns:ratingvalue" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfratingvalue" nillable="true" type="tns:ArrayOfratingvalue" />
+  <xs:complexType name="ratingvalue">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="date" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilemetatadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="rateeprofile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="rateeprofilemetadata" nillable="true" type="tns:profilemetadata" />
+      <xs:element minOccurs="0" name="rating" nillable="true" type="tns:rating" />
+      <xs:element minOccurs="0" name="rating_id" type="xs:int" />
+      <xs:element minOccurs="0" name="value" nillable="true" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ratingvalue" nillable="true" type="tns:ratingvalue" />
+  <xs:complexType name="rating">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="increment" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="ratingmaxvalue" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ratingweight" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="rating" nillable="true" type="tns:rating" />
+  <xs:complexType name="ArrayOfmailboxmessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="mailboxmessage" nillable="true" type="tns:mailboxmessage" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfmailboxmessage" nillable="true" type="tns:ArrayOfmailboxmessage" />
+  <xs:complexType name="ArrayOfsearchsetting">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="searchsetting" nillable="true" type="tns:searchsetting" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfsearchsetting" nillable="true" type="tns:ArrayOfsearchsetting" />
+  <xs:complexType name="searchsetting">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="agemax" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="agemin" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="distancefromme" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="heightmax" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="heightmin" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="lastupdatedate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="myperfectmatch" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="savedsearch" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="searchname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="searchrank" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="searchsettingsid" type="xs:int" />
+      <xs:element minOccurs="0" name="systemmatch" nillable="true" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="searchsetting" nillable="true" type="tns:searchsetting" />
+  <xs:complexType name="lu_photoapprovalstatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_photoapprovalstatus" nillable="true" type="tns:lu_photoapprovalstatus" />
+  <xs:complexType name="ArrayOfphotoconversion">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="photoconversion" nillable="true" type="tns:photoconversion" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfphotoconversion" nillable="true" type="tns:ArrayOfphotoconversion" />
+  <xs:complexType name="photoconversion">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="formattype" nillable="true" type="tns:lu_photoformat" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="image" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="photo" nillable="true" type="tns:photo" />
+      <xs:element minOccurs="0" name="photo_id" type="ser:guid" />
+      <xs:element minOccurs="0" name="size" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="photoconversion" nillable="true" type="tns:photoconversion" />
+  <xs:complexType name="lu_photoformat">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="imageresizerformat" nillable="true" type="tns:lu_photoImagersizerformat" />
+      <xs:element minOccurs="0" name="photoImagersizerformat_id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_photoformat" nillable="true" type="tns:lu_photoformat" />
+  <xs:complexType name="lu_photoImagersizerformat">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_photoImagersizerformat" nillable="true" type="tns:lu_photoImagersizerformat" />
+  <xs:complexType name="lu_photoimagetype">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_photoimagetype" nillable="true" type="tns:lu_photoimagetype" />
+  <xs:complexType name="ArrayOfphoto_securitylevel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="photo_securitylevel" nillable="true" type="tns:photo_securitylevel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfphoto_securitylevel" nillable="true" type="tns:ArrayOfphoto_securitylevel" />
+  <xs:complexType name="photo_securitylevel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="photo" nillable="true" type="tns:photo" />
+      <xs:element minOccurs="0" name="photo_id" type="ser:guid" />
+      <xs:element minOccurs="0" name="securityleveltype" nillable="true" type="tns:lu_securityleveltype" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="photo_securitylevel" nillable="true" type="tns:photo_securitylevel" />
+  <xs:complexType name="lu_photostatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_photostatus" nillable="true" type="tns:lu_photostatus" />
+  <xs:complexType name="lu_photorejectionreason">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="photos" nillable="true" type="tns:ArrayOfphoto" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+      <xs:element minOccurs="0" name="userMessage" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_photorejectionreason" nillable="true" type="tns:lu_photorejectionreason" />
+  <xs:complexType name="ArrayOfphotoreview">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="photoreview" nillable="true" type="tns:photoreview" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfphotoreview" nillable="true" type="tns:ArrayOfphotoreview" />
+  <xs:complexType name="photoreview">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="notes" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="photo" nillable="true" type="tns:photo" />
+      <xs:element minOccurs="0" name="photo_id" type="ser:guid" />
+      <xs:element minOccurs="0" name="reviewerprofile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="reviewerprofiledata" nillable="true" type="tns:profiledata" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="photoreview" nillable="true" type="tns:photoreview" />
+  <xs:complexType name="profiledata">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="aboutme" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="age" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="birthdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="bodytype" nillable="true" type="tns:lu_bodytype" />
+      <xs:element minOccurs="0" name="city" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="countryid" type="xs:int" />
+      <xs:element minOccurs="0" name="countryregion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="diet" nillable="true" type="tns:lu_diet" />
+      <xs:element minOccurs="0" name="drinking" nillable="true" type="tns:lu_drinks" />
+      <xs:element minOccurs="0" name="educationlevel" nillable="true" type="tns:lu_educationlevel" />
+      <xs:element minOccurs="0" name="employmentstatus" nillable="true" type="tns:lu_employmentstatus" />
+      <xs:element minOccurs="0" name="exercise" nillable="true" type="tns:lu_exercise" />
+      <xs:element minOccurs="0" name="eyecolor" nillable="true" type="tns:lu_eyecolor" />
+      <xs:element minOccurs="0" name="gender" nillable="true" type="tns:lu_gender" />
+      <xs:element minOccurs="0" name="haircolor" nillable="true" type="tns:lu_haircolor" />
+      <xs:element minOccurs="0" name="height" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="humor" nillable="true" type="tns:lu_humor" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="incomelevel" nillable="true" type="tns:lu_incomelevel" />
+      <xs:element minOccurs="0" name="kidstatus" nillable="true" type="tns:lu_havekids" />
+      <xs:element minOccurs="0" name="latitude" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="livingsituation" nillable="true" type="tns:lu_livingsituation" />
+      <xs:element minOccurs="0" name="longitude" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="maritalstatus" nillable="true" type="tns:lu_maritalstatus" />
+      <xs:element minOccurs="0" name="mycatchyintroLine" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="phone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="politicalview" nillable="true" type="tns:lu_politicalview" />
+      <xs:element minOccurs="0" name="postalcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="profession" nillable="true" type="tns:lu_profession" />
+      <xs:element minOccurs="0" name="religion" nillable="true" type="tns:lu_religion" />
+      <xs:element minOccurs="0" name="religiousattendance" nillable="true" type="tns:lu_religiousattendance" />
+      <xs:element minOccurs="0" name="sign" nillable="true" type="tns:lu_sign" />
+      <xs:element minOccurs="0" name="smoking" nillable="true" type="tns:lu_smokes" />
+      <xs:element minOccurs="0" name="stateprovince" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="wantsKidstatus" nillable="true" type="tns:lu_wantskids" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="profiledata" nillable="true" type="tns:profiledata" />
+  <xs:complexType name="lu_bodytype">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_bodytype" nillable="true" type="tns:lu_bodytype" />
+  <xs:complexType name="lu_diet">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_diet" nillable="true" type="tns:lu_diet" />
+  <xs:complexType name="lu_drinks">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_drinks" nillable="true" type="tns:lu_drinks" />
+  <xs:complexType name="lu_educationlevel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_educationlevel" nillable="true" type="tns:lu_educationlevel" />
+  <xs:complexType name="lu_employmentstatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_employmentstatus" nillable="true" type="tns:lu_employmentstatus" />
+  <xs:complexType name="lu_exercise">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_exercise" nillable="true" type="tns:lu_exercise" />
+  <xs:complexType name="lu_eyecolor">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_eyecolor" nillable="true" type="tns:lu_eyecolor" />
+  <xs:complexType name="lu_gender">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_gender" nillable="true" type="tns:lu_gender" />
+  <xs:complexType name="lu_haircolor">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_haircolor" nillable="true" type="tns:lu_haircolor" />
+  <xs:complexType name="lu_humor">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_humor" nillable="true" type="tns:lu_humor" />
+  <xs:complexType name="lu_incomelevel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_incomelevel" nillable="true" type="tns:lu_incomelevel" />
+  <xs:complexType name="lu_havekids">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_havekids" nillable="true" type="tns:lu_havekids" />
+  <xs:complexType name="lu_livingsituation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_livingsituation" nillable="true" type="tns:lu_livingsituation" />
+  <xs:complexType name="lu_maritalstatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_maritalstatus" nillable="true" type="tns:lu_maritalstatus" />
+  <xs:complexType name="lu_politicalview">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_politicalview" nillable="true" type="tns:lu_politicalview" />
+  <xs:complexType name="lu_profession">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_profession" nillable="true" type="tns:lu_profession" />
+  <xs:complexType name="lu_religion">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_religion" nillable="true" type="tns:lu_religion" />
+  <xs:complexType name="lu_religiousattendance">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_religiousattendance" nillable="true" type="tns:lu_religiousattendance" />
+  <xs:complexType name="lu_sign">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="month" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_sign" nillable="true" type="tns:lu_sign" />
+  <xs:complexType name="lu_smokes">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_smokes" nillable="true" type="tns:lu_smokes" />
+  <xs:complexType name="lu_wantskids">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="lu_wantskids" nillable="true" type="tns:lu_wantskids" />
+  <xs:simpleType name="photoapprovalstatusEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NotSet" />
+      <xs:enumeration value="Approved" />
+      <xs:enumeration value="NotReviewed" />
+      <xs:enumeration value="Rejected" />
+      <xs:enumeration value="RequiresFurtherInformation" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="photoapprovalstatusEnum" nillable="true" type="tns:photoapprovalstatusEnum" />
+</xs:schema>

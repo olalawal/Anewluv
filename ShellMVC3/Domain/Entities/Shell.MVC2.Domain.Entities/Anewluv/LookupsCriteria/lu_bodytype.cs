@@ -11,7 +11,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public string description { get; set; }
         [Key]
         public int id { get; set; }
-       [NotMapped]
+        [NotMapped]
         public bool selected { get; set; }
      
     }

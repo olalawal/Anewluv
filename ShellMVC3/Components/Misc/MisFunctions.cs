@@ -15,6 +15,8 @@ using Shell.MVC2.Domain.Entities;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv;
 
+using Misc.PhotoService;
+
 namespace Misc
 {
    public static class MisFunctions
@@ -160,7 +162,6 @@ namespace Misc
             }
                
         }
-
 
         public static void ConvertProfileCollections()
         {
@@ -562,35 +563,88 @@ namespace Misc
             var olddb = new AnewluvFtsEntities();
             var postaldb = new PostalData2Entities();
             var context = new AnewluvContext();
+            
 
 
             //global try for the rest of objects that are tied to profile
             try
             {
+                //create refereerence to photo service
+                var PhotoService = new PhotoServiceClient();
 
-                //populate collections tied to profilemetadata
+
+               // populate photo object and create all the photo convenversions
+                //handle favorites
+                foreach (Dating.Server.Data.Models.photo   photositem in olddb.photos )
+                {
+                    var photosobject = new Shell.MVC2.Domain.Entities.Anewluv.photo();
+
+                    //get the profileID since that was saved first
+                    var newprofile = context.profiles.Where(p => p.emailaddress == photositem.ProfileID).FirstOrDefault();
+
+                    if (newprofile != null)
+                    {
+                        //get the list of all this user's photos , we are not re-adding duplicate photos
+                        var alloldphotos = olddb.photos.Where(p=>p.ProfileID == newprofile.emailaddress );
+                        //now  before adding check the size and approved status
+                       var test = !alloldphotos.Any(z=>z.PhotoSize == photositem.PhotoSize) ;
+                        if (!alloldphotos.Any(z=>z.PhotoSize == photositem.PhotoSize ))
+                        {
+
+                        PhotoUploadModel uploadmodel = new PhotoUploadModel();
+                        uploadmodel.caption = photositem.ImageCaption;
+                        uploadmodel.creationdate = photositem.PhotoDate.GetValueOrDefault() ;
+                        uploadmodel.image = photositem.ProfileImage ;
+                        uploadmodel.imagetype = context.lu_photoimagetype.Where(z => z.description == photositem.ProfileImageType).FirstOrDefault(); 
+                        uploadmodel.size = photositem.PhotoSize ;
+
+                            if( photositem.Aproved == "Yes")
+                            {
+                                  uploadmodel.approvalstatus =context.lu_photoapprovalstatus.Where(z => z.id  == (int)(photoapprovalstatusEnum.Approved)).FirstOrDefault(); 
+                            }
+                            else if (photositem.Aproved == "No")
+                            {
+                                uploadmodel.approvalstatus = context.lu_photoapprovalstatus.Where(z => z.id == (int)(photoapprovalstatusEnum.Rejected)).FirstOrDefault();
+                            }
+                            else
+                            {
+                                uploadmodel.approvalstatus = context.lu_photoapprovalstatus.Where(z => z.id == (int)(photoapprovalstatusEnum.NotReviewed )).FirstOrDefault();
+                            }
+                  
+                        PhotoService.addsinglephoto(uploadmodel, newprofile.id.ToString());
+                        }
+                    }
+                    else
+                    { 
+                    
+                    //skip this photo since its not tied to any valid profile
+                    }
+                  
+                    
+
+                       
+
+                   //   public bool addsinglephoto(PhotoUploadModel newphoto,int profileid)
+
+                   ////add the realted proflemetadatas 
+                   // photosobject.profilemetadata  = context.profilemetadata.Where(p => p.profile.emailaddress == photositem.ProfileID).FirstOrDefault();
+                   // photosobject.id = new Guid();
+                   // photosobject.creationdate = photositem.PhotoDate.GetValueOrDefault();
+                   // photosobject.imagecaption =  photositem.ImageCaption;
+                   // photosobject.imagetype = context.lu_photoimagetype.Where(z => z.description == photositem.ProfileImageType).FirstOrDefault(); 
 
 
-                ////handle favorites
-                //foreach (Dating.Server.Data.Models.favorite  favoritesitem in olddb.favorites)
-                //{
-                //    var favoritesobject = new Shell.MVC2.Domain.Entities.Anewluv.favorite();
 
-                //   //add the realted proflemetadatas 
-                //    favoritesobject.profilemetadata  = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.ProfileID).FirstOrDefault();
-                //    favoritesobject.favoriteprofilemetadata   = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.FavoriteID ).FirstOrDefault();
+                   // photosobject.modificationdate = null;
+                   // photosobject.viewdate = photositem.photoViewedDate ;                    
+                   // photosobject.deletedbymemberdate = null;
+                   // photosobject.deletedbyphotodate = null; 
 
-                //    favoritesobject.creationdate = favoritesitem.FavoriteDate.GetValueOrDefault();
-                //    favoritesobject.modificationdate = null;
-                //    favoritesobject.viewdate = favoritesitem.FavoriteViewedDate ;                    
-                //    favoritesobject.deletedbymemberdate = null;
-                //    favoritesobject.deletedbyfavoritedate = null; 
-
-                //    //add the object to profile object
-                //    context.favorites.Add(favoritesobject);
-                //    //save data one per row
-                //    context.SaveChanges();
-                //}
+                   // //add the object to profile object
+                   // context.photos.Add(photosobject);
+                   // //save data one per row
+                   // context.SaveChanges();
+                }
 
 
 
@@ -622,25 +676,352 @@ namespace Misc
                 //populate collections tied to profilemetadata
 
 
-                //handle favorites
-                foreach (Dating.Server.Data.Models.favorite favoritesitem in olddb.favorites)
+                //handle searchsetting
+                foreach (Dating.Server.Data.Models.SearchSetting  searchsettingitem in olddb.SearchSettings )
                 {
-                    var favoritesobject = new Shell.MVC2.Domain.Entities.Anewluv.favorite();
+                    var searchsettingobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting ();
 
                     //add the realted proflemetadatas 
-                    favoritesobject.profilemetadata = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.ProfileID).FirstOrDefault();
-                    favoritesobject.favoriteprofilemetadata = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.FavoriteID).FirstOrDefault();
-
-                    favoritesobject.creationdate = favoritesitem.FavoriteDate.GetValueOrDefault();
-                    favoritesobject.modificationdate = null;
-                    favoritesobject.viewdate = favoritesitem.FavoriteViewedDate;
-                    favoritesobject.deletedbymemberdate = null;
-                    favoritesobject.deletedbyfavoritedate = null;
+                    searchsettingobject.profilemetadata = context.profilemetadata.Where(p => p.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    searchsettingobject.agemax = searchsettingitem.AgeMax;
+                    searchsettingobject.agemin  = searchsettingitem.AgeMin ;
+                    searchsettingobject.creationdate  = searchsettingitem.CreationDate ; 
+                    searchsettingobject.distancefromme  = searchsettingitem.DistanceFromMe ;
+                    searchsettingobject.heightmax  = searchsettingitem.HeightMin ;
+                    searchsettingobject.heightmin  = searchsettingitem.HeightMin ;
+                    searchsettingobject.lastupdatedate  = searchsettingitem.LastUpdateDate ;
+                    searchsettingobject.myperfectmatch  = searchsettingitem.MyPerfectMatch ;
+                    searchsettingobject.savedsearch  = searchsettingitem.SavedSearch ;
+                    searchsettingobject.searchname  = searchsettingitem.SearchName ;
+                    searchsettingobject.searchrank  = searchsettingitem.SearchRank ;
+                    searchsettingobject.systemmatch  = searchsettingitem.SystemMatch ;
 
                     //add the object to profile object
-                    context.favorites.Add(favoritesobject);
+                    context.searchsetting.Add(searchsettingobject);
                     //save data one per row
                     context.SaveChanges();
+
+                    //now populate the rest of the date for each item
+
+                    //body type
+                    foreach (Dating.Server.Data.Models.SearchSettings_BodyTypes  searchsettingbodytypeitem in olddb.SearchSettings_BodyTypes )
+                    {
+                        var searchsettingbodytypeobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_bodytype ();
+
+                        searchsettingbodytypeobject.searchsetting   = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                        searchsettingbodytypeobject.bodytype = context.lu_bodytype.Where(p => p.id == searchsettingbodytypeitem.BodyTypesID).FirstOrDefault();
+                        context.searchsetting_bodytype.Add(searchsettingbodytypeobject);
+                        //save data one per row
+                        context.SaveChanges();
+                    }
+
+                    //diet
+                    foreach (Dating.Server.Data.Models.SearchSettings_Diet  searchsettingdietitem in olddb.SearchSettings_Diet)
+                    {
+                        var searchsettingdietobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_diet();
+
+                        searchsettingdietobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                        searchsettingdietobject.diet = context.lu_diet.Where(p => p.id == searchsettingdietitem.DietID ).FirstOrDefault();
+                        context.searchsetting_diet.Add(searchsettingdietobject);
+                        //save data one per row
+                        context.SaveChanges();
+                    }
+
+                    //drink
+                    foreach (Dating.Server.Data.Models.SearchSettings_Drinks searchsettingdrinkitem in olddb.SearchSettings_Drinks)
+                    {
+                        var searchsettingdrinkobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_drink();
+
+                        searchsettingdrinkobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                        searchsettingdrinkobject.drink = context.lu_drinks.Where(p => p.id == searchsettingdrinkitem.DrinksID).FirstOrDefault();
+                        context.searchsetting_drink.Add(searchsettingdrinkobject);
+                        //save data one per row
+                        context.SaveChanges();
+                    }
+
+                    //educationlevel
+                    foreach (Dating.Server.Data.Models.SearchSettings_EducationLevel searchsettingeducationlevelitem in olddb.SearchSettings_EducationLevel)
+                    {
+                        var searchsettingeducationlevelobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_educationlevel();
+
+                        searchsettingeducationlevelobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                        searchsettingeducationlevelobject.educationlevel = context.lu_educationlevel.Where(p => p.id == searchsettingeducationlevelitem.EducationLevelID ).FirstOrDefault();
+                        context.searchsetting_educationlevel.Add(searchsettingeducationlevelobject);
+                        //save data one per row
+                        context.SaveChanges();
+                    }
+
+
+                    ////employmentstatus
+                    //foreach (Dating.Server.Data.Models.SearchSettings_employmentstatuss searchsettingemploymentstatusitem in olddb.SearchSettings_employmentstatuss)
+                    //{
+                    //    var searchsettingemploymentstatusobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_employmentstatus();
+
+                    //    searchsettingemploymentstatusobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingemploymentstatusobject.employmentstatus = context.lu_employmentstatus.Where(p => p.id == searchsettingemploymentstatusitem.employmentstatussID).FirstOrDefault();
+                    //    context.searchsetting_employmentstatus.Add(searchsettingemploymentstatusobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////ethnicity
+                    //foreach (Dating.Server.Data.Models.SearchSettings_ethnicitys searchsettingethnicityitem in olddb.SearchSettings_ethnicitys)
+                    //{
+                    //    var searchsettingethnicityobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_ethnicity();
+
+                    //    searchsettingethnicityobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingethnicityobject.ethnicity = context.lu_ethnicity.Where(p => p.id == searchsettingethnicityitem.ethnicitysID).FirstOrDefault();
+                    //    context.searchsetting_ethnicity.Add(searchsettingethnicityobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////exercise
+                    //foreach (Dating.Server.Data.Models.SearchSettings_exercises searchsettingexerciseitem in olddb.SearchSettings_exercises)
+                    //{
+                    //    var searchsettingexerciseobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_exercise();
+
+                    //    searchsettingexerciseobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingexerciseobject.exercise = context.lu_exercise.Where(p => p.id == searchsettingexerciseitem.exercisesID).FirstOrDefault();
+                    //    context.searchsetting_exercise.Add(searchsettingexerciseobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////eyecolor
+                    //foreach (Dating.Server.Data.Models.SearchSettings_eyecolors searchsettingeyecoloritem in olddb.SearchSettings_eyecolors)
+                    //{
+                    //    var searchsettingeyecolorobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_eyecolor();
+
+                    //    searchsettingeyecolorobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingeyecolorobject.eyecolor = context.lu_eyecolor.Where(p => p.id == searchsettingeyecoloritem.eyecolorsID).FirstOrDefault();
+                    //    context.searchsetting_eyecolor.Add(searchsettingeyecolorobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////gender
+                    //foreach (Dating.Server.Data.Models.SearchSettings_genders searchsettinggenderitem in olddb.SearchSettings_genders)
+                    //{
+                    //    var searchsettinggenderobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_gender();
+
+                    //    searchsettinggenderobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettinggenderobject.gender = context.lu_gender.Where(p => p.id == searchsettinggenderitem.gendersID).FirstOrDefault();
+                    //    context.searchsetting_gender.Add(searchsettinggenderobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////haircolor
+                    //foreach (Dating.Server.Data.Models.SearchSettings_haircolors searchsettinghaircoloritem in olddb.SearchSettings_haircolors)
+                    //{
+                    //    var searchsettinghaircolorobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_haircolor();
+
+                    //    searchsettinghaircolorobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettinghaircolorobject.haircolor = context.lu_haircolor.Where(p => p.id == searchsettinghaircoloritem.haircolorsID).FirstOrDefault();
+                    //    context.searchsetting_haircolor.Add(searchsettinghaircolorobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////hotfeature
+                    //foreach (Dating.Server.Data.Models.SearchSettings_hotfeatures searchsettinghotfeatureitem in olddb.SearchSettings_hotfeatures)
+                    //{
+                    //    var searchsettinghotfeatureobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_hotfeature();
+
+                    //    searchsettinghotfeatureobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettinghotfeatureobject.hotfeature = context.lu_hotfeature.Where(p => p.id == searchsettinghotfeatureitem.hotfeaturesID).FirstOrDefault();
+                    //    context.searchsetting_hotfeature.Add(searchsettinghotfeatureobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////havekids
+                    //foreach (Dating.Server.Data.Models.SearchSettings_havekidss searchsettinghavekidsitem in olddb.SearchSettings_havekidss)
+                    //{
+                    //    var searchsettinghavekidsobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_havekids();
+
+                    //    searchsettinghavekidsobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettinghavekidsobject.havekids = context.lu_havekids.Where(p => p.id == searchsettinghavekidsitem.havekidssID).FirstOrDefault();
+                    //    context.searchsetting_havekids.Add(searchsettinghavekidsobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////hobby
+                    //foreach (Dating.Server.Data.Models.SearchSettings_hobbys searchsettinghobbyitem in olddb.SearchSettings_hobbys)
+                    //{
+                    //    var searchsettinghobbyobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_hobby();
+
+                    //    searchsettinghobbyobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettinghobbyobject.hobby = context.lu_hobby.Where(p => p.id == searchsettinghobbyitem.hobbysID).FirstOrDefault();
+                    //    context.searchsetting_hobby.Add(searchsettinghobbyobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////humor
+                    //foreach (Dating.Server.Data.Models.SearchSettings_humors searchsettinghumoritem in olddb.SearchSettings_humors)
+                    //{
+                    //    var searchsettinghumorobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_humor();
+
+                    //    searchsettinghumorobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettinghumorobject.humor = context.lu_humor.Where(p => p.id == searchsettinghumoritem.humorsID).FirstOrDefault();
+                    //    context.searchsetting_humor.Add(searchsettinghumorobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+                    ////incomelevel
+                    //foreach (Dating.Server.Data.Models.SearchSettings_incomelevels searchsettingincomelevelitem in olddb.SearchSettings_incomelevels)
+                    //{
+                    //    var searchsettingincomelevelobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_incomelevel();
+
+                    //    searchsettingincomelevelobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingincomelevelobject.incomelevel = context.lu_incomelevel.Where(p => p.id == searchsettingincomelevelitem.incomelevelsID).FirstOrDefault();
+                    //    context.searchsetting_incomelevel.Add(searchsettingincomelevelobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////livingstituation
+                    //foreach (Dating.Server.Data.Models.SearchSettings_livingstituations searchsettinglivingstituationitem in olddb.SearchSettings_livingstituations)
+                    //{
+                    //    var searchsettinglivingstituationobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_livingstituation();
+
+                    //    searchsettinglivingstituationobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettinglivingstituationobject.livingstituation = context.lu_livingstituation.Where(p => p.id == searchsettinglivingstituationitem.livingstituationsID).FirstOrDefault();
+                    //    context.searchsetting_livingstituation.Add(searchsettinglivingstituationobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////location
+                    //foreach (Dating.Server.Data.Models.SearchSettings_locations searchsettinglocationitem in olddb.SearchSettings_locations)
+                    //{
+                    //    var searchsettinglocationobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_location();
+
+                    //    searchsettinglocationobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettinglocationobject.location = context.lu_location.Where(p => p.id == searchsettinglocationitem.locationsID).FirstOrDefault();
+                    //    context.searchsetting_location.Add(searchsettinglocationobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+                    ////lookingfor
+                    //foreach (Dating.Server.Data.Models.SearchSettings_lookingfors searchsettinglookingforitem in olddb.SearchSettings_lookingfors)
+                    //{
+                    //    var searchsettinglookingforobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_lookingfor();
+
+                    //    searchsettinglookingforobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettinglookingforobject.lookingfor = context.lu_lookingfor.Where(p => p.id == searchsettinglookingforitem.lookingforsID).FirstOrDefault();
+                    //    context.searchsetting_lookingfor.Add(searchsettinglookingforobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+                    ////maritalstatus
+                    //foreach (Dating.Server.Data.Models.SearchSettings_maritalstatuss searchsettingmaritalstatusitem in olddb.SearchSettings_maritalstatuss)
+                    //{
+                    //    var searchsettingmaritalstatusobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_maritalstatus();
+
+                    //    searchsettingmaritalstatusobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingmaritalstatusobject.maritalstatus = context.lu_maritalstatus.Where(p => p.id == searchsettingmaritalstatusitem.maritalstatussID).FirstOrDefault();
+                    //    context.searchsetting_maritalstatus.Add(searchsettingmaritalstatusobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+                    ////bodytype
+                    //foreach (Dating.Server.Data.Models.SearchSettings_BodyTypes searchsettingbodytypeitem in olddb.SearchSettings_BodyTypes)
+                    //{
+                    //    var searchsettingbodytypeobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_bodytype();
+
+                    //    searchsettingbodytypeobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingbodytypeobject.bodytype = context.lu_bodytype.Where(p => p.id == searchsettingbodytypeitem.BodyTypesID).FirstOrDefault();
+                    //    context.searchsetting_bodytype.Add(searchsettingbodytypeobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+                    ////bodytype
+                    //foreach (Dating.Server.Data.Models.SearchSettings_BodyTypes searchsettingbodytypeitem in olddb.SearchSettings_BodyTypes)
+                    //{
+                    //    var searchsettingbodytypeobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_bodytype();
+
+                    //    searchsettingbodytypeobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingbodytypeobject.bodytype = context.lu_bodytype.Where(p => p.id == searchsettingbodytypeitem.BodyTypesID).FirstOrDefault();
+                    //    context.searchsetting_bodytype.Add(searchsettingbodytypeobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+                    ////bodytype
+                    //foreach (Dating.Server.Data.Models.SearchSettings_BodyTypes searchsettingbodytypeitem in olddb.SearchSettings_BodyTypes)
+                    //{
+                    //    var searchsettingbodytypeobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_bodytype();
+
+                    //    searchsettingbodytypeobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingbodytypeobject.bodytype = context.lu_bodytype.Where(p => p.id == searchsettingbodytypeitem.BodyTypesID).FirstOrDefault();
+                    //    context.searchsetting_bodytype.Add(searchsettingbodytypeobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+                    ////bodytype
+                    //foreach (Dating.Server.Data.Models.SearchSettings_BodyTypes searchsettingbodytypeitem in olddb.SearchSettings_BodyTypes)
+                    //{
+                    //    var searchsettingbodytypeobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_bodytype();
+
+                    //    searchsettingbodytypeobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingbodytypeobject.bodytype = context.lu_bodytype.Where(p => p.id == searchsettingbodytypeitem.BodyTypesID).FirstOrDefault();
+                    //    context.searchsetting_bodytype.Add(searchsettingbodytypeobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+                    ////bodytype
+                    //foreach (Dating.Server.Data.Models.SearchSettings_BodyTypes searchsettingbodytypeitem in olddb.SearchSettings_BodyTypes)
+                    //{
+                    //    var searchsettingbodytypeobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_bodytype();
+
+                    //    searchsettingbodytypeobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingbodytypeobject.bodytype = context.lu_bodytype.Where(p => p.id == searchsettingbodytypeitem.BodyTypesID).FirstOrDefault();
+                    //    context.searchsetting_bodytype.Add(searchsettingbodytypeobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+                    ////bodytype
+                    //foreach (Dating.Server.Data.Models.SearchSettings_BodyTypes searchsettingbodytypeitem in olddb.SearchSettings_BodyTypes)
+                    //{
+                    //    var searchsettingbodytypeobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_bodytype();
+
+                    //    searchsettingbodytypeobject.searchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID).FirstOrDefault();
+                    //    searchsettingbodytypeobject.bodytype = context.lu_bodytype.Where(p => p.id == searchsettingbodytypeitem.BodyTypesID).FirstOrDefault();
+                    //    context.searchsetting_bodytype.Add(searchsettingbodytypeobject);
+                    //    //save data one per row
+                    //    context.SaveChanges();
+                    //}
+
+
+
+
+
+
+
                 }
 
 
@@ -658,6 +1039,8 @@ namespace Misc
 
 
         }
+
+
 
 }
 

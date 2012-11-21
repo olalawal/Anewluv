@@ -15,15 +15,14 @@ namespace Shell.MVC2.Interfaces
        
         List<photo> getallphotosbyusername(string username);       
        
-        List<PhotoEditModel> getphotosbyprofileidandstatus(string profile_id, photoapprovalstatusEnum status);
+        List<PhotoEditModel> getphotosbyprofileidandstatus(int profile_id, photoapprovalstatusEnum status);
 
-        List<PhotoEditModel> getpagedphotosbyprofileidstatus(string profile_id, photoapprovalstatusEnum status,
+        List<PhotoEditModel> getpagedphotosbyprofileidstatus(int profile_id, photoapprovalstatusEnum status,
                                                                     int page, int pagesize);
        
-        PhotoEditModel getsingleprofilephotobyphotoid(Guid photoid);       
-       
-        PhotoEditViewModel getpagededitphotoviewmodel(string username, string ApprovedYes, string NotApprovedNo,
-                                                           photoapprovalstatusEnum approvalstatus, int page, int pagesize);       
+        PhotoEditModel getsingleprofilephotobyphotoid(Guid photoid);
+
+        PhotoEditViewModel getpagededitphotoviewmodelbyprofileid(int profileid, int page, int pagesize);       
        
         void deleteduserphoto(Guid photoid);       
        
@@ -37,7 +36,8 @@ namespace Shell.MVC2.Interfaces
        
         bool addsinglephoto(PhotoUploadModel newphoto, int profileid);             
        
-        List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded);       
+        //this is private
+       // List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded);       
        
         bool checkvalidjpggif(byte[] image);
 

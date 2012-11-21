@@ -23,6 +23,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public byte[] image { get; set; } 
         [DataMember]
         public int? size { get; set; }
+         [DataMember]
+        public lu_photoapprovalstatus approvalstatus { get; set; }
         
     }  
 }

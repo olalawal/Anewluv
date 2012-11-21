@@ -16,6 +16,7 @@ namespace Shell.MVC2.Web.MediaService.ServiceHostFactories
         protected override IKernel CreateContainer()
         {
             IKernel container = new StandardKernel();
+            container.Load<NinjectModules.AnewLuvContextModule>();
            // container.Load<NinjectModules.DatingContextModule>();
            // container.Load<NinjectModules.DatingServiceModule>();
            // container.Load<NinjectModules.DatingServicesModule>();

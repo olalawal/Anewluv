@@ -30,8 +30,8 @@ namespace Shell.MVC2.Services.Dating
             public GeoService(IGeoRepository georepository)
             {
                 _georepository = georepository;
-                _apikey = HttpContext.Current.Request.QueryString["apikey"];
-                throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+           //     _apikey = HttpContext.Current.Request.QueryString["apikey"];
+           //     throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
             }
 
 
