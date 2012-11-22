@@ -7,7 +7,7 @@ using System.Data;
 using Shell.MVC2.Infrastructure.Entities.ApiKeyModel ;
 using Shell.MVC2.Infrastructure.Interfaces;
 using System.Diagnostics;
-using Shell.MVC2.Infrastructure.Interfaces;
+
 using System.Web;
 using System.Runtime.Serialization;
 using System.IO;
@@ -34,10 +34,9 @@ namespace Shell.MVC2.Data
 
             Guid apiKey;
 
-
-            // Convert the string into a Guid and validate it
-            //not validating against a list anymore
-            if (Guid.TryParse(key, out apiKey) && _context.apikeys.Any(p => p.key == apiKey))     //APIKeys.Contains(apiKey))
+             //Convert the string into a Guid and validate it
+           // not validating against a list anymore
+           if (Guid.TryParse(key, out apiKey) && _context.apikeys.Any(p => p.key == apiKey))     //APIKeys.Contains(apiKey))
             {
                 return true;
             }

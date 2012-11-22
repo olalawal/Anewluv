@@ -34,6 +34,7 @@ table that is created in SQL
 
 Update-Database -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel" -verbose –force
 Update-Database -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose –force
+PM> Update-Database -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationApiKeyModel" -verbose 
 
 check the model updating model for custom database migration settings i.e schema and object relationships
  

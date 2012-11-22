@@ -41,6 +41,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.DomainServices.EntityFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.ServiceModel.DomainServices.Server, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -57,6 +58,7 @@
     <Compile Include="Modules\ContextModules\PostalDataContextModule.cs" />
     <Compile Include="Modules\ContextModules\CustomErrorLogContextModule.cs" />
     <Compile Include="Modules\ContextModules\NotificationContextModule.cs" />
+    <Compile Include="Modules\ApiKeyModule.cs" />
     <Compile Include="Modules\MailModule.cs" />
     <Compile Include="Modules\PostalDataServiceModule.cs" />
     <Compile Include="Modules\ErrroLoggingModule.cs" />

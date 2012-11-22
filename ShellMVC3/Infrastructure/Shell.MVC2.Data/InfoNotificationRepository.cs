@@ -20,17 +20,17 @@ namespace Shell.MVC2.Data
         private NotificationContext _notificationcontext;
         private IMemberRepository _membersrepository;
         private IMembersMapperRepository _membersmapperrepository;
-        private IAPIkeyRepository  _apikeyrepository;
+        private IAPIkeyRepository _apikeyrepository;
+      
 
-        public InfoNotificationRepository(NotificationContext notificationcontext,
-            AnewluvContext datingcontext, IMemberRepository membersrepository,
-            IMembersMapperRepository membersmapperrepository)
+        public InfoNotificationRepository(NotificationContext notificationcontext, AnewluvContext datingcontext, IMemberRepository membersrepository,IMembersMapperRepository membersmapperrepository, IAPIkeyRepository apikeyrepository)
             : base(datingcontext)
         {
             _notificationcontext = notificationcontext;
             _membersrepository = membersrepository;
             _membersmapperrepository = membersmapperrepository;
-           // _apikeyrepository = apikeyrepository;
+            _datingcontext = datingcontext;
+           _apikeyrepository = apikeyrepository;
 
             
         }

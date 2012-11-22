@@ -10,6 +10,7 @@ using System.IO;
 using System.Xml.Linq;
 using System.Net;
 using Shell.MVC2.Infrastructure.Interfaces;
+using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
 
 namespace Shell.MVC2.Data
 {
@@ -17,16 +18,26 @@ namespace Shell.MVC2.Data
     {
         IAPIkeyRepository _apikeyrepository;
 
-        public APIKeyAuthorization(IAPIkeyRepository apikeyrepository)
+        //public APIKeyAuthorization(IAPIkeyRepository apikeyrepository)
+        //{
+        //    _apikeyrepository = apikeyrepository;
+        //}
+        //had to set up a parameterless contrycture due to WCF restructtions 
+        //its not too bad since this only seems to be called on the first instantiaion
+        public APIKeyAuthorization()
         {
-            _apikeyrepository = apikeyrepository;
+             ApiKeyContext context = new ApiKeyContext();
+            _apikeyrepository = new APIkeyRepository(context);
+
         }
+
+
 
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
             string key = GetAPIKey(operationContext);
-
-
+         
+            // _apikeyrepository.IsValidAPIKey(key);
 
             if (_apikeyrepository.IsValidAPIKey(key))
             {
@@ -38,6 +49,8 @@ namespace Shell.MVC2.Data
                 CreateErrorReply(operationContext, key);
                 return false;
             }
+
+          
         }
 
         public string GetAPIKey(OperationContext operationContext)
