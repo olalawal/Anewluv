@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Modules\ContextModules\AnewluvContextModule.cs" />
+    <Compile Include="Modules\ContextModules\ApiKeyContextModule.cs" />
     <Compile Include="Modules\ContextModules\UserRepairLogContextModule.cs" />
     <Compile Include="Modules\ContextModules\PostalDataContextModule.cs" />
     <Compile Include="Modules\ContextModules\CustomErrorLogContextModule.cs" />

@@ -16,6 +16,7 @@ namespace Shell.MVC2.Web.UpdateService.ServiceHostFactories
         protected override IKernel CreateContainer()
         {
             IKernel container = new StandardKernel();
+            container.Load<NinjectModules.ApiKeyContextModule>();
             container.Load<NinjectModules.UserRepairLogContextModule>();
             container.Load<NinjectModules.UserRepairLogModule>();            
             return container;

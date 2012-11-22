@@ -157,6 +157,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseClasses\MemberRepositoryBase.cs" />
     <Compile Include="UserRepairRepository.cs" />
+    <Compile Include="WCFAuthorization\APIKeyAuthorization.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Components\LoggingLibrary\LoggingLibrary.csproj">
@@ -194,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Advanced.aspx" />
+    <Content Include="ApiKeys\APIKeys.xml" />
     <Content Include="ImageResizer\Basic.htm" />
     <Content Include="css\Jcrop.gif" />
     <Content Include="css\jquery.Jcrop.css" />

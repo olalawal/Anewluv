@@ -20,7 +20,8 @@ namespace Shell.MVC2.Web.NotificationService.ServiceHostFactories
         protected override IKernel CreateContainer()
         {
             IKernel container = new StandardKernel();
-
+           // container.Load<NinjectModules.ApiKeyContextModule>();
+            container.Load<NinjectModules.CustomErrorLogContextModule>();
             container.Load<NinjectModules.AnewLuvContextModule>();
             container.Load<NinjectModules.NotificationContextModule >();
             container.Load<NinjectModules.ErrorNotificationModule>();

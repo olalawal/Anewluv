@@ -1,0 +1,125 @@
+﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Shell.MVC2.Infrastructure;
+
+
+namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
+{
+    public class SeedMethodsApiKeyModel
+    {
+
+        public static void seedgenerallookups(ApiKeyContext  context)
+        {
+
+
+
+            //application lookup
+            var applicationqry = from applicationenum value in Enum.GetValues(typeof(applicationenum))
+                                 //   where value != messageapplicationenum.NotSet
+                                 orderby value // to sort by value; remove otherwise 
+                                 select value;
+            applicationqry.ToList().ForEach(kvp => context.lu_applications.AddOrUpdate(new lu_application()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+
+            }));
+       
+            //accesslevel lookup
+            var accesslevelqry = from accesslevelsenum value in Enum.GetValues(typeof(accesslevelsenum))
+                               //   where value != messageaccesslevelenum.NotSet
+                                  orderby value // to sort by value; remove otherwise 
+                                  select value;
+              accesslevelqry.ToList().ForEach(kvp => context.lu_accesslevels.AddOrUpdate(new lu_accesslevel()
+                {
+                    id = (int)kvp,
+                    description = EnumExtensionMethods.ToDescription(kvp)                 
+                    
+                }));
+
+           
+            //Add generic data I.e email system sender and a few email addresses to use to send stuff    
+             //save this since the data is needed later for the temp
+              Utils.SaveChanges(context);
+
+              //use create some users here
+              context.users.AddOrUpdate( new user()
+              {
+                  username = "mohit",
+                  email = "mkumar@yahoo.com",
+                  active = true,
+                  registeringapplication ="testing",
+                  timestamp = DateTime.Now                  
+                   
+     
+              }
+              );
+
+              context.users.AddOrUpdate(new user()
+              {
+                   username = "olawal",
+                  email = "ola_lawal@yahoo.com",
+                  active = true,
+                  registeringapplication = "anewluvcore",
+                  timestamp = DateTime.Now
+              }
+              );
+            
+              //add a few keys here     
+              context.apikeys.AddOrUpdate(new apikey()              
+              {
+                  externalapplicationname = "Anewluvwebsite",
+                   active = true ,
+                key = Guid.Parse("bda11d91-7ade-4da1-855d-24adfe39d174") ,
+                timestamp = DateTime.Now , 
+                application  = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
+                accesslevel  = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.superadmin  ).First()
+
+                 
+              }
+              );
+
+
+              context.apikeys.AddOrUpdate(new apikey()              
+              {
+                  active =true ,
+                externalapplicationname = "Anewluvwebsite",
+                  key = Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
+                  timestamp = DateTime.Now,                 
+                  application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
+                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.readwriteuser).First()
+                    
+              }
+              );
+
+              Utils.SaveChanges(context);
+
+
+             //link the user to the correct api key 
+              user user = context.users.Where(p => p.username == "mohit").FirstOrDefault();
+              apikey apikey =   context.apikeys.Where(p => p.accesslevel_id  == (int)accesslevelsenum.readwriteuser).FirstOrDefault();
+              user.apikeys.Add(apikey);
+              Utils.SaveChanges(context);
+
+               user = context.users.Where(p => p.username == "olawal").FirstOrDefault();
+               apikey = context.apikeys.Where(p => p.accesslevel_id == (int)accesslevelsenum.readwriteuser).FirstOrDefault();
+              user.apikeys.Add(apikey);
+              Utils.SaveChanges(context);
+
+
+
+            //context.SaveChanges();
+            Utils.SaveChanges(context);
+
+
+
+          
+        }
+
+
+    }
+}

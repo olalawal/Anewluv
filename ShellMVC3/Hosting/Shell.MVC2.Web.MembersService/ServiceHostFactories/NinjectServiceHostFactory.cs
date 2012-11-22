@@ -16,7 +16,8 @@ namespace Shell.MVC2.Web.MembersService.ServiceHostFactories
         protected override IKernel CreateContainer()
         {
             IKernel container = new StandardKernel();
-            //TO do create one module combinding all these       
+            //TO do create one module combinding all these
+            container.Load<NinjectModules.ApiKeyContextModule>();
             container.Load<NinjectModules.MembersModule>();
             container.Load<NinjectModules.GeoModule>();
             container.Load<NinjectModules.MembersMapperModule>();

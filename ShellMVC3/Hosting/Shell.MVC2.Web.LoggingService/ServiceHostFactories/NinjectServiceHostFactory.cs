@@ -17,6 +17,7 @@ namespace Shell.MVC2.Web.LoggingService.ServiceHostFactories
         protected override IKernel CreateContainer()
         {
             IKernel container = new StandardKernel();
+            container.Load<NinjectModules.ApiKeyContextModule>();
             container.Load<NinjectModules.CustomErrorLogContextModule>();
             container.Load<NinjectModules.ErrorLoggingModule>();         
             return container;

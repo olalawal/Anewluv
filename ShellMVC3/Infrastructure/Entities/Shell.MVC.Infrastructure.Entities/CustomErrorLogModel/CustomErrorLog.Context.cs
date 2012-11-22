@@ -10,7 +10,7 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     {
        
         public DbSet<CustomErrorLog> CustomErrorLogs { get; set; }
-        public DbSet<lu_application> lu_application { get; set; }
+        public DbSet<lu_Application> lu_Application { get; set; }
         public DbSet<lu_logSeverity> lu_logSeverity{ get; set; }
 
        public CustomErrorLogContext()
@@ -28,7 +28,7 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
        protected override void OnModelCreating(DbModelBuilder modelBuilder)
        {
            modelBuilder.Entity<CustomErrorLog>().ToTable("CustomErrorLogs", schemaName: "Logging");
-           modelBuilder.Entity<lu_application>().ToTable("lu_application", schemaName: "Logging");
+           modelBuilder.Entity<lu_Application>().ToTable("lu_Application", schemaName: "Logging");
            modelBuilder.Entity<lu_logSeverity>().ToTable("lu_logSeverity", schemaName: "Logging");
 
            //setup FK relationsships 

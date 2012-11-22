@@ -12,15 +12,14 @@ namespace Shell.MVC2.Infrastructure.Interfaces
     public interface IAPIkeyRepository
     {
 
-      
-           bool validateAPIkey(string key);
-        
-         List<Guid> getAPIkeys  ();
+         bool IsValidAPIKey(string key);       
+
+         List<Guid> APIKeys();
 
          //List<Guid> PopulateAPIKeys();
 
-        //TO DO use enum maybe
-       Guid generateAPIkey(string service);
+         Guid generateAPIkey(string service);
+        // string APIKEYLIST();
 
       
     }

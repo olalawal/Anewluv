@@ -14,11 +14,15 @@ using System.Net;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv;
+using System.ServiceModel.Activation;
+using System.ServiceModel;
 
 
 
 namespace Shell.MVC2.Services.Notification
 {
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
    public  class InfoNotificationService  : IInfoNotificationService 
     {
        private IInfoNotificationRepository _InfoNotificationRepository ;

@@ -39,7 +39,7 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
             public object LoggedObject { get; set; }
 
             public int application_id { get; set; }
-            public virtual lu_application   Application { get; set; }
+            public virtual lu_Application   Application { get; set; }
             
             public string IPAddress { get; set; }
             [DataMember]

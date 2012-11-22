@@ -2,31 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using System.Data;
-using Shell.MVC2.Infrastructure.Entities.ApiKeyModel ;
-using Shell.MVC2.Infrastructure.Interfaces;
-using System.Diagnostics;
-using Shell.MVC2.Infrastructure.Interfaces;
 using System.Web;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Xml;
+using Shell.MVC2.Infrastructure.Entities.ApiKeyModel ;
+using Shell.MVC2.Infrastructure.Interfaces;
 
 namespace Shell.MVC2.Data
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
-    public class APIkeyRepository : IAPIkeyRepository  
+    public class APIKeyRepository : IAPIkeyRepository
     {
-        //TO DO use the database context wehre API key is stored 
-      
         private ApiKeyContext _context;
-        const string APIKEYLIST = "APIKeyList";
 
-        public APIkeyRepository(ApiKeyContext context)
+        public APIKeyRepository(ApiKeyContext context)
         {
             _context = context;
         }
+
+
+
 
         public bool IsValidAPIKey(string key)
         {
@@ -47,9 +42,10 @@ namespace Shell.MVC2.Data
             }
         }
 
-        public List<Guid> APIKeys()
+        public List<Guid> APIKeys
         {
-          
+            get
+            {
                 // Get from the cache
                 // Could also use AppFabric cache for scalability
                 var keys = HttpContext.Current.Cache[APIKEYLIST] as List<Guid>;
@@ -58,9 +54,10 @@ namespace Shell.MVC2.Data
                     keys = PopulateAPIKeys();
 
                 return keys;
-            
+            }
         }
 
+        //old way that use's XML file
         private List<Guid> PopulateAPIKeys()
         {
             List<Guid> keyList;
@@ -80,17 +77,8 @@ namespace Shell.MVC2.Data
             return keyList;
         }
 
-        //TO DO use enum maybe
-        public Guid generateAPIkey(string service)
-        {
-            Guid key = new Guid();
-            //store to DB
-            return key;
-
-        }
-
-      
-
+        const string APIKEYLIST = "APIKeyList";
 
     }
 }
+

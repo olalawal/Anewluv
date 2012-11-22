@@ -48,7 +48,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ErrorHandling\ServiceFualt.cs" />
+    <Compile Include="ErrorHandling\ServiceFualt.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ILookupService.cs" />
     <Compile Include="IErrorLoggingService.cs" />
     <Compile Include="IErrorNotificationService.cs" />

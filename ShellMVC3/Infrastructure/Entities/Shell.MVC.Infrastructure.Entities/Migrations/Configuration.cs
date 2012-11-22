@@ -6,11 +6,29 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
     using System.Linq;
     using System.Data.Entity.Validation;
     using System.Text;
+     using Shell.MVC2.Infrastructure.Entities.ApiKeyModel ;
     using Shell.MVC2.Infrastructure.Entities.NotificationModel;
     using Shell.MVC2.Infrastructure.Entities.UserRepairModel;
     using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
     using Shell.MVC2.Infrastructure.Entities;
 
+
+    internal sealed class ConfigurationApiKeyModel : DbMigrationsConfiguration<ApiKeyModel.ApiKeyContext>
+    {
+        public ConfigurationApiKeyModel()
+        {
+            AutomaticMigrationsEnabled = true;
+            MigrationsNamespace = "Shell.MVC2.Infrastructure.Entities.ApiKeyModel";
+        }
+
+        protected override void Seed(ApiKeyModel.ApiKeyContext context)
+        {
+            SeedMethodsApiKeyModel.seedgenerallookups(context);
+
+        }
+
+
+    }
 
     internal sealed class ConfigurationNotificationModel : DbMigrationsConfiguration<NotificationModel.NotificationContext>
     {
@@ -73,7 +91,7 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
             .ToDictionary(t => (int)t, t => t.ToString()).ToList();
 
             // var jobInstanceStateList = EnumExtensions.ConvertEnumToDictionary<ApplicationEnum >().ToList(); 
-            ApplicationList.ForEach(kvp => context.lu_application.Add(new lu_application()
+            ApplicationList.ForEach(kvp => context.lu_Application.Add(new lu_Application()
             {
                 id = kvp.Key,
                 ApplicationName = kvp.Value

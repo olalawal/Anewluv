@@ -10,10 +10,12 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email;
 using System.ServiceModel.Web;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using System.ServiceModel.Activation;
 
 namespace Shell.MVC2.Services.Contracts
 {
     [ServiceContract]
+    
     public interface IInfoNotificationService 
     {
 

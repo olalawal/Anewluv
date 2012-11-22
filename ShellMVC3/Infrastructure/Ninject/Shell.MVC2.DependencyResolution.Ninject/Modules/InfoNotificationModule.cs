@@ -13,6 +13,8 @@ using Shell.MVC2.Services.Contracts;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Interfaces;
 using Dating.Server.Data.Models;
+using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Shell.MVC2.Infrastructure.Entities.ApiKeyModel ;
 
 
 
@@ -28,9 +30,9 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
         public override void Load()
         {
 
-
-
-          //this.Bind<CustomErrorLogContext>().ToConstructor(x => new CustomErrorLogContext());
+            
+           // Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));
+            //this.Bind<CustomErrorLogContext>().ToConstructor(x => new CustomErrorLogContext());
             Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>()));
             Kernel.Bind<IGeoRepository>().ToConstructor(ctorArg => new GeoRepository(ctorArg.Inject<PostalData2Entities>()));
             Kernel.Bind<IPhotoRepository>().ToConstructor(
@@ -48,9 +50,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
                  ctorArg.Inject<IMemberActionsRepository>(),
                   ctorArg.Inject<IMailRepository>(),
                  ctorArg.Inject<AnewluvContext>()));
-
-
-
+            
 
             Kernel.Bind<IInfoNotificationRepository>().ToConstructor(
              ctorArg => new InfoNotificationRepository(ctorArg.Inject<NotificationContext>(),

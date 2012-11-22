@@ -16,7 +16,7 @@ namespace Shell.MVC2.Web.GeoService.ServiceHostFactories
         protected override IKernel CreateContainer()
         {
             IKernel container = new StandardKernel();
-
+            container.Load<NinjectModules.ApiKeyContextModule>();
             container.Load<NinjectModules.PostalDataContextModule>();
             container.Load<NinjectModules.GeoModule>();
             return container;
