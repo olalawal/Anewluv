@@ -36,7 +36,7 @@ namespace Shell.MVC2.Data
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
             //allow access to help page, even if they added help to a wrong URL they could not get in
-            if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Contains("help")) return true;
+            if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Contains("help/")) return true;
          
               //allows service to be discovereable with no api key
               if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/","") != "$metadata") 
