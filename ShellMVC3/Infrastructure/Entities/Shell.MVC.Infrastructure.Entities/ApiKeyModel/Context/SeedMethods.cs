@@ -47,7 +47,7 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
               Utils.SaveChanges(context);
 
               //use create some users here
-              context.users.AddOrUpdate( new user()
+              context.users.AddOrUpdate(h => h.username, new user()
               {
                   username = "mohit",
                   email = "mkumar@yahoo.com",
@@ -59,7 +59,7 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
               }
               );
 
-              context.users.AddOrUpdate(new user()
+              context.users.AddOrUpdate(h => h.username , new user()
               {
                    username = "olawal",
                   email = "ola_lawal@yahoo.com",
@@ -70,7 +70,7 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
               );
             
               //add a few keys here     
-              context.apikeys.AddOrUpdate(new apikey()              
+              context.apikeys.AddOrUpdate(h => h.key, new apikey()              
               {
                   externalapplicationname = "Anewluvwebsite",
                    active = true ,
@@ -84,7 +84,7 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
               );
 
 
-              context.apikeys.AddOrUpdate(new apikey()              
+              context.apikeys.AddOrUpdate(h=>h.key, new apikey()              
               {
                   active =true ,
                 externalapplicationname = "Anewluvwebsite",
@@ -98,17 +98,22 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
 
               Utils.SaveChanges(context);
 
+             
+              
+           
 
+            
              //link the user to the correct api key 
+          
               user user = context.users.Where(p => p.username == "mohit").FirstOrDefault();
-              apikey apikey =   context.apikeys.Where(p => p.accesslevel_id  == (int)accesslevelsenum.readwriteuser).FirstOrDefault();
+              apikey apikey = context.apikeys.Where(p => p.accesslevel.id     == (int)accesslevelsenum.readwriteuser).FirstOrDefault();
               user.apikeys.Add(apikey);
-              Utils.SaveChanges(context);
+            
 
                user = context.users.Where(p => p.username == "olawal").FirstOrDefault();
-               apikey = context.apikeys.Where(p => p.accesslevel_id == (int)accesslevelsenum.readwriteuser).FirstOrDefault();
+               apikey = context.apikeys.Where(p => p.accesslevel.id == (int)accesslevelsenum.superadmin).FirstOrDefault();
               user.apikeys.Add(apikey);
-              Utils.SaveChanges(context);
+             
 
 
 

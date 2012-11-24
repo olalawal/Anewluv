@@ -110,7 +110,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
               Utils.SaveChanges(context);
 
               //use create the System email addresses here 
-              context.systemaddress.AddOrUpdate( new systemaddress()
+              context.systemaddress.AddOrUpdate(h => h.emailaddress , new systemaddress()
               {
 
                   emailaddress = "AnewLuvDoNotReply@nmedia.com",
@@ -134,7 +134,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
                                 //   where value != messagetemplateenum.NotSet
                                 orderby value // to sort by value; remove otherwise 
                                 select value;
-              templateqry.ToList().ForEach(kvp => context.lu_template.AddOrUpdate(new lu_template()
+              templateqry.ToList().ForEach(kvp => context.lu_template.AddOrUpdate(h => h.id, new lu_template()
               {
                   id = (int)kvp,
                   description = EnumExtensionMethods.ToDescription(kvp),

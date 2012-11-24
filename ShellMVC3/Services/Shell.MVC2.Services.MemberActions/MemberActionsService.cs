@@ -23,7 +23,7 @@ namespace Shell.MVC2.Services.Dating
 
 
         private IMemberActionsRepository  _memberactionsrepository;
-        private string _apikey;
+       // private string _apikey;
 
         public MemberActionsService(IMemberActionsRepository memberactionsrepository)
             {

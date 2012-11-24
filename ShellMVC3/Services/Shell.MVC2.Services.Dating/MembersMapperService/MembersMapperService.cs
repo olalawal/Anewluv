@@ -19,16 +19,12 @@ namespace Shell.MVC2.Services.Dating
     public class MembersMapperService : IMembersMapperService
     {
         private IMembersMapperRepository _mapmembermapperrepo;
-        private string _apikey;
-
+       
 
         public MembersMapperService(IMembersMapperRepository mapmembermapperrepo)
             {
                 _mapmembermapperrepo = mapmembermapperrepo;
-               // _apikey = HttpContext.Current.Request.QueryString["apikey"];
-
-                //TO implement API KEY validation
-                //  throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+    
                
             }
 

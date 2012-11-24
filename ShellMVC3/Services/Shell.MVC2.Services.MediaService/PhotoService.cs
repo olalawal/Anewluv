@@ -21,7 +21,7 @@ namespace Shell.MVC2.Services.Media
 
 
         private IPhotoRepository  _photorepo;
-        private string _apikey;
+        //private string _apikey;
 
         public PhotoService(IPhotoRepository photorepo)
             {

@@ -25,13 +25,12 @@ namespace Shell.MVC2.Services.Dating
         public class GeoService :  IGeoService
         {
             private IGeoRepository _georepository;
-            private string _apikey;
+           
 
             public GeoService(IGeoRepository georepository)
             {
                 _georepository = georepository;
-           //     _apikey = HttpContext.Current.Request.QueryString["apikey"];
-           //     throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+     
             }
 
 

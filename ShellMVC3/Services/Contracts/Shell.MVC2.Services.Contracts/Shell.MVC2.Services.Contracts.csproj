@@ -78,6 +78,9 @@
       <Name>Shell.MVC2.Infrastructure.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ApiDocumentation\ApikeyDocumentation.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

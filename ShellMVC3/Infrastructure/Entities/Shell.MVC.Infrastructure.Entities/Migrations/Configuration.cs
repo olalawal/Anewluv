@@ -24,6 +24,7 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
         protected override void Seed(ApiKeyModel.ApiKeyContext context)
         {
             SeedMethodsApiKeyModel.seedgenerallookups(context);
+           // SeedMethodsApiKeyModel.seedcascadeddata(context);
 
         }
 

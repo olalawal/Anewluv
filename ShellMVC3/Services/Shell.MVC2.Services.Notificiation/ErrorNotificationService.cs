@@ -14,7 +14,7 @@ namespace Shell.MVC2.Services.Notification
     public class ErrorNotificationService : IErrorNotificationService
     {
        private IErrorNotificationRepository _errornotificationrepository ;
-       private string _apikey;
+       //private string _apikey;
 
        public ErrorNotificationService(IErrorNotificationRepository errornotificationrepository)
        {

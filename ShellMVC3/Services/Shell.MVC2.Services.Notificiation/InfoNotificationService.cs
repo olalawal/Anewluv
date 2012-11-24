@@ -26,7 +26,7 @@ namespace Shell.MVC2.Services.Notification
    public  class InfoNotificationService  : IInfoNotificationService 
     {
        private IInfoNotificationRepository _InfoNotificationRepository ;
-       private string _apikey;
+       //private string _apikey;
 
 
        public InfoNotificationService(IInfoNotificationRepository InfoNotificationRepository)

@@ -35,20 +35,32 @@ namespace Shell.MVC2.Data
 
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
-            string key = GetAPIKey(operationContext);
+            //allow access to help page, even if they added help to a wrong URL they could not get in
+            if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Contains("help")) return true;
          
-            // _apikeyrepository.IsValidAPIKey(key);
+              //allows service to be discovereable with no api key
+              if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/","") != "$metadata") 
+              {
+                  string key = GetAPIKey(operationContext);
 
-            if (_apikeyrepository.IsValidAPIKey(key))
-            {
-                return true;
-            }
-            else
-            {
-                // Send back an HTML reply
-                CreateErrorReply(operationContext, key);
-                return false;
-            }
+                  // _apikeyrepository.IsValidAPIKey(key);
+
+                  if (_apikeyrepository.IsValidAPIKey(key))
+                  {
+                      return true;
+                  }
+                  else
+                  {
+                      // Send back an HTML reply
+                      CreateErrorReply(operationContext, key);
+                      return false;
+                  }
+              }
+              else
+              {
+                  return true;
+              }
+           
 
           
         }
