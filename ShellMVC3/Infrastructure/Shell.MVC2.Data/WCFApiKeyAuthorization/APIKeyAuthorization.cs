@@ -35,8 +35,17 @@ namespace Shell.MVC2.Data
 
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
+            string[] urisegments = OperationContext.Current.IncomingMessageHeaders.To.Segments;
+            string helpsegment = "help"; //this is the thing we are checking   
+            string restsegment = "rest"; //this is the thing we are checking 
+           
             //allow access to help page, even if they added help to a wrong URL they could not get in
-            if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Contains("help/")) return true;
+            //if last segment is rest no operation is getting activated so ok to display help service page
+            //if we have help in the url dont do api key verifcation
+            if (urisegments.Last().Replace("/", ""  ).ToLower() == restsegment ||
+                urisegments[4].Replace("/", ""  ) == helpsegment 
+                )
+            return true;
          
               //allows service to be discovereable with no api key
               if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/","") != "$metadata") 

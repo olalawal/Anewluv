@@ -13,7 +13,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             // Metadata classes are not meant to be instantiated.
 
              [DataMember]
-            public int id { get; set; }      
+            public int profile_id { get; set; }      
             [DataMember]
             public int? age { get; set; }
             [DataMember] 

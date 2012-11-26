@@ -14,7 +14,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [DataMember]
         public int profile_id { get; set; }
        public virtual profilemetadata profilemetadata { get; set; }
-         [DataMember]
+      
+
+       [DataMember]
         public int? agemax { get; set; }
          [DataMember]
         public int? agemin { get; set; }

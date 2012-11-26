@@ -435,7 +435,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
                     //get profile and profile datas
                     Shell.MVC2.Domain.Entities.Anewluv.profile ObjProfileEntity = dbContext.profiles.Where(p => p.id == Convert.ToInt16(u.profileid)).FirstOrDefault();
-                    profiledata objprofileDateEntity = dbContext.profiledata.Where(p => p.id  == Convert.ToInt16( u.profileid)).FirstOrDefault();
+                    profiledata objprofileDateEntity = dbContext.profiledata.Where(p => p.profile_id  == Convert.ToInt16( u.profileid)).FirstOrDefault();
                     
                      new GpsData();
 

@@ -121,7 +121,7 @@ namespace Shell.MVC2.Data
                     // logic is if its a female then show them the male checked and vice versa
                     if (gendervalues.Count == 0)
                     {
-                        if (p.profilemetadata.profiledata.gender.id == 1)
+                        if (p.profilemetadata.profile.profiledata.gender.id == 1)
                         {
                             gendervalues.Add(2);
                         }
@@ -3258,7 +3258,7 @@ namespace Shell.MVC2.Data
                        //SearchSettings_showme.showmeID = showme.showmeID;
                        var temp = new profiledata_ethnicity();
                        temp.id = ethnicity.id;
-                       temp.profile_id = currentprofilemetadata.id;
+                       temp.profile_id = currentprofilemetadata.profile_id ;
                        db.ethnicities.Add(temp);
 
                    }
@@ -3267,7 +3267,7 @@ namespace Shell.MVC2.Data
                { //exists means we want to remove it
                    if (currentprofilemetadata.ethnicities.Any(p => p.id == ethnicity.id))
                    {
-                       var temp = db.ethnicities.Where(p => p.profile_id == currentprofilemetadata.id && p.ethnicty.id == ethnicity.id).First();
+                       var temp = db.ethnicities.Where(p => p.profile_id == currentprofilemetadata.profile_id  && p.ethnicty.id == ethnicity.id).First();
                        db.ethnicities.Remove(temp);
 
                    }
@@ -3301,7 +3301,7 @@ namespace Shell.MVC2.Data
                        //SearchSettings_showme.showmeID = showme.showmeID;
                        var temp = new profiledata_hotfeature();
                        temp.id = hotfeature.id;
-                       temp.profile_id = currentprofilemetadata.id;
+                       temp.profile_id =currentprofilemetadata.profile_id;
                        db.hotfeatures.Add(temp);
 
                    }
@@ -3310,7 +3310,7 @@ namespace Shell.MVC2.Data
                { //exists means we want to remove it
                    if (currentprofilemetadata.hotfeatures.Any(p => p.id == hotfeature.id))
                    {
-                       var temp = db.hotfeatures.Where(p => p.profile_id == currentprofilemetadata.id && p.hotfeature.id == hotfeature.id).First();
+                       var temp = db.hotfeatures.Where(p => p.profile_id == currentprofilemetadata.profile_id  && p.hotfeature.id == hotfeature.id).First();
                        db.hotfeatures.Remove(temp);
 
                    }
@@ -3344,7 +3344,7 @@ namespace Shell.MVC2.Data
                        //SearchSettings_showme.showmeID = showme.showmeID;
                        var temp = new profiledata_hobby();
                        temp.id = hobby.id;
-                       temp.profile_id = currentprofilemetadata.id;
+                       temp.profile_id =currentprofilemetadata.profile_id;
                        db.hobbies .Add(temp);
 
                    }
@@ -3353,7 +3353,7 @@ namespace Shell.MVC2.Data
                { //exists means we want to remove it
                    if (currentprofilemetadata.hobbies.Any(p => p.id == hobby.id))
                    {
-                       var temp = db.hobbies.Where(p => p.profile_id == currentprofilemetadata.id && p.hobby.id == hobby.id).First();
+                       var temp = db.hobbies.Where(p => p.profile_id ==currentprofilemetadata.profile_id && p.hobby.id == hobby.id).First();
                        db.hobbies.Remove(temp);
 
                    }
@@ -3387,7 +3387,7 @@ namespace Shell.MVC2.Data
                        //SearchSettings_showme.showmeID = showme.showmeID;
                        var temp = new profiledata_lookingfor();
                        temp.id = lookingfor.id;
-                       temp.profile_id = currentprofilemetadata.id;
+                       temp.profile_id =currentprofilemetadata.profile_id;
                        db.lookingfor.Add(temp);
 
                    }
@@ -3396,7 +3396,7 @@ namespace Shell.MVC2.Data
                { //exists means we want to remove it
                    if (currentprofilemetadata.lookingfor.Any(p => p.id == lookingfor.id))
                    {
-                       var temp = db.lookingfor.Where(p => p.profile_id == currentprofilemetadata.id && p.lookingfor.id == lookingfor.id).First();
+                       var temp = db.lookingfor.Where(p => p.profile_id ==currentprofilemetadata.profile_id && p.lookingfor.id == lookingfor.id).First();
                        db.lookingfor.Remove(temp);
 
                    }

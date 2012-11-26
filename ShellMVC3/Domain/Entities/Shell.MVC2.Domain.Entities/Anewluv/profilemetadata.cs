@@ -11,10 +11,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
             // Metadata classes are not meant to be instantiated.
             [DataMember]
-            public int id { get; set; }            
+            public int profile_id { get; set; }            
                   
             public virtual profile profile { get; set; }
-            public virtual profiledata profiledata { get; set; }
+           // public virtual profiledata profiledata { get; set; }
                                 
                  
             //member actions
@@ -59,7 +59,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             public virtual ICollection<photoalbum> photoalbums { get; set; }
             [DataMember]
             public virtual ICollection<photo> photos { get; set; }
-
 
             [DataMember]
             public virtual ICollection<mailboxfolder> mailboxfolders { get; set; }

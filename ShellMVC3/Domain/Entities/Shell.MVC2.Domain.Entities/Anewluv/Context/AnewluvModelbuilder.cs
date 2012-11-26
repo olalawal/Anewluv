@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
@@ -25,6 +26,43 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             // map one to many relation shipds for metadatata table from its side 
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+          //  modelBuilder.Entity<profile>().HasOptional(zm => zm.profilemetadata).WithRequired(r => r.profile );
+           // modelBuilder.Entity<profile>().HasOptional(zm => zm.profiledata).WithRequired(r => r.profile );
+
+
+
+            //11-23-2012 olawal added code to map profile_id's to profiledata  and profilemetadata
+            //11-23-2012 olawal added code to map profile_id's to and profilemetadata
+            modelBuilder.Entity<profiledata>()
+            .HasKey(e => e.profile_id);
+            modelBuilder.Entity<profiledata>()
+                        .Property(e => e.profile_id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            modelBuilder.Entity<profiledata>()
+                        .HasRequired(e => e.profile)
+                        .WithRequiredDependent(r => r.profiledata);
+
+           // modelBuilder.Entity<profiledata>().HasOptional(zm => zm.profilemetadata).WithRequired(r => r.profiledata);
+
+
+
+            //11-23-2012 olawal added code to map profile_id's to profiledata  an
+            modelBuilder.Entity<profilemetadata>()
+            .HasKey(e => e.profile_id );
+            modelBuilder.Entity<profilemetadata>()
+                        .Property(e => e.profile_id )
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            modelBuilder.Entity<profilemetadata>()
+                        .HasRequired(e => e.profile )
+                        .WithRequiredDependent(r => r.profilemetadata );
+
+           // modelBuilder.Entity<profilemetadata>()
+             //         .HasRequired(e => e.profiledata )
+              //       .WithRequiredDependent(r => r.profilemetadata);
+
+
+           
 
             //activitylog and geo data
             modelBuilder.Entity<profileactivity>().HasRequired(a => a.profileactivitygeodata )
@@ -274,21 +312,21 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //*****************************************************************
 
             //sets up a one to one relation ship with same primary key
-            modelBuilder.Entity<profile>().HasOptional(zm => zm.profiledata);
-            modelBuilder.Entity<profile >().HasKey(zmt => zmt.id);
-            modelBuilder.Entity<profile>().HasRequired(zmt => zmt.profiledata).WithRequiredDependent(zm => zm.profile );
+           // modelBuilder.Entity<profile>().HasOptional(zm => zm.profiledata);
+          //  modelBuilder.Entity<profile >().HasKey(zmt => zmt.id);
+         //   modelBuilder.Entity<profile>().HasRequired(zmt => zmt.profiledata).WithRequiredDependent(zm => zm.profile );
 
             //same thing for profilemetadata
-            modelBuilder.Entity<profile>().HasOptional(zm => zm.profilemetadata );
-            modelBuilder.Entity<profile>().HasKey(zmt => zmt.id);
-            modelBuilder.Entity<profile>().HasRequired(zmt => zmt.profilemetadata).WithRequiredDependent(zm => zm.profile);
+           // modelBuilder.Entity<profile>().HasOptional(zm => zm.profilemetadata );
+           // modelBuilder.Entity<profile>().HasKey(zmt => zmt.id);
+           // modelBuilder.Entity<profile>().HasRequired(zmt => zmt.profilemetadata).WithRequiredDependent(zm => zm.profile);
 
             //TO DO this might go away since we kind of want profile to be the base 
             //this allows loading of profiledata withoute profile info ?
             //now link profile metatadata and profiledata
-            modelBuilder.Entity<profiledata>().HasOptional(zm => zm.profilemetadata);
-            modelBuilder.Entity<profiledata>().HasKey(zmt => zmt.id);
-            modelBuilder.Entity<profiledata>().HasRequired(zmt => zmt.profilemetadata ).WithRequiredDependent(zm => zm.profiledata);
+           // modelBuilder.Entity<profiledata>().HasOptional(zm => zm.profilemetadata);
+           // modelBuilder.Entity<profiledata>().HasKey(zmt => zmt.profile_id );
+          //  modelBuilder.Entity<profiledata>().HasRequired(zmt => zmt.profilemetadata ).WithRequiredDependent(zm => zm.profiledata);
         //http://stackoverflow.com/questions/9434245/how-do-i-code-an-optional-one-to-one-relationship-in-ef-4-1-code-first-with-lazy
 
 
@@ -372,6 +410,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             //userlogtime
             modelBuilder.Entity<profile>().HasMany(p => p.logontimes )
            .WithRequired(z => z.profile).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+
+
+
 
             //prfoile part is optional for profile activity since non registered  can log information as well
             modelBuilder.Entity<profile>().HasMany(p => p.profileactivity )

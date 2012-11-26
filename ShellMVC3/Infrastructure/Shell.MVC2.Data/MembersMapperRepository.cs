@@ -58,7 +58,7 @@ namespace Shell.MVC2.Data
 
 
 
-                model.id = Currentprofiledata.id ;
+                model.id = Currentprofiledata.profile_id  ;
                 model.profiledata = Currentprofiledata;
                 model.profile = Currentprofiledata.profile;
                 model.stateprovince  = Currentprofiledata.stateprovince;
@@ -74,7 +74,7 @@ namespace Shell.MVC2.Data
                 model.city = Extensions.ReduceStringLength(Currentprofiledata.city, 11);
                 model.lastlogindate =  Currentprofiledata.profile.logindate ;
                 model.lastloggedonstring = membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
-                model.online  = membersrepository.getuseronlinestatus(Currentprofiledata.id);
+                model.online  = membersrepository.getuseronlinestatus(Currentprofiledata.profile_id );
                 // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
                 //DistanceFromMe = 0  get distance from somwhere else
                 //to do do something with the unaproved photos so it is a nullable value , private photos are linked too here
@@ -108,7 +108,7 @@ namespace Shell.MVC2.Data
 
 
 
-                model.id = Currentprofiledata.id;
+                model.id = Currentprofiledata.profile_id ;
                 model.profiledata = Currentprofiledata;
                 model.profile = Currentprofiledata.profile;
                 model.stateprovince = Currentprofiledata.stateprovince;
@@ -124,7 +124,7 @@ namespace Shell.MVC2.Data
                 model.city = Extensions.ReduceStringLength(Currentprofiledata.city, 11);
                 model.lastlogindate = Currentprofiledata.profile.logindate;
                 model.lastloggedonstring = membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
-                model.online = membersrepository.getuseronlinestatus(Currentprofiledata.id);
+                model.online = membersrepository.getuseronlinestatus(Currentprofiledata.profile_id );
                 // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
                 //DistanceFromMe = 0  get distance from somwhere else
                 //to do do something with the unaproved photos so it is a nullable value , private photos are linked too here
@@ -227,43 +227,43 @@ namespace Shell.MVC2.Data
 
                 //TO DO populate these values corrrectly
                 //run a query h ere to populate these values 
-                //Ethnicity =      metadata.profiledata_Ethnicity.Where(
+                //Ethnicity =      metadata.profile.profiledata_Ethnicity.Where(
                 //find a way to populate hoby, looking for and ethnicuty from the profiledata_Ethncity and etc
 
                 CriteriaModel.ScreenName = (metadata.profile.screenname == null) ? Extensions.ReduceStringLength(metadata.profile.screenname, 10) : Extensions.ReduceStringLength(metadata.profile.screenname, 10);
-                CriteriaModel.AboutMe  = (metadata.profiledata.aboutme  == null || metadata.profiledata.aboutme == "Hello") ? "This is the description of the type of person I am looking for.. comming soon. For Now Email Me to find out more about me" : metadata.profiledata.aboutme;
+                CriteriaModel.AboutMe  = (metadata.profile.profiledata.aboutme  == null || metadata.profile.profiledata.aboutme == "Hello") ? "This is the description of the type of person I am looking for.. comming soon. For Now Email Me to find out more about me" : metadata.profile.profiledata.aboutme;
                 //  MyCatchyIntroLine = metadata.prMyCatchyIntroLine == null ? "Hi There!" : metadata.MyCatchyIntroLine;
-                CriteriaModel.BodyType = (metadata.profiledata.bodytype == null | metadata.profiledata.bodytype.id   == null) ? "Ask Me" : metadata.profiledata.bodytype.description;
-                CriteriaModel.EyeColor = (metadata.profiledata.eyecolor  == null | metadata.profiledata.eyecolor.id == null) ? "Ask Me" : metadata.profiledata.eyecolor.description ;
+                CriteriaModel.BodyType = (metadata.profile.profiledata.bodytype == null | metadata.profile.profiledata.bodytype.id   == null) ? "Ask Me" : metadata.profile.profiledata.bodytype.description;
+                CriteriaModel.EyeColor = (metadata.profile.profiledata.eyecolor  == null | metadata.profile.profiledata.eyecolor.id == null) ? "Ask Me" : metadata.profile.profiledata.eyecolor.description ;
                 // Ethnicity = metadata.CriteriaAppearance_Ethnicity == null ? "Ask Me" : metadata.CriteriaAppearance_Ethnicity.EthnicityName;
-                CriteriaModel.HairColor = (metadata.profiledata.haircolor  == null | metadata.profiledata.haircolor.id  == null) ? "Ask Me" : metadata.profiledata.haircolor.description ;
+                CriteriaModel.HairColor = (metadata.profile.profiledata.haircolor  == null | metadata.profile.profiledata.haircolor.id  == null) ? "Ask Me" : metadata.profile.profiledata.haircolor.description ;
                 //TO DO determine weather metic or us sustem user //added 11-17-2011
-                CriteriaModel.HeightByCulture = (metadata.profiledata.height  == null | metadata.profiledata.height  == 0) ? "Ask Me" : Extensions.ToFeetInches((double)metadata.profiledata.height );
+                CriteriaModel.HeightByCulture = (metadata.profile.profiledata.height  == null | metadata.profile.profiledata.height  == 0) ? "Ask Me" : Extensions.ToFeetInches((double)metadata.profile.profiledata.height );
 
-                CriteriaModel.Exercise = (metadata.profiledata.exercise == null | metadata.profiledata.exercise.id == null) ? "Ask Me" : metadata.profiledata.exercise.description;
-                CriteriaModel.Religion = (metadata.profiledata.religion  == null | metadata.profiledata.religion.id  == null) ? "Ask Me" : metadata.profiledata.religion.description;
-                CriteriaModel.ReligiousAttendance = (metadata.profiledata.religiousattendance == null | metadata.profiledata.religiousattendance.id == null) ? "Ask Me" : metadata.profiledata.religiousattendance.description;
-                CriteriaModel.Drinks = (metadata.profiledata.drinking == null | metadata.profiledata.drinking.id  == null) ? "Ask Me" : metadata.profiledata.drinking.description;
-                CriteriaModel.Smokes = (metadata.profiledata.smoking  == null | metadata.profiledata.smoking.id  == null) ? "Ask Me" : metadata.profiledata.smoking.description  ;
-                CriteriaModel.Humor = (metadata.profiledata.humor == null | metadata.profiledata.humor.id  == null) ? "Ask Me" : metadata.profiledata.humor.description ;
-                // HotFeature = metadata.profiledata.CriteriaCharacter_HotFeature == null ? "Ask Me" : metadata.profiledata.CriteriaCharacter_HotFeature.HotFeatureName; 
-                //   Hobby =  metadata.profiledata.CriteriaCharacter_Hobby == null ? "Ask Me" : metadata.profiledata.CriteriaCharacter_Hobby.HobbyName;
-                CriteriaModel.PoliticalView =( metadata.profiledata.politicalview  == null | metadata.profiledata.politicalview  == null) ? "Ask Me" : metadata.profiledata.politicalview.description ;
-                CriteriaModel.Diet = (metadata.profiledata.diet == null | metadata.profiledata.diet.id  == null) ? "Ask Me" : metadata.profiledata.diet.description ;
+                CriteriaModel.Exercise = (metadata.profile.profiledata.exercise == null | metadata.profile.profiledata.exercise.id == null) ? "Ask Me" : metadata.profile.profiledata.exercise.description;
+                CriteriaModel.Religion = (metadata.profile.profiledata.religion  == null | metadata.profile.profiledata.religion.id  == null) ? "Ask Me" : metadata.profile.profiledata.religion.description;
+                CriteriaModel.ReligiousAttendance = (metadata.profile.profiledata.religiousattendance == null | metadata.profile.profiledata.religiousattendance.id == null) ? "Ask Me" : metadata.profile.profiledata.religiousattendance.description;
+                CriteriaModel.Drinks = (metadata.profile.profiledata.drinking == null | metadata.profile.profiledata.drinking.id  == null) ? "Ask Me" : metadata.profile.profiledata.drinking.description;
+                CriteriaModel.Smokes = (metadata.profile.profiledata.smoking  == null | metadata.profile.profiledata.smoking.id  == null) ? "Ask Me" : metadata.profile.profiledata.smoking.description  ;
+                CriteriaModel.Humor = (metadata.profile.profiledata.humor == null | metadata.profile.profiledata.humor.id  == null) ? "Ask Me" : metadata.profile.profiledata.humor.description ;
+                // HotFeature = metadata.profile.profiledata.CriteriaCharacter_HotFeature == null ? "Ask Me" : metadata.profile.profiledata.CriteriaCharacter_HotFeature.HotFeatureName; 
+                //   Hobby =  metadata.profile.profiledata.CriteriaCharacter_Hobby == null ? "Ask Me" : metadata.profile.profiledata.CriteriaCharacter_Hobby.HobbyName;
+                CriteriaModel.PoliticalView =( metadata.profile.profiledata.politicalview  == null | metadata.profile.profiledata.politicalview  == null) ? "Ask Me" : metadata.profile.profiledata.politicalview.description ;
+                CriteriaModel.Diet = (metadata.profile.profiledata.diet == null | metadata.profile.profiledata.diet.id  == null) ? "Ask Me" : metadata.profile.profiledata.diet.description ;
                 //TO DO calculate this by bdate
-                CriteriaModel.Sign = (metadata.profiledata.sign  == null | metadata.profiledata.sign.id == null) ? "Ask Me" : metadata.profiledata.sign.description ;
-                CriteriaModel.IncomeLevel = (metadata.profiledata.incomelevel  == null | metadata.profiledata.incomelevel  == null) ? "Ask Me" : metadata.profiledata.incomelevel.description ;
-                CriteriaModel.HaveKids = (metadata.profiledata.kidstatus  == null | metadata.profiledata.kidstatus.id  == null) ? "Ask Me" : metadata.profiledata.kidstatus.description ;
-                CriteriaModel.WantsKids = (metadata.profiledata.wantsKidstatus == null | metadata.profiledata.wantsKidstatus.id == null) ? "Ask Me" : metadata.profiledata.wantsKidstatus.description ;
-                CriteriaModel.EmploymentSatus = (metadata.profiledata.employmentstatus  == null | metadata.profiledata.employmentstatus.id == null) ? "Ask Me" : metadata.profiledata.employmentstatus.description;
-                CriteriaModel.EducationLevel = (metadata.profiledata.educationlevel  == null | metadata.profiledata.educationlevel.id   == null) ? "Ask Me" : metadata.profiledata.educationlevel.description ;
-                CriteriaModel.Profession = (metadata.profiledata.profession  == null | metadata.profiledata.profession .id == null) ? "Ask Me" : metadata.profiledata.profession.description ;
-                CriteriaModel.MaritalStatus = (metadata.profiledata.maritalstatus  == null | metadata.profiledata.maritalstatus.id == null) ? "Single" : metadata.profiledata.maritalstatus.description ;
-                CriteriaModel.LivingSituation = (metadata.profiledata.livingsituation  == null | metadata.profiledata.livingsituation.id  == null) ? "Ask Me" : metadata.profiledata.livingsituation.description;
+                CriteriaModel.Sign = (metadata.profile.profiledata.sign  == null | metadata.profile.profiledata.sign.id == null) ? "Ask Me" : metadata.profile.profiledata.sign.description ;
+                CriteriaModel.IncomeLevel = (metadata.profile.profiledata.incomelevel  == null | metadata.profile.profiledata.incomelevel  == null) ? "Ask Me" : metadata.profile.profiledata.incomelevel.description ;
+                CriteriaModel.HaveKids = (metadata.profile.profiledata.kidstatus  == null | metadata.profile.profiledata.kidstatus.id  == null) ? "Ask Me" : metadata.profile.profiledata.kidstatus.description ;
+                CriteriaModel.WantsKids = (metadata.profile.profiledata.wantsKidstatus == null | metadata.profile.profiledata.wantsKidstatus.id == null) ? "Ask Me" : metadata.profile.profiledata.wantsKidstatus.description ;
+                CriteriaModel.EmploymentSatus = (metadata.profile.profiledata.employmentstatus  == null | metadata.profile.profiledata.employmentstatus.id == null) ? "Ask Me" : metadata.profile.profiledata.employmentstatus.description;
+                CriteriaModel.EducationLevel = (metadata.profile.profiledata.educationlevel  == null | metadata.profile.profiledata.educationlevel.id   == null) ? "Ask Me" : metadata.profile.profiledata.educationlevel.description ;
+                CriteriaModel.Profession = (metadata.profile.profiledata.profession  == null | metadata.profile.profiledata.profession .id == null) ? "Ask Me" : metadata.profile.profiledata.profession.description ;
+                CriteriaModel.MaritalStatus = (metadata.profile.profiledata.maritalstatus  == null | metadata.profile.profiledata.maritalstatus.id == null) ? "Single" : metadata.profile.profiledata.maritalstatus.description ;
+                CriteriaModel.LivingSituation = (metadata.profile.profiledata.livingsituation  == null | metadata.profile.profiledata.livingsituation.id  == null) ? "Ask Me" : metadata.profile.profiledata.livingsituation.description;
                 //special case for ethnicty since they can have mutiples ?
                 //loop though ethnicty thing I guess ?  
                 //8/11/2011 have to loop though since these somehow get detached sometimes
-                //Ethnicity = metadata.profiledata.profiledata_Ethnicity;
+                //Ethnicity = metadata.profile.profiledata.profiledata_Ethnicity;
 
                 foreach (var item in metadata.ethnicities  )
                 {
@@ -298,9 +298,9 @@ namespace Shell.MVC2.Data
 
                 //TO DO add this to search settings for now use what is in profiledata
                 //These will come from search settings table in the future at some point
-                CriteriaModel.BasicSearchSettings.country = georepository.getcountrynamebycountryid((byte)metadata.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
-                CriteriaModel.BasicSearchSettings.citystateprovince = (metadata.profiledata.stateprovince == null) ? "Ask Me" : metadata.profiledata.stateprovince;
-                CriteriaModel.BasicSearchSettings.postalcode  = metadata.profiledata.postalcode;  //this could be for countries withoute p codes
+                CriteriaModel.BasicSearchSettings.country = georepository.getcountrynamebycountryid((byte)metadata.profile.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
+                CriteriaModel.BasicSearchSettings.citystateprovince = (metadata.profile.profiledata.stateprovince == null) ? "Ask Me" : metadata.profile.profiledata.stateprovince;
+                CriteriaModel.BasicSearchSettings.postalcode  = metadata.profile.profiledata.postalcode;  //this could be for countries withoute p codes
 
                 //populate list values
                 foreach (var item in PerfectMatchSettings.genders )

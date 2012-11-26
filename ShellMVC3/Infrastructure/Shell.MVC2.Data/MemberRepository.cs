@@ -91,7 +91,7 @@ namespace Shell.MVC2.Data
                                  .Include("CriteriaLife_IncomeLevel").Include("CriteriaLife_LivingSituation")
                                  .Include("CriteriaLife_MaritalStatus").Include("CriteriaLife_Profession")
                                  .Include("CriteriaLife_WantsKids")
-                             where (i.id == profileid)
+                             where (i.profile_id == profileid)
                              select i;
 
 
@@ -220,7 +220,7 @@ namespace Shell.MVC2.Data
                 
 
                  _gender = (from x in (_datingcontext.photos.Where(f=>f.id  == guid))
-                            join f in _datingcontext.profiledata on x.profile_id  equals f.id   
+                            join f in _datingcontext.profiledata on x.profile_id  equals f.profile_id    
                             select f.gender).FirstOrDefault();
 
 
@@ -1022,8 +1022,8 @@ namespace Shell.MVC2.Data
         {
             if (screenname == null) return null;
 
-            return (from p in db.profiles where p.screenname   == screenname 
-                      join f in  db.profiledata on p.id equals f.id
+            return (from p in db.profiles where p.screenname   == screenname
+                    join f in db.profiledata on p.id equals f.profile_id
                     select f.gender).FirstOrDefault().description ;
         }
 
@@ -1132,11 +1132,11 @@ namespace Shell.MVC2.Data
                             //TO DO add the rest of the filitering here 
                             //Appearance filtering                         
                             .WhereIf(blEvaluateHeights, z=> z.height  > intheightmin && z.height  <= intheightmax) //Only evealuate if the user searching actually has height values they look for                         
-                                      join f in db.profiles on x.id equals f.id                                    
+                                      join f in db.profiles on x.profile_id equals f.id                                    
                                       select new MemberSearchViewModel
                                       {
                                          // MyCatchyIntroLineQuickSearch = x.AboutMe,
-                                           id = x.id,
+                                          id = x.profile_id,
                                           stateprovince = x.stateprovince,
                                           postalcode = x.postalcode,
                                           countryid = x.countryid,
@@ -1254,11 +1254,11 @@ namespace Shell.MVC2.Data
                             .WhereIf(blEvaluateHeights, z => z.height  > intheightmin && z.height  <= intheightmax) //Only evealuate if the user searching actually has height values they look for 
                             //we have to filter on the back end now since we cant use UDFs
                             // .WhereIf(model.maxdistancefromme  > 0, a => db.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
-                                      join f in db.profiles on x.id  equals f.id 
+                                      join f in db.profiles on x.profile_id equals f.id 
                                       select new MemberSearchViewModel
                                       {
                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
-                                          id = x.id  ,
+                                          id = x.profile_id,
                                           stateprovince = x.stateprovince,
                                           postalcode = x.postalcode,
                                           countryid = x.countryid,
@@ -1342,13 +1342,13 @@ namespace Shell.MVC2.Data
             //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
             MemberSearchViewmodels = (from x in db.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id )) //using whereIF predicate function 
-                            .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.lookingforgenderid )                            
+                            .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.lookingforgenderid )
 
-                                      join f in db.profiles on x.id equals f.id
+                                      join f in db.profiles on x.profile_id equals f.id
                                       select new MemberSearchViewModel
                                       {
                                          // MyCatchyIntroLineQuickSearch = x.AboutMe,
-                                           id = x.id  ,
+                                          id = x.profile_id,
                                           stateprovince = x.stateprovince,
                                           postalcode = x.postalcode,
                                           countryid = x.countryid,

@@ -155,9 +155,9 @@ namespace Shell.MVC2.Data
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
          var   interests = (from p in _datingcontext.interests.Where(p => p.profile_id    == profileid)
-                         join f in _datingcontext.profiledata on p.interestprofile_id  equals f.id 
+                         join f in _datingcontext.profiledata on p.interestprofile_id  equals f.profile_id  
                          join z in _datingcontext.profiles on p.interestprofile_id equals z.id
-                         where (f.profile.status.id  < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id ))
+                         where (f.profile.status.id  < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id  ))
                          select new MemberSearchViewModel
                          {
                                    creationdate    = p.creationdate ,
@@ -208,9 +208,9 @@ namespace Shell.MVC2.Data
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
          var   whoisinterestedinme = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid)
-                                    join f in _datingcontext.profiledata on p.profile_id equals f.id
+                                    join f in _datingcontext.profiledata on p.profile_id equals f.profile_id 
                                    join z in _datingcontext.profiles on p.profile_id  equals z.id 
-                                   where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
+                                   where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id ))
                                    select new MemberSearchViewModel
                                    {
                                                 creationdate    = p.creationdate,
@@ -257,9 +257,9 @@ namespace Shell.MVC2.Data
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
           var  whoisinterestedinmenew = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid && p.viewdate  ==  null)
-                                    join f in _datingcontext.profiledata on p.profile_id equals f.id
-                                   join z in _datingcontext.profiles on p.profile_id  equals z.id 
-                                   where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
+                                    join f in _datingcontext.profiledata on p.profile_id equals f.profile_id 
+                                   join z in _datingcontext.profiles on p.profile_id  equals z.id
+                                         where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                                    select new MemberSearchViewModel
                                    {
                                         creationdate    = p.creationdate ,
@@ -730,9 +730,9 @@ namespace Shell.MVC2.Data
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
          var   WhoPeekedAtMe = (from p in _datingcontext.peeks.Where(p => p.peekprofile_id  == profileid)
-                             join f in _datingcontext.profiledata on p.profile_id  equals f.id 
+                                join f in _datingcontext.profiledata on p.profile_id equals f.profile_id 
                              join z in _datingcontext.profiles on p.profile_id  equals z.id
-                             where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
+                                where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                              select new MemberSearchViewModel
                              {
                                  peekdate  = p.creationdate ,
@@ -783,9 +783,9 @@ namespace Shell.MVC2.Data
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
             var PeekNew = (from p in _datingcontext.peeks .Where(p => p.peekprofile_id  == profileid && p.viewdate  == null)
-                       join f in _datingcontext.profiledata on p.profile_id  equals f.id
+                           join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
                        join z in _datingcontext.profiles on p.profile_id  equals z.id
-                       where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
+                           where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                        select new MemberSearchViewModel
                        {
                              peekdate  = p.creationdate ,
@@ -835,9 +835,9 @@ namespace Shell.MVC2.Data
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
             var peeks = (from p in _datingcontext.peeks.Where(p => p.profile_id  == profileid && p.deletedbymemberdate == null)
-                          join f in _datingcontext.profiledata on p.profile_id equals f.id
+                         join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
                          join z in _datingcontext.profiles on p.profile_id  equals z.id
-                         where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
+                         where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                          select new MemberSearchViewModel
                          {
                             peekdate = p.creationdate ,
@@ -1238,7 +1238,7 @@ namespace Shell.MVC2.Data
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
           var  blockNew = (from p in _datingcontext.blocks.Where(p => p.profile_id   == profileid && p.removedate == null)
-                               join f in _datingcontext.profiledata on p.blockprofile_id  equals f.id 
+                           join f in _datingcontext.profiledata on p.blockprofile_id equals f.profile_id 
                                join z in _datingcontext.profiles on p.blockprofile_id equals z.id 
                                where (f.profile.status.id< 3)
                                orderby (p.creationdate) descending
@@ -1280,7 +1280,7 @@ namespace Shell.MVC2.Data
 
 
           var  whoblockedme = (from p in _datingcontext.blocks.Where(p => p.blockprofile_id  == profileid && p.removedate == null)
-                                        join f in _datingcontext.profiledata on p.profile_id equals f.id
+                               join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
                                        join z in _datingcontext.profiles on p.profile_id  equals z.id 
                                        where (f.profile.status.id< 3)
                                        orderby (p.creationdate ) descending
@@ -1683,9 +1683,9 @@ namespace Shell.MVC2.Data
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
             var LikeNew = (from p in _datingcontext.likes.Where(p => p.likeprofile_id  == profileid && p.viewdate  == null)
-                        join f in _datingcontext.profiledata on p.profile_id equals f.id
-                       join z in _datingcontext.profiles on p.profile_id  equals z.id 
-                       where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
+                           join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                       join z in _datingcontext.profiles on p.profile_id  equals z.id
+                           where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                        orderby (p.creationdate) descending
                        select new MemberSearchViewModel
                        {
@@ -1734,9 +1734,9 @@ namespace Shell.MVC2.Data
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
             var wholikesme = (from p in _datingcontext.likes.Where(p => p.likeprofile_id   == profileid && p.deletedbylikedate == null)
-                      join f in _datingcontext.profiledata on p.profile_id equals f.id
-                     join z in _datingcontext.profiles on p.profile_id  equals z.id 
-                     where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
+                              join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                     join z in _datingcontext.profiles on p.profile_id  equals z.id
+                              where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                      orderby (p.creationdate ) descending
                      select new MemberSearchViewModel
                      {
@@ -1785,9 +1785,9 @@ namespace Shell.MVC2.Data
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
             var whoilike = (from p in _datingcontext.likes.Where(p => p.profile_id  == profileid && p.deletedbymemberdate == null)
-                              join f in _datingcontext.profiledata on p.likeprofile_id  equals f.id
+                            join f in _datingcontext.profiledata on p.likeprofile_id equals f.profile_id
                               join z in _datingcontext.profiles on p.likeprofile_id  equals z.id
-                              where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id))
+                            where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                               orderby (p.creationdate) descending
                               select new MemberSearchViewModel
                               {
