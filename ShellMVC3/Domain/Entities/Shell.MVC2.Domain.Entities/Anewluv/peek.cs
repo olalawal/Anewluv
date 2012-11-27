@@ -19,6 +19,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DateTime? modificationdate { get; set; }  
         public DateTime? deletedbymemberdate { get; set; }
         public DateTime? deletedbypeekdate { get; set; }
-        public int mutual { get; set; }
+        public bool? mutual { get; set; }
     }
 }

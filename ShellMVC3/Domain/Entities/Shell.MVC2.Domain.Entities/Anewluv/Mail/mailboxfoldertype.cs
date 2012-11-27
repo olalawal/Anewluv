@@ -14,7 +14,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual lu_defaultmailboxfolder defaultfolder { get; set; }
         public string name { get; set; }
         public bool? active { get; set; }
-        public DateTime creationdate { get; set; }
+        public DateTime? creationdate { get; set; }
         public DateTime? deleteddate { get; set; }
         public int? maxsize { get; set; }
 

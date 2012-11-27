@@ -15,7 +15,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual profilemetadata profilemetadata { get; set; }
         public virtual profilemetadata blockedprofilemetadata { get; set; }
         public ICollection<blocknotes> notes { get; set; }
-        public DateTime creationdate { get; set; }
+        public DateTime? creationdate { get; set; }
         public DateTime? modificationdate { get; set; } 
         public DateTime? removedate { get; set; }      
         public int? mutual { get; set; }

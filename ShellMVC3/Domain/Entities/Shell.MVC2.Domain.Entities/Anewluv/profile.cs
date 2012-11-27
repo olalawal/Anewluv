@@ -34,7 +34,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
            [DataMember]
         public DateTime? modificationdate { get; set; }
            [DataMember]
-        public DateTime creationdate { get; set; }
+        public DateTime? creationdate { get; set; }
   
         public virtual lu_profilestatus status { get; set; }
            [DataMember]        

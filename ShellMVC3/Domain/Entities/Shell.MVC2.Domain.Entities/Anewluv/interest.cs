@@ -13,12 +13,12 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public int interestprofile_id { get; set; }
        public virtual profilemetadata profilemetadata { get; set; }
        public virtual profilemetadata interestprofilemetadata { get; set; }
-        public DateTime creationdate { get; set; }      
+        public DateTime? creationdate { get; set; }      
         public DateTime? viewdate { get; set; }
         public DateTime? modificationdate { get; set; }  
         public DateTime? deletedbymemberdate { get; set; }
         public DateTime? deletedbyinterestdate { get; set; }    
-        public int mutual { get; set; }
+        public bool? mutual { get; set; }
 
       }
     

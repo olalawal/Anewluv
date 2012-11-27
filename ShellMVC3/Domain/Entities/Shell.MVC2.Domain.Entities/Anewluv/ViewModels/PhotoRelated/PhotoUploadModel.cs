@@ -16,7 +16,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public lu_photoimagetype imagetype { get; set; }     
         [DataMember]
-        public DateTime creationdate { get; set; }
+        public DateTime? creationdate { get; set; }
         [DataMember]
         public string  caption { get; set; }
         [DataMember]

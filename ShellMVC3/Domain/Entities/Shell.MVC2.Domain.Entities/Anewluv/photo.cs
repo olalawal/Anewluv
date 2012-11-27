@@ -31,7 +31,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         //private public secuity is done at photo level , overides album secuity
         public virtual ICollection<photo_securitylevel> photosecuritylevels { get; set; } 
 
-        public DateTime creationdate { get; set; } 
+        public DateTime? creationdate { get; set; } 
         //not sure what this is for need to rember
         //public Nullable<Guid> photoUniqueID { get; set; }            
         //actual image data

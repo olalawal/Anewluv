@@ -641,7 +641,7 @@ namespace Misc
                         profiledatalookingforobject.profilemetadata = matchedprofilemetatdata;
                         //context.profilemetadata.Where(p => p.profile.emailaddress == profiledatalookingforitem.ProfileID).FirstOrDefault();
                         profiledatalookingforobject.lookingfor  = context.lu_lookingfor.Where(p => p.id == profiledatalookingforitem.LookingForID ).FirstOrDefault();
-
+                        
                         //add the object to profile object
                         context.lookingfor.Add(profiledatalookingforobject);
                         //save data one per row
