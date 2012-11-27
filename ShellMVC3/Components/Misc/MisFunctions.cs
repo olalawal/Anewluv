@@ -404,7 +404,7 @@ namespace Misc
 
                         friendsobject.creationdate = friendsitem.FriendDate.GetValueOrDefault();
                         friendsobject.modificationdate = null;
-                        friendsobject.viewdate = friendsitem.FriendViewedDate;
+                        friendsobject.viewdate = friendsitem.FriendViewedDate.GetValueOrDefault();
                         friendsobject.deletedbymemberdate = null;
                         friendsobject.deletedbyfrienddate = null;
 
@@ -431,7 +431,7 @@ namespace Misc
 
                         Interestsobject.creationdate = Interestsitem.InterestDate.GetValueOrDefault();
                         Interestsobject.modificationdate = null;
-                        Interestsobject.viewdate = Interestsitem.IntrestViewedDate ;
+                        Interestsobject.viewdate = Interestsitem.IntrestViewedDate.GetValueOrDefault() ;
                         Interestsobject.deletedbymemberdate = null;
                         Interestsobject.deletedbyinterestdate  = null;
 
@@ -442,7 +442,7 @@ namespace Misc
                         Console.WriteLine("Interest request added for old profileid of    :" + Interestsitem.ProfileID);
                     }
                 }
-
+                context.SaveChanges();
 
 
                 //handle likes
@@ -460,18 +460,21 @@ namespace Misc
 
                         likesobject.creationdate = likesitem.LikeDate .GetValueOrDefault();
                         likesobject.modificationdate = null;
-                        likesobject.viewdate = likesitem.LikeViewedDate ;
+                        likesobject.deletedbylikedate = likesitem.DeletedByLikeIDDate.GetValueOrDefault();
+                        likesobject.deletedbymemberdate = likesitem.DeletedByProfileIDDate.GetValueOrDefault();
+                        likesobject.viewdate = likesitem.LikeViewedDate.GetValueOrDefault();                      
+                       
                         likesobject.deletedbymemberdate = null;
                         likesobject.deletedbylikedate = null;
 
                         //add the object to profile object
                         context.likes.AddOrUpdate(likesobject);
                         //save data one per row
-                      context.SaveChanges();
+                    
                         Console.WriteLine("like request added for old profileid of    :" + likesitem.ProfileID);
                     }
                 }
-
+                context.SaveChanges();
 
                 //handle peeks
                 //Peeks is invierse with profileviewer being the opposit of profile
@@ -489,7 +492,7 @@ namespace Misc
 
                         peeksobject.creationdate = peeksitem.ProfileViewDate .GetValueOrDefault();
                         peeksobject.modificationdate = null;
-                        peeksobject.viewdate = peeksitem.ProfileViewViewedDate ;
+                        peeksobject.viewdate = peeksitem.ProfileViewViewedDate.GetValueOrDefault() ;
                         peeksobject.deletedbymemberdate = null;
                         peeksobject.deletedbypeekdate = null;
 
@@ -517,7 +520,7 @@ namespace Misc
 
                         hotlistsobject.creationdate = hotlistsitem.HotlistDate .GetValueOrDefault();
                         hotlistsobject.modificationdate = null;
-                        hotlistsobject.viewdate = hotlistsitem.HotlistViewedDate ;
+                        hotlistsobject.viewdate = hotlistsitem.HotlistViewedDate.GetValueOrDefault() ;
                         hotlistsobject.deletedbymemberdate = null;
                         hotlistsobject.deletedbyhotlistdate = null;
 
@@ -547,7 +550,7 @@ namespace Misc
 
                         blocksobject.creationdate = blocksitem.MailboxBlockDate.GetValueOrDefault();
                         blocksobject.modificationdate = null; ;
-                        blocksobject.removedate = blocksitem.BlockRemovedDate;
+                        blocksobject.removedate = blocksitem.BlockRemovedDate.GetValueOrDefault();
                         //No need to do anyting with notes since we had no notes in the the past
 
                         //add the object to profile object
