@@ -87,7 +87,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             {
                 //retirve encypted password
                 encryptedPassword = myQuery.FirstOrDefault().password ;
-                creationdate = myQuery.FirstOrDefault().creationdate;
+                creationdate = myQuery.FirstOrDefault().creationdate.GetValueOrDefault();
                 passwordchangedate = myQuery.FirstOrDefault().passwordChangeddate;
             }
             else
