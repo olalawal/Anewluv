@@ -334,7 +334,7 @@ namespace Shell.MVC2.Data
                 //update the profile status to 2
                 interest.profile_id = profileid;
                 interest.interestprofile_id = targetprofileid;
-                interest.mutual = 0;  // not dealing with this calulatin yet
+                interest.mutual = false;  // not dealing with this calulatin yet
                 interest.creationdate = DateTime.Now;
                 //handele the update using EF
                 // this._datingcontext.profiles.AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
@@ -916,7 +916,7 @@ namespace Shell.MVC2.Data
                 //update the profile status to 2
                 peek.profile_id = profileid;
                 peek.peekprofile_id = targetprofileid;
-                peek.mutual = 0;  // not dealing with this calulatin yet
+                peek.mutual = false ;  // not dealing with this calulatin yet
                 peek.creationdate = DateTime.Now;
                 //handele the update using EF
                 // this._datingcontext.profiles.AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
@@ -1864,7 +1864,7 @@ namespace Shell.MVC2.Data
                 //update the profile status to 2
                 like.profile_id = profileid;
                 like.likeprofile_id = targetprofileid;
-                like.mutual = 0;  // not dealing with this calulatin yet
+                like.mutual = false;  // not dealing with this calulatin yet
                 like.creationdate = DateTime.Now;
                 //handele the update using EF
                 // this._datingcontext.profiles.AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));

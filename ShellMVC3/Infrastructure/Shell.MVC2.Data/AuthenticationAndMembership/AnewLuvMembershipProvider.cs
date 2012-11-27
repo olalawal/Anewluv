@@ -578,7 +578,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                                       "",
                                       true,
                                       false,
-                                      u.creationdate,
+                                      u.creationdate.GetValueOrDefault(),
                                       u.logindate.GetValueOrDefault()  ,
                                       u.modificationdate.GetValueOrDefault() ,
                                       DateTime.Now,
