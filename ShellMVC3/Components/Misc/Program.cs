@@ -17,9 +17,9 @@ namespace Misc
 
           //  MisFunctions.ConvertFlatProfileandprofiledata();
          //  MisFunctions.ConvertProfileCollections();
-         //  MisFunctions.ConvertProfileMetaDataBasicCollections();
+         MisFunctions.ConvertProfileMetaDataBasicCollections();
           // MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
-           MisFunctions.ConvertProfileSearchSettingsCollections();
+        //   MisFunctions.ConvertProfileSearchSettingsCollections();
 
           //  MisFunctions.FixBadUserGeoData();
           //  FixBadUserGeoData();
