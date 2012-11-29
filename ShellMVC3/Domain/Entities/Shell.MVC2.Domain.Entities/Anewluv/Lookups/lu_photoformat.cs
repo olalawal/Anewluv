@@ -15,7 +15,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public int id { get; set; }
         public string description { get; set; }
         public int photoImagersizerformat_id { get; set; }
-        public lu_photoImagersizerformat imageresizerformat { get; set; }
+        public virtual lu_photoImagersizerformat imageresizerformat { get; set; }
        [NotMapped]
         public bool selected { get; set; }
     }

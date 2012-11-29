@@ -30,10 +30,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         Nofacialpicture,
         [Description("Too many Graphics")]
         [EnumMember]
-        ToomanyGraphics,
-        [Description("Male")] 
-        [EnumMember]
-        Male,
+        ToomanyGraphics,   
         [Description("Copy Right Infringement")]
         [EnumMember]
         CopyRightInfringement,

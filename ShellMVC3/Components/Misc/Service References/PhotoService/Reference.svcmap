@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="049eeb6f-bb45-4b16-9029-7fd220179d42" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="2b7afea0-7f56-44bd-bb74-2521489490f0" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -24,13 +24,13 @@
     <MetadataSource Address="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="PhotoService.xsd" MetadataType="Schema" ID="6078463b-11ca-4855-8ae5-93ad47a19d2f" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd4" />
-    <MetadataFile FileName="PhotoService1.xsd" MetadataType="Schema" ID="4cbc2c5e-1c50-4198-bc0c-144f5349f512" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd3" />
-    <MetadataFile FileName="PhotoService2.xsd" MetadataType="Schema" ID="a5abdebb-4f8a-4851-8766-d834da567f9d" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd2" />
-    <MetadataFile FileName="PhotoService3.xsd" MetadataType="Schema" ID="2e123891-89bd-41d7-a0aa-b8c7de558f68" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd1" />
-    <MetadataFile FileName="PhotoService4.xsd" MetadataType="Schema" ID="805970d7-3d98-438c-af65-cff3f76727f7" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd0" />
-    <MetadataFile FileName="PhotoService.disco" MetadataType="Disco" ID="20dd419e-3531-4b3c-8b80-09ff223a93da" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?disco" />
-    <MetadataFile FileName="PhotoService.wsdl" MetadataType="Wsdl" ID="4f3f073d-f3f0-4736-9ac2-9f9ff5913ec7" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?wsdl" />
+    <MetadataFile FileName="PhotoService.xsd" MetadataType="Schema" ID="fb65c577-594e-423b-8c1c-0f5997672f39" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd4" />
+    <MetadataFile FileName="PhotoService1.xsd" MetadataType="Schema" ID="90cf3ad7-0132-4c04-9a44-d7c6a7f27f03" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd3" />
+    <MetadataFile FileName="PhotoService2.xsd" MetadataType="Schema" ID="59b5da24-2ef0-46c1-84d3-6c71f85aaae2" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PhotoService3.xsd" MetadataType="Schema" ID="b62a96c2-870a-4464-9132-01f455f72c92" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd1" />
+    <MetadataFile FileName="PhotoService4.xsd" MetadataType="Schema" ID="c593e60a-0c49-45d4-9e5d-6bc1fe8fe6f7" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PhotoService.disco" MetadataType="Disco" ID="ee2301ef-63cc-4a5f-bb43-1f1e789bd90e" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?disco" />
+    <MetadataFile FileName="PhotoService.wsdl" MetadataType="Wsdl" ID="09539c51-1bd3-42d9-928a-4674139e341f" SourceId="1" SourceUrl="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

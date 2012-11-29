@@ -20,7 +20,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public string description { get; set; } 
         //actual image data
         public byte[] image { get; set; }
-        public int size { get; set; }  
+        public long size { get; set; }  
 
         
     }

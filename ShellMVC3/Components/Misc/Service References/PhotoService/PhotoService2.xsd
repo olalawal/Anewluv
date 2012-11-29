@@ -12,7 +12,7 @@
       <xs:element minOccurs="0" name="albums" nillable="true" type="tns:ArrayOfphotoalbum" />
       <xs:element minOccurs="0" name="approvalstatus" nillable="true" type="tns:lu_photoapprovalstatus" />
       <xs:element minOccurs="0" name="conversions" nillable="true" type="tns:ArrayOfphotoconversion" />
-      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="id" type="ser:guid" />
       <xs:element minOccurs="0" name="imagecaption" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="imagetype" nillable="true" type="tns:lu_photoimagetype" />
@@ -81,7 +81,6 @@
       <xs:element minOccurs="0" name="hotfeatures" nillable="true" type="tns:ArrayOfprofiledata_hotfeature" />
       <xs:element minOccurs="0" name="hotlists" nillable="true" type="tns:ArrayOfhotlist" />
       <xs:element minOccurs="0" name="hotlistsadded" nillable="true" type="tns:ArrayOfhotlist" />
-      <xs:element minOccurs="0" name="id" type="xs:int" />
       <xs:element minOccurs="0" name="interests" nillable="true" type="tns:ArrayOfinterest" />
       <xs:element minOccurs="0" name="interestsadded" nillable="true" type="tns:ArrayOfinterest" />
       <xs:element minOccurs="0" name="likes" nillable="true" type="tns:ArrayOflike" />
@@ -93,6 +92,7 @@
       <xs:element minOccurs="0" name="peeksadded" nillable="true" type="tns:ArrayOfpeek" />
       <xs:element minOccurs="0" name="photoalbums" nillable="true" type="tns:ArrayOfphotoalbum" />
       <xs:element minOccurs="0" name="photos" nillable="true" type="tns:ArrayOfphoto" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
       <xs:element minOccurs="0" name="ratingvalues" nillable="true" type="tns:ArrayOfratingvalue" />
       <xs:element minOccurs="0" name="ratingvaluesadded" nillable="true" type="tns:ArrayOfratingvalue" />
       <xs:element minOccurs="0" name="receivedmailboxmessages" nillable="true" type="tns:ArrayOfmailboxmessage" />
@@ -166,7 +166,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="blockedprofilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="blockprofile_id" type="xs:int" />
-      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
       <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="mutual" nillable="true" type="xs:int" />
@@ -187,7 +187,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="block" nillable="true" type="tns:block" />
       <xs:element minOccurs="0" name="block_id" type="xs:int" />
-      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
       <xs:element minOccurs="0" name="note" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="notetype" nillable="true" type="tns:lu_notetype" />
@@ -228,14 +228,14 @@
   <xs:element name="ArrayOffavorite" nillable="true" type="tns:ArrayOffavorite" />
   <xs:complexType name="favorite">
     <xs:sequence>
-      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="deletedbyfavoritedate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="favoriteprofile_id" type="xs:int" />
       <xs:element minOccurs="0" name="favoriteprofilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
       <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="mutual" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="profile_id" type="xs:int" />
       <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
@@ -250,14 +250,14 @@
   <xs:element name="ArrayOffriend" nillable="true" type="tns:ArrayOffriend" />
   <xs:complexType name="friend">
     <xs:sequence>
-      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="deletedbyfrienddate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="friendprofile_id" type="xs:int" />
       <xs:element minOccurs="0" name="friendprofilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
       <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="mutual" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="profile_id" type="xs:int" />
       <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
@@ -318,14 +318,14 @@
   <xs:element name="ArrayOfhotlist" nillable="true" type="tns:ArrayOfhotlist" />
   <xs:complexType name="hotlist">
     <xs:sequence>
-      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="deletedbyhotlistdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="hotlistprofile_id" type="xs:int" />
       <xs:element minOccurs="0" name="hotlistprofilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
       <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="mutual" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="profile_id" type="xs:int" />
       <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
@@ -340,14 +340,14 @@
   <xs:element name="ArrayOfinterest" nillable="true" type="tns:ArrayOfinterest" />
   <xs:complexType name="interest">
     <xs:sequence>
-      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="deletedbyinterestdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
       <xs:element minOccurs="0" name="interestprofile_id" type="xs:int" />
       <xs:element minOccurs="0" name="interestprofilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="mutual" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="profile_id" type="xs:int" />
       <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
@@ -362,14 +362,14 @@
   <xs:element name="ArrayOflike" nillable="true" type="tns:ArrayOflike" />
   <xs:complexType name="like">
     <xs:sequence>
-      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="deletedbylikedate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="deletedbymemberdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
       <xs:element minOccurs="0" name="likeprofile_id" type="xs:int" />
       <xs:element minOccurs="0" name="likeprofilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="mutual" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="profile_id" type="xs:int" />
       <xs:element minOccurs="0" name="profilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="viewdate" nillable="true" type="xs:dateTime" />
@@ -419,7 +419,7 @@
   <xs:complexType name="mailboxfoldertype">
     <xs:sequence>
       <xs:element minOccurs="0" name="active" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="creationdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="defaultfolder" nillable="true" type="tns:lu_defaultmailboxfolder" />
       <xs:element minOccurs="0" name="deleteddate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
@@ -500,7 +500,7 @@
       <xs:element minOccurs="0" name="deletedbypeekdate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
       <xs:element minOccurs="0" name="modificationdate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="mutual" type="xs:int" />
+      <xs:element minOccurs="0" name="mutual" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="peekprofile_id" type="xs:int" />
       <xs:element minOccurs="0" name="peekprofilemetadata" nillable="true" type="tns:profilemetadata" />
       <xs:element minOccurs="0" name="profile_id" type="xs:int" />
@@ -565,7 +565,6 @@
       <xs:element minOccurs="0" name="savedsearch" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="searchname" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="searchrank" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="searchsettingsid" type="xs:int" />
       <xs:element minOccurs="0" name="systemmatch" nillable="true" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
@@ -693,7 +692,6 @@
       <xs:element minOccurs="0" name="haircolor" nillable="true" type="tns:lu_haircolor" />
       <xs:element minOccurs="0" name="height" nillable="true" type="xs:long" />
       <xs:element minOccurs="0" name="humor" nillable="true" type="tns:lu_humor" />
-      <xs:element minOccurs="0" name="id" type="xs:int" />
       <xs:element minOccurs="0" name="incomelevel" nillable="true" type="tns:lu_incomelevel" />
       <xs:element minOccurs="0" name="kidstatus" nillable="true" type="tns:lu_havekids" />
       <xs:element minOccurs="0" name="latitude" nillable="true" type="xs:double" />
@@ -705,6 +703,7 @@
       <xs:element minOccurs="0" name="politicalview" nillable="true" type="tns:lu_politicalview" />
       <xs:element minOccurs="0" name="postalcode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="profession" nillable="true" type="tns:lu_profession" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
       <xs:element minOccurs="0" name="religion" nillable="true" type="tns:lu_religion" />
       <xs:element minOccurs="0" name="religiousattendance" nillable="true" type="tns:lu_religiousattendance" />
       <xs:element minOccurs="0" name="sign" nillable="true" type="tns:lu_sign" />

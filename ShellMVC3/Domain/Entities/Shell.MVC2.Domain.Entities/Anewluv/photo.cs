@@ -37,7 +37,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         //actual image data
          //public byte[] image { get; set; }
          // public int? size { get; set; }
-         public string imagecaption { get; set; } 
+         public string imagecaption { get; set; }
+         public string imagename { get; set; } 
     }
 }
 

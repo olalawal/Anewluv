@@ -204,40 +204,62 @@ namespace Shell.MVC2.Data
             foreach (PhotoUploadModel  item in model.photosuploaded)
             {
                 //System.Console.WriteLine(i);
+                //System.Console.WriteLine(i);
                 try
                 {
-                    photo NewPhoto = new photo();
-                    Guid identifier = Guid.NewGuid();
-                    NewPhoto.imagetype = item.imagetype;
-                    NewPhoto.id = identifier;
-                    NewPhoto.profile_id = model.profileid; //model.ProfileImage.Length;
-                    // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
-                    NewPhoto.creationdate  = item.creationdate;
-                    NewPhoto.imagecaption  =  item.caption ;
-                    //profile ID was passed with when this instance of the dispatacher was created
-                    // NewPhoto.ProfileImageType = "NoStatus";
-                    //NewPhoto.photostatus.id = 1;
-                    //NewPhoto.ProfileID = model.ProfileID;
-                    NewPhoto.approvalstatus = (item.approvalstatus !=null)? item.approvalstatus :null;
+                    //only add photos that are not dupes 
+                    if (!_datingcontext.photos.Where(p => p.profile_id == model.profileid).Any(p => p.size == item.size && p.imagename == item.imagename))
+                    {
+                        photo NewPhoto = new photo();
+                        Guid identifier = Guid.NewGuid();
+                        NewPhoto.imagetype = item.imagetype;
+                        NewPhoto.id = identifier;
+                        NewPhoto.profile_id = model.profileid; //model.ProfileImage.Length;
+                        // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
+                        NewPhoto.creationdate = item.creationdate;
+                        NewPhoto.imagecaption = item.caption;
+                        NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
+                        //set approval status and if approved do the conversion add
+                        NewPhoto.approvalstatus = (item.approvalstatus != null) ? item.approvalstatus : null;
+                        NewPhoto.size = item.size.GetValueOrDefault();
+                        //profile ID was passed with when this instance of the dispatacher was created
+                        // NewPhoto.ProfileImageType = "NoStatus";
+                        //NewPhoto.photostatus.id = 1;
+                        //NewPhoto.ProfileID = model.ProfileID;
 
-                    //TO DO move this out of RIA services to rest service
-                    _datingcontext.photos.Add(NewPhoto);
-                   //dont save changes yet we can possibly remove or detach photos if they are dupes
-                  var temp = addphotoconverions(NewPhoto, item);
-                  if (temp.Count > 0)
-                  {
-                       foreach (photoconversion convertedphoto in temp)
-                       {
-                           //if this does not recognise the photo object we might need to save that and delete it later
-                           _datingcontext.photoconversions.Add(convertedphoto);
-                       }                      
-                      _datingcontext.SaveChanges();                    
-                  }
-                  else
-                  {
-                      _datingcontext.Dispose();
+                        //TO DO move this out of RIA services to rest service
 
-                  }
+                        //get the existing photos for a user to compare the size so we do not import dupes
+                        // existing
+                        _datingcontext.photos.Add(NewPhoto);
+                        //save the  photo here since we are somewhat checking before we try to crreate the conversions in the surrounding if
+                        //olawal 12-26-2012
+                        _datingcontext.SaveChanges();
+
+
+                        var temp = addphotoconverions(NewPhoto, item);
+                        if (temp.Count > 0)
+                        {
+                            foreach (photoconversion convertedphoto in temp)
+                            {
+                                //if this does not recognise the photo object we might need to save that and delete it later
+                                _datingcontext.photoconversions.Add(convertedphoto);
+                            }
+                            _datingcontext.SaveChanges();
+                        }
+                        else
+                        {
+                            _datingcontext.Dispose();
+
+                        }
+
+                    }
+
+                }
+
+                catch (Exception ex)
+                {    //log error
+                    string dd = ex.ToString();
                 }
                
 
@@ -271,50 +293,59 @@ namespace Shell.MVC2.Data
             //System.Console.WriteLine(i);
             try
             {
-                photo NewPhoto = new photo();
-                Guid identifier = Guid.NewGuid();
-                NewPhoto.imagetype = newphoto.imagetype;
-                NewPhoto.id = identifier;
-                NewPhoto.profile_id = profileid; //model.ProfileImage.Length;
-                // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
-                NewPhoto.creationdate = newphoto.creationdate;
-                NewPhoto.imagecaption = newphoto.caption;
-                //set approval status and if approved do the conversion add
-                NewPhoto.approvalstatus = (newphoto.approvalstatus != null) ? newphoto.approvalstatus : null;
-
-                //profile ID was passed with when this instance of the dispatacher was created
-                // NewPhoto.ProfileImageType = "NoStatus";
-                //NewPhoto.photostatus.id = 1;
-                //NewPhoto.ProfileID = model.ProfileID;
-
-                //TO DO move this out of RIA services to rest service
-                
-                //get the existing photos for a user to compare the size so we do not import dupes
-               // existing
-                _datingcontext.photos.Add(NewPhoto);
-                //dont save changes yet we can possibly remove or detach photos if they are dupes
-                var temp = addphotoconverions(NewPhoto, newphoto);
-                if (temp.Count > 0)
+                //only add photos that are not dupes 
+                if (!_datingcontext.photos.Where(p => p.profile_id == profileid).Any(p => p.size == newphoto.size && p.imagename == newphoto.imagename ))
                 {
-                    foreach (photoconversion convertedphoto in temp)
-                    {
-                        //if this does not recognise the photo object we might need to save that and delete it later
-                        _datingcontext.photoconversions.Add(convertedphoto);
-                    }
+                    photo NewPhoto = new photo();
+                    Guid identifier = Guid.NewGuid();
+                    NewPhoto.imagetype = newphoto.imagetype;
+                    NewPhoto.id = identifier;
+                    NewPhoto.profile_id = profileid; //model.ProfileImage.Length;
+                    // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
+                    NewPhoto.creationdate = newphoto.creationdate;
+                    NewPhoto.imagecaption = newphoto.caption;
+                    NewPhoto.imagename = newphoto.imagename; //11-26-2012 olawal added the name for comparisons 
+                    //set approval status and if approved do the conversion add
+                    NewPhoto.approvalstatus = (newphoto.approvalstatus != null) ? newphoto.approvalstatus : null;
+                    NewPhoto.size = newphoto.size.GetValueOrDefault();
+                    //profile ID was passed with when this instance of the dispatacher was created
+                    // NewPhoto.ProfileImageType = "NoStatus";
+                    //NewPhoto.photostatus.id = 1;
+                    //NewPhoto.ProfileID = model.ProfileID;
+
+                    //TO DO move this out of RIA services to rest service
+
+                    //get the existing photos for a user to compare the size so we do not import dupes
+                    // existing
+                    _datingcontext.photos.Add(NewPhoto);
+                    //save the  photo here since we are somewhat checking before we try to crreate the conversions in the surrounding if
+                    //olawal 12-26-2012
                     _datingcontext.SaveChanges();
-                }
-                else
-                {
-                    _datingcontext.Dispose();
+                    
+
+                    var temp = addphotoconverions(NewPhoto, newphoto);
+                    if (temp.Count > 0)
+                    {
+                        foreach (photoconversion convertedphoto in temp)
+                        {
+                            //if this does not recognise the photo object we might need to save that and delete it later
+                            _datingcontext.photoconversions.Add(convertedphoto);
+                        }
+                        _datingcontext.SaveChanges();
+                    }
+                    else
+                    {
+                        _datingcontext.Dispose();
+
+                    }
 
                 }
+
             }
 
-
-
-            catch
+            catch (Exception  ex)
             {    //log error
-                return false;
+                string dd   = ex.ToString();
             }
 
             return true;
@@ -348,32 +379,33 @@ namespace Shell.MVC2.Data
                         {
                             using (var inStream = new MemoryStream(byteArray))
                             {
-                                //var settings = new ResizeSettings("maxwidth=200&maxheight=200");
+                                //var settings1 = new ResizeSettings("maxwidth=200&maxheight=200");
                                 var settings = new ResizeSettings(currentformat.imageresizerformat.description);
                                 ImageResizer.ImageBuilder.Current.Build(inStream, outStream, settings);
                                 var outBytes = outStream.ToArray();
-
-                                //handle the check to see if this user has photos of the same size allredy which means a duplicate
-                                if (!_datingcontext.photoconversions.Where(p => p.photo.profile_id == photo.profile_id).Any(p => p.size == outBytes.Length))
-                                {
+                                //double check that there is no conversion with matching size and the name
+                                var test = _datingcontext.photoconversions.Where(p => p.photo.profile_id == photo.profile_id).Any(p => p.size == photo.size);
+                              
                                     convertedphotos.Add(new photoconversion
                                     {
                                         creationdate = DateTime.Now,
                                         description = currentformat.description,
+                                        formattype = currentformat ,
                                         image = outBytes,
                                         size = outBytes.Length,
-                                        photo = photo
+                                       photo_id = photo.id 
                                     });
-                                }
+                                
 
                                 
                             }
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
 
+                    var dd = ex.ToString();
                 }
             }
             return convertedphotos;

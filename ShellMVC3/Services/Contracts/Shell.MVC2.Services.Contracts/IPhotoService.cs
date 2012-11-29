@@ -9,6 +9,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using System.Web;
 using System.ServiceModel.Web;
+using System.IO;
 
 
 
@@ -18,6 +19,23 @@ namespace Shell.MVC2.Services.Contracts
     [ServiceContract]
      public  interface IPhotoService
     {
+
+
+        //[OperationContract]
+        //public Stream GetLargeFile()
+        //{
+        //    return new FileStream(path, FileMode.Open, FileAccess.Read);
+        //}
+
+        //[OperationContract]
+        //public void SendLargeFile(Stream stream)
+        //{
+        //    // Handle stream here - e.g. save to disk    
+        //    ProcessStream(stream);
+
+        //    // Close the stream when done processing it
+        //    stream.Close();
+        //}
      
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebGet(UriTemplate = "/getallphotosbyusername/{username}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
