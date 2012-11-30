@@ -725,7 +725,7 @@ namespace Shell.MVC2.Data
                 //to DO   DO  we still need this
                 model.profilestatusmessageshown = false;
 
-                model.mygenderid = model.profiledata.gender.id;
+                model.mygenderid = model.profile.profiledata.gender.id;
                 //this should come from search settings eventually on the full blown model of this.
                 //create hase list of genders they are looking for, if it is null add the default
 
@@ -738,16 +738,16 @@ namespace Shell.MVC2.Data
                 }
 
                 //set selected value
-                //model.Countries. = model.profiledata.CountryID;
+                //model.Countries. =model.profile.profiledata.CountryID;
 
                 //geographical data poulated here
                 model.mycountryname = georepository.getcountrynamebycountryid(model.profiledata.countryid);
-                model.mycountryid = model.profiledata.countryid;
-                model.mycity = model.profiledata.city;
+                model.mycountryid =model.profile.profiledata.countryid;
+                model.mycity =model.profile.profiledata.city;
 
                 //TO DO items need to be populated with real values, in this case change model to double for latt
-                model.mylatitude = model.profiledata.latitude.ToString(); //model.Lattitude
-                model.mylongitude = model.profiledata.longitude.ToString();
+                model.mylatitude =model.profile.profiledata.latitude.ToString(); //model.Lattitude
+                model.mylongitude =model.profile.profiledata.longitude.ToString();
                 //update 9-21-2011 get fro search settings
                 model.maxdistancefromme = model.profile.profilemetadata.searchsettings.FirstOrDefault() != null ? model.profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
 

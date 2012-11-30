@@ -12,10 +12,14 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Services.Contracts;
 using System.Web;
+using System.ServiceModel.Activation;
 
 namespace Shell.MVC2.Services.Dating
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersMapperService" in both code and config file together.
+
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]  
     public class MembersMapperService : IMembersMapperService
     {
         private IMembersMapperRepository _mapmembermapperrepo;
@@ -30,29 +34,29 @@ namespace Shell.MVC2.Services.Dating
 
 
         // constructor
-        public MemberSearchViewModel getmembersearchviewmodel(int profileId)
+        public MemberSearchViewModel getmembersearchviewmodel(string profileid)
         {
-            return _mapmembermapperrepo.getmembersearchviewmodel(profileId);
+            return _mapmembermapperrepo.getmembersearchviewmodel(Convert.ToInt32(profileid));
         }
         public List<MemberSearchViewModel> getmembersearchviewmodels(List<int> profileIds)
         {
             return _mapmembermapperrepo.getmembersearchviewmodels(profileIds);
         }
-        public ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileId)
+        public ProfileBrowseModel getprofilebrowsemodel(string viewerprofileId, string profileid)
         {
-            return _mapmembermapperrepo.getprofilebrowsemodel(viewerprofileId, profileId);
+            return _mapmembermapperrepo.getprofilebrowsemodel(Convert.ToInt32(viewerprofileId), (Convert.ToInt32(profileid)));
         }
         //returns a list of profile browsemodles for a given user
-        public List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds)
+        public List<ProfileBrowseModel> getprofilebrowsemodels(string viewerprofileId, List<int> profileIds)
         {
-            return _mapmembermapperrepo.getprofilebrowsemodels(viewerprofileId, profileIds);
+            return _mapmembermapperrepo.getprofilebrowsemodels(Convert.ToInt32(viewerprofileId), profileIds);
         }
         // constructor
         //4-12-2012 added screen name
         //4-18-2012 added search settings
-        public ProfileCriteriaModel getprofilecriteriamodel(int profileid)
+        public ProfileCriteriaModel getprofilecriteriamodel(string profileid)
         {
-            return _mapmembermapperrepo.getprofilecriteriamodel(profileid);          
+            return _mapmembermapperrepo.getprofilecriteriamodel(Convert.ToInt32(profileid));          
 
         }
         //use an overload to return values if a user is not logged in i.e
@@ -95,9 +99,9 @@ namespace Shell.MVC2.Services.Dating
         {
             return _mapmembermapperrepo.updatememberdata(model);
         }
-        public MembersViewModel updatememberdatabyprofileid(int profileid)
+        public MembersViewModel updatememberdatabyprofileid(string profileid)
         {
-            return _mapmembermapperrepo.updatememberdatabyprofileid(profileid);
+            return _mapmembermapperrepo.updatememberdatabyprofileid(Convert.ToInt32(profileid));
         }
         public bool updateguestdata(MembersViewModel model)
         {
@@ -112,15 +116,15 @@ namespace Shell.MVC2.Services.Dating
         {
             return _mapmembermapperrepo.getguestdata(sessionid);
         }
-        public MembersViewModel getmemberdata(int profileid)
+        public MembersViewModel getmemberdata(string profileid)
         {
-            return _mapmembermapperrepo.getmemberdata(profileid);
+            return _mapmembermapperrepo.getmemberdata(Convert.ToInt32(profileid));
         }
 
         //functions not exposed via WCF or otherwise
-        public MembersViewModel mapmember(int ProfileID)
+        public MembersViewModel mapmember(string profileid)
         {
-            return _mapmembermapperrepo.mapmember(ProfileID);
+            return _mapmembermapperrepo.mapmember(Convert.ToInt32(profileid));
            
 
         }

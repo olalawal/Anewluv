@@ -6,11 +6,15 @@ using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 using Shell.MVC2.Infrastructure.Interfaces;
 using Shell.MVC2.Services.Contracts;
 using System.Web;
+using System.ServiceModel.Activation;
+using System.ServiceModel;
 
 
 
 namespace Shell.MVC2.Services.Notification
 {
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]  
     public class ErrorNotificationService : IErrorNotificationService
     {
        private IErrorNotificationRepository _errornotificationrepository ;

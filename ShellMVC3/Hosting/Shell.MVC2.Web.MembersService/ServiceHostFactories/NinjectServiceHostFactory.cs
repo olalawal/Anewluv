@@ -18,8 +18,9 @@ namespace Shell.MVC2.Web.MembersService.ServiceHostFactories
             IKernel container = new StandardKernel();
             //TO do create one module combinding all these
             container.Load<NinjectModules.ApiKeyContextModule>();
-            container.Load<NinjectModules.MembersModule>();
-            container.Load<NinjectModules.GeoModule>();
+            container.Load<NinjectModules.AnewLuvContextModule>();
+            container.Load<NinjectModules.PostalDataContextModule>();
+            container.Load<NinjectModules.MembersModule>();           
             container.Load<NinjectModules.MembersMapperModule>();
             //container.Load<NinjectModules.GeoModule>();
           //  //to do just add this mapping peice to data I think not sure if we need to decouple it like this

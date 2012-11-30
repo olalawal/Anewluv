@@ -14,6 +14,7 @@ using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 
 using Shell.MVC2.Services.Contracts;
+using System.ServiceModel.Activation;
 
 
 
@@ -21,7 +22,8 @@ namespace Shell.MVC2.Services.Dating
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
  
-
+        [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+        [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]  
         public class GeoService :  IGeoService
         {
             private IGeoRepository _georepository;

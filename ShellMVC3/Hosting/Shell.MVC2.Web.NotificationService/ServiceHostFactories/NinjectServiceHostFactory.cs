@@ -21,7 +21,7 @@ namespace Shell.MVC2.Web.NotificationService.ServiceHostFactories
         {
             IKernel container = new StandardKernel();
 
-            container.Load<NinjectModules.APIKeyAuthorizationModule>();
+        
            // container.Load<NinjectModules.CustomErrorLogContextModule>();
             container.Load<NinjectModules.AnewLuvContextModule>();
             container.Load<NinjectModules.NotificationContextModule >();

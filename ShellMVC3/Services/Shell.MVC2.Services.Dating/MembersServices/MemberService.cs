@@ -14,11 +14,15 @@ using System.Net;
 
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using System.ServiceModel.Activation;
+
 
 namespace Shell.MVC2.Services.Dating
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
-    public class MemberService : IMemberRepository
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]  
+    public class MemberService : IMemberService 
     {
 
 
@@ -38,32 +42,32 @@ namespace Shell.MVC2.Services.Dating
         //get full profile stuff
         //4-28-2012 added profile visibility settings
 
-        public profiledata getprofiledatabyprofileid(int profileid)
+        public profiledata getprofiledatabyprofileid(string profileid)
         {
 
-            return _memberrepository.getprofiledatabyprofileid(profileid);
+            return _memberrepository.getprofiledatabyprofileid(Convert.ToInt32(Convert.ToInt32(profileid)));
 
         }
 
-        public searchsetting getperfectmatchsearchsettingsbyprofileid(int profileid)
+        public searchsetting getperfectmatchsearchsettingsbyprofileid(string profileid)
         {
 
-            return _memberrepository.getperfectmatchsearchsettingsbyprofileid(profileid);
+            return _memberrepository.getperfectmatchsearchsettingsbyprofileid(Convert.ToInt32(profileid));
         }
 
-        public searchsetting createmyperfectmatchsearchsettingsbyprofileid(int profileid)
+        public searchsetting createmyperfectmatchsearchsettingsbyprofileid(string profileid)
         {
 
-            return _memberrepository.createmyperfectmatchsearchsettingsbyprofileid(profileid);
+            return _memberrepository.createmyperfectmatchsearchsettingsbyprofileid(Convert.ToInt32(profileid));
 
         }
 
         //get full profile stuff
         //*****************************************************
 
-        public string getgenderbyphotoid(Guid guid)
+        public string getgenderbyphotoid(string guid)
         {
-            return _memberrepository.getgenderbyphotoid(guid);
+            return _memberrepository.getgenderbyphotoid( Guid.Parse(guid));
         }
 
         //TO DO this needs to be  linked to roles
@@ -71,56 +75,56 @@ namespace Shell.MVC2.Services.Dating
         //***********************************************************************
         // Description:	Updates the users logout time
         // added 1/18/2010 ola lawal
-        public bool checkifquoutareachedandupdate(int profileid)
+        public bool checkifquoutareachedandupdate(string profileid)
         {
-            return _memberrepository.checkifquoutareachedandupdate(profileid);
+            return _memberrepository.checkifquoutareachedandupdate(Convert.ToInt32(profileid));
         }
 
         // "Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
         //*************************************************************************************************
         //update the database i.e create folders and change profile status from guest to active ?!
-        public bool createmailboxfolders(int intprofileid)
+        public bool createmailboxfolders(string profileid)
         {
-            return _memberrepository.createmailboxfolders(intprofileid);
+            return _memberrepository.createmailboxfolders(Convert.ToInt32(profileid));
 
         }
 
-        public bool activateprofile(int intprofileid)
+        public bool activateprofile(string profileid)
         {
-            return _memberrepository.activateprofile(intprofileid);
+            return _memberrepository.activateprofile(Convert.ToInt32(profileid));
         }
 
-        public bool deactivateprofile(int intprofileid)
+        public bool deactivateprofile(string profileid)
         {
-            return _memberrepository.deactivateprofile(intprofileid);
+            return _memberrepository.deactivateprofile(Convert.ToInt32(profileid));
         }
         //updates the profile with a password that is presumed to be already encyrpted
-        public bool updatepassword(int profileid, string encryptedpassword)
+        public bool updatepassword(string profileid, string encryptedpassword)
         {
-            return _memberrepository.updatepassword(profileid, encryptedpassword);
+            return _memberrepository.updatepassword( Convert.ToInt32(profileid), encryptedpassword);
 
         }
 
-        public bool addnewopenidforprofile(int profileid, string openidIdentifer, string openidProvidername)
+        public bool addnewopenidforprofile(string profileid, string openidIdentifer, string openidProvidername)
         {
 
-            return _memberrepository.addnewopenidforprofile(profileid, openidIdentifer, openidProvidername);
+            return _memberrepository.addnewopenidforprofile(Convert.ToInt32(profileid), openidIdentifer, openidProvidername);
 
         }
 
         //check if profile is activated 
-        public bool checkifprofileisactivated(int intprofileid)
+        public bool checkifprofileisactivated(string profileid)
         {
 
-            return _memberrepository.checkifprofileisactivated(intprofileid);
+            return _memberrepository.checkifprofileisactivated(Convert.ToInt32(profileid));
 
         }
 
         //check if mailbox folder exist
-        public bool checkifmailboxfoldersarecreated(int intprofileid)
+        public bool checkifmailboxfoldersarecreated(string profileid)
         {
 
-            return _memberrepository.checkifmailboxfoldersarecreated(intprofileid);
+            return _memberrepository.checkifmailboxfoldersarecreated(Convert.ToInt32(profileid));
 
         }
 
@@ -129,18 +133,18 @@ namespace Shell.MVC2.Services.Dating
         //**********************************************************
         // Description:	Updates the users logout time
         // added 1/18/2010 ola lawal
-        public bool updateuserlogouttime(int profileid, string sessionID)
+        public bool updateuserlogouttime(string profileid, string sessionID)
         {
-          return  _memberrepository.updateuserlogouttime(profileid, sessionID);
+            return _memberrepository.updateuserlogouttime(Convert.ToInt32(profileid), sessionID);
 
         }
 
 
         //get the last time the user logged in from profile
-        public Nullable<DateTime> getmemberlastlogintime(int profileid)
+        public Nullable<DateTime> getmemberlastlogintime(string profileid)
         {
 
-            return _memberrepository.getmemberlastlogintime(profileid);
+            return _memberrepository.getmemberlastlogintime(Convert.ToInt32(profileid));
 
         }
 
@@ -154,9 +158,9 @@ namespace Shell.MVC2.Services.Dating
             return _memberrepository.updateuserlogintime(username, sessionID);
         }
 
-        public bool updateuserlogintimebyprofileid(int intprofileid, string sessionID)
+        public bool updateuserlogintimebyprofileid(string profileid, string sessionID)
         {
-            return _memberrepository.updateuserlogintimebyprofileid(intprofileid, sessionID);
+            return _memberrepository.updateuserlogintimebyprofileid(Convert.ToInt32(profileid), sessionID);
         }
 
         //date time functions '
@@ -165,17 +169,17 @@ namespace Shell.MVC2.Services.Dating
         //be it This Week,3 Weeks ago, 3 months Ago or In the last Six Months
         //Ola Lawal 7/10/2009 feel free to drill down even to the day
 
-        public string getlastloggedinstring(DateTime logindate)
+        public string getlastloggedinstring(string logindate)
         {
 
-            return _memberrepository.getlastloggedinstring(logindate);
+            return _memberrepository.getlastloggedinstring(DateTime.Parse(logindate));
 
         }
 
         //returns true if somone logged on
-        public bool getuseronlinestatus(int profileid)
+        public bool getuseronlinestatus(string profileid)
         {
-            return _memberrepository.getuseronlinestatus(profileid);
+            return _memberrepository.getuseronlinestatus(Convert.ToInt32(profileid));
         }
 
 
@@ -195,9 +199,9 @@ namespace Shell.MVC2.Services.Dating
 
         //5-20-2012 added to check if a user email is registered
 
-        public bool checkifprofileidalreadyexists(int profileid)
+        public bool checkifprofileidalreadyexists(string profileid)
         {
-            return _memberrepository.checkifprofileidalreadyexists(profileid);
+            return _memberrepository.checkifprofileidalreadyexists(Convert.ToInt32(profileid));
 
         }
 
@@ -206,17 +210,17 @@ namespace Shell.MVC2.Services.Dating
             return _memberrepository.checkifusernamealreadyexists(strusername);
         }
 
-        public string validatesecurityansweriscorrect(int intprofileid, int SecurityQuestionID, string strSecurityAnswer)
+        public string validatesecurityansweriscorrect(string profileid, string SecurityQuestionID, string strSecurityAnswer)
         {
-            return _memberrepository.validatesecurityansweriscorrect(intprofileid, SecurityQuestionID, strSecurityAnswer);
+            return _memberrepository.validatesecurityansweriscorrect(Convert.ToInt32(profileid), Convert.ToInt32(SecurityQuestionID), strSecurityAnswer);
         }
 
         /// <summary>
         /// Determines wethare an activation code matches the value in the database for a given profileid
         /// </summary>
-        public bool checkifactivationcodeisvalid(int intprofileid, string strActivationCode)
+        public bool checkifactivationcodeisvalid(string profileid, string strActivationCode)
         {
-            return _memberrepository.checkifactivationcodeisvalid(intprofileid, strActivationCode);
+            return _memberrepository.checkifactivationcodeisvalid(Convert.ToInt32(profileid), strActivationCode);
         }
 
 
@@ -234,9 +238,9 @@ namespace Shell.MVC2.Services.Dating
         //}
 
 
-        public profile getprofilebyprofileid(int profileid)
+        public profile getprofilebyprofileid(string profileid)
         {
-            return _memberrepository.getprofilebyprofileid(profileid);
+            return _memberrepository.getprofilebyprofileid(Convert.ToInt32(profileid));
 
         }
 
@@ -261,14 +265,14 @@ namespace Shell.MVC2.Services.Dating
             return _memberrepository.getprofileidbyssessionid(strsessionid);
         }
 
-        public string getusernamebyprofileid(int profileid)
+        public string getusernamebyprofileid(string profileid)
         {
-            return _memberrepository.getusernamebyprofileid(profileid);
+            return _memberrepository.getusernamebyprofileid(Convert.ToInt32(profileid));
         }
 
-        public string getscreennamebyprofileid(int profileid)
+        public string getscreennamebyprofileid(string profileid)
         {
-            return _memberrepository.getscreennamebyprofileid(profileid);
+            return _memberrepository.getscreennamebyprofileid(Convert.ToInt32(profileid));
         }
 
         public string getscreennamebyusername(string username)
@@ -298,9 +302,9 @@ namespace Shell.MVC2.Services.Dating
 
 
 
-        public visiblitysetting getprofilevisibilitysettingsbyprofileid(int profileid)
+        public visiblitysetting getprofilevisibilitysettingsbyprofileid(string profileid)
         {
-            return _memberrepository.getprofilevisibilitysettingsbyprofileid(profileid);
+            return _memberrepository.getprofilevisibilitysettingsbyprofileid(Convert.ToInt32(profileid));
 
         }
 

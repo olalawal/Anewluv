@@ -12,12 +12,12 @@ namespace Misc
     {
         static void Main(string[] args)
         {
-            //MisFunctions.StartDebuggingTest();
+           MisFunctions.StartDebuggingTest();
 
 
           //  MisFunctions.ConvertFlatProfileandprofiledata();
          //  MisFunctions.ConvertProfileCollections();
-         MisFunctions.ConvertProfileMetaDataBasicCollections();
+       //  MisFunctions.ConvertProfileMetaDataBasicCollections();
           // MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
         //   MisFunctions.ConvertProfileSearchSettingsCollections();
 

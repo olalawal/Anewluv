@@ -19,7 +19,7 @@ namespace Shell.MVC2.Data
 
        
        
-        private  AnewluvContext db; // = new AnewluvContext();
+       // private  AnewluvContext _datingcontext; // = new AnewluvContext();
        //private  PostalData2Entities postaldb; //= new PostalData2Entities();
    
        
@@ -318,8 +318,8 @@ namespace Shell.MVC2.Data
                        }
                       this._datingcontext.mailboxfolders.Add(p);
                       this._datingcontext.SaveChanges();
-                     // db.AddToproducts(p);
-                     // db.SaveChanges();
+                     // _datingcontext.AddToproducts(p);
+                     // _datingcontext.SaveChanges();
   
                     }
                 
@@ -902,7 +902,7 @@ namespace Shell.MVC2.Data
     public int getProfileIdbyusername(string User)
     {
 
-        return (from p in db.profiles
+        return (from p in _datingcontext.profiles
                 where p.username == User
                 select p.id).FirstOrDefault();
     }
@@ -911,7 +911,7 @@ namespace Shell.MVC2.Data
     public profile getprofilebyprofileid(int profileid)
     {
 
-        return (from p in db.profiles
+        return (from p in _datingcontext.profiles
                 where p.id  == profileid
                 select p).FirstOrDefault();
     }
@@ -1022,18 +1022,15 @@ namespace Shell.MVC2.Data
         {
             if (screenname == null) return null;
 
-            return (from p in db.profiles where p.screenname   == screenname
-                    join f in db.profiledata on p.id equals f.profile_id
+            return (from p in _datingcontext.profiles where p.screenname   == screenname
+                    join f in _datingcontext.profiledata on p.id equals f.profile_id
                     select f.gender).FirstOrDefault().description ;
         }
-
-
-    
        
         public visiblitysetting getprofilevisibilitysettingsbyprofileid(int profileid)
         {
 
-            return (from p in db.visibilitysettings 
+            return (from p in _datingcontext.visibilitysettings 
                     where p.profile_id  == profileid  select p).FirstOrDefault();
         }
        
@@ -1104,18 +1101,18 @@ namespace Shell.MVC2.Data
             //******** visiblitysettings test code ************************
             
             // test all the values you are pulling here
-            // var TestModel =   (from x in db.profiledata.Where(x => x.profile.username  == "case")
+            // var TestModel =   (from x in _datingcontext.profiledata.Where(x => x.profile.username  == "case")
            //                      select x).FirstOrDefault();
           //  var MinVis = today.AddYears(-(TestModel.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault() + 1));
            // bool TestgenderMatch = (TestModel.ProfileVisiblitySetting.GenderID  != null || TestModel.ProfileVisiblitySetting.GenderID == model.profiledata.GenderID) ? true : false;
 
-            //  var testmodel2 = (from x in db.profiledata.Where(x => x.profile.username  == "case" &&  db.fnCheckIfBirthDateIsInRange(x.birthdate, 19, 20) == true  )
+            //  var testmodel2 = (from x in _datingcontext.profiledata.Where(x => x.profile.username  == "case" &&  db.fnCheckIfBirthDateIsInRange(x.birthdate, 19, 20) == true  )
            //                     select x).FirstOrDefault();
 
     
            //****** end of visiblity test settings *****************************************
 
-            MemberSearchViewmodels = (from x in db.profiledata.Where(p=> p.birthdate > min && p.birthdate <= max)
+            MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p=> p.birthdate > min && p.birthdate <= max)
                             
                                //** visiblity settings still needs testing           
                              //5-8-2012 add profile visiblity code here
@@ -1132,7 +1129,7 @@ namespace Shell.MVC2.Data
                             //TO DO add the rest of the filitering here 
                             //Appearance filtering                         
                             .WhereIf(blEvaluateHeights, z=> z.height  > intheightmin && z.height  <= intheightmax) //Only evealuate if the user searching actually has height values they look for                         
-                                      join f in db.profiles on x.profile_id equals f.id                                    
+                                      join f in _datingcontext.profiles on x.profile_id equals f.id                                    
                                       select new MemberSearchViewModel
                                       {
                                          // MyCatchyIntroLineQuickSearch = x.AboutMe,
@@ -1146,13 +1143,13 @@ namespace Shell.MVC2.Data
                                             screenname = f.screenname ,
                                           longitude = (double)x.longitude,
                                           latitude = (double)x.latitude,
-                                          hasgalleryphoto  = (db.photos.Where(i => i.profile_id  == f.id && i.photostatus.id  == (int)photostatusEnum.Gallery ).FirstOrDefault().id  != null )? true : false ,
+                                          hasgalleryphoto  = (_datingcontext.photos.Where(i => i.profile_id  == f.id && i.photostatus.id  == (int)photostatusEnum.Gallery ).FirstOrDefault().id  != null )? true : false ,
                                           creationdate = f.creationdate,
-                                          //city = db.(x.city, 11),
-                                          // lastloggedonstring   = db.fnGetLastLoggedOnTime(f.logindate),
+                                          //city = _datingcontext.(x.city, 11),
+                                          // lastloggedonstring   = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                           lastlogindate = f.logindate,
-                                          //online  = db.fnGetUserOlineStatus(x.ProfileID),
-                                         // distancefromme = db.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles") 
+                                          //online  = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
+                                         // distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles") 
                                       }).ToList();
 
 
@@ -1190,7 +1187,7 @@ namespace Shell.MVC2.Data
             //get search sttings from DB
             searchsetting perfectmatchsearchsettings = model.profiledata.profilemetadata.searchsettings.FirstOrDefault();
             //set default perfect match distance as 100 for now later as we get more members lower
-            //TO DO move this to a db setting or resourcer file
+            //TO DO move this to a _datingcontext setting or resourcer file
             if (perfectmatchsearchsettings.distancefromme  == null | perfectmatchsearchsettings.distancefromme == 0)
                 model.maxdistancefromme  = 500;
 
@@ -1247,14 +1244,14 @@ namespace Shell.MVC2.Data
 
             //add more values as we get more members 
 
-            MemberSearchViewmodels = (from x in db.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
+            MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id )) //using whereIF predicate function 
                             .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.lookingforgenderid )
                             //Appearance filtering not implemented yet                        
                             .WhereIf(blEvaluateHeights, z => z.height  > intheightmin && z.height  <= intheightmax) //Only evealuate if the user searching actually has height values they look for 
                             //we have to filter on the back end now since we cant use UDFs
-                            // .WhereIf(model.maxdistancefromme  > 0, a => db.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
-                                      join f in db.profiles on x.profile_id equals f.id 
+                            // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
+                                      join f in _datingcontext.profiles on x.profile_id equals f.id 
                                       select new MemberSearchViewModel
                                       {
                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
@@ -1268,13 +1265,13 @@ namespace Shell.MVC2.Data
                                           screenname = f.screenname,
                                           longitude = x.longitude ?? 0,
                                           latitude = x.latitude ?? 0,
-                                          hasgalleryphoto = (db.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                          hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
                                           creationdate = f.creationdate,
                                          // city = db.fnTruncateString(x.city, 11),
-                                          //lastloggedonString = db.fnGetLastLoggedOnTime(f.logindate),
+                                          //lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                           lastlogindate = f.logindate,
-                                        //  Online = db.fnGetUserOlineStatus(x.ProfileID),
-                                       //  distancefromme = db.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                                        //  Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
+                                       //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
 
 
                                       }).ToList();
@@ -1306,7 +1303,7 @@ namespace Shell.MVC2.Data
             //get search sttings from DB
             searchsetting perfectmatchsearchsettings = model.profiledata.profilemetadata.searchsettings.FirstOrDefault();
             //set default perfect match distance as 100 for now later as we get more members lower
-            //TO DO move this to a db setting or resourcer file
+            //TO DO move this to a _datingcontext setting or resourcer file
             if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
                 model.maxdistancefromme  = 500;
 
@@ -1340,11 +1337,11 @@ namespace Shell.MVC2.Data
 
             //  where (LookingForGenderValues.Count !=null || LookingForGenderValues.Contains(x.GenderID)) 
             //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
-            MemberSearchViewmodels = (from x in db.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
+            MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id )) //using whereIF predicate function 
                             .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.lookingforgenderid )
 
-                                      join f in db.profiles on x.profile_id equals f.id
+                                      join f in _datingcontext.profiles on x.profile_id equals f.id
                                       select new MemberSearchViewModel
                                       {
                                          // MyCatchyIntroLineQuickSearch = x.AboutMe,
@@ -1358,13 +1355,13 @@ namespace Shell.MVC2.Data
                                           screenname = f.screenname,
                                           longitude = x.longitude ?? 0,
                                           latitude =  x.latitude ?? 0,
-                                           hasgalleryphoto = (db.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                           hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
                                            creationdate = f.creationdate,
                                          // city = db.fnTruncateString(x.city, 11),
-                                         // lastloggedonString = db.fnGetLastLoggedOnTime(f.logindate),
+                                         // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                           lastlogindate = f.logindate,
-                                          //Online = db.fnGetUserOlineStatus(x.ProfileID),
-                                        //  distancefromme = db.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                                          //Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
+                                        //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
 
                                       }).ToList();
 

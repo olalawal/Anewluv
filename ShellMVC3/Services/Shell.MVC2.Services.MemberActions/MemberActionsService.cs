@@ -13,10 +13,13 @@ using Shell.MVC2.Interfaces;
 
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using System.ServiceModel.Activation;
 
 namespace Shell.MVC2.Services.Dating
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]  
     public class MemberActionsService : IMemberActionsService
     {
 
