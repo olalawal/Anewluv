@@ -473,7 +473,7 @@ namespace Shell.MVC2.Data
         //gets search settings
         //TO DO this function is just setting temp values for now
         //9 -21- 2011 added code to get age at least from search settings , more values to follow
-        public MembersViewModel getdefaultquicksearchsettingsmembers(MembersViewModel Model)
+        public MembersViewModel getdefaultquicksearchsettingsmembers(MembersViewModel model)
         {
             quicksearchmodel quicksearchmodel = new quicksearchmodel();
            // PostalDataService postaldataservicecontext = new PostalDataService().Initialize();
@@ -482,48 +482,48 @@ namespace Shell.MVC2.Data
             quicksearchmodel.myselectedcurrentpage = 1;
             //added state province with comma 
 
-            quicksearchmodel.myselectedcity = Model.profiledata.city;
-            quicksearchmodel.myselectedmaxdistancefromme = Model.profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme != null ? Model.maxdistancefromme : 1000;
+            quicksearchmodel.myselectedcity = model.profile.profiledata.city;
+            quicksearchmodel.myselectedmaxdistancefromme = model.profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme != null ? model.maxdistancefromme : 1000;
 
-            quicksearchmodel.myselectedfromage = Model.profile.profilemetadata.searchsettings.FirstOrDefault().agemin != null ? Model.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.GetValueOrDefault() : 18;
-            quicksearchmodel.myselectedtoage = Model.profile.profilemetadata.searchsettings.FirstOrDefault().agemax != null ? Model.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.GetValueOrDefault() : 99; ;
+            quicksearchmodel.myselectedfromage = model.profile.profilemetadata.searchsettings.FirstOrDefault().agemin != null ? model.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.GetValueOrDefault() : 18;
+            quicksearchmodel.myselectedtoage = model.profile.profilemetadata.searchsettings.FirstOrDefault().agemax != null ? model.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.GetValueOrDefault() : 99; ;
 
 
-            quicksearchmodel.myselectediamgenderid = Model.profiledata.gender.id ;
-            quicksearchmodel.myselectedcitystateprovince = Model.profiledata.city + "," + Model.profiledata.stateprovince; ;
+            quicksearchmodel.myselectediamgenderid = model.profile.profiledata.gender.id ;
+            quicksearchmodel.myselectedcitystateprovince = model.profile.profiledata.city + "," + model.profile.profiledata.stateprovince; ;
             //TO DO convert genders to a list of genders 
-            quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(Model.profiledata.gender.id);
-            quicksearchmodel.myselectedcountryname = Model.mycountryname; //use same country for now
+            quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(model.profile.profiledata.gender.id);
+            quicksearchmodel.myselectedcountryname = model.mycountryname; //use same country for now
             //add the postal code status here as well
-            quicksearchmodel.myselectedpostalcodestatus = (georepository.getcountry_postalcodestatusbycountryname(Model.mycountryname) == 1) ? true : false;
+            quicksearchmodel.myselectedpostalcodestatus = (georepository.getcountry_postalcodestatusbycountryname(model.mycountryname) == 1) ? true : false;
 
             //TO do get this from search settings
             //default for has photos only get this from the 
             quicksearchmodel.myselectedphotostatus = true;
 
-            Model.myquicksearch = quicksearchmodel;  //save it
+            model.myquicksearch = quicksearchmodel;  //save it
 
-            return Model;
+            return model;
         }
         //populate search settings for guests 
-        public MembersViewModel getdefaultsearchsettingsguest(MembersViewModel Model)
+        public MembersViewModel getdefaultsearchsettingsguest(MembersViewModel model)
         {
             //set defualt values for guests
-            //Model.myquicksearch.mySelectedPageSize = 4;
-            Model.myquicksearch.myselectedcurrentpage = 1;
-            Model.myquicksearch.myselectedcity = "";
-            Model.mypostalcodestatus = false;
-            Model.myquicksearch.myselectedmaxdistancefromme = 2000;
-            Model.myquicksearch.myselectedfromage = 18;
-            Model.myquicksearch.myselectedtoage = 99;
-            Model.myquicksearch.myselectediamgenderid = 1;
-            Model.myquicksearch.myselectedcitystateprovince = "ALL";
-            Model.myquicksearch.myselectedseekinggenderid = Extensions.GetLookingForGenderID(1);
-            Model.myquicksearch.myselectedcountryname = "United States"; //use same country for now
+            //model.myquicksearch.mySelectedPageSize = 4;
+            model.myquicksearch.myselectedcurrentpage = 1;
+            model.myquicksearch.myselectedcity = "";
+            model.mypostalcodestatus = false;
+            model.myquicksearch.myselectedmaxdistancefromme = 2000;
+            model.myquicksearch.myselectedfromage = 18;
+            model.myquicksearch.myselectedtoage = 99;
+            model.myquicksearch.myselectediamgenderid = 1;
+            model.myquicksearch.myselectedcitystateprovince = "ALL";
+            model.myquicksearch.myselectedseekinggenderid = Extensions.GetLookingForGenderID(1);
+            model.myquicksearch.myselectedcountryname = "United States"; //use same country for now
 
-            Model.myquicksearch.myselectedphotostatus = true;
+            model.myquicksearch.myselectedphotostatus = true;
 
-            return Model;
+            return model;
         }
 
         //registration model update and mapping
@@ -717,7 +717,7 @@ namespace Shell.MVC2.Data
                 //TO DO do away with this since we already have the profile via include from the profile DATA
                 // model.Profile = model.profile;
 
-                //   model.profiledata.SearchSettings(perfectmatchsearchsettings);
+                //   model.profile.profiledata.SearchSettings(perfectmatchsearchsettings);
                 //4-28-2012 added mapping for profile visiblity
                 model.profilevisiblity = model.profile.profiledata.visibilitysettings;
 
@@ -732,7 +732,7 @@ namespace Shell.MVC2.Data
                 //TO DO change this to use membererepo
                 model.lookingforgendersid = (model.profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?
                 new HashSet<int>(model.profile.profilemetadata.searchsettings.FirstOrDefault().genders.Select(c => c.id.GetValueOrDefault())) : null;
-                if (model.lookingforgendersid.Count == 0)
+                if (model.lookingforgendersid != null)
                 {
                     model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(model.profile.profiledata.gender.id));
                 }
@@ -741,38 +741,38 @@ namespace Shell.MVC2.Data
                 //model.Countries. =model.profile.profiledata.CountryID;
 
                 //geographical data poulated here
-                model.mycountryname = georepository.getcountrynamebycountryid(model.profiledata.countryid);
+                model.mycountryname = georepository.getcountrynamebycountryid(model.profile.profiledata.countryid);
                 model.mycountryid =model.profile.profiledata.countryid;
                 model.mycity =model.profile.profiledata.city;
-
                 //TO DO items need to be populated with real values, in this case change model to double for latt
                 model.mylatitude =model.profile.profiledata.latitude.ToString(); //model.Lattitude
                 model.mylongitude =model.profile.profiledata.longitude.ToString();
                 //update 9-21-2011 get fro search settings
                 model.maxdistancefromme = model.profile.profilemetadata.searchsettings.FirstOrDefault() != null ? model.profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
 
+                //11-29-2012 olawl move this chunk to ajax calls 
                 //mail counters
-                model.mymailcount = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Sent, model.profile.id).ToString();
-                model.whomailedme = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
-                model.whomailedmenewcount = mailrepository.getnewmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
+                //model.mymailcount = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Sent, model.profile.id).ToString();
+                //model.whomailedme = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
+                //model.whomailedmenewcount = mailrepository.getnewmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
 
                 //model.WhoMailedMeNewCount =  
                 //interests
                 //TO DO move all these to ajax calls on client
-                model.myintrestcount = memberactionsrepository.getwhoiaminterestedincount(model.profile.id).ToString();
-                model.whoisinterestedinmecount = memberactionsrepository.getwhoisinterestedinmecount(model.profile.id).ToString();
-                model.whoisinterestedinmenewcount = memberactionsrepository.getwhoisinterestedinmenewcount(model.profile.id).ToString();
-                //peeks
-                model.mypeekscount = memberactionsrepository.getwhoipeekedatcount(model.profile.id).ToString();
-                model.whopeekededatmecount = memberactionsrepository.getwhopeekedatmecount(model.profile.id).ToString();
-                model.whopeekedatmenewcount = memberactionsrepository.getwhopeekedatmenewcount(model.profile.id).ToString();
-                //likes
-                model.wholikesmenewcount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
-                model.wholikesmecount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
-                model.whoilikecount = memberactionsrepository.getwhoilikecount(model.profile.id).ToString();
+                //model.myintrestcount = memberactionsrepository.getwhoiaminterestedincount(model.profile.id).ToString();
+                //model.whoisinterestedinmecount = memberactionsrepository.getwhoisinterestedinmecount(model.profile.id).ToString();
+                //model.whoisinterestedinmenewcount = memberactionsrepository.getwhoisinterestedinmenewcount(model.profile.id).ToString();
+                ////peeks
+                //model.mypeekscount = memberactionsrepository.getwhoipeekedatcount(model.profile.id).ToString();
+                //model.whopeekededatmecount = memberactionsrepository.getwhopeekedatmecount(model.profile.id).ToString();
+                //model.whopeekedatmenewcount = memberactionsrepository.getwhopeekedatmenewcount(model.profile.id).ToString();
+                ////likes
+                //model.wholikesmenewcount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
+                //model.wholikesmecount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
+                //model.whoilikecount = memberactionsrepository.getwhoilikecount(model.profile.id).ToString();
 
                 //blocks
-                model.myblockcount = memberactionsrepository.getwhoiblockedcount(model.profile.id).ToString();
+               // model.myblockcount = memberactionsrepository.getwhoiblockedcount(model.profile.id).ToString();
 
                 //instantiate models for city state province and quick search
                 // get users search setttings
@@ -812,10 +812,10 @@ namespace Shell.MVC2.Data
                 return model;
             }
             //TO DO log the error
-            catch
+            catch (Exception ex)
             {
 
-
+ var message = ex.Message;
             }
 
 

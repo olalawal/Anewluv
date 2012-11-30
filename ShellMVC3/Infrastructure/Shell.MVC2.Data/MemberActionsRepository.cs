@@ -2181,7 +2181,7 @@ namespace Shell.MVC2.Data
         //    //var TestModel = (from x in db.profiledata.Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
         //    //                      select x).FirstOrDefault();
         //    //  var MinVis = today.AddYears(-(TestModel.ProfileVisiblitySetting.AgeMaxVisibility.GetValueOrDefault() + 1));
-        //    // bool TestgenderMatch = (TestModel.ProfileVisiblitySetting.GenderID  != null || TestModel.ProfileVisiblitySetting.GenderID == model.profiledata.GenderID) ? true : false;
+        //    // bool TestgenderMatch = (TestModel.ProfileVisiblitySetting.GenderID  != null || TestModel.ProfileVisiblitySetting.GenderID == model.profile.profiledata.GenderID) ? true : false;
 
         //    // var testmodel2 = (from x in db.profiledata.Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
         //    //                     .Where(z=>z.ProfileVisiblitySetting !=null || z.ProfileVisiblitySetting.ProfileVisiblity == true)

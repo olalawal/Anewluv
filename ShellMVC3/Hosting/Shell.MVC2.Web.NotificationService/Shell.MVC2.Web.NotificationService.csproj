@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accessibility">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="CommonInstanceFactory">
       <HintPath>..\..\Shell.MVC2\packages\CommonInstanceFactory.1.0.0.0\lib\net40\CommonInstanceFactory.dll</HintPath>
     </Reference>
@@ -44,6 +47,12 @@
     </Reference>
     <Reference Include="CommonInstanceFactory.Extensions.Wcf.Ninject">
       <HintPath>..\..\Shell.MVC2\packages\CommonInstanceFactory.Extensions.Wcf.Ninject.1.0.0.0\lib\net40\CommonInstanceFactory.Extensions.Wcf.Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Shell.MVC2\Shell.MVC2\bin\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Shell.MVC2\Shell.MVC2\bin\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ninject">

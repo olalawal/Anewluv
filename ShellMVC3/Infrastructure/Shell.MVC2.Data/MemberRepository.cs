@@ -73,24 +73,7 @@ namespace Shell.MVC2.Data
                  //  return items.FirstOrDefault();
                  //}
 
-                 var items = from i in this._datingcontext.profiledata
-                                 .Include("Profile")
-                                 .Include("ProfileVisiblitySetting")
-                                 .Include("ProfileData_Ethnicity.CriteriaAppearance_Ethnicity")
-                                 .Include("ProfileData_Hobby.CriteriaCharacter_Hobby")
-                                 .Include("ProfileData_LookingFor.CriteriaLife_LookingFor")
-                                 .Include("ProfileData_HotFeature.CriteriaCharacter_HotFeature")
-                                 .Include("CriteriaAppearance_Bodytypes")
-                                 .Include("CriteriaAppearance_EyeColor").Include("CriteriaAppearance_HairColor")
-                                 .Include("CriteriaCharacter_Diet").Include("CriteriaCharacter_Drinks")
-                                 .Include("CriteriaCharacter_Exercise").Include("CriteriaCharacter_Humor")
-                                 .Include("CriteriaCharacter_PoliticalView").Include("CriteriaCharacter_Religion")
-                                 .Include("CriteriaCharacter_ReligiousAttendance").Include("CriteriaCharacter_Sign")
-                                 .Include("CriteriaCharacter_Smokes").Include("CriteriaLife_EducationLevel")
-                                 .Include("CriteriaLife_EmploymentStatus").Include("CriteriaLife_HaveKids")
-                                 .Include("CriteriaLife_IncomeLevel").Include("CriteriaLife_LivingSituation")
-                                 .Include("CriteriaLife_MaritalStatus").Include("CriteriaLife_Profession")
-                                 .Include("CriteriaLife_WantsKids")
+                 var items = from i in this._datingcontext.profiledata  
                              where (i.profile_id == profileid)
                              select i;
 
@@ -123,38 +106,35 @@ namespace Shell.MVC2.Data
                  //Dim ctx As New Entities()
                  tmpsearchsettings = this._datingcontext.searchsetting
                      // .Include("ProfileData1")
-                 .Include("searchsettings_Genders")
-                  .Include("searchsettings_BodyTypes")
-                   .Include("searchsettings_Diet")
-                    .Include("searchsettings_Drinks")
-                  .Include("searchsettings_EducationLevel")
-                  .Include("searchsettings_EmploymentStatus")
-                    .Include("searchsettings_Ethnicity")
-                   .Include("searchsettings_Exercise")
-                    .Include(" searchsettings_EyeColor")
-                    .Include("searchsettings_HairColor")
-                    .Include("searchsettings_HaveKids")
-                   .Include("searchsettings_Hobby")
-                    .Include("searchsettings_HotFeature")
-                   .Include("searchsettings_Humor")
-                   .Include("searchsettings_IncomeLevel")
-                   .Include("searchsettings_LivingStituation")
-                   .Include("searchsettings_Location")
-                   .Include("searchsettings_LookingFor")
-                    .Include("searchsettings_MaritalStatus")
-                   .Include("searchsettings_PoliticalView")
-                   .Include("searchsettings_Profession")
-                   .Include(" searchsettings_Religion")
-                   .Include("searchsettings_ReligiousAttendance")
-                    .Include("searchsettings_ShowMe")
-                    .Include("searchsettings_Sign")
-                   .Include("searchsettings_Smokes")
-                    .Include("searchsettings_SortByType")
-                   .Include("searchsettings_WantKids")
-                   .Include("searchsettings_Tribe")
-
-
-
+                 //.Include("searchsettings_Genders")
+                 // .Include("searchsettings_BodyTypes")
+                 //  .Include("searchsettings_Diet")
+                 //   .Include("searchsettings_Drinks")
+                 // .Include("searchsettings_EducationLevel")
+                 // .Include("searchsettings_EmploymentStatus")
+                 //   .Include("searchsettings_Ethnicity")
+                 //  .Include("searchsettings_Exercise")
+                 //   .Include(" searchsettings_EyeColor")
+                 //   .Include("searchsettings_HairColor")
+                 //   .Include("searchsettings_HaveKids")
+                 //  .Include("searchsettings_Hobby")
+                 //   .Include("searchsettings_HotFeature")
+                 //  .Include("searchsettings_Humor")
+                 //  .Include("searchsettings_IncomeLevel")
+                 //  .Include("searchsettings_LivingStituation")
+                 //  .Include("searchsettings_Location")
+                 //  .Include("searchsettings_LookingFor")
+                 //   .Include("searchsettings_MaritalStatus")
+                 //  .Include("searchsettings_PoliticalView")
+                 //  .Include("searchsettings_Profession")
+                 //  .Include(" searchsettings_Religion")
+                 //  .Include("searchsettings_ReligiousAttendance")
+                 //   .Include("searchsettings_ShowMe")
+                 //   .Include("searchsettings_Sign")
+                 //  .Include("searchsettings_Smokes")
+                 //   .Include("searchsettings_SortByType")
+                 //  .Include("searchsettings_WantKids")
+                 //  .Include("searchsettings_Tribe")
                  .Where(p => p.profile_id    == profileid && p.myperfectmatch  == true);
 
                  //End If
@@ -175,8 +155,6 @@ namespace Shell.MVC2.Data
                      //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
                     //  this._datingcontext.searchsettings.Add(Newsearchsettings);
                     //  this._datingcontext.SaveChanges();
-                     
-
                      //save the profile data with the search settings to the database so we dont have to create it again
                      return Newsearchsettings;
 
@@ -1040,7 +1018,7 @@ namespace Shell.MVC2.Data
         {
 
             //get search sttings from DB
-            searchsetting perfectmatchsearchsettings = model.profiledata.profilemetadata.searchsettings.FirstOrDefault();
+            searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
             //set default perfect match distance as 100 for now later as we get more members lower
             //TO DO move this to a db setting or resourcer file
             if (perfectmatchsearchsettings.distancefromme   == null | perfectmatchsearchsettings.distancefromme   == 0)
@@ -1104,7 +1082,7 @@ namespace Shell.MVC2.Data
             // var TestModel =   (from x in _datingcontext.profiledata.Where(x => x.profile.username  == "case")
            //                      select x).FirstOrDefault();
           //  var MinVis = today.AddYears(-(TestModel.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault() + 1));
-           // bool TestgenderMatch = (TestModel.ProfileVisiblitySetting.GenderID  != null || TestModel.ProfileVisiblitySetting.GenderID == model.profiledata.GenderID) ? true : false;
+           // bool TestgenderMatch = (TestModel.ProfileVisiblitySetting.GenderID  != null || TestModel.ProfileVisiblitySetting.GenderID == model.profile.profiledata.GenderID) ? true : false;
 
             //  var testmodel2 = (from x in _datingcontext.profiledata.Where(x => x.profile.username  == "case" &&  db.fnCheckIfBirthDateIsInRange(x.birthdate, 19, 20) == true  )
            //                     select x).FirstOrDefault();
@@ -1118,14 +1096,14 @@ namespace Shell.MVC2.Data
                              //5-8-2012 add profile visiblity code here
                             // .Where(x => x.profile.username == "case")
                             //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.ProfileVisiblity == true)
-                            //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.agemaxVisibility != null && model.profiledata.birthdate > today.AddYears(-(x.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault() + 1)))
-                            //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.agemaxVisibility != null && model.profiledata.birthdate < today.AddYears(-x.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault()))
-                           // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.countryid != null && x.ProfileVisiblitySetting.countryid == model.profiledata.countryid  )
-                           // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.GenderID != null && x.ProfileVisiblitySetting.GenderID ==  model.profiledata.GenderID )
+                            //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.agemaxVisibility != null && model.profile.profiledata.birthdate > today.AddYears(-(x.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault() + 1)))
+                            //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.agemaxVisibility != null && model.profile.profiledata.birthdate < today.AddYears(-x.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault()))
+                           // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.countryid != null && x.ProfileVisiblitySetting.countryid == model.profile.profiledata.countryid  )
+                           // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.GenderID != null && x.ProfileVisiblitySetting.GenderID ==  model.profile.profiledata.GenderID )
                           //** end of visiblity settings ***
                           
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)) //using whereIF predicate function 
-                            .WhereIf(LookingForGenderValues.Count == 0, z=>z.gender.id  == model.lookingforgenderid)    
+                            .WhereIf(LookingForGenderValues.Count == 0, z=> model.lookingforgendersid.Contains(z.gender.id)) //  == model.lookingforgenderid)    
                             //TO DO add the rest of the filitering here 
                             //Appearance filtering                         
                             .WhereIf(blEvaluateHeights, z=> z.height  > intheightmin && z.height  <= intheightmax) //Only evealuate if the user searching actually has height values they look for                         
@@ -1184,128 +1162,139 @@ namespace Shell.MVC2.Data
         public List<MemberSearchViewModel> getemailmatches(MembersViewModel model)
         {
 
-            //get search sttings from DB
-            searchsetting perfectmatchsearchsettings = model.profiledata.profilemetadata.searchsettings.FirstOrDefault();
-            //set default perfect match distance as 100 for now later as we get more members lower
-            //TO DO move this to a _datingcontext setting or resourcer file
-            if (perfectmatchsearchsettings.distancefromme  == null | perfectmatchsearchsettings.distancefromme == 0)
-                model.maxdistancefromme  = 500;
 
-            //TO DO add this code to search after types have been made into doubles
-            //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
-            //right now returning all countries as well
+            try
+            {
+                //get search sttings from DB
+                searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
+                //set default perfect match distance as 100 for now later as we get more members lower
+                //TO DO move this to a _datingcontext setting or resourcer file
+                if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
+                    model.maxdistancefromme = 500;
 
-            //** TEST ***
-            //get the  gender's from search settings
+                //TO DO add this code to search after types have been made into doubles
+                //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
+                //right now returning all countries as well
 
-            // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
-            int intAgeTo = perfectmatchsearchsettings.agemax != null ? perfectmatchsearchsettings.agemax.GetValueOrDefault() : 99;
-            int intAgeFrom = perfectmatchsearchsettings.agemin!= null ? perfectmatchsearchsettings.agemin .GetValueOrDefault() : 18;
-            //Height
-            int intheightmin = perfectmatchsearchsettings.heightmin != null ? perfectmatchsearchsettings.heightmin.GetValueOrDefault() : 0;
-            int intheightmax = perfectmatchsearchsettings.heightmax != null ? perfectmatchsearchsettings.heightmax.GetValueOrDefault() : 100;
-            bool blEvaluateHeights = intheightmin > 0 ? true : false;
-            //get the rest of the values if they are needed in calculations
-            //convert lattitudes from string (needed for JSON) to bool           
-            double? myLongitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
-            double? myLattitude = (model.mylatitude  != "") ? Convert.ToDouble(model.mylongitude ) : 0;
+                //** TEST ***
+                //get the  gender's from search settings
 
-
-            //set variables
-            List<MemberSearchViewModel> MemberSearchViewmodels;
-            DateTime today = DateTime.Today;
-            DateTime max = today.AddYears(-(intAgeFrom + 1));
-            DateTime min = today.AddYears(-intAgeTo);
+                // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+                int intAgeTo = perfectmatchsearchsettings.agemax != null ? perfectmatchsearchsettings.agemax.GetValueOrDefault() : 99;
+                int intAgeFrom = perfectmatchsearchsettings.agemin != null ? perfectmatchsearchsettings.agemin.GetValueOrDefault() : 18;
+                //Height
+                int intheightmin = perfectmatchsearchsettings.heightmin != null ? perfectmatchsearchsettings.heightmin.GetValueOrDefault() : 0;
+                int intheightmax = perfectmatchsearchsettings.heightmax != null ? perfectmatchsearchsettings.heightmax.GetValueOrDefault() : 100;
+                bool blEvaluateHeights = intheightmin > 0 ? true : false;
+                //get the rest of the values if they are needed in calculations
+                //convert lattitudes from string (needed for JSON) to bool           
+                double? myLongitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
+                double? myLattitude = (model.mylatitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
 
 
-
-            //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
-            //requery all the has tbls
-            HashSet<int> LookingForGenderValues = new HashSet<int>();
-            LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.genders.Select(c => c.id.GetValueOrDefault())) : LookingForGenderValues;
-            //Appearacnce seache settings values         
-
-            //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
-
-            HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
-            LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id.GetValueOrDefault())) : LookingForBodyTypesValues;
-
-            HashSet<int> LookingForEthnicityValues = new HashSet<int>();
-            LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicitys.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
-
-            HashSet<int> LookingForEyeColorValues = new HashSet<int>();
-            LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.eyecolors.Select(c => c.id.GetValueOrDefault())) : LookingForEyeColorValues;
-
-            HashSet<int> LookingForHairColorValues = new HashSet<int>();
-            LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.haircolors.Select(c => c.id.GetValueOrDefault())) : LookingForHairColorValues;
-
-            HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
-            LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.hotfeatures.Select(c => c.id.GetValueOrDefault())) : LookingForHotFeatureValues;
-
-            //add more values as we get more members 
-
-            MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
-                            .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id )) //using whereIF predicate function 
-                            .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.lookingforgenderid )
-                            //Appearance filtering not implemented yet                        
-                            .WhereIf(blEvaluateHeights, z => z.height  > intheightmin && z.height  <= intheightmax) //Only evealuate if the user searching actually has height values they look for 
-                            //we have to filter on the back end now since we cant use UDFs
-                            // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
-                                      join f in _datingcontext.profiles on x.profile_id equals f.id 
-                                      select new MemberSearchViewModel
-                                      {
-                                          // MyCatchyIntroLineQuickSearch = x.AboutMe,
-                                          id = x.profile_id,
-                                          stateprovince = x.stateprovince,
-                                          postalcode = x.postalcode,
-                                          countryid = x.countryid,
-                                           genderid  = x.gender.id ,
-                                          birthdate = x.birthdate,
-                                          profile = f,
-                                          screenname = f.screenname,
-                                          longitude = x.longitude ?? 0,
-                                          latitude = x.latitude ?? 0,
-                                          hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
-                                          creationdate = f.creationdate,
-                                         // city = db.fnTruncateString(x.city, 11),
-                                          //lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
-                                          lastlogindate = f.logindate,
-                                        //  Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
-                                       //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
-
-
-                                      }).ToList();
+                //set variables
+                List<MemberSearchViewModel> MemberSearchViewmodels;
+                DateTime today = DateTime.Today;
+                DateTime max = today.AddYears(-(intAgeFrom + 1));
+                DateTime min = today.AddYears(-intAgeTo);
 
 
 
-            //these could be added to where if as well, also limits values if they did selected all
-           // var Profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.maxdistancefromme) select q) : MemberSearchViewmodels;
-            //     Profiles; ; 
-            // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
-            //               Profiles;
+                //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
+                //requery all the has tbls
+                HashSet<int> LookingForGenderValues = new HashSet<int>();
+                LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.genders.Select(c => c.id.GetValueOrDefault())) : LookingForGenderValues;
+                //Appearacnce seache settings values         
 
-            //TO DO switch this to most active postible and then filter by last logged in date instead .ThenByDescending(p => p.lastlogindate)
-            //final ordering 
-            var Profiles = MemberSearchViewmodels.OrderByDescending(p => p.hasgalleryphoto  == true).ThenByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).Take(4);
+                //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
 
-            //TO DO find another way to do this maybe check and see if parsed values are empty or something or return a cached list?
-            //11/20/2011 handle case where  no profiles were found
-            if (Profiles.Count() == 0)
-                return getquickmatcheswhenquickmatchesempty(model);
+                HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
+                LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id.GetValueOrDefault())) : LookingForBodyTypesValues;
 
-            return Profiles.ToList();
+                HashSet<int> LookingForEthnicityValues = new HashSet<int>();
+                LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicitys.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
+
+                HashSet<int> LookingForEyeColorValues = new HashSet<int>();
+                LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.eyecolors.Select(c => c.id.GetValueOrDefault())) : LookingForEyeColorValues;
+
+                HashSet<int> LookingForHairColorValues = new HashSet<int>();
+                LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.haircolors.Select(c => c.id.GetValueOrDefault())) : LookingForHairColorValues;
+
+                HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
+                LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.hotfeatures.Select(c => c.id.GetValueOrDefault())) : LookingForHotFeatureValues;
+
+                //add more values as we get more members 
+
+                MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
+                                .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)) //using whereIF predicate function 
+                                .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id))
+                                              //Appearance filtering not implemented yet                        
+                                .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax) //Only evealuate if the user searching actually has height values they look for 
+                                          //we have to filter on the back end now since we cant use UDFs
+                                          // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
+                                          join f in _datingcontext.profiles on x.profile_id equals f.id
+                                          select new MemberSearchViewModel
+                                          {
+                                              // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                              id = x.profile_id,
+                                              stateprovince = x.stateprovince,
+                                              postalcode = x.postalcode,
+                                              countryid = x.countryid,
+                                              genderid = x.gender.id,
+                                              birthdate = x.birthdate,
+                                              profile = f,
+                                              screenname = f.screenname,
+                                              longitude = x.longitude ?? 0,
+                                              latitude = x.latitude ?? 0,
+                                              hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                              creationdate = f.creationdate,
+                                              // city = db.fnTruncateString(x.city, 11),
+                                              //lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
+                                              lastlogindate = f.logindate,
+                                              //  Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
+                                                //distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
 
 
+                                          }).ToList();
+
+
+
+                //these could be added to where if as well, also limits values if they did selected all
+                // var Profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.maxdistancefromme) select q) : MemberSearchViewmodels;
+                //     Profiles; ; 
+                // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
+                //               Profiles;
+
+                //TO DO switch this to most active postible and then filter by last logged in date instead .ThenByDescending(p => p.lastlogindate)
+                //final ordering 
+                var Profiles = MemberSearchViewmodels.OrderByDescending(p => p.hasgalleryphoto == true).ThenByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).Take(4);
+
+            
+
+
+                //TO DO find another way to do this maybe check and see if parsed values are empty or something or return a cached list?
+                //11/20/2011 handle case where  no profiles were found
+                if (Profiles.Count() == 0)
+                    return getquickmatcheswhenquickmatchesempty(model).Take(4).ToList();
+
+                return Profiles.ToList();
+            }
+            catch (Exception ex)
+            {
+                var errormessage = ex.Message;
+
+            }
+            return null;
         }
         public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model)
         {
 
             //get search sttings from DB
-            searchsetting perfectmatchsearchsettings = model.profiledata.profilemetadata.searchsettings.FirstOrDefault();
+            searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
             //set default perfect match distance as 100 for now later as we get more members lower
             //TO DO move this to a _datingcontext setting or resourcer file
             if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
-                model.maxdistancefromme  = 500;
+                model.maxdistancefromme  = 5000;
 
             //TO DO add this code to search after types have been made into doubles
             //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
@@ -1339,7 +1328,7 @@ namespace Shell.MVC2.Data
             //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
             MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id )) //using whereIF predicate function 
-                            .WhereIf(LookingForGenderValues.Count == 0, z => z.gender.id  == model.lookingforgenderid )
+                            .WhereIf(LookingForGenderValues.Count == 0,z=>  model.lookingforgendersid.Contains(z.gender.id))
 
                                       join f in _datingcontext.profiles on x.profile_id equals f.id
                                       select new MemberSearchViewModel
@@ -1367,7 +1356,9 @@ namespace Shell.MVC2.Data
 
 
             //these could be added to where if as well, also limits values if they did selected all
-            var Profiles = (model.maxdistancefromme  > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.maxdistancefromme ) select q) : MemberSearchViewmodels.Take(500);
+           // var Profiles = (model.maxdistancefromme  > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.maxdistancefromme ) select q) : MemberSearchViewmodels.Take(500);
+
+            var Profiles =  MemberSearchViewmodels.Take(500);
             //     Profiles; ; 
             // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
             //               Profiles;

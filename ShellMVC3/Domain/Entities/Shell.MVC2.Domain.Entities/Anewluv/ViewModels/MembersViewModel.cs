@@ -132,8 +132,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public HashSet<int> lookingforgendersid { get; set; }
 
         //gender ID when they do not have anything in search settings fallback 
-         [DataMember]
-        public int lookingforgenderid { get; set; }
+       //  [DataMember]
+       // public int lookingforgenderid { get; set; }
          [DataMember]
         public string lookingforagefrom { get; set; }
          [DataMember]

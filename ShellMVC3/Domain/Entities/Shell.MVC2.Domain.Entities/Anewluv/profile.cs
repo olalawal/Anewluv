@@ -6,11 +6,12 @@ using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    [DataContract]
-    [Serializable ]
+    [DataContract]  
     public class profile
     {
+             [DataMember]
         public virtual profiledata profiledata { get; set; }
+           [DataMember]
         public virtual profilemetadata profilemetadata { get; set; }
 
            [DataMember]
@@ -50,14 +51,18 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
            [DataMember]
         public DateTime? failedpasswordchangedate { get; set; }
            [DataMember]
-        public int? failedpasswordchangeattemptcount { get; set; } 
-        public string salt { get; set; }   
+        public int? failedpasswordchangeattemptcount { get; set; }
+               [DataMember]
+        public string salt { get; set; }
+              [DataMember]
         public string securityanswer { get; set; }
 
        
         public virtual lu_securityquestion securityquestion { get; set; } 
         //Anti spam stuff might do away with
+          [DataMember]
         public int? sentemailquotahitcount { get; set; }
+            [DataMember]
         public int? sentmessagequotahitcount { get; set; }
       
         //linked collections
