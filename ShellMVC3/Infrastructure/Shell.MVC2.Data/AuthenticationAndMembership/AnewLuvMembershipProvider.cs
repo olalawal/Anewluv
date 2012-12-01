@@ -23,7 +23,8 @@
     using System.Web;
     using System.Web.Security;
     using System.ServiceModel.DomainServices.Server.ApplicationServices;
-    using Common;
+   // using Common;
+using Shell.MVC2.Infrastructure;
 
 
     using System.Globalization;
@@ -103,13 +104,13 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             //use new decryption method
             {
                
-                decryptedPassword = Common.Encryption.decryptString (encryptedPassword);
+                decryptedPassword = Encryption.decryptString (encryptedPassword);
                 actualpasswordstring = password;            
             }
             else
             {
-                decryptedPassword = Common.Encryption.Decrypt(encryptedPassword, password);
-                actualpasswordstring = username.ToUpper() + Common.Encryption.EncryptionKey;            
+                decryptedPassword = Encryption.Decrypt(encryptedPassword, password);
+                actualpasswordstring = username.ToUpper() + Encryption.EncryptionKey;            
             }
 
 
@@ -344,7 +345,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 ObjProfileEntity.username = username;
                 //changed the encryption to something stronger
                 //make username upper so that we can get actual mateches withoute user having to type in a case sensitive username
-                    ObjProfileEntity.password  = (openidIdentifer !="") ?Common.Encryption.encryptString(password) : openidIdentifer;
+                    ObjProfileEntity.password  = (openidIdentifer !="") ? Encryption.encryptString(password) : openidIdentifer;
                // ObjProfileEntity.id   = email;
                 ObjProfileEntity.screenname  = screenname;
                 //need to add a new feild
@@ -409,7 +410,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //we have the generated password now update the user's account with new password
 
                 generatedpassword = GeneratePassword();
-                _memberepository.updatepassword(Convert.ToInt16(profileid), Common.Encryption.encryptString(generatedpassword));
+                _memberepository.updatepassword(Convert.ToInt16(profileid), Encryption.encryptString(generatedpassword));
 
 
                 //'reset the password 
@@ -490,7 +491,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                     //only update password if it changed
                     if (u.password != null)
                     {
-                        ObjProfileEntity.password  = Common.Encryption.encryptString(u.password);
+                        ObjProfileEntity.password  = Encryption.encryptString(u.password);
                         ObjProfileEntity.passwordChangeddate  = DateTime.Now;
                         ObjProfileEntity.passwordchangecount = (ObjProfileEntity.passwordchangecount == null) ? 1 : ObjProfileEntity.passwordchangecount + 1;
                     }

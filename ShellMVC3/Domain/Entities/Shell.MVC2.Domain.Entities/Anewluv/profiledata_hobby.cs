@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
@@ -9,9 +10,12 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class profiledata_hobby
     {
         [Key]
-        public int id { get; set; }
+       [DataMember]  public int id { get; set; }
+        [DataMember]
         public virtual lu_hobby hobby { get; set; }
-                    public int profile_id { get; set; }
+        [DataMember]
+        public int profile_id { get; set; }
+        [DataMember]
         public virtual profilemetadata profilemetadata { get; set; }
        
     }

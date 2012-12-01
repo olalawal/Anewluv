@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
@@ -9,15 +10,23 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class ratingvalue
     {
         [Key]
-        public int id { get; set; }
+       [DataMember] public int id { get; set; }
+        [DataMember]
         public int rating_id { get; set; }
+        [DataMember]
         public int profile_id { get; set; }
+        [DataMember]
         public int rateeprofile_id { get; set; }
-        public virtual rating  rating { get; set; }  //type of rating
+        [DataMember]
+        public virtual rating rating { get; set; }  //type of rating
+        [DataMember]
         public virtual profilemetadata profilemetatadata { get; set; }    //person giving the rating
-        public virtual profilemetadata  rateeprofilemetadata { get; set; }   //person being rated  
-        public DateTime? date { get; set; }     
-        public Double ? value { get; set; }
+        [DataMember]
+        public virtual profilemetadata rateeprofilemetadata { get; set; }   //person being rated  
+        [DataMember]
+        public DateTime? date { get; set; }
+        [DataMember]
+        public Double? value { get; set; }
     }
 }
      
