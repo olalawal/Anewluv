@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    [DataContract]
+    [DataContract(IsReference = true)]
     public class profilemetadata
     {
             // Metadata classes are not meant to be instantiated.

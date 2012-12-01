@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    [DataContract]  
+    [DataContract(IsReference = true)] 
     public class profile
     {
              [DataMember]
@@ -66,9 +66,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public int? sentmessagequotahitcount { get; set; }
       
         //linked collections
+           [DataMember]
         public virtual ICollection<membersinrole > memberroles { get; set; }
+          [DataMember]
         public virtual ICollection<profileactivity> profileactivity { get; set; }
+           [DataMember]
         public virtual ICollection<openid> openids { get; set; }
+           [DataMember]
         public virtual ICollection<userlogtime> logontimes { get; set; }
 
       

@@ -40,9 +40,12 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public string phone { get; set; }
          [DataMember]    
         public string postalcode { get; set; }           
-            public virtual profile profile { get; set; }
-            public virtual profilemetadata profilemetadata { get; set; }
-            public virtual visiblitysetting visibilitysettings { get; set; }   
+           
+        public virtual profile profile { get; set; }
+        [DataMember]        
+        public virtual profilemetadata profilemetadata { get; set; }
+        [DataMember]        
+        public virtual visiblitysetting visibilitysettings { get; set; }   
 
 
             //lookups for personal profile details 

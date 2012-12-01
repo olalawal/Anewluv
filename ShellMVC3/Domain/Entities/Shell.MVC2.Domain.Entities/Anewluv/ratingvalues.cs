@@ -5,6 +5,7 @@ using System.Text;using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
+     [DataContract(IsReference = true)]
     public class ratingvalue
     {
         [Key]

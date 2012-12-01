@@ -151,17 +151,19 @@ namespace Shell.MVC2.Data
 
             
         }
+
+
         public List<lu_ethnicity> getethnicitylist()
         {
-           
+
 
 
 #if DISCONECTED
-                List<lu_ethnicity> ethnicitylist = new List<lu_ethnicity>();
-                ethnicitylist.Add(new lu_ethnicity { description = "Male",  id  = 1, selected   = false });
-                ethnicitylist.Add(new lu_ethnicity { description = "Female", id = 2, selected = false });
-                return ethnicitylist;
-                
+            List<lu_ethnicity> ethnicitylist = new List<lu_ethnicity>();
+            ethnicitylist.Add(new lu_ethnicity { description = "Male", id = 1, selected = false });
+            ethnicitylist.Add(new lu_ethnicity { description = "Female", id = 2, selected = false });
+            return ethnicitylist;
+
 #else
 
 
@@ -169,11 +171,11 @@ namespace Shell.MVC2.Data
                 return CachingFactory.SharedObjectHelper.getethnicitylist(_datingcontext);
 
 
-        }
+        
                 // return temp;
 #endif
 
-            
+        }
         
         public List<lu_eyecolor> geteyecolorlist()
         {

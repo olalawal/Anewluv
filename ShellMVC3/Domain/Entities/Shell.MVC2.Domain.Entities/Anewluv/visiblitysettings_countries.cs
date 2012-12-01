@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    [DataContract ]
+     [DataContract(IsReference = true)]
     public class visiblitysettings_country
     {
 

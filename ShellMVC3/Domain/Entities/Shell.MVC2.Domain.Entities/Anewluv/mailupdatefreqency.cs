@@ -8,10 +8,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class mailupdatefreqency
     {
         [Key]
+        [DataMember]
         public int id { get; set; }
+        [DataMember]
         public int? updatefreqency { get; set; }
-        public int profile_id { get; set; } 
-        public virtual profilemetadata  profilemetadata { get; set; }       
+        [DataMember]
+        public int profile_id { get; set; }
+        [DataMember]
+        public virtual profilemetadata profilemetadata { get; set; }       
       
     }
 }

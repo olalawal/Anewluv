@@ -9,14 +9,23 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class abusereportnotes
     {
         [Key]
+        [DataMember]
         public int id { get; set; }
+        [DataMember]
         public int abusereport_id { get; set; }
+        [DataMember]
         public int profile_id { get; set; }
+        [DataMember]
         public virtual abusereport abusereport { get; set; }
+        [DataMember]
         public virtual profilemetadata profilemetadata { get; set; }
+        [DataMember]
         public virtual lu_notetype notetype { get; set; }
+        [DataMember]
         public string note { get; set; }
+        [DataMember]
         public DateTime? creationdate { get; set; }
+        [DataMember]
         public DateTime? reviewdate { get; set; }
 
 

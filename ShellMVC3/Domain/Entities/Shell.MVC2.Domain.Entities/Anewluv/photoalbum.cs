@@ -9,11 +9,17 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
       
         [Key]
+        [DataMember]
         public int id { get; set; }
+        [DataMember]
         public virtual ICollection<photo> photos { get; set; }
+        [DataMember]
         public string description { get; set; }
+        [DataMember]
         public virtual ICollection<photoalbum_securitylevel> albumsecuritylevels { get; set; }
+        [DataMember]
         public int profile_id { get; set; }
+        [DataMember]
         public profilemetadata profilemetadata { get; set; }
         
 
