@@ -702,53 +702,57 @@ namespace Shell.MVC2.Data
         public MembersViewModel mapmember(int ProfileID)
         {
 
+
+
             MembersViewModel model = new MembersViewModel();
+            profile profile = new profile();
+
             // IEnumerable<CityStateProvince> CityStateProvince ;
             // MailModelRepository mailrepository = new MailModelRepository();
             //var myProfile = membersrepository.GetprofiledataByProfileID(ProfileID).profile;
             // var perfectmatchsearchsettings = membersrepository.GetPerFectMatchSearchSettingsByProfileID(ProfileID);
             // model.Profile = myProfile;
             //Profile data will be on the include
-            model.profile = membersrepository.getprofilebyprofileid(Convert.ToInt16(ProfileID));
+            profile = membersrepository.getprofilebyprofileid(Convert.ToInt16(ProfileID));
             //TO DO this should be a try cacth with exception handling
 
             try
             {
                 //TO DO do away with this since we already have the profile via include from the profile DATA
                 // model.Profile = model.profile;
-
+                model.profile_id = profile.id;
                 //   model.profile.profiledata.SearchSettings(perfectmatchsearchsettings);
                 //4-28-2012 added mapping for profile visiblity
-                model.profilevisiblity = model.profile.profiledata.visibilitysettings;
+                model.profilevisiblity = profile.profiledata.visibilitysettings;
 
                 //on first load this should always be false
                 //to DO   DO  we still need this
                 model.profilestatusmessageshown = false;
 
-                model.mygenderid = model.profile.profiledata.gender.id;
+                model.mygenderid = profile.profiledata.gender.id;
                 //this should come from search settings eventually on the full blown model of this.
                 //create hase list of genders they are looking for, if it is null add the default
 
                 //TO DO change this to use membererepo
-                model.lookingforgendersid = (model.profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?
-                new HashSet<int>(model.profile.profilemetadata.searchsettings.FirstOrDefault().genders.Select(c => c.id.GetValueOrDefault())) : null;
+                model.lookingforgendersid = (profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?
+                new HashSet<int>(profile.profilemetadata.searchsettings.FirstOrDefault().genders.Select(c => c.id.GetValueOrDefault())) : null;
                 if (model.lookingforgendersid != null)
                 {
-                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(model.profile.profiledata.gender.id));
+                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(profile.profiledata.gender.id));
                 }
 
                 //set selected value
                 //model.Countries. =model.profile.profiledata.CountryID;
 
                 //geographical data poulated here
-                model.mycountryname = georepository.getcountrynamebycountryid(model.profile.profiledata.countryid);
-                model.mycountryid =model.profile.profiledata.countryid;
-                model.mycity =model.profile.profiledata.city;
+                model.mycountryname = georepository.getcountrynamebycountryid(profile.profiledata.countryid);
+                model.mycountryid =profile.profiledata.countryid;
+                model.mycity =profile.profiledata.city;
                 //TO DO items need to be populated with real values, in this case change model to double for latt
-                model.mylatitude =model.profile.profiledata.latitude.ToString(); //model.Lattitude
-                model.mylongitude =model.profile.profiledata.longitude.ToString();
+                model.mylatitude =profile.profiledata.latitude.ToString(); //model.Lattitude
+                model.mylongitude =profile.profiledata.longitude.ToString();
                 //update 9-21-2011 get fro search settings
-                model.maxdistancefromme = model.profile.profilemetadata.searchsettings.FirstOrDefault() != null ? model.profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
+                model.maxdistancefromme = profile.profilemetadata.searchsettings.FirstOrDefault() != null ? profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
 
                 //11-29-2012 olawl move this chunk to ajax calls 
                 //mail counters
@@ -788,12 +792,12 @@ namespace Shell.MVC2.Data
                 //we dont want to add search setttings to the members model?
                 //TO do remove profiledata at some point
                 //check if the user has a profile search settings value in stored DB if not add one and save it
-                if (model.profile.profilemetadata.searchsettings.Count == 0)
+                if (profile.profilemetadata.searchsettings.Count == 0)
                 {
-                    membersrepository.createmyperfectmatchsearchsettingsbyprofileid(model.profile.id);
+                    membersrepository.createmyperfectmatchsearchsettingsbyprofileid(profile.id);
                     //update the profile data with the updated value
                     //TO DO stop storing profiledata
-                    model.profiledata = membersrepository.getprofiledatabyprofileid(model.profile.id);
+                   // model.profiledata = membersrepository.getprofiledatabyprofileid(profile.id);
 
                 }
 

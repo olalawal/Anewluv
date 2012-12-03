@@ -1121,7 +1121,11 @@ namespace Shell.MVC2.Data
                                             screenname = f.screenname ,
                                           longitude = (double)x.longitude,
                                           latitude = (double)x.latitude,
-                                          hasgalleryphoto  = (_datingcontext.photos.Where(i => i.profile_id  == f.id && i.photostatus.id  == (int)photostatusEnum.Gallery ).FirstOrDefault().id  != null )? true : false ,
+                                         // hasgalleryphoto  = (_datingcontext.photos.Where(i => i.profile_id  == f.id && i.photostatus.id  == (int)photostatusEnum.Gallery ).FirstOrDefault().id  != null )? true : false ,
+                                        //  galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.photo.photostatus.id == (int)photostatusEnum.Gallery && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
+                                          hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id).FirstOrDefault().id != null) ? true : false,
+                                          galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
+                                            
                                           creationdate = f.creationdate,
                                           //city = _datingcontext.(x.city, 11),
                                           // lastloggedonstring   = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
@@ -1163,8 +1167,15 @@ namespace Shell.MVC2.Data
         {
 
 
+
             try
             {
+
+                profile profile = new profile();
+                profile =  this.getprofilebyprofileid(Convert.ToInt16(model.profile_id ));
+
+                model.profile = profile;
+
                 //get search sttings from DB
                 searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
                 //set default perfect match distance as 100 for now later as we get more members lower
@@ -1242,12 +1253,18 @@ namespace Shell.MVC2.Data
                                               countryid = x.countryid,
                                               genderid = x.gender.id,
                                               birthdate = x.birthdate,
-                                              profile = f,
+                                              //profile = f,
                                               screenname = f.screenname,
                                               longitude = x.longitude ?? 0,
                                               latitude = x.latitude ?? 0,
-                                              hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                              //TO restore this when DB is fixed
+                                              //hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                             // galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.photo.photostatus.id == (int)photostatusEnum.Gallery && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
+                                            
                                               creationdate = f.creationdate,
+                                              hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id).FirstOrDefault().id != null) ? true : false,
+                                               galleryphoto   = (_datingcontext.photoconversions.Where(i => i.photo.profile_id ==x.profile_id  && i.formattype.id  == (int)photoformatEnum.Thumbnail ) .FirstOrDefault()),
+                                            
                                               // city = db.fnTruncateString(x.city, 11),
                                               //lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                               lastlogindate = f.logindate,
@@ -1267,7 +1284,9 @@ namespace Shell.MVC2.Data
 
                 //TO DO switch this to most active postible and then filter by last logged in date instead .ThenByDescending(p => p.lastlogindate)
                 //final ordering 
-                var Profiles = MemberSearchViewmodels.OrderByDescending(p => p.hasgalleryphoto == true).ThenByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).Take(4);
+                //var Profiles = MemberSearchViewmodels.OrderByDescending(p => p.hasgalleryphoto == true).ThenByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).Take(4);
+                
+                var Profiles = MemberSearchViewmodels.Where(p => p.hasgalleryphoto == true).OrderBy(p => p.creationdate).ThenByDescending(p => p.distancefromme).Take(4);
 
             
 
@@ -1344,7 +1363,11 @@ namespace Shell.MVC2.Data
                                           screenname = f.screenname,
                                           longitude = x.longitude ?? 0,
                                           latitude =  x.latitude ?? 0,
-                                           hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                        //   hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                        //  galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.photo.photostatus.id == (int)photostatusEnum.Gallery && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
+                                          hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id).FirstOrDefault().id != null) ? true : false,
+                                          galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
+                                            
                                            creationdate = f.creationdate,
                                          // city = db.fnTruncateString(x.city, 11),
                                          // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),

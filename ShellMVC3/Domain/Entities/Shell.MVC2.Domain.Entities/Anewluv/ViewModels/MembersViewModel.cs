@@ -41,6 +41,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //Added session ID
           [DataMember]
         public string sessionid { get; set; }
+          [DataMember]
+        public int profile_id { get; set; } 
 
         //added to hold RPX /OpenID data
         [DataMember ]
@@ -67,23 +69,27 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         // public photo  Photos { get; set; }
 
         //profileData should enumarate the entire model 
-        [DataMember]
+       // [DataMember]
         public profile profile { get; set; }
 
-        [DataMember]
+      //  [DataMember]
         public profiledata profiledata { get; set; }
 
         [DataMember]
         public quicksearchmodel myquicksearch { get; set; }
 
+         [DataMember]
         public RegisterModel register { get; set; }
 
-      
+       [DataMember]
         public AccountModel account { get; set; }
 
   
         //used for uploading photos , just temporary
+         [DataMember]
         public List<photo> myphotos { get; set; }
+
+         public photoconversion galleryphoto { get; set; }
 
         //10-26-2011 added as another temp storrange
           [DataMember ]
@@ -122,10 +128,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public string whoilikecount { get; set; }
         //blocks
 
-
          [DataMember]
         public string myblockcount { get; set; }
-
 
         //male would be default looking for female etc
          [DataMember]
@@ -138,7 +142,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public string lookingforagefrom { get; set; }
          [DataMember]
         public string lookingforageto { get; set; }
-
 
         //get genders collection and selection
         [DataMember]

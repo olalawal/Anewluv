@@ -46,26 +46,37 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public DateTime? lastlogindate { get; set; }
            [DataMember]
         public int? lookingforid { get; set; }
-           [DataMember]
+         
         public profile profile { get; set; }
-         [DataMember]
+         
         public profiledata profiledata { get; set; }
         //added a conttructor with profile ID for building this item since its one per page now
          [DataMember]
         public searchsetting  perfectmatchsettings { get; set; }
        // public EditProfilePhotosViewModel ProfilePhotos { get; set; }
         // properties       
+         [DataMember]
         public int id { get; set; }
+          [DataMember]
         public string stateprovince { get; set; }
+          [DataMember]
         public string postalcode { get; set; }
+          [DataMember]
         public int? countryid { get; set; }
         //public DateTime? lastloggedontime { get; set; }
+         [DataMember]
         public string lastloggedonstring { get; set; } //display value of last logged in          
+         [DataMember]
         public bool? online { get; set; } //not filled in yet          
+          [DataMember]
         public bool hasgalleryphoto { get; set; }
+          [DataMember]
+        public photoconversion galleryphoto { get; set; }
+          [DataMember]
         public string countryname { get; set; }
         public string city { get; set; }
         //added screen name since we dont pass profile anymore
+          [DataMember]
         public string screenname { get; set; }
         public string mycatchyintroline { get; set; }
            [DataMember]
