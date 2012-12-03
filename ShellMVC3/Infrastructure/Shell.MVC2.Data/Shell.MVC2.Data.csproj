@@ -99,11 +99,11 @@
     <Reference Include="ImageResizer.Plugins.WhitespaceTrimmer">
       <HintPath>..\..\Shell.MVC2\packages\ImageResizer.Plugins.WhitespaceTrimmer.3.2.4\lib\ImageResizer.Plugins.WhitespaceTrimmer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationServer.Caching.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\Shell.MVC2\Shell.MVC2\bin\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Client">
+      <HintPath>..\..\Shell.MVC2\packages\ServerAppFabric.Client.1.1.2106\lib\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationServer.Caching.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\Shell.MVC2\Shell.MVC2\bin\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Core">
+      <HintPath>..\..\Shell.MVC2\packages\ServerAppFabric.Client.1.1.2106\lib\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ServiceBus">
       <HintPath>..\..\Shell.MVC2\packages\WindowsAzure.ServiceBus.1.7.0.1\lib\net40-full\Microsoft.ServiceBus.dll</HintPath>

@@ -716,9 +716,11 @@ namespace Shell.MVC2.Data
 
 
 #if DISCONECTED
-                        temp.Add(new string() { Text = "United States", Value = "44", Selected = false });
-                        temp.Add(new string() { Text = "Canada", Value = "43", Selected = true });
-                        return temp;
+                       
+                        List<country> countrylist = new List<country>();
+                        countrylist.Add(new country { countryvalue = "United", countryindex = "44", selected = false });
+                        countrylist.Add(new country { countryvalue = "Canada", countryindex = "43", selected = false });
+                        return countrylist;
 
 #else
 

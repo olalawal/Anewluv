@@ -37,19 +37,21 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         public string agevalue { get; set; }
         public string ageindex { get; set; }
+        public bool selected { get; set; }
     }
 
     public class metricheight
     {
         public string heightvalue { get; set; }
         public string heightindex { get; set; }
+        public bool selected { get; set; }
     }
     
     public class distance
     {
         public int distancevalue;
         public int distanceindex;
-
+        public bool selected { get; set; }
     }
 
 
@@ -57,13 +59,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         public string cityvalue { get; set; }
         public string cityindex { get; set; }
-
+        public bool selected { get; set; }
     }
 
     public class country
     {
         public string countryvalue { get; set; }
         public string countryindex { get; set; }
+        public bool selected { get; set; }
 
     }
 
@@ -71,7 +74,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         public string  stateprovinceindex { get; set; }
          public string stateprovince { get; set; }
-
+         public bool selected { get; set; }
     }
 
 
@@ -79,7 +82,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
         public string postalcodevalue { get; set; }
         public string postalcodevalueindex { get; set; }
-
+        public bool selected { get; set; }
     }
 
 

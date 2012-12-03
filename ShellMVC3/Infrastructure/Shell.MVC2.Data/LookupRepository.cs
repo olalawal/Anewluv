@@ -51,9 +51,9 @@ namespace Shell.MVC2.Data
 
 #if DISCONECTED
             
-                SystemPageSetting virtualpage = new SystemPageSetting();
-                virtualpage.Titile = "MembersHome";
-                virtualpage.BodyCssSyleName = "StandardWhiteBackground";
+                systempagesetting virtualpage = new systempagesetting();
+                virtualpage.title  = "MembersHome";
+                virtualpage.bodycssstylename  = "StandardWhiteBackground";
 
                 temp.Add(virtualpage);
                           
@@ -87,13 +87,7 @@ namespace Shell.MVC2.Data
                 return genderlist;
                 
 #else
-
-
-
-                return CachingFactory.SharedObjectHelper.getgenderlist(_datingcontext);
-
-
-
+            return CachingFactory.SharedObjectHelper.getgenderlist(_datingcontext);
                 // return temp;
 #endif
 

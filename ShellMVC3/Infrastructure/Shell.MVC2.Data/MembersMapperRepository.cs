@@ -728,11 +728,9 @@ namespace Shell.MVC2.Data
                 //on first load this should always be false
                 //to DO   DO  we still need this
                 model.profilestatusmessageshown = false;
-
                 model.mygenderid = profile.profiledata.gender.id;
                 //this should come from search settings eventually on the full blown model of this.
                 //create hase list of genders they are looking for, if it is null add the default
-
                 //TO DO change this to use membererepo
                 model.lookingforgendersid = (profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?
                 new HashSet<int>(profile.profilemetadata.searchsettings.FirstOrDefault().genders.Select(c => c.id.GetValueOrDefault())) : null;
@@ -743,9 +741,15 @@ namespace Shell.MVC2.Data
 
                 //set selected value
                 //model.Countries. =model.profile.profiledata.CountryID;
+                //geographical data poulated here 
+                //this is disabled when disconected ok
+#if DISCONECTED
 
-                //geographical data poulated here
-                model.mycountryname = georepository.getcountrynamebycountryid(profile.profiledata.countryid);
+                model.mycountryname = "United States";// georepository.getcountrynamebycountryid(profile.profiledata.countryid);
+#else
+            model.mycountryname = georepository.getcountrynamebycountryid(profile.profiledata.countryid);
+#endif
+
                 model.mycountryid =profile.profiledata.countryid;
                 model.mycity =profile.profiledata.city;
                 //TO DO items need to be populated with real values, in this case change model to double for latt
@@ -803,16 +807,11 @@ namespace Shell.MVC2.Data
 
                 //*** start binding collections here ******
                 //do this last since we need values populated first
-
-
                 // var pp = new PaginatedList<MemberSearchViewModel>();
-
                 //sets up the inital paging for your matches
                 //  var productPagedList = pp.GetPageableList(model.MyMatches, 1,4);
                 //   MyMatchesPaged.AsPagination(1, 4);
-
                 // model.MyMatches = productPagedList;  // set quick matches
-
                 return model;
             }
             //TO DO log the error
