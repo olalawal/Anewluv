@@ -1122,10 +1122,16 @@ namespace Shell.MVC2.Data
                                           longitude = (double)x.longitude,
                                           latitude = (double)x.latitude,
                                          // hasgalleryphoto  = (_datingcontext.photos.Where(i => i.profile_id  == f.id && i.photostatus.id  == (int)photostatusEnum.Gallery ).FirstOrDefault().id  != null )? true : false ,
-                                        //  galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.photo.photostatus.id == (int)photostatusEnum.Gallery && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
+                                         // galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.photo.photostatus.id == (int)photostatusEnum.Gallery && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
                                           hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id).FirstOrDefault().id != null) ? true : false,
-                                          galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
-                                            
+                                          galleryphoto =  new PhotoModel {
+
+                                              photo = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image),
+                                              approvalstatus = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.approvalstatus),
+                                              imagecaption = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.imagecaption),
+                                              convertedsize = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().size),
+                                              orginalsize = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.size)
+                                          },
                                           creationdate = f.creationdate,
                                           //city = _datingcontext.(x.city, 11),
                                           // lastloggedonstring   = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
@@ -1141,11 +1147,7 @@ namespace Shell.MVC2.Data
             //     Profiles; ; 
             // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
             //               Profiles;
-
             //do the stuff for the user defined functions here
-
-
-
             //TO DO switch this to most active postible and then filter by last logged in date instead .ThenByDescending(p => p.lastlogindate)
             //final ordering 
             Profiles = Profiles.OrderByDescending(p => p.hasgalleryphoto  == true).ThenByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);
@@ -1155,9 +1157,7 @@ namespace Shell.MVC2.Data
             if (Profiles.Count() == 0 )
             return getquickmatcheswhenquickmatchesempty(model);
 
-
             return Profiles.ToList();
-
 
         }
 
@@ -1263,8 +1263,16 @@ namespace Shell.MVC2.Data
                                             
                                               creationdate = f.creationdate,
                                               hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id).FirstOrDefault().id != null) ? true : false,
-                                               galleryphoto   = (_datingcontext.photoconversions.Where(i => i.photo.profile_id ==x.profile_id  && i.formattype.id  == (int)photoformatEnum.Thumbnail ) .FirstOrDefault()),
-                                            
+                                              galleryphoto = new PhotoModel
+                                              {
+                                                  photo = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image),
+                                                  approvalstatus = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.approvalstatus),
+                                                  imagecaption = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.imagecaption),
+                                                  convertedsize  = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().size),
+                                                  orginalsize   = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.size )
+
+                                              },
+                                     
                                               // city = db.fnTruncateString(x.city, 11),
                                               //lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                               lastlogindate = f.logindate,
@@ -1366,8 +1374,15 @@ namespace Shell.MVC2.Data
                                         //   hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
                                         //  galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.photo.photostatus.id == (int)photostatusEnum.Gallery && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
                                           hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id).FirstOrDefault().id != null) ? true : false,
-                                          galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
-                                            
+                                          galleryphoto = new PhotoModel
+                                          {
+                                              photo = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image),
+                                              approvalstatus = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.approvalstatus),
+                                              imagecaption = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.imagecaption),
+                                              convertedsize = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().size),
+                                              orginalsize = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.size)
+                                          },
+                                      
                                            creationdate = f.creationdate,
                                          // city = db.fnTruncateString(x.city, 11),
                                          // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),

@@ -53,28 +53,28 @@ namespace Shell.MVC2.Data
                 //TO DO change to use Ninject maybe
                // DatingService db = new DatingService();
                 //  MembersRepository membersrepo=  new MembersRepository();
-                profiledata Currentprofiledata =membersrepository.getprofiledatabyprofileid(profileId); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
+                profile profile =membersrepository.getprofilebyprofileid(profileId); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
                 //  EditProfileRepository editProfileRepository = new EditProfileRepository();
 
 
 
-                model.id = Currentprofiledata.profile_id  ;
-                model.profiledata = Currentprofiledata;
-                model.profile = Currentprofiledata.profile;
-                model.stateprovince  = Currentprofiledata.stateprovince;
-                model.postalcode  = Currentprofiledata.postalcode;
-                model.countryid  = Currentprofiledata.countryid;
-                model.genderid  = Currentprofiledata.gender.id ;
-                model.birthdate = Currentprofiledata.birthdate;
-                // modelprofile = Currentprofiledata.profile;
-                model.longitude = (double)Currentprofiledata.longitude;
-                model.latitude = (double)Currentprofiledata.latitude;
+                model.id = profile.id  ;
+                model.profiledata = profile.profiledata ;
+                model.profile = profile;
+                model.stateprovince  = profile.profiledata.stateprovince;
+                model.postalcode = profile.profiledata.postalcode;
+                model.countryid = profile.profiledata.countryid;
+                model.genderid = profile.profiledata.gender.id;
+                model.birthdate = profile.profiledata.birthdate;
+                // modelprofile = profile.profile;
+                model.longitude = (double)profile.profiledata.longitude;
+                model.latitude = (double)profile.profiledata.latitude;
                 //  HasGalleryPhoto = (from p in db.photos.Where(i => i.ProfileID == f.ProfileID && i.ProfileImageType == "Gallery") select p.ProfileImageType).FirstOrDefault(),
-                model.creationdate  = Currentprofiledata.profile.creationdate;
-                model.city = Extensions.ReduceStringLength(Currentprofiledata.city, 11);
-                model.lastlogindate =  Currentprofiledata.profile.logindate ;
+                model.creationdate  = profile.creationdate;
+                model.city = Extensions.ReduceStringLength(profile.profiledata.city, 11);
+                model.lastlogindate =  profile.logindate ;
                 model.lastloggedonstring = membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
-                model.online  = membersrepository.getuseronlinestatus(Currentprofiledata.profile_id );
+                model.online  = membersrepository.getuseronlinestatus(profile.id );
                 // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
                 //DistanceFromMe = 0  get distance from somwhere else
                 //to do do something with the unaproved photos so it is a nullable value , private photos are linked too here
@@ -87,6 +87,7 @@ namespace Shell.MVC2.Data
                // var NotApproved = editProfileRepository.GetApproved(MyPhotos, "No", page, ps);
                // var Private = editProfileRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
                 model.profilephotos = photorepository.getpagededitphotoviewmodelbyprofileid(model.profile.id, page, ps);   //editProfileRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                approvedphotos = photorepository.
 
                return model;
             }

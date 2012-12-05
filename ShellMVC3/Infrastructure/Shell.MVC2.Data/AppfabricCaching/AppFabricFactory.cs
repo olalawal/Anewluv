@@ -402,7 +402,7 @@ namespace Shell.MVC2.AppFabric
 
 
 
-                MembersViewModel model = new MembersViewModel();
+                MembersViewModel model = new MembersViewModel();               
                 //var mm = MembersMapperRepository();
 
                 try
@@ -412,7 +412,7 @@ namespace Shell.MVC2.AppFabric
 
                     //TO do check if the model has changed since the last time it was loaded 
                     //create a method in members repo that checks to see if something has been updated since last activity?
-                    if (model == null )
+                    if (model.profile_id  == null | model.profile_id == 0 )
                     {
                         if (dataCache != null)
                         {
@@ -425,7 +425,9 @@ namespace Shell.MVC2.AppFabric
                         }
                         else
                         {
-                            model =membersmapperepository.mapguest();
+                            //TO DO map to gest i think
+                            model = membersmapperepository.mapmember(profileid);
+                            //model =membersmapperepository.mapguest();
 
                         }
                     } return model;
@@ -458,8 +460,8 @@ namespace Shell.MVC2.AppFabric
                     //int y = 0;
                     //int z = x / y;
 
-                    
-                    if (model == null)
+
+                    if (model.profile_id == null | model.profile_id == 0)
                     {
                         //not sure what needs to be initialized for guests , if anything initlize it here
                         // map the registration thing since 
@@ -662,7 +664,7 @@ namespace Shell.MVC2.AppFabric
                 //    //throw new InvalidOperationException();
                 //    return null;
                 //}
-                if (p == null)
+                if (p.profile_id  == null | p.profile_id == 0)
                 {
                     //remap the user data if cache is empty
                    // var mm = new ViewModelMapper();
@@ -726,7 +728,7 @@ namespace Shell.MVC2.AppFabric
 
         public static class ProfileBrowseModelsHelper
         {
-            public static List<ProfileBrowseModel> getmembercurrentsearchresults(string profileid, ISearchRepository  searchrepository)
+            public static List<ProfileBrowseModel> getmembercurrentsearchresults(string profileid)
             {
                 DataCache dataCache;
                 dataCache = GetCache;
@@ -742,7 +744,7 @@ namespace Shell.MVC2.AppFabric
                     //put cleanup code here
                     throw (ex);
                 }
-                if (model == null)
+                if (model.Count == 0)
                 {
 
                     //remap the user data if cache is empty

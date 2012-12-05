@@ -54,16 +54,16 @@ namespace Shell.MVC2.Data
             // Retrieve All User's Approved Photo's that are not Private and approved.
             //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
-            var model = (from p in _datingcontext.photos.Where(a => a.approvalstatus.id == (int)status)
+            var model = (from p in _datingcontext.photos.Where(a => a.approvalstatus != null && a.approvalstatus.id == (int)status)
                          select new PhotoEditModel
                          {
                              photoid = p.id,
                              profileid = p.profile_id,
                              screenname = p.profilemetadata.profile.screenname,
-                             aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             approved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
                              profileimagetype = p.imagetype.description,
                              imagecaption = p.imagecaption,
-                             photodate = p.creationdate,
+                             creationdate  = p.creationdate,
                              photostatusid = p.photostatus.id,
                              checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
                          });
@@ -72,7 +72,7 @@ namespace Shell.MVC2.Data
            
 
 
-            return (model.OrderByDescending(u => u.photodate).ToList());
+            return (model.OrderByDescending(u => u.creationdate ).ToList());
 
 
 
@@ -87,16 +87,16 @@ namespace Shell.MVC2.Data
             // Retrieve All User's Approved Photo's that are not Private and approved.
             //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
-            var model = (from p in _datingcontext.photos.Where(a => a.approvalstatus.id == (int)status)
+            var model = (from p in _datingcontext.photos.Where(a => a.approvalstatus != null && a.approvalstatus.id == (int)status)
                          select new PhotoEditModel
                          {
                              photoid = p.id,
                              profileid = p.profile_id,
                              screenname = p.profilemetadata.profile.screenname,
-                             aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             approved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
                              profileimagetype = p.imagetype.description,
                              imagecaption = p.imagecaption,
-                             photodate = p.creationdate,
+                             creationdate  = p.creationdate,
                              photostatusid = p.photostatus.id,
                              checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
                          });
@@ -105,12 +105,51 @@ namespace Shell.MVC2.Data
             if (model.Count() > pagesize) { pagesize = model.Count(); }
 
 
-            return (model.OrderByDescending(u => u.photodate).Skip((page - 1) * pagesize).Take(pagesize)).ToList();
+            return (model.OrderByDescending(u => u.creationdate ).Skip((page - 1) * pagesize).Take(pagesize)).ToList();
 
 
 
         }
-   
+
+        public List<PhotoModel> getpagedviewphotosbyprofileidandstatus(int profile_id, photoapprovalstatusEnum status,
+                                                                    int page, int pagesize)
+        {
+        
+            // Retrieve All User's Photos that are not approved.
+            //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
+
+            // Retrieve All User's Approved Photo's that are not Private and approved.
+            //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
+
+            try
+            {
+                var model = (from p in _datingcontext.photos.Where(a => a.approvalstatus != null && a.approvalstatus.id == (int)status)
+                             select new PhotoModel
+                             {
+                                 photoid = p.id,
+                                 profileid = p.profile_id,
+                                 screenname = p.profilemetadata.profile.screenname,
+                                 photo = (_datingcontext.photoconversions.Where(i => p.profile_id == profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image),
+                                 approvalstatus = (_datingcontext.photoconversions.Where(i => p.profile_id == profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.approvalstatus),
+                                 imagecaption = (_datingcontext.photoconversions.Where(i => p.profile_id == profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.imagecaption),
+                                 convertedsize = (_datingcontext.photoconversions.Where(i => p.profile_id == profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().size),
+                                 orginalsize = (_datingcontext.photoconversions.Where(i => p.profile_id == profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.size)
+
+                             });
+
+                return model.ToList();
+            }
+            catch (Exception ex)
+            {
+             
+            }
+
+            return null;
+        
+        }
+
+
+
        
         public PhotoEditModel getsingleprofilephotobyphotoid(Guid photoid)
         {
@@ -120,10 +159,10 @@ namespace Shell.MVC2.Data
                                                photoid = p.id ,
                                                profileid = p.profile_id,
                                                screenname = p.profilemetadata.profile.screenname ,
-                                               aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true:false ,
+                                               approved = (p.approvalstatus != null && p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true:false ,
                                                profileimagetype = p.imagetype.description ,
                                                 imagecaption  = p.imagecaption ,
-                                               photodate   = p.creationdate ,
+                                               creationdate    = p.creationdate ,
                                               photostatusid   = p.photostatus.id ,
                                               checkedprimary = (p.photostatus.id == (int) photostatusEnum.Gallery)                                             
                                            }).Single();
@@ -152,6 +191,37 @@ namespace Shell.MVC2.Data
 
             return (model);
             
+        }
+
+        //TO DO get photo albums as well ?
+        public PhotoEditViewModel getpagededitphotoviewmodelbyprofileid(int profileid, int page, int pagesize)
+        {
+            var myPhotos = _datingcontext.photos.Where(z => z.profile_id == profileid).ToList();
+            var ApprovedPhotos = filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, page, pagesize);
+            var NotApprovedPhotos = filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, page, pagesize);
+            //TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
+            //since this is edit mode that is fine
+            var PrivatePhotos = filterphotosbysecuitylevel(myPhotos, securityleveltypeEnum.Private, page, pagesize);
+            var model = getphotoeditviewmodel(ApprovedPhotos, NotApprovedPhotos, PrivatePhotos, myPhotos);
+
+            return (model);
+
+        }
+
+        //TO DO get photo albums as well ?
+        public PhotoViewModel getpagedphotoviewmodelbyprofileid(int profileid, int page, int pagesize)
+        {
+            var myPhotos = _datingcontext.photos.Where(z => z.profile_id == profileid).ToList();
+            var ApprovedPhotos = filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, page, pagesize);
+            var NotApprovedPhotos = filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, page, pagesize);
+            //TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
+            //since this is edit mode that is fine
+            var PrivatePhotos = filterphotosbysecuitylevel(myPhotos, securityleveltypeEnum.Private, page, pagesize);
+            //var model = getphotoviewmodel(ApprovedPhotos, NotApprovedPhotos, PrivatePhotos, myPhotos);
+
+           // return (model);
+            return null;
+
         }
 
         public void deleteduserphoto(Guid photoid)
@@ -220,7 +290,7 @@ namespace Shell.MVC2.Data
                         NewPhoto.imagecaption = item.caption;
                         NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
                         //set approval status and if approved do the conversion add
-                        NewPhoto.approvalstatus = (item.approvalstatus != null) ? item.approvalstatus : null;
+                        NewPhoto.approvalstatus = ( item.approvalstatus != null) ? item.approvalstatus : null;
                         NewPhoto.size = item.size.GetValueOrDefault();
                         //profile ID was passed with when this instance of the dispatacher was created
                         // NewPhoto.ProfileImageType = "NoStatus";
@@ -466,10 +536,10 @@ namespace Shell.MVC2.Data
                                                 photoid = p.id,
                                                 profileid = p.profile_id,
                                                 screenname = p.profilemetadata.profile.screenname,
-                                                aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                                                approved = (p.approvalstatus != null && p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
                                                 profileimagetype = p.imagetype.description,
                                                 imagecaption = p.imagecaption,
-                                                photodate = p.creationdate,
+                                                creationdate  = p.creationdate,
                                                 photostatusid = p.photostatus.id,
                                                 checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
                                             });
@@ -477,7 +547,7 @@ namespace Shell.MVC2.Data
 
             if (model.Count() > pagesize) { pagesize = model.Count(); }
 
-            return (model.OrderByDescending(u => u.photodate ).Skip((page - 1) * pagesize).Take(pagesize));
+            return (model.OrderByDescending(u => u.creationdate  ).Skip((page - 1) * pagesize).Take(pagesize));
 
         }
 
@@ -490,17 +560,17 @@ namespace Shell.MVC2.Data
                              photoid = p.id,
                              profileid = p.profile_id,
                              screenname = p.profilemetadata.profile.screenname,
-                             aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             approved = (p.approvalstatus !=null && p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
                              profileimagetype = p.imagetype.description,
                              imagecaption = p.imagecaption,
-                             photodate = p.creationdate,
+                             creationdate  = p.creationdate,
                              photostatusid = p.photostatus.id,
                              checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
                          });
 
 
             if (model.Count() > pagesize) { pagesize = model.Count(); }
-            return (model.OrderByDescending(u => u.photodate ).Skip((page - 1) * pagesize).Take(pagesize));
+            return (model.OrderByDescending(u => u.creationdate).Skip((page - 1) * pagesize).Take(pagesize));
 
         }
 
@@ -508,7 +578,7 @@ namespace Shell.MVC2.Data
                                                                int page, int pagesize)
         {
             // Retrieve All User's Photos that are not approved.
-            var photos = MyPhotos.Where(a => a.approvalstatus.id == (int)approvalstatus);
+            var photos = MyPhotos.Where(a => a.approvalstatus != null && a.approvalstatus.id == (int)approvalstatus);
 
             // Retrieve All User's Approved Photo's that are not Private and approved.
             //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
@@ -519,10 +589,10 @@ namespace Shell.MVC2.Data
                              photoid = p.id,
                              profileid = p.profile_id,
                              screenname = p.profilemetadata.profile.screenname,
-                             aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             approved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
                              profileimagetype = p.imagetype.description,
                              imagecaption = p.imagecaption,
-                             photodate = p.creationdate,
+                             creationdate = p.creationdate,
                              photostatusid = p.photostatus.id,
                              checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
                          });
@@ -531,7 +601,7 @@ namespace Shell.MVC2.Data
             if (model.Count() > pagesize) { pagesize = model.Count(); }
 
 
-            return (model.OrderByDescending(u => u.photodate).Skip((page - 1) * pagesize).Take(pagesize)).ToList();
+            return (model.OrderByDescending(u => u.creationdate).Skip((page - 1) * pagesize).Take(pagesize)).ToList();
 
 
 
@@ -554,14 +624,14 @@ namespace Shell.MVC2.Data
                            photoid = p.id,
                            profileid = p.profile_id,
                            screenname = p.profilemetadata.profile.screenname,
-                           aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                           approved = (p.approvalstatus !=null &&  p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
                            profileimagetype = p.imagetype.description,
                            imagecaption = p.imagecaption,
-                           photodate = p.creationdate,
+                           creationdate = p.creationdate,
                            photostatusid = p.photostatus.id,
                            checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
                        })
-                             .OrderBy(o => o.profileimagetype ).ThenByDescending(o => o.photodate )
+                             .OrderBy(o => o.profileimagetype).ThenByDescending(o => o.creationdate)
                              .FirstOrDefault();
             }
             else
@@ -572,14 +642,14 @@ namespace Shell.MVC2.Data
                            photoid = p.id,
                            profileid = p.profile_id,
                            screenname = p.profilemetadata.profile.screenname,
-                           aproved = (p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                           approved = (p.approvalstatus != null &&  p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
                            profileimagetype = p.imagetype.description,
                            imagecaption = p.imagecaption,
-                           photodate = p.creationdate,
+                           creationdate = p.creationdate,
                            photostatusid = p.photostatus.id,
                            checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
                        })
-                               .OrderByDescending(o => o.photodate )
+                               .OrderByDescending(o => o.creationdate)
                                .FirstOrDefault();
             }
 
@@ -612,6 +682,82 @@ namespace Shell.MVC2.Data
 
         }
 
+
+        private PhotoViewModel getphotoviewmodel(IEnumerable<PhotoModel> Approved,
+                                                           IEnumerable<PhotoModel> NotApproved,
+                                                           IEnumerable<PhotoModel> Private,
+                                                           List<photo> model)
+        {
+            // Retrieve singlephotoProfile from either the approved model or photo model
+            PhotoModel src = new PhotoModel();
+            if (Approved.Count() > 0)
+            {
+                src = (from p in model
+                       join x in Approved
+                       on p.id equals x.photoid
+                       select new PhotoModel
+                       {
+                           photoid = p.id,
+                           profileid = p.profile_id,
+                           screenname = p.profilemetadata.profile.screenname,
+                        //   approved = (p.approvalstatus != null && p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                        //   profileimagetype = p.imagetype.description,
+                           imagecaption = p.imagecaption,
+                           creationdate = p.creationdate,
+                           photostatusid = p.photostatus.id,
+                        //   checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
+                       })
+                             .OrderBy(o => o.imagetype.description ).ThenByDescending(o => o.creationdate)
+                             .FirstOrDefault();
+            }
+            else
+            {
+                src = (from p in model
+                       select new PhotoModel
+                       {
+                           photoid = p.id,
+                           profileid = p.profile_id,
+                           screenname = p.profilemetadata.profile.screenname,
+                        //   approved = (p.approvalstatus != null && p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                         //  profileimagetype = p.imagetype.description,
+                           imagecaption = p.imagecaption,
+                           creationdate = p.creationdate,
+                           photostatusid = p.photostatus.id,
+                         //  checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
+                       })
+                               .OrderByDescending(o => o.creationdate)
+                               .FirstOrDefault();
+            }
+
+
+            //handled in the query
+            //try
+            //{
+            //    src.checkedPrimary = src.BoolImageType(src.ProfileImageType.ToString());
+            //}
+            //catch
+            //{
+
+
+            //}
+
+           // PhotoUploadViewModel UploadPhotos = new PhotoUploadViewModel();
+
+            PhotoViewModel ViewModel = new PhotoViewModel
+            {
+                SingleProfilePhoto = src,
+                ProfilePhotosApproved = Approved.ToList(),
+                ProfilePhotosNotApproved = NotApproved.ToList(),
+                ProfilePhotosPrivate = Private.ToList(),
+               
+            };
+
+
+            return (ViewModel);
+
+
+        }
+
         #endregion
         //end of private stuff
 
@@ -625,8 +771,8 @@ namespace Shell.MVC2.Data
 
             // string strProfileID = this.getprofileidbyscreenname(strScreenName);
           var  GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.screenname  == strScreenName)
-                            join f in _datingcontext.photos on p.id  equals f.profile_id 
-                            where (f.approvalstatus.id   ==  (int)photoapprovalstatusEnum.Approved  
+                            join f in _datingcontext.photos on p.id  equals f.profile_id
+                               where (f.approvalstatus != null && f.approvalstatus.id == (int)photoapprovalstatusEnum.Approved  
                             && f.imagetype.id  == (int)photostatusEnum.Gallery  )
                             select f).FirstOrDefault();
 
@@ -653,8 +799,8 @@ namespace Shell.MVC2.Data
         {
            // IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
             //Dim ctx As New Entities()
-           var GalleryPhoto = this._datingcontext.photos.Where(p => p.id  == strPhotoID 
-               &&  p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved & p.imagetype.id  == (int)photostatusEnum.Gallery ).FirstOrDefault();
+           var GalleryPhoto = this._datingcontext.photos.Where(p =>( p.id  == strPhotoID)
+               && p.approvalstatus != null && p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved & p.imagetype.id == (int)photostatusEnum.Gallery).FirstOrDefault();
 
             try
             {
@@ -680,7 +826,7 @@ namespace Shell.MVC2.Data
            // IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
             //Dim ctx As New Entities()
            var GalleryPhoto = this._datingcontext.photos
-          .Where(p => p.profile_id == intProfileID &&
+          .Where(p => (p.profile_id == intProfileID) && (p.approvalstatus != null) &&
           p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved & p.imagetype.id == (int)photostatusEnum.Gallery).FirstOrDefault();
 
 
@@ -708,7 +854,7 @@ namespace Shell.MVC2.Data
             // string strProfileID = this.getprofileidbyscreenname(strScreenName);
           var  GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.screenname.Replace(" ", "") == strScreenName)
                             join f in _datingcontext.photos on p.id equals f.profile_id
-                               where (f.approvalstatus.id == (int)photoapprovalstatusEnum.Approved && f.imagetype.id == (int)photostatusEnum.Gallery)
+                               where (f.approvalstatus != null &&  f.approvalstatus.id == (int)photoapprovalstatusEnum.Approved && f.imagetype.id == (int)photostatusEnum.Gallery)
                             select f).FirstOrDefault();
 
 
@@ -757,7 +903,7 @@ namespace Shell.MVC2.Data
            // IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
             //Dim ctx As New Entities()
             var GalleryPhoto = this._datingcontext.photos.Where(p => p.profile_id  == intProfileID &&
-                p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved && p.imagetype.id == (int)photostatusEnum.Gallery).FirstOrDefault(); 
+                p.approvalstatus != null &&   p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved && p.imagetype.id == (int)photostatusEnum.Gallery).FirstOrDefault(); 
 
             if (GalleryPhoto != null)
             {

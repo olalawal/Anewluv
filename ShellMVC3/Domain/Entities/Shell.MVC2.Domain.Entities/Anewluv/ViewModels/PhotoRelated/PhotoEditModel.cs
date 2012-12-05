@@ -19,31 +19,36 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public int profileid { get; set; }
         [DataMember]
-        public bool  aproved { get; set; }
+        public virtual lu_photoformat photoformat { get; set; }
         [DataMember]
-        public string profileimagetype { get; set; }
+        public bool approved { get; set; }
+        [DataMember]
+        public string  profileimagetype { get; set; }
         [DataMember]
         public bool checkedprimary { get; set; }
         [DataMember]
         public bool checkedphoto { get; set; }      
         [DataMember]
-        public DateTime? photodate { get; set; }
+        public DateTime? creationdate { get; set; }
         [DataMember]
         public string imagecaption { get; set; }
         [DataMember]
+        public string imagename { get; set; }
+        [DataMember]
         public int photostatusid { get; set; }
-
-        public bool boolimagetype(string profileimagetype)
-        {
-            bool check = false;
-
-            if (profileimagetype == "Gallery")//"NoStatus vs Gallery"
-            {
-                check = true;
-            }
-
-            return check;
-        }
+        [DataMember]
+        public bool description { get; set; }
+        [DataMember]
+        public long orginalsize { get; set; }
+        [DataMember]
+        public int convertedsize { get; set; }
+       // [DataMember]
+       // public virtual lu_photostatus photostatus { get; set; }
+       // [DataMember]
+       // public virtual lu_photoapprovalstatus approvalstatus { get; set; }
+       // [DataMember]
+       // public virtual lu_photoimagetype imagetype { get; set; }
+       
 
     }  
 }

@@ -15,18 +15,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
   [DataContract]
     public class MemberSearchViewModel
     {
-
         //added stuff for photo VMS
            [DataMember]
-        public PhotoEditViewModel profilephotos { get; set; }
-
-
+        public PhotoViewModel profilephotos { get; set; }
         //added stuff from visiblity table
+           public PhotoEditViewModel profileeditphotos { get; set; }
+           //added stuff from visiblity table
            [DataMember]
         public Boolean? ProfileVisibility { get; set; }
-
-
-
 
         //added date feilds for times of events
            [DataMember]
@@ -49,35 +45,40 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
          
         public profile profile { get; set; }
          
-        public profiledata profiledata { get; set; }
-        //added a conttructor with profile ID for building this item since its one per page now
+         public profiledata profiledata { get; set; }
+         //added a conttructor with profile ID for building this item since its one per page now
          [DataMember]
-        public searchsetting  perfectmatchsettings { get; set; }
-       // public EditProfilePhotosViewModel ProfilePhotos { get; set; }
-        // properties       
+         public searchsetting  perfectmatchsettings { get; set; }
+         // public EditProfilePhotosViewModel ProfilePhotos { get; set; }
+         // properties       
          [DataMember]
-        public int id { get; set; }
+         public int id { get; set; }
           [DataMember]
-        public string stateprovince { get; set; }
+         public string stateprovince { get; set; }
           [DataMember]
-        public string postalcode { get; set; }
+         public string postalcode { get; set; }
           [DataMember]
-        public int? countryid { get; set; }
-        //public DateTime? lastloggedontime { get; set; }
+         public int? countryid { get; set; }
+         //public DateTime? lastloggedontime { get; set; }
          [DataMember]
-        public string lastloggedonstring { get; set; } //display value of last logged in          
+         public string lastloggedonstring { get; set; } //display value of last logged in          
          [DataMember]
-        public bool? online { get; set; } //not filled in yet          
-          [DataMember]
-        public bool hasgalleryphoto { get; set; }
-          [DataMember]
-        public photoconversion galleryphoto { get; set; }
+         public bool? online { get; set; } //not filled in yet          
+         [DataMember]
+         public bool hasgalleryphoto { get; set; }
+        
+         [DataMember]
+         public PhotoModel galleryphoto { get; set; }
+
+        public photoconversion galleryphotoconverted { get; set; }
           [DataMember]
         public string countryname { get; set; }
+          [DataMember]
         public string city { get; set; }
         //added screen name since we dont pass profile anymore
           [DataMember]
         public string screenname { get; set; }
+          [DataMember]
         public string mycatchyintroline { get; set; }
            [DataMember]
         public string aboutme { get; set; }

@@ -17,32 +17,28 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public Guid id { get; set; }
         [DataMember]
         public long size { get; set; }
-
-     //   [DataMember]
+        [DataMember]
         public virtual ICollection<photoalbum> albums { get; set; }
-      //  [DataMember]
+        [DataMember]
         public virtual lu_photorejectionreason rejectionreason { get; set; }
-      //  [DataMember]
+        [DataMember]
         public virtual lu_photostatus photostatus { get; set; }
-     //   [DataMember]
+        [DataMember]
         public virtual lu_photoapprovalstatus approvalstatus { get; set; }
-      //  [DataMember]
+        [DataMember]
         public virtual lu_photoimagetype imagetype { get; set; }
-
-       // [DataMember]
+        [DataMember]
         public int profile_id { get; set; }
-       // [DataMember]
+        //[DataMember]
         [IgnoreDataMember  ]
-        public virtual profilemetadata profilemetadata { get; set; }
-       
-       
+        public virtual profilemetadata profilemetadata { get; set; }      
         //lazy load these for now and check perforamce
-      //  [DataMember]
+       [DataMember]
         public virtual ICollection<photoreview> reviews { get; set; }
-      //  [DataMember]
+       [DataMember]
         public virtual ICollection<photoconversion> conversions { get; set; }  
         //private public secuity is done at photo level , overides album secuity
-      //  [DataMember]
+        [DataMember]
         public virtual ICollection<photo_securitylevel> photosecuritylevels { get; set; }
 
         [DataMember]
