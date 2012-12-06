@@ -13,8 +13,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
    
     public class PhotoUploadModel
     {       
-        [DataMember]
-        public lu_photoimagetype imagetype { get; set; }     
+          
         [DataMember]
         public DateTime? creationdate { get; set; }
         [DataMember]
@@ -25,9 +24,19 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public byte[] image { get; set; } 
         [DataMember]
         public int? size { get; set; }
-         [DataMember]
-        public lu_photoapprovalstatus approvalstatus { get; set; }
+      
 
+       [DataMember]
+         public int? approvalstatusid { get; set; }
+
+       [DataMember]
+       public int? imagetypeid { get; set; }
+
+       [DataMember]
+       public int? photostatusid { get; set; }
+
+       [DataMember]
+       public int?  rejectionreasonid { get; set; }
         
     }  
 }
