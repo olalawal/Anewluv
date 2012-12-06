@@ -21,15 +21,15 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public int profileid { get; set; }
         [DataMember]
-        public virtual lu_photoformat photoformat { get; set; }
+        public lu_photoformat photoformat { get; set; }
          [DataMember]
         public DateTime? creationdate { get; set; }
         [DataMember]
         public string imagecaption { get; set; }
         [DataMember]
         public string imagename { get; set; }
-        [DataMember]
-        public int photostatusid { get; set; }
+        //[DataMember]
+       // public int photostatusid { get; set; }
         [DataMember]
         public string description { get; set; }
         [DataMember]
@@ -37,12 +37,12 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public long? convertedsize { get; set; }
         [DataMember]
-        public virtual lu_photostatus photostatus { get; set; }
+      //  public lu_photostatus photostatus { get; set; }
         [DataMember]
-        public virtual lu_photoapprovalstatus approvalstatus { get; set; }
-        [DataMember]
-        public virtual lu_photoimagetype imagetype { get; set; }
-
+       // public  lu_photoapprovalstatus approvalstatus { get; set; }
+        //[DataMember]
+       // public  lu_photoimagetype imagetype { get; set; }
+       
 
     }
 }
