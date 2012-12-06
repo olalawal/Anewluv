@@ -45,5 +45,7 @@ namespace Shell.MVC2.Interfaces
         List<citystateprovince> getfilteredcitiesold(string filter, string country, int offset);    
         List<citystateprovince> getfilteredcities(string filter, string country, int offset);    
         List<postalcodes> getfilteredpostalcodes(string filter, string country, string City, int offset);
+
+        double? getdistancebetweenmembers(double lat1, double lon1, double lat2, double lon2, string unit);
     }
 }

@@ -115,18 +115,18 @@ namespace Shell.MVC2.Data
 
         public PhotoModel getphotomodelbyphotoid(Guid photoid,photoformatEnum format)
         {
-            PhotoModel model = (from p in _datingcontext.photos.Where(p => p.id == photoid)
+            PhotoModel model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && ( a.photo.id == photoid))
                                     select new PhotoModel
                                     {
-                                        photoid = p.id,
-                                        profileid = p.profile_id,
-                                        screenname = p.profilemetadata.profile.screenname,
-                                        photo = (_datingcontext.photoconversions.Where(i => p.id == photoid && i.formattype.id == (int)format).FirstOrDefault().image),
-                                        photoformat = (_datingcontext.photoconversions.Where(i => p.id == photoid && i.formattype.id == (int)format).FirstOrDefault().formattype),                                       
-                                        convertedsize = (_datingcontext.photoconversions.Where(i => p.id == photoid && i.formattype.id == (int)format).FirstOrDefault().size),
-                                        orginalsize = p.size,
-                                        imagecaption = p.imagecaption,
-                                        creationdate = p.creationdate,
+                                        photoid = p.photo.id,
+                                        profileid = p.photo.profile_id,
+                                        screenname = p.photo.profilemetadata.profile.screenname,
+                                        photo = p.image,
+                                        photoformat = p.formattype,
+                                        convertedsize = p.size,
+                                        orginalsize = p.photo.size,
+                                        imagecaption = p.photo.imagecaption,
+                                        creationdate = p.photo.creationdate,
                                         
                                     }).Single();
 
@@ -149,18 +149,19 @@ namespace Shell.MVC2.Data
             // Retrieve All User's Approved Photo's that are not Private and approved.
             //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
-            var model = (from p in _datingcontext.photos.Where(a => a.approvalstatus != null && a.approvalstatus.id == (int)status)
+            var model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && 
+                ((a.photo.approvalstatus != null && a.photo.approvalstatus.id == (int)status)))
                          select new PhotoModel
                          {
-                             photoid = p.id,
-                             profileid = p.profile_id,
-                             screenname = p.profilemetadata.profile.screenname,
-                             photo = (_datingcontext.photoconversions.Where(i => p.profile_id == profile_id && i.formattype.id == (int)format).FirstOrDefault().image),
-                             photoformat = (_datingcontext.photoconversions.Where(i => p.profile_id == profile_id && i.formattype.id == (int)format).FirstOrDefault().formattype),
-                             convertedsize = (_datingcontext.photoconversions.Where(i => p.profile_id == profile_id && i.formattype.id == (int)format).FirstOrDefault().size),
-                             orginalsize = p.size,
-                             imagecaption = p.imagecaption,
-                             creationdate = p.creationdate,                          
+                             photoid = p.photo.id,
+                             profileid = p.photo.profile_id,
+                             screenname = p.photo.profilemetadata.profile.screenname,
+                             photo = p.image,
+                             photoformat = p.formattype,
+                             convertedsize = p.size,
+                             orginalsize = p.photo.size,
+                             imagecaption = p.photo.imagecaption,
+                             creationdate = p.photo.creationdate,                         
                          });
 
 
@@ -185,8 +186,8 @@ namespace Shell.MVC2.Data
 
             try
             {
-                var model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format &&
-                                                     a.photo.approvalstatus != null && a.photo.approvalstatus.id == (int)status)
+                var model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && (
+                                                     a.photo.approvalstatus != null && a.photo.approvalstatus.id == (int)status))
                              select new PhotoModel
                              {
                                  photoid = p.photo.id,
@@ -309,7 +310,6 @@ namespace Shell.MVC2.Data
         }
 
      
-
         #endregion
         
         #region "Edititable Photo models 
@@ -659,17 +659,20 @@ namespace Shell.MVC2.Data
                     if (!_datingcontext.photos.Where(p => p.profile_id == model.profileid).Any(p => p.size == item.size && p.imagename == item.imagename))
                     {
                         photo NewPhoto = new photo();
-                        Guid identifier = Guid.NewGuid();
-                        NewPhoto.imagetype = item.imagetype;
+                        Guid identifier = Guid.NewGuid();                       
                         NewPhoto.id = identifier;
                         NewPhoto.profile_id = model.profileid; //model.ProfileImage.Length;
                         // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
                         NewPhoto.creationdate = item.creationdate;
                         NewPhoto.imagecaption = item.caption;
                         NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
-                        //set approval status and if approved do the conversion add
-                        NewPhoto.approvalstatus = ( item.approvalstatus != null) ? item.approvalstatus : null;
                         NewPhoto.size = item.size.GetValueOrDefault();
+                        //set the rest of the information as needed i.e approval status refecttion etc
+                        NewPhoto.imagetype = (item.imagetypeid != null) ? _datingcontext.lu_photoimagetype.Where(p => p.id == item.imagetypeid).FirstOrDefault() : null; // : null; item.imagetypeid;
+                        NewPhoto.approvalstatus = (item.approvalstatusid  != null) ? _datingcontext.lu_photoapprovalstatus.Where(p => p.id == item.approvalstatusid ).FirstOrDefault() : null;
+                        NewPhoto.rejectionreason = (item.rejectionreasonid  != null) ? _datingcontext.lu_photorejectionreason.Where(p => p.id == item.rejectionreasonid ).FirstOrDefault() : null;
+                        NewPhoto.photostatus = (item.photostatusid  != null) ? _datingcontext.lu_photostatus .Where(p => p.id == item.photostatusid).FirstOrDefault() : null;
+                       
                         //profile ID was passed with when this instance of the dispatacher was created
                         // NewPhoto.ProfileImageType = "NoStatus";
                         //NewPhoto.photostatus.id = 1;
@@ -746,20 +749,19 @@ namespace Shell.MVC2.Data
                 {
                     photo NewPhoto = new photo();
                     Guid identifier = Guid.NewGuid();
-                    NewPhoto.imagetype = newphoto.imagetype;
                     NewPhoto.id = identifier;
                     NewPhoto.profile_id = profileid; //model.ProfileImage.Length;
                     // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
                     NewPhoto.creationdate = newphoto.creationdate;
                     NewPhoto.imagecaption = newphoto.caption;
                     NewPhoto.imagename = newphoto.imagename; //11-26-2012 olawal added the name for comparisons 
-                    //set approval status and if approved do the conversion add
-                    NewPhoto.approvalstatus = (newphoto.approvalstatus != null) ? newphoto.approvalstatus : null;
                     NewPhoto.size = newphoto.size.GetValueOrDefault();
-                    //profile ID was passed with when this instance of the dispatacher was created
-                    // NewPhoto.ProfileImageType = "NoStatus";
-                    //NewPhoto.photostatus.id = 1;
-                    //NewPhoto.ProfileID = model.ProfileID;
+                    //set the rest of the information as needed i.e approval status refecttion etc
+                    NewPhoto.imagetype = (newphoto.imagetypeid != null) ? _datingcontext.lu_photoimagetype.Where(p => p.id == newphoto.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
+                    NewPhoto.approvalstatus = (newphoto.approvalstatusid != null) ? _datingcontext.lu_photoapprovalstatus.Where(p => p.id == newphoto.approvalstatusid).FirstOrDefault() : null;
+                    NewPhoto.rejectionreason = (newphoto.rejectionreasonid != null) ? _datingcontext.lu_photorejectionreason.Where(p => p.id == newphoto.rejectionreasonid).FirstOrDefault() : null;
+                    NewPhoto.photostatus = (newphoto.photostatusid != null) ? _datingcontext.lu_photostatus.Where(p => p.id == newphoto.photostatusid).FirstOrDefault() : null;
+                       
 
                     //TO DO move this out of RIA services to rest service
 
@@ -797,8 +799,7 @@ namespace Shell.MVC2.Data
             }
 
             return true;
-        }
-            
+        }            
 
         public bool checkvalidjpggif(byte[] image)
         {

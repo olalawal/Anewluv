@@ -11,9 +11,13 @@ namespace Shell.MVC2.Interfaces
 
 
 
+             List<lu_photoformat> getphotoformatlist();
+             List<lu_photoapprovalstatus> getphotoapprovalstatuslist();
+             List<lu_photorejectionreason > getphotorejecttionreasonlist();
+             List<lu_photostatus  > getphotostatuslist();
+             List<lu_photoimagetype  > getphotoimagetypeslist();
 
-
-            List<systempagesetting> getsystempagesettinglist();     
+             List<systempagesetting> getsystempagesettinglist();     
 
              List<lu_gender> getgenderlist();           
              List<age> getageslist();

@@ -15,12 +15,12 @@ namespace Shell.MVC2.Services.Contracts
     {
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getmembersearchviewmodel/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        MemberSearchViewModel getmembersearchviewmodel(string profileid);
+        [WebGet(UriTemplate = "/getmembersearchviewmodel/{viewerprofileid}/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        MemberSearchViewModel getmembersearchviewmodel(string viewerprofileid,string profileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/getmembersearchviewmodels", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<MemberSearchViewModel> getmembersearchviewmodels(List<int> profileids);
+        [WebInvoke(UriTemplate = "/getmembersearchviewmodels/{viewerprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<MemberSearchViewModel> getmembersearchviewmodels(string viewerprofileid,List<int> profileids);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebGet(UriTemplate = "/getprofilebrowsemodel/{viewerprofileid}/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
@@ -97,6 +97,26 @@ namespace Shell.MVC2.Services.Contracts
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebGet(UriTemplate = "/mapguest", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
         MembersViewModel mapguest();
+
+
+        //TO DO move these functions to a Matches or Search Services Area and repoisitory eventually
+        //***********************************************************************************************
+        //quick search for members in the same country for now, no more filters yet
+        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebInvoke(UriTemplate = "/getquickmatches", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<MemberSearchViewModel> getquickmatches(MembersViewModel model);
+
+        //quick search for members in the same country for now, no more filters yet
+        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebInvoke(UriTemplate = "/getemailmatches", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<MemberSearchViewModel> getemailmatches(MembersViewModel model);
+
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebInvoke(UriTemplate = "/getquickmatcheswhenquickmatchesempty", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model);
+
     }
 
 }

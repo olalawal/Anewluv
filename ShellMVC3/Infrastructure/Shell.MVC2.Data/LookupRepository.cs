@@ -40,7 +40,92 @@ namespace Shell.MVC2.Data
             _memberrepository = memberrepository;
         }
 
+
+        #region "new lookups that come from the lu_tables that have to be displayed i.e such as photoformats etc"
+
+             
+
+        public List<lu_photoformat> getphotoformatlist()
+        {
+
+#if DISCONECTED
+                List<lu_photoformat> photoformatlist = new List<lu_photoformat>();
+                photoformatlist.Add(new lu_photoformat { description = "Male",  id  = 1, selected   = false });
+                photoformatlist.Add(new lu_photoformat { description = "Female", id = 2, selected = false });
+                return photoformatlist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getphotoformatlist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_photoapprovalstatus> getphotoapprovalstatuslist()
+        {
+
+
+#if DISCONECTED
+                List<lu_photoapprovalstatus> photoapprovalstatuslist = new List<lu_photoapprovalstatus>();
+                photoapprovalstatuslist.Add(new lu_photoapprovalstatus { description = "Male",  id  = 1, selected   = false });
+                photoapprovalstatuslist.Add(new lu_photoapprovalstatus { description = "Female", id = 2, selected = false });
+                return photoapprovalstatuslist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getphotoapprovalstatuslist(_datingcontext);
+            // return temp;
+#endif
+
         
+        }
+        public List<lu_photorejectionreason> getphotorejecttionreasonlist()
+        {
+
+
+#if DISCONECTED
+                List<lu_photorejectionreason> photorejectionreasonlist = new List<lu_photorejectionreason>();
+                photorejectionreasonlist.Add(new lu_photorejectionreason { description = "Male",  id  = 1, selected   = false });
+                photorejectionreasonlist.Add(new lu_photorejectionreason { description = "Female", id = 2, selected = false });
+                return photorejectionreasonlist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getphotorejectionreasonlist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_photostatus> getphotostatuslist()
+        {
+
+#if DISCONECTED
+                List<lu_photostatus> photostatuslist = new List<lu_photostatus>();
+                photostatuslist.Add(new lu_photostatus { description = "Male",  id  = 1, selected   = false });
+                photostatuslist.Add(new lu_photostatus { description = "Female", id = 2, selected = false });
+                return photostatuslist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getphotostatuslist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_photoimagetype> getphotoimagetypeslist()
+        {
+
+#if DISCONECTED
+                List<lu_photoimagetype> photoimagetypelist = new List<lu_photoimagetype>();
+                photoimagetypelist.Add(new lu_photoimagetype { description = "Male",  id  = 1, selected   = false });
+                photoimagetypelist.Add(new lu_photoimagetype { description = "Female", id = 2, selected = false });
+                return photoimagetypelist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getphotoimagetypelist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+
+        #endregion
+
         #region "Load Other misc stuff such as list of pages etc"
 
         public List<systempagesetting> getsystempagesettinglist()

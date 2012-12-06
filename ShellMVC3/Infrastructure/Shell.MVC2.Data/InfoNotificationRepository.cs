@@ -562,9 +562,9 @@ namespace Shell.MVC2.Data
           {
               MembersViewModel model = _membersmapperrepository.getmemberdata(profileid);
               EmailViewModel returnmodel = new EmailViewModel();
-              returnmodel.EmailMatches = _membersrepository.getemailmatches(model);
+              returnmodel.EmailMatches = _membersmapperrepository.getemailmatches(model);
               //get featured member
-              returnmodel.FeaturedMember = _membersmapperrepository.getmembersearchviewmodel(featuredmemberid);
+              returnmodel.FeaturedMember = _membersmapperrepository.getmembersearchviewmodel(profileid,featuredmemberid);
               returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberMatchesSentMemberNotification);
               returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberMatchestSentAdminNotificaton);
               //fill in the rest of the email model values 

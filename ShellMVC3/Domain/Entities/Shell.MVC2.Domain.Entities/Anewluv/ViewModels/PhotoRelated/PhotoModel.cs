@@ -36,9 +36,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public long? orginalsize { get; set; }
         [DataMember]
         public long? convertedsize { get; set; }
-        [DataMember]
+     //   [DataMember]
       //  public lu_photostatus photostatus { get; set; }
-        [DataMember]
+       // [DataMember]
        // public  lu_photoapprovalstatus approvalstatus { get; set; }
         //[DataMember]
        // public  lu_photoimagetype imagetype { get; set; }

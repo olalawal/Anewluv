@@ -1019,6 +1019,248 @@ namespace Shell.MVC2.AppFabric
         //add all thier getters and setters here 
         public static class SharedObjectHelper
         {
+            //Photo based functions 
+            public static List<lu_photoformat> getphotoformatlist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_photoformat> photoformat = null;
+                try
+                {
+
+                    try { if (dataCache != null) photoformat = dataCache.Get("photoformatlist") as List<lu_photoformat>; }
+                    catch (DataCacheException)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (photoformat == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        photoformat = context.lu_photoformat.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("photoformatlist", photoformat);
+
+                    } return photoformat;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_photoapprovalstatus> getphotoapprovalstatuslist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_photoapprovalstatus> photoapprovalstatus = null;
+                try
+                {
+
+                    try { if (dataCache != null) photoapprovalstatus = dataCache.Get("photoapprovalstatuslist") as List<lu_photoapprovalstatus>; }
+                    catch (DataCacheException)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (photoapprovalstatus == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        photoapprovalstatus = context.lu_photoapprovalstatus.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("photoapprovalstatuslist", photoapprovalstatus);
+
+                    } return photoapprovalstatus;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_photorejectionreason> getphotorejectionreasonlist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_photorejectionreason> photorejectionreason = null;
+                try
+                {
+
+                    try { if (dataCache != null) photorejectionreason = dataCache.Get("photorejectionreasonlist") as List<lu_photorejectionreason>; }
+                    catch (DataCacheException)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (photorejectionreason == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        photorejectionreason = context.lu_photorejectionreason.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("photorejectionreasonlist", photorejectionreason);
+
+                    } return photorejectionreason;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_photostatus> getphotostatuslist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_photostatus> photostatus = null;
+                try
+                {
+
+                    try { if (dataCache != null) photostatus = dataCache.Get("photostatuslist") as List<lu_photostatus>; }
+                    catch (DataCacheException)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (photostatus == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        photostatus = context.lu_photostatus.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("photostatuslist", photostatus);
+
+                    } return photostatus;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_photoimagetype> getphotoimagetypelist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_photoimagetype> photoimagetype = null;
+                try
+                {
+
+                    try { if (dataCache != null) photoimagetype = dataCache.Get("photoimagetypelist") as List<lu_photoimagetype>; }
+                    catch (DataCacheException)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (photoimagetype == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        photoimagetype = context.lu_photoimagetype.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("photoimagetypelist", photoimagetype);
+
+                    } return photoimagetype;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+
             //generic functions
             public static List<lu_gender> getgenderlist(AnewluvContext context)
             {

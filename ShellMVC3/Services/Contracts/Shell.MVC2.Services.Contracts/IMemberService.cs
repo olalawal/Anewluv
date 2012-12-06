@@ -198,25 +198,7 @@ namespace Shell.MVC2.Services.Contracts
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebGet(UriTemplate = "/getprofilevisibilitysettingsbyprofileid/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
         visiblitysetting getprofilevisibilitysettingsbyprofileid(string profileid);
-        
-        //TO DO move these functions to a Matches or Search Services Area and repoisitory eventually
-        //***********************************************************************************************
-        //quick search for members in the same country for now, no more filters yet
-        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/getquickmatches", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        List<MemberSearchViewModel> getquickmatches(MembersViewModel model);
-      
-        //quick search for members in the same country for now, no more filters yet
-        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/getemailmatches", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        List<MemberSearchViewModel> getemailmatches(MembersViewModel model);
-
-        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/getquickmatcheswhenquickmatchesempty", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model);
-
+     
         //mapper calls that use the appfabric cache
     }
 }

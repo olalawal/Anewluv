@@ -110,15 +110,7 @@ namespace Shell.MVC2.Interfaces
         visiblitysetting getprofilevisibilitysettingsbyprofileid(int profileid);          
      
      
-       //TO DO move these functions to a Matches or Search Services Area and repoisitory eventually
-       //***********************************************************************************************
-        //quick search for members in the same country for now, no more filters yet
-        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-         List<MemberSearchViewModel> getquickmatches(MembersViewModel model);      
-        //quick search for members in the same country for now, no more filters yet
-        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-         List<MemberSearchViewModel> getemailmatches(MembersViewModel model);
-         List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model);
+      
           
       //mapper calls that use the appfabric cache
 

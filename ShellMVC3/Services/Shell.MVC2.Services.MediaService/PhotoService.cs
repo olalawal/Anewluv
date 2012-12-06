@@ -36,37 +36,79 @@ namespace Shell.MVC2.Services.Media
 
 
 
-        public List<photo> getallphotosbyusername(string username)
+
+
+
+
+        #region "View Photo models"
+
+        public PhotoModel getphotomodelbyphotoid(string photoid, string format)
         {
-            return _photorepo.getallphotosbyusername(username);
+            return _photorepo.getphotomodelbyphotoid(Guid.Parse(photoid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
         }
 
-        public List<PhotoEditModel> getphotosbyprofileidandstatus(string profileid, photoapprovalstatusEnum status)
+        public List<PhotoModel> getphotomodelsbyprofileidandstatus(string profile_id, string status, string format)
         {
+            
 
-            return _photorepo.getphotosbyprofileidandstatus(Convert.ToInt32(profileid), status);
+            return _photorepo.getphotomodelsbyprofileidandstatus(Convert.ToInt32(profile_id),
+                      ((photoapprovalstatusEnum)Enum.Parse(typeof(photoapprovalstatusEnum), status)) ,
+                       ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
         }
 
-        public List<PhotoEditModel> getpagedphotosbyprofileidstatus(string profileid, photoapprovalstatusEnum approvalstatus,
-                                                                    string page, string pagesize)
+        public List<PhotoModel> getpagedphotomodelbyprofileidandstatus(string profile_id, string status, string format, string page, string pagesize)
         {
-            return _photorepo.getpagedphotosbyprofileidstatus(Convert.ToInt32(profileid), approvalstatus, Convert.ToInt32(page), Convert.ToInt32(pagesize));
-
-        }
-
-        public PhotoEditModel getsingleprofilephotobyphotoid(string photoid)
-        {
-
-            return _photorepo.getsingleprofilephotobyphotoid(Guid.Parse(photoid));
+            return _photorepo.getpagedphotomodelbyprofileidandstatus(Convert.ToInt32(profile_id),
+                      ((photoapprovalstatusEnum)Enum.Parse(typeof(photoapprovalstatusEnum), status)),
+                       ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)), Convert.ToInt32(page), Convert.ToInt32(pagesize));
 
         }
 
         //TO DO get photo albums as well ?
-        //TO DO look at this code
-        public PhotoEditViewModel getpagededitphotoviewmodelbyprofileid(string profileid, string page, string pagesize)        {
-
-            return _photorepo.getpagededitphotoviewmodelbyprofileid(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(pagesize));
+        public PhotoViewModel getpagedphotoviewmodelbyprofileid(int profileid, string format, int page, int pagesize)
+        {
+            return _photorepo.getpagedphotoviewmodelbyprofileid(Convert.ToInt32(profileid),
+                        ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)), Convert.ToInt32(page), Convert.ToInt32(pagesize));
         }
+
+
+
+        #endregion
+
+        #region "Edititable Photo models
+
+        public PhotoEditModel getphotoeditmodelbyphotoid(string photoid, string format)
+        {
+            return _photorepo.getphotoeditmodelbyphotoid(Guid.Parse(photoid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
+        }
+
+        public List<PhotoEditModel> getphotoeditmodelsbyprofileidandstatus(string profile_id, string status, string format)
+        {
+            return _photorepo.getphotoeditmodelsbyprofileidandstatus(Convert.ToInt32(profile_id),
+                   ((photoapprovalstatusEnum)Enum.Parse(typeof(photoapprovalstatusEnum), status)),
+                    ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
+
+        }
+
+        public List<PhotoEditModel> getpagedphotoeditmodelsbyprofileidstatus(string profile_id, string status, string format,
+                                                              string page, string pagesize)
+        {
+            return _photorepo.getpagedphotoeditmodelsbyprofileidstatus(Convert.ToInt32(profile_id),
+                    ((photoapprovalstatusEnum)Enum.Parse(typeof(photoapprovalstatusEnum), status)),
+                     ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)), Convert.ToInt32(page), Convert.ToInt32(pagesize));
+        }
+
+        //12-10-2012 this also filters the format
+        public PhotoEditViewModel getpagededitphotoviewmodelbyprofileidandformat(string profileid, string format, string page, string pagesize)
+        {
+            return _photorepo.getpagededitphotoviewmodelbyprofileidandformat(Convert.ToInt32(profileid),
+                          ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)), Convert.ToInt32(page), Convert.ToInt32(pagesize));
+        }
+
+
+
+        #endregion
+
 
         public void deleteduserphoto(string photoid)
         {
@@ -100,53 +142,34 @@ namespace Shell.MVC2.Services.Media
         }
 
         //http://stackoverflow.com/questions/10484295/image-resizing-from-sql-database-on-the-fly-with-mvc2
-        /// <summary>
-        /// this function creates and stores converted photos on the fly and returns them as byte array.
-        /// if we have enough horsepower this might be faster than storing.
-        /// </summary>
-        /// <param name="photo"></param>
-        /// <param name="photouploaded"></param>
-        /// <param name="formats"></param>
-        /// <returns></returns>
-        //public List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded)
-        //{
-
-        //    return _photorepo.addphotoconverions(photo, photouploaded);
-
-        //}
-
+    
         public bool checkvalidjpggif(byte[] image)
         {
 
             return _photorepo.checkvalidjpggif(image);
         }
-
-
         
         //Stuff pulled from dating service regular
         // added by Deshola on 5/17/2011
 
-        public byte[] getgalleryphotobyscreenname(string strScreenName)
+        public byte[] getgalleryphotobyscreenname(string strScreenName,string format)
         {
-            return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName);
+            return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName, ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
         }
 
-        public byte[] getgalleryimagebyphotoid(string photoid)
+        public byte[] getgalleryimagebyphotoid(string photoid, string format)
         {
-
-            return _photorepo.getgalleryimagebyphotoid(Guid.Parse(photoid));
+            return _photorepo.getgalleryimagebyphotoid(Guid.Parse(photoid),(photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
         }
         //TO DO normalize name
-        public byte[] getgalleryphotobyprofileid(string profileid)
+        public byte[] getgalleryphotobyprofileid(string profileid, string format)
         {
-            return _photorepo.getgalleryphotobyprofileid(Convert.ToInt32(profileid));
-
+            return _photorepo.getgalleryphotobyprofileid(Convert.ToInt32(profileid), ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
         }
 
-        public byte[] getgalleryimagebynormalizedscreenname(string strScreenName)
+        public byte[] getgalleryimagebynormalizedscreenname(string strScreenName, string format)
         {
-
-            return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName);
+            return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName, (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
         }
 
         public bool checkifphotocaptionalreadyexists(string profileid, string strPhotoCaption)

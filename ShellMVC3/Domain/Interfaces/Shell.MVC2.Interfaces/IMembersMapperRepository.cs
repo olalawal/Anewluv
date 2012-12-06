@@ -10,8 +10,8 @@ namespace Shell.MVC2.Interfaces
     {
 
     
-        MemberSearchViewModel getmembersearchviewmodel(int profileid);     
-        List<MemberSearchViewModel> getmembersearchviewmodels(List<int> profileIds);   
+        MemberSearchViewModel getmembersearchviewmodel(int? viewerprofileid,int profileid);     
+        List<MemberSearchViewModel> getmembersearchviewmodels(int? viewerprofileid,List<int> profileIds);   
         ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileid);  
         List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds);   
         ProfileCriteriaModel getprofilecriteriamodel(int profileid);       //overload for above
@@ -45,6 +45,16 @@ namespace Shell.MVC2.Interfaces
        //mapping functions for members VM
         MembersViewModel mapmember(int profileid);
         MembersViewModel mapguest();
-        
+
+        //TO DO move these functions to a Matches or Search Services Area and repoisitory eventually
+        //***********************************************************************************************
+        //quick search for members in the same country for now, no more filters yet
+        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
+        List<MemberSearchViewModel> getquickmatches(MembersViewModel model);
+        //quick search for members in the same country for now, no more filters yet
+        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
+        List<MemberSearchViewModel> getemailmatches(MembersViewModel model);
+        List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model);
+
     }
 }

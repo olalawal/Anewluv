@@ -34,13 +34,13 @@ namespace Shell.MVC2.Services.Dating
 
 
         // constructor
-        public MemberSearchViewModel getmembersearchviewmodel(string profileid)
+        public MemberSearchViewModel getmembersearchviewmodel(string viewerprofileid,string profileid)
         {
-            return _mapmembermapperrepo.getmembersearchviewmodel(Convert.ToInt32(profileid));
+            return _mapmembermapperrepo.getmembersearchviewmodel(Convert.ToInt32(profileid),Convert.ToInt32(profileid));
         }
-        public List<MemberSearchViewModel> getmembersearchviewmodels(List<int> profileIds)
+        public List<MemberSearchViewModel> getmembersearchviewmodels(string viewerprofileid,List<int> profileIds)
         {
-            return _mapmembermapperrepo.getmembersearchviewmodels(profileIds);
+            return _mapmembermapperrepo.getmembersearchviewmodels(Convert.ToInt32(viewerprofileid),profileIds);
         }
         public ProfileBrowseModel getprofilebrowsemodel(string viewerprofileId, string profileid)
         {
@@ -132,6 +132,39 @@ namespace Shell.MVC2.Services.Dating
         public MembersViewModel mapguest()
         {
             return _mapmembermapperrepo.mapguest();
+        }
+
+
+        //quick search for members in the same country for now, no more filters yet
+        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
+        public List<MemberSearchViewModel> getquickmatches(MembersViewModel model)
+        {
+
+
+            return _mapmembermapperrepo.getquickmatches(model);
+
+
+
+
+        }
+
+        //quick search for members in the same country for now, no more filters yet
+        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
+        public List<MemberSearchViewModel> getemailmatches(MembersViewModel model)
+        {
+
+
+
+            return _mapmembermapperrepo.getemailmatches(model);
+
+
+
+        }
+        public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model)
+        {
+
+            return _mapmembermapperrepo.getquickmatcheswhenquickmatchesempty(model);
+
         }
 
     }

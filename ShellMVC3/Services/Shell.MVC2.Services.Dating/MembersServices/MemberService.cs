@@ -308,37 +308,6 @@ namespace Shell.MVC2.Services.Dating
 
         }
 
-        //quick search for members in the same country for now, no more filters yet
-        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public List<MemberSearchViewModel> getquickmatches(MembersViewModel model)
-        {
-
-
-            return _memberrepository.getquickmatches(model);
-
-
-
-
-        }
-
-        //quick search for members in the same country for now, no more filters yet
-        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public List<MemberSearchViewModel> getemailmatches(MembersViewModel model)
-        {
-
-
-
-            return _memberrepository.getemailmatches(model);
-
-
-
-        }
-        public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model)
-        {
-
-            return _memberrepository.getquickmatcheswhenquickmatchesempty(model);
-
-        }
        
 
 
