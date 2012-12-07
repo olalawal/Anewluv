@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Anewluv\abusereport.cs" />
     <Compile Include="Anewluv\abusereportnotes.cs" />
+    <Compile Include="Anewluv\Lookups\enums\photorejectionreasonusermessage.cs" />
     <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
     <Compile Include="Anewluv\photo_securitylevel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoViewModel.cs" />

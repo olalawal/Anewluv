@@ -51,7 +51,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [DataMember]
         public string imagecaption { get; set; }
         [DataMember]
-        public string imagename { get; set; } 
+        public string imagename { get; set; }
+        [DataMember]
+        public string providername { get; set; } 
+                      
     }
 }
 

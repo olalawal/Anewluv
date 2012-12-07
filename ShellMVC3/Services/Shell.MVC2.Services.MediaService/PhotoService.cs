@@ -65,7 +65,7 @@ namespace Shell.MVC2.Services.Media
         }
 
         //TO DO get photo albums as well ?
-        public PhotoViewModel getpagedphotoviewmodelbyprofileid(int profileid, string format, int page, int pagesize)
+        public PhotoViewModel getpagedphotoviewmodelbyprofileid(string profileid, string format, string page, string pagesize)
         {
             return _photorepo.getpagedphotoviewmodelbyprofileid(Convert.ToInt32(profileid),
                         ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)), Convert.ToInt32(page), Convert.ToInt32(pagesize));

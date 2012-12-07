@@ -56,7 +56,7 @@ namespace Shell.MVC2.Services.Contracts
         //TO DO get photo albums as well ?
          [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
          [WebGet(UriTemplate = "/getpagedphotoviewmodelbyprofileid/{profileid}/{format}/{page}/{pagesize}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 
-         PhotoViewModel getpagedphotoviewmodelbyprofileid(int profileid, string format, int page, int pagesize);
+         PhotoViewModel getpagedphotoviewmodelbyprofileid(string  profileid, string format, string page, string  pagesize);
         
         #endregion
 
@@ -67,7 +67,7 @@ namespace Shell.MVC2.Services.Contracts
          PhotoEditModel getphotoeditmodelbyphotoid(string photoid, string format);
 
          [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-         [WebGet(UriTemplate = "/getphotoeditmodelsbyprofileidandstatus/{status}/{format}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 
+         [WebGet(UriTemplate = "/getphotoeditmodelsbyprofileidandstatus/{profileid}/{status}/{format}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 
          List<PhotoEditModel> getphotoeditmodelsbyprofileidandstatus(string profileid, string status, string format);
 
          [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]

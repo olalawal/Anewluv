@@ -108,20 +108,66 @@ namespace Shell.MVC2.Domain.Entities.Migrations
             }));
 
 
-           
+
+            // nonZeroProjectIds.ForEach(p => UrisByProject.Add(p, urisForTheImage[nonZeroProjectIds.FindIndex(t => t == p)]));
+
+            List<string> rejectionreasons = new List<string>();
+            List<string> rejectionreasonmessages = new List<string>();
 
             //photorejectionreasons
             //filter an enum for not set since that is the zero value i.e  
-            var photorejectionreasonqry = from photorejectionreasonEnum value in Enum.GetValues(typeof(photorejectionreasonEnum))
-                               where value != photorejectionreasonEnum.NotSet
-                               orderby value // to sort by value; remove otherwise 
-                               select value;
-            photorejectionreasonqry.ToList().ForEach(kvp => context.lu_photorejectionreason.AddOrUpdate(new lu_photorejectionreason()
-            {
-                id = (int)kvp,
-                description = EnumExtensionMethods.ToDescription(kvp)
-            }));
+            var photorejectionreasonmessagesqry = from photorejectionreasonusermessageEnum value in Enum.GetValues(typeof(photorejectionreasonusermessageEnum))
+                                          where value != photorejectionreasonusermessageEnum.NotSet
+                                          orderby value // to sort by value; remove otherwise 
+                                          select value;                                 
 
+            var photorejectionreasonqry  = from photorejectionreasonEnum value in Enum.GetValues(typeof(photorejectionreasonEnum))
+                               where value != photorejectionreasonEnum.NotSet
+                               orderby value // to sort by value; remove otherwise
+                               select value;
+
+            foreach (var value in photorejectionreasonqry) 
+            { 
+                rejectionreasons.Add(EnumExtensionMethods.ToDescription(value));
+                System.Diagnostics.Debug.WriteLine(EnumExtensionMethods.ToDescription(value));
+            }
+
+
+            foreach (var value in photorejectionreasonmessagesqry)
+            {
+                rejectionreasonmessages.Add(EnumExtensionMethods.ToDescription(value));
+                System.Diagnostics.Debug.WriteLine(EnumExtensionMethods.ToDescription(value));
+            }
+
+            Dictionary<string, string> UrisByProject = new Dictionary<string, string>();
+            rejectionreasons.ForEach(p => UrisByProject.Add(p, rejectionreasonmessages[rejectionreasons.FindIndex(t => t == p)]));
+
+            //var counter = 1;
+            //UrisByProject.ToList().ForEach(kvp => context.lu_photorejectionreason.AddOrUpdate(new lu_photorejectionreason()
+            //{
+              
+            //    id = counter  ,
+            //    description = kvp.Key,
+            //     userMessage = kvp.Value,
+            //}));
+
+            var counter = 1;
+            foreach (var value in UrisByProject)
+            {
+                lu_photorejectionreason newitem = new lu_photorejectionreason();
+                newitem.id = counter;
+                newitem.description = value.Key;
+                newitem.userMessage = value.Value ;
+
+
+                System.Diagnostics.Debug.WriteLine(value.Key + "," + value.Value);
+                context.lu_photorejectionreason.AddOrUpdate(newitem);
+                counter = counter + 1;
+            }
+
+
+
+        
 
             //photosizes
             //filter an enum for not set since that is the zero value i.e  

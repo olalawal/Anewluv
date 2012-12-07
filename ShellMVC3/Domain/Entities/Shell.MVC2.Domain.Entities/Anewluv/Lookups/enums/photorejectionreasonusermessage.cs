@@ -14,30 +14,30 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum photorejectionreasonEnum : int
+    public enum photorejectionreasonusermessageEnum : int
     {
         [Description("NotSet")]
         [EnumMember]
         NotSet,
-        [Description("Pornographic material")] 
+        [Description("Your photo could not be approved due to it being Pornographic in nature")] 
         [EnumMember]
         Pornographicmaterial,
-        [Description("Duplicate Photo")]
+        [Description("Your photo could not be approved becase it is a duplicate")]
         [EnumMember]
         DuplicatePhoto,
-        [Description("No facial picture")] 
+        [Description("Your photo could not be approved becase you had no facial features showing")] 
         [EnumMember]
         Nofacialpicture,
-        [Description("Not A real Picture of a Person")]
+        [Description("Your photo could not be approved becase it is a stock photo, and copyright")]
         [EnumMember]
         NotaRealPictureofAperson,
-        [Description("Too many Graphics")]
+        [Description("Your photo could not be approved becase there are too many grapical changes on it")]
         [EnumMember]
-        ToomanyGraphics,   
-        [Description("Copy Right Infringement")]
+        ToomanyGraphics,
+        [Description("Your photo could not be approved becase it is from another site or owned by another entity")]
         [EnumMember]
         CopyRightInfringement,
-        [Description("Photo shows a Minor")]
+        [Description("Your photo could not be approved becase it contains a minor")]
         [EnumMember]
         PhotoshowsaMinor	
         
