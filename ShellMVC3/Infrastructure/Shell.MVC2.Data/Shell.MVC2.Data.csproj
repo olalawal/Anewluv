@@ -198,7 +198,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Advanced.aspx" />
+    <Content Include="Advanced.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="ApiKeys\APIKeys.xml" />
     <Content Include="ImageResizer\Basic.htm" />
     <Content Include="css\Jcrop.gif" />

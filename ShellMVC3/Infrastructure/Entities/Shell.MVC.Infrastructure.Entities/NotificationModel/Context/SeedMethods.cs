@@ -124,26 +124,71 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
               }
               );
 
-              //add a few templates 
-              //TO DO use razor 
-              //use create the System email addresses here 
+              //add template names, to do maybe parse templates into database from strings down the line
+              //
+              List<string> template = new List<string>();
+              List<string> templatefilename = new List<string>();
 
-              //DO this last since it gets values from previous seeded body values
-              //template lookup
               var templateqry = from templateenum value in Enum.GetValues(typeof(templateenum))
                                 //   where value != messagetemplateenum.NotSet
                                 orderby value // to sort by value; remove otherwise 
                                 select value;
-              templateqry.ToList().ForEach(kvp => context.lu_template.AddOrUpdate(h => h.id, new lu_template()
-              {
-                  id = (int)kvp,
-                  description = EnumExtensionMethods.ToDescription(kvp),
-                  active = true,
-                  creationdate = DateTime.Now,
-                  bodystring = context.lu_templatebody.Where(p => p.id == (int)kvp).First(),
-                  subjectstring = context.lu_templatesubject.Where(p => p.id == (int)kvp).First()
 
-              }));
+              var templatefilenameqry = from templatefilenameenum value in Enum.GetValues(typeof(templateenum))
+                                //   where value != messagetemplateenum.NotSet
+                                orderby value // to sort by value; remove otherwise 
+                                select value;
+
+
+              foreach (var value in templateqry)
+              {
+                  template.Add(EnumExtensionMethods.ToDescription(value));
+                  System.Diagnostics.Debug.WriteLine(EnumExtensionMethods.ToDescription(value));
+              }
+
+
+              foreach (var value in templatefilenameqry)
+              {
+                  templatefilename.Add(EnumExtensionMethods.ToDescription(value));
+                  System.Diagnostics.Debug.WriteLine(EnumExtensionMethods.ToDescription(value));
+              }
+
+
+              Dictionary<string, string> UrisByProject = new Dictionary<string, string>();
+              template.ForEach(p => UrisByProject.Add(p, templatefilename[template.FindIndex(t => t == p)]));
+
+              var counter = 1;
+              foreach (var value in UrisByProject)
+              {
+                   lu_template newitem = new lu_template();
+                  newitem.id = counter;
+                  newitem.description = value.Key;                  
+                  newitem.filename = value.Value + ".cshtml";
+                  newitem.active = true;
+                  newitem.creationdate = DateTime.Now;
+                  newitem.bodystring = context.lu_templatebody.Where(p => p.id == (int)counter).First();
+                  newitem.subjectstring = context.lu_templatesubject.Where(p => p.id == (int)counter).First();
+                  counter = counter + 1;
+              }
+
+
+             //old way
+              ////DO this last since it gets values from previous seeded body values
+              ////template lookup
+              //var templateqry = from templateenum value in Enum.GetValues(typeof(templateenum))
+              //                  //   where value != messagetemplateenum.NotSet
+              //                  orderby value // to sort by value; remove otherwise 
+              //                  select value;
+              //templateqry.ToList().ForEach(kvp => context.lu_template.AddOrUpdate(h => h.id, new lu_template()
+              //{
+              //    id = (int)kvp,
+              //    description = EnumExtensionMethods.ToDescription(kvp),
+              //    active = true,
+              //    creationdate = DateTime.Now,
+              //    bodystring = context.lu_templatebody.Where(p => p.id == (int)kvp).First(),
+              //    subjectstring = context.lu_templatesubject.Where(p => p.id == (int)kvp).First()
+
+              //}));
 
 
             //context.SaveChanges();

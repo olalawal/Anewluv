@@ -40,14 +40,11 @@ namespace Shell.MVC2.Infrastructure
             // Razor.SetTemplateService(service)
             dynamic template = File.OpenText(filename).ReadToEnd();
             dynamic result = Razor.Parse(template, myobject);
-
             return result;
         }
 
         public string MyGenericSub<T>(ref List<T> MyList)
         {
-
-
 
             return "";
         }

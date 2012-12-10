@@ -76,6 +76,7 @@
     <Compile Include="CustomErrorLogModel\LogValue.cs" />
     <Compile Include="NotificationModel\Context\NotificationModelbuilder.cs" />
     <Compile Include="NotificationModel\Context\SeedMethods.cs" />
+    <Compile Include="NotificationModel\Enums\templatefilename.cs" />
     <Compile Include="NotificationModel\messagedetail.cs" />
     <Compile Include="NotificationModel\Enums\news.cs" />
     <Compile Include="NotificationModel\lu_news.cs" />

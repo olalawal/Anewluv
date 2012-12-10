@@ -142,15 +142,6 @@ namespace Shell.MVC2.Domain.Entities.Migrations
             Dictionary<string, string> UrisByProject = new Dictionary<string, string>();
             rejectionreasons.ForEach(p => UrisByProject.Add(p, rejectionreasonmessages[rejectionreasons.FindIndex(t => t == p)]));
 
-            //var counter = 1;
-            //UrisByProject.ToList().ForEach(kvp => context.lu_photorejectionreason.AddOrUpdate(new lu_photorejectionreason()
-            //{
-              
-            //    id = counter  ,
-            //    description = kvp.Key,
-            //     userMessage = kvp.Value,
-            //}));
-
             var counter = 1;
             foreach (var value in UrisByProject)
             {
@@ -158,15 +149,13 @@ namespace Shell.MVC2.Domain.Entities.Migrations
                 newitem.id = counter;
                 newitem.description = value.Key;
                 newitem.userMessage = value.Value ;
-
-
                 System.Diagnostics.Debug.WriteLine(value.Key + "," + value.Value);
                 context.lu_photorejectionreason.AddOrUpdate(newitem);
                 counter = counter + 1;
             }
 
 
-
+            //End of photo rejection stuff
         
 
             //photosizes

@@ -47,24 +47,8 @@ namespace Shell.MVC2.Data
 				// Perform validation on the updated order before applying the changes.
 				message message = new message();
 
-                //message = (message.Create( c =>
-                //{	
-
-
-
-                //    c.MessageTemplateLookupId =  (int)MessageTemplateEnum.GenericErrorMessage;
-                //c.MessageTypeLookupId = (int)MessageTypeEnum.DeveloperError;
-                //    c.Body = c.MessageTemplate == null ? TemplateParser.RazorFileTemplate("", ref customerror) :
-                //                                         TemplateParser.RazorDBTemplate(message.MessageTemplate.RazorTemplateBody,ref customerror);
-                //    c.Subject = string.Format("An error occured");
-                //    c.Recipients = recipientEmailAddresss.ToList();
-                //    c.SendingApplication = "ErrorNotificationService";
-                //    c.SystemSender = SystemSenderAddress;
-                //}));
-
-
-                  //use create method it like this 
-              message=  (message.Create (c =>
+               //use create method it like this 
+               message=  (message.Create (c =>
                {
                    c.id = (int)templateenum.GenericErrorMessage;
                    c.messagetype.id = (int)messagetypeenum.DeveloperError;
@@ -74,7 +58,7 @@ namespace Shell.MVC2.Data
                    c.recipients = recipientEmailAddresss.ToList();
                    c.sendingapplication  = "ErrorNotificationService";
                    c.systemaddress = SystemSenderAddress;
-               }));
+                }));
 
                // c.body = c.template == null ? TemplateParser.RazorFileTemplate("", ref customerror) :
                   //                                      TemplateParser.RazorDBTemplate(message.template.razorTemplateBody, ref customerror);
@@ -112,10 +96,7 @@ namespace Shell.MVC2.Data
 				throw new InvalidOperationException("Failed to send a mail message. Try your request again.");
 				//TO Do log this , sort of recursive
 
-			}
-		
-
-
+			}	
 	}
 
 
@@ -132,7 +113,6 @@ namespace Shell.MVC2.Data
                     mailMessage.IsBodyHtml = true;
                     mailMessage.Subject = message.subject;
                     mailMessage.Body = message.body;
-
                     SmtpClient smtp = new SmtpClient();
                     smtp.Host = !string.IsNullOrEmpty(message.systemaddress.hostname) ? mailMessage.Sender.Host : message.systemaddress.hostip;
                     //smtp.Credentials()
