@@ -11,6 +11,9 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 using Shell.MVC2.Interfaces;
+using System.Data;
+using System.Net.Mail;
+using Shell.MVC2.Infrastructure;
 
 namespace Shell.MVC2.Data
 {
@@ -34,28 +37,197 @@ namespace Shell.MVC2.Data
             featuredmemberid = 67;
             
         }
-               
-              
-   
 
-      public  EmailViewModel getgenericerroremail(CustomErrorLog error)
+
+
+        #region "private  functions which actually creates message in databse and sends the email"    
+
+
+        private bool savemessage(message message)
         {
-
+           //save the message object first
             try
             {
-                EmailViewModel returnmodel = new EmailViewModel();
-                returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.GenericErrorMessage);
-                //fill in the rest of the email model values 
-                returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject, error.ProfileID);
-                returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, error.ProfileID, error.Message);
-
-                return returnmodel;
+                //now that the sent flag has been updated we can add and save the message 
+                //same thing similar would be possible for a chat based service I imagnge
+                _notificationcontext.messages.Add(message);
+                _notificationcontext.SaveChanges();
+               
+            }
+            catch (UpdateException ex)
+            {
+                //log message
+                string actualmessage = ex.Message;
+                throw new InvalidOperationException("Failed to send a mail message. Try your request again.");
+                //TO Do log this , sort of recursive
+                // return false ;
+            }
+            return true;
+        }
+        private bool sendemail(message message)
+        {
+            bool isEmailSendSuccessfully = false;
+            try
+            {
+                foreach (address recip_loopVariable in message.recipients)
+                {
+                    var recip = recip_loopVariable;
+                    System.Net.Mail.MailMessage mailMessage = new System.Net.Mail.MailMessage(message.systemaddress.emailaddress, recip_loopVariable.emailaddress);
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Subject = message.subject;
+                    mailMessage.Body = message.body;
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = !string.IsNullOrEmpty(message.systemaddress.hostname) ? mailMessage.Sender.Host : message.systemaddress.hostip;
+                    //smtp.Credentials()
+                    smtp.Credentials = new System.Net.NetworkCredential(message.systemaddress.credentialusername, message.systemaddress.credentialpassword);
+                    smtp.Send(mailMessage);
+                    isEmailSendSuccessfully = true;
+                }
+                
+                isEmailSendSuccessfully = true;
             }
             catch (Exception ex)
             {
-                //handle logging here
+                string ErrorMessage = ex.Message;
+                isEmailSendSuccessfully = false;
+
             }
-            return null;
+
+            return isEmailSendSuccessfully;
+        }
+
+        #endregion
+
+
+        #region "error message notifications"
+
+        //public bool senderrormessagetodevelopers(CustomErrorLog customerror)
+        //{
+
+
+
+        //    //using (_notificationcontext ) {
+        //    try
+        //    {
+        //        //get the recipients 
+        //        //Dim recipeints As New List(Of String)
+
+        //        // recipeints = context.MessageSystemAddresses.Where(Function(c) c.SystemAddressType = CInt(AddressType))
+        //        dynamic recipientEmailAddresss = (from x in (_notificationcontext.address.Where(f => f.id == Convert.ToInt32(addresstypeenum.Developer))) select x);
+        //        dynamic SystemSenderAddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == Convert.ToInt32(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
+
+        //        // Perform validation on the updated order before applying the changes.
+        //         message message = new message();
+
+        //        //use create method it like this 
+        //        message = (message.Create(c =>
+        //        {
+        //            //c.id = (int)templateenum.GenericErrorMessage;
+        //            c.template.id = (int)templateenum.GenericErrorMessage;
+        //            c.messagetype.id = (int)messagetypeenum.DeveloperError;
+        //            c.body = c.template == null ? TemplateParser.RazorFileTemplate("", ref customerror) :
+        //                                                 TemplateParser.RazorDBTemplate(message.template.razortemplatebody, ref customerror);
+        //            c.subject = string.Format("An error occured");
+        //            c.recipients = recipientEmailAddresss.ToList();
+        //            c.sendingapplication = "ErrorNotificationService";
+        //            c.systemaddress = SystemSenderAddress;
+        //        }));
+
+        //        // c.body = c.template == null ? TemplateParser.RazorFileTemplate("", ref customerror) :
+        //        //                                      TemplateParser.RazorDBTemplate(message.template.razorTemplateBody, ref customerror);
+
+        //        //'parse the message body from the template
+
+        //        var messsage = new message
+        //        {
+        //            id = (int)templateenum.GenericErrorMessage,
+        //            template = new lu_template { id = 1 },
+        //            messagetype = new lu_messagetype { id = (int)messagetypeenum.DeveloperError },
+        //            body = message.template.razortemplatebody == null ? TemplateParser.RazorFileTemplate("", ref customerror) : TemplateParser.RazorDBTemplate(message.template.razortemplatebody, ref customerror),
+        //            subject = string.Format("An error occured"),
+        //            recipients = recipientEmailAddresss.ToList(),
+        //            sendingapplication = "ErrorNotificationService",
+        //            systemaddress = SystemSenderAddress
+
+        //        };
+
+
+        //        // The Add method examines the change tracking information 
+        //        // contained in the graph of self-tracking entities to infer the set of operations
+        //        // that need to be performed to reflect the changes in the database. 
+        //        //Dim ddd = New CustomErrorLog()
+        //        //ddd.Message = errormessage
+
+        //        //send the pyysicall email message here
+
+        //        message.sent = sendemail(message); //attempt to send the message
+        //        savemessage(message);  //save the message into database 
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //log error mesasge
+        //        string mesessage  = ex.Message ;
+        //        return false;
+        //    }
+
+        //    return true;
+         
+        //}
+        #endregion
+
+
+        public   EmailModel senderrormessage(CustomErrorLog error,addresstypeenum addresstype)
+        {
+
+            EmailModel emailmodels = new EmailModel();
+
+          
+            try
+            {
+                dynamic systemsenderaddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == Convert.ToInt32(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
+                dynamic razortemplatebody =  (from x in (_notificationcontext.lu_template.Where(f => f.id == Convert.ToInt32( templateenum.GenericErrorMessage))) select x).First().razortemplatebody;
+                dynamic recipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == Convert.ToInt32(addresstype))) select x);
+               
+                 //build the recipient address objects
+                 
+                    EmailModel returnmodel = new EmailModel();
+                    returnmodel = getemailbytemplateid(templateenum.GenericErrorMessage);
+                    //fill in the rest of the email model values 
+                    returnmodel.subject = String.Format(returnmodel.subject, error.ProfileID);
+                    returnmodel.body = String.Format(returnmodel.body, error.ProfileID, error.Message);
+                     
+                
+
+                 //Now build the message e
+                 // recipeints = context.MessageSystemAddresses.Where(Function(c) c.SystemAddressType = CInt(AddressType))
+                 //Perform validation on the updated order before applying the changes.
+                 message message = new message();
+                 //use create method it like this 
+                 message = (message.Create(c =>
+                 {
+                     //c.id = (int)templateenum.GenericErrorMessage;
+                     c.template.id = (int)templateenum.GenericErrorMessage;
+                     c.messagetype.id = (int)messagetypeenum.DeveloperError;
+                     c.body = TemplateParser.RazorDBTemplate(razortemplatebody, ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                     c.subject = returnmodel.subject;
+                     c.recipients = recipientemailaddresss.ToList();
+                     c.sendingapplication = "InfoNotificationService";
+                     c.systemaddress = systemsenderaddress;
+                 }));
+
+                 message.sent = sendemail(message); //attempt to send the message
+                 savemessage(message);  //save the message into database 
+
+               }
+              catch (Exception ex)
+              {
+                  //log error mesasge
+                  string mesessage = ex.Message;
+                    //handle logging here
+              }
+             
+              
+            return emailmodels;
 
         }
 
