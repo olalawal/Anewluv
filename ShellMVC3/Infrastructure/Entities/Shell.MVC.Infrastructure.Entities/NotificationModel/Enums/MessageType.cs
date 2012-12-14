@@ -38,7 +38,13 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         [Description("Member Global Update")][EnumMember]
         GlobalUserUpdate = 10,
         [Description("Member News Update")][EnumMember]
-        NewsUpdate = 10,
+        NewsUpdate = 11,
+        [Description("User Contract us")]
+        [EnumMember]
+        UserContactUsnotification = 12,
+        [Description("Member Contract us")]
+        [EnumMember]
+        MemberContactUsNotification = 13,
 
     }
 

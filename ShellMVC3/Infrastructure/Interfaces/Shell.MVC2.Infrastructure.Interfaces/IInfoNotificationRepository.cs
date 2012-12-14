@@ -14,9 +14,9 @@ namespace Shell.MVC2.Infrastructure.Interfaces
    public  interface IInfoNotificationRepository
     {
 
-       EmailViewModel getgenericerroremail(CustomErrorLog error);
+       EmailModel senderrormessage(CustomErrorLog error, addresstypeenum addresstype);
 
-       EmailViewModel getcontactusemail(ContactUsModel model);
+       EmailViewModel sendcontactusemail(ContactUsModel model);
         
        EmailViewModel getmembercreatedemail(RegisterModel model);       
     

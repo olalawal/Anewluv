@@ -24,8 +24,11 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         ProjectLead = 3,
         [Description("QA")][EnumMember]
         QualityAsurance = 4,
+        [Description("Support Admin")][EnumMember]
+        SiteSupportAdmin = 5,
         [Description("Member")][EnumMember]
-        SiteUser = 5
+        SiteUser = 6,
+     
     }
 
 

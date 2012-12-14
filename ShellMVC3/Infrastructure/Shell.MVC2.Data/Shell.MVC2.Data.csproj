@@ -155,7 +155,6 @@
     <Compile Include="OpenidRepositiory.cs" />
     <Compile Include="MailRepository.cs" />
     <Compile Include="ErrorLoggingRepository.cs" />
-    <Compile Include="ErrorNotificationRepository.cs" />
     <Compile Include="InfoNotificationRepository.cs" />
     <Compile Include="MemberActionsRepository.cs" />
     <Compile Include="GeoRepository.cs" />

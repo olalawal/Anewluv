@@ -194,8 +194,7 @@ namespace Shell.MVC2.Data
                     returnmodel = getemailbytemplateid(templateenum.GenericErrorMessage);
                     //fill in the rest of the email model values 
                     returnmodel.subject = String.Format(returnmodel.subject, error.ProfileID);
-                    returnmodel.body = String.Format(returnmodel.body, error.ProfileID, error.Message);
-                     
+                    returnmodel.body = String.Format(returnmodel.body, error.ProfileID, error.Message);                    
                 
 
                  //Now build the message e
@@ -231,11 +230,36 @@ namespace Shell.MVC2.Data
 
         }
 
-      public  EmailViewModel getcontactusemail(ContactUsModel model)
+        //TO Do find a way to differentiate between user and Member
+      public  EmailViewModel sendcontactusemail(ContactUsModel model)
          {
           
              try
              {
+                 dynamic systemsenderaddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == Convert.ToInt32(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
+                 dynamic memberrazortemplatebody = (from x in (_notificationcontext.lu_template.Where(f => f.id == Convert.ToInt32(templateenum.MemberContactUsMemberMesage ))) select x).First().razortemplatebody;
+                 dynamic adminzortemplatebody = (from x in (_notificationcontext.lu_template.Where(f => f.id == Convert.ToInt32(templateenum.MemberContactUsAdminMessage ))) select x).First().razortemplatebody;
+               
+                 //build the recipeint addresses from contract us model i.f they dont exist create new ones 
+                 //First get system addresses for admin
+                 dynamic  adminrecipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == Convert.ToInt32(addresstypeenum.SiteSupportAdmin))) select x);
+               
+                 //create new addres for user who already has one otherwise just add to new item
+                 dynamic memberrecipientaddress = _notificationcontext.address.Where(f=>f.emailaddress == model.Email).First() ;
+                 if ( memberrecipientaddress == null) 
+                 {
+                    var address = new address 
+                    {                       
+                       addresstype  = _notificationcontext.lu_addresstype.Where(f=>f.id == (int)addresstypeenum.SiteUser).FirstOrDefault(),       
+                       emailaddress  = model.Email ,
+                        otheridentifer = model.Name ,  //use this for chat notifications maybe
+                        active = true,
+                      creationdate = DateTime.Now  
+                    };
+                     _notificationcontext.SaveChanges();  //TO DO maybe remove this                      
+                 }
+                
+                 //TO DO remove these large models after testing is complete
                  EmailViewModel returnmodel = new EmailViewModel();
                  returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberContactUsMemberMesage);
                  returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberContactUsAdminMessage);
@@ -246,11 +270,52 @@ namespace Shell.MVC2.Data
                  //Body
                  returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.Email, model.Subject, model.Message);
                  returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.Name);
+               
+                 //Build and send the user Message first
+               
+                 message message = new message();
+                 //use create method it like this 
+                 message = (message.Create(c =>
+                 {
+                     //c.id = (int)templateenum.GenericErrorMessage;
+                     c.template.id = (int)templateenum.MemberContactUsMemberMesage  ;
+                     c.messagetype.id = (int)messagetypeenum.UserContactUsnotification ;
+                     c.body = TemplateParser.RazorDBTemplate(memberrazortemplatebody, ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                     c.subject =   returnmodel.memberEmailViewModel.subject ;
+                     c.recipients = memberrecipientaddress.ToList();
+                     c.sendingapplication = "InfoNotificationService";
+                     c.systemaddress = systemsenderaddress;
+                 }));
+                 message.sent = sendemail(message); //attempt to send the message
+                 savemessage(message);  //save the message into database 
+
+                 //now send the admin message
+
+                      
+               
+                 //use create method it like this 
+                 message = (message.Create(c =>
+                 {
+                     //c.id = (int)templateenum.GenericErrorMessage;
+                     c.template.id = (int)templateenum.MemberContactUsAdminMessage  ;
+                     c.messagetype.id = (int)messagetypeenum.UserContactUsnotification ;
+                     c.body = TemplateParser.RazorDBTemplate(adminzortemplatebody, ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                     c.subject =   returnmodel.adminEmailViewModel.subject ;
+                     c.recipients =  adminrecipientemailaddresss.ToList();
+                     c.sendingapplication = "InfoNotificationService";
+                     c.systemaddress = systemsenderaddress;
+                 }));
+                 message.sent = sendemail(message); //attempt to send the message
+                 savemessage(message);  //save the message into database 
+
+                 //TO DO remove this after testing is complete;
                  return returnmodel;
+
              }
              catch (Exception ex)
              {
                  //handle logging here
+                 var message = ex.Message;
              }
              return null;
          } 

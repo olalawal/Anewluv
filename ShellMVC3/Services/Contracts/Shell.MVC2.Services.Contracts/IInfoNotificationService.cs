@@ -24,15 +24,15 @@ namespace Shell.MVC2.Services.Contracts
         //[OperationContract]
         //string WriteLogEntry(CustomErrorLog logEntry);
 
-  
+        
         //temporary method for use by designer to get the message information formated for them
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/getgenericerroremail", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        EmailViewModel getgenericerroremail(CustomErrorLog error);
+        [WebInvoke(UriTemplate = "/senderrormessage/{addresstype}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        EmailModel senderrormessage(CustomErrorLog error, string addresstype);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/getcontactusemail", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	      
-        EmailViewModel getcontactusemail(ContactUsModel model);
+        [WebInvoke(UriTemplate = "/sendcontactusemail", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	      
+        EmailViewModel sendcontactusemail(ContactUsModel model);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/getmembercreatedemail", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 

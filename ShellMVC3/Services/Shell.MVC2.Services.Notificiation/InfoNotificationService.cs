@@ -40,17 +40,17 @@ namespace Shell.MVC2.Services.Notification
             }
 
 
-       public EmailViewModel getgenericerroremail(CustomErrorLog error)
+       public EmailModel senderrormessage(CustomErrorLog error, string addresstype)
        {
 
-           return _InfoNotificationRepository.getgenericerroremail(error);
+           return _InfoNotificationRepository.senderrormessage(error,((addresstypeenum)Enum.Parse(typeof(addresstypeenum),addresstype)));
 
        }
 
-       public EmailViewModel getcontactusemail(ContactUsModel model)
+       public EmailViewModel sendcontactusemail(ContactUsModel model)
        {
 
-           return _InfoNotificationRepository.getcontactusemail(model);
+           return _InfoNotificationRepository.sendcontactusemail(model);
        }
 
        public EmailViewModel getmembercreatedemail(RegisterModel model)

@@ -61,7 +61,6 @@
     </Compile>
     <Compile Include="ILookupService.cs" />
     <Compile Include="IErrorLoggingService.cs" />
-    <Compile Include="IErrorNotificationService.cs" />
     <Compile Include="IGeoService.cs" />
     <Compile Include="IInfoNotificationService.cs" />
     <Compile Include="IMemberActionsService.cs" />

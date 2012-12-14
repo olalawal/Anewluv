@@ -15,6 +15,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 using System.Configuration;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Shell.MVC2.Infrastructure.Entities.NotificationModel;
 using Shell.MVC2.Services.Contracts;
 
 using Shell.MVC2.Infrastructure;
@@ -35,8 +36,8 @@ namespace LoggingLibrary
         private int errorpass = 0;
 
         //chanle for notifications 
-        private IErrorNotificationService ErrorNotificationServiceProxy;
-        ChannelFactory<IErrorNotificationService> ErrorNotificationfactory;
+        private IInfoNotificationService InfoNotificationServiceProxy;
+        ChannelFactory<IInfoNotificationService> InfoNotificationfactory;
        
 
         /// <summary>
@@ -73,8 +74,8 @@ namespace LoggingLibrary
             LoggingServiceProxy = ErrorLoggingfactory.CreateChannel();
 
             //create chanle for notifcaiton servierc
-            ErrorNotificationfactory = new ChannelFactory<IErrorNotificationService>("WSHttpBinding_IErrorNotificationService");//(mysClient.Endpoint);
-            ErrorNotificationServiceProxy = ErrorNotificationfactory.CreateChannel();
+           InfoNotificationfactory = new ChannelFactory<IInfoNotificationService>("WSHttpBinding_IErrorNotificationService");//(mysClient.Endpoint);
+           InfoNotificationServiceProxy =InfoNotificationfactory.CreateChannel();
 
             oLogEntry = new CustomErrorLog();
 
@@ -210,7 +211,7 @@ namespace LoggingLibrary
                // var test = LoggingServiceProxy.WriteCompleteLogEntry(oLogEntry);
                 //modified to log the error and send message in one stroke
 
-                Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorNotificationService>.Use(d =>
+                Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IInfoNotificationService>.Use(d =>
                 {
                     WriteCustomErrorNotificationEntry(oLogEntry);
                 }
@@ -251,7 +252,7 @@ namespace LoggingLibrary
             //modified to log the error and send message in one stroke
             try
             {
-                ErrorNotificationServiceProxy.SendErrorMessageToDevelopers(oLogEntry);
+                InfoNotificationServiceProxy.senderrormessage(error, addresstypeenum.Developer.ToString());
             }
             catch (Exception ex)
             {
@@ -312,9 +313,9 @@ namespace LoggingLibrary
             //lstValues.Clear();
             // lstMessages.Clear();
             ((IClientChannel)LoggingServiceProxy).Close();
-            ((IClientChannel)ErrorNotificationServiceProxy).Close();
+            ((IClientChannel)InfoNotificationServiceProxy).Close();
             ErrorLoggingfactory.Close();
-            ErrorNotificationfactory.Close();
+           InfoNotificationfactory.Close();
           
         }
 
