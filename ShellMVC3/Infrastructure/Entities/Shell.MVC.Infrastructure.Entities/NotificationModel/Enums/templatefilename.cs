@@ -153,6 +153,14 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         [Description("MemberPhotoApprovedAdminNotification")]
         MemberPhotoApprovedAdminNotification = 34,
 
+        [Description("MemberFriendRequestRecivedMemberNotification")]
+        [EnumMember]
+        MemberFriendRequestRecivedMemberNotification = 35,
+
+        [Description("MemberFriendRequestRecivedAdminNotification")]
+        [EnumMember]
+        MemberFriendRequestRecivedAdminNotification = 36
+
     }
 
 

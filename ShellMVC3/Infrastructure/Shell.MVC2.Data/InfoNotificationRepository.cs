@@ -184,9 +184,9 @@ namespace Shell.MVC2.Data
           
             try
             {
-                dynamic systemsenderaddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == Convert.ToInt32(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
-                dynamic razortemplatebody =  (from x in (_notificationcontext.lu_template.Where(f => f.id == Convert.ToInt32( templateenum.GenericErrorMessage))) select x).First().razortemplatebody;
-                dynamic recipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == Convert.ToInt32(addresstype))) select x);
+                dynamic systemsenderaddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == (int)(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
+                lu_template  template = (from x in (_notificationcontext.lu_template.Where(f => f.id == (int)(templateenum.GenericErrorMessage))) select x).First();
+                dynamic recipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == (int)(addresstype))) select x);
                
                  //build the recipient address objects
                  
@@ -207,7 +207,7 @@ namespace Shell.MVC2.Data
                      //c.id = (int)templateenum.GenericErrorMessage;
                      c.template.id = (int)templateenum.GenericErrorMessage;
                      c.messagetype.id = (int)messagetypeenum.DeveloperError;
-                     c.body = TemplateParser.RazorDBTemplate(razortemplatebody, ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                     c.body = TemplateParser.RazorFileTemplate(template.filename , ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
                      c.subject = returnmodel.subject;
                      c.recipients = recipientemailaddresss.ToList();
                      c.sendingapplication = "InfoNotificationService";
@@ -236,17 +236,20 @@ namespace Shell.MVC2.Data
           
              try
              {
-                 dynamic systemsenderaddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == Convert.ToInt32(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
-                 dynamic memberrazortemplatebody = (from x in (_notificationcontext.lu_template.Where(f => f.id == Convert.ToInt32(templateenum.MemberContactUsMemberMesage ))) select x).First().razortemplatebody;
-                 dynamic adminzortemplatebody = (from x in (_notificationcontext.lu_template.Where(f => f.id == Convert.ToInt32(templateenum.MemberContactUsAdminMessage ))) select x).First().razortemplatebody;
+                // var testmembertemplate =(int)(templateenum.MemberContactUsMemberMesage );
+                //var testadmintemplate = (int)(templateenum.MemberContactUsAdminMessage);
+
+                 dynamic systemsenderaddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == (int)(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
+                  lu_template   membertemplate = (from x in (_notificationcontext.lu_template.Where(f => f.id == (int)(templateenum.MemberContactUsMemberMesage ))) select x).First();
+                 lu_template admintemplate = (from x in (_notificationcontext.lu_template.Where(f => f.id == (int)(templateenum.MemberContactUsAdminMessage ))) select x).First();
                
                  //build the recipeint addresses from contract us model i.f they dont exist create new ones 
                  //First get system addresses for admin
-                 dynamic  adminrecipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == Convert.ToInt32(addresstypeenum.SiteSupportAdmin))) select x);
+                 dynamic  adminrecipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == (int)(addresstypeenum.SiteSupportAdmin))) select x);
                
                  //create new addres for user who already has one otherwise just add to new item
-                 dynamic memberrecipientaddress = _notificationcontext.address.Where(f=>f.emailaddress == model.Email).First() ;
-                 if ( memberrecipientaddress == null) 
+                 var  memberrecipientaddress = ( from x in (_notificationcontext.address.Where(f=>f.emailaddress == model.Email)) select x) ;
+                 if (!(memberrecipientaddress.Count()  > 0))
                  {
                     var address = new address 
                     {                       
@@ -268,38 +271,48 @@ namespace Shell.MVC2.Data
                  returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
                  returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
                  //Body
-                 returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.Email, model.Subject, model.Message);
-                 returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.Name);
+                 returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.Name, model.Subject, model.Message);
+                 returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.Name,model.Email ,model.Subject,model.Message );
                
                  //Build and send the user Message first
                
-                 message message = new message();
-                 //use create method it like this 
-                 message = (message.Create(c =>
-                 {
-                     //c.id = (int)templateenum.GenericErrorMessage;
-                     c.template.id = (int)templateenum.MemberContactUsMemberMesage  ;
-                     c.messagetype.id = (int)messagetypeenum.UserContactUsnotification ;
-                     c.body = TemplateParser.RazorDBTemplate(memberrazortemplatebody, ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                     c.subject =   returnmodel.memberEmailViewModel.subject ;
-                     c.recipients = memberrecipientaddress.ToList();
-                     c.sendingapplication = "InfoNotificationService";
-                     c.systemaddress = systemsenderaddress;
-                 }));
+                 //message message = new message();
+                 ////use create method it like this 
+                 //message = (message.Create(c =>
+                 //{
+                 //    //c.id = (int)templateenum.GenericErrorMessage;
+                 //    c.template.id = (int)templateenum.MemberContactUsMemberMesage  ;
+                 //    c.messagetype.id = (int)messagetypeenum.UserContactUsnotification ;
+                 //    c.body = TemplateParser.RazorFileTemplate(membertemplate.filename , ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                 //    c.subject =   returnmodel.memberEmailViewModel.subject ;
+                 //    c.recipients = memberrecipientaddress.ToList();
+                 //    c.sendingapplication = "InfoNotificationService";
+                 //    c.systemaddress = systemsenderaddress;
+                 //}));
+
+                var messsage = new message
+                {
+                   template  = (int)templateenum.MemberContactUsMemberMesage,
+                    messagetype = new lu_messagetype { id = (int)messagetypeenum.DeveloperError },
+                    body = message.template.razortemplatebody == null ? TemplateParser.RazorFileTemplate("", ref customerror) : TemplateParser.RazorDBTemplate(message.template.razortemplatebody, ref customerror),
+                    subject = string.Format("An error occured"),
+                    recipients = recipientEmailAddresss.ToList(),
+                    sendingapplication = "ErrorNotificationService",
+                    systemaddress = SystemSenderAddress
+
+                };
+
                  message.sent = sendemail(message); //attempt to send the message
                  savemessage(message);  //save the message into database 
 
                  //now send the admin message
-
-                      
-               
                  //use create method it like this 
                  message = (message.Create(c =>
                  {
                      //c.id = (int)templateenum.GenericErrorMessage;
                      c.template.id = (int)templateenum.MemberContactUsAdminMessage  ;
                      c.messagetype.id = (int)messagetypeenum.UserContactUsnotification ;
-                     c.body = TemplateParser.RazorDBTemplate(adminzortemplatebody, ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                     c.body = TemplateParser.RazorFileTemplate(admintemplate.filename , ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
                      c.subject =   returnmodel.adminEmailViewModel.subject ;
                      c.recipients =  adminrecipientemailaddresss.ToList();
                      c.sendingapplication = "InfoNotificationService";
@@ -316,8 +329,9 @@ namespace Shell.MVC2.Data
              {
                  //handle logging here
                  var message = ex.Message;
+                 throw ex;
              }
-             return null;
+            // return null;
          } 
 
       public  EmailViewModel getmembercreatedemail(RegisterModel model)

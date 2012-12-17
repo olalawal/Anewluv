@@ -24,7 +24,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         [Description("Dear <b>{0}</b> ,<p></p> Thank you for contacting us at Anewluv.com, your message has been added to the support ticket list and you will get a response from our support staff within 24 hours <p></p> The Anewluv.com Support Team")]
         [EnumMember]
         MemberContactUsMemberMesage = 2,
-        [Description("The Email address {0} sent the following message: <p></p> <b> </br>  subject:  {1}  </b> </br> Message : </br> {2}")]
+        [Description("The user {0} with email address : {1} sent the following message: <p></p> <b> </br>  subject:  {1}  </b> </br> Message : </br> {2}")]
         [EnumMember]
         MemberContactUsAdminMessage = 3,
         [Description("Dear <b>{0}</b> ,<p></p> Thank you for creating a profile at <a href=\"www.anewluv.com\">Anewluv.com </a> <p></p><a href=\"www.anewluv.com\">Anewluv.com </a>   provides a new and refereshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> So get started today!  Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page </b> </br> Your user name is: <b> {1} </b> and Your activation code is:  <b>  {2} </b>  <p></p>  - The AnewLuv.com Team <p></p>  ")]
@@ -119,6 +119,14 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
         [Description("A photo from the user {0} with email address {1} has been approved by: {1} on AnewLuv")]
         MemberPhotoApprovedAdminNotification = 34,
+
+        [Description("Dear {0}, <p></p>The member {1} has sent you a friend request on AnewLuv.com, Please log into your account and to view {1}'s details </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={1} \">Log on to your Account on www.Anewluv.com</a></b>")]
+        [EnumMember]
+        MemberFriendRequestRecivedMemberNotification = 35,
+
+        [Description("The Member {0} has received an Interest from the Member, {1}")]
+        [EnumMember]
+        MemberFriendRequestRecivedAdminNotification = 36
 
     }
 

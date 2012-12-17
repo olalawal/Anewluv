@@ -43,119 +43,371 @@ namespace Shell.MVC2.Services.Notification
        public EmailModel senderrormessage(CustomErrorLog error, string addresstype)
        {
 
-           return _InfoNotificationRepository.senderrormessage(error,((addresstypeenum)Enum.Parse(typeof(addresstypeenum),addresstype)));
+    
+           try
+           {
+               return _InfoNotificationRepository.senderrormessage(error, ((addresstypeenum)Enum.Parse(typeof(addresstypeenum), addresstype)));
+
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
 
        }
 
        public EmailViewModel sendcontactusemail(ContactUsModel model)
        {
-
-           return _InfoNotificationRepository.sendcontactusemail(model);
+           try
+           {
+               return _InfoNotificationRepository.sendcontactusemail(model);
+           }
+           catch (Exception ex)
+           {     
+             //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail),faultreason );
+           }
        }
 
        public EmailViewModel getmembercreatedemail(RegisterModel model)
        {
-           return _InfoNotificationRepository.getmembercreatedemail(model);
+        
+           try
+           {
+               return _InfoNotificationRepository.getmembercreatedemail(model);
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
        }
 
        public EmailViewModel getmembercreatedopenidemail(RegisterModel model)
        {
-           return _InfoNotificationRepository.getmembercreatedopenidemail(model);
-
+        
+           try
+           {
+               return _InfoNotificationRepository.getmembercreatedopenidemail(model);
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
        }
 
        public EmailViewModel getmemberpasswordchangedemail(LogonViewModel model)
        {
 
-           return _InfoNotificationRepository.getmemberpasswordchangedemail(model);
+          try
+           {
+               return _InfoNotificationRepository.getmemberpasswordchangedemail(model);          
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
        }
 
        public EmailViewModel getmemberprofileactivatedemailbyprofileid(string profileid)
        {
-           return _InfoNotificationRepository.getmemberprofileactivatedemailbyprofileid(Convert.ToInt32(profileid));
+        
+           try
+           {
+               return _InfoNotificationRepository.getmemberprofileactivatedemailbyprofileid(Convert.ToInt32(profileid));
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
        }
 
        public EmailViewModel getmemberactivationcoderecoveredemailbyprofileid(string profileid)
        {
-
-           return _InfoNotificationRepository.getmemberactivationcoderecoveredemailbyprofileid(Convert.ToInt32(profileid));
+        
+           try
+           {
+               return _InfoNotificationRepository.getmemberactivationcoderecoveredemailbyprofileid(Convert.ToInt32(profileid));
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
        }
 
        public EmailViewModel getmemberemailmemssagerecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
-           return _InfoNotificationRepository.getmemberemailmemssagerecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+          try
+           {
+               return _InfoNotificationRepository.getmemberemailmemssagerecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+        
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
        }
 
        public EmailViewModel getmemberpeekrecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
-              return _InfoNotificationRepository.getmemberpeekrecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+         
+              try
+              {
+                  return _InfoNotificationRepository.getmemberpeekrecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+
+              }
+              catch (Exception ex)
+              {
+                  //can parse the error to build a more custom error mssage and populate fualt faultreason
+                  FaultReason faultreason = new FaultReason("Generic Error");
+                  string ErrorMessage = "";
+                  string ErrorDetail = "ErrorMessage: " + ex.Message;
+                  throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+              }
        }
 
        public EmailViewModel getmemberlikerecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
-           return _InfoNotificationRepository.getmemberlikerecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+       
+           try
+           {
+               return _InfoNotificationRepository.getmemberlikerecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
 
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
        }
 
        public EmailViewModel getmemberinterestrecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
 
-           return _InfoNotificationRepository.getmemberinterestrecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+        
+           try
+           {
+               return _InfoNotificationRepository.getmemberinterestrecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
        }
 
        public EmailViewModel getmemberchatrequestrecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
-
-           return _InfoNotificationRepository.getmemberchatrequestrecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
-       }
+           try
+           {
+               return _InfoNotificationRepository.getmemberchatrequestrecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+     
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
+      }
 
        public EmailViewModel getmemberofflinechatmessagerecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
-
-           return _InfoNotificationRepository.getmemberofflinechatmessagerecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
-       }
+           try
+           {
+               return _InfoNotificationRepository.getmemberofflinechatmessagerecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+   
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
+      }
 
        public EmailViewModel getmemberphotorejectedemailbyprofileid(string profileid, string adminprofileid, photorejectionreasonEnum reason)
        {
+           try
+           {
 
-           return _InfoNotificationRepository.getmemberphotorejectedemailbyprofileid(Convert.ToInt32(profileid), Convert.ToInt32(adminprofileid), reason);
-       }
+               return _InfoNotificationRepository.getmemberphotorejectedemailbyprofileid(Convert.ToInt32(profileid), Convert.ToInt32(adminprofileid), reason);
+   
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
+      }
 
        public EmailViewModel getmemberphotouploadedemailbyprofileid(string profileid)
        {
-           return _InfoNotificationRepository.getmemberphotouploadedemailbyprofileid(Convert.ToInt32(profileid));
+           try
+           {
+
+               return _InfoNotificationRepository.getmemberphotouploadedemailbyprofileid(Convert.ToInt32(profileid));
+     
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
        }
 
        public EmailViewModel getadminspamblockedemailbyprofileid(string blockedprofileid)
        {
-           return _InfoNotificationRepository.getadminspamblockedemailbyprofileid(Convert.ToInt32(blockedprofileid));
+           try
+           {
+                return _InfoNotificationRepository.getadminspamblockedemailbyprofileid(Convert.ToInt32(blockedprofileid));
+    
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
        }
 
        //TO DO revisit this to send back the matches here
        public EmailViewModel getemailmatchesemailbyprofileid(string profileid)
        {
-           return _InfoNotificationRepository.getemailmatchesemailbyprofileid(Convert.ToInt32(profileid));
+           try
+           {
+               return _InfoNotificationRepository.getemailmatchesemailbyprofileid(Convert.ToInt32(profileid));
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
+         
 
        }
 
        public EmailViewModel getadminmemberspamblockedemailbyprofileid(string spamblockedprofileid, string reason, string blockedby)
        {
-           return _InfoNotificationRepository.getadminmemberspamblockedemailbyprofileid(Convert.ToInt32(spamblockedprofileid),reason ,blockedby );
-       }
+           try
+           {
+               return _InfoNotificationRepository.getadminmemberspamblockedemailbyprofileid(Convert.ToInt32(spamblockedprofileid), reason, blockedby);
+   
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
+      }
        public EmailViewModel getadminmemberblockedemailbyprofileid(string blockedprofileid, string blockerprofileid)
        {
-           return _InfoNotificationRepository.getadminmemberblockedemailbyprofileid(Convert.ToInt32(blockedprofileid), Convert.ToInt32(blockerprofileid));
-       }
+           try
+           {
+               return _InfoNotificationRepository.getadminmemberblockedemailbyprofileid(Convert.ToInt32(blockedprofileid), Convert.ToInt32(blockerprofileid));
+     
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
+  }
 
        //There is no message for Members to know when photos are approved btw
        public EmailViewModel getadminmemberphotoapprovedemailbyprofileid(string approvedprofileid, string adminprofileid)
        {
-           return _InfoNotificationRepository.getadminmemberphotoapprovedemailbyprofileid(Convert.ToInt32(approvedprofileid), Convert.ToInt32(adminprofileid));
-       }
+           try
+           {
+
+               return _InfoNotificationRepository.getadminmemberphotoapprovedemailbyprofileid(Convert.ToInt32(approvedprofileid), Convert.ToInt32(adminprofileid));
+     
+
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
+  }
 
        public EmailModel getemailbytemplateid(templateenum template)
        {
-           return _InfoNotificationRepository.getemailbytemplateid(template);
+
+           try
+           {
+               return _InfoNotificationRepository.getemailbytemplateid(template);
+
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Generic Error");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
+
        }
      
 

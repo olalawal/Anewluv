@@ -134,7 +134,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
                                 orderby value // to sort by value; remove otherwise 
                                 select value;
 
-              var templatefilenameqry = from templatefilenameenum value in Enum.GetValues(typeof(templateenum))
+              var templatefilenameqry = from templatefilenameenum value in Enum.GetValues(typeof(templatefilenameenum))
                                 //   where value != messagetemplateenum.NotSet
                                 orderby value // to sort by value; remove otherwise 
                                 select value;
@@ -168,6 +168,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
                   newitem.creationdate = DateTime.Now;
                   newitem.bodystring = context.lu_templatebody.Where(p => p.id == (int)counter).First();
                   newitem.subjectstring = context.lu_templatesubject.Where(p => p.id == (int)counter).First();
+                  context.lu_template .AddOrUpdate(newitem);
                   counter = counter + 1;
               }
 
