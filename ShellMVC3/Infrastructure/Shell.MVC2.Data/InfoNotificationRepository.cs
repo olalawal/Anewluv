@@ -64,6 +64,27 @@ namespace Shell.MVC2.Data
             }
             return true;
         }
+        private bool saveaddress(address  address)
+        {
+            //save the message object first
+            try
+            {
+                //now that the sent flag has been updated we can add and save the message 
+                //same thing similar would be possible for a chat based service I imagnge
+                _notificationcontext.address.Add(address);
+                _notificationcontext.SaveChanges();
+
+            }
+            catch (UpdateException ex)
+            {
+                //log message
+                string actualmessage = ex.Message;
+                throw new InvalidOperationException("Failed to send a mail message. Try your request again.");
+                //TO Do log this , sort of recursive
+                // return false ;
+            }
+            return true;
+        }
         private bool sendemail(message message)
         {
             bool isEmailSendSuccessfully = false;
@@ -231,7 +252,7 @@ namespace Shell.MVC2.Data
         }
 
         //TO Do find a way to differentiate between user and Member
-      public  EmailViewModel sendcontactusemail(ContactUsModel model)
+        public  EmailViewModel sendcontactusemail(ContactUsModel model)
          {
           
              try
@@ -257,9 +278,9 @@ namespace Shell.MVC2.Data
                        emailaddress  = model.Email ,
                         otheridentifer = model.Name ,  //use this for chat notifications maybe
                         active = true,
-                      creationdate = DateTime.Now  
+                      creationdate = DateTime.Now                        
                     };
-                     _notificationcontext.SaveChanges();  //TO DO maybe remove this                      
+                    saveaddress(address);   //TO DO maybe remove this                      
                  }
                 
                  //TO DO remove these large models after testing is complete
@@ -290,36 +311,34 @@ namespace Shell.MVC2.Data
                  //    c.systemaddress = systemsenderaddress;
                  //}));
 
-                var messsage = new message
-                {
-                   template  = (int)templateenum.MemberContactUsMemberMesage,
-                    messagetype = new lu_messagetype { id = (int)messagetypeenum.DeveloperError },
-                    body = message.template.razortemplatebody == null ? TemplateParser.RazorFileTemplate("", ref customerror) : TemplateParser.RazorDBTemplate(message.template.razortemplatebody, ref customerror),
-                    subject = string.Format("An error occured"),
-                    recipients = recipientEmailAddresss.ToList(),
-                    sendingapplication = "ErrorNotificationService",
-                    systemaddress = SystemSenderAddress
+                  message  membermessage = new message();
+                  membermessage.template  = _notificationcontext.lu_template.Where(f=>f.id == (int)templateenum.MemberContactUsMemberMesage).First();
+                  membermessage.messagetype = _notificationcontext.lu_messagetype .Where(f => f.id == (int)messagetypeenum.UserContactUsnotification).First();
+                  membermessage.body = TemplateParser.RazorFileTemplate(membertemplate.filename , ref returnmodel);
+                  membermessage.subject = returnmodel.memberEmailViewModel.subject;
+                  membermessage.recipients = memberrecipientaddress.ToList();
+                  membermessage.sendingapplication = "ErrorNotificationService";
+                  membermessage.systemaddress = systemsenderaddress;
 
-                };
 
-                 message.sent = sendemail(message); //attempt to send the message
-                 savemessage(message);  //save the message into database 
+                  membermessage.sent = sendemail(membermessage); //attempt to send the message
+                  savemessage(membermessage);  //save the message into database 
 
-                 //now send the admin message
-                 //use create method it like this 
-                 message = (message.Create(c =>
-                 {
-                     //c.id = (int)templateenum.GenericErrorMessage;
-                     c.template.id = (int)templateenum.MemberContactUsAdminMessage  ;
-                     c.messagetype.id = (int)messagetypeenum.UserContactUsnotification ;
-                     c.body = TemplateParser.RazorFileTemplate(admintemplate.filename , ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                     c.subject =   returnmodel.adminEmailViewModel.subject ;
-                     c.recipients =  adminrecipientemailaddresss.ToList();
-                     c.sendingapplication = "InfoNotificationService";
-                     c.systemaddress = systemsenderaddress;
-                 }));
-                 message.sent = sendemail(message); //attempt to send the message
-                 savemessage(message);  //save the message into database 
+                 ////now send the admin message
+                 ////use create method it like this 
+                 //message = (message.Create(c =>
+                 //{
+                 //    //c.id = (int)templateenum.GenericErrorMessage;
+                 //    c.template.id = (int)templateenum.MemberContactUsAdminMessage  ;
+                 //    c.messagetype.id = (int)messagetypeenum.UserContactUsnotification ;
+                 //    c.body = TemplateParser.RazorFileTemplate(admintemplate.filename , ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                 //    c.subject =   returnmodel.adminEmailViewModel.subject ;
+                 //    c.recipients =  adminrecipientemailaddresss.ToList();
+                 //    c.sendingapplication = "InfoNotificationService";
+                 //    c.systemaddress = systemsenderaddress;
+                 //}));
+                 //message.sent = sendemail(message); //attempt to send the message
+                 //savemessage(message);  //save the message into database 
 
                  //TO DO remove this after testing is complete;
                  return returnmodel;
@@ -494,7 +513,7 @@ namespace Shell.MVC2.Data
           return null;
       }
 
-      public  EmailViewModel getmemberemailmemssagerecivedemailbyprofileid(int recipientprofileid, int senderprofileid) 
+      public  EmailViewModel getmemberemailmemssagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid) 
       {
          
 
@@ -531,7 +550,7 @@ namespace Shell.MVC2.Data
           return null;
       }
 
-      public  EmailViewModel getmemberpeekrecivedemailbyprofileid(int recipientprofileid, int senderprofileid)
+      public  EmailViewModel getmemberpeekreceivedemailbyprofileid(int recipientprofileid, int senderprofileid)
       {
        
 
@@ -568,7 +587,7 @@ namespace Shell.MVC2.Data
           return null;
       }
 
-      public  EmailViewModel getmemberlikerecivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
+      public  EmailViewModel getmemberlikereceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
 
  
 
@@ -606,7 +625,7 @@ namespace Shell.MVC2.Data
       
       }
 
-      public  EmailViewModel getmemberinterestrecivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
+      public  EmailViewModel getmemberinterestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
        
     
 
@@ -643,7 +662,7 @@ namespace Shell.MVC2.Data
           return null;
       }
 
-      public  EmailViewModel getmemberchatrequestrecivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
+      public  EmailViewModel getmemberchatrequestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
 
          
           try
@@ -678,7 +697,7 @@ namespace Shell.MVC2.Data
 
       }
 
-      public  EmailViewModel getmemberofflinechatmessagerecivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
+      public  EmailViewModel getmemberofflinechatmessagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
             
 
           try

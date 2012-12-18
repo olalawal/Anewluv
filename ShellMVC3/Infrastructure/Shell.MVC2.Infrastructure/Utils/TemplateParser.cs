@@ -16,7 +16,7 @@ namespace Shell.MVC2.Infrastructure
     public class TemplateParser
     {
 
-        const string  razorfileslocation = "c:\temp\templates\"";
+        const string  basepath = @"c:\temp\templates";
 
         public static string RazorDBTemplate<T>(string templatestring, ref T myobject)
         {
@@ -34,11 +34,18 @@ namespace Shell.MVC2.Infrastructure
 
         public static string RazorFileTemplate<T>(string filename, ref T myobject)
         {
-            //templates built heer are C# templates
-            //Dim config = New TemplateServiceConfiguration() With {.Language = RazorEngine.Language.VisualBasic}
-            //Dim service = New Templating.TemplateService(config)
-            // Razor.SetTemplateService(service)
-            dynamic template = File.OpenText(razorfileslocation +  filename).ReadToEnd();
+            dynamic config = new TemplateServiceConfiguration { Language = RazorEngine.Language.CSharp, Debug = true  };
+            dynamic service = new RazorEngine.Templating.TemplateService(config);
+            Razor.SetTemplateService(service);
+            
+
+            var fullpath = Path.Combine(basepath, filename);
+            dynamic template = File.OpenText(fullpath).ReadToEnd();
+
+           
+
+
+
             dynamic result = Razor.Parse(template, myobject);
             return result;
         }

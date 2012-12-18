@@ -27,7 +27,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         [EnumMember]
         MemberContactUsMemberMesage = 2,
 
-        [Description("A new Question from a user has been recived at Anewluv.com! Please respond ")]
+        [Description("A new Question from a user has been received at Anewluv.com! Please respond ")]
         [EnumMember]
         MemberContactUsAdminMessage = 3,
 

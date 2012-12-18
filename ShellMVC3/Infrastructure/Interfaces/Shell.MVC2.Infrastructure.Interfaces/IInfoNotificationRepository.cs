@@ -28,17 +28,17 @@ namespace Shell.MVC2.Infrastructure.Interfaces
        
        EmailViewModel getmemberactivationcoderecoveredemailbyprofileid(int profileid);
       
-       EmailViewModel getmemberemailmemssagerecivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel getmemberemailmemssagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
   
-       EmailViewModel getmemberpeekrecivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel getmemberpeekreceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
 
-       EmailViewModel getmemberlikerecivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel getmemberlikereceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
   
-       EmailViewModel getmemberinterestrecivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel getmemberinterestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
  
-       EmailViewModel getmemberchatrequestrecivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel getmemberchatrequestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
      
-       EmailViewModel getmemberofflinechatmessagerecivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel getmemberofflinechatmessagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
  
        EmailViewModel getmemberphotorejectedemailbyprofileid(int profileid, int adminprofileid, photorejectionreasonEnum reason);
       

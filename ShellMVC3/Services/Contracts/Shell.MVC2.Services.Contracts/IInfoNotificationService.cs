@@ -55,28 +55,28 @@ namespace Shell.MVC2.Services.Contracts
         EmailViewModel getmemberactivationcoderecoveredemailbyprofileid(string profileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getmemberemailmemssagerecivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        EmailViewModel getmemberemailmemssagerecivedemailbyprofileid(string recipientprofileid, string senderprofileid);
+        [WebGet(UriTemplate = "/getmemberemailmemssagereceivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        EmailViewModel getmemberemailmemssagereceivedemailbyprofileid(string recipientprofileid, string senderprofileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getmemberpeekrecivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        EmailViewModel getmemberpeekrecivedemailbyprofileid(string recipientprofileid, string senderprofileid);
+        [WebGet(UriTemplate = "/getmemberpeekreceivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        EmailViewModel getmemberpeekreceivedemailbyprofileid(string recipientprofileid, string senderprofileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getmemberlikerecivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        EmailViewModel getmemberlikerecivedemailbyprofileid(string recipientprofileid, string senderprofileid);
+        [WebGet(UriTemplate = "/getmemberlikereceivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        EmailViewModel getmemberlikereceivedemailbyprofileid(string recipientprofileid, string senderprofileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getmemberinterestrecivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        EmailViewModel getmemberinterestrecivedemailbyprofileid(string recipientprofileid, string senderprofileid);
+        [WebGet(UriTemplate = "/getmemberinterestreceivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        EmailViewModel getmemberinterestreceivedemailbyprofileid(string recipientprofileid, string senderprofileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getmemberchatrequestrecivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        EmailViewModel getmemberchatrequestrecivedemailbyprofileid(string recipientprofileid, string senderprofileid);
+        [WebGet(UriTemplate = "/getmemberchatrequestreceivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        EmailViewModel getmemberchatrequestreceivedemailbyprofileid(string recipientprofileid, string senderprofileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getmemberofflinechatmessagerecivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        EmailViewModel getmemberofflinechatmessagerecivedemailbyprofileid(string recipientprofileid, string senderprofileid);
+        [WebGet(UriTemplate = "/getmemberofflinechatmessagereceivedemailbyprofileid/{recipientprofileid}/{senderprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        EmailViewModel getmemberofflinechatmessagereceivedemailbyprofileid(string recipientprofileid, string senderprofileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/getmemberphotorejectedemailbyprofileid/{profileid}/{adminprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 

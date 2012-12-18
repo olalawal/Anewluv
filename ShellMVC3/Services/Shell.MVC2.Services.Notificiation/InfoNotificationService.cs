@@ -161,11 +161,11 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberemailmemssagerecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel getmemberemailmemssagereceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
           try
            {
-               return _InfoNotificationRepository.getmemberemailmemssagerecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+               return _InfoNotificationRepository.getmemberemailmemssagereceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
         
            }
            catch (Exception ex)
@@ -178,12 +178,12 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberpeekrecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel getmemberpeekreceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
          
               try
               {
-                  return _InfoNotificationRepository.getmemberpeekrecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+                  return _InfoNotificationRepository.getmemberpeekreceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
 
               }
               catch (Exception ex)
@@ -196,12 +196,12 @@ namespace Shell.MVC2.Services.Notification
               }
        }
 
-       public EmailViewModel getmemberlikerecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel getmemberlikereceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
        
            try
            {
-               return _InfoNotificationRepository.getmemberlikerecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+               return _InfoNotificationRepository.getmemberlikereceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
 
            }
            catch (Exception ex)
@@ -214,13 +214,13 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberinterestrecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel getmemberinterestreceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
 
         
            try
            {
-               return _InfoNotificationRepository.getmemberinterestrecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+               return _InfoNotificationRepository.getmemberinterestreceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
            }
            catch (Exception ex)
            {
@@ -232,11 +232,11 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberchatrequestrecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel getmemberchatrequestreceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
            try
            {
-               return _InfoNotificationRepository.getmemberchatrequestrecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+               return _InfoNotificationRepository.getmemberchatrequestreceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
      
            }
            catch (Exception ex)
@@ -249,11 +249,11 @@ namespace Shell.MVC2.Services.Notification
            }
       }
 
-       public EmailViewModel getmemberofflinechatmessagerecivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel getmemberofflinechatmessagereceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
            try
            {
-               return _InfoNotificationRepository.getmemberofflinechatmessagerecivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+               return _InfoNotificationRepository.getmemberofflinechatmessagereceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
    
            }
            catch (Exception ex)

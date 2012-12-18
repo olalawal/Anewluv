@@ -108,7 +108,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         [Description("Dear {0} , <p></p>Here are your {1} new matches for date : {2}  </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={3} \">Log on to your Account on www.Anewluv.com</a></b>")]
         [EnumMember]
         MemberMatchesSentMemberNotification = 30,
-        [Description("The member {0} with email address {1} has recived {2} matches for the date : {2}")]
+        [Description("The member {0} with email address {1} has received {2} matches for the date : {2}")]
         [EnumMember]
         MemberMatchestSentAdminNotificaton = 31,      
         [Description("A message from the user {0} with email address {1) was blocked becase of the reason: {1}")]
