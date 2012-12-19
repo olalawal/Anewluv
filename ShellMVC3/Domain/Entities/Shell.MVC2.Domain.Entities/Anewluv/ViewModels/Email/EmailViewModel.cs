@@ -47,5 +47,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email
         public EmailModel adminEmailViewModel { get; set; }
         [DataMember]   
         public bool HasMatches { get; set; }  //tels you if there are any matches 
+         [DataMember]
+        public string SysteMessages { get; set; } //12-19-2012 olawal added for error message logging
+
     }
 }

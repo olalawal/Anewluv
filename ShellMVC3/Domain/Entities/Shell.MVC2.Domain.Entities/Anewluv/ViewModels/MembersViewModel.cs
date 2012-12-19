@@ -69,7 +69,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         // public photo  Photos { get; set; }
 
         //profileData should enumarate the entire model 
-       // [DataMember]
+        [DataMember]
         public profile profile { get; set; }
 
       //  [DataMember]

@@ -34,20 +34,34 @@ namespace Shell.MVC2.Infrastructure
 
         public static string RazorFileTemplate<T>(string filename, ref T myobject)
         {
-            dynamic config = new TemplateServiceConfiguration { Language = RazorEngine.Language.CSharp, Debug = true  };
-            dynamic service = new RazorEngine.Templating.TemplateService(config);
-            Razor.SetTemplateService(service);
-            
+            string templatestring ="";
 
-            var fullpath = Path.Combine(basepath, filename);
-            dynamic template = File.OpenText(fullpath).ReadToEnd();
+            try
+            {
+                dynamic config = new TemplateServiceConfiguration { Language = RazorEngine.Language.CSharp, Debug = true };
+                dynamic service = new RazorEngine.Templating.TemplateService(config);
+                Razor.SetTemplateService(service);
 
+
+                var fullpath = Path.Combine(basepath, filename);
+                templatestring = File.OpenText(fullpath).ReadToEnd();
+
+
+
+
+
+                dynamic result = Razor.Parse(templatestring, myobject);
+                return result;
+            }
+           
            
 
+            catch (Exception ex)
+            {
+                var messge = ex.Message;
+                throw;
 
-
-            dynamic result = Razor.Parse(template, myobject);
-            return result;
+            }
         }
 
         public string MyGenericSub<T>(ref List<T> MyList)

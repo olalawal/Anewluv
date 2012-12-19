@@ -285,6 +285,14 @@ namespace Shell.MVC2.Data
                 
                  //TO DO remove these large models after testing is complete
                  EmailViewModel returnmodel = new EmailViewModel();
+                 
+                 //12-19-2012 olawal Here we added this  , so we can populate the screen name
+                 MembersViewModel membersviewmodel = new MembersViewModel();
+                 profile profile = new profile {screenname = model.Name , emailaddress = model.Email };
+                 membersviewmodel.profile = profile;
+                 //add it
+                 returnmodel.MembersViewModel = membersviewmodel;
+
                  returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberContactUsMemberMesage);
                  returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberContactUsAdminMessage);
                  //fill in the rest of the email model values i.e format the subject and body
@@ -295,50 +303,41 @@ namespace Shell.MVC2.Data
                  returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.Name, model.Subject, model.Message);
                  returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.Name,model.Email ,model.Subject,model.Message );
                
-                 //Build and send the user Message first
-               
-                 //message message = new message();
-                 ////use create method it like this 
-                 //message = (message.Create(c =>
-                 //{
-                 //    //c.id = (int)templateenum.GenericErrorMessage;
-                 //    c.template.id = (int)templateenum.MemberContactUsMemberMesage  ;
-                 //    c.messagetype.id = (int)messagetypeenum.UserContactUsnotification ;
-                 //    c.body = TemplateParser.RazorFileTemplate(membertemplate.filename , ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                 //    c.subject =   returnmodel.memberEmailViewModel.subject ;
-                 //    c.recipients = memberrecipientaddress.ToList();
-                 //    c.sendingapplication = "InfoNotificationService";
-                 //    c.systemaddress = systemsenderaddress;
-                 //}));
-
-                  message  membermessage = new message();
-                  membermessage.template  = _notificationcontext.lu_template.Where(f=>f.id == (int)templateenum.MemberContactUsMemberMesage).First();
-                  membermessage.messagetype = _notificationcontext.lu_messagetype .Where(f => f.id == (int)messagetypeenum.UserContactUsnotification).First();
-                  membermessage.body = TemplateParser.RazorFileTemplate(membertemplate.filename , ref returnmodel);
-                  membermessage.subject = returnmodel.memberEmailViewModel.subject;
-                  membermessage.recipients = memberrecipientaddress.ToList();
-                  membermessage.sendingapplication = "ErrorNotificationService";
-                  membermessage.systemaddress = systemsenderaddress;
+                 //Build and send the user Message first               
+              
+                  message message = new message();
+                  message.template = _notificationcontext.lu_template.Where(f => f.id == (int)templateenum.MemberContactUsMemberMesage).First();
+                  message.messagetype = _notificationcontext.lu_messagetype.Where(f => f.id == (int)messagetypeenum.UserContactUsnotification).First();
+                  message.content  = TemplateParser.RazorFileTemplate(membertemplate.filename, ref returnmodel);
+                  message.body = returnmodel.memberEmailViewModel.body;
+                  message.subject = returnmodel.memberEmailViewModel.subject;
+                  message.recipients = memberrecipientaddress.ToList();
+                  message.sendingapplication = "InfoNotificationService";
+                  message.creationdate = DateTime.Now;
+                  message.sendattempts = 0;
+                  message.systemaddress = systemsenderaddress;
 
 
-                  membermessage.sent = sendemail(membermessage); //attempt to send the message
-                  savemessage(membermessage);  //save the message into database 
+                  message.sent = sendemail(message); //attempt to send the message
+                  savemessage(message);  //save the message into database 
 
                  ////now send the admin message
                  ////use create method it like this 
-                 //message = (message.Create(c =>
-                 //{
-                 //    //c.id = (int)templateenum.GenericErrorMessage;
-                 //    c.template.id = (int)templateenum.MemberContactUsAdminMessage  ;
-                 //    c.messagetype.id = (int)messagetypeenum.UserContactUsnotification ;
-                 //    c.body = TemplateParser.RazorFileTemplate(admintemplate.filename , ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                 //    c.subject =   returnmodel.adminEmailViewModel.subject ;
-                 //    c.recipients =  adminrecipientemailaddresss.ToList();
-                 //    c.sendingapplication = "InfoNotificationService";
-                 //    c.systemaddress = systemsenderaddress;
-                 //}));
-                 //message.sent = sendemail(message); //attempt to send the message
-                 //savemessage(message);  //save the message into database 
+                  message = (message.Create(c =>
+                  {
+                      //c.id = (int)templateenum.GenericErrorMessage;
+                      c.template.id = (int)templateenum.MemberContactUsAdminMessage;
+                      c.messagetype.id = (int)messagetypeenum.UserContactUsnotification;
+                      c.content  = TemplateParser.RazorFileTemplate(admintemplate.filename, ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                      c.body = returnmodel.adminEmailViewModel.body;
+                      c.subject = returnmodel.adminEmailViewModel.subject;
+                      c.recipients = adminrecipientemailaddresss.ToList();
+                      c.sendingapplication = "InfoNotificationService";
+                      c.systemaddress = systemsenderaddress;
+                  }));
+                 
+                 message.sent = sendemail(message); //attempt to send the message
+                 savemessage(message);  //save the message into database 
 
                  //TO DO remove this after testing is complete;
                  return returnmodel;
@@ -885,6 +884,7 @@ namespace Shell.MVC2.Data
           return null;
 
       }
+
       public EmailViewModel getadminmemberblockedemailbyprofileid(int blockedprofileid, int blockerprofileid)
       {
        
