@@ -86,8 +86,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
   
         //used for uploading photos , just temporary
-         [DataMember]
-        public List<photo> myphotos { get; set; }
+        [DataMember ]
+        public List<PhotoModel> myphotos { get; set; }
 
          public photoconversion galleryphoto { get; set; }
 
@@ -95,6 +95,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
           [DataMember ]
         public PhotoEditViewModel myeditprofilephotosviewmodel { get; set; }
         //10-26-2011 another tmeporary model 
+        [DataMember]
         public List<MemberSearchViewModel> mycurrentsearchlist { get; set; }
 
         //counters

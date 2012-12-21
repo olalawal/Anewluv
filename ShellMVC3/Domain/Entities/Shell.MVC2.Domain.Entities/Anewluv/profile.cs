@@ -6,12 +6,12 @@ using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    [DataContract(IsReference = true)] 
+    [DataContract] 
     public class profile
     {
-          
+     
         public virtual profiledata profiledata { get; set; }
-      
+
         public virtual profilemetadata profilemetadata { get; set; }
 
            [DataMember]

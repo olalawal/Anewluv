@@ -42,12 +42,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public DateTime? lastlogindate { get; set; }
            [DataMember]
         public int? lookingforid { get; set; }
-         
+
+        [DataMember]
         public profile profile { get; set; }
          
          public profiledata profiledata { get; set; }
          //added a conttructor with profile ID for building this item since its one per page now
-         [DataMember]
+     
          public searchsetting  perfectmatchsettings { get; set; }
          // public EditProfilePhotosViewModel ProfilePhotos { get; set; }
          // properties       

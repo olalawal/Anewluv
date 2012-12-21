@@ -18,42 +18,42 @@ namespace Shell.MVC2.Infrastructure.Interfaces
 
        EmailViewModel sendcontactusemail(ContactUsModel model);
         
-       EmailViewModel getmembercreatedemail(RegisterModel model);       
+       EmailViewModel sendmembercreatedemail(RegisterModel model);       
     
-       EmailViewModel getmembercreatedopenidemail(RegisterModel model);
+       EmailViewModel sendmembercreatedopenidemail(RegisterModel model);
      
-       EmailViewModel getmemberpasswordchangedemail(LogonViewModel model);
+       EmailViewModel sendmemberpasswordchangedemail(LogonViewModel model);
        
-       EmailViewModel getmemberprofileactivatedemailbyprofileid(int profileid);
+       EmailViewModel sendmemberprofileactivatedemailbyprofileid(int profileid);
        
-       EmailViewModel getmemberactivationcoderecoveredemailbyprofileid(int profileid);
+       EmailViewModel sendmemberactivationcoderecoveredemailbyprofileid(int profileid);
       
-       EmailViewModel getmemberemailmemssagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel sendmemberemailmemssagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
   
-       EmailViewModel getmemberpeekreceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel sendmemberpeekreceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
 
-       EmailViewModel getmemberlikereceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel sendmemberlikereceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
   
-       EmailViewModel getmemberinterestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel sendmemberinterestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
  
-       EmailViewModel getmemberchatrequestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel sendmemberchatrequestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
      
-       EmailViewModel getmemberofflinechatmessagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
+       EmailViewModel sendmemberofflinechatmessagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid);
  
-       EmailViewModel getmemberphotorejectedemailbyprofileid(int profileid, int adminprofileid, photorejectionreasonEnum reason);
+       EmailViewModel sendmemberphotorejectedemailbyprofileid(int profileid, int adminprofileid, photorejectionreasonEnum reason);
       
-       EmailViewModel getmemberphotouploadedemailbyprofileid(int profileid);
+       EmailViewModel sendmemberphotouploadedemailbyprofileid(int profileid);
     
-       EmailViewModel getadminspamblockedemailbyprofileid(int blockedprofileid);
+       EmailViewModel sendadminspamblockedemailbyprofileid(int blockedprofileid);
  
-       EmailViewModel getemailmatchesemailbyprofileid(int profileid);
+       EmailViewModel sendemailmatchesemailbyprofileid(int profileid);
   
-       EmailViewModel getadminmemberspamblockedemailbyprofileid(int spamblockedprofileid, string reason, string blockedby);
+       EmailViewModel sendadminmemberspamblockedemailbyprofileid(int spamblockedprofileid, string reason, string blockedby);
       
-       EmailViewModel getadminmemberblockedemailbyprofileid(int blockedprofileid, int blockerprofileid);
+       EmailViewModel sendadminmemberblockedemailbyprofileid(int blockedprofileid, int blockerprofileid);
        //There is no message for Members to know when photos are approved btw
        
-       EmailViewModel getadminmemberphotoapprovedemailbyprofileid(int approvedprofileid, int adminprofileid);
+       EmailViewModel sendadminmemberphotoapprovedemailbyprofileid(int approvedprofileid, int adminprofileid);
  
        EmailModel getemailbytemplateid(templateenum template);
        

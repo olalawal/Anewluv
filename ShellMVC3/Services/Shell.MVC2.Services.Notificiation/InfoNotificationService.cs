@@ -76,12 +76,12 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmembercreatedemail(RegisterModel model)
+       public EmailViewModel sendmembercreatedemail(RegisterModel model)
        {
         
            try
            {
-               return _InfoNotificationRepository.getmembercreatedemail(model);
+               return _InfoNotificationRepository.sendmembercreatedemail(model);
            }
            catch (Exception ex)
            {
@@ -93,12 +93,12 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmembercreatedopenidemail(RegisterModel model)
+       public EmailViewModel sendmembercreatedopenidemail(RegisterModel model)
        {
         
            try
            {
-               return _InfoNotificationRepository.getmembercreatedopenidemail(model);
+               return _InfoNotificationRepository.sendmembercreatedopenidemail(model);
            }
            catch (Exception ex)
            {
@@ -110,12 +110,12 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberpasswordchangedemail(LogonViewModel model)
+       public EmailViewModel sendmemberpasswordchangedemail(LogonViewModel model)
        {
 
           try
            {
-               return _InfoNotificationRepository.getmemberpasswordchangedemail(model);          
+               return _InfoNotificationRepository.sendmemberpasswordchangedemail(model);          
            }
            catch (Exception ex)
            {
@@ -127,12 +127,12 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberprofileactivatedemailbyprofileid(string profileid)
+       public EmailViewModel sendmemberprofileactivatedemailbyprofileid(string profileid)
        {
         
            try
            {
-               return _InfoNotificationRepository.getmemberprofileactivatedemailbyprofileid(Convert.ToInt32(profileid));
+               return _InfoNotificationRepository.sendmemberprofileactivatedemailbyprofileid(Convert.ToInt32(profileid));
            }
            catch (Exception ex)
            {
@@ -144,12 +144,12 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberactivationcoderecoveredemailbyprofileid(string profileid)
+       public EmailViewModel sendmemberactivationcoderecoveredemailbyprofileid(string profileid)
        {
         
            try
            {
-               return _InfoNotificationRepository.getmemberactivationcoderecoveredemailbyprofileid(Convert.ToInt32(profileid));
+               return _InfoNotificationRepository.sendmemberactivationcoderecoveredemailbyprofileid(Convert.ToInt32(profileid));
            }
            catch (Exception ex)
            {
@@ -161,11 +161,11 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberemailmemssagereceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel sendmemberemailmemssagereceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
           try
            {
-               return _InfoNotificationRepository.getmemberemailmemssagereceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+               return _InfoNotificationRepository.sendmemberemailmemssagereceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
         
            }
            catch (Exception ex)
@@ -178,12 +178,12 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberpeekreceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel sendmemberpeekreceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
          
               try
               {
-                  return _InfoNotificationRepository.getmemberpeekreceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+                  return _InfoNotificationRepository.sendmemberpeekreceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
 
               }
               catch (Exception ex)
@@ -196,12 +196,12 @@ namespace Shell.MVC2.Services.Notification
               }
        }
 
-       public EmailViewModel getmemberlikereceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel sendmemberlikereceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
        
            try
            {
-               return _InfoNotificationRepository.getmemberlikereceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+               return _InfoNotificationRepository.sendmemberlikereceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
 
            }
            catch (Exception ex)
@@ -214,13 +214,13 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberinterestreceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel sendmemberinterestreceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
 
         
            try
            {
-               return _InfoNotificationRepository.getmemberinterestreceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+               return _InfoNotificationRepository.sendmemberinterestreceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
            }
            catch (Exception ex)
            {
@@ -232,11 +232,11 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getmemberchatrequestreceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel sendmemberchatrequestreceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
            try
            {
-               return _InfoNotificationRepository.getmemberchatrequestreceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+               return _InfoNotificationRepository.sendmemberchatrequestreceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
      
            }
            catch (Exception ex)
@@ -249,11 +249,11 @@ namespace Shell.MVC2.Services.Notification
            }
       }
 
-       public EmailViewModel getmemberofflinechatmessagereceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
+       public EmailViewModel sendmemberofflinechatmessagereceivedemailbyprofileid(string recipientprofileid, string senderprofileid)
        {
            try
            {
-               return _InfoNotificationRepository.getmemberofflinechatmessagereceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
+               return _InfoNotificationRepository.sendmemberofflinechatmessagereceivedemailbyprofileid(Convert.ToInt32(recipientprofileid), Convert.ToInt32(senderprofileid));
    
            }
            catch (Exception ex)
@@ -266,12 +266,12 @@ namespace Shell.MVC2.Services.Notification
            }
       }
 
-       public EmailViewModel getmemberphotorejectedemailbyprofileid(string profileid, string adminprofileid, photorejectionreasonEnum reason)
+       public EmailViewModel sendmemberphotorejectedemailbyprofileid(string profileid, string adminprofileid, photorejectionreasonEnum reason)
        {
            try
            {
 
-               return _InfoNotificationRepository.getmemberphotorejectedemailbyprofileid(Convert.ToInt32(profileid), Convert.ToInt32(adminprofileid), reason);
+               return _InfoNotificationRepository.sendmemberphotorejectedemailbyprofileid(Convert.ToInt32(profileid), Convert.ToInt32(adminprofileid), reason);
    
            }
            catch (Exception ex)
@@ -284,12 +284,12 @@ namespace Shell.MVC2.Services.Notification
            }
       }
 
-       public EmailViewModel getmemberphotouploadedemailbyprofileid(string profileid)
+       public EmailViewModel sendmemberphotouploadedemailbyprofileid(string profileid)
        {
            try
            {
 
-               return _InfoNotificationRepository.getmemberphotouploadedemailbyprofileid(Convert.ToInt32(profileid));
+               return _InfoNotificationRepository.sendmemberphotouploadedemailbyprofileid(Convert.ToInt32(profileid));
      
            }
            catch (Exception ex)
@@ -302,11 +302,11 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel getadminspamblockedemailbyprofileid(string blockedprofileid)
+       public EmailViewModel sendadminspamblockedemailbyprofileid(string blockedprofileid)
        {
            try
            {
-                return _InfoNotificationRepository.getadminspamblockedemailbyprofileid(Convert.ToInt32(blockedprofileid));
+                return _InfoNotificationRepository.sendadminspamblockedemailbyprofileid(Convert.ToInt32(blockedprofileid));
     
            }
            catch (Exception ex)
@@ -320,11 +320,11 @@ namespace Shell.MVC2.Services.Notification
        }
 
        //TO DO revisit this to send back the matches here
-       public EmailViewModel getemailmatchesemailbyprofileid(string profileid)
+       public EmailViewModel sendemailmatchesemailbyprofileid(string profileid)
        {
            try
            {
-               return _InfoNotificationRepository.getemailmatchesemailbyprofileid(Convert.ToInt32(profileid));
+               return _InfoNotificationRepository.sendemailmatchesemailbyprofileid(Convert.ToInt32(profileid));
            }
            catch (Exception ex)
            {
@@ -338,11 +338,11 @@ namespace Shell.MVC2.Services.Notification
 
        }
 
-       public EmailViewModel getadminmemberspamblockedemailbyprofileid(string spamblockedprofileid, string reason, string blockedby)
+       public EmailViewModel sendadminmemberspamblockedemailbyprofileid(string spamblockedprofileid, string reason, string blockedby)
        {
            try
            {
-               return _InfoNotificationRepository.getadminmemberspamblockedemailbyprofileid(Convert.ToInt32(spamblockedprofileid), reason, blockedby);
+               return _InfoNotificationRepository.sendadminmemberspamblockedemailbyprofileid(Convert.ToInt32(spamblockedprofileid), reason, blockedby);
    
            }
            catch (Exception ex)
@@ -354,11 +354,11 @@ namespace Shell.MVC2.Services.Notification
                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
            }
       }
-       public EmailViewModel getadminmemberblockedemailbyprofileid(string blockedprofileid, string blockerprofileid)
+       public EmailViewModel sendadminmemberblockedemailbyprofileid(string blockedprofileid, string blockerprofileid)
        {
            try
            {
-               return _InfoNotificationRepository.getadminmemberblockedemailbyprofileid(Convert.ToInt32(blockedprofileid), Convert.ToInt32(blockerprofileid));
+               return _InfoNotificationRepository.sendadminmemberblockedemailbyprofileid(Convert.ToInt32(blockedprofileid), Convert.ToInt32(blockerprofileid));
      
            }
            catch (Exception ex)
@@ -372,12 +372,12 @@ namespace Shell.MVC2.Services.Notification
   }
 
        //There is no message for Members to know when photos are approved btw
-       public EmailViewModel getadminmemberphotoapprovedemailbyprofileid(string approvedprofileid, string adminprofileid)
+       public EmailViewModel sendadminmemberphotoapprovedemailbyprofileid(string approvedprofileid, string adminprofileid)
        {
            try
            {
 
-               return _InfoNotificationRepository.getadminmemberphotoapprovedemailbyprofileid(Convert.ToInt32(approvedprofileid), Convert.ToInt32(adminprofileid));
+               return _InfoNotificationRepository.sendadminmemberphotoapprovedemailbyprofileid(Convert.ToInt32(approvedprofileid), Convert.ToInt32(adminprofileid));
      
 
            }

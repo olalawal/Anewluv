@@ -457,12 +457,7 @@ namespace Shell.MVC2.Data
         }
 
       public  EmailViewModel sendmembercreatedemail(RegisterModel model)
-      {         
-  
-
-
-
-
+      {  
              try
              {
                  EmailViewModel returnmodel = new EmailViewModel();
