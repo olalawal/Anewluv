@@ -350,10 +350,118 @@ namespace Shell.MVC2.Data
                  throw ex;
              }
             // return null;
-         } 
+         }
 
-      public  EmailViewModel getmembercreatedemail(RegisterModel model)
-      {           
+        //TO DO revisit this to send back the matches here
+        public EmailViewModel sendemailmatchesemailbyprofileid(int profileid)
+        {
+
+
+            try
+            {
+                MembersViewModel model = _membersmapperrepository.getmemberdata(profileid);
+                EmailViewModel returnmodel = new EmailViewModel();
+                returnmodel.EmailMatches = _membersmapperrepository.getemailmatches(model);
+                //get featured member
+                returnmodel.FeaturedMember = _membersmapperrepository.getmembersearchviewmodel(profileid, featuredmemberid);
+                returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberMatchesSentMemberNotification);
+                returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberMatchestSentAdminNotificaton);
+                //fill in the rest of the email model values 
+                //fill in the rest of the email model values i.e format the subject and body
+                //subject
+                returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
+                returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
+                //Body
+                returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.profile.screenname, returnmodel.EmailMatches.Count(), DateTime.Now, model.profile.id);
+                returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.profile.username, model.profile.emailaddress, returnmodel.EmailMatches.Count(), DateTime.Now);
+                //send the emails here i think trhough the service
+                //once things are finally done there will he only a boolean return
+
+                returnmodel.HasMatches = (returnmodel.EmailMatches.Count > 0) ? true : false;
+
+                dynamic systemsenderaddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == (int)(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
+                lu_template membertemplate = (from x in (_notificationcontext.lu_template.Where(f => f.id == (int)(templateenum.MemberMatchesSentMemberNotification ))) select x).First();
+                lu_template admintemplate = (from x in (_notificationcontext.lu_template.Where(f => f.id == (int)(templateenum.MemberMatchestSentAdminNotificaton ))) select x).First();
+
+                //build the recipeint addresses from contract us model i.f they dont exist create new ones 
+                //First get system addresses for admin
+                dynamic adminrecipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == (int)(addresstypeenum.SiteSupportAdmin))) select x);
+
+                //create new addres for user who already has one otherwise just add to new item
+                var memberrecipientaddress = (from x in (_notificationcontext.address.Where(f => f.emailaddress == model.profile.emailaddress )) select x);
+                if (!(memberrecipientaddress.Count() > 0))
+                {
+                    var address = new address
+                    {
+                        addresstype = _notificationcontext.lu_addresstype.Where(f => f.id == (int)addresstypeenum.SiteUser).FirstOrDefault(),
+                        emailaddress = model.profile.emailaddress, 
+                        otheridentifer = model.profile.username,  //use this for chat notifications maybe
+                        active = true,
+                        creationdate = DateTime.Now
+                    };
+                    saveaddress(address);   //TO DO maybe remove this                      
+                }
+
+            
+                //Build and send the user Message first               
+
+                message message = new message();
+                message.template = _notificationcontext.lu_template.Where(f => f.id == (int)templateenum.MemberMatchesSentMemberNotification ).First();
+                message.messagetype = _notificationcontext.lu_messagetype.Where(f => f.id == (int)messagetypeenum.UserUpdate ).First();
+                message.content = TemplateParser.RazorFileTemplate(membertemplate.filename, ref returnmodel);
+                message.body = returnmodel.memberEmailViewModel.body;
+                message.subject = returnmodel.memberEmailViewModel.subject;
+                message.recipients = memberrecipientaddress.ToList();
+                message.sendingapplication = "InfoNotificationService";
+                message.creationdate = DateTime.Now;
+                message.sendattempts = 0;
+                message.systemaddress = systemsenderaddress;
+
+
+                message.sent = sendemail(message); //attempt to send the message
+                savemessage(message);  //save the message into database 
+
+                ////now send the admin message
+                ////use create method it like this 
+                message = (message.Create(c =>
+                {
+                    //c.id = (int)templateenum.GenericErrorMessage;
+                    c.template.id = (int)templateenum.MemberMatchestSentAdminNotificaton ;
+                    c.messagetype.id = (int)messagetypeenum.SysAdminUpdate ;
+                    c.content = TemplateParser.RazorFileTemplate(admintemplate.filename, ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                    c.body = returnmodel.adminEmailViewModel.body;
+                    c.subject = returnmodel.adminEmailViewModel.subject;
+                    c.recipients = adminrecipientemailaddresss.ToList();
+                    c.sendingapplication = "InfoNotificationService";
+                    c.systemaddress = systemsenderaddress;
+                }));
+
+                message.sent = sendemail(message); //attempt to send the message
+                savemessage(message);  //save the message into database 
+
+                //TO DO remove this after testing is complete;
+                return returnmodel;
+
+            }
+            catch (Exception ex)
+            {
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
+            }
+          
+
+          
+          
+
+        }
+
+      public  EmailViewModel sendmembercreatedemail(RegisterModel model)
+      {         
+  
+
+
+
 
              try
              {
@@ -378,7 +486,7 @@ namespace Shell.MVC2.Data
              return null;
       }
 
-      public  EmailViewModel getmembercreatedopenidemail(RegisterModel model) 
+      public  EmailViewModel sendmembercreatedopenidemail(RegisterModel model) 
       {
 
 
@@ -408,7 +516,7 @@ namespace Shell.MVC2.Data
       
       }
 
-      public  EmailViewModel getmemberpasswordchangedemail(LogonViewModel model) 
+      public  EmailViewModel sendmemberpasswordchangedemail(LogonViewModel model) 
       {                
 
           try
@@ -441,7 +549,7 @@ namespace Shell.MVC2.Data
 
       }
 
-      public EmailViewModel getmemberprofileactivatedemailbyprofileid(int profileid)
+      public EmailViewModel sendmemberprofileactivatedemailbyprofileid(int profileid)
       {
       
 
@@ -477,7 +585,7 @@ namespace Shell.MVC2.Data
           return null;
       }
 
-      public  EmailViewModel getmemberactivationcoderecoveredemailbyprofileid(int profileid) 
+      public  EmailViewModel sendmemberactivationcoderecoveredemailbyprofileid(int profileid) 
       {             
 
           try
@@ -512,7 +620,7 @@ namespace Shell.MVC2.Data
           return null;
       }
 
-      public  EmailViewModel getmemberemailmemssagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid) 
+      public  EmailViewModel sendmemberemailmemssagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid) 
       {
          
 
@@ -549,7 +657,7 @@ namespace Shell.MVC2.Data
           return null;
       }
 
-      public  EmailViewModel getmemberpeekreceivedemailbyprofileid(int recipientprofileid, int senderprofileid)
+      public  EmailViewModel sendmemberpeekreceivedemailbyprofileid(int recipientprofileid, int senderprofileid)
       {
        
 
@@ -586,7 +694,7 @@ namespace Shell.MVC2.Data
           return null;
       }
 
-      public  EmailViewModel getmemberlikereceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
+      public  EmailViewModel sendmemberlikereceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
 
  
 
@@ -624,7 +732,7 @@ namespace Shell.MVC2.Data
       
       }
 
-      public  EmailViewModel getmemberinterestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
+      public  EmailViewModel sendmemberinterestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
        
     
 
@@ -661,7 +769,7 @@ namespace Shell.MVC2.Data
           return null;
       }
 
-      public  EmailViewModel getmemberchatrequestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
+      public  EmailViewModel sendmemberchatrequestreceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
 
          
           try
@@ -696,7 +804,7 @@ namespace Shell.MVC2.Data
 
       }
 
-      public  EmailViewModel getmemberofflinechatmessagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
+      public  EmailViewModel sendmemberofflinechatmessagereceivedemailbyprofileid(int recipientprofileid, int senderprofileid) {
             
 
           try
@@ -727,7 +835,7 @@ namespace Shell.MVC2.Data
 
       }
 
-      public  EmailViewModel getmemberphotorejectedemailbyprofileid(int profileid,int adminprofileid, photorejectionreasonEnum reason) {
+      public  EmailViewModel sendmemberphotorejectedemailbyprofileid(int profileid,int adminprofileid, photorejectionreasonEnum reason) {
               
 
           try
@@ -759,7 +867,7 @@ namespace Shell.MVC2.Data
 
       }
 
-      public  EmailViewModel getmemberphotouploadedemailbyprofileid(int profileid) {
+      public  EmailViewModel sendmemberphotouploadedemailbyprofileid(int profileid) {
 
    
           try
@@ -791,7 +899,7 @@ namespace Shell.MVC2.Data
       
       }
 
-      public EmailViewModel getadminspamblockedemailbyprofileid(int blockedprofileid)
+      public EmailViewModel sendadminspamblockedemailbyprofileid(int blockedprofileid)
       {    
 
           try
@@ -823,42 +931,9 @@ namespace Shell.MVC2.Data
           return null;
       }
 
-      //TO DO revisit this to send back the matches here
-      public EmailViewModel getemailmatchesemailbyprofileid(int profileid)
-      {    
+ 
 
-          try
-          {
-              MembersViewModel model = _membersmapperrepository.getmemberdata(profileid);
-              EmailViewModel returnmodel = new EmailViewModel();
-              returnmodel.EmailMatches = _membersmapperrepository.getemailmatches(model);
-              //get featured member
-              returnmodel.FeaturedMember = _membersmapperrepository.getmembersearchviewmodel(profileid,featuredmemberid);
-              returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberMatchesSentMemberNotification);
-              returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberMatchestSentAdminNotificaton);
-              //fill in the rest of the email model values 
-              //fill in the rest of the email model values i.e format the subject and body
-              //subject
-              returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-              returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
-              //Body
-              returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.profile.screenname, returnmodel.EmailMatches.Count(), DateTime.Now, model.profile.id);
-              returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.profile.username, model.profile.emailaddress, returnmodel.EmailMatches.Count(), DateTime.Now);
-              //send the emails here i think trhough the service
-              //once things are finally done there will he only a boolean return
-            
-              returnmodel.HasMatches = (returnmodel.EmailMatches.Count > 0) ? true : false;
-              return returnmodel;
-          }
-          catch (Exception ex)
-          {
-              //handle logging here
-          }
-          return null;
-
-      }
-
-      public EmailViewModel getadminmemberspamblockedemailbyprofileid(int spamblockedprofileid,string reason,string blockedby)
+      public EmailViewModel sendadminmemberspamblockedemailbyprofileid(int spamblockedprofileid,string reason,string blockedby)
       {
    
 
@@ -885,7 +960,7 @@ namespace Shell.MVC2.Data
 
       }
 
-      public EmailViewModel getadminmemberblockedemailbyprofileid(int blockedprofileid, int blockerprofileid)
+      public EmailViewModel sendadminmemberblockedemailbyprofileid(int blockedprofileid, int blockerprofileid)
       {
        
 
@@ -916,7 +991,7 @@ namespace Shell.MVC2.Data
       }
 
         //There is no message for Members to know when photos are approved btw
-      public EmailViewModel getadminmemberphotoapprovedemailbyprofileid(int approvedprofileid, int adminprofileid)
+      public EmailViewModel sendadminmemberphotoapprovedemailbyprofileid(int approvedprofileid, int adminprofileid)
       {
 
           try
