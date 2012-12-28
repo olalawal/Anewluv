@@ -101,6 +101,7 @@ namespace Shell.MVC2.Data
                // var Approved = editProfileRepository.GetApproved(MyPhotos, "Yes", page, ps);
                // var NotApproved = editProfileRepository.GetApproved(MyPhotos, "No", page, ps);
                // var Private = editProfileRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
+                model.profilephotos = new PhotoViewModel();
                 model.profilephotos.ProfilePhotosApproved  = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id,photoapprovalstatusEnum.Approved ,photoformatEnum.Thumbnail,  page, ps);   //editProfileRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
                // approvedphotos = photorepository.
 
@@ -173,6 +174,8 @@ namespace Shell.MVC2.Data
                     // var Approved = editProfileRepository.GetApproved(MyPhotos, "Yes", page, ps);
                     // var NotApproved = editProfileRepository.GetApproved(MyPhotos, "No", page, ps);
                     // var Private = editProfileRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
+                  //12-27-2012 olawal added a contrructore to photoviewmodel to avoid null collections
+                    model.profilephotos = new PhotoViewModel();
                     model.profilephotos.ProfilePhotosApproved = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id, photoapprovalstatusEnum.Approved, photoformatEnum.Thumbnail, page, ps);   //editProfileRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
                     // approvedphotos = photorepository.
 

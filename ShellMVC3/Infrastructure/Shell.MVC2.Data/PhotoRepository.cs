@@ -149,7 +149,7 @@ namespace Shell.MVC2.Data
             // Retrieve All User's Approved Photo's that are not Private and approved.
             //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
-            var model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && 
+            var model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && a.photo.profile_id == profile_id && 
                 ((a.photo.approvalstatus != null && a.photo.approvalstatus.id == (int)status)))
                          select new PhotoModel
                          {
@@ -186,7 +186,7 @@ namespace Shell.MVC2.Data
 
             try
             {
-                var model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && (
+                var model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && a.photo.profile_id == profile_id && a.photo.profile_id == profile_id && (
                                                      a.photo.approvalstatus != null && a.photo.approvalstatus.id == (int)status))
                              select new PhotoModel
                              {

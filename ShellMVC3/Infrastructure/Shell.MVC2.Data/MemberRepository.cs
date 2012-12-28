@@ -73,7 +73,7 @@ namespace Shell.MVC2.Data
                  //  return items.FirstOrDefault();
                  //}
 
-                 var items = from i in this._datingcontext.profiledata  
+                 var items = from i in this._datingcontext.profiledata
                              where (i.profile_id == profileid)
                              select i;
 
@@ -86,7 +86,7 @@ namespace Shell.MVC2.Data
                  {
                  
 
-                     items.FirstOrDefault().profilemetadata.searchsettings.Add(this.getperfectmatchsearchsettingsbyprofileid (profileid));
+                     items.FirstOrDefault().profile.profilemetadata.searchsettings.Add(this.getperfectmatchsearchsettingsbyprofileid (profileid));
 
                      return items.FirstOrDefault();
 

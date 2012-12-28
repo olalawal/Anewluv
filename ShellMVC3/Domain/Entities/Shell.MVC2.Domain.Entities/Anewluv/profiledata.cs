@@ -12,13 +12,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {
             // Metadata classes are not meant to be instantiated.
 
-             [DataMember]
-            public int profile_id { get; set; }      
+          [DataMember]
+          public int profile_id { get; set; }      
             [DataMember]
             public int? age { get; set; }
             [DataMember] 
             public DateTime birthdate { get; set; }
-         [DataMember]
+         [DataMember]        
             public string city { get; set; }
          [DataMember]    
         public string countryregion { get; set; }
@@ -36,11 +36,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public long? height { get; set; }
          [DataMember]    
         public string mycatchyintroLine { get; set; }
-         [DataMember]    
+        [DataMember]    
         public string phone { get; set; }
-         [DataMember]    
+        [DataMember]    
         public string postalcode { get; set; }           
-           
+        [DataMember] 
         public virtual profile profile { get; set; }
         [DataMember]        
         public virtual profilemetadata profilemetadata { get; set; }

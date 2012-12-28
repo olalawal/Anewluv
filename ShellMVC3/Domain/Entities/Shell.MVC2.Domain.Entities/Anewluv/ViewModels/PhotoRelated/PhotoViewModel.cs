@@ -10,6 +10,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     [DataContract]
     public class PhotoViewModel
     {
+       public PhotoViewModel()
+        {
+            ProfilePhotosApproved = new List<PhotoModel>();
+            ProfilePhotosNotApproved = new List<PhotoModel>();
+            ProfilePhotosPrivate = new List<PhotoModel>();
+            SingleProfilePhoto = new PhotoModel();
+    }
 
         // properties
 

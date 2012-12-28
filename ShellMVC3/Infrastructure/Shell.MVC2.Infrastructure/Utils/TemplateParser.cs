@@ -17,6 +17,8 @@ namespace Shell.MVC2.Infrastructure
     {
 
         const string  basepath = @"c:\temp\templates";
+        const string admintemplateshomepath = @"E:\VisualStudio\GitHubShared\Webclients\AnewLuvWebClient\AnewLuv\Views\AdminTemplates";
+        const string membertemplateshomepath = @"E:\VisualStudio\GitHubShared\Webclients\AnewLuvWebClient\AnewLuv\Views\MemberTemplates";
 
         public static string RazorDBTemplate<T>(string templatestring, ref T myobject)
         {
@@ -43,8 +45,28 @@ namespace Shell.MVC2.Infrastructure
                 Razor.SetTemplateService(service);
 
 
-                var fullpath = Path.Combine(basepath, filename);
-                templatestring = File.OpenText(fullpath).ReadToEnd();
+
+
+                var admintemplatespath = Path.Combine(admintemplateshomepath, filename);
+                var membertemplatespath = Path.Combine(membertemplateshomepath , filename);
+                var sharedpath = Path.Combine(basepath , filename);
+                var validpath = "";
+                if (File.Exists(admintemplatespath))
+                {
+                    validpath = admintemplatespath;
+ 
+                }
+                else if (File.Exists(membertemplatespath))
+                {
+
+                    validpath = membertemplatespath;
+
+                }
+                else
+                {
+                    validpath = sharedpath;
+                }
+                templatestring = File.OpenText(validpath ).ReadToEnd();
 
 
 

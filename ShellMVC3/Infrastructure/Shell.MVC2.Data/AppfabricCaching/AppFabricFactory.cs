@@ -66,39 +66,45 @@ namespace Shell.MVC2.AppFabric
                 {
                     try
                     {
-                      _cacheFactory = new DataCacheFactory();
-                              //-------------------------
-                    // Configure Cache Client 
-                    //-------------------------
+                        _cacheFactory = new DataCacheFactory();
+                        //-------------------------
+                        // Configure Cache Client 
+                        //-------------------------
 
-                    //Define Array for 1 Cache Host
-                    List<DataCacheServerEndpoint> servers = new List<DataCacheServerEndpoint>(1);
+                        //Define Array for 1 Cache Host
+                        List<DataCacheServerEndpoint> servers = new List<DataCacheServerEndpoint>(1);
 
-                    //Specify Cache Host Details 
-                    //  Parameter 1 = host name
-                    //  Parameter 2 = cache port number
-                    servers.Add(new DataCacheServerEndpoint(_LeadCacheHost, 22233));
+                        //Specify Cache Host Details 
+                        //  Parameter 1 = host name
+                        //  Parameter 2 = cache port number
+                        servers.Add(new DataCacheServerEndpoint(_LeadCacheHost, 22233));
 
-                    //Create cache configuration
-                    DataCacheFactoryConfiguration configuration = new DataCacheFactoryConfiguration();
+                        //Create cache configuration
+                        DataCacheFactoryConfiguration configuration = new DataCacheFactoryConfiguration();
 
-                    //Set the cache host(s)
-                    configuration.Servers = servers;
+                        //Set the cache host(s)
+                        configuration.Servers = servers;
 
-                    //Set default properties for local cache (local cache disabled)
-                    configuration.LocalCacheProperties = new DataCacheLocalCacheProperties();
+                        //Set default properties for local cache (local cache disabled)
+                        configuration.LocalCacheProperties = new DataCacheLocalCacheProperties();
 
-                    //Disable tracing to avoid informational/verbose messages on the web page
-                    DataCacheClientLogManager.ChangeLogLevel(System.Diagnostics.TraceLevel.Off);
+                        //Disable tracing to avoid informational/verbose messages on the web page
+                        DataCacheClientLogManager.ChangeLogLevel(System.Diagnostics.TraceLevel.Off);
 
-                    //Pass configuration settings to cacheFactory constructor
-                    _cacheFactory = new DataCacheFactory(configuration);
-                    
+                        //Pass configuration settings to cacheFactory constructor
+                        _cacheFactory = new DataCacheFactory(configuration);
+
                     }
                     catch (DataCacheException ex)
                     {
                         //throw ex;
                         // log the execption message
+                        return null;
+                    }
+                    catch (Exception ex)
+                    {
+
+                        //log andmessage the exception moveon
                         return null;
                     }
 
@@ -258,8 +264,10 @@ namespace Shell.MVC2.AppFabric
             {
                 // if region already exists it's ok, 
                 // otherwise rethrow the exception
+                //12-27-2012 olawal not throwingg the error anymore justneedto logand send theemail
+                //TO DO log error andsend email toadmin
                 if (dcex.ErrorCode != DataCacheErrorCode.RegionAlreadyExists)
-                    throw dcex;
+                 return null;  
             }
 
             return NamedCache;
