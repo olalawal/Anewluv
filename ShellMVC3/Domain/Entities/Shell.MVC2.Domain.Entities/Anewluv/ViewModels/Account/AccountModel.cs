@@ -29,18 +29,20 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     {
         public string EarliestDateFrom = DateTime.Now.AddYears(-18).ToString();
         public string CurrentDate = DateTime.Now.ToString();
-                
+           
+        [DataMember]
         [DataType(DataType.Password)]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters", MinimumLength = 6)]
         [DisplayName("New Password")]
         public string Password { get; set; }
 
-
+          [DataMember]
         [DataType(DataType.Password)]
         [DisplayName("Confirm New password")]
         // [Compare("Password", ErrorMessage = "The Passwords do not match.")]
         public string ConfirmPassword { get; set; }
 
+          [DataMember]
         [Required]
         [DataType(DataType.Date)]
         [CustomValidation(typeof(RegisterModel), "ValidatebirthdateDate")]
@@ -51,6 +53,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
         //public IEnumerable<SelectListItem> Genders { get; set; }
 
+          [DataMember]
         [Required]
         [DataType(DataType.Text)]
         [DisplayName("Gender")]
@@ -61,17 +64,19 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
         //public List<SelectListItem> Countries { get; set; }
 
+          [DataMember]
         [Required]
         [DataType(DataType.Text)]
         [DisplayName("Country")]
         public string Country { get; set; }
 
-
+          [DataMember]
         public bool PostalCodeStatus { get; set; }
 
 
         //public List<SelectListItem> Cities { get; set; }
 
+          [DataMember]
         [Required]
         [DataType(DataType.Text)]
         [DisplayName("City")]
@@ -80,7 +85,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
         // public List<SelectListItem> ZipOrPostalCodes { get; set; }
 
-
+          [DataMember]
         [DataType(DataType.Text)]
         [DisplayName("Zip/PostalCode")]
         //[RequiredPostalCodeIf("PostalCodeStatus", Comparison.IsEqualTo, true)]
@@ -92,11 +97,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //  [DataMember]
         //public List<SelectListItem> SecurityQuestions { get; set; }
 
-        [Required]
+          [DataMember]
+       // [Required]
         [DisplayName("Security Question")]
         public string SecurityQuestion { get; set; }
 
-        [Required]
+          [DataMember]
+       // [Required]
         [DisplayName("Security Answer")]
         public string SecurityAnswer { get; set; }
 

@@ -52,12 +52,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [EmailDoesNotExistAttribute]
         public string Email { get; set; }
 
+           [DataMember]
         [Required]
         [DataType(DataType.EmailAddress)]
         //[Compare("Email", ErrorMessage = "The Email Adresses do not match.")]
         [DisplayName("Confirm Email")]
         public string ConfirmEmail { get; set; }
 
+           [DataMember]
         [Required]
         [DataType(DataType.Password)]
         [ValidatePasswordHasNoSpaces]
@@ -65,6 +67,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DisplayName("Password")]
         public string Password { get; set; }
 
+           [DataMember]
         [Required]
         [DataType(DataType.Password)]
         [DisplayName("Confirm password")]
@@ -77,6 +80,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public string openidProvider { get; set; }
 
+           [DataMember]
         [Required]
         [DataType(DataType.Date)]
         [CustomValidation(typeof(RegisterModel), "ValidatebirthdateDate")]
@@ -86,6 +90,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public List<string> Genders { get; set; }
 
+           [DataMember]
         [Required]
         [DataType(DataType.Text)]
         [DisplayName("Gender")]
@@ -94,17 +99,19 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public List<string> Countries { get; set; }
 
+           [DataMember]
         [Required]
         [DataType(DataType.Text)]
         [DisplayName("Country")]
         public string Country { get; set; }
 
-
+           [DataMember]
         public bool PostalCodeStatus { get; set; }
 
         [DataMember]
         public List<string> Cities { get; set; }
 
+           [DataMember]
         [Required]
         [DataType(DataType.Text)]
         [DisplayName("City")]
@@ -125,7 +132,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public List<string> ZipOrPostalCodes { get; set; }
 
-
+           [DataMember]
         [DataType(DataType.Text)]
         [DisplayName("Zip/PostalCode")]
         //[RequiredPostalCodeIf("PostalCodeStatus", Comparison.IsEqualTo, true)]
@@ -145,10 +152,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //public string SecurityAnswer { get; set; }
 
         //photo model stuff 
+           [DataMember]
         public PhotoEditModel RegistrationPhotos { get; set; }
 
         //add temp storage for activation code too i guess
+           [DataMember]
         public string ActivationCode { get; set; }
+
 
         public static ValidationResult ValidatebirthdateDate(DateTime birthdateDateToValidate)
         {

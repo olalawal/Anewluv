@@ -14,6 +14,7 @@
     using Dating.Server.Data.Services;
 
     using Shell.MVC2.Domain.Entities.Anewluv;
+using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 
     using System.Data.EntityClient;
     using System.Collections.ObjectModel;
@@ -629,7 +630,172 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
         #region "Extra Methods added to interface to clean up MVC controllers that do member stuff"
 
-       
+       //1-8-2013 olawal addedrobust method for activating profiles
+        public AnewluvMessages activateprofile(ActivateProfileContainerViewModel model)
+        {
+        
+            //Clear any errors kinda redundant tho
+            AnewluvMessages messages= new AnewluvMessages();
+            messages.message ="";
+            messages.errormessages  = null;
+
+            //also create a members view model to store pertinent data i.e persist photos profile ID etc
+            var membersmodel = new MembersViewModel();
+
+            //get the macthcing member data using the profile ID/email entered
+           var  profile = _memberepository.getprofilebyprofileid  (Convert.ToInt32 ( model.ActivateProfileModel.ProfileId));
+          //  membersmodel =  _m .GetMemberData(model.ActivateProfileModel.ProfileId);
+
+            //verify that user entered correct email before doing anything
+            //TO DO add these error messages to resource files
+            if (profile == null)
+            {
+                messages.errormessages.Add("There is no registered account with the email address: " + model.ActivateProfileModel.ProfileId + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
+                //hide the photo view in thsi case
+                model.ActivateProfileModel.PhotoStatus = true;
+                return messages;
+}            
+                
+            //11-1-2011
+            //store the valid profileID in appfarbic cache
+           // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID(model.ActivateProfileModel.ProfileId, this.HttpContext);
+
+           
+            //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
+           // PhotoEditModel photoviewmodel = new PhotoEditModel();
+            //RegisterModel registerviewmodel = new RegisterModel();
+            registerviewmodel.Email = model.ActivateProfileModel.ProfileId;
+            registerviewmodel.ActivationCode = model.ActivateProfileModel.ActivationCode;
+            photoviewmodel.ProfileID = model.ActivateProfileModel.ProfileId;  //store the profileID i.e email addy into photo viewmodel
+            registerviewmodel.RegistrationPhotos = photoviewmodel;  //map it to the empty photo view model
+            //add the registermodel to the activate model          
+            membersmodel.Register = registerviewmodel;         
+            //store the members viewmodel
+            CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel,model.ActivateProfileModel.ProfileId);
+            //populate the values of all the form feilds from model if they are empty
+            //verify that the modelstate is good beforeing even starting, this so that in case it was a redirecect 
+            // from action we display any preivous errors from another associated partial view
+            if (ModelState.IsValid != true)
+            {
+                //show the photo partial view as well since any previous errors will be from here
+                model.ActivateProfileModel.PhotoStatus = true;
+                //ModelState.Clear();
+                return View(model);
+            }
+
+
+            // create temprary instances of both models since the partial view only passes one or the other not both
+            //depending on which partial view made the request
+            var activateProfileModel = new ActivateProfileModel();
+            var photoModel = new PhotoEditModel();
+
+            //5/11/2011
+            // add photo view model stuff
+            model.ActivateProfilePhotos = photoModel;
+
+
+            //store temporary variables for this request
+            TempData["ProfileID"] = model.ActivateProfileModel.ProfileId;
+            TempData["ActivationCode"] = model.ActivateProfileModel.ActivationCode;
+
+            //no need for this sicne we have a route for it
+            // HttpRequestBase rd = this.Request;
+            // model.ProfileId =  rd.QueryString.Get("ProfileId");
+            //model.ActivationCode = rd.QueryString.Get("ActivationCode");
+
+            //after a photo has been uploaded or if no photo needed to be uploaded, attempt to validate the user's information           
+
+            //Server side validation begins here  activation code is validated though the data model , but we still need to validate that the user has photo 
+            //*****************************************************************************
+
+            //validate the profileID first i.e dont even attemp to allow them to upload a photo if that was the issue if the profile ID is inccorect the just ruturn the view with the generic activaion code error
+            if (MembershipService.CheckIfEmailAlreadyExists(model.ActivateProfileModel.ProfileId) == false)
+            {
+                ModelState.AddModelError("", "Invalid Activation Code or Email Address");
+                //hide the photo view in thsi case
+                model.ActivateProfileModel.PhotoStatus = true;
+                return View(model);
+            }
+            //else
+            //{
+            //    ModelState.Clear();  // clear the model state , i.e removes prevalidation
+            //}
+
+
+
+            //since we got here we can now check if the user has a photo
+            //first check to see if there is an email address for the given user on the server add it to the data anotaions validation                 
+            //get a value for photo status so we know weather to display uplodad phot dialog or not
+            //if the photo status is TRUE then hide the upload photo div
+            model.ActivateProfileModel.PhotoStatus = MembershipService.CheckForUploadedPhotoByProfileID(model.ActivateProfileModel.ProfileId);
+            if (model.ActivateProfileModel.PhotoStatus == false)
+            {
+                ModelState.AddModelError("", "Please upload at least one profile photo using the browser below");
+                return View(model);
+                
+            }
+            //else
+            //{
+            //    ModelState.Clear();  // clear the model state , i.e removes prevalidation
+            //}
+            //add the error to the model if 
+
+
+            if (ModelState.IsValid)
+            {
+                //get username here
+                string UserName = MembershipService.GetUserNamebyProfileID(model.ActivateProfileModel.ProfileId);
+                string ScreenName = MembershipService.GetScreenNamebyProfileID(model.ActivateProfileModel.ProfileId);
+                //build log on model
+                //create a new login model
+                var logonmodel = new LogOnModel();
+                var lostaccountinfomodel = new LostAccountInfoModel();
+                var lostActivationcodemodel = new LostActivationCodeModel();
+                var _logonmodel = new LogonViewModel
+                {
+                    LogOnModel = logonmodel,
+                    LostAccountInfoModel = lostaccountinfomodel,
+                    LostActivationCodeModel = lostActivationcodemodel
+                };
+
+                //popualate values
+                _logonmodel.LogOnModel.UserName = UserName;
+                _logonmodel.LogOnModel.Password = "";  //we do not sent password over wire
+
+                //Check here if the profile was alrady activated, if it is add the error and return the view, 
+                //If the profile was actived then the next check is if the mailbox folders were created, if they are not then create them here as well
+                //validate the profileID first i.e dont even attemp to allow them to upload a photo if that was the issue if the profile ID is inccorect the just ruturn the view with the generic activaion code error
+
+
+
+                if (CheckIfProfileisActivated(model.ActivateProfileModel.ProfileId) == true)
+                {
+                    ModelState.AddModelError("", "Your Profile has already been activated");
+                    //hide the photo view in thsi case
+
+                    //ViewData["ActivateProfileStatus"]=
+                    return View("LogOn", _logonmodel);
+                }
+                //activaate profile here
+                else
+                {
+                    MembershipService.ActivateProfile(model.ActivateProfileModel.ProfileId);
+                }
+
+                //check if mailbox folders exist, if they dont create em , don't add any error status
+                if (MembershipService.checkifmailboxfoldersarecreated(model.ActivateProfileModel.ProfileId) == true)
+                {
+                    //ModelState.AddModelError("", "Your Profile has already been activated");
+                    //hide the photo view in thsi case                  
+                }
+                //create the mailbox folders if they do not exist
+                else
+                {
+                    MembershipService.createmailboxfolders(model.ActivateProfileModel.ProfileId);
+                }
+
+
+        }
         
 
         public bool checkifmailboxfoldersarecreated(string profileid)

@@ -64,6 +64,7 @@
     <Compile Include="Anewluv\Lookups\enums\photorejectionreasonusermessage.cs" />
     <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
     <Compile Include="Anewluv\photo_securitylevel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\AnewLuvMessages.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoModel.cs" />
     <Compile Include="Anewluv\visiblitysettings_countries.cs" />

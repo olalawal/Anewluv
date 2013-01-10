@@ -18,6 +18,8 @@ using Shell.MVC2.Services.Contracts;
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
 using Shell.MVC2.Domain.Entities.Anewluv;
+using Shell.MVC2.Infrastructure.Interfaces;
+using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
 
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
@@ -26,7 +28,9 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 		public override void Load()
 		{
                 //AnewLuvFTSEntities datingcontext, IGeoRepository georepository, IMemberRepository memberepository
-           
+            Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));
+            Kernel.Bind<IGeoRepository>().ToConstructor(ctorArg => new GeoRepository(ctorArg.Inject<PostalData2Entities>()));
+            Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>()));
            Kernel.Bind<IAnewLuvMembershipProvider>().ToConstructor(
              ctorArg => new AnewLuvMembershipProvider(ctorArg.Inject<AnewluvContext>(),ctorArg.Inject<IGeoRepository>(),ctorArg.Inject<IMemberRepository>()));
 

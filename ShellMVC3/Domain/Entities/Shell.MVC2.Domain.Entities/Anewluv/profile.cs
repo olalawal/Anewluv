@@ -42,7 +42,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public bool? readprivacystatement { get; set; }
            [DataMember]
         public bool? readtemsofuse { get; set; }
-         
+          [DataMember]
         public string password { get; set; }
            [DataMember]
         public DateTime? passwordChangeddate { get; set; }
@@ -57,7 +57,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
               [DataMember]
         public string securityanswer { get; set; }
 
-       
+        [DataMember]
         public virtual lu_securityquestion securityquestion { get; set; } 
         //Anti spam stuff might do away with
           [DataMember]

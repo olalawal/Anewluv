@@ -19,6 +19,8 @@ namespace Shell.MVC2.Web.AuthenticationService.ServiceHostFactories
 
             IKernel container = new StandardKernel();
             container.Load<NinjectModules.ApiKeyContextModule>();
+            container.Load<NinjectModules.AnewLuvContextModule>();
+            container.Load<NinjectModules.PostalDataContextModule>();
             container.Load<NinjectModules.MembershipModule>();        
             return container;
         }
