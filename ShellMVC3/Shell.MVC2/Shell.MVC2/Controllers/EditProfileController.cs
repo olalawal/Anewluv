@@ -1301,7 +1301,7 @@ namespace Shell.MVC2.Controllers
         [AcceptParameter(Name = "Uploadbutton", Value = "submit")]
         [ModelStateToTempData]
         [PassParametersDuringRedirect]
-        public ActionResult EditUploadPhoto(PhotoEditModel model)
+        public ActionResult EditUploadPhoto(photoeditmodel model)
         {
 
             var membersmodel = new MembersViewModel();
@@ -1374,7 +1374,7 @@ namespace Shell.MVC2.Controllers
         [AcceptParameter(Name = "CancelUploadbutton", Value = "cancel")]
         [ModelStateToTempData]
         [PassParametersDuringRedirect]
-        public ActionResult CancelUploadPhoto(PhotoEditModel model)
+        public ActionResult CancelUploadPhoto(photoeditmodel model)
         {
             var membersmodel = new MembersViewModel();
 

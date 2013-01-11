@@ -77,12 +77,12 @@ namespace Shell.MVC2.Services.Media
 
         #region "Edititable Photo models
 
-        public PhotoEditModel getphotoeditmodelbyphotoid(string photoid, string format)
+        public photoeditmodel getphotoeditmodelbyphotoid(string photoid, string format)
         {
             return _photorepo.getphotoeditmodelbyphotoid(Guid.Parse(photoid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
         }
 
-        public List<PhotoEditModel> getphotoeditmodelsbyprofileidandstatus(string profile_id, string status, string format)
+        public List<photoeditmodel> getphotoeditmodelsbyprofileidandstatus(string profile_id, string status, string format)
         {
             return _photorepo.getphotoeditmodelsbyprofileidandstatus(Convert.ToInt32(profile_id),
                    ((photoapprovalstatusEnum)Enum.Parse(typeof(photoapprovalstatusEnum), status)),
@@ -90,7 +90,7 @@ namespace Shell.MVC2.Services.Media
 
         }
 
-        public List<PhotoEditModel> getpagedphotoeditmodelsbyprofileidstatus(string profile_id, string status, string format,
+        public List<photoeditmodel> getpagedphotoeditmodelsbyprofileidstatus(string profile_id, string status, string format,
                                                               string page, string pagesize)
         {
             return _photorepo.getpagedphotoeditmodelsbyprofileidstatus(Convert.ToInt32(profile_id),

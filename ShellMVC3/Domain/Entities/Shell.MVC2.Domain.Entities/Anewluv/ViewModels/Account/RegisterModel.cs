@@ -23,7 +23,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     [DataContract]
     [Serializable]
     // [RegistrationCountryCityPostalCodeIsValid("CountryName", "City", "ZipOrPostalCode", "PostalCodeStatus")]  
-    public class RegisterModel
+    public class registermodel
     {
         public string EarliestDateFrom = DateTime.Now.AddYears(-18).ToString();
         public string CurrentDate = DateTime.Now.ToString();
@@ -35,14 +35,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [ValidateUserNameHasNoSpaces]
         [DisplayName("User Name")]
         [StringLength(15, ErrorMessage = "User Name must be 15 characters or less")]
-        public string UserName { get; set; }
+        public string username { get; set; }
 
         [DataMember]
         [Required]
         [ValidateScreenname]
         [StringLength(10, ErrorMessage = "Screen Name must be 10 characters or less")]
         [DisplayName("Screen Name")]
-        public string ScreenName { get; set; }
+        public string screenname { get; set; }
 
         [DataMember]
         [Required]
@@ -50,14 +50,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [StringLength(200, ErrorMessage = "Email must be 200 characters or less.")]
         [DisplayName("Email address")]
         [EmailDoesNotExistAttribute]
-        public string Email { get; set; }
+        public string emailaddress { get; set; }
 
            [DataMember]
         [Required]
         [DataType(DataType.EmailAddress)]
         //[Compare("Email", ErrorMessage = "The Email Adresses do not match.")]
         [DisplayName("Confirm Email")]
-        public string ConfirmEmail { get; set; }
+        public string confirmemailaddress { get; set; }
 
            [DataMember]
         [Required]
@@ -65,61 +65,61 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [ValidatePasswordHasNoSpaces]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters", MinimumLength = 7)]
         [DisplayName("Password")]
-        public string Password { get; set; }
+        public string password { get; set; }
 
            [DataMember]
         [Required]
         [DataType(DataType.Password)]
         [DisplayName("Confirm password")]
         //[Compare("Password", ErrorMessage = "The Passwords do not match.")]
-        public string ConfirmPassword { get; set; }
+        public string confirmpassword { get; set; }
 
         [DataMember]
-        public string openidIdentifer { get; set; }
+        public string openididentifer { get; set; }
 
         [DataMember]
-        public string openidProvider { get; set; }
+        public string openidprovider { get; set; }
 
            [DataMember]
         [Required]
         [DataType(DataType.Date)]
-        [CustomValidation(typeof(RegisterModel), "ValidatebirthdateDate")]
+        [CustomValidation(typeof(registermodel), "ValidatebirthdateDate")]
         [DisplayName("Date of Birth")]
-        public DateTime BirthDate { get; set; }
+        public DateTime birthdate { get; set; }
 
         [DataMember]
-        public List<string> Genders { get; set; }
+        public List<string> genders { get; set; }
 
            [DataMember]
         [Required]
         [DataType(DataType.Text)]
         [DisplayName("Gender")]
-        public string Gender { get; set; }
+        public string gender { get; set; }
 
         [DataMember]
-        public List<string> Countries { get; set; }
+        public List<string> countries { get; set; }
 
            [DataMember]
         [Required]
         [DataType(DataType.Text)]
         [DisplayName("Country")]
-        public string Country { get; set; }
+        public string country { get; set; }
 
            [DataMember]
-        public bool PostalCodeStatus { get; set; }
+        public bool postalcodestatus { get; set; }
 
         [DataMember]
-        public List<string> Cities { get; set; }
+        public List<string> cities { get; set; }
 
            [DataMember]
         [Required]
         [DataType(DataType.Text)]
         [DisplayName("City")]
-        public string City { get; set; }
+        public string city { get; set; }
 
         [DataMember]
         [DataType(DataType.Text)]
-        public string Stateprovince { get; set; }
+        public string stateprovince { get; set; }
 
         [DataMember]
         public double? longitude { get; set; }
@@ -130,18 +130,18 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
 
         [DataMember]
-        public List<string> ZipOrPostalCodes { get; set; }
+        public List<string> ziporpostalcodes { get; set; }
 
            [DataMember]
         [DataType(DataType.Text)]
         [DisplayName("Zip/PostalCode")]
         //[RequiredPostalCodeIf("PostalCodeStatus", Comparison.IsEqualTo, true)]
-        public string ZipOrPostalCode { get; set; }
+        public string ziporpostalcode { get; set; }
 
 
         // public SecurityQuestion SecurityQuestion { get; set; }
         [DataMember]
-        public List<string> SecurityQuestions { get; set; }
+        public List<string> securityquestions { get; set; }
 
 
         //[DisplayName("Security Question")]
@@ -153,11 +153,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
         //photo model stuff 
            [DataMember]
-        public PhotoEditModel RegistrationPhotos { get; set; }
+        public photoeditmodel registrationphotos { get; set; }
 
         //add temp storage for activation code too i guess
            [DataMember]
-        public string ActivationCode { get; set; }
+        public string activationcode { get; set; }
 
 
         public static ValidationResult ValidatebirthdateDate(DateTime birthdateDateToValidate)

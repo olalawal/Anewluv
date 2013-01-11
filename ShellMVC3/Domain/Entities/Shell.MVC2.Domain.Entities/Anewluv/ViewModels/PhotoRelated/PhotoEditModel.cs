@@ -10,7 +10,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
    
    [DataContract ]
     [Serializable ]
-    public class PhotoEditModel
+    public class photoeditmodel
     {
         [DataMember]
         public Guid photoid { get; set; }

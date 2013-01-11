@@ -84,15 +84,15 @@ namespace Misc.PhotoService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/getphotosbyprofileidandstatus", ReplyAction="http://tempuri.org/IPhotoService/getphotosbyprofileidandstatusResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(Misc.PhotoService.ServiceFault), Action="http://Schemas.Testws.Medtox.com", Name="ServiceFault", Namespace="http://schemas.datacontract.org/2004/07/")]
-        System.Collections.Generic.List<Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoEditModel> getphotosbyprofileidandstatus(string profileid, Shell.MVC2.Domain.Entities.Anewluv.photoapprovalstatusEnum status);
+        System.Collections.Generic.List<Shell.MVC2.Domain.Entities.Anewluv.ViewModels.photoeditmodel> getphotosbyprofileidandstatus(string profileid, Shell.MVC2.Domain.Entities.Anewluv.photoapprovalstatusEnum status);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/getpagedphotosbyprofileidstatus", ReplyAction="http://tempuri.org/IPhotoService/getpagedphotosbyprofileidstatusResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(Misc.PhotoService.ServiceFault), Action="http://Schemas.Testws.Medtox.com", Name="ServiceFault", Namespace="http://schemas.datacontract.org/2004/07/")]
-        System.Collections.Generic.List<Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoEditModel> getpagedphotosbyprofileidstatus(string profileid, Shell.MVC2.Domain.Entities.Anewluv.photoapprovalstatusEnum status, string page, string pagesize);
+        System.Collections.Generic.List<Shell.MVC2.Domain.Entities.Anewluv.ViewModels.photoeditmodel> getpagedphotosbyprofileidstatus(string profileid, Shell.MVC2.Domain.Entities.Anewluv.photoapprovalstatusEnum status, string page, string pagesize);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/getsingleprofilephotobyphotoid", ReplyAction="http://tempuri.org/IPhotoService/getsingleprofilephotobyphotoidResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(Misc.PhotoService.ServiceFault), Action="http://Schemas.Testws.Medtox.com", Name="ServiceFault", Namespace="http://schemas.datacontract.org/2004/07/")]
-        Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoEditModel getsingleprofilephotobyphotoid(string photoid);
+        Shell.MVC2.Domain.Entities.Anewluv.ViewModels.photoeditmodel getsingleprofilephotobyphotoid(string photoid);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileid", ReplyAction="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileidResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(Misc.PhotoService.ServiceFault), Action="http://Schemas.Testws.Medtox.com", Name="ServiceFault", Namespace="http://schemas.datacontract.org/2004/07/")]
@@ -186,15 +186,15 @@ namespace Misc.PhotoService {
             return base.Channel.getallphotosbyusername(username);
         }
         
-        public System.Collections.Generic.List<Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoEditModel> getphotosbyprofileidandstatus(string profileid, Shell.MVC2.Domain.Entities.Anewluv.photoapprovalstatusEnum status) {
+        public System.Collections.Generic.List<Shell.MVC2.Domain.Entities.Anewluv.ViewModels.photoeditmodel> getphotosbyprofileidandstatus(string profileid, Shell.MVC2.Domain.Entities.Anewluv.photoapprovalstatusEnum status) {
             return base.Channel.getphotosbyprofileidandstatus(profileid, status);
         }
         
-        public System.Collections.Generic.List<Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoEditModel> getpagedphotosbyprofileidstatus(string profileid, Shell.MVC2.Domain.Entities.Anewluv.photoapprovalstatusEnum status, string page, string pagesize) {
+        public System.Collections.Generic.List<Shell.MVC2.Domain.Entities.Anewluv.ViewModels.photoeditmodel> getpagedphotosbyprofileidstatus(string profileid, Shell.MVC2.Domain.Entities.Anewluv.photoapprovalstatusEnum status, string page, string pagesize) {
             return base.Channel.getpagedphotosbyprofileidstatus(profileid, status, page, pagesize);
         }
         
-        public Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoEditModel getsingleprofilephotobyphotoid(string photoid) {
+        public Shell.MVC2.Domain.Entities.Anewluv.ViewModels.photoeditmodel getsingleprofilephotobyphotoid(string photoid) {
             return base.Channel.getsingleprofilephotobyphotoid(photoid);
         }
         

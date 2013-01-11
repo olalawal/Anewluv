@@ -50,17 +50,17 @@ namespace Shell.MVC2.Services.Contracts
         //registration model mapping
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/getregistermodel", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        RegisterModel getregistermodel(MembersViewModel membersmodel);
+        registermodel getregistermodel(MembersViewModel membersmodel);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/getregistermodelopenid", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
         //TO DO this should be using profileID or a composite model , add rpxprofile to members model
-        RegisterModel getregistermodelopenid(MembersViewModel membersmodel);
+        registermodel getregistermodelopenid(MembersViewModel membersmodel);
       
         //exposed methods that use cache, we should prpbbaly hdie the other methods that are not cached
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebGet(UriTemplate = "/getregistermodeltest", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        RegisterModel getregistermodeltest();
+        registermodel getregistermodeltest();
 
         // MembersViewModel updatemembersviewmodel(MembersViewModel model);
         //send the full model to app fapbric   

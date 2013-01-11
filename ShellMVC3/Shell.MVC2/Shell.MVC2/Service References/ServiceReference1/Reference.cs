@@ -2189,16 +2189,16 @@ namespace Shell.MVC2.ServiceReference1 {
         private Shell.MVC2.ServiceReference1.PhotoUploadViewModel PhotosUploadingField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Shell.MVC2.ServiceReference1.PhotoEditModel[] ProfilePhotosApprovedField;
+        private Shell.MVC2.ServiceReference1.photoeditmodel[] ProfilePhotosApprovedField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Shell.MVC2.ServiceReference1.PhotoEditModel[] ProfilePhotosNotApprovedField;
+        private Shell.MVC2.ServiceReference1.photoeditmodel[] ProfilePhotosNotApprovedField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Shell.MVC2.ServiceReference1.PhotoEditModel[] ProfilePhotosPrivateField;
+        private Shell.MVC2.ServiceReference1.photoeditmodel[] ProfilePhotosPrivateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Shell.MVC2.ServiceReference1.PhotoEditModel SingleProfilePhotoField;
+        private Shell.MVC2.ServiceReference1.photoeditmodel SingleProfilePhotoField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -2237,7 +2237,7 @@ namespace Shell.MVC2.ServiceReference1 {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Shell.MVC2.ServiceReference1.PhotoEditModel[] ProfilePhotosApproved {
+        public Shell.MVC2.ServiceReference1.photoeditmodel[] ProfilePhotosApproved {
             get {
                 return this.ProfilePhotosApprovedField;
             }
@@ -2250,7 +2250,7 @@ namespace Shell.MVC2.ServiceReference1 {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Shell.MVC2.ServiceReference1.PhotoEditModel[] ProfilePhotosNotApproved {
+        public Shell.MVC2.ServiceReference1.photoeditmodel[] ProfilePhotosNotApproved {
             get {
                 return this.ProfilePhotosNotApprovedField;
             }
@@ -2263,7 +2263,7 @@ namespace Shell.MVC2.ServiceReference1 {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Shell.MVC2.ServiceReference1.PhotoEditModel[] ProfilePhotosPrivate {
+        public Shell.MVC2.ServiceReference1.photoeditmodel[] ProfilePhotosPrivate {
             get {
                 return this.ProfilePhotosPrivateField;
             }
@@ -2276,7 +2276,7 @@ namespace Shell.MVC2.ServiceReference1 {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Shell.MVC2.ServiceReference1.PhotoEditModel SingleProfilePhoto {
+        public Shell.MVC2.ServiceReference1.photoeditmodel SingleProfilePhoto {
             get {
                 return this.SingleProfilePhotoField;
             }
@@ -2394,10 +2394,10 @@ namespace Shell.MVC2.ServiceReference1 {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PhotoEditModel", Namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewMo" +
+    [System.Runtime.Serialization.DataContractAttribute(Name="photoeditmodel", Namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewMo" +
         "dels")]
     [System.SerializableAttribute()]
-    public partial class PhotoEditModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class photoeditmodel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;

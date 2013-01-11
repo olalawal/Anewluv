@@ -54,10 +54,10 @@ namespace Shell.MVC2.Infastructure.JanRainAuthentication
         }
 
         //TO DO use this for regathering registration data
-        public RegisterModel RegisterUser()
+        public registermodel RegisterUser()
         {
 
-            return new RegisterModel 
+            return new registermodel 
             {
                 
             };

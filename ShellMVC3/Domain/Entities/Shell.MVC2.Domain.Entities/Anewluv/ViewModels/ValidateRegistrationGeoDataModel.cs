@@ -11,7 +11,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     public class ValidateRegistrationGeoDataModel
     {
        [DataMember ]
-        public RegisterModel GeoRegisterModel {get;set;}
+        public registermodel GeoRegisterModel {get;set;}
         [DataMember]
         public MembersViewModel GeoMembersModel { get; set; }
 

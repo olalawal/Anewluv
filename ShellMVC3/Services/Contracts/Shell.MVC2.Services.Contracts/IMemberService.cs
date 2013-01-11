@@ -18,7 +18,7 @@ namespace Shell.MVC2.Services.Contracts
         //member viewmodoem mapping and registration models mappers
 
         //TO DO move to unit test
-        // RegisterModel mapregistrationtest();  
+        // registermodel mapregistrationtest();  
         //end of profile mapping
 
         //initial profile stuffs

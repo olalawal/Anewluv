@@ -14,19 +14,19 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         // properties
 
         [DataMember]
-        public PhotoEditModel SingleProfilePhoto { get; set; }
+        public photoeditmodel SingleProfilePhoto { get; set; }
 
         [DataMember]
        // public List<EditProfileViewPhotoModel> ProfilePhotosApproved { get; set; }
-        public List<PhotoEditModel> ProfilePhotosApproved { get; set; }
+        public List<photoeditmodel> ProfilePhotosApproved { get; set; }
 
         [DataMember]
         //public List<EditProfileViewPhotoModel> ProfilePhotosNotApproved { get; set; }
-        public List<PhotoEditModel> ProfilePhotosNotApproved { get; set; }
+        public List<photoeditmodel> ProfilePhotosNotApproved { get; set; }
 
         [DataMember]
        // public List<EditProfileViewPhotoModel> ProfilePhotosPrivate { get; set; }
-        public List<PhotoEditModel> ProfilePhotosPrivate { get; set; }
+        public List<photoeditmodel> ProfilePhotosPrivate { get; set; }
 
 
         [DataMember]

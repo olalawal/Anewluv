@@ -576,20 +576,20 @@ namespace Shell.MVC2.Data
         }
 
         //registration model update and mapping
-        public RegisterModel getregistermodel(MembersViewModel membersmodel)
+        public registermodel getregistermodel(MembersViewModel membersmodel)
         {
 
             // MembersRepository membersrepository = new MembersRepository();
 
 
-            RegisterModel model = new RegisterModel();
+            registermodel model = new registermodel();
             //quicksearchmodel quicksearchmodel = new quicksearchmodel();
             // IEnumerable<CityStateProvince> CityStateProvince ;
-            model.City = membersmodel.myquicksearch.myselectedcity;
-            model.Country = membersmodel.myquicksearch.myselectedcountryname;
+            model.city = membersmodel.myquicksearch.myselectedcity;
+            model.country = membersmodel.myquicksearch.myselectedcountryname;
             model.longitude = membersmodel.myquicksearch.myselectedlongitude;
             model.lattitude = membersmodel.myquicksearch.myselectedlongitude;
-            model.PostalCodeStatus = membersmodel.myquicksearch.myselectedpostalcodestatus;
+            model.postalcodestatus = membersmodel.myquicksearch.myselectedpostalcodestatus;
 
             // model.SecurityAnswer = "moma";
             //5/8/2011  set other defualt values here
@@ -598,15 +598,15 @@ namespace Shell.MVC2.Data
             return model;
 
         }
-        public RegisterModel getregistermodelopenid(MembersViewModel membersmodel)
+        public registermodel getregistermodelopenid(MembersViewModel membersmodel)
         {
 
 
-            RegisterModel model = new RegisterModel();
+            registermodel model = new registermodel();
             //quicksearchmodel quicksearchmodel = new quicksearchmodel();
             // IEnumerable<CityStateProvince> CityStateProvince ;
-            model.openidIdentifer = membersmodel.rpxmodel.identifier;
-            model.openidProvider = membersmodel.rpxmodel.providername;
+            model.openididentifer = membersmodel.rpxmodel.identifier;
+            model.openidprovider = membersmodel.rpxmodel.providername;
 
 
             //model.Ages = sharedrepository.AgesSelectList();
@@ -614,29 +614,29 @@ namespace Shell.MVC2.Data
             // model.Countries = sharedrepository.CountrySelectList();
             // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
             //test values
-            model.BirthDate = DateTime.Parse(membersmodel.rpxmodel.birthday);
+            model.birthdate = DateTime.Parse(membersmodel.rpxmodel.birthday);
 
-            model.Email = membersmodel.rpxmodel.verifiedemail;
-            model.ConfirmEmail = membersmodel.rpxmodel.verifiedemail;
-            model.Gender = Extensions.ConvertGenderName(membersmodel.rpxmodel.gender).ToString();
+            model.emailaddress  = membersmodel.rpxmodel.verifiedemail;
+            model.confirmemailaddress  = membersmodel.rpxmodel.verifiedemail;
+            model.gender = Extensions.ConvertGenderName(membersmodel.rpxmodel.gender).ToString();
 
 
             // model.Password = "kayode02";
             //model.ConfirmPassword = "kayode02";
-            model.ScreenName = membersmodel.rpxmodel.displayname;
-            model.UserName = membersmodel.rpxmodel.preferredusername;
-            model.City = membersmodel.mycitystateprovince;
+            model.screenname = membersmodel.rpxmodel.displayname;
+            model.username = membersmodel.rpxmodel.preferredusername;
+            model.city = membersmodel.mycitystateprovince;
 
 
-            model.Country = membersmodel.mycountryname;
+            model.country = membersmodel.mycountryname;
             model.longitude = Convert.ToDouble(membersmodel.mylongitude);
             model.lattitude = Convert.ToDouble(membersmodel.mylatitude);
-            model.PostalCodeStatus = membersmodel.mypostalcodestatus;
-            model.ZipOrPostalCode = membersmodel.mypostalcode;
+            model.postalcodestatus = membersmodel.mypostalcodestatus;
+            model.ziporpostalcode = membersmodel.mypostalcode;
 
 
             //added passwords temporary hack
-            model.Password = "ssoUser";
+            model.password = "ssoUser";
 
             //5/29/2012
 
@@ -677,13 +677,13 @@ namespace Shell.MVC2.Data
             return model;
 
         }
-        public RegisterModel getregistermodeltest()
+        public registermodel getregistermodeltest()
         {
 
             // MembersRepository membersrepository = new MembersRepository();
 
 
-            RegisterModel model = new RegisterModel();
+            registermodel model = new registermodel();
             //quicksearchmodel quicksearchmodel = new quicksearchmodel();
             // IEnumerable<CityStateProvince> CityStateProvince ;
 
@@ -694,15 +694,15 @@ namespace Shell.MVC2.Data
             // model.Countries = sharedrepository.CountrySelectList();
             // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
             //test values
-            model.BirthDate = DateTime.Parse("1/1/1983");
+            model.birthdate = DateTime.Parse("1/1/1983");
 
-            model.Email = "ola_lawal@lyahoo.com";
-            model.ConfirmEmail = "ola_lawal@lyahoo.com";
+            model.emailaddress  = "ola_lawal@lyahoo.com";
+            model.confirmemailaddress  = "ola_lawal@lyahoo.com";
             // model.Gender = "Male";
-            model.Password = "kayode02";
-            model.ConfirmPassword = "kayode02";
-            model.ScreenName = "test1";
-            model.UserName = "olalaw";
+            model.password = "kayode02";
+            model.confirmpassword = "kayode02";
+            model.screenname = "test1";
+            model.username = "olalaw";
 
             // model.SecurityAnswer = "moma";
 

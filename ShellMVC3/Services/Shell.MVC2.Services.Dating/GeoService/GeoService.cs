@@ -40,7 +40,7 @@ namespace Shell.MVC2.Services.Dating
             {
                 return _georepository.getcountrynamebycountryid(countryid);
             }
-            public RegisterModel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model)
+            public registermodel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model)
             {
                 return _georepository.verifyorupdateregistrationgeodata(model);
 

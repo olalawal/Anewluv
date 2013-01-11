@@ -80,15 +80,15 @@ namespace Shell.MVC2.Services.Dating
         }
 
         //registration model update and mapping
-        public RegisterModel getregistermodel(MembersViewModel membersmodel)
+        public registermodel getregistermodel(MembersViewModel membersmodel)
         {
             return _mapmembermapperrepo.getregistermodel(membersmodel);          
         }
-        public RegisterModel getregistermodelopenid(MembersViewModel membersmodel)
+        public registermodel getregistermodelopenid(MembersViewModel membersmodel)
         {
             return _mapmembermapperrepo.getregistermodelopenid(membersmodel);
         }
-        public RegisterModel getregistermodeltest()
+        public registermodel getregistermodeltest()
         {
             return _mapmembermapperrepo.getregistermodeltest();
         }

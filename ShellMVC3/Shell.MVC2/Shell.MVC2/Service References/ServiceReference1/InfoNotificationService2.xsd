@@ -44,7 +44,7 @@
       <xs:element minOccurs="0" name="ProfilePhotosApproved" nillable="true" type="tns:ArrayOfPhotoEditModel" />
       <xs:element minOccurs="0" name="ProfilePhotosNotApproved" nillable="true" type="tns:ArrayOfPhotoEditModel" />
       <xs:element minOccurs="0" name="ProfilePhotosPrivate" nillable="true" type="tns:ArrayOfPhotoEditModel" />
-      <xs:element minOccurs="0" name="SingleProfilePhoto" nillable="true" type="tns:PhotoEditModel" />
+      <xs:element minOccurs="0" name="SingleProfilePhoto" nillable="true" type="tns:photoeditmodel" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PhotoEditViewModel" nillable="true" type="tns:PhotoEditViewModel" />
@@ -75,11 +75,11 @@
   <xs:element name="PhotoUploadModel" nillable="true" type="tns:PhotoUploadModel" />
   <xs:complexType name="ArrayOfPhotoEditModel">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="PhotoEditModel" nillable="true" type="tns:PhotoEditModel" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="photoeditmodel" nillable="true" type="tns:photoeditmodel" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfPhotoEditModel" nillable="true" type="tns:ArrayOfPhotoEditModel" />
-  <xs:complexType name="PhotoEditModel">
+  <xs:complexType name="photoeditmodel">
     <xs:sequence>
       <xs:element minOccurs="0" name="aproved" type="xs:boolean" />
       <xs:element minOccurs="0" name="checkedphoto" type="xs:boolean" />
@@ -93,7 +93,7 @@
       <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="PhotoEditModel" nillable="true" type="tns:PhotoEditModel" />
+  <xs:element name="photoeditmodel" nillable="true" type="tns:photoeditmodel" />
   <xs:complexType name="MembersViewModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="lookingforagefrom" nillable="true" type="xs:string" />

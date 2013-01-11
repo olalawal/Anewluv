@@ -25,7 +25,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     // [ActivationCodeIsValid("ProfileId", "ActivationCode", ErrorMessage = "Invalid Activation Code or Email Address")]
     [DataContract]
     //[Serializable]
-    public class ActivateProfileModel
+    public class activateprofilemodel
     {
         [Required]
         [DataType(DataType.EmailAddress)]
@@ -36,21 +36,23 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //#########################################################
         [DisplayName("Email Address")]
         [DataMember]
-        public string ProfileId { get; set; }
+        public int emailaddress { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
         [DisplayName("Activation Code")]
         [DataMember]
-        public string ActivationCode { get; set; }
-
-          [DataMember]
-        [Display(Name = "Photo Status")]
-        public bool PhotoStatus { get; set; }
+        public string activationcode { get; set; }
 
         [DataMember]
-        PhotoEditModel Photos { get; set; }
+        [Display(Name = "Photo Status")]
+        public bool photostatus { get; set; }
 
+        [DataMember]
+        public photoeditmodel photos { get; set; }
+
+        [DataMember]
+       public int profileid { get; set; }
 
     }
 }

@@ -374,7 +374,7 @@ namespace Shell.MVC2.Models
             //return postaldataservicecontext.GetCountryNameByCountryID(ProfileData.CountryID);
         }
 
-        public RegisterModel  VerifyOrUpdateRegistrationGeoData(RegisterModel  model,MembersViewModel membersmodel)
+        public registermodel  VerifyOrUpdateRegistrationGeoData(registermodel  model,MembersViewModel membersmodel)
         {
             //4-24-2012 fixed code to hanlde if we did not have a postcal code
             GpsData gpsData = new GpsData();

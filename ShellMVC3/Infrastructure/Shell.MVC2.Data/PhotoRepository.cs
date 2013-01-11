@@ -314,10 +314,10 @@ namespace Shell.MVC2.Data
         
         #region "Edititable Photo models 
         
-        public PhotoEditModel getphotoeditmodelbyphotoid(Guid photoid, photoformatEnum format)
+        public photoeditmodel getphotoeditmodelbyphotoid(Guid photoid, photoformatEnum format)
         {
-            PhotoEditModel model = (from p in _datingcontext.photoconversions.Where(p =>p.formattype.id == (int)format && p.photo.id == photoid)
-                                    select new PhotoEditModel
+            photoeditmodel model = (from p in _datingcontext.photoconversions.Where(p =>p.formattype.id == (int)format && p.photo.id == photoid)
+                                    select new photoeditmodel
                                     {
                                         photoid = p.photo.id,
                                         profileid = p.photo.profile_id,
@@ -341,7 +341,7 @@ namespace Shell.MVC2.Data
 
         }
 
-        public List<PhotoEditModel> getphotoeditmodelsbyprofileidandstatus(int profile_id, photoapprovalstatusEnum status, photoformatEnum format)
+        public List<photoeditmodel> getphotoeditmodelsbyprofileidandstatus(int profile_id, photoapprovalstatusEnum status, photoformatEnum format)
         {
             // Retrieve All User's Photos that are not approved.
             //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
@@ -351,7 +351,7 @@ namespace Shell.MVC2.Data
 
             var model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format
                 && a.photo.approvalstatus != null && a.photo.approvalstatus.id == (int)status)
-                         select new PhotoEditModel
+                         select new photoeditmodel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
@@ -374,7 +374,7 @@ namespace Shell.MVC2.Data
 
         }
 
-        public List<PhotoEditModel> getpagedphotoeditmodelsbyprofileidstatus(int profile_id, photoapprovalstatusEnum status,photoformatEnum format,
+        public List<photoeditmodel> getpagedphotoeditmodelsbyprofileidstatus(int profile_id, photoapprovalstatusEnum status,photoformatEnum format,
                                                               int page, int pagesize)
         {
             // Retrieve All User's Photos that are not approved.
@@ -385,7 +385,7 @@ namespace Shell.MVC2.Data
 
             var model = (from p in _datingcontext.photoconversions.Where(a =>a.formattype.id == (int)format && a.photo.approvalstatus != null 
                 && a.photo.approvalstatus.id == (int)status)
-                         select new PhotoEditModel
+                         select new photoeditmodel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
@@ -441,7 +441,7 @@ namespace Shell.MVC2.Data
         }
 
         //Filter methods for edit photo models
-        private IEnumerable<PhotoEditModel> filterphotosapprovedminusgallery(IQueryable<photoconversion> MyPhotos, 
+        private IEnumerable<photoeditmodel> filterphotosapprovedminusgallery(IQueryable<photoconversion> MyPhotos, 
                                                         photoapprovalstatusEnum status,
                                                             int page, int pagesize)
         {
@@ -456,7 +456,7 @@ namespace Shell.MVC2.Data
             }
 
             var model = (from p in photos
-                         select new PhotoEditModel
+                         select new photoeditmodel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
@@ -476,11 +476,11 @@ namespace Shell.MVC2.Data
 
         }
 
-        private IEnumerable<PhotoEditModel> filterphotosbysecuitylevel(List<photoconversion> MyPhotos, securityleveltypeEnum status,
+        private IEnumerable<photoeditmodel> filterphotosbysecuitylevel(List<photoconversion> MyPhotos, securityleveltypeEnum status,
                                                                         int page, int pagesize)
         {
             var model = (from p in MyPhotos.Where(a => a.photo.photosecuritylevels.Any(d => d.securityleveltype.id == (int)status))
-                         select new PhotoEditModel
+                         select new photoeditmodel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
@@ -500,7 +500,7 @@ namespace Shell.MVC2.Data
         }
 
         //format should be known by down
-        private List<PhotoEditModel> filterandpagephotosbystatus(List<photoconversion> MyPhotos, photoapprovalstatusEnum approvalstatus,
+        private List<photoeditmodel> filterandpagephotosbystatus(List<photoconversion> MyPhotos, photoapprovalstatusEnum approvalstatus,
                                                                int page, int pagesize)
         {
             // Retrieve All User's Photos that are not approved.
@@ -510,7 +510,7 @@ namespace Shell.MVC2.Data
             //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
             var model = (from p in photos
-                         select new PhotoEditModel
+                         select new photoeditmodel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
@@ -533,19 +533,19 @@ namespace Shell.MVC2.Data
 
         }
 
-        private PhotoEditViewModel getphotoeditviewmodel(IEnumerable<PhotoEditModel> Approved,
-                                                            IEnumerable<PhotoEditModel> NotApproved,
-                                                            IEnumerable<PhotoEditModel> Private,
+        private PhotoEditViewModel getphotoeditviewmodel(IEnumerable<photoeditmodel> Approved,
+                                                            IEnumerable<photoeditmodel> NotApproved,
+                                                            IEnumerable<photoeditmodel> Private,
                                                             List<photoconversion> model)
         {
             // Retrieve singlephotoProfile from either the approved model or photo model
-            PhotoEditModel src = new PhotoEditModel();
+            photoeditmodel src = new photoeditmodel();
             if (Approved.Count() > 0)
             {
                 src = (from p in model
                        join x in Approved
                        on p.photo.id equals x.photoid
-                       select new PhotoEditModel
+                       select new photoeditmodel
                        {
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,
@@ -563,7 +563,7 @@ namespace Shell.MVC2.Data
             else
             {
                 src = (from p in model
-                       select new PhotoEditModel
+                       select new photoeditmodel
                        {
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,

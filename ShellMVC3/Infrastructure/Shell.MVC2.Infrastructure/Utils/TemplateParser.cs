@@ -8,6 +8,7 @@ using RazorEngine;
 using RazorEngine.Configuration;
 using RazorEngine.Templating;
 using System.IO;
+using System.Web;
 
 
 namespace Shell.MVC2.Infrastructure
@@ -16,9 +17,17 @@ namespace Shell.MVC2.Infrastructure
     public class TemplateParser
     {
 
-        const string  basepath = @"c:\temp\templates";
-        const string admintemplateshomepath = @"E:\VisualStudio\GitHubShared\Webclients\AnewLuvWebClient\AnewLuv\Views\AdminTemplates";
-        const string membertemplateshomepath = @"E:\VisualStudio\GitHubShared\Webclients\AnewLuvWebClient\AnewLuv\Views\MemberTemplates";
+       // const string  basepath = @"c:\temp\templates";
+       // const string admintemplateshomepath = @"E:\VisualStudio\GitHubShared\Webclients\AnewLuvWebClient\AnewLuv\Views\AdminTemplates";
+       // const string membertemplateshomepath = @"E:\VisualStudio\GitHubShared\Webclients\AnewLuvWebClient\AnewLuv\Views\MemberTemplates";
+
+       private static  string  basepath   = HttpContext.Current.Server.MapPath("/");
+ 
+        //Image1.ImageUrl = Request.ApplicationPath + "/images/Image1.gif";
+       // Label2.Text = Image1.ImageUrl;
+       private static string admintemplateshomepath ;// basepath + "/Views/AdminTemplates";
+       private static string membertemplateshomepath; //basepath + "/Views/MemberTemplates";
+
 
         public static string RazorDBTemplate<T>(string templatestring, ref T myobject)
         {
@@ -37,7 +46,8 @@ namespace Shell.MVC2.Infrastructure
         public static string RazorFileTemplate<T>(string filename, ref T myobject)
         {
             string templatestring ="";
-
+            admintemplateshomepath = basepath + "/Views/AdminTemplates";
+            membertemplateshomepath = basepath + "/Views/MemberTemplates";
             try
             {
                 dynamic config = new TemplateServiceConfiguration { Language = RazorEngine.Language.CSharp, Debug = true };

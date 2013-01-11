@@ -54,13 +54,17 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
       
          private IGeoRepository _georepository;
          private IMemberRepository _memberepository;
-         protected AnewluvContext _datingcontext;
+         private AnewluvContext _datingcontext;
+        private IPhotoRepository _photorepository;
 
-         public AnewLuvMembershipProvider(AnewluvContext datingcontext, IGeoRepository georepository, IMemberRepository memberepository)            
+
+         public AnewLuvMembershipProvider(AnewluvContext datingcontext, IGeoRepository georepository,
+             IMemberRepository memberepository,IPhotoRepository photorepository)            
         {
             _georepository = georepository;
             _memberepository = memberepository;
              _datingcontext = datingcontext ;
+             _photorepository = photorepository ;
         }
 
 
@@ -68,74 +72,86 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         public override bool ValidateUser(string username, string password)
         {
 
-            IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
-           
-            //first you have to get the encrypted sctring by email address and username 
-            string encryptedPassword = "";
-            //get profile created date
-            DateTime creationdate;
-            DateTime? passwordchangedate;
-            DateTime EncrpytionChangeDate = new DateTime(2011, 8, 3, 4, 5, 0);
-            string decryptedPassword;
-            string actualpasswordstring;
-
-            //Dim ctx As New Entities()
-            //added profile status ID validation as well i.e 2 for activated and is not banned 
-            myQuery = _datingcontext.profiles.Where(p => p.username == username && p.status.id == 2 );
-
-            
-
-            if (myQuery.Count() > 0)
+            try
             {
-                //retirve encypted password
-                encryptedPassword = myQuery.FirstOrDefault().password ;
-                creationdate = myQuery.FirstOrDefault().creationdate.GetValueOrDefault();
-                passwordchangedate = myQuery.FirstOrDefault().passwordChangeddate;
+                IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
+
+                //first you have to get the encrypted sctring by email address and username 
+                string encryptedPassword = "";
+                //get profile created date
+                DateTime creationdate;
+                DateTime? passwordchangedate;
+                DateTime EncrpytionChangeDate = new DateTime(2011, 8, 3, 4, 5, 0);
+                string decryptedPassword;
+                string actualpasswordstring;
+
+                //Dim ctx As New Entities()
+                //added profile status ID validation as well i.e 2 for activated and is not banned 
+                myQuery = _datingcontext.profiles.Where(p => p.username == username && p.status.id == 2);
+
+
+
+                if (myQuery.Count() > 0)
+                {
+                    //retirve encypted password
+                    encryptedPassword = myQuery.FirstOrDefault().password;
+                    creationdate = myQuery.FirstOrDefault().creationdate.GetValueOrDefault();
+                    passwordchangedate = myQuery.FirstOrDefault().passwordChangeddate;
+                }
+                else
+                {
+                    return false;
+                }
+
+                //case for if the user account was created before encrpyption algorithm was changed
+                //compare the dates
+                int resultcreateddate = DateTime.Compare(creationdate, EncrpytionChangeDate);
+                int resultpasswordchangedate = DateTime.Compare(passwordchangedate.GetValueOrDefault(), EncrpytionChangeDate);
+                if (resultpasswordchangedate > 0 | resultcreateddate > 0)
+                //use new decryption method
+                {
+
+                    decryptedPassword = Encryption.decryptString(encryptedPassword);
+                    actualpasswordstring = password;
+                }
+                else
+                {
+                    decryptedPassword = Encryption.Decrypt(encryptedPassword, password);
+                    actualpasswordstring = username.ToUpper() + Encryption.EncryptionKey;
+                }
+
+
+
+
+
+
+                //check if decrypted string macthed username to upper  + secret
+                if (actualpasswordstring == decryptedPassword)
+                {
+
+
+                    //log the user logtime here so it is common to silverlight and MVC
+                    _memberepository.updateuserlogintime(username, HttpContext.Current.Session.SessionID);
+                    //also update the profiledata for the last login date
+
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return false;
+                // model.activateprofilemodel.PhotoStatus = true;
+                //ModelState.Clear();
+                //return View(model);
+                //TO DO Log the error 
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
             }
-
-            //case for if the user account was created before encrpyption algorithm was changed
-            //compare the dates
-            int resultcreateddate = DateTime.Compare(creationdate,EncrpytionChangeDate);
-            int resultpasswordchangedate = DateTime.Compare(passwordchangedate.GetValueOrDefault() , EncrpytionChangeDate);
-            if (resultpasswordchangedate > 0 |  resultcreateddate > 0)
-            //use new decryption method
-            {
-               
-                decryptedPassword = Encryption.decryptString (encryptedPassword);
-                actualpasswordstring = password;            
-            }
-            else
-            {
-                decryptedPassword = Encryption.Decrypt(encryptedPassword, password);
-                actualpasswordstring = username.ToUpper() + Encryption.EncryptionKey;            
-            }
-
-
-
-
-            
-
-            //check if decrypted string macthed username to upper  + secret
-            if (actualpasswordstring == decryptedPassword)
-            {
-
-            
-            //log the user logtime here so it is common to silverlight and MVC
-                _memberepository.updateuserlogintime(username, HttpContext.Current.Session.SessionID);
-                //also update the profiledata for the last login date
-
-
-            return true;
-            }
-            else
-            {
-            return false;
-            }
-
 
 
 
@@ -147,13 +163,14 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         //overide for validate user that uses just the username, this can be used for pass through auth where a user was already prevalidated via another method
         public  bool ValidateUser(string username)
         {
-            
-         
 
+
+            try
+            {
                 //test code here 
-               // dynamic user = from p in datingcontext.profiles
+                // dynamic user = from p in datingcontext.profiles
                 //               where p.username == username
-                 //              select new { p.ScreenName };
+                //              select new { p.ScreenName };
                 //end test code
 
 
@@ -161,7 +178,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //dynamic user = datingcontext.profiles.Where(u => u.username == username && u.Password == Common.Encryption.EncodePasswordWithSalt(password, username).FirstOrDefault());
                 // Return user IsNot Nothing
                 //string encryptedPassword = Common.Encryption.EncodePasswordWithSalt(password, username);
-            IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
+                IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
                 //Dim ctx As New Entities()
                 myQuery = _datingcontext.profiles.Where(p => p.username == username);//&& p.ProfileStatusID == 2);
 
@@ -169,7 +186,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 if (myQuery.Count() > 0)
                 {
                     //log the user logtime here so it is common to silverlight and MVC
-                    _memberepository.updateuserlogintime(username, HttpContext.Current.Session.SessionID);            
+                    _memberepository.updateuserlogintime(username, HttpContext.Current.Session.SessionID);
 
                     return true;
                 }
@@ -177,57 +194,78 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 {
                     return false;
                 }
-
+            }
+            catch (Exception ex)
+            {
+                // model.activateprofilemodel.PhotoStatus = true;
+                //ModelState.Clear();
+                //return View(model);
+                //TO DO Log the error 
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
+            }
             
         }
                         
         public  bool ValidateUser(string VerifedEmail, string openidIdentifer,string openidProvidername)
         {
 
-
-            //open ID members are already verifed but it is posublethat a member who is not activated tries to use open ID
-            //so they could be in order status 1
-           var  myprofile = _datingcontext.profiles.Where(p => p.emailaddress   == VerifedEmail && p.status.id   <= 2).FirstOrDefault();
-
-            //check for the openIDidenfier , to see if it was used before , if it was do nothing but normal updates for user
-           var myopenIDstore = myprofile.openids.Where(p => p.openididentifier == openidIdentifer && p.openidprovidername == openidProvidername && p.active == true).FirstOrDefault();
-
-           //if we found an openID store for this type
-           if (myopenIDstore == null && myprofile != null)
-           //add the openID provider if its a new one
-           {
-               _memberepository.addnewopenidforprofile(myprofile.id , openidIdentifer, openidProvidername);
-           }
-
-            //first you have to get the encrypted sctring by email address and username 
-           // string encryptedopenidIdentifer = "";
-            //get profile created date
-            //DateTime creationdate;
-           // DateTime? passwordchangedate;
-            //DateTime EncrpytionChangeDate = new DateTime(2011, 8, 3, 4, 5, 0);        
-
-            //Dim ctx As New Entities()
-            //added profile status ID validation as well i.e 2 for activated and is not banned 
-           // myQuery = datingcontext.profiles.Where(p => p.ProfileID == VerifedEmail && p.ProfileStatusID == 2);
-            if (myprofile != null)
+            try
             {
-                _memberepository.updateuserlogintimebyprofileid(myprofile.id, HttpContext.Current.Session.SessionID);
-               return true;
+                //open ID members are already verifed but it is posublethat a member who is not activated tries to use open ID
+                //so they could be in order status 1
+                var myprofile = _datingcontext.profiles.Where(p => p.emailaddress == VerifedEmail && p.status.id <= 2).FirstOrDefault();
+
+                //check for the openIDidenfier , to see if it was used before , if it was do nothing but normal updates for user
+                var myopenIDstore = myprofile.openids.Where(p => p.openididentifier == openidIdentifer && p.openidprovidername == openidProvidername && p.active == true).FirstOrDefault();
+
+                //if we found an openID store for this type
+                if (myopenIDstore == null && myprofile != null)
+                //add the openID provider if its a new one
+                {
+                    _memberepository.addnewopenidforprofile(myprofile.id, openidIdentifer, openidProvidername);
+                }
+
+                //first you have to get the encrypted sctring by email address and username 
+                // string encryptedopenidIdentifer = "";
+                //get profile created date
+                //DateTime creationdate;
+                // DateTime? passwordchangedate;
+                //DateTime EncrpytionChangeDate = new DateTime(2011, 8, 3, 4, 5, 0);        
+
+                //Dim ctx As New Entities()
+                //added profile status ID validation as well i.e 2 for activated and is not banned 
+                // myQuery = datingcontext.profiles.Where(p => p.ProfileID == VerifedEmail && p.ProfileStatusID == 2);
+                if (myprofile != null)
+                {
+                    _memberepository.updateuserlogintimebyprofileid(myprofile.id, HttpContext.Current.Session.SessionID);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+
+
+                // datingService.UpdateUserLoginTimeByProfileID(VerifedEmail, HttpContext.Current.Session.SessionID);
+
+
+                //    return false;
+                // }
+
             }
-            else
+            catch (Exception ex)
             {
-                return false;
+                // model.activateprofilemodel.PhotoStatus = true;
+                //ModelState.Clear();
+                //return View(model);
+                //TO DO Log the error 
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
             }
-                     
-            
-          
-           // datingService.UpdateUserLoginTimeByProfileID(VerifedEmail, HttpContext.Current.Session.SessionID);
-             
-
-            //    return false;
-           // }
-
-
 
 
 
@@ -401,24 +439,37 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         public string ResetPasswordCustom(int profileid)
         {
 
-          //  if (securityquestionID == null) return "";
-
-          // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
-            var username = _memberepository.getusernamebyprofileid ( Convert.ToInt16(profileid));
-            var generatedpassword = "";
-            if (username != "")
+            try
             {
-                //we have the generated password now update the user's account with new password
+                //  if (securityquestionID == null) return "";
 
-                generatedpassword = GeneratePassword();
-                _memberepository.updatepassword(Convert.ToInt16(profileid), Encryption.encryptString(generatedpassword));
+                // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
+                var username = _memberepository.getusernamebyprofileid(Convert.ToInt16(profileid));
+                var generatedpassword = "";
+                if (username != "")
+                {
+                    //we have the generated password now update the user's account with new password
+
+                    generatedpassword = GeneratePassword();
+                    _memberepository.updatepassword(Convert.ToInt16(profileid), Encryption.encryptString(generatedpassword));
 
 
-                //'reset the password 
-                return generatedpassword;
+                    //'reset the password 
+                    return generatedpassword;
+                }
+                // throw new NotImplementedException();
+                return "";
             }
-            // throw new NotImplementedException();
-            return "";
+            catch (Exception ex)
+            {
+                // model.activateprofilemodel.PhotoStatus = true;
+                //ModelState.Clear();
+                //return View(model);
+                //TO DO Log the error 
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
+            }
         }
 
         public override void UpdateUser(MembershipUser user)
@@ -595,22 +646,36 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
         public string GeneratePassword()
         {
-            Random rand = new Random(); String password = "";
-            List<String> data = new List<String>();
-            for (int i = 0; i < 10; i++)
-            {
-                if (i < 3) data.Add(UPPER[rand.Next(UPPER.Length)].ToString());
-                else if (i < 6) data.Add(LOWER[rand.Next(LOWER.Length)].ToString());
-                else if (i < 8) data.Add(NUMBERS[rand.Next(NUMBERS.Length)].ToString());
-                else if (i < 10) data.Add(SPECIAL[rand.Next(SPECIAL.Length)].ToString());
-            }
-            while (data.Count > 0)
-            {
-                int pos = rand.Next(data.Count); password += data[pos];
-                data.RemoveAt(pos);
-            }
 
-            return password;
+            try
+            {
+                Random rand = new Random(); String password = "";
+                List<String> data = new List<String>();
+                for (int i = 0; i < 10; i++)
+                {
+                    if (i < 3) data.Add(UPPER[rand.Next(UPPER.Length)].ToString());
+                    else if (i < 6) data.Add(LOWER[rand.Next(LOWER.Length)].ToString());
+                    else if (i < 8) data.Add(NUMBERS[rand.Next(NUMBERS.Length)].ToString());
+                    else if (i < 10) data.Add(SPECIAL[rand.Next(SPECIAL.Length)].ToString());
+                }
+                while (data.Count > 0)
+                {
+                    int pos = rand.Next(data.Count); password += data[pos];
+                    data.RemoveAt(pos);
+                }
+
+                return password;
+            }
+            catch (Exception ex)
+            {
+                // model.activateprofilemodel.PhotoStatus = true;
+                //ModelState.Clear();
+                //return View(model);
+                //TO DO Log the error 
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
+            }
         }
 
   
@@ -620,83 +685,80 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 string securityAnswer,
                 DateTime birthdate, string gender, string country, string city, string zippostalcode)
         {
-
-
-          
-            
-
-            
         }
 
         #region "Extra Methods added to interface to clean up MVC controllers that do member stuff"
 
        //1-8-2013 olawal addedrobust method for activating profiles
-        public AnewluvMessages activateprofile(ActivateProfileContainerViewModel model)
+        public AnewluvMessages activateprofile(activateprofilecontainerviewmodel model)
         {
-        
+            AnewluvMessages messages = new AnewluvMessages();
+            messages.message = "";
+            messages.errormessages = null;
+            
+            try
+            {
             //Clear any errors kinda redundant tho
-            AnewluvMessages messages= new AnewluvMessages();
-            messages.message ="";
-            messages.errormessages  = null;
+           
 
             //also create a members view model to store pertinent data i.e persist photos profile ID etc
             var membersmodel = new MembersViewModel();
 
             //get the macthcing member data using the profile ID/email entered
-           var  profile = _memberepository.getprofilebyprofileid  (Convert.ToInt32 ( model.ActivateProfileModel.ProfileId));
-          //  membersmodel =  _m .GetMemberData(model.ActivateProfileModel.ProfileId);
+           var  profile = _memberepository.getprofilebyprofileid  ( model.activateprofilemodel.profileid);
+           //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
 
             //verify that user entered correct email before doing anything
             //TO DO add these error messages to resource files
             if (profile == null)
             {
-                messages.errormessages.Add("There is no registered account with the email address: " + model.ActivateProfileModel.ProfileId + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
+                messages.errormessages.Add("There is no registered account with the email address: " +  model.activateprofilemodel.emailaddress  + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
                 //hide the photo view in thsi case
-                model.ActivateProfileModel.PhotoStatus = true;
+                model.activateprofilemodel.photostatus = true;
                 return messages;
-}            
+             }            
                 
             //11-1-2011
             //store the valid profileID in appfarbic cache
-           // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID(model.ActivateProfileModel.ProfileId, this.HttpContext);
+           // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
 
            
             //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
-           // PhotoEditModel photoviewmodel = new PhotoEditModel();
-            //RegisterModel registerviewmodel = new RegisterModel();
-            registerviewmodel.Email = model.ActivateProfileModel.ProfileId;
-            registerviewmodel.ActivationCode = model.ActivateProfileModel.ActivationCode;
-            photoviewmodel.ProfileID = model.ActivateProfileModel.ProfileId;  //store the profileID i.e email addy into photo viewmodel
-            registerviewmodel.RegistrationPhotos = photoviewmodel;  //map it to the empty photo view model
+           // photoeditmodel photoviewmodel = new photoeditmodel();
+            //registermodel registerviewmodel = new registermodel();
+            model.registermodel.emailaddress  = profile.emailaddress ;
+            model.registermodel.activationcode = profile.activationcode ; //model.activateprofilemodel.ActivationCode;
+            model.registermodel.username  =  profile.username; // model.activateprofilemodel.profileid;  //store the profileID i.e email addy into photo viewmodel
+            //registerviewmodel.RegistrationPhotos = photoviewmodel;  //map it to the empty photo view model
             //add the registermodel to the activate model          
-            membersmodel.Register = registerviewmodel;         
+            //membersmodel.Register = registerviewmodel;         
             //store the members viewmodel
-            CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel,model.ActivateProfileModel.ProfileId);
+            //CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, model.activateprofilemodel.profileid);
             //populate the values of all the form feilds from model if they are empty
             //verify that the modelstate is good beforeing even starting, this so that in case it was a redirecect 
             // from action we display any preivous errors from another associated partial view
-            if (ModelState.IsValid != true)
-            {
+           // if (ModelState.IsValid != true)
+           // {
                 //show the photo partial view as well since any previous errors will be from here
-                model.ActivateProfileModel.PhotoStatus = true;
+               // model.activateprofilemodel.PhotoStatus = true;
                 //ModelState.Clear();
-                return View(model);
-            }
+               // return View(model);
+           // }
 
 
             // create temprary instances of both models since the partial view only passes one or the other not both
             //depending on which partial view made the request
-            var activateProfileModel = new ActivateProfileModel();
-            var photoModel = new PhotoEditModel();
+            var activateProfileModel = new activateprofilemodel();
+            var photoModel = new photoeditmodel();
 
             //5/11/2011
             // add photo view model stuff
-            model.ActivateProfilePhotos = photoModel;
+            model.activateprofilephotos = photoModel;
 
 
             //store temporary variables for this request
-            TempData["ProfileID"] = model.ActivateProfileModel.ProfileId;
-            TempData["ActivationCode"] = model.ActivateProfileModel.ActivationCode;
+           // TempData["ProfileID"] =  model.activateprofilemodel.profileid;
+           // TempData["ActivationCode"] = model.activateprofilemodel.ActivationCode;
 
             //no need for this sicne we have a route for it
             // HttpRequestBase rd = this.Request;
@@ -707,31 +769,30 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
             //Server side validation begins here  activation code is validated though the data model , but we still need to validate that the user has photo 
             //*****************************************************************************
-
+                
             //validate the profileID first i.e dont even attemp to allow them to upload a photo if that was the issue if the profile ID is inccorect the just ruturn the view with the generic activaion code error
-            if (MembershipService.CheckIfEmailAlreadyExists(model.ActivateProfileModel.ProfileId) == false)
+            if (_memberepository.checkifemailalreadyexists(profile.emailaddress) == false)
             {
-                ModelState.AddModelError("", "Invalid Activation Code or Email Address");
+                messages.errormessages.Add ("Invalid Activation Code or Email Address");
                 //hide the photo view in thsi case
-                model.ActivateProfileModel.PhotoStatus = true;
-                return View(model);
+                // model.activateprofilemodel.PhotoStatus = true;
+                //return View(model);
+                return messages ;
             }
             //else
             //{
             //    ModelState.Clear();  // clear the model state , i.e removes prevalidation
             //}
 
-
-
             //since we got here we can now check if the user has a photo
             //first check to see if there is an email address for the given user on the server add it to the data anotaions validation                 
             //get a value for photo status so we know weather to display uplodad phot dialog or not
             //if the photo status is TRUE then hide the upload photo div
-            model.ActivateProfileModel.PhotoStatus = MembershipService.CheckForUploadedPhotoByProfileID(model.ActivateProfileModel.ProfileId);
-            if (model.ActivateProfileModel.PhotoStatus == false)
+            model.activateprofilemodel.photostatus =  _photorepository.checkforuploadedphotobyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
+            if (model.activateprofilemodel.photostatus == false)
             {
-                ModelState.AddModelError("", "Please upload at least one profile photo using the browser below");
-                return View(model);
+                 messages.errormessages.Add("Please upload at least one profile photo using the browser below");
+                return messages ;
                 
             }
             //else
@@ -741,11 +802,10 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             //add the error to the model if 
 
 
-            if (ModelState.IsValid)
-            {
+            
                 //get username here
-                string UserName = MembershipService.GetUserNamebyProfileID(model.ActivateProfileModel.ProfileId);
-                string ScreenName = MembershipService.GetScreenNamebyProfileID(model.ActivateProfileModel.ProfileId);
+            string UserName = _memberepository.getusernamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
+            string ScreenName = _memberepository.getscreennamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
                 //build log on model
                 //create a new login model
                 var logonmodel = new LogOnModel();
@@ -768,22 +828,22 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
 
 
-                if (CheckIfProfileisActivated(model.ActivateProfileModel.ProfileId) == true)
+                if (CheckIfProfileisActivated( model.activateprofilemodel.profileid.ToString()) == true)
                 {
-                    ModelState.AddModelError("", "Your Profile has already been activated");
+                    messages.errormessages.Add ( "Your Profile has already been activated");
                     //hide the photo view in thsi case
-
                     //ViewData["ActivateProfileStatus"]=
-                    return View("LogOn", _logonmodel);
+                    // return View("LogOn", _logonmodel);
+                    return messages;
                 }
                 //activaate profile here
                 else
                 {
-                    MembershipService.ActivateProfile(model.ActivateProfileModel.ProfileId);
+                    _memberepository.activateprofile( model.activateprofilemodel.profileid);
                 }
 
                 //check if mailbox folders exist, if they dont create em , don't add any error status
-                if (MembershipService.checkifmailboxfoldersarecreated(model.ActivateProfileModel.ProfileId) == true)
+                if (_memberepository.checkifmailboxfoldersarecreated( model.activateprofilemodel.profileid) == true)
                 {
                     //ModelState.AddModelError("", "Your Profile has already been activated");
                     //hide the photo view in thsi case                  
@@ -791,10 +851,25 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //create the mailbox folders if they do not exist
                 else
                 {
-                    MembershipService.createmailboxfolders(model.ActivateProfileModel.ProfileId);
+                    _memberepository.createmailboxfolders( model.activateprofilemodel.profileid);
                 }
 
+                messages.message = "Activation Sucssesful";
+                return messages;
 
+            }
+            catch (Exception ex)
+            {
+                // model.activateprofilemodel.PhotoStatus = true;
+                //ModelState.Clear();
+                //return View(model);
+                //TO DO Log the error 
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
+            }
+
+                   
         }
         
 

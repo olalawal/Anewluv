@@ -18,9 +18,9 @@ namespace Shell.MVC2.Infrastructure.Interfaces
 
        EmailViewModel sendcontactusemail(ContactUsModel model);
         
-       EmailViewModel sendmembercreatedemail(RegisterModel model);       
+       EmailViewModel sendmembercreatedemail(registermodel model);       
     
-       EmailViewModel sendmembercreatedopenidemail(RegisterModel model);
+       EmailViewModel sendmembercreatedopenidemail(registermodel model);
      
        EmailViewModel sendmemberpasswordchangedemail(LogonViewModel model);
        

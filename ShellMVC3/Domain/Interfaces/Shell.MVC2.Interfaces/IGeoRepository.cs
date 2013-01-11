@@ -16,7 +16,7 @@ namespace Shell.MVC2.Interfaces
     {
 
        string getcountrynamebycountryid(int countryId);
-       RegisterModel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model);
+       registermodel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model);
        //gets the country list and orders it
        //added sorting
         List<Country_PostalCode_List> getcountry_postalcode_listandorderbycountry();

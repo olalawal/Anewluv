@@ -3051,7 +3051,7 @@ namespace Shell.MVC2.Models
             
             }
 
-            PhotoEditModel UploadPhotos = new PhotoEditModel();
+            photoeditmodel UploadPhotos = new photoeditmodel();
 
             EditProfilePhotosViewModel ViewModel = new EditProfilePhotosViewModel { 
                 SingleProfilePhoto = src,

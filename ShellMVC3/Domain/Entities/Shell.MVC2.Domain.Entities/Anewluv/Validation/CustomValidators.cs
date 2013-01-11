@@ -316,8 +316,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Validation
 
 
         //            //convert the value whihci is the model ? tthe type of model we use in this case members view mode l?
-        //            // RegisterModel model = new RegisterModel();
-        //            //model = (RegisterModel)(value);
+        //            // registermodel model = new registermodel();
+        //            //model = (registermodel)(value);
 
         //            //split up the city from state province
         //            // string[] tempCityAndStateProvince = model.City.Split(',');

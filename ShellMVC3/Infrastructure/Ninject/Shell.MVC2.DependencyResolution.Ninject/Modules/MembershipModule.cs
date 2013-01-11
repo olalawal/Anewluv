@@ -27,12 +27,13 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 	{
 		public override void Load()
 		{
-                //AnewLuvFTSEntities datingcontext, IGeoRepository georepository, IMemberRepository memberepository
+             //AnewLuvFTSEntities datingcontext, IGeoRepository georepository, IMemberRepository memberepository
             Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));
             Kernel.Bind<IGeoRepository>().ToConstructor(ctorArg => new GeoRepository(ctorArg.Inject<PostalData2Entities>()));
             Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>()));
-           Kernel.Bind<IAnewLuvMembershipProvider>().ToConstructor(
-             ctorArg => new AnewLuvMembershipProvider(ctorArg.Inject<AnewluvContext>(),ctorArg.Inject<IGeoRepository>(),ctorArg.Inject<IMemberRepository>()));
+            Kernel.Bind<IPhotoRepository>().ToConstructor(ctorArg => new PhotoRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
+            Kernel.Bind<IAnewLuvMembershipProvider>().ToConstructor(
+            ctorArg => new AnewLuvMembershipProvider(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IGeoRepository>(), ctorArg.Inject<IMemberRepository>(), ctorArg.Inject<IPhotoRepository>()));
 
             //services
            Kernel.Bind<IAuthenticationService>().ToSelf();

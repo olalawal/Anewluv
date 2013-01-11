@@ -28,11 +28,11 @@ namespace Shell.MVC2.Interfaces
 
         #region "Edititable Photo models
 
-        PhotoEditModel getphotoeditmodelbyphotoid(Guid photoid, photoformatEnum format);
+        photoeditmodel getphotoeditmodelbyphotoid(Guid photoid, photoformatEnum format);
        
-        List<PhotoEditModel> getphotoeditmodelsbyprofileidandstatus(int profile_id, photoapprovalstatusEnum status, photoformatEnum format);
+        List<photoeditmodel> getphotoeditmodelsbyprofileidandstatus(int profile_id, photoapprovalstatusEnum status, photoformatEnum format);
        
-        List<PhotoEditModel> getpagedphotoeditmodelsbyprofileidstatus(int profile_id, photoapprovalstatusEnum status, photoformatEnum format,
+        List<photoeditmodel> getpagedphotoeditmodelsbyprofileidstatus(int profile_id, photoapprovalstatusEnum status, photoformatEnum format,
                                                               int page, int pagesize);    
 
         //12-10-2012 this also filters the format

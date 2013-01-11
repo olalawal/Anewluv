@@ -76,7 +76,7 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel sendmembercreatedemail(RegisterModel model)
+       public EmailViewModel sendmembercreatedemail(registermodel model)
        {
         
            try
@@ -93,7 +93,7 @@ namespace Shell.MVC2.Services.Notification
            }
        }
 
-       public EmailViewModel sendmembercreatedopenidemail(RegisterModel model)
+       public EmailViewModel sendmembercreatedopenidemail(registermodel model)
        {
         
            try

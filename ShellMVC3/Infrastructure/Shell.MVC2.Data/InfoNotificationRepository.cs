@@ -456,7 +456,7 @@ namespace Shell.MVC2.Data
 
         }
 
-      public  EmailViewModel sendmembercreatedemail(RegisterModel model)
+      public  EmailViewModel sendmembercreatedemail(registermodel model)
       {  
              try
              {
@@ -470,8 +470,8 @@ namespace Shell.MVC2.Data
                  returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject);
 
                  //Body
-                 returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.ScreenName, model.UserName, model.ActivationCode);
-                 returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.ScreenName, model.Email);
+                 returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.screenname, model.username, model.activationcode);
+                 returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.screenname, model.emailaddress );
                  return returnmodel;
              }
              catch (Exception ex)
@@ -481,7 +481,7 @@ namespace Shell.MVC2.Data
              return null;
       }
 
-      public  EmailViewModel sendmembercreatedopenidemail(RegisterModel model) 
+      public  EmailViewModel sendmembercreatedopenidemail(registermodel model) 
       {
 
 
@@ -495,11 +495,11 @@ namespace Shell.MVC2.Data
               //fill in the rest of the email model values i.e format the subject and body
               //subject
               returnmodel.memberEmailViewModel.subject = String.Format(returnmodel.memberEmailViewModel.subject);
-              returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject, model.openidProvider);
+              returnmodel.adminEmailViewModel.subject = String.Format(returnmodel.adminEmailViewModel.subject, model.openidprovider);
 
               //Body
-              returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.ScreenName, model.openidProvider, model.UserName);
-              returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.ScreenName, model.Email, model.openidProvider);
+              returnmodel.memberEmailViewModel.body = String.Format(returnmodel.memberEmailViewModel.body, model.screenname, model.openidprovider, model.username);
+              returnmodel.adminEmailViewModel.body = String.Format(returnmodel.adminEmailViewModel.body, model.screenname, model.emailaddress , model.openidprovider);
 
               return returnmodel;
           }

@@ -45,7 +45,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
           [DataMember]
         [Required]
         [DataType(DataType.Date)]
-        [CustomValidation(typeof(RegisterModel), "ValidatebirthdateDate")]
+        [CustomValidation(typeof(registermodel), "ValidatebirthdateDate")]
         [DisplayName("Date of Birth")]
         public DateTime BirthDate { get; set; }
 

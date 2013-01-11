@@ -24,11 +24,11 @@ namespace Shell.MVC2.Interfaces
        
       
        //registration model mapping
-        RegisterModel getregistermodel(MembersViewModel membersmodel);
+        registermodel getregistermodel(MembersViewModel membersmodel);
        //TO DO this should be using profileID or a composite model , add rpxprofile to members model
-        RegisterModel getregistermodelopenid(MembersViewModel membersmodel);
+        registermodel getregistermodelopenid(MembersViewModel membersmodel);
        //exposed methods that use cache, we should prpbbaly hdie the other methods that are not cached
-         RegisterModel getregistermodeltest();
+         registermodel getregistermodeltest();
        
            
        

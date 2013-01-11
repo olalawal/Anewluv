@@ -21,7 +21,7 @@ namespace Shell.MVC2.Services.Contracts
         string getcountrynamebycountryid(int countryId);
         [WebInvoke ]
         [OperationContract]
-        RegisterModel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model);
+        registermodel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model);
         //gets the country list and orders it
         //added sorting
         [WebGet]

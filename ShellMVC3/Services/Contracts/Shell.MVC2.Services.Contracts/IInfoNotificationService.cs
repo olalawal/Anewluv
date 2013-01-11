@@ -36,11 +36,11 @@ namespace Shell.MVC2.Services.Contracts
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/sendmembercreatedemail", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 
-        EmailViewModel sendmembercreatedemail(RegisterModel model);
+        EmailViewModel sendmembercreatedemail(registermodel model);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/sendmembercreatedopenidemail", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 
-        EmailViewModel sendmembercreatedopenidemail(RegisterModel model);
+        EmailViewModel sendmembercreatedopenidemail(registermodel model);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/sendmemberpasswordchangedemail", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 

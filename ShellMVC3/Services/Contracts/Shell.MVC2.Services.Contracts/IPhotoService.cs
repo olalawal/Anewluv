@@ -64,15 +64,15 @@ namespace Shell.MVC2.Services.Contracts
 
          [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
          [WebGet(UriTemplate = "/getphotoeditmodelbyphotoid/{photoid}/{format}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 
-         PhotoEditModel getphotoeditmodelbyphotoid(string photoid, string format);
+         photoeditmodel getphotoeditmodelbyphotoid(string photoid, string format);
 
          [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
          [WebGet(UriTemplate = "/getphotoeditmodelsbyprofileidandstatus/{profileid}/{status}/{format}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 
-         List<PhotoEditModel> getphotoeditmodelsbyprofileidandstatus(string profileid, string status, string format);
+         List<photoeditmodel> getphotoeditmodelsbyprofileidandstatus(string profileid, string status, string format);
 
          [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
          [WebGet(UriTemplate = "/getpagedphotoeditmodelsbyprofileidstatus/{profileid}/{status}/{format}/{page}/{pagesize}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	 
-         List<PhotoEditModel> getpagedphotoeditmodelsbyprofileidstatus(string profileid, string status, string format, string page, string pagesize);
+         List<photoeditmodel> getpagedphotoeditmodelsbyprofileidstatus(string profileid, string status, string format, string page, string pagesize);
         
         //12-10-2012 this also filters the format
          [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]

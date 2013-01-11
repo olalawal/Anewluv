@@ -39,20 +39,21 @@ namespace Shell.MVC2.Data
                     select p.CountryName).FirstOrDefault();
             //return postaldataservicecontext.GetCountryNameByCountryID(profiledata.countryid);
         }
-        public RegisterModel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model)
+        public registermodel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model)
         {
             //4-24-2012 fixed code to hanlde if we did not have a postcal code
             GpsData gpsData = new GpsData();
-            string[] tempCityAndStateProvince = model.GeoRegisterModel.City .Split(',');
+            string[] tempCityAndStateProvince = model.GeoRegisterModel.city .Split(',');
             //int countryID;
 
             //attmept to get postal postalcode if it is empty
-            model.GeoRegisterModel.ZipOrPostalCode = (model.GeoRegisterModel.ZipOrPostalCode == null) ? this.getgeopostalcodebycountrynameandcity(model.GeoRegisterModel.Country, tempCityAndStateProvince[0]) : model.GeoRegisterModel.ZipOrPostalCode;
-            model.GeoRegisterModel.Stateprovince = ((tempCityAndStateProvince.Count() > 1)) ? tempCityAndStateProvince[1] : "NA";
+            model.GeoRegisterModel.ziporpostalcode = (model.GeoRegisterModel.ziporpostalcode == null) ?
+            this.getgeopostalcodebycountrynameandcity(model.GeoRegisterModel.country, tempCityAndStateProvince[0]) : model.GeoRegisterModel.ziporpostalcode;
+            model.GeoRegisterModel.stateprovince = ((tempCityAndStateProvince.Count() > 1)) ? tempCityAndStateProvince[1] : "NA";
             //countryID = postaldataservicecontext.GetCountryIdByCountryName(model.GeoRegisterModel.Country);
 
             //check if the  city and country match
-            if (model.GeoRegisterModel.Country == model.GeoMembersModel.myquicksearch.myselectedcountryname && 
+            if (model.GeoRegisterModel.country == model.GeoMembersModel.myquicksearch.myselectedcountryname && 
                 tempCityAndStateProvince[0] == model.GeoMembersModel.myquicksearch.myselectedcity)
             {
                 if (model.GeoRegisterModel.lattitude  != null | model.GeoRegisterModel.lattitude  == 0)
@@ -66,7 +67,7 @@ namespace Shell.MVC2.Data
             //get the longidtue and latttude 
             //1-11-2011 postal code and city are flipped by the way not this function should be renamed
             //TO DO rename this function.                  
-            gpsData = this.getgpsdatasinglebycitycountryandpostalcode(model.GeoRegisterModel.Country, model.GeoRegisterModel.ZipOrPostalCode, tempCityAndStateProvince[0]);
+            gpsData = this.getgpsdatasinglebycitycountryandpostalcode(model.GeoRegisterModel.country, model.GeoRegisterModel.ziporpostalcode, tempCityAndStateProvince[0]);
 
 
             model.GeoRegisterModel.lattitude  = (gpsData != null) ? gpsData.Latitude  : 0;

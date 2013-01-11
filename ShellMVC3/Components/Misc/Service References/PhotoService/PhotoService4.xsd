@@ -58,7 +58,7 @@
   <xs:element name="getsingleprofilephotobyphotoidResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" minOccurs="0" name="getsingleprofilephotobyphotoidResult" nillable="true" type="q6:PhotoEditModel" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" minOccurs="0" name="getsingleprofilephotobyphotoidResult" nillable="true" type="q6:photoeditmodel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

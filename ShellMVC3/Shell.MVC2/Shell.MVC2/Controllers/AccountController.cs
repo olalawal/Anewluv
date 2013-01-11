@@ -125,10 +125,10 @@ namespace Shell.MVC2.Controllers
                     model = CachingFactory.MembersViewModelHelper.GetGuestData(this.HttpContext);
                     var mapper = new ViewModelMapper();
                     //map regiseter model to guest geodata and rpx returned data
-                    var RegisterModel = mapper.MapJainRainRegistration(response, model);
+                    var registermodel = mapper.MapJainRainRegistration(response, model);
                     //save the register model along with phtos here since photo VM is lost on postback
-                    model.Register = RegisterModel;
-                    return RedirectToAction("RegisterOpenID", RegisterModel);
+                    model.Register = registermodel;
+                    return RedirectToAction("RegisterOpenID", registermodel);
                 }
 
 
@@ -142,11 +142,11 @@ namespace Shell.MVC2.Controllers
                    model = CachingFactory.MembersViewModelHelper.GetGuestData(this.HttpContext);
                    var mapper = new ViewModelMapper();
                    //map regiseter model to guest geodata and rpx returned data
-                   var RegisterModel = mapper.MapJainRainRegistration(response, model);
+                   var registermodel = mapper.MapJainRainRegistration(response, model);
                    //save the register model along with phtos here since photo VM is lost on postback
-                   model.Register = RegisterModel;
+                   model.Register = registermodel;
                    CachingFactory.MembersViewModelHelper.UpdateGuestData(model, this.HttpContext);
-                   return RedirectToAction("RegisterOpenID","Account", RegisterModel);
+                   return RedirectToAction("RegisterOpenID","Account", registermodel);
                 }  
 #endif
                 else
@@ -571,7 +571,7 @@ namespace Shell.MVC2.Controllers
 
             //initialize the viewmodel container and its models
             var activateProfileModel = new ActivateProfileModel();
-            var photoViewModel  = new PhotoEditModel();
+            var photoViewModel  = new photoeditmodel();
 
             var model = new ActivateProfileContainerViewModel
             {
@@ -689,8 +689,8 @@ namespace Shell.MVC2.Controllers
 
            
             //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
-            PhotoEditModel photoviewmodel = new PhotoEditModel();
-            RegisterModel registerviewmodel = new RegisterModel();
+            photoeditmodel photoviewmodel = new photoeditmodel();
+            registermodel registerviewmodel = new registermodel();
             registerviewmodel.Email = model.ActivateProfileModel.ProfileId;
             registerviewmodel.ActivationCode = model.ActivateProfileModel.ActivationCode;
             photoviewmodel.ProfileID = model.ActivateProfileModel.ProfileId;  //store the profileID i.e email addy into photo viewmodel
@@ -714,7 +714,7 @@ namespace Shell.MVC2.Controllers
             // create temprary instances of both models since the partial view only passes one or the other not both
             //depending on which partial view made the request
             var activateProfileModel = new ActivateProfileModel();
-            var photoModel = new PhotoEditModel();
+            var photoModel = new photoeditmodel();
 
             //5/11/2011
             // add photo view model stuff
@@ -1048,7 +1048,7 @@ namespace Shell.MVC2.Controllers
              //" Your account was succesfully created , please upload a photo to your account to complete your profile Once your photo has been uploaded please check your email for your activation code."
              ViewData["RegisterStatus"]  = "Your Profile has been created however you did not upload a photo. Please check your email for your activation link.. You will be required to upload a photo when you activate your profile";
 
-             PhotoEditModel model = new PhotoEditModel();
+             photoeditmodel model = new photoeditmodel();
              
 
               //when  we know the user did hit cancel so we know we are handled in any case.
@@ -1066,7 +1066,7 @@ namespace Shell.MVC2.Controllers
         [HttpPost]
         [PassParametersDuringRedirect]
         [AcceptParameter(Name = "button", Value = "submit")]
-        public virtual ActionResult UploadRegistrationPhoto(PhotoEditModel  model)
+        public virtual ActionResult UploadRegistrationPhoto(photoeditmodel  model)
         {
             //11-1-2011 this is an out of logged in action as well so using session to tie 
             var _ProfileID = (this.HttpContext.User.Identity.Name != "") ? CachingFactory.GetProfileIDByUserName(this.HttpContext.User.Identity.Name) :
@@ -1106,7 +1106,7 @@ namespace Shell.MVC2.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    PhotoEditModel PhotoVM = new PhotoEditModel();
+                    photoeditmodel PhotoVM = new photoeditmodel();
 
                     foreach (Photo photo  in  membersmodel.MyPhotos)
                     {
@@ -1195,7 +1195,7 @@ namespace Shell.MVC2.Controllers
 
             //get the model from session 
             var model = new MembersViewModel();
-            var photoviewmodel = new PhotoEditModel();
+            var photoviewmodel = new photoeditmodel();
 
             model = (_ProfileID != null) ? CachingFactory.MembersViewModelHelper.GetMemberData(_ProfileID) : null;
      
@@ -1235,7 +1235,7 @@ namespace Shell.MVC2.Controllers
         [HttpPost]
         [PassParametersDuringRedirect]
         [AcceptParameter(Name = "button", Value = "submit")]
-        public virtual ActionResult UploadActivationPhoto(PhotoEditModel model)
+        public virtual ActionResult UploadActivationPhoto(photoeditmodel model)
         {
             //11-1-2011 this is an out of logged in action as well so using session to tie 
             var _ProfileID = (this.HttpContext.User.Identity.Name != "") ? CachingFactory.GetProfileIDByUserName(this.HttpContext.User.Identity.Name) :
@@ -1301,7 +1301,7 @@ namespace Shell.MVC2.Controllers
                 {
 
                     //TO DO move this add photo to its own repostiorey 
-                    PhotoEditModel PhotoVM = new PhotoEditModel();
+                    photoeditmodel PhotoVM = new photoeditmodel();
 
                     foreach (Photo photo in membersmodel.MyPhotos)
                     {
@@ -2079,7 +2079,7 @@ namespace Shell.MVC2.Controllers
         [TempDataToViewData]
         [PassParametersDuringRedirect]
         [HttpPost]
-        public ActionResult Register(RegisterModel  model)
+        public ActionResult Register(registermodel  model)
         {
 
               //create a model to store the selected country and other persient values as well
@@ -2139,7 +2139,7 @@ namespace Shell.MVC2.Controllers
                        //dont sign user in here wtf
                        // FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
                        //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
-                       PhotoEditModel photoviewmodel = new PhotoEditModel();
+                       photoeditmodel photoviewmodel = new photoeditmodel();
                        photoviewmodel.ProfileID = model.Email;  //store the profileID i.e email addy into photo viewmodel
                        model.RegistrationPhotos = photoviewmodel;  //map it to the empty photo view model
                        //remap map the membersviewmodel to default values or what is stored in  stored in session
@@ -2198,7 +2198,7 @@ namespace Shell.MVC2.Controllers
         [ModelStateToTempData]
         [TempDataToViewData]
         [PassParametersDuringRedirect]      
-        public ActionResult   RegisterOpenID(RegisterModel model)
+        public ActionResult   RegisterOpenID(registermodel model)
         {
 
             //create a model to store the selected country and other persient values as well
@@ -2330,7 +2330,7 @@ namespace Shell.MVC2.Controllers
         }
 
 
-        public MembershipCreateStatus CallCreateUser(RegisterModel model)
+        public MembershipCreateStatus CallCreateUser(registermodel model)
         
         {
             
@@ -2362,7 +2362,7 @@ namespace Shell.MVC2.Controllers
         [TempDataToViewData]
         [PassParametersDuringRedirect]
         [HttpGet]
-        public ActionResult RegisterSuccess(PhotoEditModel  model)
+        public ActionResult RegisterSuccess(photoeditmodel  model)
         {          
             //CachingFactory.MembersViewModelHelper.Add (model, this.HttpContext);
             Session.Abandon();
