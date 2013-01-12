@@ -828,7 +828,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
 
 
-                if (CheckIfProfileisActivated( model.activateprofilemodel.profileid.ToString()) == true)
+                if (_memberepository.checkifprofileisactivated( model.activateprofilemodel.profileid) == true)
                 {
                     messages.errormessages.Add ( "Your Profile has already been activated");
                     //hide the photo view in thsi case
@@ -872,51 +872,6 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                    
         }
         
-
-        public bool checkifmailboxfoldersarecreated(string profileid)
-        {
-            return _memberepository.checkifmailboxfoldersarecreated( Convert.ToInt16(profileid));
-        }
-
-        public bool CheckIfEmailAlreadyExists(string email)
-        {
-            return _memberepository.checkifemailalreadyexists(email);
-        }
-
-        public bool CheckIfProfileisActivated(string profileid)
-        {
-            return _memberepository.checkifprofileisactivated(Convert.ToInt16(profileid));
-        }
-
-        public bool ActivateProfile(string profileid)
-        {
-            return _memberepository.activateprofile(Convert.ToInt16(profileid));
-        }
-
-        public bool createmailboxfolders(string profileid)
-        {
-            return _memberepository.createmailboxfolders(Convert.ToInt16(profileid));
-        }
-
-        public string GetusernamebyProfileID(string profileid)
-        {
-            return _memberepository.getusernamebyprofileid ( Convert.ToInt16(profileid));
-        }
-
-        public string GetScreenNamebyProfileID(string profileid)
-        {
-
-            return _memberepository.getscreennamebyprofileid(Convert.ToInt16(profileid));
-        }
-
-        public string GetScreenNamebyusername(string username)
-        {
-            return _memberepository.getscreennamebyusername (username);
-        }
-
-
-
-
         #endregion
 
         // Other overrides not implemented

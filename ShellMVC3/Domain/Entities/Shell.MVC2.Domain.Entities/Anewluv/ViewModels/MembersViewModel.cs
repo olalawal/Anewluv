@@ -92,8 +92,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
          public photoconversion galleryphoto { get; set; }
 
         //10-26-2011 added as another temp storrange
-          [DataMember ]
+        [DataMember ]
         public PhotoEditViewModel myeditprofilephotosviewmodel { get; set; }
+
+        //1-12-2012 olawal added this to handle uploaded photos 
+         [DataMember]
+        public List<PhotoUploadModel> recentlyuploadedphotos { get; set; }
+
         //10-26-2011 another tmeporary model 
         [DataMember]
         public List<MemberSearchViewModel> mycurrentsearchlist { get; set; }

@@ -36,7 +36,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //#########################################################
         [DisplayName("Email Address")]
         [DataMember]
-        public int emailaddress { get; set; }
+        public string  emailaddress { get; set; }
 
         [Required]
         [DataType(DataType.Text)]

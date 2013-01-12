@@ -5,6 +5,7 @@ using System.Text;
   using System.Web.Security;
 using Dating.Server.Data.Models;
 using Shell.MVC2.Domain.Entities.Anewluv;
+using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 
 namespace Shell.MVC2.Interfaces
 {
@@ -71,8 +72,11 @@ namespace Shell.MVC2.Interfaces
                 DateTime birthdate, string gender, string country, string city, string zippostalcode);
 
 
-
+          AnewluvMessages activateprofile(activateprofilecontainerviewmodel model);
 
        // MembershipUser CreateUser(string username, string password, string email, string securityQuestion, string securityAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status);
-    }
+   
+   
+   
+   }
 }

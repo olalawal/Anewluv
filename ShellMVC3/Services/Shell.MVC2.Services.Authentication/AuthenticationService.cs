@@ -111,17 +111,17 @@ namespace Shell.MVC2.Services.Authentication
             }
           
             
-            public MembershipUser GetUser(string username, bool userIsOnline)
+            public MembershipUser GetUser(string username, string userIsOnline)
             {
-                return _anewluvmembershipprovider.GetUser(username, userIsOnline);
+                return _anewluvmembershipprovider.GetUser(username, Convert.ToBoolean(userIsOnline));
             }
 
             //custom remapped membership get user function
           
             
-            public AnewLuvMembershipUser GetUserCustom(string username, bool userIsOnline)
+            public AnewLuvMembershipUser GetUserCustom(string username, string userIsOnline)
             {
-                return _anewluvmembershipprovider.GetUserCustom(username, userIsOnline);
+                return _anewluvmembershipprovider.GetUserCustom(username, Convert.ToBoolean(userIsOnline));
             }
                  
             
@@ -136,7 +136,12 @@ namespace Shell.MVC2.Services.Authentication
             //    _anewluvmembershipprovider.UpdateUser(user);
             //}
 
-
+            #region "Custom methods specific for AnewLuv"
+            public  AnewluvMessages activateprofile(activateprofilecontainerviewmodel model)
+            {
+                return _anewluvmembershipprovider.activateprofile(model);
+            }
+            #endregion
 
 
 

@@ -15,10 +15,14 @@ namespace Shell.MVC2.Data
 {
 
 
+    /////################# TO DO make all the invidual save for the per page basis private , i.e save everything as one big blob since we do
+    //// not want to limit how the UI creators set up thier UI.  Reuturn all errors with the AnewLuv Messages thing for the UPDATEs and have the UI creator
+    /// navigate the user to the pages with issues them selvs.
+
 /// <summary>
 /// TO DO split off search settings methods , if needed they should be references as an interface
 /// </summary>
-   public  class EditProfileRepository : MemberRepositoryBase  
+   public  class EditMemberRepository : MemberRepositoryBase  
     {
 
        
@@ -35,7 +39,7 @@ namespace Shell.MVC2.Data
             public bool selected { get; set; }
         }
 
-        public EditProfileRepository(AnewluvContext datingcontext, IMemberRepository membersrepository)
+        public EditMemberRepository(AnewluvContext datingcontext, IMemberRepository membersrepository)
             : base(datingcontext)
         {
             _membersrepository = membersrepository;
@@ -716,8 +720,23 @@ namespace Shell.MVC2.Data
             }
 
        //here are the methdods that actually modify settings i.e old UI vs new
+       #region "profile visisiblity settings update here"
+
+       public bool UpdateProfileVisibilitySettings(visiblitysetting model)
+       {
+           if (model.id != null)
+           {
+
+               //Impement on member service ?
+               // datingservice.UpdateProfileVisiblitySetting(model);
 
 
+               return true;
+           }
+           return false;
+       }
+       #endregion
+       
        #region "Edit profile Basic Settings Updates here
        public BasicSettingsViewModel EditProfileBasicSettings(BasicSettingsViewModel newmodel, int _ProfileID)
        {
@@ -3408,23 +3427,7 @@ namespace Shell.MVC2.Data
 
        
 
-       #region "profile visisiblity settings update here"
-
-       public bool UpdateProfileVisibilitySettings(visiblitysetting  model)
-       {
-           if (model.id  != null)
-           {
-               
-               //Impement on member service ?
-              // datingservice.UpdateProfileVisiblitySetting(model);
-
-
-               return true;
-           }
-           return false;
-       }
-       #endregion
-
+      
        
     }
 }
