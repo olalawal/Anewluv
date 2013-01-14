@@ -44,9 +44,28 @@ namespace Shell.MVC2.Data
         {
             _membersrepository = membersrepository;
         }
-      
+
+        #region "profile visisiblity settings update here"
+
+        public bool UpdateProfileVisibilitySettings(visiblitysetting model)
+        {
+            if (model.id != null)
+            {
+
+                //Impement on member service ?
+                // datingservice.UpdateProfileVisiblitySetting(model);
+
+
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
+
+        #region "Methods to GET current edit profile settings for a user"
        
-       // constructor
+        // constructor
        public BasicSettingsViewModel getbasicsettingsviewmodel(int intprofileid)
             {
                 try
@@ -718,28 +737,20 @@ namespace Shell.MVC2.Data
                 }
                 return null;
             }
+       
+        #endregion
 
+
+//Edit Profile Settings Occur here.
        //here are the methdods that actually modify settings i.e old UI vs new
-       #region "profile visisiblity settings update here"
-
-       public bool UpdateProfileVisibilitySettings(visiblitysetting model)
-       {
-           if (model.id != null)
-           {
-
-               //Impement on member service ?
-               // datingservice.UpdateProfileVisiblitySetting(model);
-
-
-               return true;
-           }
-           return false;
-       }
-       #endregion
        
        #region "Edit profile Basic Settings Updates here
-       public BasicSettingsViewModel EditProfileBasicSettings(BasicSettingsViewModel newmodel, int _ProfileID)
+   
+       public AnewluvMessages  EditProfileBasicSettings(BasicSettingsViewModel newmodel, int _ProfileID)
        {
+           //create a new messages object
+           AnewluvMessages messages = new AnewluvMessages();
+
            //get the profile details :
            profile profile = db.profiles.Where(p => p.id == _ProfileID).First();
            //create the search settings i.e matches if it does not exist 
@@ -749,17 +760,30 @@ namespace Shell.MVC2.Data
            //TO DO this might be suplerflous ?
            var  newmodel2 = this.getbasicsettingsviewmodel(profile.id);  
 
-           newmodel = EditProfileBasicSettingsPage1Update(newmodel, profile, SearchSettingsToUpdate);
-           newmodel = EditProfileBasicSettingsPage2Update(newmodel, profile, SearchSettingsToUpdate);
-          return newmodel;
+            messages=(EditProfileBasicSettingsPage1Update(newmodel, profile, SearchSettingsToUpdate,messages));
+            messages=(EditProfileBasicSettingsPage2Update(newmodel, profile, SearchSettingsToUpdate,messages));
+
+
+            if (messages.errormessages.Count > 0)
+            {
+                messages.message = "There was a problem Editing You Basic Settings, Please try again later";
+               return messages ;
+            }
+              messages.message = "Edit Basic Settings Successful" ;
+              return messages ;        
        }
-       private BasicSettingsViewModel EditProfileBasicSettingsPage1Update(BasicSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings)
+
+       //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
+       private AnewluvMessages EditProfileBasicSettingsPage1Update(BasicSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings, AnewluvMessages messages)
        {
 
-         
+           try
+           {
            //get all the values that should post from page 1
            //var AboutMe = formCollection["Editor"];  
            //var MyCatchyIntroLine = formCollection["MyCatchyIntroLine"];
+           var UiBirthdate = profile.profiledata.birthdate;
+
            var AboutMe = newmodel.aboutme ;
            var MyCatchyIntroLine = newmodel.mycatchyintroline;
            var agemin = newmodel.agemin;
@@ -773,54 +797,64 @@ namespace Shell.MVC2.Data
 
            //check if user checked at least one gender
            // bool isGenderSelected = formCollection.GetValues("SelectedGenderIds").Contains("true");  
-           var newGendersValues = newmodel.genderslist;  // formCollection["SelectedGenderIds"];;
+           //var newGendersValues = newmodel.genderslist;  // formCollection["SelectedGenderIds"];;
 
            //re populate the models
            //build Basic Profile Settings from Submited view 
-           newmodel.aboutme  = AboutMe;
-           newmodel.mycatchyintroline = MyCatchyIntroLine;
+         //  newmodel.aboutme  = AboutMe;
+         //  newmodel.mycatchyintroline = MyCatchyIntroLine;
 
            // map the basic search settings to the search settings pulled from databse
            // model.BasicSearchSettings = new SearchModelBasicSettings(SearchSettingsToUpdate);
            //update the searchmodl settings with current settings
-           newmodel.agemin = agemin;
-           newmodel.agemax = agemax;
+         //  newmodel.agemin = agemin;
+         //  newmodel.agemax = agemax;
           
-         
-           try
-           {
                //link the profiledata entities
-               profile.modificationdate  = DateTime.Now;
+               profile.modificationdate = DateTime.Now;
                //manually update model i think
                //set properties in the about me
                profile.profiledata.aboutme = AboutMe;
-               profile.profiledata.mycatchyintroLine  = MyCatchyIntroLine;
+               profile.profiledata.birthdate = UiBirthdate;
+               profile.profiledata.mycatchyintroLine = MyCatchyIntroLine;
                //detrmine if we are in edit or add mode for search settings for perfect match
                //if its null add a new entity  
                //noew update searchsettings text values
                oldsearchsettings.agemax = agemax;
                oldsearchsettings.agemin = agemin;
-               oldsearchsettings.lastupdatedate  = DateTime.Now; //addded time stamp for updates this should be somone where else tho ?
+               oldsearchsettings.lastupdatedate = DateTime.Now; //addded time stamp for updates this should be somone where else tho ?
                //TO DO move this code to searchssettings Repositoury
                this.updatesearchsettingsgenders(newmodel.genderslist.ToList(), oldsearchsettings);
-               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+               //db.Entry(profiledata).State = EntityState.Modified;
                db.SaveChanges();
                //TOD DO
                //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-               return newmodel ;
+               //return newmodel;
            }
-           catch (DataException)
+           catch (DataException dx)
            {
                //Log the error (add a variable name after DataException) 
-              // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-              // return model;
+               // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               // return model;
+               //handle logging here
+               var message = dx.Message;
+               throw dx;
            }
-           return null;
-       }
-       private BasicSettingsViewModel EditProfileBasicSettingsPage2Update(BasicSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings)
-       {
-           
+           catch (Exception ex)
+           {
+               //handle logging here
+               var message = ex.Message;
+               throw ex;
 
+           }
+           return messages ;
+       }
+       //TO DO add validation and pass back via messages 
+       private AnewluvMessages EditProfileBasicSettingsPage2Update(BasicSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings, AnewluvMessages messages)
+       {
+
+           try
+           {
            var DistanceFromMe = newmodel.distancefromme;
            //re populate the models
            //build Basic Profile Settings from Submited view 
@@ -835,410 +869,402 @@ namespace Shell.MVC2.Data
            //update show me and sortby with correct values from UI as well
            //this code is just for serv side validation does nothing atm
            //showme next
-         
-
-           try
-           {
-               //link the profiledata entities
+              //link the profiledata entities
                profile.modificationdate = DateTime.Now;
-
                oldsearchsettings.distancefromme = newmodel.distancefromme;
-
-
                //TO DO move this code to searchssettings Repositoury             
                  this.updatesearchsettingsshowme(newmodel.showmelist.ToList(), oldsearchsettings);
                  this.updatesearchsettingssortbytype(newmodel.sortbytypelist.ToList(), oldsearchsettings);
-               oldsearchsettings.lastupdatedate  = DateTime.Now;
+                 oldsearchsettings.lastupdatedate  = DateTime.Now;
 
-               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+               //db.Entry(profiledata).State = EntityState.Modified;
                db.SaveChanges();
 
                //TOD DO
                //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                //update session too just in case
-               //  membersmodel.profiledata = ProfileDataToUpdate;
-               //  CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,ProfileDataToUpdate  );
+               //  membersmodel.profiledata = profiledata;
+               //  CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
 
                //model.CurrentErrors.Clear();
-               return newmodel;
+           
            }
-           catch (DataException)
+           catch (DataException dx)
            {
                //Log the error (add a variable name after DataException) 
-               //model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-               //return model;
+               // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               // return model;
+               //handle logging here
+               var message = dx.Message;
+               throw dx;
            }
-           return null;
+           catch (Exception ex)
+           {
+               //handle logging here
+               var message = ex.Message;
+               throw ex;
+           }
+           return messages ;
+
        }
+      
        #endregion
 
 
        #region "other editpages to implement"
-       //#region "Edit profile Appeareance Settings Updates here"
-
-       //public EditProfileSettingsViewModel EditProfileAppearanceSettingsPage1Update(EditProfileSettingsViewModel model,
-       //FormCollection formCollection, int?[] SelectedYourBodyTypesID, string _ProfileID)
-       //{
-
-       //    profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-       //    if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
-       //    SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
-
-
-       //    // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
+       #region "Edit profile Appeareance Settings Updates here"
+
+       public AnewluvMessages EditProfileAppearanceSettings(AppearanceSettingsViewModel newmodel, int _ProfileID)
+       {
+           //create a new messages object
+           AnewluvMessages messages = new AnewluvMessages();
+
+           //get the profile details :
+           profile profile = db.profiles.Where(p => p.id == _ProfileID).First();
+           //create the search settings i.e matches if it does not exist 
+           if (profile.profilemetadata.searchsettings.Count() == 0) _membersrepository.createmyperfectmatchsearchsettingsbyprofileid(_ProfileID);
+           searchsetting SearchSettingsToUpdate = db.searchsetting.Where(p => p.profile_id == _ProfileID && p.myperfectmatch == true && p.searchname == "MyPerfectMatch").First();
+
+           //TO DO this might be suplerflous ?
+          // var newmodel2 = this.getAppearancesettingsviewmodel(profile.id);
+
+           messages = (EditProfileAppearanceSettingsPage1Update(newmodel, profile, SearchSettingsToUpdate, messages));
+           messages = (EditProfileAppearanceSettingsPage2Update(newmodel, profile, SearchSettingsToUpdate, messages));
+           messages = (EditProfileAppearanceSettingsPage3Update(newmodel, profile, SearchSettingsToUpdate, messages));
+           messages = (EditProfileAppearanceSettingsPage4Update(newmodel, profile, SearchSettingsToUpdate, messages));
+
+           if (messages.errormessages.Count > 0)
+           {
+               messages.message = "There was a problem Editing You Appearance Settings, Please try again later";
+               return messages;
+           }
+           messages.message = "Edit Appearance Settings Successful";
+           return messages;
+       }
+
+       public AnewluvMessages  EditProfileAppearanceSettingsPage1Update(AppearanceSettingsViewModel  model, profile profile, searchsetting oldsearchsettings, AnewluvMessages messages)
+       {
+           bool nothingupdated = true;
+
+           try
+           {
+               //re populate the models TO DO not sure this is needed index valiues are stored
+               //if there are checkbox values on basic settings we would need to reload as well
+               //build Basic Profile Settings from Submited view 
+               // model.BasicProfileSettings. = AboutMe;
+               //relaod appreadnce settings as needed
+               var UiHeight = profile.profiledata.height;
+               var UiBodyType = profile.profiledata.bodytype.id;
+
+               // model.AppearanceSettings = new EditProfileAppearanceSettingsModel(profiledata);
+
+               //noew updated the reloaded model with the saved higit on UI
+               //  model.AppearanceSettings.Height = UiHeight;
+               // model.AppearanceSettings.BodyTypesID = UiBodyType;
+ 
+               var heightmin = model.heightmin == -1 ? 48 : model.heightmin;
+               var heightmax = model.heightmax == -1 ? 89 : model.heightmax;
+
+
+               //update my settings 
+              nothingupdated = (profile.h)  profile.profiledata.height = Convert.ToInt32(UiHeight);
+               profile.profiledata.bodytype.id = UiBodyType;  //TO DO look at this
+
+               //now update the search settings 
+               oldsearchsettings.heightmin = heightmin;
+               oldsearchsettings.heightmax = heightmax;
+               oldsearchsettings.lastupdatedate = DateTime.Now;
+               updatesearchsettingsbodytype(model.bodytypeslist, oldsearchsettings);
+
+
+               //db.Entry(profiledata).State = EntityState.Modified;
+               int changes = db.SaveChanges();
+
+               //TOD DO
+               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+               //update session too just in case
+               //membersmodel.profiledata = profiledata;               
+
+               //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
+               //model.CurrentErrors.Clear();
+              // return model;
+           }
+           catch (DataException dx)
+           {
+               //Log the error (add a variable name after DataException) 
+               // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               // return model;
+               //handle logging here
+               var message = dx.Message;
+               throw dx;
+           }
+           catch (Exception ex)
+           {
+               //handle logging here
+               var message = ex.Message;
+               throw ex;
+
+           }
+           return messages;
+           
+          
+
+       }
+
+       public AnewluvMessages  EditProfileAppearanceSettingsPage2Update(AppearanceSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings, AnewluvMessages messages)
+       {
 
-       //    //TO DO finde a better way to do this I guess get the current
-
-       //    //re populate the models TO DO not sure this is needed index valiues are stored
-       //    //if there are checkbox values on basic settings we would need to reload as well
-       //    //build Basic Profile Settings from Submited view 
-       //    // model.BasicProfileSettings. = AboutMe;
-       //    //relaod appreadnce settings as needed
-       //    var UiHeight = model.AppearanceSettings.Height;
-       //    var UiBodyType = model.AppearanceSettings.BodyTypesID;
 
-       //    model.AppearanceSettings = new EditProfileAppearanceSettingsModel(ProfileDataToUpdate);
+           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
-       //    //noew updated the reloaded model with the saved higit on UI
-       //    model.AppearanceSettings.Height = UiHeight;
-       //    model.AppearanceSettings.BodyTypesID = UiBodyType;
+           //re populate the models TO DO not sure this is needed index valiues are stored
+           //if there are checkbox values on basic settings we would need to reload as well
+           //build Basic Profile Settings from Submited view 
+           // model.BasicProfileSettings. = AboutMe;
+           model.AppearanceSettings = new EditProfileAppearanceSettingsModel(profiledata);
 
-       //    var heightmin = model.AppearanceSearchSettings.heightmin == -1 ? 48 : model.AppearanceSearchSettings.heightmin;
-       //    var heightmax = model.AppearanceSearchSettings.heightmax == -1 ? 89 : model.AppearanceSearchSettings.heightmax;
 
+           //reload search settings since it seems the checkbox values are lost on postback
+           //we really should just rebuild them from form collection imo
+           model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
 
-       //    //reload search settings since it seems the checkbox values are lost on postback
-       //    //we really should just rebuild them from form collection imo
-       //    model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
-       //    //update the reloaded  searchmodl settings with current settings on the UI
-       //    model.AppearanceSearchSettings.heightmin = heightmin;
-       //    model.AppearanceSearchSettings.heightmax = heightmax;
 
 
-       //    //update the searchmodl settings with current settings            
-       //    //update body types mine For UI
-       //    IEnumerable<int?> EnumerableYourBodyTypes = SelectedYourBodyTypesID;
+           //update the searchmodl settings with current settings            
+           //update UI display values with current displayed values as well for check boxes
 
-       //    var YourBodyTypesValues = EnumerableYourBodyTypes != null ? new HashSet<int?>(EnumerableYourBodyTypes) : null;
+           IEnumerable<int?> EnumerableMyEthnicity = SelectedMyEthnicityIds;
 
-       //    foreach (var _BodyTypes in model.AppearanceSearchSettings.bodytypeslist)
-       //    {
-       //        _BodyTypes.Selected = YourBodyTypesValues != null ? YourBodyTypesValues.Contains(_BodyTypes.BodyTypesID) : false;
-       //    }
+           var MyEthnicityValues = EnumerableMyEthnicity != null ? new HashSet<int?>(EnumerableMyEthnicity) : null;
 
+           foreach (var _Ethnicity in model.AppearanceSettings.Myethnicitylist)
+           {
+               _Ethnicity.Selected = MyEthnicityValues != null ? MyEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
+           }
 
-       //    try
-       //    {
-       //        //link the profiledata entities
-       //        ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+           IEnumerable<int?> EnumerableYourEthnicity = SelectedYourEthnicityIds;
 
-       //        //search settings will never be null anymore , should have been created before we got here and added the members model
-       //        //Add searchh settings as well if its not null
-       //        //if (ModelToUpdate.SearchSettings == null)
-       //        //{
-       //        //    SearchSetting NewSearchSettings = new SearchSetting();
-       //        //    ProfileDataToUpdate.SearchSettings.Add(NewSearchSettings);
-       //        //}
-       //        //else
-       //        //{
-       //        //    ProfileDataToUpdate.SearchSettings.Add(ModelToUpdate.SearchSettings);
-       //        //}
+           var YourEthnicityValues = EnumerableYourEthnicity != null ? new HashSet<int?>(EnumerableYourEthnicity) : null;
 
-       //        //detrmine if we are in edit or add mode for search settings for perfect match
-       //        //if its null add a new entity  
-       //        //noew update searchsettings text values
-       //        //update my settings 
-       //        ProfileDataToUpdate.Height = Convert.ToInt32(model.AppearanceSettings.Height);
-       //        ProfileDataToUpdate.BodyTypeID = model.AppearanceSettings.BodyTypesID;
+           foreach (var _Ethnicity in model.AppearanceSearchSettings.ethnicitylist)
+           {
+               _Ethnicity.Selected = YourEthnicityValues != null ? YourEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
+           }
 
-       //        //now update the search settings 
-       //        SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.heightmin;
-       //        SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
-       //        SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
-       //        UpdateSearchSettingsBodyTypes(SelectedYourBodyTypesID, ProfileDataToUpdate);
 
+           try
+           {
+               //link the profiledata entities
+               profiledata.profile.ModificationDate = DateTime.Now;
 
-       //        //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
-       //        int changes = db.SaveChanges();
+               ////Add searchh settings as well if its not null
+               //if (ModelToUpdate.SearchSettings == null)
+               //{
+               //    SearchSetting NewSearchSettings = new SearchSetting();
+               //    profiledata.SearchSettings.Add(NewSearchSettings);
+               //}
+               //else
+               //{
+               //    profiledata.SearchSettings.Add(ModelToUpdate.SearchSettings);
+               //}
 
-       //        //TOD DO
-       //        //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-       //        //update session too just in case
-       //        //membersmodel.profiledata = ProfileDataToUpdate;               
+               UpdateSearchSettingsEthnicity(SelectedYourEthnicityIds, profiledata);
+               UpdateProfileDataEthnicity(SelectedMyEthnicityIds, profiledata);
+               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
-       //        //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,ProfileDataToUpdate  );
-       //        model.CurrentErrors.Clear();
-       //        return model;
-       //    }
-       //    catch (DataException)
-       //    {
-       //        //Log the error (add a variable name after DataException) 
-       //        model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-       //        return model;
-       //    }
+               //db.Entry(profiledata).State = EntityState.Modified;
+               db.SaveChanges();
 
-       //}
+               //TOD DO
+               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+               //update session too just in case
+               //membersmodel.profiledata = profiledata;
+               //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID ,profiledata );
 
-       //public EditProfileSettingsViewModel EditProfileAppearanceSettingsPage2Update(EditProfileSettingsViewModel model,
-       //     FormCollection formCollection, int?[] SelectedYourEthnicityIds, int?[] SelectedMyEthnicityIds, string _ProfileID
-       //    )
-       //{
+               model.CurrentErrors.Clear();
+               return model;
+           }
+           catch (DataException)
+           {
+               //Log the error (add a variable name after DataException) 
+               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               return model;
+           }
 
+       }
 
-       //    profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-       //    if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
-       //    SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+       public AnewluvMessages  EditProfileAppearanceSettingsPage3Update(AppearanceSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings, AnewluvMessages messages)
+       {
 
-       //    //re populate the models TO DO not sure this is needed index valiues are stored
-       //    //if there are checkbox values on basic settings we would need to reload as well
-       //    //build Basic Profile Settings from Submited view 
-       //    // model.BasicProfileSettings. = AboutMe;
-       //    model.AppearanceSettings = new EditProfileAppearanceSettingsModel(ProfileDataToUpdate);
+           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
-       //    //reload search settings since it seems the checkbox values are lost on postback
-       //    //we really should just rebuild them from form collection imo
-       //    model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
 
+           //reload search settings since it seems the checkbox values are lost on postback
+           //we really should just rebuild them from form collection imo
 
 
-       //    //update the searchmodl settings with current settings            
-       //    //update UI display values with current displayed values as well for check boxes
+           //re populate the models TO DO not sure this is needed index valiues are stored
+           //if there are checkbox values on basic settings we would need to reload as well
+           //build Basic Profile Settings from Submited view 
+           // model.BasicProfileSettings. = AboutMe;
+           //temp store values on UI also handle ANY case here !!
+           //just for conistiancy.
+           var EyColorID = model.AppearanceSettings.EyeColorID;
+           var HairCOlorID = model.AppearanceSettings.HairColorID;
+           model.AppearanceSettings = new EditProfileAppearanceSettingsModel(profiledata);
+           model.AppearanceSettings.HairColorID = HairCOlorID;
+           model.AppearanceSettings.EyeColorID = EyColorID;
 
-       //    IEnumerable<int?> EnumerableMyEthnicity = SelectedMyEthnicityIds;
 
-       //    var MyEthnicityValues = EnumerableMyEthnicity != null ? new HashSet<int?>(EnumerableMyEthnicity) : null;
+           //reload search settings since it seems the checkbox values are lost on postback
+           //we really should just rebuild them from form collection imo
+           model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
+           //update the reloaded  searchmodl settings with current settings on the UI
 
-       //    foreach (var _Ethnicity in model.AppearanceSettings.Myethnicitylist)
-       //    {
-       //        _Ethnicity.Selected = MyEthnicityValues != null ? MyEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
-       //    }
 
-       //    IEnumerable<int?> EnumerableYourEthnicity = SelectedYourEthnicityIds;
+           //update the searchmodl settings with current settings            
+           //update UI display values with current displayed values as well for check boxes
+           IEnumerable<int?> EnumerableYourHairColor = SelectedYourHairColorIds;
 
-       //    var YourEthnicityValues = EnumerableYourEthnicity != null ? new HashSet<int?>(EnumerableYourEthnicity) : null;
+           var YourHairColorValues = EnumerableYourHairColor != null ? new HashSet<int?>(EnumerableYourHairColor) : null;
 
-       //    foreach (var _Ethnicity in model.AppearanceSearchSettings.ethnicitylist)
-       //    {
-       //        _Ethnicity.Selected = YourEthnicityValues != null ? YourEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
-       //    }
+           foreach (var _HairColor in model.AppearanceSearchSettings.haircolorlist)
+           {
+               _HairColor.Selected = YourHairColorValues != null ? YourHairColorValues.Contains(_HairColor.HairColorID) : false;
+           }
 
+           IEnumerable<int?> EnumerableYourEyeColor = SelectedYourEyeColorIds;
 
-       //    try
-       //    {
-       //        //link the profiledata entities
-       //        ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+           var YourEyeColorValues = EnumerableYourEyeColor != null ? new HashSet<int?>(EnumerableYourEyeColor) : null;
 
-       //        ////Add searchh settings as well if its not null
-       //        //if (ModelToUpdate.SearchSettings == null)
-       //        //{
-       //        //    SearchSetting NewSearchSettings = new SearchSetting();
-       //        //    ProfileDataToUpdate.SearchSettings.Add(NewSearchSettings);
-       //        //}
-       //        //else
-       //        //{
-       //        //    ProfileDataToUpdate.SearchSettings.Add(ModelToUpdate.SearchSettings);
-       //        //}
+           foreach (var _EyeColor in model.AppearanceSearchSettings.eyecolorlist)
+           {
+               _EyeColor.Selected = YourEyeColorValues != null ? YourEyeColorValues.Contains(_EyeColor.EyeColorID) : false;
+           }
 
-       //        UpdateSearchSettingsEthnicity(SelectedYourEthnicityIds, ProfileDataToUpdate);
-       //        UpdateProfileDataEthnicity(SelectedMyEthnicityIds, ProfileDataToUpdate);
-       //        SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+           //UI updates done
 
-       //        //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
-       //        db.SaveChanges();
+           //get active profile data 
 
-       //        //TOD DO
-       //        //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-       //        //update session too just in case
-       //        //membersmodel.profiledata = ProfileDataToUpdate;
-       //        //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID ,ProfileDataToUpdate );
 
-       //        model.CurrentErrors.Clear();
-       //        return model;
-       //    }
-       //    catch (DataException)
-       //    {
-       //        //Log the error (add a variable name after DataException) 
-       //        model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-       //        return model;
-       //    }
 
-       //}
+           try
+           {
+               profiledata.profile.ModificationDate = DateTime.Now;
 
-       //public EditProfileSettingsViewModel EditProfileAppearanceSettingsPage3Update(EditProfileSettingsViewModel model,
-       //     FormCollection formCollection, int?[] SelectedYourEyeColorIds,
-       //    int?[] SelectedYourHairColorIds,
-       //    string _ProfileID)
-       //{
+               //update my settings 
+               profiledata.EyeColorID = model.AppearanceSettings.EyeColorID;
+               profiledata.HairColorID = model.AppearanceSettings.HairColorID;
 
-       //    profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-       //    if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
-       //    SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+               //now update the search settings 
+               SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.heightmin;
+               SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
 
+               UpdateSearchSettingsEyeColor(SelectedYourEyeColorIds, profiledata);
+               UpdateSearchSettingsHairColor(SelectedYourHairColorIds, profiledata);
 
+               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+               //db.Entry(profiledata).State = EntityState.Modified;
+               db.SaveChanges();
 
-       //    //reload search settings since it seems the checkbox values are lost on postback
-       //    //we really should just rebuild them from form collection imo
+               //TOD DO
+               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+               //update session too just in case
+               // membersmodel.profiledata = profiledata;
+               // CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, membersmodel.Profile.ProfileID);
 
+               model.CurrentErrors.Clear();
+               return model;
+           }
+           catch (DataException)
+           {
+               //Log the error (add a variable name after DataException) 
+               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               return model;
+           }
+       }
 
-       //    //re populate the models TO DO not sure this is needed index valiues are stored
-       //    //if there are checkbox values on basic settings we would need to reload as well
-       //    //build Basic Profile Settings from Submited view 
-       //    // model.BasicProfileSettings. = AboutMe;
-       //    //temp store values on UI also handle ANY case here !!
-       //    //just for conistiancy.
-       //    var EyColorID = model.AppearanceSettings.EyeColorID;
-       //    var HairCOlorID = model.AppearanceSettings.HairColorID;
-       //    model.AppearanceSettings = new EditProfileAppearanceSettingsModel(ProfileDataToUpdate);
-       //    model.AppearanceSettings.HairColorID = HairCOlorID;
-       //    model.AppearanceSettings.EyeColorID = EyColorID;
+       public AnewluvMessages  EditProfileAppearanceSettingsPage4Update(AppearanceSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings, AnewluvMessages messages)
+       {
 
+           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
-       //    //reload search settings since it seems the checkbox values are lost on postback
-       //    //we really should just rebuild them from form collection imo
-       //    model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
-       //    //update the reloaded  searchmodl settings with current settings on the UI
 
+           //no validation needed just save 
+           //TOD DO move this to a function i think or repository for search and have it populate those there
+           //repopulate checkboxes for postback
+           //reload search settings since it seems the checkbox values are lost on postback
+           //we really should just rebuild them from form collection imo
 
-       //    //update the searchmodl settings with current settings            
-       //    //update UI display values with current displayed values as well for check boxes
-       //    IEnumerable<int?> EnumerableYourHairColor = SelectedYourHairColorIds;
+           //reload the Apppearance values
+           model.AppearanceSettings = new EditProfileAppearanceSettingsModel(profiledata);
 
-       //    var YourHairColorValues = EnumerableYourHairColor != null ? new HashSet<int?>(EnumerableYourHairColor) : null;
+           model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
 
-       //    foreach (var _HairColor in model.AppearanceSearchSettings.haircolorlist)
-       //    {
-       //        _HairColor.Selected = YourHairColorValues != null ? YourHairColorValues.Contains(_HairColor.HairColorID) : false;
-       //    }
+           //update the searchmodl settings with current settings            
+           //update UI display values with current displayed values as well for check boxes
+           IEnumerable<int?> EnumerableYourHotFeature = SelectedYourHotFeatureIds;
 
-       //    IEnumerable<int?> EnumerableYourEyeColor = SelectedYourEyeColorIds;
+           var YourHotFeatureValues = EnumerableYourHotFeature != null ? new HashSet<int?>(EnumerableYourHotFeature) : null;
 
-       //    var YourEyeColorValues = EnumerableYourEyeColor != null ? new HashSet<int?>(EnumerableYourEyeColor) : null;
+           foreach (var _HotFeature in model.AppearanceSearchSettings.hotfeaturelist)
+           {
+               _HotFeature.Selected = YourHotFeatureValues != null ? YourHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
+           }
 
-       //    foreach (var _EyeColor in model.AppearanceSearchSettings.eyecolorlist)
-       //    {
-       //        _EyeColor.Selected = YourEyeColorValues != null ? YourEyeColorValues.Contains(_EyeColor.EyeColorID) : false;
-       //    }
+           IEnumerable<int?> EnumerableMyHotFeature = SelectedMyHotFeatureIds;
 
-       //    //UI updates done
+           var MyHotFeatureValues = EnumerableMyHotFeature != null ? new HashSet<int?>(EnumerableMyHotFeature) : null;
 
-       //    //get active profile data 
+           foreach (var _HotFeature in model.AppearanceSettings.Myhotfeaturelist)
+           {
+               _HotFeature.Selected = MyHotFeatureValues != null ? MyHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
+           }
 
+           //UI updates done
 
+           //get active profile data 
+           //get active profile data 
 
-       //    try
-       //    {
-       //        ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
 
-       //        //update my settings 
-       //        ProfileDataToUpdate.EyeColorID = model.AppearanceSettings.EyeColorID;
-       //        ProfileDataToUpdate.HairColorID = model.AppearanceSettings.HairColorID;
+           try
+           {
+               //link the profiledata entities
 
-       //        //now update the search settings 
-       //        SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.heightmin;
-       //        SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
+               profiledata.profile.ModificationDate = DateTime.Now;
+               //now update the search settings 
+               UpdateSearchSettingsHotFeature(SelectedYourHotFeatureIds, profiledata);
+               UpdateProfileDataHotFeature(SelectedMyHotFeatureIds, profiledata);
 
-       //        UpdateSearchSettingsEyeColor(SelectedYourEyeColorIds, ProfileDataToUpdate);
-       //        UpdateSearchSettingsHairColor(SelectedYourHairColorIds, ProfileDataToUpdate);
+               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+               //db.Entry(profiledata).State = EntityState.Modified;
+               db.SaveChanges();
 
-       //        SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
-       //        //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
-       //        db.SaveChanges();
+               //TOD DO
+               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+               //update session too just in case
+               //membersmodel.profiledata = profiledata;
+               // CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID ,profiledata );
 
-       //        //TOD DO
-       //        //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-       //        //update session too just in case
-       //        // membersmodel.profiledata = ProfileDataToUpdate;
-       //        // CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, membersmodel.Profile.ProfileID);
+               model.CurrentErrors.Clear();
+               return model;
+           }
+           catch (DataException)
+           {
+               //Log the error (add a variable name after DataException) 
+               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               return model;
+           }
+       }
 
-       //        model.CurrentErrors.Clear();
-       //        return model;
-       //    }
-       //    catch (DataException)
-       //    {
-       //        //Log the error (add a variable name after DataException) 
-       //        model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-       //        return model;
-       //    }
-       //}
-
-       //public EditProfileSettingsViewModel EditProfileAppearanceSettingsPage4Update(EditProfileSettingsViewModel model,
-       //     FormCollection formCollection, int?[] SelectedYourHotFeatureIds, int?[] SelectedMyHotFeatureIds, string _ProfileID)
-       //{
-
-       //    profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-       //    if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
-       //    SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
-
-
-       //    //no validation needed just save 
-       //    //TOD DO move this to a function i think or repository for search and have it populate those there
-       //    //repopulate checkboxes for postback
-       //    //reload search settings since it seems the checkbox values are lost on postback
-       //    //we really should just rebuild them from form collection imo
-
-       //    //reload the Apppearance values
-       //    model.AppearanceSettings = new EditProfileAppearanceSettingsModel(ProfileDataToUpdate);
-
-       //    model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
-
-       //    //update the searchmodl settings with current settings            
-       //    //update UI display values with current displayed values as well for check boxes
-       //    IEnumerable<int?> EnumerableYourHotFeature = SelectedYourHotFeatureIds;
-
-       //    var YourHotFeatureValues = EnumerableYourHotFeature != null ? new HashSet<int?>(EnumerableYourHotFeature) : null;
-
-       //    foreach (var _HotFeature in model.AppearanceSearchSettings.hotfeaturelist)
-       //    {
-       //        _HotFeature.Selected = YourHotFeatureValues != null ? YourHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
-       //    }
-
-       //    IEnumerable<int?> EnumerableMyHotFeature = SelectedMyHotFeatureIds;
-
-       //    var MyHotFeatureValues = EnumerableMyHotFeature != null ? new HashSet<int?>(EnumerableMyHotFeature) : null;
-
-       //    foreach (var _HotFeature in model.AppearanceSettings.Myhotfeaturelist)
-       //    {
-       //        _HotFeature.Selected = MyHotFeatureValues != null ? MyHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
-       //    }
-
-       //    //UI updates done
-
-       //    //get active profile data 
-       //    //get active profile data 
-
-
-       //    try
-       //    {
-       //        //link the profiledata entities
-
-       //        ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
-       //        //now update the search settings 
-       //        UpdateSearchSettingsHotFeature(SelectedYourHotFeatureIds, ProfileDataToUpdate);
-       //        UpdateProfileDataHotFeature(SelectedMyHotFeatureIds, ProfileDataToUpdate);
-
-       //        SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
-       //        //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
-       //        db.SaveChanges();
-
-       //        //TOD DO
-       //        //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-       //        //update session too just in case
-       //        //membersmodel.profiledata = ProfileDataToUpdate;
-       //        // CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID ,ProfileDataToUpdate );
-
-       //        model.CurrentErrors.Clear();
-       //        return model;
-       //    }
-       //    catch (DataException)
-       //    {
-       //        //Log the error (add a variable name after DataException) 
-       //        model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-       //        return model;
-       //    }
-       //}
-
-       //#endregion
+       #endregion
 
 
 //       #region "Edit profile LifeStyle Settings Updates here"
@@ -1247,8 +1273,8 @@ namespace Shell.MVC2.Data
 //       FormCollection formCollection, int?[] SelectedYourMaritalStatusIds, int?[] SelectedYourLivingSituationIds,
 //           int?[] SelectedYourLookingForIds, int?[] SelectedMyLookingForIds, string _ProfileID)
 //       {
-//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
 //           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
@@ -1260,7 +1286,7 @@ namespace Shell.MVC2.Data
 //           //just for conistiancy.
 //           var MyMaritalStatusID = model.LifeStyleSettings.MaritalStatusID;
 //           var MyLivingSituationID = model.LifeStyleSettings.LivingSituationID;
-//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(ProfileDataToUpdate);
+//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(profiledata);
 //           model.LifeStyleSettings.MaritalStatusID = MyMaritalStatusID;
 //           model.LifeStyleSettings.LivingSituationID = MyLivingSituationID;
 
@@ -1313,33 +1339,33 @@ namespace Shell.MVC2.Data
 
 
 
-//           // profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           // profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
 //           //  SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
 //           try
 //           {
-//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
-//               ProfileDataToUpdate.MaritalStatusID = Convert.ToInt32(model.LifeStyleSettings.MaritalStatusID);
-//               ProfileDataToUpdate.LivingSituationID = model.LifeStyleSettings.LivingSituationID;
+//               profiledata.profile.ModificationDate = DateTime.Now;
+//               profiledata.MaritalStatusID = Convert.ToInt32(model.LifeStyleSettings.MaritalStatusID);
+//               profiledata.LivingSituationID = model.LifeStyleSettings.LivingSituationID;
 
 
-//               UpdateProfileDataLookingFor(SelectedMyLookingForIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsLookingFor(SelectedYourLookingForIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsMaritalStatus(SelectedYourMaritalStatusIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsLivingSituation(SelectedYourLivingSituationIds, ProfileDataToUpdate);
+//               UpdateProfileDataLookingFor(SelectedMyLookingForIds, profiledata);
+//               UpdateSearchSettingsLookingFor(SelectedYourLookingForIds, profiledata);
+//               UpdateSearchSettingsMaritalStatus(SelectedYourMaritalStatusIds, profiledata);
+//               UpdateSearchSettingsLivingSituation(SelectedYourLivingSituationIds, profiledata);
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
 
-//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               //db.Entry(profiledata).State = EntityState.Modified;
 //               int changes = db.SaveChanges();
 
 //               //TOD DO
 //               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
 //               //update session too just in case
-//               //membersmodel.profiledata = ProfileDataToUpdate;
+//               //membersmodel.profiledata = profiledata;
 
-//               CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
+//               CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, profiledata);
 
 
 //               model.CurrentErrors.Clear();
@@ -1360,8 +1386,8 @@ namespace Shell.MVC2.Data
 //       {
 //           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
 
-//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
 //           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
@@ -1373,7 +1399,7 @@ namespace Shell.MVC2.Data
 //           //just for conistiancy.
 //           var MyWantKidsID = model.LifeStyleSettings.WantsKidsID;
 //           var MyHaveKidsID = model.LifeStyleSettings.HaveKidsId;
-//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(ProfileDataToUpdate);
+//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(profiledata);
 //           model.LifeStyleSettings.WantsKidsID = MyWantKidsID;
 //           model.LifeStyleSettings.HaveKidsId = MyHaveKidsID;
 
@@ -1410,7 +1436,7 @@ namespace Shell.MVC2.Data
 
 
 
-//           //profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           //profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
 //           // SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
@@ -1419,25 +1445,25 @@ namespace Shell.MVC2.Data
 
 
 
-//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+//               profiledata.profile.ModificationDate = DateTime.Now;
 
-//               ProfileDataToUpdate.WantsKidsID = Convert.ToInt32(model.LifeStyleSettings.WantsKidsID);
-//               ProfileDataToUpdate.HaveKidsId = model.LifeStyleSettings.HaveKidsId;
+//               profiledata.WantsKidsID = Convert.ToInt32(model.LifeStyleSettings.WantsKidsID);
+//               profiledata.HaveKidsId = model.LifeStyleSettings.HaveKidsId;
 
 
 
-//               UpdateSearchSettingsWantsKids(SelectedYourWantsKidsIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsHaveKids(SelectedYourHaveKidsIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsWantsKids(SelectedYourWantsKidsIds, profiledata);
+//               UpdateSearchSettingsHaveKids(SelectedYourHaveKidsIds, profiledata);
 
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
-//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               //db.Entry(profiledata).State = EntityState.Modified;
 //               int changes = db.SaveChanges();
 
 //               //TOD DO
 //               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
 //               //update session too just in case
-//               //membersmodel.profiledata = ProfileDataToUpdate;
+//               //membersmodel.profiledata = profiledata;
 
 //               // CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, membersmodel.Profile.ProfileID);
 
@@ -1461,8 +1487,8 @@ namespace Shell.MVC2.Data
 //       {
 //           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
 
-//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
 //           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
@@ -1474,7 +1500,7 @@ namespace Shell.MVC2.Data
 //           //just for conistiancy.
 //           var MyIncomeLevelID = model.LifeStyleSettings.IncomeLevelID;
 //           var MyEmploymentStatusID = model.LifeStyleSettings.EmploymentStatusID;
-//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(ProfileDataToUpdate);
+//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(profiledata);
 //           model.LifeStyleSettings.IncomeLevelID = MyIncomeLevelID;
 //           model.LifeStyleSettings.EmploymentStatusID = MyEmploymentStatusID;
 
@@ -1511,31 +1537,31 @@ namespace Shell.MVC2.Data
 
 
 
-//           //profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           //profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
 //           // SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
 //           try
 //           {
-//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+//               profiledata.profile.ModificationDate = DateTime.Now;
 
-//               ProfileDataToUpdate.IncomeLevelID = Convert.ToInt32(model.LifeStyleSettings.IncomeLevelID);
-//               ProfileDataToUpdate.EmploymentSatusID = model.LifeStyleSettings.EmploymentStatusID;
+//               profiledata.IncomeLevelID = Convert.ToInt32(model.LifeStyleSettings.IncomeLevelID);
+//               profiledata.EmploymentSatusID = model.LifeStyleSettings.EmploymentStatusID;
 
 
 
-//               UpdateSearchSettingsIncomeLevel(SelectedYourIncomeLevelIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsEmploymentStatus(SelectedYourEmploymentStatusIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsIncomeLevel(SelectedYourIncomeLevelIds, profiledata);
+//               UpdateSearchSettingsEmploymentStatus(SelectedYourEmploymentStatusIds, profiledata);
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
 
-//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               //db.Entry(profiledata).State = EntityState.Modified;
 //               int changes = db.SaveChanges();
 
 //               //TOD DO
 //               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
 //               //update session too just in case
-//               // membersmodel.profiledata = ProfileDataToUpdate;
+//               // membersmodel.profiledata = profiledata;
 //               //CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, membersmodel.Profile.ProfileID);
 
 
@@ -1556,8 +1582,8 @@ namespace Shell.MVC2.Data
 //     string _ProfileID)
 //       {
 
-//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
 //           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 //           //MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
@@ -1570,7 +1596,7 @@ namespace Shell.MVC2.Data
 //           //just for conistiancy.
 //           var MyProfessionID = model.LifeStyleSettings.ProfessionID;
 //           var MyEducationLevelID = model.LifeStyleSettings.EducationLevelID;
-//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(ProfileDataToUpdate);
+//           model.LifeStyleSettings = new EditProfileLifeStyleSettingsModel(profiledata);
 //           model.LifeStyleSettings.ProfessionID = MyProfessionID;
 //           model.LifeStyleSettings.EducationLevelID = MyEducationLevelID;
 
@@ -1607,28 +1633,28 @@ namespace Shell.MVC2.Data
 
 
 
-//           //profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           //profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
 //           // SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
 //           try
 //           {
 
-//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
-//               ProfileDataToUpdate.ProfessionID = Convert.ToInt32(model.LifeStyleSettings.ProfessionID);
-//               ProfileDataToUpdate.EducationLevelID = model.LifeStyleSettings.EducationLevelID;
-//               UpdateSearchSettingsProfession(SelectedYourProfessionIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsEducationLevel(SelectedYourEducationLevelIds, ProfileDataToUpdate);
+//               profiledata.profile.ModificationDate = DateTime.Now;
+//               profiledata.ProfessionID = Convert.ToInt32(model.LifeStyleSettings.ProfessionID);
+//               profiledata.EducationLevelID = model.LifeStyleSettings.EducationLevelID;
+//               UpdateSearchSettingsProfession(SelectedYourProfessionIds, profiledata);
+//               UpdateSearchSettingsEducationLevel(SelectedYourEducationLevelIds, profiledata);
 
 
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
-//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               //db.Entry(profiledata).State = EntityState.Modified;
 //               int changes = db.SaveChanges();
 
 //               //TOD DO
 //               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
 //               //update session too just in case
-//               //membersmodel.profiledata = ProfileDataToUpdate;
+//               //membersmodel.profiledata = profiledata;
 
 //               //CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, membersmodel.Profile.ProfileID);
 
@@ -1655,8 +1681,8 @@ namespace Shell.MVC2.Data
 //           int?[] SelectedYourExerciseIds, int?[] SelectedYourSmokesIds, string _ProfileID)
 //       {
 //           //5-10-2012 moved this to get these items first.
-//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
 //           SearchSetting SearchSettingsToUpdate = membersrepository.GetPerFectMatchSearchSettingsByProfileID(_ProfileID);// db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
@@ -1673,7 +1699,7 @@ namespace Shell.MVC2.Data
 //           var MyExerciseID = model.CharacterSettings.ExerciseID;
 //           var MySmokesID = model.CharacterSettings.SmokesID;
 //           //TO DO read from name value collection to incrfeate efficency
-//           model.CharacterSettings = new EditProfileCharacterSettingsModel(ProfileDataToUpdate);
+//           model.CharacterSettings = new EditProfileCharacterSettingsModel(profiledata);
 //           model.CharacterSettings.DietID = MyDietID;
 //           model.CharacterSettings.DrinksID = MyDrinksID;
 //           model.CharacterSettings.ExerciseID = MyExerciseID;
@@ -1726,36 +1752,36 @@ namespace Shell.MVC2.Data
 
 
 
-//           //profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           //profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
 //           // SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
 //           try
 //           {
-//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+//               profiledata.profile.ModificationDate = DateTime.Now;
 
-//               ProfileDataToUpdate.DietID = Convert.ToInt32(model.CharacterSettings.DietID);
-//               ProfileDataToUpdate.DrinksID = model.CharacterSettings.DrinksID;
-//               ProfileDataToUpdate.ExerciseID = model.CharacterSettings.ExerciseID;
-//               ProfileDataToUpdate.SmokesID = model.CharacterSettings.SmokesID;
+//               profiledata.DietID = Convert.ToInt32(model.CharacterSettings.DietID);
+//               profiledata.DrinksID = model.CharacterSettings.DrinksID;
+//               profiledata.ExerciseID = model.CharacterSettings.ExerciseID;
+//               profiledata.SmokesID = model.CharacterSettings.SmokesID;
 
 
-//               UpdateSearchSettingsExercise(SelectedYourExerciseIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsDiet(SelectedYourDietIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsDrinks(SelectedYourDrinksIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsSmokes(SelectedYourSmokesIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsExercise(SelectedYourExerciseIds, profiledata);
+//               UpdateSearchSettingsDiet(SelectedYourDietIds, profiledata);
+//               UpdateSearchSettingsDrinks(SelectedYourDrinksIds, profiledata);
+//               UpdateSearchSettingsSmokes(SelectedYourSmokesIds, profiledata);
 
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
-//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               //db.Entry(profiledata).State = EntityState.Modified;
 //               int changes = db.SaveChanges();
 
 //               //TOD DO
 //               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
 //               //update session too just in case
-//               // membersmodel.profiledata = ProfileDataToUpdate;
+//               // membersmodel.profiledata = profiledata;
 
-//               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
+//               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, profiledata);
 
 
 //               model.CurrentErrors.Clear();
@@ -1776,8 +1802,8 @@ namespace Shell.MVC2.Data
 //       {
 //           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
 //           //5-10-2012 moved this to get these items first.
-//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
 //           SearchSetting SearchSettingsToUpdate = membersrepository.GetPerFectMatchSearchSettingsByProfileID(_ProfileID); // db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
@@ -1789,7 +1815,7 @@ namespace Shell.MVC2.Data
 //           //temp store values on UI also handle ANY case here !!
 //           //just for conistiancy.
 //           var MySignID = model.CharacterSettings.SignID;
-//           model.CharacterSettings = new EditProfileCharacterSettingsModel(ProfileDataToUpdate);
+//           model.CharacterSettings = new EditProfileCharacterSettingsModel(profiledata);
 //           model.CharacterSettings.SignID = MySignID;
 
 
@@ -1835,35 +1861,35 @@ namespace Shell.MVC2.Data
 
 
 
-//           // profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           // profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
 //           // SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
 //           try
 //           {
 
-//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+//               profiledata.profile.ModificationDate = DateTime.Now;
 
-//               ProfileDataToUpdate.SignID = Convert.ToInt32(model.CharacterSettings.SignID);
-
-
+//               profiledata.SignID = Convert.ToInt32(model.CharacterSettings.SignID);
 
 
-//               UpdateProfileDataHobby(SelectedMyHobbyIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsHobby(SelectedYourHobbyIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsSign(SelectedYourSignIds, ProfileDataToUpdate);
+
+
+//               UpdateProfileDataHobby(SelectedMyHobbyIds, profiledata);
+//               UpdateSearchSettingsHobby(SelectedYourHobbyIds, profiledata);
+//               UpdateSearchSettingsSign(SelectedYourSignIds, profiledata);
 
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
-//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               //db.Entry(profiledata).State = EntityState.Modified;
 //               int changes = db.SaveChanges();
 
 //               //TOD DO
 //               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
 //               //update session too just in case
-//               // membersmodel.profiledata = ProfileDataToUpdate;
+//               // membersmodel.profiledata = profiledata;
 
-//               // CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
+//               // CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, profiledata);
 
 //               model.CurrentErrors.Clear();
 //               return model;
@@ -1885,8 +1911,8 @@ namespace Shell.MVC2.Data
 //       {
 //           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
 //           //5-10-2012 moved this to get these items first.
-//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
 //           SearchSetting SearchSettingsToUpdate = membersrepository.GetPerFectMatchSearchSettingsByProfileID(_ProfileID); //db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
@@ -1898,7 +1924,7 @@ namespace Shell.MVC2.Data
 //           //just for conistiancy.
 //           var MyReligiousAttendanceID = model.CharacterSettings.ReligiousAttendanceID;
 //           var MyReligionID = model.CharacterSettings.ReligionID;
-//           model.CharacterSettings = new EditProfileCharacterSettingsModel(ProfileDataToUpdate);
+//           model.CharacterSettings = new EditProfileCharacterSettingsModel(profiledata);
 //           model.CharacterSettings.ReligiousAttendanceID = MyReligiousAttendanceID;
 //           model.CharacterSettings.ReligionID = MyReligionID;
 
@@ -1935,35 +1961,35 @@ namespace Shell.MVC2.Data
 
 
 
-//           //   profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           //   profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
 //           //  SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
 //           try
 //           {
-//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+//               profiledata.profile.ModificationDate = DateTime.Now;
 
-//               ProfileDataToUpdate.ReligiousAttendanceID = Convert.ToInt32(model.CharacterSettings.ReligiousAttendanceID);
-//               ProfileDataToUpdate.ReligionID = Convert.ToInt32(model.CharacterSettings.ReligionID);
-//               ProfileDataToUpdate.EmploymentSatusID = model.CharacterSettings.ReligionID;
+//               profiledata.ReligiousAttendanceID = Convert.ToInt32(model.CharacterSettings.ReligiousAttendanceID);
+//               profiledata.ReligionID = Convert.ToInt32(model.CharacterSettings.ReligionID);
+//               profiledata.EmploymentSatusID = model.CharacterSettings.ReligionID;
 
 
-//               UpdateSearchSettingsReligiousAttendance(SelectedYourReligiousAttendanceIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsReligion(SelectedYourReligionIds, ProfileDataToUpdate);
+//               UpdateSearchSettingsReligiousAttendance(SelectedYourReligiousAttendanceIds, profiledata);
+//               UpdateSearchSettingsReligion(SelectedYourReligionIds, profiledata);
 
 //               //added modifciation date 1-9-2012 , confirm that it works as an inclided
-//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+//               profiledata.profile.ModificationDate = DateTime.Now;
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
-//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               //db.Entry(profiledata).State = EntityState.Modified;
 //               int changes = db.SaveChanges();
 
 //               //TOD DO
 //               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
 //               //update session too just in case
-//               // membersmodel.profiledata = ProfileDataToUpdate;
+//               // membersmodel.profiledata = profiledata;
 
-//               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
+//               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, profiledata);
 
 
 //               model.CurrentErrors.Clear();
@@ -1984,8 +2010,8 @@ namespace Shell.MVC2.Data
 //       {
 //           // MembersViewModel membersmodel = GetMembersViewModelAddSearchSettingsAndUpdate(_ProfileID);
 //           //5-10-2012 moved this to get these items first.
-//           profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-//           if (ProfileDataToUpdate.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
+//           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
+//           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
 //           SearchSetting SearchSettingsToUpdate = membersrepository.GetPerFectMatchSearchSettingsByProfileID(_ProfileID); //db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 //           //re populate the models TO DO not sure this is needed index valiues are stored
@@ -1996,7 +2022,7 @@ namespace Shell.MVC2.Data
 //           //just for conistiancy.
 //           var MyHumorID = model.CharacterSettings.HumorID;
 //           var MyPoliticalViewID = model.CharacterSettings.PoliticalViewID;
-//           model.CharacterSettings = new EditProfileCharacterSettingsModel(ProfileDataToUpdate);
+//           model.CharacterSettings = new EditProfileCharacterSettingsModel(profiledata);
 //           model.CharacterSettings.HumorID = MyHumorID;
 //           model.CharacterSettings.PoliticalViewID = MyPoliticalViewID;
 
@@ -2033,34 +2059,34 @@ namespace Shell.MVC2.Data
 
 
 
-//           // profiledata ProfileDataToUpdate = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+//           // profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
 //           //   SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
 
 //           try
 //           {
-//               ProfileDataToUpdate.profile.ModificationDate = DateTime.Now;
+//               profiledata.profile.ModificationDate = DateTime.Now;
 
-//               ProfileDataToUpdate.HumorID = Convert.ToInt32(model.CharacterSettings.HumorID);
-//               ProfileDataToUpdate.PoliticalViewID = Convert.ToInt32(model.CharacterSettings.PoliticalViewID);
-//               ProfileDataToUpdate.EmploymentSatusID = model.CharacterSettings.PoliticalViewID;
-
-
-
-//               UpdateSearchSettingsHumor(SelectedYourHumorIds, ProfileDataToUpdate);
-//               UpdateSearchSettingsPoliticalView(SelectedYourPoliticalViewIds, ProfileDataToUpdate);
+//               profiledata.HumorID = Convert.ToInt32(model.CharacterSettings.HumorID);
+//               profiledata.PoliticalViewID = Convert.ToInt32(model.CharacterSettings.PoliticalViewID);
+//               profiledata.EmploymentSatusID = model.CharacterSettings.PoliticalViewID;
 
 
 
-//               //db.Entry(ProfileDataToUpdate).State = EntityState.Modified;
+//               UpdateSearchSettingsHumor(SelectedYourHumorIds, profiledata);
+//               UpdateSearchSettingsPoliticalView(SelectedYourPoliticalViewIds, profiledata);
+
+
+
+//               //db.Entry(profiledata).State = EntityState.Modified;
 //               int changes = db.SaveChanges();
 
 //               //TOD DO
 //               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
 //               //update session too just in case
-//               // membersmodel.profiledata = ProfileDataToUpdate;
+//               // membersmodel.profiledata = profiledata;
 
-//               CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, ProfileDataToUpdate);
+//               CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, profiledata);
 
 
 //               model.CurrentErrors.Clear();
@@ -2088,11 +2114,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedgenders == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_Genders  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_Genders  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_Genders CurrentSearchSettings_Genders = db.SearchSettings_Genders.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2132,11 +2158,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedshowme == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2175,11 +2201,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedsortbytype == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_sortbytype  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_sortbytype  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_sortbytype CurrentSearchSettings_sortbytype = db.SearchSettings_sortbytype.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2218,11 +2244,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedbodytype == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_bodytype  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_bodytype  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_bodytype CurrentSearchSettings_bodytype = db.SearchSettings_bodytype.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2261,11 +2287,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedethnicity == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_ethnicity  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_ethnicity  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_ethnicity CurrentSearchSettings_ethnicity = db.SearchSettings_ethnicity.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2304,11 +2330,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedhaircolor == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_haircolor  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_haircolor  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_haircolor CurrentSearchSettings_haircolor = db.SearchSettings_haircolor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2347,11 +2373,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedeyecolor == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_eyecolor  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_eyecolor  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_eyecolor CurrentSearchSettings_eyecolor = db.SearchSettings_eyecolor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2390,11 +2416,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedhotfeature == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_hotfeature  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_hotfeature  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_hotfeature CurrentSearchSettings_hotfeature = db.SearchSettings_hotfeature.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2433,11 +2459,11 @@ namespace Shell.MVC2.Data
        {
            if (selecteddiet == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_diet  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_diet  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_diet CurrentSearchSettings_diet = db.SearchSettings_diet.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2476,11 +2502,11 @@ namespace Shell.MVC2.Data
        {
            if (selecteddrinks == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_drinks  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_drinks  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_drinks CurrentSearchSettings_drinks = db.SearchSettings_drinks.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2519,11 +2545,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedexercise == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_exercise  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_exercise  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_exercise CurrentSearchSettings_exercise = db.SearchSettings_exercise.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2562,11 +2588,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedhobby == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_hobby  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_hobby  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_hobby CurrentSearchSettings_hobby = db.SearchSettings_hobby.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2605,11 +2631,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedhumor == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_humor  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_humor  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_humor CurrentSearchSettings_humor = db.SearchSettings_humor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2648,11 +2674,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedpoliticalview == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_politicalview  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_politicalview  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_politicalview CurrentSearchSettings_politicalview = db.SearchSettings_politicalview.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2691,11 +2717,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedreligion == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_religion  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_religion  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_religion CurrentSearchSettings_religion = db.SearchSettings_religion.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2734,11 +2760,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedreligiousattendance == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_religiousattendance  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_religiousattendance  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_religiousattendance CurrentSearchSettings_religiousattendance = db.SearchSettings_religiousattendance.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2777,11 +2803,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedsign == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_sign  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_sign  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_sign CurrentSearchSettings_sign = db.SearchSettings_sign.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2820,11 +2846,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedsmokes == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_smokes  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_smokes  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_smokes CurrentSearchSettings_smokes = db.SearchSettings_smokes.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2863,11 +2889,11 @@ namespace Shell.MVC2.Data
        {
            if (selectededucationlevel == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_educationlevel  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_educationlevel  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_educationlevel CurrentSearchSettings_educationlevel = db.SearchSettings_educationlevel.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2906,11 +2932,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedemploymentstatus == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_employmentstatus  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_employmentstatus  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_employmentstatus CurrentSearchSettings_employmentstatus = db.SearchSettings_employmentstatus.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2949,11 +2975,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedhavekids == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_havekids  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_havekids  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_havekids CurrentSearchSettings_havekids = db.SearchSettings_havekids.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -2992,11 +3018,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedincomelevel == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_incomelevel  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_incomelevel  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_incomelevel CurrentSearchSettings_incomelevel = db.SearchSettings_incomelevel.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -3035,11 +3061,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedlivingsituation == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_livingsituation  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_livingsituation  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_livingsituation CurrentSearchSettings_livingsituation = db.SearchSettings_livingsituation.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -3078,11 +3104,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedlookingfor == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_lookingfor  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_lookingfor  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_lookingfor CurrentSearchSettings_lookingfor = db.SearchSettings_lookingfor.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -3121,11 +3147,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedmaritalstatus == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_maritalstatus  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_maritalstatus  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_maritalstatus CurrentSearchSettings_maritalstatus = db.SearchSettings_maritalstatus.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -3164,11 +3190,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedprofession == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_profession  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_profession  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_profession CurrentSearchSettings_profession = db.SearchSettings_profession.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -3207,11 +3233,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedwantskids == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_wantskids  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_wantskids  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_wantskids CurrentSearchSettings_wantskids = db.SearchSettings_wantskids.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -3255,11 +3281,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedethnicity == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -3298,11 +3324,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedhotfeature == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -3341,11 +3367,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedhobby == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
@@ -3384,11 +3410,11 @@ namespace Shell.MVC2.Data
        {
            if (selectedlookingfor == null)
            {
-               // ProfileDataToUpdate.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
            }
            //build the search settings gender object
-           // int SearchSettingsID = currentsearchsetting.id;//ProfileDataToUpdate.searchsettings.FirstOrDefault().id;
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
            //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 

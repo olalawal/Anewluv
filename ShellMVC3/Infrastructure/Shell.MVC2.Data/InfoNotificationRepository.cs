@@ -242,8 +242,9 @@ namespace Shell.MVC2.Data
               catch (Exception ex)
               {
                   //log error mesasge
-                  string mesessage = ex.Message;
-                    //handle logging here
+                  //handle logging here
+                  var message = ex.Message;
+                  throw ex;
               }
              
               

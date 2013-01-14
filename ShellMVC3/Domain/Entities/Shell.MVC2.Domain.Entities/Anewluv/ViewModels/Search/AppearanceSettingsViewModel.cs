@@ -41,6 +41,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //}
         //#endregion
 
+        var UiHeight = profile.profiledata.height;
+        var UiBodyType = profile.profiledata.bodytype.id;
+
         public int heightmax { get; set; }
         public int heightmin { get; set; }
 
