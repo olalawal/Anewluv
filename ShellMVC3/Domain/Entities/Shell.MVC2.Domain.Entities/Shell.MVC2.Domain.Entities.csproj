@@ -65,6 +65,7 @@
     <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
     <Compile Include="Anewluv\photo_securitylevel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\AnewLuvMessages.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\EditProfileViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoModel.cs" />
     <Compile Include="Anewluv\visiblitysettings_countries.cs" />
@@ -178,7 +179,6 @@
     <Compile Include="Anewluv\ViewModels\AdminPhotoModel.cs" />
     <Compile Include="Anewluv\ViewModels\Admin\AdminViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\ContactUsModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Editprofile\EditProfileModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\EditProfileVisibilitySettingsModel.cs" />
     <Compile Include="Anewluv\Mail\ViewModels\mailviewmodel.cs" />
     <Compile Include="Anewluv\Mail\ViewModels\mailmessageviewmodel.cs" />
@@ -198,11 +198,11 @@
     <Compile Include="Anewluv\ViewModels\SearchSettings\SearchBasicSettings.cs" />
     <Compile Include="Anewluv\ViewModels\SearchSettings\SearchCharacterSettings.cs" />
     <Compile Include="Anewluv\ViewModels\SearchSettings\SearchLifeStyleSettings.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\AppearanceSettingsViewModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\LifeStyleSettingsViewModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\CharacterSettingsViewModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\SearchSettingsViewModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\BasicSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\AppearanceSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\CharacterSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\SearchSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\BasicSettingsViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\UxMessages\UxMessageTypeModel.cs" />
     <Compile Include="Anewluv\ViewModels\ValidateRegistrationGeoDataModel.cs" />
     <Compile Include="Anewluv\visiblitysetting.cs" />
@@ -309,7 +309,9 @@
   <ItemGroup>
     <Content Include="Documentation\Migration Instructions.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Anewluv\ViewModels\Search\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

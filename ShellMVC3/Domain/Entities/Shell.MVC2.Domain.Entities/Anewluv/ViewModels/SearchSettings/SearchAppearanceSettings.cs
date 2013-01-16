@@ -10,13 +10,19 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
      public class SearchAppearanceSettings
     {
         //appereance search settings 
-        public string heightmax { get; set; }
-        public string heightmin { get; set; }
-        public List<string> ethnicitylist = new List<string>();
-        public List<string> bodytypeslist = new List<string>();
-
-        public List<string> eyecolorlist = new List<string>();
-        public List<string> haircolorlist = new List<string>();
-        public List<string> hotfeaturelist = new List<string>();
+       [DataMember] 
+       public string heightmax { get; set; }
+       [DataMember]
+       public string heightmin { get; set; }
+       [DataMember]
+       public List<lu_ethnicity> ethnicitylist { get; set; } // = new List<string>();
+       [DataMember]
+       public List<lu_bodytype> bodytypeslist { get; set; } // = new List<string>();
+       [DataMember]
+       public List<lu_eyecolor > eyecolorlist { get; set; } // = new List<string>();
+       [DataMember]
+       public List<lu_haircolor> haircolorlist { get; set; } // = new List<string>();
+       [DataMember]
+       public List<lu_hotfeature> hotfeaturelist { get; set; } // = new List<string>();
     }
 }

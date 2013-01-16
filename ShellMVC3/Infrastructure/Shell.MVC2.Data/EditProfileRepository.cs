@@ -15,6 +15,12 @@ namespace Shell.MVC2.Data
 {
 
 
+    //TO DO move this data out to a Searchsettings model and create a full view model maybe 
+    //that way the edit code is re-usuable, final code change will be search settings object
+    //i.e appearancesearchsettings  , and appearancesettings  combine into viewmodel
+    //the search peice will be udpated via searchrepostiory as a separate call maybe since even the matches 
+    //settings which we are updating is actually just a search
+
     /////################# TO DO make all the invidual save for the per page basis private , i.e save everything as one big blob since we do
     //// not want to limit how the UI creators set up thier UI.  Reuturn all errors with the AnewLuv Messages thing for the UPDATEs and have the UI creator
     /// navigate the user to the pages with issues them selvs.
@@ -29,6 +35,7 @@ namespace Shell.MVC2.Data
        
         private  AnewluvContext db; // = new AnewluvContext();    
         private IMemberRepository _membersrepository;
+        private ISearchRepository  _searchrepository;
         
        //private  PostalData2Entities postaldb; //= new PostalData2Entities();
 
@@ -39,10 +46,11 @@ namespace Shell.MVC2.Data
             public bool selected { get; set; }
         }
 
-        public EditMemberRepository(AnewluvContext datingcontext, IMemberRepository membersrepository)
+        public EditMemberRepository(AnewluvContext datingcontext, IMemberRepository membersrepository,ISearchRepository searchrepository)
             : base(datingcontext)
         {
             _membersrepository = membersrepository;
+            _searchrepository = searchrepository;
         }
 
         #region "profile visisiblity settings update here"
@@ -911,7 +919,7 @@ namespace Shell.MVC2.Data
        #endregion
 
 
-       #region "other editpages to implement"
+       //#region "other editpages to implement"
        #region "Edit profile Appeareance Settings Updates here"
 
        public AnewluvMessages EditProfileAppearanceSettings(AppearanceSettingsViewModel newmodel, int _ProfileID)
@@ -942,7 +950,7 @@ namespace Shell.MVC2.Data
            return messages;
        }
 
-       public AnewluvMessages  EditProfileAppearanceSettingsPage1Update(AppearanceSettingsViewModel  model, profile profile, searchsetting oldsearchsettings, AnewluvMessages messages)
+       public AnewluvMessages  EditProfileAppearanceSettingsPage1Update(AppearanceSettingsViewModel  newmodel, profile profile, searchsetting oldsearchsettings, AnewluvMessages messages)
        {
            bool nothingupdated = true;
 
@@ -953,28 +961,30 @@ namespace Shell.MVC2.Data
                //build Basic Profile Settings from Submited view 
                // model.BasicProfileSettings. = AboutMe;
                //relaod appreadnce settings as needed
-               var UiHeight = profile.profiledata.height;
-               var UiBodyType = profile.profiledata.bodytype.id;
+               var UiHeight = newmodel.myheight;
+               var UiBodyType = newmodel.mybodytype;
 
                // model.AppearanceSettings = new EditProfileAppearanceSettingsModel(profiledata);
 
                //noew updated the reloaded model with the saved higit on UI
                //  model.AppearanceSettings.Height = UiHeight;
                // model.AppearanceSettings.BodyTypesID = UiBodyType;
- 
-               var heightmin = model.heightmin == -1 ? 48 : model.heightmin;
-               var heightmax = model.heightmax == -1 ? 89 : model.heightmax;
+
+               var heightmin = newmodel.heightmin == -1 ? 48 : newmodel.heightmin;
+               var heightmax = newmodel.heightmax == -1 ? 89 : newmodel.heightmax;
 
 
                //update my settings 
-              nothingupdated = (profile.h)  profile.profiledata.height = Convert.ToInt32(UiHeight);
-               profile.profiledata.bodytype.id = UiBodyType;  //TO DO look at this
+               //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
+               nothingupdated = (newmodel.myheight == profile.profiledata.height )? false  : true ;
+
+               profile.profiledata.bodytype= UiBodyType;  //TO DO look at this
 
                //now update the search settings 
                oldsearchsettings.heightmin = heightmin;
                oldsearchsettings.heightmax = heightmax;
                oldsearchsettings.lastupdatedate = DateTime.Now;
-               updatesearchsettingsbodytype(model.bodytypeslist, oldsearchsettings);
+               updatesearchsettingsbodytype(newmodel.bodytypeslist, oldsearchsettings);
 
 
                //db.Entry(profiledata).State = EntityState.Modified;
@@ -1015,49 +1025,46 @@ namespace Shell.MVC2.Data
        {
 
 
-           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
-           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
-
+        
            //re populate the models TO DO not sure this is needed index valiues are stored
            //if there are checkbox values on basic settings we would need to reload as well
            //build Basic Profile Settings from Submited view 
            // model.BasicProfileSettings. = AboutMe;
-           model.AppearanceSettings = new EditProfileAppearanceSettingsModel(profiledata);
+          // model.AppearanceSettings = new EditProfileAppearanceSettingsModel(profiledata);
 
 
            //reload search settings since it seems the checkbox values are lost on postback
            //we really should just rebuild them from form collection imo
-           model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
+        //   model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
 
 
 
            //update the searchmodl settings with current settings            
            //update UI display values with current displayed values as well for check boxes
 
-           IEnumerable<int?> EnumerableMyEthnicity = SelectedMyEthnicityIds;
+           //IEnumerable<int?> EnumerableMyEthnicity = SelectedMyEthnicityIds;
 
-           var MyEthnicityValues = EnumerableMyEthnicity != null ? new HashSet<int?>(EnumerableMyEthnicity) : null;
+           //var MyEthnicityValues = EnumerableMyEthnicity != null ? new HashSet<int?>(EnumerableMyEthnicity) : null;
 
-           foreach (var _Ethnicity in model.AppearanceSettings.Myethnicitylist)
-           {
-               _Ethnicity.Selected = MyEthnicityValues != null ? MyEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
-           }
+           //foreach (var _Ethnicity in model.AppearanceSettings.Myethnicitylist)
+           //{
+           //    _Ethnicity.Selected = MyEthnicityValues != null ? MyEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
+           //}
 
-           IEnumerable<int?> EnumerableYourEthnicity = SelectedYourEthnicityIds;
+           //IEnumerable<int?> EnumerableYourEthnicity = SelectedYourEthnicityIds;
 
-           var YourEthnicityValues = EnumerableYourEthnicity != null ? new HashSet<int?>(EnumerableYourEthnicity) : null;
+           //var YourEthnicityValues = EnumerableYourEthnicity != null ? new HashSet<int?>(EnumerableYourEthnicity) : null;
 
-           foreach (var _Ethnicity in model.AppearanceSearchSettings.ethnicitylist)
-           {
-               _Ethnicity.Selected = YourEthnicityValues != null ? YourEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
-           }
+           //foreach (var _Ethnicity in model.AppearanceSearchSettings.ethnicitylist)
+           //{
+           //    _Ethnicity.Selected = YourEthnicityValues != null ? YourEthnicityValues.Contains(_Ethnicity.EthnicityID) : false;
+           //}
 
 
            try
            {
                //link the profiledata entities
-               profiledata.profile.ModificationDate = DateTime.Now;
+               profile.modificationdate = DateTime.Now;
 
                ////Add searchh settings as well if its not null
                //if (ModelToUpdate.SearchSettings == null)
@@ -1069,10 +1076,11 @@ namespace Shell.MVC2.Data
                //{
                //    profiledata.SearchSettings.Add(ModelToUpdate.SearchSettings);
                //}
-
-               UpdateSearchSettingsEthnicity(SelectedYourEthnicityIds, profiledata);
-               UpdateProfileDataEthnicity(SelectedMyEthnicityIds, profiledata);
-               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+               
+               
+               updatesearchsettingsethnicity(newmodel.ethnicitylist, oldsearchsettings  );
+               updatprofilemetatdataethnicity(newmodel.myethnicitylist, profile.profilemetadata );
+               oldsearchsettings.lastupdatedate  = DateTime.Now;
 
                //db.Entry(profiledata).State = EntityState.Modified;
                db.SaveChanges();
@@ -1083,90 +1091,75 @@ namespace Shell.MVC2.Data
                //membersmodel.profiledata = profiledata;
                //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID ,profiledata );
 
-               model.CurrentErrors.Clear();
-               return model;
+              // model.CurrentErrors.Clear();
+              //  return model;
            }
-           catch (DataException)
+           catch (DataException dx)
            {
                //Log the error (add a variable name after DataException) 
-               model.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-               return model;
+               // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               // return model;
+               //handle logging here
+               var message = dx.Message;
+               throw dx;
            }
+           catch (Exception ex)
+           {
+               //handle logging here
+               var message = ex.Message;
+               throw ex;
+
+           }
+           return messages;
 
        }
 
        public AnewluvMessages  EditProfileAppearanceSettingsPage3Update(AppearanceSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings, AnewluvMessages messages)
        {
 
-           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
-           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
-
-
-           //reload search settings since it seems the checkbox values are lost on postback
-           //we really should just rebuild them from form collection imo
-
-
-           //re populate the models TO DO not sure this is needed index valiues are stored
-           //if there are checkbox values on basic settings we would need to reload as well
-           //build Basic Profile Settings from Submited view 
-           // model.BasicProfileSettings. = AboutMe;
-           //temp store values on UI also handle ANY case here !!
-           //just for conistiancy.
-           var EyColorID = model.AppearanceSettings.EyeColorID;
-           var HairCOlorID = model.AppearanceSettings.HairColorID;
-           model.AppearanceSettings = new EditProfileAppearanceSettingsModel(profiledata);
-           model.AppearanceSettings.HairColorID = HairCOlorID;
-           model.AppearanceSettings.EyeColorID = EyColorID;
+           var EyColor = newmodel.myeyecolor;
+           var HairColor = newmodel.myhaircolor;
+         //  model.AppearanceSettings = new EditProfileAppearanceSettingsModel(profiledata);
+         //  model.AppearanceSettings.HairColorID = HairCOlorID;
+         //  model.AppearanceSettings.EyeColorID = EyColorID;
 
 
            //reload search settings since it seems the checkbox values are lost on postback
            //we really should just rebuild them from form collection imo
-           model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
+           // model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
            //update the reloaded  searchmodl settings with current settings on the UI
-
-
            //update the searchmodl settings with current settings            
            //update UI display values with current displayed values as well for check boxes
-           IEnumerable<int?> EnumerableYourHairColor = SelectedYourHairColorIds;
-
-           var YourHairColorValues = EnumerableYourHairColor != null ? new HashSet<int?>(EnumerableYourHairColor) : null;
-
-           foreach (var _HairColor in model.AppearanceSearchSettings.haircolorlist)
-           {
-               _HairColor.Selected = YourHairColorValues != null ? YourHairColorValues.Contains(_HairColor.HairColorID) : false;
-           }
-
-           IEnumerable<int?> EnumerableYourEyeColor = SelectedYourEyeColorIds;
-
-           var YourEyeColorValues = EnumerableYourEyeColor != null ? new HashSet<int?>(EnumerableYourEyeColor) : null;
-
-           foreach (var _EyeColor in model.AppearanceSearchSettings.eyecolorlist)
-           {
-               _EyeColor.Selected = YourEyeColorValues != null ? YourEyeColorValues.Contains(_EyeColor.EyeColorID) : false;
-           }
-
+           //IEnumerable<int?> EnumerableYourHairColor = SelectedYourHairColorIds;
+           //var YourHairColorValues = EnumerableYourHairColor != null ? new HashSet<int?>(EnumerableYourHairColor) : null;
+           //foreach (var _HairColor in model.AppearanceSearchSettings.haircolorlist)
+           //{
+           //    _HairColor.Selected = YourHairColorValues != null ? YourHairColorValues.Contains(_HairColor.HairColorID) : false;
+           //}
+           //IEnumerable<int?> EnumerableYourEyeColor = SelectedYourEyeColorIds;
+           //var YourEyeColorValues = EnumerableYourEyeColor != null ? new HashSet<int?>(EnumerableYourEyeColor) : null;
+           //foreach (var _EyeColor in model.AppearanceSearchSettings.eyecolorlist)
+           //{
+           //    _EyeColor.Selected = YourEyeColorValues != null ? YourEyeColorValues.Contains(_EyeColor.EyeColorID) : false;
+           //}
            //UI updates done
-
            //get active profile data 
-
-
 
            try
            {
-               profiledata.profile.ModificationDate = DateTime.Now;
+               profile.modificationdate = DateTime.Now;
 
                //update my settings 
-               profiledata.EyeColorID = model.AppearanceSettings.EyeColorID;
-               profiledata.HairColorID = model.AppearanceSettings.HairColorID;
+               profile.profiledata.eyecolor = EyColor;
+               profile.profiledata.haircolor = HairColor; //model.AppearanceSettings.HairColorID;
 
                //now update the search settings 
-               SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.heightmin;
-               SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
+               //SearchSettingsToUpdate.HeightMin = model.AppearanceSearchSettings.heightmin;
+              // SearchSettingsToUpdate.HeightMax = model.AppearanceSearchSettings.heightmax;
 
-               UpdateSearchSettingsEyeColor(SelectedYourEyeColorIds, profiledata);
-               UpdateSearchSettingsHairColor(SelectedYourHairColorIds, profiledata);
+               updatesearchsettingseyecolor(newmodel.eyecolorlist ,oldsearchsettings);
+                updatesearchsettingshaircolor  (newmodel.haircolorlist ,oldsearchsettings);
 
                SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
                //db.Entry(profiledata).State = EntityState.Modified;
@@ -1192,56 +1185,20 @@ namespace Shell.MVC2.Data
        public AnewluvMessages  EditProfileAppearanceSettingsPage4Update(AppearanceSettingsViewModel newmodel, profile profile, searchsetting oldsearchsettings, AnewluvMessages messages)
        {
 
-           profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == _ProfileID).First();
-           if (profiledata.SearchSettings.Count() == 0) membersrepository.CreateMyPerFectMatchSearchSettingsByProfileID(_ProfileID);
-           SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
 
-
-           //no validation needed just save 
-           //TOD DO move this to a function i think or repository for search and have it populate those there
-           //repopulate checkboxes for postback
-           //reload search settings since it seems the checkbox values are lost on postback
-           //we really should just rebuild them from form collection imo
-
-           //reload the Apppearance values
-           model.AppearanceSettings = new EditProfileAppearanceSettingsModel(profiledata);
-
-           model.AppearanceSearchSettings = new SearchModelAppearanceSettings(SearchSettingsToUpdate);
-
-           //update the searchmodl settings with current settings            
-           //update UI display values with current displayed values as well for check boxes
-           IEnumerable<int?> EnumerableYourHotFeature = SelectedYourHotFeatureIds;
-
-           var YourHotFeatureValues = EnumerableYourHotFeature != null ? new HashSet<int?>(EnumerableYourHotFeature) : null;
-
-           foreach (var _HotFeature in model.AppearanceSearchSettings.hotfeaturelist)
-           {
-               _HotFeature.Selected = YourHotFeatureValues != null ? YourHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
-           }
-
-           IEnumerable<int?> EnumerableMyHotFeature = SelectedMyHotFeatureIds;
-
-           var MyHotFeatureValues = EnumerableMyHotFeature != null ? new HashSet<int?>(EnumerableMyHotFeature) : null;
-
-           foreach (var _HotFeature in model.AppearanceSettings.Myhotfeaturelist)
-           {
-               _HotFeature.Selected = MyHotFeatureValues != null ? MyHotFeatureValues.Contains(_HotFeature.HotFeatureID) : false;
-           }
 
            //UI updates done
-
            //get active profile data 
            //get active profile data 
-
 
            try
            {
                //link the profiledata entities
 
-               profiledata.profile.ModificationDate = DateTime.Now;
+                profile.modificationdate = DateTime.Now;
                //now update the search settings 
-               UpdateSearchSettingsHotFeature(SelectedYourHotFeatureIds, profiledata);
-               UpdateProfileDataHotFeature(SelectedMyHotFeatureIds, profiledata);
+               updatesearchsettingshotfeature(newmodel.hotfeaturelist,oldsearchsettings);
+               updateprofilemetatdatahotfeature(SelectedMyHotFeatureIds,oldsearchsettings);
 
                SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
                //db.Entry(profiledata).State = EntityState.Modified;
@@ -1345,15 +1302,15 @@ namespace Shell.MVC2.Data
 
 //           try
 //           {
-//               profiledata.profile.ModificationDate = DateTime.Now;
+//                profile.modificationdate = DateTime.Now;
 //               profiledata.MaritalStatusID = Convert.ToInt32(model.LifeStyleSettings.MaritalStatusID);
 //               profiledata.LivingSituationID = model.LifeStyleSettings.LivingSituationID;
 
 
-//               UpdateProfileDataLookingFor(SelectedMyLookingForIds, profiledata);
-//               UpdateSearchSettingsLookingFor(SelectedYourLookingForIds, profiledata);
-//               UpdateSearchSettingsMaritalStatus(SelectedYourMaritalStatusIds, profiledata);
-//               UpdateSearchSettingsLivingSituation(SelectedYourLivingSituationIds, profiledata);
+//               UpdateProfileDataLookingFor(SelectedMyLookingForIds,oldsearchsettings);
+//               UpdateSearchSettingsLookingFor(SelectedYourLookingForIds,oldsearchsettings);
+//               UpdateSearchSettingsMaritalStatus(SelectedYourMaritalStatusIds,oldsearchsettings);
+//               UpdateSearchSettingsLivingSituation(SelectedYourLivingSituationIds,oldsearchsettings);
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
 
@@ -1365,7 +1322,7 @@ namespace Shell.MVC2.Data
 //               //update session too just in case
 //               //membersmodel.profiledata = profiledata;
 
-//               CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, profiledata);
+//               CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID,oldsearchsettings);
 
 
 //               model.CurrentErrors.Clear();
@@ -1445,15 +1402,15 @@ namespace Shell.MVC2.Data
 
 
 
-//               profiledata.profile.ModificationDate = DateTime.Now;
+//                profile.modificationdate = DateTime.Now;
 
 //               profiledata.WantsKidsID = Convert.ToInt32(model.LifeStyleSettings.WantsKidsID);
 //               profiledata.HaveKidsId = model.LifeStyleSettings.HaveKidsId;
 
 
 
-//               UpdateSearchSettingsWantsKids(SelectedYourWantsKidsIds, profiledata);
-//               UpdateSearchSettingsHaveKids(SelectedYourHaveKidsIds, profiledata);
+//               UpdateSearchSettingsWantsKids(SelectedYourWantsKidsIds,oldsearchsettings);
+//               UpdateSearchSettingsHaveKids(SelectedYourHaveKidsIds,oldsearchsettings);
 
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
@@ -1543,15 +1500,15 @@ namespace Shell.MVC2.Data
 
 //           try
 //           {
-//               profiledata.profile.ModificationDate = DateTime.Now;
+//                profile.modificationdate = DateTime.Now;
 
 //               profiledata.IncomeLevelID = Convert.ToInt32(model.LifeStyleSettings.IncomeLevelID);
 //               profiledata.EmploymentSatusID = model.LifeStyleSettings.EmploymentStatusID;
 
 
 
-//               UpdateSearchSettingsIncomeLevel(SelectedYourIncomeLevelIds, profiledata);
-//               UpdateSearchSettingsEmploymentStatus(SelectedYourEmploymentStatusIds, profiledata);
+//               UpdateSearchSettingsIncomeLevel(SelectedYourIncomeLevelIds,oldsearchsettings);
+//               UpdateSearchSettingsEmploymentStatus(SelectedYourEmploymentStatusIds,oldsearchsettings);
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
 
@@ -1640,11 +1597,11 @@ namespace Shell.MVC2.Data
 //           try
 //           {
 
-//               profiledata.profile.ModificationDate = DateTime.Now;
+//                profile.modificationdate = DateTime.Now;
 //               profiledata.ProfessionID = Convert.ToInt32(model.LifeStyleSettings.ProfessionID);
 //               profiledata.EducationLevelID = model.LifeStyleSettings.EducationLevelID;
-//               UpdateSearchSettingsProfession(SelectedYourProfessionIds, profiledata);
-//               UpdateSearchSettingsEducationLevel(SelectedYourEducationLevelIds, profiledata);
+//               UpdateSearchSettingsProfession(SelectedYourProfessionIds,oldsearchsettings);
+//               UpdateSearchSettingsEducationLevel(SelectedYourEducationLevelIds,oldsearchsettings);
 
 
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
@@ -1758,7 +1715,7 @@ namespace Shell.MVC2.Data
 
 //           try
 //           {
-//               profiledata.profile.ModificationDate = DateTime.Now;
+//                profile.modificationdate = DateTime.Now;
 
 //               profiledata.DietID = Convert.ToInt32(model.CharacterSettings.DietID);
 //               profiledata.DrinksID = model.CharacterSettings.DrinksID;
@@ -1766,10 +1723,10 @@ namespace Shell.MVC2.Data
 //               profiledata.SmokesID = model.CharacterSettings.SmokesID;
 
 
-//               UpdateSearchSettingsExercise(SelectedYourExerciseIds, profiledata);
-//               UpdateSearchSettingsDiet(SelectedYourDietIds, profiledata);
-//               UpdateSearchSettingsDrinks(SelectedYourDrinksIds, profiledata);
-//               UpdateSearchSettingsSmokes(SelectedYourSmokesIds, profiledata);
+//               UpdateSearchSettingsExercise(SelectedYourExerciseIds,oldsearchsettings);
+//               UpdateSearchSettingsDiet(SelectedYourDietIds,oldsearchsettings);
+//               UpdateSearchSettingsDrinks(SelectedYourDrinksIds,oldsearchsettings);
+//               UpdateSearchSettingsSmokes(SelectedYourSmokesIds,oldsearchsettings);
 
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
@@ -1781,7 +1738,7 @@ namespace Shell.MVC2.Data
 //               //update session too just in case
 //               // membersmodel.profiledata = profiledata;
 
-//               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, profiledata);
+//               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID,oldsearchsettings);
 
 
 //               model.CurrentErrors.Clear();
@@ -1868,16 +1825,16 @@ namespace Shell.MVC2.Data
 //           try
 //           {
 
-//               profiledata.profile.ModificationDate = DateTime.Now;
+//                profile.modificationdate = DateTime.Now;
 
 //               profiledata.SignID = Convert.ToInt32(model.CharacterSettings.SignID);
 
 
 
 
-//               UpdateProfileDataHobby(SelectedMyHobbyIds, profiledata);
-//               UpdateSearchSettingsHobby(SelectedYourHobbyIds, profiledata);
-//               UpdateSearchSettingsSign(SelectedYourSignIds, profiledata);
+//               UpdateProfileDataHobby(SelectedMyHobbyIds,oldsearchsettings);
+//               UpdateSearchSettingsHobby(SelectedYourHobbyIds,oldsearchsettings);
+//               UpdateSearchSettingsSign(SelectedYourSignIds,oldsearchsettings);
 
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
@@ -1889,7 +1846,7 @@ namespace Shell.MVC2.Data
 //               //update session too just in case
 //               // membersmodel.profiledata = profiledata;
 
-//               // CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, profiledata);
+//               // CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID,oldsearchsettings);
 
 //               model.CurrentErrors.Clear();
 //               return model;
@@ -1967,18 +1924,18 @@ namespace Shell.MVC2.Data
 
 //           try
 //           {
-//               profiledata.profile.ModificationDate = DateTime.Now;
+//                profile.modificationdate = DateTime.Now;
 
 //               profiledata.ReligiousAttendanceID = Convert.ToInt32(model.CharacterSettings.ReligiousAttendanceID);
 //               profiledata.ReligionID = Convert.ToInt32(model.CharacterSettings.ReligionID);
 //               profiledata.EmploymentSatusID = model.CharacterSettings.ReligionID;
 
 
-//               UpdateSearchSettingsReligiousAttendance(SelectedYourReligiousAttendanceIds, profiledata);
-//               UpdateSearchSettingsReligion(SelectedYourReligionIds, profiledata);
+//               UpdateSearchSettingsReligiousAttendance(SelectedYourReligiousAttendanceIds,oldsearchsettings);
+//               UpdateSearchSettingsReligion(SelectedYourReligionIds,oldsearchsettings);
 
 //               //added modifciation date 1-9-2012 , confirm that it works as an inclided
-//               profiledata.profile.ModificationDate = DateTime.Now;
+//                profile.modificationdate = DateTime.Now;
 //               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
 
 //               //db.Entry(profiledata).State = EntityState.Modified;
@@ -1989,7 +1946,7 @@ namespace Shell.MVC2.Data
 //               //update session too just in case
 //               // membersmodel.profiledata = profiledata;
 
-//               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, profiledata);
+//               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID,oldsearchsettings);
 
 
 //               model.CurrentErrors.Clear();
@@ -2065,7 +2022,7 @@ namespace Shell.MVC2.Data
 
 //           try
 //           {
-//               profiledata.profile.ModificationDate = DateTime.Now;
+//                profile.modificationdate = DateTime.Now;
 
 //               profiledata.HumorID = Convert.ToInt32(model.CharacterSettings.HumorID);
 //               profiledata.PoliticalViewID = Convert.ToInt32(model.CharacterSettings.PoliticalViewID);
@@ -2073,8 +2030,8 @@ namespace Shell.MVC2.Data
 
 
 
-//               UpdateSearchSettingsHumor(SelectedYourHumorIds, profiledata);
-//               UpdateSearchSettingsPoliticalView(SelectedYourPoliticalViewIds, profiledata);
+//               UpdateSearchSettingsHumor(SelectedYourHumorIds,oldsearchsettings);
+//               UpdateSearchSettingsPoliticalView(SelectedYourPoliticalViewIds,oldsearchsettings);
 
 
 
@@ -2086,7 +2043,7 @@ namespace Shell.MVC2.Data
 //               //update session too just in case
 //               // membersmodel.profiledata = profiledata;
 
-//               CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID, profiledata);
+//               CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID(_ProfileID,oldsearchsettings);
 
 
 //               model.CurrentErrors.Clear();
@@ -2102,7 +2059,7 @@ namespace Shell.MVC2.Data
 //       }
 
 //       #endregion
-       #endregion
+     //  #endregion
 
        //TO DO move to search setting repo i think
 
@@ -3277,7 +3234,7 @@ namespace Shell.MVC2.Data
 
 
        //profiledata ethnicity
-       private void updatprofilemetatdataethnicity(List<lu_ethnicity> selectedethnicity, profilemetadata currentprofilemetadata)
+       private void updateprofilemetatdataethnicity(List<lu_ethnicity> selectedethnicity, profilemetadata currentprofilemetadata)
        {
            if (selectedethnicity == null)
            {
@@ -3320,7 +3277,7 @@ namespace Shell.MVC2.Data
            }
        }
        //profiledata hotfeature
-       private void updatprofilemetatdatahotfeature(List<lu_hotfeature> selectedhotfeature, profilemetadata currentprofilemetadata)
+       private void updateprofilemetatdatahotfeature(List<lu_hotfeature> selectedhotfeature, profilemetadata currentprofilemetadata)
        {
            if (selectedhotfeature == null)
            {
@@ -3363,7 +3320,7 @@ namespace Shell.MVC2.Data
            }
        }
        //profiledata hobby
-       private void updatprofilemetatdatahobby(List<lu_hobby> selectedhobby, profilemetadata currentprofilemetadata)
+       private void updateprofilemetatdatahobby(List<lu_hobby> selectedhobby, profilemetadata currentprofilemetadata)
        {
            if (selectedhobby == null)
            {
@@ -3406,7 +3363,7 @@ namespace Shell.MVC2.Data
            }
        }
        //profiledata lookingfor
-       private void updatprofilemetatdatalookingfor(List<lu_lookingfor> selectedlookingfor, profilemetadata currentprofilemetadata)
+       private void updateprofilemetatdatalookingfor(List<lu_lookingfor> selectedlookingfor, profilemetadata currentprofilemetadata)
        {
            if (selectedlookingfor == null)
            {

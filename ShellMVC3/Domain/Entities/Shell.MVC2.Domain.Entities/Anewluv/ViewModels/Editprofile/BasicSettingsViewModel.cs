@@ -13,27 +13,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     public class BasicSettingsViewModel
     {
 
-        //public class ShowMeCheckBox
-        //{
-        //    public int ShowMeID { get; set; }
-        //    public string ShowMeName { get; set; }
-        //    public bool selected { get; set; }
-        //}
-
-        //public class GenderCheckBox
-        //{
-        //    public int GenderID { get; set; }
-        //    public string GenderName { get; set; }
-        //    public bool selected { get; set; }
-        //}
-
-        //public class SortByTypeCheckBox
-        //{
-        //    public int SortByTypeID { get; set; }
-        //    public string SortByTypeName { get; set; }
-        //    public bool selected { get; set; }
-        //}
-
        
         // [DataMember]
         //public string searchname { get; set; }

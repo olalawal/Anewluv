@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Security;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using System.Collections;
+using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
@@ -16,24 +17,42 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     public class ProfileVisibilitySettingsModel
     {
         //basic settings
-        public  Boolean? MailPeeks { get; set; }
-        public Boolean? MailInterests { get; set; }
-        public Boolean? MailLikes { get; set; }
-        public Boolean? MailNews { get; set; }
-        public Boolean MailChatRequest { get; set; }
-        public Boolean? ProfileVisibility { get; set; }
-        public int? CountryId { get; set; }
-        public int? GenderId { get; set; }
-        public Boolean? StealthPeeks { get; set; }
-        public int? AgeMin { get; set; }
-        public int? AgeMax { get; set; }
-        public DateTime? LastUpdateTime { get; set; }
-        public Boolean? ChatVisibilityToLikes { get; set; }
-        public Boolean? ChatVisibilityToInterests { get; set; }
-        public Boolean?ChatVisibilityToMatches { get; set; }
-        public Boolean? ChatVisibilityToPeeks { get; set; }
-        public Boolean? ChatVisibilityToSearch { get; set; }
-        public Boolean? SaveOfflineChatMessages { get; set; }
+        [DataMember]
+        public Boolean? mailpeeks { get; set; }
+        [DataMember]
+        public Boolean? mailinterests { get; set; }
+        [DataMember]
+        public Boolean? maillikes { get; set; }
+        [DataMember]
+        public Boolean? mailnews { get; set; }
+        [DataMember]
+        public Boolean mailchatrequest { get; set; }
+        [DataMember]
+        public Boolean? profilevisibility { get; set; }
+        [DataMember]
+        public int? countryid { get; set; }
+        [DataMember]
+        public int? genderid { get; set; }
+        [DataMember]
+        public Boolean? stealthpeeks { get; set; }
+        [DataMember]
+        public int? agemin { get; set; }
+        [DataMember]
+        public int? agemax { get; set; }
+        [DataMember]
+        public DateTime? lastupdatetime { get; set; }
+        [DataMember]
+        public Boolean? chatvisibilitytolikes { get; set; }
+        [DataMember]
+        public Boolean? chatvisibilitytointerests { get; set; }
+        [DataMember]
+        public Boolean? chatvisibilitytomatches { get; set; }
+        [DataMember]
+        public Boolean? chatvisibilitytopeeks { get; set; }
+        [DataMember]
+        public Boolean? chatvisibilitytosearch { get; set; }
+        [DataMember]
+        public Boolean? saveofflinechatmessages { get; set; }
       
     }
 }

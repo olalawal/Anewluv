@@ -12,14 +12,20 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
         //Your Search Settings Values
         //basic settings
-        public int? maxdistancefromme { get; set; }
-        public int? seekingagemin { get; set; }
-        public int? seekingagemax { get; set; }
-        public string country { get; set; }
-        public string citystateprovince { get; set; }
-        public string postalcode { get; set; }
+       [DataMember ] public int? maxdistancefromme { get; set; }
+       [DataMember]
+       public int? seekingagemin { get; set; }
+       [DataMember]
+       public int? seekingagemax { get; set; }
+       [DataMember]
+       public string country { get; set; }
+       [DataMember]
+       public string citystateprovince { get; set; }
+       [DataMember]
+       public string postalcode { get; set; }
         //gender is now allowing multiple selections
-        public List<string> genderslist = new List<string>();
+       [DataMember]
+       public List<lu_gender> genderslist { get; set; } // = new List<string>();
 
        
 
