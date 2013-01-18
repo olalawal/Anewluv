@@ -10,7 +10,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
 {
     [DataContract]
-    public class BasicSettings
+    public class BasicSettingsModel
     {
 
        
@@ -21,19 +21,23 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
         //My Settings 
         [DataMember]
-        DateTime mybirthdate { get; set; }
+        public DateTime? birthdate { get; set; }
         [DataMember]
-        lu_gender mygender { get; set; }
+        public lu_gender gender { get; set; }
         [DataMember]
-        public int countryid { get; set; }
+        public int? countryid { get; set; }
         [DataMember]
-        public string citystateprovince { get; set; }
+        public string stateprovince { get; set; }
+        [DataMember]
+        public string city { get; set; }
         [DataMember]
         public string postalcode { get; set; }
         [DataMember]
         public string aboutme { get; set; }
         [DataMember]
-        public string mycatchyintroline { get; set; }
+        public string catchyintroline { get; set; }   
+        [DataMember]
+        public string phonenumber { get; set; }
 
         ////Match settings i.e search
         //[DataMember]

@@ -17,7 +17,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
             [DataMember]
             public int? age { get; set; }
             [DataMember] 
-            public DateTime birthdate { get; set; }
+            public DateTime? birthdate { get; set; }
          [DataMember]        
             public string city { get; set; }
          [DataMember]    
@@ -25,7 +25,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
          [DataMember]    
         public string stateprovince { get; set; }
          [DataMember]    
-        public int countryid { get; set; }
+        public int? countryid { get; set; }
          [DataMember]    
         public Nullable<double> longitude { get; set; }
          [DataMember]    

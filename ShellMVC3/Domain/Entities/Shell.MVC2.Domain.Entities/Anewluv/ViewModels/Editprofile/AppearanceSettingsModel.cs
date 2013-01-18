@@ -15,18 +15,19 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     public class AppearanceSettingsModel
     {
 
+    
          [DataMember]
-         public int myheight { get; set; }
+         public long? height { get; set; }
          [DataMember]
-         public lu_bodytype mybodytype { get; set; }
+         public lu_bodytype bodytype { get; set; }
          [DataMember]
-         public lu_haircolor myhaircolor { get; set; }
+         public lu_haircolor haircolor { get; set; }
          [DataMember]
-         public lu_eyecolor myeyecolor { get; set; }
+         public lu_eyecolor eyecolor { get; set; }
          [DataMember]
-         public List<lu_hotfeature> myhotfeaturelist { get; set; }
+         public List<profiledata_hotfeature> hotfeaturelist { get; set; }
          [DataMember]
-         public List<lu_ethnicity> myethnicitylist { get; set; }
+         public List<profiledata_ethnicity> ethnicitylist { get; set; }
 
 
       

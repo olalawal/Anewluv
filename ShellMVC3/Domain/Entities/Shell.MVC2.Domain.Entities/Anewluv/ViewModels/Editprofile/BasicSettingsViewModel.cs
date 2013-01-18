@@ -13,7 +13,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     public class BasicSettingsViewModel
     {
         [DataMember]
-        public BasicSettings basicsettings { get; set; }
+        public BasicSettingsModel basicsettings { get; set; }
         [DataMember ]
         public BasicSearchSettingsModel  basicsearchsettings { get; set; }
 

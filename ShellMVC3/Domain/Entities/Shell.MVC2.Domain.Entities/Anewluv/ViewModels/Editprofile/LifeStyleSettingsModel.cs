@@ -10,23 +10,23 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     public class LifeStyleSettingsModel
     {
        [DataMember]
-       public lu_educationlevel myeducationlevel { get; set; }
+       public lu_educationlevel educationlevel { get; set; }
        [DataMember]
-       public lu_employmentstatus myemploymentstatus { get; set; }
+       public lu_employmentstatus employmentstatus { get; set; }
        [DataMember]
-       public lu_incomelevel myincomelevel { get; set; }
+       public lu_incomelevel incomelevel { get; set; }
        [DataMember]
-       public List<lu_lookingfor> mylookingforlist { get; set; }
+       public List<lu_lookingfor> lookingforlist { get; set; }
        [DataMember]
-       public lu_wantskids mywantskids { get; set; }
+       public lu_wantskids wantskids { get; set; }
        [DataMember]
-       public lu_profession myprofession { get; set; }
+       public lu_profession profession { get; set; }
        [DataMember]
-       public lu_maritalstatus mymaritalstatus { get; set; }
+       public lu_maritalstatus maritalstatus { get; set; }
        [DataMember]
-       public lu_livingsituation mylivingsituation { get; set; }
+       public lu_livingsituation livingsituation { get; set; }
        [DataMember]
-       public lu_havekids myhavekids { get; set; }
+       public lu_havekids havekids { get; set; }
        
       
     }
