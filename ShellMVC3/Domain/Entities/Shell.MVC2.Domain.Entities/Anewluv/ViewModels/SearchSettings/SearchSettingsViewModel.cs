@@ -5,26 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Web;
-
 using System.Web.Security;
-
-
-
-
-
-//using RiaServicesContrib.Mvc;
-
-
 using System.Collections;
-
-
-//using RiaServicesContrib.Mvc.Services;
-
-
-
-
-
-
 
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
@@ -36,16 +18,15 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     //populates and updates a search page similar to edit
     public class SearchSettingsViewModel
     {
-        //basic settings
-  
-        public BasicSettingsViewModel BasicSearchSettings { get; set; }     
-        public AppearanceSettingsViewModel AppearanceSearchSettings { get; set; }      
-        public  LifeStyleSettingsViewModel  LifeStyleSearchSettings { get; set; }      
-        public CharacterSettingsViewModel   CharacterSearchSettings { get; set; }
+        //basic settings  
+        public BasicSearchSettingsModel basicsearchsettings { get; set; }     
+        public AppearanceSearchSettingsModel appearancesearchsettings { get; set; }      
+        public LifeStyleSettingsModel lifestylesearchsettings { get; set; }      
+        public CharacterSettingsModel   charactersearchsettings { get; set; }
         //index of what page we are looking at i.e we want to split up this model into diff partial views
-        public int ViewIndex { get; set; }
-        public bool PostalCodeStatus { get; set; }
-        public bool IsFullEditing { get; set; }
-        public  List<string> CurrentErrors = new List<string>();
+        public int viewindex { get; set; }
+        public bool postalcodestatus { get; set; }
+        public bool isfullediting { get; set; }
+        public  List<string> currenterrors = new List<string>();
     }
 }

@@ -10,34 +10,30 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
 {
     [DataContract]
-    public class BasicSettingsViewModel
+    public class BasicSettings
     {
-        [DataMember]
-        public BasicSettings basicsettings { get; set; }
-        [DataMember ]
-        public BasicSearchSettingsModel  basicsearchsettings { get; set; }
 
        
-        //// [DataMember]
-        ////public string searchname { get; set; }
-        //// [DataMember]
-        ////public int searchrank { get; set; }
+        // [DataMember]
+        //public string searchname { get; set; }
+        // [DataMember]
+        //public int searchrank { get; set; }
 
-        ////My Settings 
-        //[DataMember]
-        //DateTime mybirthdate { get; set; }
-        //[DataMember]
-        //lu_gender mygender { get; set; }
-        //[DataMember]
-        //public int countryid { get; set; }
-        //[DataMember]
-        //public string citystateprovince { get; set; }
-        //[DataMember]
-        //public string postalcode { get; set; }
-        //[DataMember]
-        //public string aboutme { get; set; }
-        //[DataMember]
-        //public string mycatchyintroline { get; set; }
+        //My Settings 
+        [DataMember]
+        DateTime mybirthdate { get; set; }
+        [DataMember]
+        lu_gender mygender { get; set; }
+        [DataMember]
+        public int countryid { get; set; }
+        [DataMember]
+        public string citystateprovince { get; set; }
+        [DataMember]
+        public string postalcode { get; set; }
+        [DataMember]
+        public string aboutme { get; set; }
+        [DataMember]
+        public string mycatchyintroline { get; set; }
 
         ////Match settings i.e search
         //[DataMember]
@@ -57,7 +53,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         // [DataMember]
         // public IList<lu_gender> genderslist = new List<lu_gender>();
 
-        // public SelectList Genders { get; set; }
+        //// public SelectList Genders { get; set; }
         //9-16-2011 need to KILL the parametered contructor for the postbacks not to be messed up
         //MVC viewstate needs a paramerless contrsctuor ,  see 
 

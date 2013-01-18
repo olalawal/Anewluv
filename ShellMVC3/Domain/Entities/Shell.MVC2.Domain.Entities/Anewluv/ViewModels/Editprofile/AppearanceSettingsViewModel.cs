@@ -11,39 +11,29 @@ using System.Runtime.Serialization;
 //settings which we are updating is actually just a search
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
-      [DataContract]
+    [DataContract]
     public class AppearanceSettingsViewModel
     {
+        [DataMember ]
+        public AppearanceSettingsModel appearancesettings { get; set; }
+        [DataMember]
+        public AppearanceSearchSettingsModel  appearncesearchsettings { get; set; }
 
-         [DataMember]
-        public int myheight { get; set; }
-         [DataMember]
-        public lu_bodytype mybodytype { get; set; }
-         [DataMember]
-         public lu_haircolor myhaircolor { get; set; }
-         [DataMember]
-         public lu_eyecolor myeyecolor { get; set; }
-         [DataMember]
-         public List<lu_hotfeature> myhotfeaturelist { get; set; }
-         [DataMember]
-         public List<lu_ethnicity> myethnicitylist { get; set; }
-
-
-      e
-         [DataMember]
-         public int heightmax { get; set; }
-         [DataMember]
-         public int heightmin { get; set; }
-         [DataMember]
-         public List<lu_bodytype> bodytypeslist = new List<lu_bodytype>();
-         [DataMember]
-         public List<lu_ethnicity> ethnicitylist = new List<lu_ethnicity>();
-         [DataMember]
-         public List<lu_eyecolor> eyecolorlist = new List<lu_eyecolor>();
-         [DataMember]
-         public List<lu_haircolor> haircolorlist = new List<lu_haircolor>();
-         [DataMember]
-         public List<lu_hotfeature> hotfeaturelist = new List<lu_hotfeature>();
+      
+         //[DataMember]
+         //public int heightmax { get; set; }
+         //[DataMember]
+         //public int heightmin { get; set; }
+         //[DataMember]
+         //public List<lu_bodytype> bodytypeslist = new List<lu_bodytype>();
+         //[DataMember]
+         //public List<lu_ethnicity> ethnicitylist = new List<lu_ethnicity>();
+         //[DataMember]
+         //public List<lu_eyecolor> eyecolorlist = new List<lu_eyecolor>();
+         //[DataMember]
+         //public List<lu_haircolor> haircolorlist = new List<lu_haircolor>();
+         //[DataMember]
+         //public List<lu_hotfeature> hotfeaturelist = new List<lu_hotfeature>();
 
         //9-16-2011 need to KILL the parametered contructor for the postbacks not to be messed up
         //MVC viewstate needs a paramerless contrsctuor ,  see 

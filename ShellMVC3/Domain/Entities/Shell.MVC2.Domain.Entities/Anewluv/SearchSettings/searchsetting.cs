@@ -17,28 +17,28 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
       
 
        [DataMember]
-        public int? agemax { get; set; }
-         [DataMember]
-        public int? agemin { get; set; }
-         [DataMember]
-        public DateTime? creationdate { get; set; }
-         [DataMember]
-        public int? distancefromme { get; set; }
-         [DataMember]
-        public int? heightmax { get; set; }
-         [DataMember]
-        public int? heightmin { get; set; }
-         [DataMember]
-        public DateTime? lastupdatedate { get; set; }
-         [DataMember]
-        public bool? myperfectmatch { get; set; }
-         [DataMember]
-        public bool? savedsearch { get; set; }
-         [DataMember]
-        public string searchname { get; set; }
-         [DataMember]
-        public int? searchrank { get; set; }
-         [DataMember]
+       public int? agemax { get; set; }
+       [DataMember]
+       public int? agemin { get; set; }
+       [DataMember]
+       public DateTime? creationdate { get; set; }
+       [DataMember]
+       public int? distancefromme { get; set; }
+       [DataMember]
+       public int? heightmax { get; set; }
+       [DataMember]
+       public int? heightmin { get; set; }
+       [DataMember]
+       public DateTime? lastupdatedate { get; set; }
+       [DataMember]
+       public bool? myperfectmatch { get; set; }
+       [DataMember]
+       public bool? savedsearch { get; set; }
+       [DataMember]
+       public string searchname { get; set; }
+       [DataMember]
+       public int? searchrank { get; set; }
+       [DataMember]
         //public int searchsettingsid { get; set; }
         // [DataMember]
         public bool? systemmatch { get; set; }

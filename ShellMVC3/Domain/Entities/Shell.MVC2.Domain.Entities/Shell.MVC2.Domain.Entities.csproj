@@ -65,6 +65,10 @@
     <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
     <Compile Include="Anewluv\photo_securitylevel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\AnewLuvMessages.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\BasicSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\AppearanceSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\CharacterSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\EditProfileViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoModel.cs" />
@@ -194,10 +198,10 @@
     <Compile Include="Anewluv\ViewModels\ProfileBrowseModels.cs" />
     <Compile Include="Anewluv\ViewModels\ProfileCriteriaModel.cs" />
     <Compile Include="Anewluv\ViewModels\QuickSearchModel.cs" />
-    <Compile Include="Anewluv\ViewModels\SearchSettings\SearchAppearanceSettings.cs" />
-    <Compile Include="Anewluv\ViewModels\SearchSettings\SearchBasicSettings.cs" />
-    <Compile Include="Anewluv\ViewModels\SearchSettings\SearchCharacterSettings.cs" />
-    <Compile Include="Anewluv\ViewModels\SearchSettings\SearchLifeStyleSettings.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\AppearanceSearchSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\BasicSearchSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\CharacterSearchSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\LifeStyleSearchSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\AppearanceSettingsViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\CharacterSettingsViewModel.cs" />

@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
       [DataContract]
-    public class SearchLifeStyleSettings
+    public class LifeStyleSearchSettingsModel
     {
         //Lifestyle setting here
        [DataMember] public List<lu_educationlevel> educationlevellist  { get; set; } // = new List<string>();

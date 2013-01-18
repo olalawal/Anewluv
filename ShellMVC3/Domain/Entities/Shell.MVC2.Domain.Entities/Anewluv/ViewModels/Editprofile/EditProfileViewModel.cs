@@ -5,48 +5,38 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Web;
-
 using System.Web.Security;
-
-
-
-
-
-//using RiaServicesContrib.Mvc;
-
-
 using System.Collections;
-
-
-//using RiaServicesContrib.Mvc.Services;
-
-
-
-
-
-
+using System.Runtime.Serialization;
 
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
-
-    //constants for page indexes
+        //constants for page indexes
     
         
-    //populates and updates a search page similar to edit
-  [Data]
-    public class EditProfileViewModel
-    {
+        //populates and updates a search page similar to edit
+        [DataContract]
+        public class EditProfileViewModel
+        {
+        
         //basic settings
-  
-        public BasicSettingsViewModel BasicSearchSettings { get; set; }     
-        public AppearanceSettingsViewModel AppearanceSearchSettings { get; set; }      
-        public  LifeStyleSettingsViewModel  LifeStyleSearchSettings { get; set; }      
-        public CharacterSettingsViewModel   CharacterSearchSettings { get; set; }
+        [DataMember ]
+        public  BasicSettingsViewModel basicsettings { get; set; }
+        [DataMember]
+        public AppearanceSettingsViewModel appearancesettings { get; set; }
+        [DataMember]
+        public LifeStyleSettingsViewModel lifestylesettings { get; set; }
+        [DataMember]
+        public CharacterSettingsViewModel charactersettings { get; set; }
         //index of what page we are looking at i.e we want to split up this model into diff partial views
-        public int ViewIndex { get; set; }
-        public bool PostalCodeStatus { get; set; }
-        public bool IsFullEditing { get; set; }
-        public  List<string> CurrentErrors = new List<string>();
+        [DataMember]
+        public int viewindex { get; set; }
+        [DataMember]
+        public bool postalcodestatus { get; set; }
+        [DataMember]
+        public bool isfullediting { get; set; }
+        [DataMember]
+        public List<string> currenterrors = new List<string>();
     }
 }

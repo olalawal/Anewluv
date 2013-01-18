@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
       [DataContract]
-    public class SearchCharacterSettings
+    public class CharacterSearchSettingsModel
 
     {
 
