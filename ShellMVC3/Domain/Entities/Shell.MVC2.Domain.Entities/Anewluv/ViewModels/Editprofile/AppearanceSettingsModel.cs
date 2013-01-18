@@ -25,9 +25,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
          [DataMember]
          public lu_eyecolor eyecolor { get; set; }
          [DataMember]
-         public List<profiledata_hotfeature> hotfeaturelist { get; set; }
+         public List<lu_hotfeature> hotfeaturelist { get; set; }
          [DataMember]
-         public List<profiledata_ethnicity> ethnicitylist { get; set; }
+         public List<lu_ethnicity > ethnicitylist { get; set; }
 
 
       
