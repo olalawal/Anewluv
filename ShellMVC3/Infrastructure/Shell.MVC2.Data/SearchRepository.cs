@@ -867,8 +867,8 @@ namespace Shell.MVC2.Data
 
        #region "Push/Post methods that save changes to entire search settings or peice meal as needed"
 
-       #region "Basic Search Settings"
-       public AnewluvMessages updatbasicsearchsettings(BasicSearchSettingsModel newmodel, int searchid)
+       #region "Basic Search Settings Edit"
+       public AnewluvMessages  editbasicsearchsettings(BasicSearchSettingsModel newmodel, int searchid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
@@ -882,8 +882,8 @@ namespace Shell.MVC2.Data
            //TO DO this might be suplerflous ?
            //var  newmodel2 = this.getbasicsettingsmodel(profile.id);  
 
-           messages = (updatebasicsearchsettingspage1update(newmodel, searchid, messages));
-           messages = (updatebasicsearchsettingspage2update(newmodel, searchid, messages));
+           messages = (updatebasicsearchsettings(newmodel, searchid, messages));
+    
 
 
            if (messages.errormessages.Count > 0)
@@ -894,24 +894,577 @@ namespace Shell.MVC2.Data
            messages.message = "Edit Basic Settings Successful";
            return messages;
        }
-       public AnewluvMessages updatebasicsearchsettingspage1update(BasicSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
+       private AnewluvMessages updatebasicsearchsettings(BasicSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
        {
+           searchsetting searchsettingstoupdate = db.searchsetting.Where(d=>d.id == searchid).First();
 
-            //detrmine if we are in edit or add mode for search settings for perfect match
-               //if its null add a new entity  
-               //noew update searchsettings text values
-               //oldsearchsettings.agemax = agemax;
-               //oldsearchsettings.agemin = agemin;
-              // oldsearchsettings.lastupdatedate = DateTime.Now; //addded time stamp for updates this should be somone where else tho ?
-               //TO DO move this code to searchssettings Repositoury
-               /this.updatesearchsettingsgenders(newmodel.genderslist.ToList(), oldsearchsettings);
+           
+              //link the profiledata entities
+               profile.modificationdate = DateTime.Now;
+               oldsearchsettings.distancefromme = newmodel.distancefromme;
+               //TO DO move this code to searchssettings Repositoury             
+                 this.updatesearchsettingsshowme(newmodel.showmelist.ToList(), oldsearchsettings);
+                 this.updatesearchsettingssortbytype(newmodel.sortbytypelist.ToList(), oldsearchsettings);
+                 oldsearchsettings.lastupdatedate  = DateTime.Now;
+
                //db.Entry(profiledata).State = EntityState.Modified;
+               db.SaveChanges();
+ 
+
+               /this.updatesearchsettingsgenders(newmodel.genderslist.ToList(), searchsettingstoupdate);
+               //db.Entry(profiledata).State = EntityState.Modified;
+       }
+       #endregion
+
+       //#region "other editpages to implement"
+       #region "Appeareance Settings  Search Edit"
+
+       public AnewluvMessages editappearancesettings(AppearanceSearchSettingsModel newmodel, int searchid)
+       {
+           //create a new messages object
+           AnewluvMessages messages = new AnewluvMessages();
+
+                  // var newmodel2 = this.getAppearancesettingsviewmodel(profile.id);
+
+           messages = updateappearancessettings(newmodel, searchid, messages);
+       
+
+           if (messages.errormessages.Count > 0)
+           {
+               messages.message = "There was a problem Editing You Appearance Settings, Please try again later";
+               return messages;
+           }
+           messages.message = "Edit Appearance Settings Successful";
+           return messages;
+       }       
+       public AnewluvMessages updateappearancessettings(AppearanceSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
+       {
+           bool nothingupdated = true;
+
+           try
+           {
+               profile profile = db.profiles.Where(p => p.id == profileid).First();
+
+
+               
+               var heightmin = newmodel.heightmin == -1 ? 48 : newmodel.heightmin;
+               var heightmax = newmodel.heightmax == -1 ? 89 : newmodel.heightmax;
+
+
+               //update my settings 
+               //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
+               nothingupdated = (newmodel.myheight == profile.profiledata.height) ? false : true;
+
+               profile.profiledata.bodytype = UiBodyType;  //TO DO look at this
+
+               //now update the search settings 
+               oldsearchsettings.heightmin = heightmin;
+               oldsearchsettings.heightmax = heightmax;
+               oldsearchsettings.lastupdatedate = DateTime.Now;
+               updatesearchsettingsbodytype(newmodel.bodytypeslist, oldsearchsettings);
+
+               updatesearchsettingsethnicity(newmodel.ethnicitylist, oldsearchsettings);
+           
+
+
+               updatesearchsettingseyecolor(newmodel.eyecolorlist, oldsearchsettings);
+               updatesearchsettingshaircolor(newmodel.haircolorlist, oldsearchsettings);
+
+               //now update the search settings 
+               updatesearchsettingshotfeature(newmodel.hotfeaturelist, oldsearchsettings);
+            
+
+               oldsearchsettings.lastupdatedate = DateTime.Now;
+
+               //db.Entry(profiledata).State = EntityState.Modified;
+               int changes = db.SaveChanges();
+
+               //TOD DO
+               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+               //update session too just in case
+               //membersmodel.profiledata = profiledata;               
+
+               //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
+               //model.CurrentErrors.Clear();
+               // return model;
+           }
+           catch (DataException dx)
+           {
+               //Log the error (add a variable name after DataException) 
+               // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               // return model;
+               //handle logging here
+               var message = dx.Message;
+               throw dx;
+           }
+           catch (Exception ex)
+           {
+               //handle logging here
+               var message = ex.Message;
+               throw ex;
+
+           }
+           return messages;
+
+
+
        }
 
        #endregion
-     
+
+       #region "Lifestyle settings "
+       
+       public AnewluvMessages editlifestylesettings(LifeStyleSearchSettingsModel  newmodel, int searchid)
+       {
+           //create a new messages object
+           AnewluvMessages messages = new AnewluvMessages();
+
+           // var newmodel2 = this.getAppearancesettingsviewmodel(profile.id);
+
+           messages = (updatelifestylesettings(newmodel, searchid,  messages));
+          
+
+           if (messages.errormessages.Count > 0)
+           {
+               messages.message = "There was a problem Editing You Lifestyle Search settings, Please try again later";
+               return messages;
+           }
+           messages.message = "Edit Lifestyle Search settings Successful";
+           return messages;
+       }
+       public AnewluvMessages updatelifestylesettingspage1(LifeStyleSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
+       {
+           bool nothingupdated = true;
+
+           try
+           {
+                 //update the searchmodl settings with current settings            
+           //update UI display values with current displayed values as well for check boxes
+
+           IEnumerable<int?> EnumerableMyLookingFor = SelectedMyLookingForIds;
+
+           var MyLookingForValues = EnumerableMyLookingFor != null ? new HashSet<int?>(EnumerableMyLookingFor) : null;
+
+           foreach (var _LookingFor in model.LifeStyleSettings.MyLookingForList)
+           {
+               _LookingFor.Selected = MyLookingForValues != null ? MyLookingForValues.Contains(_LookingFor.MyLookingForID) : false;
+           }
+
+
+           IEnumerable<int?> EnumerableYourLookingFor = SelectedYourLookingForIds;
+
+           var YourLookingForValues = EnumerableYourLookingFor != null ? new HashSet<int?>(EnumerableYourLookingFor) : null;
+
+           foreach (var _LookingFor in model.LifeStyleSearchSettings.lookingforlist)
+           {
+               _LookingFor.Selected = YourLookingForValues != null ? YourLookingForValues.Contains(_LookingFor.LookingForID) : false;
+           }
+
+           IEnumerable<int?> EnumerableYourLivingSituation = SelectedYourLivingSituationIds;
+
+           var YourLivingSituationValues = EnumerableYourLivingSituation != null ? new HashSet<int?>(EnumerableYourLivingSituation) : null;
+
+           foreach (var _LivingSituation in model.LifeStyleSearchSettings.livingsituationlist)
+           {
+               _LivingSituation.Selected = YourLivingSituationValues != null ? YourLivingSituationValues.Contains(_LivingSituation.LivingSituationID) : false;
+           }
+
+           IEnumerable<int?> EnumerableYourMaritalStatus = SelectedYourMaritalStatusIds;
+
+           var YourMaritalStatusValues = EnumerableYourMaritalStatus != null ? new HashSet<int?>(EnumerableYourMaritalStatus) : null;
+
+           foreach (var _MaritalStatus in model.LifeStyleSearchSettings.maritalstatuslist)
+           {
+               _MaritalStatus.Selected = YourMaritalStatusValues != null ? YourMaritalStatusValues.Contains(_MaritalStatus.MaritalStatusID) : false;
+           }
+
+
+               
+           IEnumerable<int?> EnumerableYourWantsKids = SelectedYourWantsKidsIds;
+
+           var YourWantsKidsValues = EnumerableYourWantsKids != null ? new HashSet<int?>(EnumerableYourWantsKids) : null;
+
+           foreach (var _WantsKids in model.LifeStyleSearchSettings.wantskidslist)
+           {
+               _WantsKids.Selected = YourWantsKidsValues != null ? YourWantsKidsValues.Contains(_WantsKids.WantsKidsID) : false;
+           }
+
+
+           IEnumerable<int?> EnumerableYourHaveKids = SelectedYourHaveKidsIds;
+
+           var YourHaveKidsValues = EnumerableYourHaveKids != null ? new HashSet<int?>(EnumerableYourHaveKids) : null;
+
+           foreach (var _HaveKids in model.LifeStyleSearchSettings.havekidslist)
+           {
+               _HaveKids.Selected = YourHaveKidsValues != null ? YourHaveKidsValues.Contains(_HaveKids.HaveKidsID) : false;
+           }
+
+
+
+               
+           IEnumerable<int?> EnumerableYourIncomeLevel = SelectedYourIncomeLevelIds;
+
+           var YourIncomeLevelValues = EnumerableYourIncomeLevel != null ? new HashSet<int?>(EnumerableYourIncomeLevel) : null;
+
+           foreach (var _IncomeLevel in model.LifeStyleSearchSettings.incomelevellist)
+           {
+               _IncomeLevel.Selected = YourIncomeLevelValues != null ? YourIncomeLevelValues.Contains(_IncomeLevel.IncomeLevelID) : false;
+           }
+
+
+           IEnumerable<int?> EnumerableYourEmploymentStatus = SelectedYourEmploymentStatusIds;
+
+           var YourEmploymentStatusValues = EnumerableYourEmploymentStatus != null ? new HashSet<int?>(EnumerableYourEmploymentStatus) : null;
+
+           foreach (var _EmploymentStatus in model.LifeStyleSearchSettings.employmentstatuslist)
+           {
+               _EmploymentStatus.Selected = YourEmploymentStatusValues != null ? YourEmploymentStatusValues.Contains(_EmploymentStatus.EmploymentStatusID) : false;
+           }
+
+
+
+
+
+                  UpdateProfileDataLookingFor(SelectedMyLookingForIds,oldsearchsettings);
+               UpdateSearchSettingsLookingFor(SelectedYourLookingForIds,oldsearchsettings);
+               UpdateSearchSettingsMaritalStatus(SelectedYourMaritalStatusIds,oldsearchsettings);
+               UpdateSearchSettingsLivingSituation(SelectedYourLivingSituationIds,oldsearchsettings);
+           
+               
+                UpdateSearchSettingsIncomeLevel(SelectedYourIncomeLevelIds,oldsearchsettings);
+               UpdateSearchSettingsEmploymentStatus(SelectedYourEmploymentStatusIds,oldsearchsettings);
+               UpdateSearchSettingsWantsKids(SelectedYourWantsKidsIds,oldsearchsettings);
+               UpdateSearchSettingsHaveKids(SelectedYourHaveKidsIds,oldsearchsettings);
+
+                   SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+               //db.Entry(profiledata).State = EntityState.Modified;
+               int changes = db.SaveChanges();
+
+
+           // profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+           //  SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+           }
+           catch (DataException dx)
+           {
+               //Log the error (add a variable name after DataException) 
+               // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               // return model;
+               //handle logging here
+               var message = dx.Message;
+               throw dx;
+           }
+           catch (Exception ex)
+           {
+               //handle logging here
+               var message = ex.Message;
+               throw ex;
+
+           }
+           return messages;
+
+
+
+       }
+       public AnewluvMessages updatelifestylesettingspage2(LifeStyleSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
+       {
+           bool nothingupdated = true;
+
+           try
+           {
+               //update the searchmodl settings with current settings            
+               //update UI display values with current displayed values as well for check boxes
+
+               IEnumerable<int?> EnumerableMyLookingFor = SelectedMyLookingForIds;
+
+               var MyLookingForValues = EnumerableMyLookingFor != null ? new HashSet<int?>(EnumerableMyLookingFor) : null;
+
+               foreach (var _LookingFor in model.LifeStyleSettings.MyLookingForList)
+               {
+                   _LookingFor.Selected = MyLookingForValues != null ? MyLookingForValues.Contains(_LookingFor.MyLookingForID) : false;
+               }
+
+
+               IEnumerable<int?> EnumerableYourLookingFor = SelectedYourLookingForIds;
+
+               var YourLookingForValues = EnumerableYourLookingFor != null ? new HashSet<int?>(EnumerableYourLookingFor) : null;
+
+               foreach (var _LookingFor in model.LifeStyleSearchSettings.lookingforlist)
+               {
+                   _LookingFor.Selected = YourLookingForValues != null ? YourLookingForValues.Contains(_LookingFor.LookingForID) : false;
+               }
+
+               IEnumerable<int?> EnumerableYourLivingSituation = SelectedYourLivingSituationIds;
+
+               var YourLivingSituationValues = EnumerableYourLivingSituation != null ? new HashSet<int?>(EnumerableYourLivingSituation) : null;
+
+               foreach (var _LivingSituation in model.LifeStyleSearchSettings.livingsituationlist)
+               {
+                   _LivingSituation.Selected = YourLivingSituationValues != null ? YourLivingSituationValues.Contains(_LivingSituation.LivingSituationID) : false;
+               }
+
+               IEnumerable<int?> EnumerableYourMaritalStatus = SelectedYourMaritalStatusIds;
+
+               var YourMaritalStatusValues = EnumerableYourMaritalStatus != null ? new HashSet<int?>(EnumerableYourMaritalStatus) : null;
+
+               foreach (var _MaritalStatus in model.LifeStyleSearchSettings.maritalstatuslist)
+               {
+                   _MaritalStatus.Selected = YourMaritalStatusValues != null ? YourMaritalStatusValues.Contains(_MaritalStatus.MaritalStatusID) : false;
+               }
+
+
+
+               IEnumerable<int?> EnumerableYourWantsKids = SelectedYourWantsKidsIds;
+
+               var YourWantsKidsValues = EnumerableYourWantsKids != null ? new HashSet<int?>(EnumerableYourWantsKids) : null;
+
+               foreach (var _WantsKids in model.LifeStyleSearchSettings.wantskidslist)
+               {
+                   _WantsKids.Selected = YourWantsKidsValues != null ? YourWantsKidsValues.Contains(_WantsKids.WantsKidsID) : false;
+               }
+
+
+               IEnumerable<int?> EnumerableYourHaveKids = SelectedYourHaveKidsIds;
+
+               var YourHaveKidsValues = EnumerableYourHaveKids != null ? new HashSet<int?>(EnumerableYourHaveKids) : null;
+
+               foreach (var _HaveKids in model.LifeStyleSearchSettings.havekidslist)
+               {
+                   _HaveKids.Selected = YourHaveKidsValues != null ? YourHaveKidsValues.Contains(_HaveKids.HaveKidsID) : false;
+               }
+
+
+
+
+               IEnumerable<int?> EnumerableYourIncomeLevel = SelectedYourIncomeLevelIds;
+
+               var YourIncomeLevelValues = EnumerableYourIncomeLevel != null ? new HashSet<int?>(EnumerableYourIncomeLevel) : null;
+
+               foreach (var _IncomeLevel in model.LifeStyleSearchSettings.incomelevellist)
+               {
+                   _IncomeLevel.Selected = YourIncomeLevelValues != null ? YourIncomeLevelValues.Contains(_IncomeLevel.IncomeLevelID) : false;
+               }
+
+
+               IEnumerable<int?> EnumerableYourEmploymentStatus = SelectedYourEmploymentStatusIds;
+
+               var YourEmploymentStatusValues = EnumerableYourEmploymentStatus != null ? new HashSet<int?>(EnumerableYourEmploymentStatus) : null;
+
+               foreach (var _EmploymentStatus in model.LifeStyleSearchSettings.employmentstatuslist)
+               {
+                   _EmploymentStatus.Selected = YourEmploymentStatusValues != null ? YourEmploymentStatusValues.Contains(_EmploymentStatus.EmploymentStatusID) : false;
+               }
+
+
+
+
+
+               UpdateProfileDataLookingFor(SelectedMyLookingForIds, oldsearchsettings);
+               UpdateSearchSettingsLookingFor(SelectedYourLookingForIds, oldsearchsettings);
+               UpdateSearchSettingsMaritalStatus(SelectedYourMaritalStatusIds, oldsearchsettings);
+               UpdateSearchSettingsLivingSituation(SelectedYourLivingSituationIds, oldsearchsettings);
+
+
+               UpdateSearchSettingsIncomeLevel(SelectedYourIncomeLevelIds, oldsearchsettings);
+               UpdateSearchSettingsEmploymentStatus(SelectedYourEmploymentStatusIds, oldsearchsettings);
+               UpdateSearchSettingsWantsKids(SelectedYourWantsKidsIds, oldsearchsettings);
+               UpdateSearchSettingsHaveKids(SelectedYourHaveKidsIds, oldsearchsettings);
+
+               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+               //db.Entry(profiledata).State = EntityState.Modified;
+               int changes = db.SaveChanges();
+
+
+               // profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+               //  SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+           }
+           catch (DataException dx)
+           {
+               //Log the error (add a variable name after DataException) 
+               // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               // return model;
+               //handle logging here
+               var message = dx.Message;
+               throw dx;
+           }
+           catch (Exception ex)
+           {
+               //handle logging here
+               var message = ex.Message;
+               throw ex;
+
+           }
+           return messages;
+
+
+
+       }
+       public AnewluvMessages updatelifestylesettingspage3(LifeStyleSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
+       {
+           bool nothingupdated = true;
+
+           try
+           {
+               //update the searchmodl settings with current settings            
+               //update UI display values with current displayed values as well for check boxes
+
+               IEnumerable<int?> EnumerableMyLookingFor = SelectedMyLookingForIds;
+
+               var MyLookingForValues = EnumerableMyLookingFor != null ? new HashSet<int?>(EnumerableMyLookingFor) : null;
+
+               foreach (var _LookingFor in model.LifeStyleSettings.MyLookingForList)
+               {
+                   _LookingFor.Selected = MyLookingForValues != null ? MyLookingForValues.Contains(_LookingFor.MyLookingForID) : false;
+               }
+
+
+               IEnumerable<int?> EnumerableYourLookingFor = SelectedYourLookingForIds;
+
+               var YourLookingForValues = EnumerableYourLookingFor != null ? new HashSet<int?>(EnumerableYourLookingFor) : null;
+
+               foreach (var _LookingFor in model.LifeStyleSearchSettings.lookingforlist)
+               {
+                   _LookingFor.Selected = YourLookingForValues != null ? YourLookingForValues.Contains(_LookingFor.LookingForID) : false;
+               }
+
+               IEnumerable<int?> EnumerableYourLivingSituation = SelectedYourLivingSituationIds;
+
+               var YourLivingSituationValues = EnumerableYourLivingSituation != null ? new HashSet<int?>(EnumerableYourLivingSituation) : null;
+
+               foreach (var _LivingSituation in model.LifeStyleSearchSettings.livingsituationlist)
+               {
+                   _LivingSituation.Selected = YourLivingSituationValues != null ? YourLivingSituationValues.Contains(_LivingSituation.LivingSituationID) : false;
+               }
+
+               IEnumerable<int?> EnumerableYourMaritalStatus = SelectedYourMaritalStatusIds;
+
+               var YourMaritalStatusValues = EnumerableYourMaritalStatus != null ? new HashSet<int?>(EnumerableYourMaritalStatus) : null;
+
+               foreach (var _MaritalStatus in model.LifeStyleSearchSettings.maritalstatuslist)
+               {
+                   _MaritalStatus.Selected = YourMaritalStatusValues != null ? YourMaritalStatusValues.Contains(_MaritalStatus.MaritalStatusID) : false;
+               }
+
+
+
+               IEnumerable<int?> EnumerableYourWantsKids = SelectedYourWantsKidsIds;
+
+               var YourWantsKidsValues = EnumerableYourWantsKids != null ? new HashSet<int?>(EnumerableYourWantsKids) : null;
+
+               foreach (var _WantsKids in model.LifeStyleSearchSettings.wantskidslist)
+               {
+                   _WantsKids.Selected = YourWantsKidsValues != null ? YourWantsKidsValues.Contains(_WantsKids.WantsKidsID) : false;
+               }
+
+
+               IEnumerable<int?> EnumerableYourHaveKids = SelectedYourHaveKidsIds;
+
+               var YourHaveKidsValues = EnumerableYourHaveKids != null ? new HashSet<int?>(EnumerableYourHaveKids) : null;
+
+               foreach (var _HaveKids in model.LifeStyleSearchSettings.havekidslist)
+               {
+                   _HaveKids.Selected = YourHaveKidsValues != null ? YourHaveKidsValues.Contains(_HaveKids.HaveKidsID) : false;
+               }
+
+
+
+
+               IEnumerable<int?> EnumerableYourIncomeLevel = SelectedYourIncomeLevelIds;
+
+               var YourIncomeLevelValues = EnumerableYourIncomeLevel != null ? new HashSet<int?>(EnumerableYourIncomeLevel) : null;
+
+               foreach (var _IncomeLevel in model.LifeStyleSearchSettings.incomelevellist)
+               {
+                   _IncomeLevel.Selected = YourIncomeLevelValues != null ? YourIncomeLevelValues.Contains(_IncomeLevel.IncomeLevelID) : false;
+               }
+
+
+               IEnumerable<int?> EnumerableYourEmploymentStatus = SelectedYourEmploymentStatusIds;
+
+               var YourEmploymentStatusValues = EnumerableYourEmploymentStatus != null ? new HashSet<int?>(EnumerableYourEmploymentStatus) : null;
+
+               foreach (var _EmploymentStatus in model.LifeStyleSearchSettings.employmentstatuslist)
+               {
+                   _EmploymentStatus.Selected = YourEmploymentStatusValues != null ? YourEmploymentStatusValues.Contains(_EmploymentStatus.EmploymentStatusID) : false;
+               }
+
+
+
+               IEnumerable<int?> EnumerableYourProfession = SelectedYourProfessionIds;
+
+               var YourProfessionValues = EnumerableYourProfession != null ? new HashSet<int?>(EnumerableYourProfession) : null;
+
+               foreach (var _Profession in model.LifeStyleSearchSettings.professionlist)
+               {
+                   _Profession.Selected = YourProfessionValues != null ? YourProfessionValues.Contains(_Profession.ProfessionID) : false;
+               }
+
+
+               IEnumerable<int?> EnumerableYourEducationLevel = SelectedYourEducationLevelIds;
+
+               var YourEducationLevelValues = EnumerableYourEducationLevel != null ? new HashSet<int?>(EnumerableYourEducationLevel) : null;
+
+               foreach (var _EducationLevel in model.LifeStyleSearchSettings.educationlevellist)
+               {
+                   _EducationLevel.Selected = YourEducationLevelValues != null ? YourEducationLevelValues.Contains(_EducationLevel.EducationLevelID) : false;
+               }
+
+
+
+               UpdateProfileDataLookingFor(SelectedMyLookingForIds, oldsearchsettings);
+               UpdateSearchSettingsLookingFor(SelectedYourLookingForIds, oldsearchsettings);
+               UpdateSearchSettingsMaritalStatus(SelectedYourMaritalStatusIds, oldsearchsettings);
+               UpdateSearchSettingsLivingSituation(SelectedYourLivingSituationIds, oldsearchsettings);
+
+
+               UpdateSearchSettingsIncomeLevel(SelectedYourIncomeLevelIds, oldsearchsettings);
+               UpdateSearchSettingsEmploymentStatus(SelectedYourEmploymentStatusIds, oldsearchsettings);
+               UpdateSearchSettingsWantsKids(SelectedYourWantsKidsIds, oldsearchsettings);
+               UpdateSearchSettingsHaveKids(SelectedYourHaveKidsIds, oldsearchsettings);
+
+               UpdateSearchSettingsProfession(SelectedYourProfessionIds, oldsearchsettings);
+               UpdateSearchSettingsEducationLevel(SelectedYourEducationLevelIds, oldsearchsettings);
+
+               SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+               //db.Entry(profiledata).State = EntityState.Modified;
+               int changes = db.SaveChanges();
+
+
+               // profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
+               //  SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
+
+
+           }
+           catch (DataException dx)
+           {
+               //Log the error (add a variable name after DataException) 
+               // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               // return model;
+               //handle logging here
+               var message = dx.Message;
+               throw dx;
+           }
+           catch (Exception ex)
+           {
+               //handle logging here
+               var message = ex.Message;
+               throw ex;
+
+           }
+           return messages;
+
+
+
+       }
+
+
+       #endregion
        #endregion
 
+  
 
        //index of what page we are looking at i.e we want to split up this model into diff partial views
        #region "checkbox updated functions searchsettings values for all lists"
