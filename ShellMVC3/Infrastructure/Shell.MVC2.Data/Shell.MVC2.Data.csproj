@@ -144,7 +144,7 @@
     <Compile Include="EditProfileRepository.cs" />
     <Compile Include="ImageResizer\ImageResizerUtils.cs" />
     <Compile Include="LookupRepository.cs" />
-    <Compile Include="SearchRepository.cs" />
+    <Compile Include="EditSearchRepository.cs" />
     <Compile Include="OpenidRepositiory.cs" />
     <Compile Include="MailRepository.cs" />
     <Compile Include="ErrorLoggingRepository.cs" />
