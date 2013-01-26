@@ -25,6 +25,10 @@ namespace Shell.MVC2.Data
     //// not want to limit how the UI creators set up thier UI.  Reuturn all errors with the AnewLuv Messages thing for the UPDATEs and have the UI creator
     /// navigate the user to the pages with issues them selvs.
 
+
+
+    //TO DO update all these methods to uload the current searchsetting into cache as needed i.e after retriveal
+    //at least for the perfect match
 /// <summary>
 /// TO DO split off search settings methods , if needed they should be references as an interface
 /// </summary>
@@ -243,7 +247,7 @@ namespace Shell.MVC2.Data
                    throw ex;
 
                }
-               return null;
+     
              }     
          //Using a contstructor populate the current values I suppose
             //The actual values will bind to viewmodel I think
@@ -276,7 +280,7 @@ namespace Shell.MVC2.Data
                     model.smoking = p.profiledata.smoking ;
                     model.sign = p.profiledata.sign ;
                     model.politicalview = p.profiledata.politicalview ;
-                    model.myreligiousattendance = p.profiledata.religiousattendance ;
+                    model.religiousattendance = p.profiledata.religiousattendance ;
 
                     return model;
                 }
@@ -296,7 +300,7 @@ namespace Shell.MVC2.Data
                    throw ex;
 
                }
-               return null;
+        
             }
        
         #endregion
@@ -304,57 +308,54 @@ namespace Shell.MVC2.Data
 
 //Edit Profile Settings Occur here.
        //here are the methdods that actually modify settings i.e old UI vs new
-       
+
+       #region "Methods to Update profile settings for a user"
+
        #region "Edit profile Basic Settings Updates here
-   
-       public AnewluvMessages  editprofilebasicsettings(BasicSettingsModel newmodel, int profileid)
+
+       public AnewluvMessages editprofilebasicsettings(BasicSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
 
            //get the profile details :
-        
-           //create the search settings i.e matches if it does not exist 
-          // if (profile.profilemetadata.searchsettings.Count() == 0) _membersrepository.createmyperfectmatchsearchsettingsbyprofileid(_ProfileID);
-          // searchsetting SearchSettingsToUpdate = db.searchsetting.Where(p => p.profile_id  == _ProfileID && p.myperfectmatch == true && p.searchname  == "MyPerfectMatch").First();
+           profile p = db.profiles.Where(z => z.id == profileid).First(); 
 
-           //TO DO this might be suplerflous ?
-           //var  newmodel2 = this.getbasicsettingsmodel(profile.id);  
-
-            messages=(updateprofilebasicsettings (newmodel,profileid, messages));
-          //  messages=(EditProfileBasicSettingsPage2Update(newmodel,profileid ,messages));
+           
+           messages = (updateprofilebasicsettings(newmodel, p, messages));
+           //  messages=(EditProfileBasicSettingsPage2Update(newmodel,profileid ,messages));
 
 
-            if (messages.errormessages.Count > 0)
-            {
-                messages.message = "There was a problem Editing You Basic Settings, Please try again later";
-               return messages ;
-            }
-              messages.message = "Edit Basic Settings Successful" ;
-              return messages ;        
+           if (messages.errormessages.Count > 0)
+           {
+               messages.message = "There was a problem Editing You Basic Settings, Please try again later";
+               return messages;
+           }
+           messages.message = "Edit Basic Settings Successful";
+           return messages;
        }
 
        //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-       private AnewluvMessages updateprofilebasicsettings(BasicSettingsModel newmodel,int profileid, AnewluvMessages messages)
+       private AnewluvMessages updateprofilebasicsettings(BasicSettingsModel newmodel, profile p, AnewluvMessages messages)
        {
 
            try
            {
-               profile p = db.profiles.Where(p => p.id == profileid).First();
-         
+             //  profile p = db.profiles.Where(z => z.id == profileid).First();
+
                //TO DO
-                //Up here we will check to see if the values have not changed 
-               var birthdate = newmodel.birthdate ;
-               var AboutMe = newmodel.aboutme  ;
+               //Up here we will check to see if the values have not changed 
+               var birthdate = newmodel.birthdate;
+               var AboutMe = newmodel.aboutme;
                var MyCatchyIntroLine = newmodel.catchyintroline;
-               var city = newmodel.city ;
+               var city = newmodel.city;
                var stateprovince = newmodel.stateprovince;
-               var countryid = newmodel.countryid ;
-               var gender = newmodel.gender ;
+               var countryid = newmodel.countryid;
+               var gender = newmodel.gender;
                var postalcode = newmodel.postalcode;
-               var dd = newmodel.phonenumber ;
+               var dd = newmodel.phonenumber;
                //get current values from DB in case some values were not updated
-                                        
+
                //link the profiledata entities
                p.modificationdate = DateTime.Now;
                //manually update model i think
@@ -362,7 +363,7 @@ namespace Shell.MVC2.Data
                p.profiledata.aboutme = AboutMe;
                p.profiledata.birthdate = birthdate;
                p.profiledata.mycatchyintroLine = MyCatchyIntroLine;
-              
+
                db.SaveChanges();
                //TOD DO
                //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
@@ -384,10 +385,10 @@ namespace Shell.MVC2.Data
                throw ex;
 
            }
-           return messages ;
+           return messages;
        }
        //TO DO add validation and pass back via messages 
-     
+
        #endregion
 
 
@@ -399,13 +400,14 @@ namespace Shell.MVC2.Data
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
 
-     
-          // var newmodel2 = this.getAppearancesettingsviewmodel(profile.id);
 
-           messages = (updateprofileappearancesettings(newmodel, profileid, messages));
-          // messages = (EditProfileAppearanceSettingsPage2Update(newmodel, profileid, messages));
-          // messages = (EditProfileAppearanceSettingsPage3Update(newmodel, profileid, messages));
-         //  messages = (EditProfileAppearanceSettingsPage4Update(newmodel, profileid, messages));
+           //get the profile details :
+           profile p = db.profiles.Where(z => z.id == profileid).First(); 
+
+           messages = (updateprofileappearancesettings(newmodel, p, messages));
+           // messages = (EditProfileAppearanceSettingsPage2Update(newmodel, profileid, messages));
+           // messages = (EditProfileAppearanceSettingsPage3Update(newmodel, profileid, messages));
+           //  messages = (EditProfileAppearanceSettingsPage4Update(newmodel, profileid, messages));
 
            if (messages.errormessages.Count > 0)
            {
@@ -417,44 +419,44 @@ namespace Shell.MVC2.Data
        }
 
        //TO DO send back the messages on errors and when nothing is changed
-       private AnewluvMessages updateprofileappearancesettings(AppearanceSettingsModel  newmodel,int profileid, AnewluvMessages messages)
+       private AnewluvMessages updateprofileappearancesettings(AppearanceSettingsModel newmodel, profile p, AnewluvMessages messages)
        {
            bool nothingupdated = true;
 
            try
            {
-               profile p = db.profiles.Where(z => z.id == profileid).First();
-             //sample code for determining weather to edit an item or not or determin if a value changed'
-             //nothingupdated = (newmodel.height  == p.profiledata.height) ? false : true;
+               //profile p = db.profiles.Where(z => z.id == profileid).First();
+               //sample code for determining weather to edit an item or not or determin if a value changed'
+               //nothingupdated = (newmodel.height  == p.profiledata.height) ? false : true;
 
-             //only update items that are not null
-             var height = (newmodel.height == p.profiledata.height) ? newmodel.height : null;
-             var bodytype = (newmodel.bodytype == p.profiledata.bodytype ) ? newmodel.bodytype : null ;
-             var haircolor = (newmodel.haircolor  == p.profiledata.haircolor ) ? newmodel.haircolor : null;
-             var eyecolor = (newmodel.eyecolor  == p.profiledata.eyecolor ) ? newmodel.eyecolor : null;
-             //TO DO test if anything changed
-             var hotfeatures = newmodel.hotfeaturelist;
-             //TO DO test if anything changed
-             var ethicities = newmodel.ethnicitylist;
-           
+               //only update items that are not null
+               var height = (newmodel.height == p.profiledata.height) ? newmodel.height : null;
+               var bodytype = (newmodel.bodytype == p.profiledata.bodytype) ? newmodel.bodytype : null;
+               var haircolor = (newmodel.haircolor == p.profiledata.haircolor) ? newmodel.haircolor : null;
+               var eyecolor = (newmodel.eyecolor == p.profiledata.eyecolor) ? newmodel.eyecolor : null;
+               //TO DO test if anything changed
+               var hotfeatures = newmodel.hotfeaturelist;
+               //TO DO test if anything changed
+               var ethicities = newmodel.ethnicitylist;
+
 
 
                //update my settings 
                //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
 
-             if (height.HasValue == true) p.profiledata.height = height;
-             if (bodytype  != null) p.profiledata.bodytype  = bodytype ;
-             if (haircolor  != null) p.profiledata.haircolor  = haircolor ;
-             if (eyecolor  != null) p.profiledata.eyecolor = eyecolor ;
-             if (hotfeatures.Count >0) p.profiledata.height = height;
-             if (height.HasValue == true) p.profiledata.height = height;
-             if (height.HasValue == true) p.profiledata.height = height;
+               if (height.HasValue == true) p.profiledata.height = height;
+               if (bodytype != null) p.profiledata.bodytype = bodytype;
+               if (haircolor != null) p.profiledata.haircolor = haircolor;
+               if (eyecolor != null) p.profiledata.eyecolor = eyecolor;
+               if (hotfeatures.Count > 0) p.profiledata.height = height;
+               if (height.HasValue == true) p.profiledata.height = height;
+               if (height.HasValue == true) p.profiledata.height = height;
 
-             if (hotfeatures.Count > 0)
-                 updateprofilemetatdatahotfeature(hotfeatures, p.profilemetadata);
-             if (ethicities.Count > 0)
-               updateprofilemetatdataethnicity(ethicities, p.profilemetadata);
-               
+               if (hotfeatures.Count > 0)
+                   updateprofilemetatdatahotfeature(hotfeatures, p.profilemetadata);
+               if (ethicities.Count > 0)
+                   updateprofilemetatdataethnicity(ethicities, p.profilemetadata);
+
 
                //db.Entry(profiledata).State = EntityState.Modified;
                int changes = db.SaveChanges();
@@ -466,7 +468,7 @@ namespace Shell.MVC2.Data
 
                //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
                //model.CurrentErrors.Clear();
-              // return model;
+               // return model;
            }
            catch (DataException dx)
            {
@@ -485,8 +487,8 @@ namespace Shell.MVC2.Data
 
            }
            return messages;
-           
-          
+
+
 
        }
 
@@ -495,15 +497,16 @@ namespace Shell.MVC2.Data
 
        #region "Edit profile LifeStyle Settings Updates here"
 
-       public AnewluvMessages editprofilelifestylesettings(LifeStyleSettingsModel  newmodel, int profileid)
+       public AnewluvMessages editprofilelifestylesettings(LifeStyleSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
 
 
-           // var newmodel2 = this.getlifestylesettingsviewmodel(profile.id);
+           //get the profile details :
+           profile p = db.profiles.Where(z => z.id == profileid).First(); 
 
-           messages = (updateprofilelifestylesettings(newmodel, profileid, messages));
+           messages = (updateprofilelifestylesettings(newmodel, p, messages));
            // messages = (EditProfilelifestyleSettingsPage2Update(newmodel, profileid, messages));
            // messages = (EditProfilelifestyleSettingsPage3Update(newmodel, profileid, messages));
            //  messages = (EditProfilelifestyleSettingsPage4Update(newmodel, profileid, messages));
@@ -518,13 +521,13 @@ namespace Shell.MVC2.Data
        }
 
        //TO DO send back the messages on errors and when nothing is changed
-       private AnewluvMessages updateprofilelifestylesettings(LifeStyleSettingsModel  newmodel, int profileid, AnewluvMessages messages)
+       private AnewluvMessages updateprofilelifestylesettings(LifeStyleSettingsModel newmodel,profile p, AnewluvMessages messages)
        {
            bool nothingupdated = true;
 
            try
            {
-               profile p = db.profiles.Where(z => z.id == profileid).First();
+              // profile p = db.profiles.Where(z => z.id == profileid).First();
                //sample code for determining weather to edit an item or not or determin if a value changed'
                //nothingupdated = (newmodel.educationlevel  == p.profiledata.educationlevel) ? false : true;
 
@@ -532,14 +535,14 @@ namespace Shell.MVC2.Data
                var educationlevel = (newmodel.educationlevel == p.profiledata.educationlevel) ? newmodel.educationlevel : null;
                var employmentstatus = (newmodel.employmentstatus == p.profiledata.employmentstatus) ? newmodel.employmentstatus : null;
                var incomelevel = (newmodel.incomelevel == p.profiledata.incomelevel) ? newmodel.incomelevel : null;
-               var wantskids = (newmodel.wantskids == p.profiledata.wantsKidstatus) ? newmodel.wantskids : null;              
+               var wantskids = (newmodel.wantskids == p.profiledata.wantsKidstatus) ? newmodel.wantskids : null;
                var profession = (newmodel.profession == p.profiledata.profession) ? newmodel.profession : null;
                var maritalstatus = (newmodel.maritalstatus == p.profiledata.maritalstatus) ? newmodel.maritalstatus : null;
                var livingsituation = (newmodel.livingsituation == p.profiledata.livingsituation) ? newmodel.livingsituation : null;
-               var havekids = (newmodel.havekids == p.profiledata.kidstatus ) ? newmodel.havekids : null;
+               var havekids = (newmodel.havekids == p.profiledata.kidstatus) ? newmodel.havekids : null;
                //TO DO test if anything changed
                var lookingfors = newmodel.lookingforlist;
-              
+
 
 
 
@@ -549,11 +552,11 @@ namespace Shell.MVC2.Data
                if (educationlevel != null) p.profiledata.educationlevel = educationlevel;
                if (employmentstatus != null) p.profiledata.employmentstatus = employmentstatus;
                if (incomelevel != null) p.profiledata.incomelevel = incomelevel;
-               if (wantskids != null) p.profiledata.wantsKidstatus  = wantskids;
+               if (wantskids != null) p.profiledata.wantsKidstatus = wantskids;
                if (profession != null) p.profiledata.profession = profession;
                if (maritalstatus != null) p.profiledata.maritalstatus = maritalstatus;
-               if (livingsituation != null) p.profiledata.livingsituation = livingsituation;              
-               if (havekids != null) p.profiledata.kidstatus  = havekids ;
+               if (livingsituation != null) p.profiledata.livingsituation = livingsituation;
+               if (havekids != null) p.profiledata.kidstatus = havekids;
 
                if (lookingfors.Count > 0)
                    updateprofilemetatdatalookingfor(lookingfors, p.profilemetadata);
@@ -601,15 +604,16 @@ namespace Shell.MVC2.Data
        #region "Edit profile Character Settings Updates here"
 
 
-       public AnewluvMessages editprofilecharactersettings(CharacterSettingsModel  newmodel, int profileid)
+       public AnewluvMessages editprofilecharactersettings(CharacterSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
 
 
-           // var newmodel2 = this.getcharactersettingsviewmodel(profile.id);
+           //get the profile details :
+           profile p = db.profiles.Where(z => z.id == profileid).First(); 
 
-           messages = (updateprofilecharactersettings(newmodel, profileid, messages));
+           messages = (updateprofilecharactersettings(newmodel, p, messages));
            // messages = (EditProfilecharacterSettingsPage2Update(newmodel, profileid, messages));
            // messages = (EditProfilecharacterSettingsPage3Update(newmodel, profileid, messages));
            //  messages = (EditProfilecharacterSettingsPage4Update(newmodel, profileid, messages));
@@ -624,13 +628,13 @@ namespace Shell.MVC2.Data
        }
 
        //TO DO send back the messages on errors and when nothing is changed
-       private AnewluvMessages updateprofilecharactersettings(CharacterSettingsModel  newmodel, int profileid, AnewluvMessages messages)
+       private AnewluvMessages updateprofilecharactersettings(CharacterSettingsModel newmodel, profile p, AnewluvMessages messages)
        {
            bool nothingupdated = true;
 
            try
            {
-               profile p = db.profiles.Where(z => z.id == profileid).First();
+              // profile p = db.profiles.Where(z => z.id == profileid).First();
                //sample code for determining weather to edit an item or not or determin if a value changed'
                //nothingupdated = (newmodel.diet  == p.profiledata.diet) ? false : true;
 
@@ -638,13 +642,14 @@ namespace Shell.MVC2.Data
                var diet = (newmodel.diet == p.profiledata.diet) ? newmodel.diet : null;
                var humor = (newmodel.humor == p.profiledata.humor) ? newmodel.humor : null;
                var drinking = (newmodel.drinking == p.profiledata.drinking) ? newmodel.drinking : null;
-               var excercise = (newmodel.excercise == p.profiledata.excercisetatus) ? newmodel.excercise : null;
+               var excercise = (newmodel.excercise == p.profiledata.exercise ) ? newmodel.excercise : null;
                var smoking = (newmodel.smoking == p.profiledata.smoking) ? newmodel.smoking : null;
                var sign = (newmodel.sign == p.profiledata.sign) ? newmodel.sign : null;
-               var livingsituation = (newmodel.livingsituation == p.profiledata.livingsituation) ? newmodel.livingsituation : null;
-               var havekids = (newmodel.havekids == p.profiledata.kidstatus) ? newmodel.havekids : null;
+               var politicalview = (newmodel.politicalview  == p.profiledata.politicalview) ? newmodel.politicalview : null;
+               var religion = (newmodel.religion  == p.profiledata.religion) ? newmodel.religion  : null;
+               var religiousattendance = (newmodel.religiousattendance == p.profiledata.religiousattendance) ? newmodel.religiousattendance : null;
                //TO DO test if anything changed
-               var lookingfors = newmodel.lookingforlist;
+               var hobylist  = newmodel.hobbylist;
 
 
 
@@ -655,13 +660,14 @@ namespace Shell.MVC2.Data
                if (diet != null) p.profiledata.diet = diet;
                if (humor != null) p.profiledata.humor = humor;
                if (drinking != null) p.profiledata.drinking = drinking;
-               if (excercise != null) p.profiledata.excercisetatus = excercise;
+               if (excercise != null) p.profiledata.exercise  = excercise;
                if (smoking != null) p.profiledata.smoking = smoking;
                if (sign != null) p.profiledata.sign = sign;
-               if (livingsituation != null) p.profiledata.livingsituation = livingsituation;
-               if (lookingfors.Count > 0) p.profiledata.diet = diet;
-               if (lookingfors.Count > 0)
-                   updateprofilemetatdatalookingfor(lookingfors, p.profilemetadata);
+               if (politicalview != null) p.profiledata.politicalview  = politicalview ;
+               if (religion != null) p.profiledata.religion = religion;
+               if (religiousattendance != null) p.profiledata.religiousattendance = religiousattendance;
+               if (hobylist.Count > 0)
+                   updateprofilemetatdatahobby(hobylist, p.profilemetadata);
 
 
 
@@ -702,6 +708,9 @@ namespace Shell.MVC2.Data
 
 
        #endregion
+       #endregion
+
+    
        
 
        //TO DO move to search setting repo i think

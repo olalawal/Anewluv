@@ -10,10 +10,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     public class AppearanceSearchSettingsModel
     {
         //appereance search settings 
-       [DataMember] 
-       public string heightmax { get; set; }
-       [DataMember]
-       public string heightmin { get; set; }
+
+        [DataMember]
+        public int? heightmax { get; set; }
+        [DataMember]
+        public int? heightmin { get; set; }
        [DataMember]
        public List<lu_ethnicity> ethnicitylist { get; set; } // = new List<string>();
        [DataMember]

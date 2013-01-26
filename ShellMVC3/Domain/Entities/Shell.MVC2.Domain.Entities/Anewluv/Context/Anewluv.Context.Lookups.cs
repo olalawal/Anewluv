@@ -29,5 +29,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<lu_sortbytype > lu_sortbytype { get; set; }
         public DbSet<lu_securityquestion> lu_securityquestion { get; set; }
         public DbSet<lu_flagyesno> lu_flagyesno { get; set; }
+        //1-25-2012 olawal added viratual
+        //public DbSet<lu_location> lu_location { get; set; }
     }
 }

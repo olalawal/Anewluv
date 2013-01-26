@@ -10,31 +10,42 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     [DataContract]
     public class BasicSearchSettingsModel
     {
-           
-       //Match settings i.e search
-       [DataMember]
-       [Range(0, 5000, ErrorMessage = "DistanceFrom must be a postive number no greater than 5000")]
-       public int? maxdistancefromme { get; set; }
-       [DataMember]
-       public int? seekingagemin { get; set; }
-       [DataMember]
-       public int? seekingagemax { get; set; }
-       [DataMember]
-       public string country { get; set; }
-       [DataMember]
-       public string citystateprovince { get; set; }
-       [DataMember]
-       public string postalcode { get; set; }
-       //add the propeties for bound litsts here
-       [DataMember]
-       public IList<lu_showme> showmelist = new List<lu_showme>();
-       [DataMember]
-       public IList<lu_sortbytype> sortbytypelist = new List<lu_sortbytype>();
-       //gender is now allowing multiple selections
-       [DataMember]
-       public IList<lu_gender> genderslist = new List<lu_gender>();
 
-        // public SelectList Genders { get; set; }
+        [DataMember]
+        public int? agemax { get; set; }
+        [DataMember]
+        public int? agemin { get; set; }
+        [DataMember]
+        public DateTime? creationdate { get; set; }
+        [DataMember]
+        public int? distancefromme { get; set; }
+        //Moved to appearabnce settings
+        //[DataMember]
+        //public int? heightmax { get; set; }
+        //[DataMember]
+        //public int? heightmin { get; set; }
+        [DataMember]
+        public DateTime? lastupdatedate { get; set; }
+        [DataMember]
+        public bool? myperfectmatch { get; set; }
+        [DataMember]
+        public bool? savedsearch { get; set; }
+        [DataMember]
+        public string searchname { get; set; }
+        [DataMember]
+        public int? searchrank { get; set; }
+        [DataMember]
+        //public int searchsettingsid { get; set; }
+        // [DataMember]
+        public bool? systemmatch { get; set; }
 
+        [DataMember]
+        public List<lu_showme> showmelist { get; set; }
+        [DataMember]
+        public List<lu_gender> genderlist { get; set; }
+        [DataMember]
+        public List<lu_sortbytype> sortbylist { get; set; }
+        [DataMember]
+        public List<searchsetting_location> locationlist { get; set; }
     }
 }

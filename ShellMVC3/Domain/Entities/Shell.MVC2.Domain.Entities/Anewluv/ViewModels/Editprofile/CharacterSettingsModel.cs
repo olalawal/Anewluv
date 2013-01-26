@@ -12,9 +12,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
          [DataMember ]
          public lu_diet diet { get; set; }
          [DataMember]
-         public lu_humor humor { get; set; }
-         [DataMember]
-         public List<lu_hobby> hobbylist { get; set; }
+         public lu_humor humor { get; set; }                 
          [DataMember]
          public lu_drinks drinking { get; set; }
          [DataMember]
@@ -28,6 +26,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
          [DataMember]
          public lu_religion religion { get; set; }
          [DataMember]
-         public lu_religiousattendance myreligiousattendance { get; set; }
+         public lu_religiousattendance religiousattendance { get; set; }
+         [DataMember]
+         public List<lu_hobby> hobbylist { get; set; }
     }
 }

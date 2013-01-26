@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
+using System.Text;using System.ComponentModel.DataAnnotations;using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
     [DataContract]
-    public class searchsetting_location
+    [NotMapped]  //From a different database no need to map to the database its virtual
+    public class lu_location
     {
-
         [Key]
         public int id { get; set; }
         [DataMember]
@@ -21,10 +20,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public string postalcode { get; set; }
         [NotMapped]
         [DataMember]
-        public bool selected { get; set; } 
-        public virtual searchsetting  searchsetting { get; set; } 
+        public bool selected { get; set; }
 
-
-       
+    
     }
 }

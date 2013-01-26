@@ -10,6 +10,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class searchsetting
     {
         [Key]
+        [DataMember]
         public int id { get; set; }
         [DataMember]
         public int profile_id { get; set; }
@@ -47,7 +48,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public virtual ICollection<searchsetting_drink>  drinks { get; set; }        
         public virtual ICollection<searchsetting_educationlevel>  educationlevels { get; set; }        
         public virtual ICollection<searchsetting_employmentstatus>  employmentstatus { get; set; }        
-        public virtual ICollection<searchsetting_ethnicity>  ethnicitys { get; set; }        
+        public virtual ICollection<searchsetting_ethnicity>  ethnicities { get; set; }        
         public virtual ICollection<searchsetting_exercise>  exercises { get; set; }        
         public virtual ICollection<searchsetting_eyecolor>  eyecolors { get; set; }        
         public virtual ICollection<searchsetting_gender>  genders { get; set; }        

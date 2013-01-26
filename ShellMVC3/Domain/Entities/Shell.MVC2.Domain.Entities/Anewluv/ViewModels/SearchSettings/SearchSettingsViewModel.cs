@@ -21,8 +21,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         //basic settings  
         public BasicSearchSettingsModel basicsearchsettings { get; set; }     
         public AppearanceSearchSettingsModel appearancesearchsettings { get; set; }      
-        public LifeStyleSettingsModel lifestylesearchsettings { get; set; }      
-        public CharacterSettingsModel   charactersearchsettings { get; set; }
+        public LifeStyleSearchSettingsModel lifestylesearchsettings { get; set; }      
+        public CharacterSearchSettingsModel   charactersearchsettings { get; set; }
         //index of what page we are looking at i.e we want to split up this model into diff partial views
         public int viewindex { get; set; }
         public bool postalcodestatus { get; set; }

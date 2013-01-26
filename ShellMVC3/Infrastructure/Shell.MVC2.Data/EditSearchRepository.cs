@@ -32,8 +32,9 @@ namespace Shell.MVC2.Data
         {
         }
 
-        #region "basic searchsetting get methods"      
-        public searchsetting getsearchsetting(int profileid, string searchname, int? searchrank)
+        #region "searchsetting table get methods"      
+      
+       public searchsetting getsearchsetting(int profileid, string searchname, int? searchrank)
         {
 
                               
@@ -67,7 +68,8 @@ namespace Shell.MVC2.Data
             }
             //return null;
         }
-        public List<searchsetting> getsearchsettings(int profileid)
+  
+       public List<searchsetting> getsearchsettings(int profileid)
         {
 
 
@@ -98,7 +100,8 @@ namespace Shell.MVC2.Data
             }
             //return null;
         }
-        public SearchSettingsViewModel getsearchsettingsviewmodel(int profileid,string searchname,int? searchrank )
+    
+       public SearchSettingsViewModel getsearchsettingsviewmodel(int profileid,string searchname,int? searchrank )
         {
 
            try
@@ -144,14 +147,16 @@ namespace Shell.MVC2.Data
            }
 
        }
+    
         #endregion
         //basic settings  
-        #region "Get methods here to return search settings values as well as the entire bound models as needed"
+       
+       #region "Get methods here to return search settings values as well as the entire bound models as needed"
       
        
         public BasicSearchSettingsModel getbasicsearchsettings(int searchid)
         {
-            BasicSearchSettingsModel returnmodel = new BasicSearchSettingsModel();
+      
 
             try
             {
@@ -163,72 +168,63 @@ namespace Shell.MVC2.Data
                 //populate values here ok ?
                 if (p != null)
 
+                  model.distancefromme  = (p.distancefromme == 0 ||p.distancefromme  == null) ? p.distancefromme.GetValueOrDefault()  : 0;
+                  model.agemin = p.agemax == null ? 18 : p.agemin.GetValueOrDefault();
+                  model.agemax  = p.agemax == null ? 120 : p.agemax.GetValueOrDefault();
 
-                    // model. = p.searchname == null ? "Unamed Search" : p.searchname;
-                    //model.di = p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();
-                    // model.searchrank = p.searchrank == null ? 0 : p.searchrank.GetValueOrDefault();
+                  model.creationdate = p.creationdate == null ? null : p.creationdate;
+                //this is done in inches and stuff , convert to metric as needed on UI
+ 
+                  model.lastupdatedate  = p.lastupdatedate  == null ? null : p.lastupdatedate;
+                  model.searchname = p.searchname  == "" ? "" : p.searchname ;    
+                  model.searchrank =  p.searchrank  == null ? 0 : p.searchrank;   
+                  model.myperfectmatch = p.myperfectmatch == null ? false : p.myperfectmatch.Value;
+                  model.systemmatch = p.systemmatch == null ? false : p.systemmatch.Value;
+                  model.savedsearch = p.savedsearch == null ? false : p.savedsearch.Value;
 
-                    //populate ages select list here I guess
-                    //TODO get from app fabric
-                    // SharedRepository sharedrepository = new SharedRepository();
-                    //Ages = sharedrepository.AgesSelectList;
+                  var showmevalues = new HashSet<int>(p.showme.Select(c => c.showme.id));
+                  foreach (var _showme in db.lu_showme)
+                  {
+                      model.showmelist.Add(new lu_showme
+                      {
+                          id = _showme.id,
+                          description = _showme.description,
+                          selected = showmevalues.Contains(_showme.id)
+                      });
+                  }
 
-                    model.br = p.agemax == null ? 99 : p.agemax.GetValueOrDefault();
-                //  model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
+                 
 
+                  var sortbyvalues = new HashSet<int>(p.sortbytypes.Select(c => c.sortbytype.id));
+                  foreach (var _sortby in db.lu_sortbytype)
+                  {
+                      model.sortbylist.Add(new lu_sortbytype 
+                      {
+                          id = _sortby.id,
+                          description = _sortby.description,
+                          selected = sortbyvalues.Contains(_sortby.id)
+                      });
+                  }
 
-
-
-                model.myperfectmatch = p.myperfectmatch == null ? false : p.myperfectmatch.Value;
-                model.systemmatch = p.systemmatch == null ? false : p.systemmatch.Value;
-                model.savedsearch = p.savedsearch == null ? false : p.savedsearch.Value;
-
-                //pilot how to show the rest of the values 
-                //sample of doing string values
-                var allShowMe = db.lu_showme;
-                var ShowMeValues = new HashSet<int>(p.showme.Select(c => c.id.GetValueOrDefault()));
-                //foreach (var item in p.ShowMe )
-                //{
-                //    (item.ShowMe.ShowMeName);
-                //}
-                foreach (var _ShowMe in allShowMe)
-                {
-                    model.showmelist.Add(new lu_showme
-                    {
-                        id = _ShowMe.id,
-                        description = _ShowMe.description,
-                        selected = ShowMeValues.Contains(_ShowMe.id)
-                    });
-                }
-
-                var allSortByTypes = db.lu_sortbytype;
-                var SortByTypeValues = new HashSet<int>(p.sortbytypes.Select(c => c.id.GetValueOrDefault()));
-
-                foreach (var _SortByType in allSortByTypes)
-                {
-                    model.sortbytypelist.Add(new lu_sortbytype
-                    {
-                        description = _SortByType.description,
-                        id = _SortByType.id,
-                        selected = SortByTypeValues.Contains(_SortByType.id)
-                    });
-                }
-
-
-                //populate BodyTypes uings other test value type
-                //TEST how this works vs other method
-                //foreach (var item in p.SortByType)
-                //{
-                //    SortBy.Add(item.SortByType);
-                //}
+                //Different since theer is not a lookup for these.
+                  var locationvalues = new HashSet<int>(p.locations .Select(c => c.id));
+                  foreach (var _location in db.searchsetting_location )
+                  {
+                      model.locationlist.Add(new searchsetting_location 
+                      {
+                          id = _location.id,
+                           city  = _location.city,
+                            countryid = _location.countryid ,
+                             postalcode = _location.postalcode ,
+                          selected = locationvalues.Contains(_location.id)
+                      });
+                  }
 
 
-                var allgenders = db.lu_gender;
-                var gendervalues = new HashSet<int>(p.genders.Select(c => c.id.GetValueOrDefault()));
-
+                 var gendervalues = new HashSet<int>(p.genders.Select(c => c.gender.id));
                 //set default if non selected
                 // logic is if its a female then show them the male checked and vice versa
-                if (gendervalues.Count == 0)
+                if (gendervalues.Count  == 0)
                 {
                     if (p.profilemetadata.profile.profiledata.gender.id == 1)
                     {
@@ -240,35 +236,21 @@ namespace Shell.MVC2.Data
                     }
                 }
 
-
-                foreach (var _gender in allgenders)
+                //now populate the checkboxes               
+                foreach (var _genders in db.lu_gender)
                 {
-                    model.genderslist.Add(new lu_gender
+                    model.genderlist.Add(new lu_gender
                     {
-                        description = _gender.description,
-                        id = _gender.id,
-                        selected = SortByTypeValues.Contains(_gender.id)
+                        id = _genders.id,
+                        description = _genders.description,
+                        selected = gendervalues.Contains(_genders.id)
                     });
                 }
 
 
+               return model;
 
-
-
-                //for the gender only select one , the oposite of the members 
-                //set defualts
-                //if (p.Genders  == 1)
-                //{
-                //    LookingForGender = "Male";
-                //}
-                //else
-                //{
-                //    LookingForGender = "Female";
-                //}
-
-                return model;
-
-                return returnmodel;
+            
             }
             catch (DataException dx)
             {
@@ -288,67 +270,50 @@ namespace Shell.MVC2.Data
             }
 
         }       
-       public AppearanceSearchSettingsModel getappearancesearchsettings(int searchid)
+
+        public AppearanceSearchSettingsModel getappearancesearchsettings(int searchid)
        {
-           AppearanceSearchSettingsModel returnmodel = new AppearanceSearchSettingsModel();
+          
 
            try
            {
-               searchsetting p = db.searchsetting.Where(z => z.profile_id == intprofileid && z.myperfectmatch == true).FirstOrDefault();
-               AppearanceSettingsViewModel model = new AppearanceSettingsViewModel();
+
+               searchsetting p = db.searchsetting.Where(z => z.id == searchid).FirstOrDefault();
+               AppearanceSearchSettingsModel model = new AppearanceSearchSettingsModel();
 
                //hight in inches max defualt is 7"6 min default is 4"0
-               model.heightmax = p.heightmax == null ? -1 : p.heightmax.GetValueOrDefault();
-               model.heightmin = p.heightmin == null ? -1 : p.heightmin.GetValueOrDefault();
+               model.heightmax = p.heightmax == null ? 89 : p.heightmax.GetValueOrDefault();
+               model.heightmin = p.heightmin == null ? 48 : p.heightmin.GetValueOrDefault();
 
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var allbodytype = db.lu_bodytype;
-               var bodytypevalues = new HashSet<int>(p.bodytypes.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.bodytype )
-               //{
-               //    (item.bodytype.bodytypeName);
-               //}
-               foreach (var _bodytype in allbodytype)
-               {
-                   model.bodytypeslist.Add(new lu_bodytype
-                   {
-                       id = _bodytype.id,
-                       description = _bodytype.description,
-                       selected = bodytypevalues.Contains(_bodytype.id)
-                   });
-               }
 
-               //ethnicities
-               //pilot how to show the rest of the values 
-               //sample of doing string values
-               var allethnicity = db.lu_ethnicity;
-               var ethnicityvalues = new HashSet<int>(p.ethnicitys.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.ethnicity )
-               //{
-               //    (item.ethnicity.ethnicityName);
-               //}
-               foreach (var _ethnicity in allethnicity)
+               var ethncityvalues = new HashSet<int>(p.ethnicities.Select(c => c.ethnicity.id));
+               foreach (var _ethnicity in db.lu_ethnicity)
                {
                    model.ethnicitylist.Add(new lu_ethnicity
                    {
                        id = _ethnicity.id,
                        description = _ethnicity.description,
-                       selected = ethnicityvalues.Contains(_ethnicity.id)
+                       selected = ethncityvalues.Contains(_ethnicity.id)
                    });
                }
 
-               //eye color 
 
-               //pilot how to show the rest of the values 
-               //sample of doing string values
-               var alleyecolor = db.lu_eyecolor;
-               var eyecolorvalues = new HashSet<int>(p.eyecolors.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.eyecolor )
-               //{
-               //    (item.eyecolor.eyecolorName);
-               //}
-               foreach (var _eyecolor in alleyecolor)
+               var bodytypesvalues = new HashSet<int>(p.bodytypes.Select(c => c.bodytype.id));
+               foreach (var _bodytypes in db.lu_bodytype)
+               {
+                   model.bodytypeslist.Add(new lu_bodytype
+                   {
+                       id = _bodytypes.id,
+                       description = _bodytypes.description,
+                       selected = bodytypesvalues.Contains(_bodytypes.id)
+                   });
+               }
+
+
+               var eyecolorvalues = new HashSet<int>(p.eyecolors.Select(c => c.eyecolor.id));
+               foreach (var _eyecolor in db.lu_eyecolor)
                {
                    model.eyecolorlist.Add(new lu_eyecolor
                    {
@@ -358,16 +323,9 @@ namespace Shell.MVC2.Data
                    });
                }
 
-               // hair color
-               //pilot how to show the rest of the values 
-               //sample of doing string values
-               var allhaircolor = db.lu_haircolor;
-               var haircolorvalues = new HashSet<int>(p.haircolors.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.haircolor )
-               //{
-               //    (item.haircolor.haircolorName);
-               //}
-               foreach (var _haircolor in allhaircolor)
+
+               var haircolorvalues = new HashSet<int>(p.haircolors.Select(c => c.haircolor.id));
+               foreach (var _haircolor in db.lu_haircolor)
                {
                    model.haircolorlist.Add(new lu_haircolor
                    {
@@ -377,15 +335,9 @@ namespace Shell.MVC2.Data
                    });
                }
 
-               //pilot how to show the rest of the values 
-               //sample of doing string values
-               var allhotfeature = db.lu_hotfeature;
-               var hotfeaturevalues = new HashSet<int>(p.hotfeatures.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.hotfeature )
-               //{
-               //    (item.hotfeature.hotfeatureName);
-               //}
-               foreach (var _hotfeature in allhotfeature)
+
+               var hotfeaturevalues = new HashSet<int>(p.hotfeatures.Select(c => c.hotfeature.id));
+               foreach (var _hotfeature in db.lu_hotfeature)
                {
                    model.hotfeaturelist.Add(new lu_hotfeature
                    {
@@ -395,9 +347,10 @@ namespace Shell.MVC2.Data
                    });
                }
 
+
                return model;
 
-               return returnmodel;
+             
            }
            catch (DataException dx)
            {
@@ -416,26 +369,23 @@ namespace Shell.MVC2.Data
 
            }
        }
-       public CharacterSettingsModel getcharactersearchsettings(int searchid)
+
+        public CharacterSearchSettingsModel getcharactersearchsettings(int searchid)
        {
-           CharacterSettingsModel returnmodel = new CharacterSettingsModel();
+    
 
 
            try
            {
-               searchsetting p = db.searchsetting.Where(z => z.profile_id == intprofileid && z.myperfectmatch == true).FirstOrDefault();
-               CharacterSettingsViewModel model = new CharacterSettingsViewModel();
+               searchsetting p = db.searchsetting.Where(z => z.id == searchid).FirstOrDefault();
+               CharacterSearchSettingsModel model = new CharacterSearchSettingsModel();
+            
                #region "Diet"
                //Diet checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var alldiet = db.lu_diet;
-               var dietvalues = new HashSet<int>(p.diets.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.diet )
-               //{
-               //    (item.diet.dietName);
-               //}
-               foreach (var _diet in alldiet)
+               var dietvalues = new HashSet<int>(p.diets.Select(c => c.diet.id));
+               foreach (var _diet in db.lu_diet)
                {
                    model.dietlist.Add(new lu_diet
                    {
@@ -449,13 +399,8 @@ namespace Shell.MVC2.Data
                //Humor checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var allhumor = db.lu_humor;
-               var humorvalues = new HashSet<int>(p.humors.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.humor )
-               //{
-               //    (item.humor.humorName);
-               //}
-               foreach (var _humor in allhumor)
+               var humorvalues = new HashSet<int>(p.humors.Select(c => c.humor.id));
+               foreach (var _humor in db.lu_humor)
                {
                    model.humorlist.Add(new lu_humor
                    {
@@ -469,13 +414,8 @@ namespace Shell.MVC2.Data
                //Hobby checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var allhobby = db.lu_hobby;
-               var hobbyvalues = new HashSet<int>(p.hobbies.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.hobby )
-               //{
-               //    (item.hobby.hobbyName);
-               //}
-               foreach (var _hobby in allhobby)
+               var hobbyvalues = new HashSet<int>(p.hobbies .Select(c => c.hobby.id));
+               foreach (var _hobby in db.lu_hobby)
                {
                    model.hobbylist.Add(new lu_hobby
                    {
@@ -489,13 +429,12 @@ namespace Shell.MVC2.Data
                //Drinks checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var alldrinks = db.lu_drinks;
-               var drinksvalues = new HashSet<int>(p.drinks.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.drinks )
+              //foreach (var item in p.drinks )
                //{
                //    (item.drinks.drinksName);
                //}
-               foreach (var _drinks in alldrinks)
+               var drinksvalues = new HashSet<int>(p.drinks.Select(c => c.drink.id));
+               foreach (var _drinks in db.lu_drinks)
                {
                    model.drinkslist.Add(new lu_drinks
                    {
@@ -509,13 +448,8 @@ namespace Shell.MVC2.Data
                //Exercise checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var allexercise = db.lu_exercise;
-               var exercisevalues = new HashSet<int>(p.exercises.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.exercise )
-               //{
-               //    (item.exercise.exerciseName);
-               //}
-               foreach (var _exercise in allexercise)
+               var exercisevalues = new HashSet<int>(p.exercises.Select(c => c.exercise.id));
+               foreach (var _exercise in db.lu_exercise)
                {
                    model.exerciselist.Add(new lu_exercise
                    {
@@ -529,13 +463,8 @@ namespace Shell.MVC2.Data
                //Smokes checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var allsmokes = db.lu_smokes;
-               var smokesvalues = new HashSet<int>(p.smokes.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.smokes )
-               //{
-               //    (item.smokes.smokesName);
-               //}
-               foreach (var _smokes in allsmokes)
+               var smokesvalues = new HashSet<int>(p.smokes.Select(c => c.smoke.id));
+               foreach (var _smokes in db.lu_smokes)
                {
                    model.smokeslist.Add(new lu_smokes
                    {
@@ -549,13 +478,8 @@ namespace Shell.MVC2.Data
                //Sign checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var allsign = db.lu_sign;
-               var signvalues = new HashSet<int>(p.signs.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.sign )
-               //{
-               //    (item.sign.signName);
-               //}
-               foreach (var _sign in allsign)
+               var signvalues = new HashSet<int>(p.signs.Select(c => c.sign.id));
+               foreach (var _sign in db.lu_sign)
                {
                    model.signlist.Add(new lu_sign
                    {
@@ -569,13 +493,8 @@ namespace Shell.MVC2.Data
                //PoliticalView checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var allpoliticalview = db.lu_politicalview;
-               var politicalviewvalues = new HashSet<int>(p.politicalviews.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.politicalview )
-               //{
-               //    (item.politicalview.politicalviewName);
-               //}
-               foreach (var _politicalview in allpoliticalview)
+               var politicalviewvalues = new HashSet<int>(p.politicalviews.Select(c => c.politicalview.id));
+               foreach (var _politicalview in db.lu_politicalview)
                {
                    model.politicalviewlist.Add(new lu_politicalview
                    {
@@ -589,13 +508,8 @@ namespace Shell.MVC2.Data
                //Religion checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var allreligion = db.lu_religion;
-               var religionvalues = new HashSet<int>(p.religions.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.religion )
-               //{
-               //    (item.religion.religionName);
-               //}
-               foreach (var _religion in allreligion)
+               var religionvalues = new HashSet<int>(p.religions.Select(c => c.religion.id));
+               foreach (var _religion in db.lu_religion)
                {
                    model.religionlist.Add(new lu_religion
                    {
@@ -609,13 +523,8 @@ namespace Shell.MVC2.Data
                //ReligiousAttendance checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var allreligiousattendance = db.lu_religiousattendance;
-               var religiousattendancevalues = new HashSet<int>(p.religiousattendances.Select(c => c.id.GetValueOrDefault()));
-               //foreach (var item in p.religiousattendance )
-               //{
-               //    (item.religiousattendance.religiousattendanceName);
-               //}
-               foreach (var _religiousattendance in allreligiousattendance)
+               var religiousattendancevalues = new HashSet<int>(p.religiousattendances.Select(c => c.religiousattendance.id));
+               foreach (var _religiousattendance in db.lu_religiousattendance)
                {
                    model.religiousattendancelist.Add(new lu_religiousattendance
                    {
@@ -646,27 +555,22 @@ namespace Shell.MVC2.Data
            }
 
        }       
-       public LifeStyleSettingsModel getlifestylesearchsettings(int searchid)
+     
+       public LifeStyleSearchSettingsModel  getlifestylesearchsettings(int searchid)
         {
-            LifeStyleSettingsModel returnmodel = new LifeStyleSettingsModel();
-
+         
 
             try
             {
-                searchsetting p = db.searchsetting.Where(z => z.profile_id == intprofileid && z.myperfectmatch == true).FirstOrDefault();
-                LifeStyleSettingsViewModel model = new LifeStyleSettingsViewModel();
+                searchsetting p = db.searchsetting.Where(z => z.id == searchid).FirstOrDefault();
+                LifeStyleSearchSettingsModel model = new LifeStyleSearchSettingsModel();
 
                 #region "EducationLevel"
                 //EducationLevel checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var alleducationlevel = db.lu_educationlevel;
-                var educationlevelvalues = new HashSet<int>(p.educationlevels.Select(c => c.id.GetValueOrDefault()));
-                //foreach (var item in p.educationlevel )
-                //{
-                //    (item.educationlevel.educationlevelName);
-                //}
-                foreach (var _educationlevel in alleducationlevel)
+                var educationlevelvalues = new HashSet<int>(p.educationlevels.Select(c => c.educationlevel.id));
+                foreach (var _educationlevel in db.lu_educationlevel)
                 {
                     model.educationlevellist.Add(new lu_educationlevel
                     {
@@ -675,18 +579,14 @@ namespace Shell.MVC2.Data
                         selected = educationlevelvalues.Contains(_educationlevel.id)
                     });
                 }
+
                 #endregion
                 #region "EmploymentStatus"
                 //EmploymentStatus checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var allemploymentstatus = db.lu_employmentstatus;
-                var employmentstatusvalues = new HashSet<int>(p.employmentstatus.Select(c => c.id.GetValueOrDefault()));
-                //foreach (var item in p.employmentstatus )
-                //{
-                //    (item.employmentstatus.employmentstatusName);
-                //}
-                foreach (var _employmentstatus in allemploymentstatus)
+                var employmentstatusvalues = new HashSet<int>(p.employmentstatus.Select(c => c.employmentstatus.id));
+                foreach (var _employmentstatus in db.lu_employmentstatus)
                 {
                     model.employmentstatuslist.Add(new lu_employmentstatus
                     {
@@ -695,18 +595,14 @@ namespace Shell.MVC2.Data
                         selected = employmentstatusvalues.Contains(_employmentstatus.id)
                     });
                 }
+
                 #endregion
                 #region "IncomeLevel"
                 //IncomeLevel checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var allincomelevel = db.lu_incomelevel;
-                var incomelevelvalues = new HashSet<int>(p.incomelevels.Select(c => c.id.GetValueOrDefault()));
-                //foreach (var item in p.incomelevel )
-                //{
-                //    (item.incomelevel.incomelevelName);
-                //}
-                foreach (var _incomelevel in allincomelevel)
+                var incomelevelvalues = new HashSet<int>(p.incomelevels.Select(c => c.incomelevel.id));
+                foreach (var _incomelevel in db.lu_incomelevel)
                 {
                     model.incomelevellist.Add(new lu_incomelevel
                     {
@@ -715,18 +611,14 @@ namespace Shell.MVC2.Data
                         selected = incomelevelvalues.Contains(_incomelevel.id)
                     });
                 }
+
                 #endregion
                 #region "LookingFor"
                 //LookingFor checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var alllookingfor = db.lu_lookingfor;
-                var lookingforvalues = new HashSet<int>(p.lookingfor.Select(c => c.id.GetValueOrDefault()));
-                //foreach (var item in p.lookingfor )
-                //{
-                //    (item.lookingfor.lookingforName);
-                //}
-                foreach (var _lookingfor in alllookingfor)
+                var lookingforvalues = new HashSet<int>(p.lookingfor.Select(c => c.lookingfor.id));
+                foreach (var _lookingfor in db.lu_lookingfor)
                 {
                     model.lookingforlist.Add(new lu_lookingfor
                     {
@@ -742,13 +634,8 @@ namespace Shell.MVC2.Data
                 //WantsKids checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var allwantskids = db.lu_wantskids;
-                var wantskidsvalues = new HashSet<int>(p.wantkids.Select(c => c.id.GetValueOrDefault()));
-                //foreach (var item in p.wantskids )
-                //{
-                //    (item.wantskids.wantskidsName);
-                //}
-                foreach (var _wantskids in allwantskids)
+                var wantskidsvalues = new HashSet<int>(p.wantkids.Select(c => c.wantskids.id));
+                foreach (var _wantskids in db.lu_wantskids)
                 {
                     model.wantskidslist.Add(new lu_wantskids
                     {
@@ -757,19 +644,15 @@ namespace Shell.MVC2.Data
                         selected = wantskidsvalues.Contains(_wantskids.id)
                     });
                 }
+
                 #endregion
                 #region "Profession"
 
                 //Profession checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var allprofession = db.lu_profession;
-                var professionvalues = new HashSet<int>(p.professions.Select(c => c.id.GetValueOrDefault()));
-                //foreach (var item in p.profession )
-                //{
-                //    (item.profession.professionName);
-                //}
-                foreach (var _profession in allprofession)
+                var professionvalues = new HashSet<int>(p.professions.Select(c => c.profession.id));
+                foreach (var _profession in db.lu_profession)
                 {
                     model.professionlist.Add(new lu_profession
                     {
@@ -778,19 +661,15 @@ namespace Shell.MVC2.Data
                         selected = professionvalues.Contains(_profession.id)
                     });
                 }
+
                 #endregion
                 #region "Marital STatus"
 
                 //MaritalStatus checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var allmaritalstatus = db.lu_maritalstatus;
-                var maritalstatusvalues = new HashSet<int>(p.maritalstatuses.Select(c => c.id.GetValueOrDefault()));
-                //foreach (var item in p.maritalstatus )
-                //{
-                //    (item.maritalstatus.maritalstatusName);
-                //}
-                foreach (var _maritalstatus in allmaritalstatus)
+                var maritalstatusvalues = new HashSet<int>(p.maritalstatuses.Select(c => c.maritalstatus.id));
+                foreach (var _maritalstatus in db.lu_maritalstatus)
                 {
                     model.maritalstatuslist.Add(new lu_maritalstatus
                     {
@@ -799,19 +678,15 @@ namespace Shell.MVC2.Data
                         selected = maritalstatusvalues.Contains(_maritalstatus.id)
                     });
                 }
+
                 #endregion
                 #region "Living Situation"
 
                 //LivingSituation checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var alllivingsituation = db.lu_livingsituation;
-                var livingsituationvalues = new HashSet<int>(p.livingstituations.Select(c => c.id.GetValueOrDefault()));
-                //foreach (var item in p.livingsituation )
-                //{
-                //    (item.livingsituation.livingsituationName);
-                //}
-                foreach (var _livingsituation in alllivingsituation)
+                var livingsituationvalues = new HashSet<int>(p.livingstituations.Select(c => c.livingsituation.id));
+                foreach (var _livingsituation in db.lu_livingsituation)
                 {
                     model.livingsituationlist.Add(new lu_livingsituation
                     {
@@ -820,19 +695,15 @@ namespace Shell.MVC2.Data
                         selected = livingsituationvalues.Contains(_livingsituation.id)
                     });
                 }
+
                 #endregion
                 #region "HaveKids"
 
 
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var allhavekids = db.lu_havekids;
-                var havekidsvalues = new HashSet<int>(p.havekids.Select(c => c.id.GetValueOrDefault()));
-                //foreach (var item in p.havekids )
-                //{
-                //    (item.havekids.havekidsName);
-                //}
-                foreach (var _havekids in allhavekids)
+                var havekidsvalues = new HashSet<int>(p.havekids.Select(c => c.havekids.id));
+                foreach (var _havekids in db.lu_havekids)
                 {
                     model.havekidslist.Add(new lu_havekids
                     {
@@ -842,10 +713,11 @@ namespace Shell.MVC2.Data
                     });
                 }
 
+
                 #endregion
 
                 return model;
-                return returnmodel;
+             
             }
             catch (DataException dx)
             {
@@ -865,7 +737,9 @@ namespace Shell.MVC2.Data
             }
 
         }
+
         #endregion
+
         #region "Push/Post methods that save changes to entire search settings or peice meal as needed"
 
        #region "Basic Search Settings Edit"
@@ -875,16 +749,10 @@ namespace Shell.MVC2.Data
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
 
-           //get the profile details :
+           //get the searchsettings
+           searchsetting search = db.searchsetting.Where(d => d.id == searchid).First();
 
-           //create the search settings i.e matches if it does not exist 
-           // if (profile.profilemetadata.searchsettings.Count() == 0) _membersrepository.createmyperfectmatchsearchsettingsbyprofileid(_ProfileID);
-           // searchsetting SearchSettingsToUpdate = db.searchsetting.Where(p => p.profile_id  == _ProfileID && p.myperfectmatch == true && p.searchname  == "MyPerfectMatch").First();
-
-           //TO DO this might be suplerflous ?
-           //var  newmodel2 = this.getbasicsettingsmodel(profile.id);  
-
-           messages = (updatebasicsearchsettings(newmodel, searchid, messages));
+           messages = (updatebasicsearchsettings(newmodel, search, messages));
     
 
 
@@ -896,25 +764,106 @@ namespace Shell.MVC2.Data
            messages.message = "Edit Basic Settings Successful";
            return messages;
        }
-       private AnewluvMessages updatebasicsearchsettings(BasicSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
+     
+       private AnewluvMessages updatebasicsearchsettings(BasicSearchSettingsModel newmodel, searchsetting search, AnewluvMessages messages)
        {
-           searchsetting searchsettingstoupdate = db.searchsetting.Where(d=>d.id == searchid).First();
-
+         
            
-              //link the profiledata entities
-               profile.modificationdate = DateTime.Now;
-               oldsearchsettings.distancefromme = newmodel.distancefromme;
-               //TO DO move this code to searchssettings Repositoury             
-                 this.updatesearchsettingsshowme(newmodel.showmelist.ToList(), oldsearchsettings);
-                 this.updatesearchsettingssortbytype(newmodel.sortbytypelist.ToList(), oldsearchsettings);
+           
+              
+
+
+            bool nothingupdated = true;
+
+           try
+           {
+               //profile p = db.profiles.Where(z => z.id == profileid).First();
+               //sample code for determining weather to edit an item or not or determin if a value changed'
+               //nothingupdated = (newmodel.height  == search.height) ? false : true;
+
+               //only update items that seem to be changing or are different
+               var agemax = (newmodel.agemax  == search.agemax ) ? newmodel.agemax  : null;
+               var agemin = (newmodel.agemin  == search.agemin ) ? newmodel.agemin  : null;
+               var creationdate = (newmodel.creationdate  == search.creationdate ) ? newmodel.creationdate  : null;
+               var distancefromme = (newmodel.distancefromme  == search.distancefromme) ? newmodel.distancefromme : null;
+               var lastupdatedate = (newmodel.lastupdatedate  == search.lastupdatedate) ? newmodel.lastupdatedate : null;
+               var myperfectmatch = (newmodel.myperfectmatch == search.myperfectmatch) ? newmodel.myperfectmatch : null;
+               var savedsearch = (newmodel.savedsearch == search.savedsearch) ? newmodel.savedsearch : null;
+               var searchname = (newmodel.searchname == search.searchname) ? newmodel.searchname : null;
+               var searchrank = (newmodel.searchrank == search.searchrank) ? newmodel.searchrank : null;
+               var systemmatch = (newmodel.systemmatch == search.systemmatch) ? newmodel.systemmatch : null;
+               //TO DO test if anything changed
+               var showmelist = newmodel.showmelist ;
+               //TO DO test if anything changed
+               var genderlist = newmodel.genderlist ;
+                      //TO DO test if anything changed
+               var sortbylist = newmodel.sortbylist;
+                      //TO DO test if anything changed
+               var locationlist = newmodel.locationlist;
+
+
+               //update my settings 
+               //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
+
+               if (agemax.HasValue == true) search.agemax  = agemax;
+               if (agemin != null) search.agemin  = agemin;
+               if (creationdate  != null) search.creationdate  = creationdate ;
+               if (distancefromme  != null) search.distancefromme = distancefromme ;
+               if (lastupdatedate  != null) search.lastupdatedate = lastupdatedate ;
+               if (myperfectmatch   != null) search.myperfectmatch = myperfectmatch ;
+               if (savedsearch  != null) search.savedsearch = savedsearch ;
+               if (searchname  != null) search.searchname = searchname ;
+               if (searchrank  != null) search.searchrank = searchrank ;
+               if (systemmatch   != null) search.systemmatch  = systemmatch  ;
+               if (showmelist.Count > 0)   this.updatesearchsettingsshowme(showmelist , search);
+               if (genderlist.Count > 0)   this.updatesearchsettingsgenders(genderlist , search);
+               if (sortbylist.Count > 0)    this.updatesearchsettingssortbytype(sortbylist, oldsearchsettings);
+               if (locationlist.Count > 0)    this.updatesearchsettingssortbytype(locationlist, oldsearchsettings);
+       
+
+             //TO DO move this code to searchssettings Repositoury             
+               
+               
                  oldsearchsettings.lastupdatedate  = DateTime.Now;
 
                //db.Entry(profiledata).State = EntityState.Modified;
                db.SaveChanges();
  
 
-               /this.updatesearchsettingsgenders(newmodel.genderslist.ToList(), searchsettingstoupdate);
+               
                //db.Entry(profiledata).State = EntityState.Modified;
+
+
+               //db.Entry(profiledata).State = EntityState.Modified;
+               int changes = db.SaveChanges();
+
+               //TOD DO
+               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+               //update session too just in case
+               //membersmodel.profiledata = profiledata;               
+
+               //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
+               //model.CurrentErrors.Clear();
+               // return model;
+           }
+           catch (DataException dx)
+           {
+               //Log the error (add a variable name after DataException) 
+               // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               // return model;
+               //handle logging here
+               var message = dx.Message;
+               throw dx;
+           }
+           catch (Exception ex)
+           {
+               //handle logging here
+               var message = ex.Message;
+               throw ex;
+
+           }
+           return messages;
+
        }
   
        #endregion
@@ -2536,6 +2485,52 @@ namespace Shell.MVC2.Data
                }
            }
        }
+
+       //location added 1/25/2012
+       private void updatesearchsettingslocation(List<searchsetting_location> locations, searchsetting currentsearchsetting)
+       {
+           if (selectedlocation == null)
+           {
+               // profiledata.SearchSettings.FirstOrDefault().SearchSettings_location  = new List<gender>(); 
+               return;
+           }
+           //build the search settings gender object
+           // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
+           //SearchSettings_location CurrentSearchSettings_location = db.SearchSettings_location.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+
+
+           // var selectedlocationHS = new HashSet<int?>(selectedlocation);
+           //get the values for this members searchsettings location
+           //var SearchSettingslocation = new HashSet<int?>(currentsearchsetting.location.Select(c => c.id));
+           foreach (var location in db.searchsetting_location)
+           {
+               if (selectedlocation.Contains(location))
+               {
+                   //does not exist so we will add it
+                   if (!currentsearchsetting.locations.Any(p => p.id == location.id))
+                   {
+
+                       //SearchSettings_location.locationID = location.locationID;
+                       var temp = new searchsetting_location();
+                       temp.id = location.id;
+                       temp.searchsetting.id = currentsearchsetting.id;
+                       db.searchsetting_location.Add(temp);
+
+                   }
+               }
+               else
+               { //exists means we want to remove it
+                   if (currentsearchsetting.locations.Any(p => p.id == location.id))
+                   {
+                       var temp = db.searchsetting_location.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == location.id).First();
+                       db.searchsetting_location.Remove(temp);
+
+                   }
+               }
+           }
+       }
+     
+     
        #endregion
 
     }
