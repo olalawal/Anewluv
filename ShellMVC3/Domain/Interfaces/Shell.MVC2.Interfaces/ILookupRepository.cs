@@ -17,8 +17,10 @@ namespace Shell.MVC2.Interfaces
              List<lu_photostatus  > getphotostatuslist();
              List<lu_photoimagetype  > getphotoimagetypeslist();
 
-             List<systempagesetting> getsystempagesettinglist();     
+             List<systempagesetting> getsystempagesettinglist();
 
+             string getbodycssbypagename(string pagename);
+            
              List<lu_gender> getgenderlist();           
              List<age> getageslist();
              List<metricheight> getmetricheightlist();

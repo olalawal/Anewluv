@@ -30,6 +30,10 @@ namespace Shell.MVC2.Services.Contracts
         [WebGet]
         [OperationContract]
         List<metricheight> getmetricheightlist();
+
+        [WebGet]
+        [OperationContract]
+        string getbodycssbypagename(string pagename);
         //List<age> createagelist(); //not created by database 
 
 

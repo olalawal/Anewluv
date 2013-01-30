@@ -281,9 +281,13 @@ namespace Shell.MVC2.Data
                searchsetting p = db.searchsetting.Where(z => z.id == searchid).FirstOrDefault();
                AppearanceSearchSettingsModel model = new AppearanceSearchSettingsModel();
 
-               //hight in inches max defualt is 7"6 min default is 4"0
-               model.heightmax = p.heightmax == null ? 89 : p.heightmax.GetValueOrDefault();
-               model.heightmin = p.heightmin == null ? 48 : p.heightmin.GetValueOrDefault();
+               //TO DO determine the users metric type here and get the min height in thier locale
+               var usheightmin = "48";
+               var usheightmax = "89";
+
+
+               string heightmin = Convert.ToInt32(model.heightmin) == -1 ? usheightmin : model.heightmin;
+               var heightmax = Convert.ToInt32(model.heightmax) == -1 ? usheightmax : model.heightmax;
 
                //pilot how to show the rest of the values 
                //sample of doing string values
@@ -740,7 +744,8 @@ namespace Shell.MVC2.Data
 
         #endregion
 
-        #region "Push/Post methods that save changes to entire search settings or peice meal as needed"
+       //remeber these values for the lists only send the new values i.e values they want to add
+       #region "Push/Post methods that save changes to entire search settings or peice meal as needed"
 
        #region "Basic Search Settings Edit"
      
@@ -767,11 +772,6 @@ namespace Shell.MVC2.Data
      
        private AnewluvMessages updatebasicsearchsettings(BasicSearchSettingsModel newmodel, searchsetting search, AnewluvMessages messages)
        {
-         
-           
-           
-              
-
 
             bool nothingupdated = true;
 
@@ -817,14 +817,14 @@ namespace Shell.MVC2.Data
                if (systemmatch   != null) search.systemmatch  = systemmatch  ;
                if (showmelist.Count > 0)   this.updatesearchsettingsshowme(showmelist , search);
                if (genderlist.Count > 0)   this.updatesearchsettingsgenders(genderlist , search);
-               if (sortbylist.Count > 0)    this.updatesearchsettingssortbytype(sortbylist, oldsearchsettings);
-               if (locationlist.Count > 0)    this.updatesearchsettingssortbytype(locationlist, oldsearchsettings);
+               if (sortbylist.Count > 0) this.updatesearchsettingssortbytype(sortbylist, search);
+               if (locationlist.Count > 0) this.updatesearchsettingslocation(locationlist, search);
        
 
              //TO DO move this code to searchssettings Repositoury             
-               
-               
-                 oldsearchsettings.lastupdatedate  = DateTime.Now;
+
+
+               search.lastupdatedate = DateTime.Now;
 
                //db.Entry(profiledata).State = EntityState.Modified;
                db.SaveChanges();
@@ -889,7 +889,8 @@ namespace Shell.MVC2.Data
            messages.message = "Edit Appearance Settings Successful";
            return messages;
        }       
-       public AnewluvMessages updateappearancessettings(AppearanceSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
+
+       private AnewluvMessages updateappearancessettings(AppearanceSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
        {
            bool nothingupdated = true;
 
@@ -897,47 +898,57 @@ namespace Shell.MVC2.Data
            {
                searchsetting searchsettingstoupdate = db.searchsetting.Where(d => d.id == searchid).First();
 
-
+               //TO DO determine the users metric type here and get the min height in thier locale
+               var usheightmin = "48";
+               var usheightmax = "89";
 
                
-               var heightmin = newmodel.heightmin == -1 ? 48 : newmodel.heightmin;
-               var heightmax = newmodel.heightmax == -1 ? 89 : newmodel.heightmax;
-
+               string heightmin = Convert.ToInt32(newmodel.heightmin) == -1 ? usheightmin  :  newmodel.heightmin ;
+               var heightmax =  Convert.ToInt32(newmodel.heightmax) == -1 ? usheightmax  : newmodel.heightmax;
+               //TO DO test if anything changed
+               var bodytypelist = newmodel.bodytypeslist;
+               //TO DO test if anything changed
+               var haircolorlist = newmodel.haircolorlist;
+               //TO DO test if anything changed
+               var eyecolorlist = newmodel.eyecolorlist;
+               //TO DO test if anything changed
+               var hotfeaturelist = newmodel.hotfeaturelist;
+               //TO DO test if anything changed
+               var ethnicitylist = newmodel.ethnicitylist;
 
                //update my settings 
                //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
-               nothingupdated = (newmodel.myheight == profile.profiledata.height) ? false : true;
+              // nothingupdated = (newmodel.myheight == profile.profiledata.height) ? false : true;
 
-               profile.profiledata.bodytype = UiBodyType;  //TO DO look at this
-
-               //now update the search settings 
-               oldsearchsettings.heightmin = heightmin;
-               oldsearchsettings.heightmax = heightmax;
-               oldsearchsettings.lastupdatedate = DateTime.Now;
-               updatesearchsettingsbodytype(newmodel.bodytypeslist, oldsearchsettings);
-
-               updatesearchsettingsethnicity(newmodel.ethnicitylist, oldsearchsettings);
-           
-
-
-               updatesearchsettingseyecolor(newmodel.eyecolorlist, oldsearchsettings);
-               updatesearchsettingshaircolor(newmodel.haircolorlist, oldsearchsettings);
+               //profile.profiledata.bodytype = UiBodyType;  //TO DO look at this
 
                //now update the search settings 
-               updatesearchsettingshotfeature(newmodel.hotfeaturelist, oldsearchsettings);
-            
+          
+               if (heightmin != "") searchsettingstoupdate.heightmin  = Convert.ToInt32(heightmin );
+               if (heightmin != "") searchsettingstoupdate.heightmin = Convert.ToInt32(heightmin);
 
-               oldsearchsettings.lastupdatedate = DateTime.Now;
+               //now update the lists if values were passed only!
+               if (bodytypelist.Count > 0)
+                   updatesearchsettingsbodytype(newmodel.bodytypeslist, searchsettingstoupdate);
+               if (haircolorlist.Count > 0)
+                   updatesearchsettingshaircolor(newmodel.haircolorlist , searchsettingstoupdate);
+              if (eyecolorlist.Count > 0)
+                   updatesearchsettingseyecolor(newmodel.eyecolorlist, searchsettingstoupdate);
+              if (hotfeaturelist.Count > 0)
+                  updatesearchsettingshotfeature(hotfeaturelist, searchsettingstoupdate);
+              if (ethnicitylist.Count > 0)
+                  updatesearchsettingsethnicity(ethnicitylist, searchsettingstoupdate);
+                            
+        
+         
+               searchsettingstoupdate.lastupdatedate = DateTime.Now;
 
                //db.Entry(profiledata).State = EntityState.Modified;
                int changes = db.SaveChanges();
 
-               //TOD DO
-               //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-               //update session too just in case
-               //membersmodel.profiledata = profiledata;               
+               //TOD DO probbaly update cache stuff here as needed.                           
 
-               //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
+               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
                //model.CurrentErrors.Clear();
                // return model;
            }
@@ -974,8 +985,7 @@ namespace Shell.MVC2.Data
 
            // var newmodel2 = this.getAppearancesettingsviewmodel(profile.id);
 
-           messages = (updatelifestylesettings(newmodel, searchid,  messages));
-          
+           messages = (updatelifestylesettings(newmodel, searchid,  messages));          
 
            if (messages.errormessages.Count > 0)
            {
@@ -985,7 +995,8 @@ namespace Shell.MVC2.Data
            messages.message = "Edit Lifestyle Search settings Successful";
            return messages;
        }
-       public AnewluvMessages updatelifestylesettings(LifeStyleSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
+
+       private AnewluvMessages updatelifestylesettings(LifeStyleSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
        {
            bool nothingupdated = true;
 
@@ -994,113 +1005,53 @@ namespace Shell.MVC2.Data
 
                searchsetting searchsettingstoupdate = db.searchsetting.Where(d => d.id == searchid).First();
 
+               // profile p = db.profiles.Where(z => z.id == profileid).First();
+               //sample code for determining weather to edit an item or not or determin if a value changed'
+               //nothingupdated = (newmodel.educationlevel  == p.profiledata.educationlevel) ? false : true;
 
-                 //update the searchmodl settings with current settings            
-           //update UI display values with current displayed values as well for check boxes
-
-           IEnumerable<int?> EnumerableMyLookingFor = SelectedMyLookingForIds;
-
-           var MyLookingForValues = EnumerableMyLookingFor != null ? new HashSet<int?>(EnumerableMyLookingFor) : null;
-
-           foreach (var _LookingFor in model.LifeStyleSettings.MyLookingForList)
-           {
-               _LookingFor.Selected = MyLookingForValues != null ? MyLookingForValues.Contains(_LookingFor.MyLookingForID) : false;
-           }
-
-
-           IEnumerable<int?> EnumerableYourLookingFor = SelectedYourLookingForIds;
-
-           var YourLookingForValues = EnumerableYourLookingFor != null ? new HashSet<int?>(EnumerableYourLookingFor) : null;
-
-           foreach (var _LookingFor in model.LifeStyleSearchSettings.lookingforlist)
-           {
-               _LookingFor.Selected = YourLookingForValues != null ? YourLookingForValues.Contains(_LookingFor.LookingForID) : false;
-           }
-
-           IEnumerable<int?> EnumerableYourLivingSituation = SelectedYourLivingSituationIds;
-
-           var YourLivingSituationValues = EnumerableYourLivingSituation != null ? new HashSet<int?>(EnumerableYourLivingSituation) : null;
-
-           foreach (var _LivingSituation in model.LifeStyleSearchSettings.livingsituationlist)
-           {
-               _LivingSituation.Selected = YourLivingSituationValues != null ? YourLivingSituationValues.Contains(_LivingSituation.LivingSituationID) : false;
-           }
-
-           IEnumerable<int?> EnumerableYourMaritalStatus = SelectedYourMaritalStatusIds;
-
-           var YourMaritalStatusValues = EnumerableYourMaritalStatus != null ? new HashSet<int?>(EnumerableYourMaritalStatus) : null;
-
-           foreach (var _MaritalStatus in model.LifeStyleSearchSettings.maritalstatuslist)
-           {
-               _MaritalStatus.Selected = YourMaritalStatusValues != null ? YourMaritalStatusValues.Contains(_MaritalStatus.MaritalStatusID) : false;
-           }
+               //only update items that are not null
+               var educationlevellist = newmodel.educationlevellist;
+               var employmentstatuslist = newmodel.employmentstatuslist;
+               var incomelevellist = newmodel.incomelevellist;
+               var wantskidslist = newmodel.wantskidslist;
+               var professionlist = newmodel.professionlist ;
+               var maritalstatuslist = newmodel.maritalstatuslist;
+               var livingsituationlist = newmodel.livingsituationlist;
+               var havekidslist = newmodel.havekidslist;
+               //TO DO test if anything changed
+               var lookingforlist = newmodel.lookingforlist;
 
 
-               
-           IEnumerable<int?> EnumerableYourWantsKids = SelectedYourWantsKidsIds;
+               //update my settings 
+               //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
 
-           var YourWantsKidsValues = EnumerableYourWantsKids != null ? new HashSet<int?>(EnumerableYourWantsKids) : null;
+               if (educationlevellist.Count > 0)
+                   updatesearchsettingseducationlevel(educationlevellist, searchsettingstoupdate);
+               if (employmentstatuslist.Count > 0)
+                   updatesearchsettingsemploymentstatus(employmentstatuslist, searchsettingstoupdate);
+               if (incomelevellist.Count > 0)
+                   updatesearchsettingsincomelevel(incomelevellist, searchsettingstoupdate);
+               if (wantskidslist.Count > 0)
+                   updatesearchsettingswantskids(wantskidslist, searchsettingstoupdate);
+               if (professionlist.Count > 0)
+                   updatesearchsettingsprofession(professionlist , searchsettingstoupdate);
+               if (maritalstatuslist.Count > 0)
+                   updatesearchsettingsmaritalstatus(maritalstatuslist, searchsettingstoupdate);
+               if (livingsituationlist.Count > 0)
+                   updatesearchsettingslivingsituation(livingsituationlist, searchsettingstoupdate);
+               if (havekidslist.Count > 0)
+                   updatesearchsettingshavekids(havekidslist, searchsettingstoupdate);
+               if (lookingforlist.Count > 0)
+                   updatesearchsettingslookingfor(lookingforlist, searchsettingstoupdate);
 
-           foreach (var _WantsKids in model.LifeStyleSearchSettings.wantskidslist)
-           {
-               _WantsKids.Selected = YourWantsKidsValues != null ? YourWantsKidsValues.Contains(_WantsKids.WantsKidsID) : false;
-           }
-
-
-           IEnumerable<int?> EnumerableYourHaveKids = SelectedYourHaveKidsIds;
-
-           var YourHaveKidsValues = EnumerableYourHaveKids != null ? new HashSet<int?>(EnumerableYourHaveKids) : null;
-
-           foreach (var _HaveKids in model.LifeStyleSearchSettings.havekidslist)
-           {
-               _HaveKids.Selected = YourHaveKidsValues != null ? YourHaveKidsValues.Contains(_HaveKids.HaveKidsID) : false;
-           }
-
-
-
-               
-           IEnumerable<int?> EnumerableYourIncomeLevel = SelectedYourIncomeLevelIds;
-
-           var YourIncomeLevelValues = EnumerableYourIncomeLevel != null ? new HashSet<int?>(EnumerableYourIncomeLevel) : null;
-
-           foreach (var _IncomeLevel in model.LifeStyleSearchSettings.incomelevellist)
-           {
-               _IncomeLevel.Selected = YourIncomeLevelValues != null ? YourIncomeLevelValues.Contains(_IncomeLevel.IncomeLevelID) : false;
-           }
-
-
-           IEnumerable<int?> EnumerableYourEmploymentStatus = SelectedYourEmploymentStatusIds;
-
-           var YourEmploymentStatusValues = EnumerableYourEmploymentStatus != null ? new HashSet<int?>(EnumerableYourEmploymentStatus) : null;
-
-           foreach (var _EmploymentStatus in model.LifeStyleSearchSettings.employmentstatuslist)
-           {
-               _EmploymentStatus.Selected = YourEmploymentStatusValues != null ? YourEmploymentStatusValues.Contains(_EmploymentStatus.EmploymentStatusID) : false;
-           }
-
-
-
-
-
-                  UpdateProfileDataLookingFor(SelectedMyLookingForIds,oldsearchsettings);
-               UpdateSearchSettingsLookingFor(SelectedYourLookingForIds,oldsearchsettings);
-               UpdateSearchSettingsMaritalStatus(SelectedYourMaritalStatusIds,oldsearchsettings);
-               UpdateSearchSettingsLivingSituation(SelectedYourLivingSituationIds,oldsearchsettings);
-           
-               
-                UpdateSearchSettingsIncomeLevel(SelectedYourIncomeLevelIds,oldsearchsettings);
-               UpdateSearchSettingsEmploymentStatus(SelectedYourEmploymentStatusIds,oldsearchsettings);
-               UpdateSearchSettingsWantsKids(SelectedYourWantsKidsIds,oldsearchsettings);
-               UpdateSearchSettingsHaveKids(SelectedYourHaveKidsIds,oldsearchsettings);
-
-                   SearchSettingsToUpdate.LastUpdateDate = DateTime.Now;
+               searchsettingstoupdate.lastupdatedate = DateTime.Now;
                //db.Entry(profiledata).State = EntityState.Modified;
                int changes = db.SaveChanges();
-
-
-           // profiledata profiledata = db.ProfileDatas.Include("profile").Where(p => p.ProfileID == membersmodel.profiledata.ProfileID).First();
-           //  SearchSetting SearchSettingsToUpdate = db.SearchSettings.Where(p => p.ProfileID == _ProfileID && p.MyPerfectMatch == true && p.SearchName == "MyPerfectMatch").First();
-
+               
+               //TOD DO probbaly update cache stuff here as needed.  
+               //CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
+               //model.CurrentErrors.Clear();
+               // return model;
 
            }
            catch (DataException dx)
@@ -1133,10 +1084,7 @@ namespace Shell.MVC2.Data
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
 
-           // var newmodel2 = this.getcharactersettingsviewmodel(profile.id);
-
            messages = updatecharacterssettings(newmodel, searchid, messages);
-
 
            if (messages.errormessages.Count > 0)
            {
@@ -1146,7 +1094,8 @@ namespace Shell.MVC2.Data
            messages.message = "Edit character Settings Successful";
            return messages;
        }
-       public AnewluvMessages updatecharacterssettings(CharacterSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
+     
+       private AnewluvMessages updatecharacterssettings(CharacterSearchSettingsModel newmodel, int searchid, AnewluvMessages messages)
        {
            bool nothingupdated = true;
 
@@ -1155,136 +1104,47 @@ namespace Shell.MVC2.Data
                searchsetting searchsettingstoupdate = db.searchsetting.Where(d => d.id == searchid).First();
 
 
-               IEnumerable<int?> EnumerableYourExercise = SelectedYourExerciseIds;
 
-               var YourExerciseValues = EnumerableYourExercise != null ? new HashSet<int?>(EnumerableYourExercise) : null;
-
-               foreach (var _Exercise in model.CharacterSearchSettings.exerciselist)
-               {
-                   _Exercise.Selected = YourExerciseValues != null ? YourExerciseValues.Contains(_Exercise.ExerciseID) : false;
-               }
-
-               IEnumerable<int?> EnumerableYourDrinks = SelectedYourDrinksIds;
-
-               var YourDrinksValues = EnumerableYourDrinks != null ? new HashSet<int?>(EnumerableYourDrinks) : null;
-
-               foreach (var _Drinks in model.CharacterSearchSettings.drinkslist)
-               {
-                   _Drinks.Selected = YourDrinksValues != null ? YourDrinksValues.Contains(_Drinks.DrinksID) : false;
-               }
-
-               IEnumerable<int?> EnumerableYourDiet = SelectedYourDietIds;
-
-               var YourDietValues = EnumerableYourDiet != null ? new HashSet<int?>(EnumerableYourDiet) : null;
-
-               foreach (var _Diet in model.CharacterSearchSettings.dietlist)
-               {
-                   _Diet.Selected = YourDietValues != null ? YourDietValues.Contains(_Diet.DietID) : false;
-               }
-
-               IEnumerable<int?> EnumerableYourSmokes = SelectedYourSmokesIds;
-
-               var YourSmokesValues = EnumerableYourSmokes != null ? new HashSet<int?>(EnumerableYourSmokes) : null;
-
-               foreach (var _Smokes in model.CharacterSearchSettings.smokeslist)
-               {
-                   _Smokes.Selected = YourSmokesValues != null ? YourSmokesValues.Contains(_Smokes.SmokesID) : false;
-               }
-
-               UpdateSearchSettingsExercise(SelectedYourExerciseIds, oldsearchsettings);
-               UpdateSearchSettingsDiet(SelectedYourDietIds, oldsearchsettings);
-               UpdateSearchSettingsDrinks(SelectedYourDrinksIds, oldsearchsettings);
-               UpdateSearchSettingsSmokes(SelectedYourSmokesIds, oldsearchsettings);
-
-               //page 2 starts here
-
-
-               IEnumerable<int?> EnumerableMyHobby = SelectedMyHobbyIds;
-
-               var MyHobbyValues = EnumerableMyHobby != null ? new HashSet<int?>(EnumerableMyHobby) : null;
-
-               foreach (var _Hobby in model.CharacterSettings.MyHobbyList)
-               {
-                   _Hobby.Selected = MyHobbyValues != null ? MyHobbyValues.Contains(_Hobby.MyHobbyID) : false;
-               }
-
-               IEnumerable<int?> EnumerableYourHobby = SelectedYourHobbyIds;
-
-               var YourHobbyValues = EnumerableYourHobby != null ? new HashSet<int?>(EnumerableYourHobby) : null;
-
-               foreach (var _Hobby in model.CharacterSearchSettings.hobbylist)
-               {
-                   _Hobby.Selected = YourHobbyValues != null ? YourHobbyValues.Contains(_Hobby.HobbyID) : false;
-               }
-
-
-               IEnumerable<int?> EnumerableYourSign = SelectedYourSignIds;
-
-               var YourSignValues = EnumerableYourSign != null ? new HashSet<int?>(EnumerableYourSign) : null;
-
-               foreach (var _Sign in model.CharacterSearchSettings.signlist)
-               {
-                   _Sign.Selected = YourSignValues != null ? YourSignValues.Contains(_Sign.SignID) : false;
-               }
-
-               UpdateSearchSettingsHobby(SelectedYourHobbyIds, oldsearchsettings);
-               UpdateSearchSettingsSign(SelectedYourSignIds, oldsearchsettings);
-
-               //page 3 here
-
-               IEnumerable<int?> EnumerableYourReligiousAttendance = SelectedYourReligiousAttendanceIds;
-
-               var YourReligiousAttendanceValues = EnumerableYourReligiousAttendance != null ? new HashSet<int?>(EnumerableYourReligiousAttendance) : null;
-
-               foreach (var _ReligiousAttendance in model.CharacterSearchSettings.religiousattendancelist)
-               {
-                   _ReligiousAttendance.Selected = YourReligiousAttendanceValues != null ? YourReligiousAttendanceValues.Contains(_ReligiousAttendance.ReligiousAttendanceID) : false;
-               }
-
-
-               IEnumerable<int?> EnumerableYourReligion = SelectedYourReligionIds;
-
-               var YourReligionValues = EnumerableYourReligion != null ? new HashSet<int?>(EnumerableYourReligion) : null;
-
-               foreach (var _Religion in model.CharacterSearchSettings.religionlist)
-               {
-                   _Religion.Selected = YourReligionValues != null ? YourReligionValues.Contains(_Religion.ReligionID) : false;
-               }
-
-
-               UpdateSearchSettingsReligiousAttendance(SelectedYourReligiousAttendanceIds, oldsearchsettings);
-               UpdateSearchSettingsReligion(SelectedYourReligionIds, oldsearchsettings);
-
-               //paged 4 starts here , should combine with page 3
-
-
-               IEnumerable<int?> EnumerableYourHumor = SelectedYourHumorIds;
-
-               var YourHumorValues = EnumerableYourHumor != null ? new HashSet<int?>(EnumerableYourHumor) : null;
-
-               foreach (var _Humor in model.CharacterSearchSettings.humorlist)
-               {
-                   _Humor.Selected = YourHumorValues != null ? YourHumorValues.Contains(_Humor.HumorID) : false;
-               }
-
-
-               IEnumerable<int?> EnumerableYourPoliticalView = SelectedYourPoliticalViewIds;
-
-               var YourPoliticalViewValues = EnumerableYourPoliticalView != null ? new HashSet<int?>(EnumerableYourPoliticalView) : null;
-
-               foreach (var _PoliticalView in model.CharacterSearchSettings.politicalviewlist)
-               {
-                   _PoliticalView.Selected = YourPoliticalViewValues != null ? YourPoliticalViewValues.Contains(_PoliticalView.PoliticalViewID) : false;
-               }
+               //only update items that are not null
+               var dietlist = newmodel.dietlist;
+               var humorlist = newmodel.humorlist;
+               var drinkinglist = newmodel.drinkslist;
+               var excerciselist = newmodel.exerciselist;
+               var smokinglist = newmodel.smokeslist;
+               var signlist = newmodel.signlist;
+               var politicalviewlist = newmodel.politicalviewlist;
+               var religionlist = newmodel.religionlist;
+               var religiousattendancelist = newmodel.religiousattendancelist; //TO DO test if anything changed
+               var hobylistlist = newmodel.hobbylist;
 
 
 
 
-               UpdateSearchSettingsHumor(SelectedYourHumorIds, oldsearchsettings);
-               UpdateSearchSettingsPoliticalView(SelectedYourPoliticalViewIds, oldsearchsettings);
+               //update my settings 
+               //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
+               if (dietlist.Count > 0)
+                   updatesearchsettingsdiet (dietlist, searchsettingstoupdate);
+               if (humorlist.Count > 0)
+                   updatesearchsettingshumor (humorlist, searchsettingstoupdate);
+               if (drinkinglist.Count > 0)
+                   updatesearchsettingsdrinks (drinkinglist, searchsettingstoupdate);
+               if (excerciselist.Count > 0)
+                   updatesearchsettingsexercise (excerciselist, searchsettingstoupdate);
+               if (smokinglist.Count > 0)
+                   updatesearchsettingssmokes (smokinglist, searchsettingstoupdate);
+               if (signlist.Count > 0)
+                   updatesearchsettingssign(signlist, searchsettingstoupdate);
+               if (politicalviewlist.Count > 0)
+                   updatesearchsettingspoliticalview(politicalviewlist, searchsettingstoupdate);
+               if (religionlist.Count > 0)
+                   updatesearchsettingsreligion(religionlist, searchsettingstoupdate);
+               if (religiousattendancelist.Count > 0)
+                   updatesearchsettingsreligiousattendance (religiousattendancelist, searchsettingstoupdate);
+               if (hobylistlist.Count > 0)
+                   updatesearchsettingshobby(hobylistlist, searchsettingstoupdate);
 
-
-
+               
+               searchsettingstoupdate.lastupdatedate = DateTime.Now;
                //db.Entry(profiledata).State = EntityState.Modified;
                int changes = db.SaveChanges();
 
@@ -1324,9 +1184,9 @@ namespace Shell.MVC2.Data
 
 
        //10-3-2012 oawlal made the functuon far more generic so it will work alot better for perefect match or any search setting 
-       private void updatesearchsettingsgenders(List<lu_gender> selectedgenders, searchsetting currentsearchsetting)
+       private void updatesearchsettingsgenders(List<lu_gender> genders, searchsetting currentsearchsetting)
        {
-           if (selectedgenders == null)
+           if (genders == null)
            {
                // profiledata.SearchSettings.FirstOrDefault().SearchSettings_Genders  = new List<gender>(); 
                return;
@@ -1339,32 +1199,59 @@ namespace Shell.MVC2.Data
            // var selectedGendersHS = new HashSet<int?>(selectedGenders);
            //get the values for this members searchsettings Genders
            //var SearchSettingsGenders = new HashSet<int?>(currentsearchsetting.genders.Select(c => c.id));
-           foreach (var gender in db.lu_gender)
+           foreach (var gender in genders)
            {
-               if (selectedgenders.Contains(gender))
+               //new logic : if this item was selected and is not already in the search settings gender values add it 
+               if ((gender.selected == true && !currentsearchsetting.genders.Where(z => z.gender.id == gender.id).Any()))
                {
-                   //does not exist so we will add it
-                   if (!currentsearchsetting.genders.Any(p => p.id == gender.id))
-                   {
-
-                       //SearchSettings_Genders.GendersID = Genders.GendersID;
-                       var temp = new searchsetting_gender();
-                       temp.id = gender.id;
-                       temp.searchsetting.id = currentsearchsetting.id;
-                       db.searchsetting_gender.Add(temp);
-
-                   }
+                   //SearchSettings_Genders.GendersID = Genders.GendersID;
+                   var temp = new searchsetting_gender();
+                   temp.id = gender.id;
+                   temp.searchsetting.id = currentsearchsetting.id;
+                   db.searchsetting_gender.Add(temp);
                }
                else
-               { //exists means we want to remove it
-                   if (currentsearchsetting.genders.Any(p => p.id == gender.id))
-                   {
-                       var Temp = db.searchsetting_gender.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == gender.id).First();
-                       db.searchsetting_gender.Remove(Temp);
+               {
+                   //we have an existing value and we want to remove it in this case since selected was false for sure
+                   //we will be doing a remove either way
+                   var Temp = db.searchsetting_gender.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == gender.id).First();
+                   if (Temp != null)
+                   db.searchsetting_gender.Remove(Temp);
 
-                   }
                }
            }
+
+
+           //old logicx for old code
+           //foreach (var gender in db.lu_gender)
+           //{
+            
+
+
+           //    if (genders.Contains(gender ))
+           //    {
+           //        //does not exist so we will add it
+           //        if (    !currentsearchsetting.genders.Any(p => p.id == gender.id))
+           //        {
+
+           //            //SearchSettings_Genders.GendersID = Genders.GendersID;
+           //            var temp = new searchsetting_gender();
+           //            temp.id = gender.id;
+           //            temp.searchsetting.id = currentsearchsetting.id;
+           //            db.searchsetting_gender.Add(temp);
+
+           //        }
+           //    }
+           //    else
+           //    { //exists means we want to remove it
+           //        if (currentsearchsetting.genders.Any(p => p.id == gender.id))
+           //        {
+           //            var Temp = db.searchsetting_gender.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == gender.id).First();
+           //            db.searchsetting_gender.Remove(Temp);
+
+           //        }
+           //    }
+           //}
        }
 
        //show me
@@ -1517,7 +1404,7 @@ namespace Shell.MVC2.Data
                if (selectedethnicity.Contains(ethnicity))
                {
                    //does not exist so we will add it
-                   if (!currentsearchsetting.ethnicitys.Any(p => p.id == ethnicity.id))
+                   if (!currentsearchsetting.ethnicities.Any(p => p.id == ethnicity.id))
                    {
 
                        //SearchSettings_ethnicity.ethnicityID = ethnicity.ethnicityID;
@@ -1530,7 +1417,7 @@ namespace Shell.MVC2.Data
                }
                else
                { //exists means we want to remove it
-                   if (currentsearchsetting.ethnicitys.Any(p => p.id == ethnicity.id))
+                   if (currentsearchsetting.ethnicities.Any(p => p.id == ethnicity.id))
                    {
                        var temp = db.searchsetting_ethnicity.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == ethnicity.id).First();
                        db.searchsetting_ethnicity.Remove(temp);
@@ -2489,7 +2376,7 @@ namespace Shell.MVC2.Data
        //location added 1/25/2012
        private void updatesearchsettingslocation(List<searchsetting_location> locations, searchsetting currentsearchsetting)
        {
-           if (selectedlocation == null)
+           if (locations == null)
            {
                // profiledata.SearchSettings.FirstOrDefault().SearchSettings_location  = new List<gender>(); 
                return;
@@ -2504,7 +2391,7 @@ namespace Shell.MVC2.Data
            //var SearchSettingslocation = new HashSet<int?>(currentsearchsetting.location.Select(c => c.id));
            foreach (var location in db.searchsetting_location)
            {
-               if (selectedlocation.Contains(location))
+               if (locations.Contains(location))
                {
                    //does not exist so we will add it
                    if (!currentsearchsetting.locations.Any(p => p.id == location.id))

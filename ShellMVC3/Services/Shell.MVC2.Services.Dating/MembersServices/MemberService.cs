@@ -45,7 +45,7 @@ namespace Shell.MVC2.Services.Dating
         public profiledata getprofiledatabyprofileid(string profileid)
         {
 
-            return _memberrepository.getprofiledatabyprofileid(Convert.ToInt32(Convert.ToInt32(profileid)));
+            return _memberrepository.getprofiledatabyprofileid(Convert.ToInt32(profileid));
 
         }
 

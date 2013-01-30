@@ -11,9 +11,33 @@ using System.Web;
 namespace Shell.MVC2.Interfaces
 {
     public interface IEditSearchRepository
-    {       
+    {
+
+
+         searchsetting getsearchsetting(int profileid, string searchname, int? searchrank);
        
+         List<searchsetting> getsearchsettings(int profileid);
        
+         SearchSettingsViewModel getsearchsettingsviewmodel(int profileid, string searchname, int? searchrank) ;  
+
+         BasicSearchSettingsModel getbasicsearchsettings(int searchid)     ;     
+
+         AppearanceSearchSettingsModel getappearancesearchsettings(int searchid);
+           
+         CharacterSearchSettingsModel getcharactersearchsettings(int searchid) ;     
+
+         LifeStyleSearchSettingsModel getlifestylesearchsettings(int searchid);
+
+         AnewluvMessages editbasicsearchsettings(BasicSearchSettingsModel newmodel, int searchid) ;   
+
+         AnewluvMessages editappearancesettings(AppearanceSearchSettingsModel newmodel, int searchid);
+  
+         AnewluvMessages editlifestylesettings(LifeStyleSearchSettingsModel newmodel, int searchid);
+
+         AnewluvMessages editcharactersettings(CharacterSearchSettingsModel newmodel, int searchid);
+       
+      
+
     
     }
 }

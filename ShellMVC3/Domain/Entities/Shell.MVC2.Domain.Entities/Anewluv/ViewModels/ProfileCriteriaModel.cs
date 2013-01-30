@@ -10,7 +10,7 @@ using System.Data.Objects.DataClasses;
 using System.Runtime.Serialization;
 
 
-
+//TO DO we should use the Editprofile model to map this I think
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
       [Serializable]
@@ -61,10 +61,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
        [DataMember]
        public List<string> HotFeature = new List<string>();
 
-       public SearchBasicSettings  BasicSearchSettings { get; set; }
-       public SearchAppearanceSettings AppearanceSearchSettings { get; set; }
-       public SearchLifeStyleSettings LifeStyleSearchSettings { get; set; }
-       public SearchCharacterSettings CharacterSearchSettings { get; set; }
+          //1-29-2013 olawal these are for match settings 
+       public BasicSearchSettingsModel  BasicSearchSettings { get; set; }
+       public AppearanceSearchSettingsModel   AppearanceSearchSettings { get; set; }
+       public LifeStyleSearchSettingsModel  LifeStyleSearchSettings { get; set; }
+       public CharacterSearchSettingsModel  CharacterSearchSettings { get; set; }
           
        
 

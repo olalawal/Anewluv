@@ -32,40 +32,40 @@ namespace Shell.MVC2.Data
 /// <summary>
 /// TO DO split off search settings methods , if needed they should be references as an interface
 /// </summary>
-   public  class EditMemberRepository : MemberRepositoryBase  
+   public  class EditMemberRepository : MemberRepositoryBase  , IEditMemberRepository 
     {
 
        
        
         private  AnewluvContext db; // = new AnewluvContext();    
-        private IMemberRepository _membersrepository;
-        private IEditSearchRepository  _searchrepository;
+    //    private IMemberRepository _membersrepository;
+       // private IEditSearchRepository  _searchrepository;
         
        //private  PostalData2Entities postaldb; //= new PostalData2Entities();
 
-        public class CheckBox
-        {
-            public int id { get; set; }
-            public string description { get; set; }
-            public bool selected { get; set; }
-        }
+        //public class CheckBox
+        //{
+        //    public int id { get; set; }
+        //    public string description { get; set; }
+        //    public bool selected { get; set; }
+        //}
 
-        public EditMemberRepository(AnewluvContext datingcontext, IMemberRepository membersrepository,IEditSearchRepository searchrepository)
+        public EditMemberRepository(AnewluvContext datingcontext)
             : base(datingcontext)
         {
-            _membersrepository = membersrepository;
-            _searchrepository = searchrepository;
+           // _membersrepository = membersrepository;
+           // _searchrepository = searchrepository;
         }
 
         #region "profile visisiblity settings update here"
 
-        public bool UpdateProfileVisibilitySettings(visiblitysetting model)
+        public bool updatemembervisibilitysettings(visiblitysetting model)
         {
             if (model.id != null)
             {
 
                 //Impement on member service ?
-                // datingservice.UpdateProfileVisiblitySetting(model);
+                // datingservice.updatememberVisiblitySetting(model);
 
 
                 return true;
@@ -313,7 +313,7 @@ namespace Shell.MVC2.Data
 
        #region "Edit profile Basic Settings Updates here
 
-       public AnewluvMessages editprofilebasicsettings(BasicSettingsModel newmodel, int profileid)
+       public AnewluvMessages editmemberbasicsettings(BasicSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
@@ -322,8 +322,8 @@ namespace Shell.MVC2.Data
            profile p = db.profiles.Where(z => z.id == profileid).First(); 
 
            
-           messages = (updateprofilebasicsettings(newmodel, p, messages));
-           //  messages=(EditProfileBasicSettingsPage2Update(newmodel,profileid ,messages));
+           messages = (updatememberbasicsettings(newmodel, p, messages));
+           //  messages=(editmemberBasicSettingsPage2Update(newmodel,profileid ,messages));
 
 
            if (messages.errormessages.Count > 0)
@@ -336,7 +336,7 @@ namespace Shell.MVC2.Data
        }
 
        //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-       private AnewluvMessages updateprofilebasicsettings(BasicSettingsModel newmodel, profile p, AnewluvMessages messages)
+       private AnewluvMessages updatememberbasicsettings(BasicSettingsModel newmodel, profile p, AnewluvMessages messages)
        {
 
            try
@@ -395,7 +395,7 @@ namespace Shell.MVC2.Data
        //#region "other editpages to implement"
        #region "Edit profile Appeareance Settings Updates here"
 
-       public AnewluvMessages editprofileappearancesettings(AppearanceSettingsModel newmodel, int profileid)
+       public AnewluvMessages editmemberappearancesettings(AppearanceSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
@@ -404,10 +404,10 @@ namespace Shell.MVC2.Data
            //get the profile details :
            profile p = db.profiles.Where(z => z.id == profileid).First(); 
 
-           messages = (updateprofileappearancesettings(newmodel, p, messages));
-           // messages = (EditProfileAppearanceSettingsPage2Update(newmodel, profileid, messages));
-           // messages = (EditProfileAppearanceSettingsPage3Update(newmodel, profileid, messages));
-           //  messages = (EditProfileAppearanceSettingsPage4Update(newmodel, profileid, messages));
+           messages = (updatememberappearancesettings(newmodel, p, messages));
+           // messages = (editmemberAppearanceSettingsPage2Update(newmodel, profileid, messages));
+           // messages = (editmemberAppearanceSettingsPage3Update(newmodel, profileid, messages));
+           //  messages = (editmemberAppearanceSettingsPage4Update(newmodel, profileid, messages));
 
            if (messages.errormessages.Count > 0)
            {
@@ -419,7 +419,7 @@ namespace Shell.MVC2.Data
        }
 
        //TO DO send back the messages on errors and when nothing is changed
-       private AnewluvMessages updateprofileappearancesettings(AppearanceSettingsModel newmodel, profile p, AnewluvMessages messages)
+       private AnewluvMessages updatememberappearancesettings(AppearanceSettingsModel newmodel, profile p, AnewluvMessages messages)
        {
            bool nothingupdated = true;
 
@@ -453,9 +453,9 @@ namespace Shell.MVC2.Data
                if (height.HasValue == true) p.profiledata.height = height;
 
                if (hotfeatures.Count > 0)
-                   updateprofilemetatdatahotfeature(hotfeatures, p.profilemetadata);
+                   updatemembermetatdatahotfeature(hotfeatures, p.profilemetadata);
                if (ethicities.Count > 0)
-                   updateprofilemetatdataethnicity(ethicities, p.profilemetadata);
+                   updatemembermetatdataethnicity(ethicities, p.profilemetadata);
 
 
                //db.Entry(profiledata).State = EntityState.Modified;
@@ -497,7 +497,7 @@ namespace Shell.MVC2.Data
 
        #region "Edit profile LifeStyle Settings Updates here"
 
-       public AnewluvMessages editprofilelifestylesettings(LifeStyleSettingsModel newmodel, int profileid)
+       public AnewluvMessages editmemberlifestylesettings(LifeStyleSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
@@ -506,10 +506,10 @@ namespace Shell.MVC2.Data
            //get the profile details :
            profile p = db.profiles.Where(z => z.id == profileid).First(); 
 
-           messages = (updateprofilelifestylesettings(newmodel, p, messages));
-           // messages = (EditProfilelifestyleSettingsPage2Update(newmodel, profileid, messages));
-           // messages = (EditProfilelifestyleSettingsPage3Update(newmodel, profileid, messages));
-           //  messages = (EditProfilelifestyleSettingsPage4Update(newmodel, profileid, messages));
+           messages = (updatememberlifestylesettings(newmodel, p, messages));
+           // messages = (editmemberlifestyleSettingsPage2Update(newmodel, profileid, messages));
+           // messages = (editmemberlifestyleSettingsPage3Update(newmodel, profileid, messages));
+           //  messages = (editmemberlifestyleSettingsPage4Update(newmodel, profileid, messages));
 
            if (messages.errormessages.Count > 0)
            {
@@ -521,7 +521,7 @@ namespace Shell.MVC2.Data
        }
 
        //TO DO send back the messages on errors and when nothing is changed
-       private AnewluvMessages updateprofilelifestylesettings(LifeStyleSettingsModel newmodel,profile p, AnewluvMessages messages)
+       private AnewluvMessages updatememberlifestylesettings(LifeStyleSettingsModel newmodel,profile p, AnewluvMessages messages)
        {
            bool nothingupdated = true;
 
@@ -559,7 +559,7 @@ namespace Shell.MVC2.Data
                if (havekids != null) p.profiledata.kidstatus = havekids;
 
                if (lookingfors.Count > 0)
-                   updateprofilemetatdatalookingfor(lookingfors, p.profilemetadata);
+                   updatemembermetatdatalookingfor(lookingfors, p.profilemetadata);
 
 
 
@@ -597,14 +597,13 @@ namespace Shell.MVC2.Data
 
        }
 
-
        #endregion
 
 
        #region "Edit profile Character Settings Updates here"
 
 
-       public AnewluvMessages editprofilecharactersettings(CharacterSettingsModel newmodel, int profileid)
+       public AnewluvMessages editmembercharactersettings(CharacterSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
@@ -613,10 +612,10 @@ namespace Shell.MVC2.Data
            //get the profile details :
            profile p = db.profiles.Where(z => z.id == profileid).First(); 
 
-           messages = (updateprofilecharactersettings(newmodel, p, messages));
-           // messages = (EditProfilecharacterSettingsPage2Update(newmodel, profileid, messages));
-           // messages = (EditProfilecharacterSettingsPage3Update(newmodel, profileid, messages));
-           //  messages = (EditProfilecharacterSettingsPage4Update(newmodel, profileid, messages));
+           messages = (updatemembercharactersettings(newmodel, p, messages));
+           // messages = (editmembercharacterSettingsPage2Update(newmodel, profileid, messages));
+           // messages = (editmembercharacterSettingsPage3Update(newmodel, profileid, messages));
+           //  messages = (editmembercharacterSettingsPage4Update(newmodel, profileid, messages));
 
            if (messages.errormessages.Count > 0)
            {
@@ -628,7 +627,7 @@ namespace Shell.MVC2.Data
        }
 
        //TO DO send back the messages on errors and when nothing is changed
-       private AnewluvMessages updateprofilecharactersettings(CharacterSettingsModel newmodel, profile p, AnewluvMessages messages)
+       private AnewluvMessages updatemembercharactersettings(CharacterSettingsModel newmodel, profile p, AnewluvMessages messages)
        {
            bool nothingupdated = true;
 
@@ -667,7 +666,7 @@ namespace Shell.MVC2.Data
                if (religion != null) p.profiledata.religion = religion;
                if (religiousattendance != null) p.profiledata.religiousattendance = religiousattendance;
                if (hobylist.Count > 0)
-                   updateprofilemetatdatahobby(hobylist, p.profilemetadata);
+                   updatemembermetatdatahobby(hobylist, p.profilemetadata);
 
 
 
@@ -708,6 +707,7 @@ namespace Shell.MVC2.Data
 
 
        #endregion
+
        #endregion
 
     
@@ -721,9 +721,9 @@ namespace Shell.MVC2.Data
 
 
        //profiledata ethnicity
-       private void updateprofilemetatdataethnicity(List<lu_ethnicity> selectedethnicity, profilemetadata currentprofilemetadata)
+       private void updatemembermetatdataethnicity(List<lu_ethnicity> ethnicities, profilemetadata currentprofilemetadata)
        {
-           if (selectedethnicity == null)
+           if (ethnicities == null)
            {
                // profiledata.SearchSettings.FirstOrDefault().SearchSettings_showme  = new List<gender>(); 
                return;
@@ -733,38 +733,58 @@ namespace Shell.MVC2.Data
            //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-           // var selectedshowmeHS = new HashSet<int?>(selectedshowme);
-           //get the values for this members searchsettings showme
-           //var SearchSettingsshowme = new HashSet<int?>(currentsearchsetting.showme.Select(c => c.id));
-           foreach (var ethnicity in db.lu_ethnicity)
+           foreach (var ethnicity in ethnicities)
            {
-               if (selectedethnicity.Contains(ethnicity))
+               //new logic : if this item was selected and is not already in the search settings gender values add it 
+               if ((ethnicity.selected == true && !currentprofilemetadata.ethnicities.Where(z => z.ethnicty.id == ethnicity.id).Any()))
                {
-                   //does not exist so we will add it
-                   if (!currentprofilemetadata.ethnicities.Any(p => p.id == ethnicity.id))
-                   {
+                   //SearchSettings_showme.showmeID = showme.showmeID;
+                   var temp = new profiledata_ethnicity();
+                   temp.id = ethnicity.id;
+                   temp.profile_id = currentprofilemetadata.profile_id;
+                   db.ethnicities.Add(temp);
 
-                       //SearchSettings_showme.showmeID = showme.showmeID;
-                       var temp = new profiledata_ethnicity();
-                       temp.id = ethnicity.id;
-                       temp.profile_id = currentprofilemetadata.profile_id ;
-                       db.ethnicities.Add(temp);
-
-                   }
                }
                else
-               { //exists means we want to remove it
-                   if (currentprofilemetadata.ethnicities.Any(p => p.id == ethnicity.id))
-                   {
-                       var temp = db.ethnicities.Where(p => p.profile_id == currentprofilemetadata.profile_id  && p.ethnicty.id == ethnicity.id).First();
+               {
+                   //we have an existing value and we want to remove it in this case since selected was false for sure
+                   //we will be doing a remove either way
+                   var temp = db.ethnicities.Where(p => p.profile_id == currentprofilemetadata.profile_id && p.ethnicty.id == ethnicity.id).First();
+                   if (temp != null)
                        db.ethnicities.Remove(temp);
-
-                   }
                }
            }
+
+
+           //foreach (var ethnicity in db.lu_ethnicity)
+           //{
+           //    if (ethnicities.Contains(ethnicity))
+           //    {
+           //        //does not exist so we will add it
+           //        if (!currentprofilemetadata.ethnicities.Any(p => p.id == ethnicity.id))
+           //        {
+
+           //            //SearchSettings_showme.showmeID = showme.showmeID;
+           //            var temp = new profiledata_ethnicity();
+           //            temp.id = ethnicity.id;
+           //            temp.profile_id = currentprofilemetadata.profile_id ;
+           //            db.ethnicities.Add(temp);
+
+           //        }
+           //    }
+           //    else
+           //    { //exists means we want to remove it
+           //        if (currentprofilemetadata.ethnicities.Any(p => p.id == ethnicity.id))
+           //        {
+           //            var temp = db.ethnicities.Where(p => p.profile_id == currentprofilemetadata.profile_id  && p.ethnicty.id == ethnicity.id).First();
+           //            db.ethnicities.Remove(temp);
+
+           //        }
+           //    }
+           //}
        }
        //profiledata hotfeature
-       private void updateprofilemetatdatahotfeature(List<lu_hotfeature> selectedhotfeature, profilemetadata currentprofilemetadata)
+       private void updatemembermetatdatahotfeature(List<lu_hotfeature> selectedhotfeature, profilemetadata currentprofilemetadata)
        {
            if (selectedhotfeature == null)
            {
@@ -807,7 +827,7 @@ namespace Shell.MVC2.Data
            }
        }
        //profiledata hobby
-       private void updateprofilemetatdatahobby(List<lu_hobby> selectedhobby, profilemetadata currentprofilemetadata)
+       private void updatemembermetatdatahobby(List<lu_hobby> selectedhobby, profilemetadata currentprofilemetadata)
        {
            if (selectedhobby == null)
            {
@@ -850,7 +870,7 @@ namespace Shell.MVC2.Data
            }
        }
        //profiledata lookingfor
-       private void updateprofilemetatdatalookingfor(List<lu_lookingfor> selectedlookingfor, profilemetadata currentprofilemetadata)
+       private void updatemembermetatdatalookingfor(List<lu_lookingfor> selectedlookingfor, profilemetadata currentprofilemetadata)
        {
            if (selectedlookingfor == null)
            {

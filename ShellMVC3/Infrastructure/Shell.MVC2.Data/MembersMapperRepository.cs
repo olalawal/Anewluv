@@ -59,7 +59,7 @@ namespace Shell.MVC2.Data
                // DatingService db = new DatingService();
                 //  MembersRepository membersrepo=  new MembersRepository();
                 profile profile =membersrepository.getprofilebyprofileid(profileId); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
-                //  EditProfileRepository editProfileRepository = new EditProfileRepository();
+                //  editmemberRepository editmemberRepository = new editmemberRepository();
 
                    //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
                     if (viewerprofile.latitude != null &&
@@ -97,12 +97,12 @@ namespace Shell.MVC2.Data
                 //or instead just have the photo the select zoom up
                 int page = 1;
                 int ps = 12;
-               // var MyPhotos = editProfileRepository.MyPhotos(model.profile.username);
-               // var Approved = editProfileRepository.GetApproved(MyPhotos, "Yes", page, ps);
-               // var NotApproved = editProfileRepository.GetApproved(MyPhotos, "No", page, ps);
-               // var Private = editProfileRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
+               // var MyPhotos = editmemberRepository.MyPhotos(model.profile.username);
+               // var Approved = editmemberRepository.GetApproved(MyPhotos, "Yes", page, ps);
+               // var NotApproved = editmemberRepository.GetApproved(MyPhotos, "No", page, ps);
+               // var Private = editmemberRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
                 model.profilephotos = new PhotoViewModel();
-                model.profilephotos.ProfilePhotosApproved  = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id,photoapprovalstatusEnum.Approved ,photoformatEnum.Thumbnail,  page, ps);   //editProfileRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                model.profilephotos.ProfilePhotosApproved  = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id,photoapprovalstatusEnum.Approved ,photoformatEnum.Thumbnail,  page, ps);   //editmemberRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
                // approvedphotos = photorepository.
 
                return model;
@@ -132,7 +132,7 @@ namespace Shell.MVC2.Data
                     // DatingService db = new DatingService();
                     //  MembersRepository membersrepo=  new MembersRepository();
                     profile profile = membersrepository.getprofilebyprofileid(item); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
-                    //  EditProfileRepository editProfileRepository = new EditProfileRepository();
+                    //  editmemberRepository editmemberRepository = new editmemberRepository();
 
                     //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
                     if (viewerprofile.latitude != null &&
@@ -170,13 +170,13 @@ namespace Shell.MVC2.Data
                     //or instead just have the photo the select zoom up
                     int page = 1;
                     int ps = 12;
-                    // var MyPhotos = editProfileRepository.MyPhotos(model.profile.username);
-                    // var Approved = editProfileRepository.GetApproved(MyPhotos, "Yes", page, ps);
-                    // var NotApproved = editProfileRepository.GetApproved(MyPhotos, "No", page, ps);
-                    // var Private = editProfileRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
+                    // var MyPhotos = editmemberRepository.MyPhotos(model.profile.username);
+                    // var Approved = editmemberRepository.GetApproved(MyPhotos, "Yes", page, ps);
+                    // var NotApproved = editmemberRepository.GetApproved(MyPhotos, "No", page, ps);
+                    // var Private = editmemberRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
                   //12-27-2012 olawal added a contrructore to photoviewmodel to avoid null collections
                     model.profilephotos = new PhotoViewModel();
-                    model.profilephotos.ProfilePhotosApproved = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id, photoapprovalstatusEnum.Approved, photoformatEnum.Thumbnail, page, ps);   //editProfileRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                    model.profilephotos.ProfilePhotosApproved = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id, photoapprovalstatusEnum.Approved, photoformatEnum.Thumbnail, page, ps);   //editmemberRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
                     // approvedphotos = photorepository.
 
                 }
@@ -266,10 +266,10 @@ namespace Shell.MVC2.Data
 
 
                 //instantiate models
-                CriteriaModel.BasicSearchSettings = new SearchBasicSettings();
-                CriteriaModel.AppearanceSearchSettings = new SearchAppearanceSettings();
-                CriteriaModel.LifeStyleSearchSettings = new SearchLifeStyleSettings();
-                CriteriaModel.CharacterSearchSettings = new SearchCharacterSettings();
+                CriteriaModel.BasicSearchSettings = new BasicSearchSettingsModel ();
+                CriteriaModel.AppearanceSearchSettings = new AppearanceSearchSettingsModel ();
+                CriteriaModel.LifeStyleSearchSettings = new LifeStyleSearchSettingsModel ();
+                CriteriaModel.CharacterSearchSettings = new CharacterSearchSettingsModel ();
                 // IKernel kernel = new StandardKernel();
                 //Get these initalized
                 //  MembersRepository membersrepo = kernel.Get<MembersRepository>(); 
@@ -341,111 +341,111 @@ namespace Shell.MVC2.Data
 
 
                 //basic search settings here
-                CriteriaModel.BasicSearchSettings.maxdistancefromme  = (PerfectMatchSettings == null || PerfectMatchSettings.distancefromme == null) ? 500 : PerfectMatchSettings.distancefromme ;
-                CriteriaModel.BasicSearchSettings.seekingagemin = (PerfectMatchSettings == null || PerfectMatchSettings.agemin == null) ? 18 : PerfectMatchSettings.agemin;
-                CriteriaModel.BasicSearchSettings.seekingagemax = (PerfectMatchSettings == null || PerfectMatchSettings.agemax == null) ? 99 : PerfectMatchSettings.agemax;
+                CriteriaModel.BasicSearchSettings.distancefromme   = (PerfectMatchSettings == null || PerfectMatchSettings.distancefromme == null) ? 500 : PerfectMatchSettings.distancefromme ;
+                CriteriaModel.BasicSearchSettings.agemin  = (PerfectMatchSettings == null || PerfectMatchSettings.agemin == null) ? 18 : PerfectMatchSettings.agemin;
+                CriteriaModel.BasicSearchSettings.agemax  = (PerfectMatchSettings == null || PerfectMatchSettings.agemax == null) ? 99 : PerfectMatchSettings.agemax;
 
                 //TO DO add this to search settings for now use what is in profiledata
                 //These will come from search settings table in the future at some point
-                CriteriaModel.BasicSearchSettings.country = georepository.getcountrynamebycountryid((byte)metadata.profile.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
-                CriteriaModel.BasicSearchSettings.citystateprovince = (metadata.profile.profiledata.stateprovince == null) ? "Ask Me" : metadata.profile.profiledata.stateprovince;
-                CriteriaModel.BasicSearchSettings.postalcode  = metadata.profile.profiledata.postalcode;  //this could be for countries withoute p codes
+              //  CriteriaModel.BasicSearchSettings. = georepository.getcountrynamebycountryid((byte)metadata.profile.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
+                CriteriaModel.BasicSearchSettings.locationlist = PerfectMatchSettings.locations .ToList();
+              //  CriteriaModel.BasicSearchSettings.postalcode  = metadata.profile.profiledata.postalcode;  //this could be for countries withoute p codes
 
                 //populate list values
                 foreach (var item in PerfectMatchSettings.genders )
                 {
-                    CriteriaModel.BasicSearchSettings.genderslist.Add(item.gender.description );
+                    CriteriaModel.BasicSearchSettings.genderlist.Add(item.gender);
                 }
                 //appearance search settings here
-                CriteriaModel.AppearanceSearchSettings.heightmax = (PerfectMatchSettings == null || PerfectMatchSettings.heightmax == null) ? Extensions.ToFeetInches(48) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmax);
+                CriteriaModel.AppearanceSearchSettings.heightmax = (PerfectMatchSettings == null || PerfectMatchSettings.heightmax  == null) ? Extensions.ToFeetInches(48) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmax);
                 CriteriaModel.AppearanceSearchSettings.heightmin = (PerfectMatchSettings == null || PerfectMatchSettings.heightmin == null) ? Extensions.ToFeetInches(89) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmin);
 
-                foreach (var item in PerfectMatchSettings.ethnicitys )
+                foreach (var item in PerfectMatchSettings.ethnicities  )
                 {
-                    CriteriaModel.AppearanceSearchSettings.ethnicitylist.Add(item.ethnicity.description );
+                    CriteriaModel.AppearanceSearchSettings.ethnicitylist.Add(item.ethnicity);
                 }
 
                 foreach (var item in PerfectMatchSettings.bodytypes )
                 {
-                    CriteriaModel.AppearanceSearchSettings.bodytypeslist.Add(item.bodytype.description );
+                    CriteriaModel.AppearanceSearchSettings.bodytypeslist.Add(item.bodytype);
                 }
 
                 foreach (var item in PerfectMatchSettings.eyecolors )
                 {
-                    CriteriaModel.AppearanceSearchSettings.eyecolorlist.Add(item.eyecolor.description );
+                    CriteriaModel.AppearanceSearchSettings.eyecolorlist.Add(item.eyecolor );
                 }
 
                 foreach (var item in PerfectMatchSettings.haircolors )
                 {
-                    CriteriaModel.AppearanceSearchSettings.haircolorlist.Add(item.haircolor.description );
+                    CriteriaModel.AppearanceSearchSettings.haircolorlist.Add(item.haircolor );
                 }
 
 
                 foreach (var item in PerfectMatchSettings.hotfeatures )
                 {
-                    CriteriaModel.AppearanceSearchSettings.hotfeaturelist.Add(item.hotfeature.description);
+                    CriteriaModel.AppearanceSearchSettings.hotfeaturelist.Add(item.hotfeature);
                 }
 
                 //populate lifestyle values here
 
                 foreach (var item in PerfectMatchSettings.educationlevels )
-                { CriteriaModel.LifeStyleSearchSettings.educationlevellist.Add(item.educationlevel.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.educationlevellist.Add(item.educationlevel ); }
 
                 foreach (var item in PerfectMatchSettings.lookingfor )
-                { CriteriaModel.LifeStyleSearchSettings.lookingforlist.Add(item.lookingfor.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.lookingforlist.Add(item.lookingfor ); }
 
                 foreach (var item in PerfectMatchSettings.employmentstatus )
-                { CriteriaModel.LifeStyleSearchSettings.employmentstatuslist.Add(item.employmentstatus.description); }
+                { CriteriaModel.LifeStyleSearchSettings.employmentstatuslist.Add(item.employmentstatus); }
 
                 foreach (var item in PerfectMatchSettings.havekids )
-                { CriteriaModel.LifeStyleSearchSettings.havekidslist.Add(item.havekids.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.havekidslist.Add(item.havekids ); }
 
                 foreach (var item in PerfectMatchSettings.livingstituations )
-                { CriteriaModel.LifeStyleSearchSettings.livingsituationlist.Add(item.livingsituation.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.livingsituationlist.Add(item.livingsituation ); }
 
                 foreach (var item in PerfectMatchSettings.maritalstatuses )
-                { CriteriaModel.LifeStyleSearchSettings.maritalstatuslist.Add(item.maritalstatus.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.maritalstatuslist.Add(item.maritalstatus ); }
 
                 foreach (var item in PerfectMatchSettings.wantkids )
-                { CriteriaModel.LifeStyleSearchSettings.wantskidslist.Add(item.wantskids.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.wantskidslist.Add(item.wantskids ); }
 
                 foreach (var item in PerfectMatchSettings.professions )
-                { CriteriaModel.LifeStyleSearchSettings.professionlist.Add(item.profession.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.professionlist.Add(item.profession ); }
 
                 foreach (var item in PerfectMatchSettings.incomelevels )
-                { CriteriaModel.LifeStyleSearchSettings.incomelevellist.Add(item.incomelevel.description ); }
+                { CriteriaModel.LifeStyleSearchSettings.incomelevellist.Add(item.incomelevel ); }
 
                 //Character settings for search here
                 foreach (var item in PerfectMatchSettings.diets )
-                { CriteriaModel.CharacterSearchSettings.dietlist.Add(item.diet.description ); }
+                { CriteriaModel.CharacterSearchSettings.dietlist.Add(item.diet ); }
 
                 foreach (var item in PerfectMatchSettings.humors )
-                { CriteriaModel.CharacterSearchSettings.humorlist.Add(item.humor.description ); }
+                { CriteriaModel.CharacterSearchSettings.humorlist.Add(item.humor ); }
 
                 foreach (var item in PerfectMatchSettings.hobbies )
-                { CriteriaModel.CharacterSearchSettings.hobbylist.Add(item.hobby.description ); }
+                { CriteriaModel.CharacterSearchSettings.hobbylist.Add(item.hobby ); }
 
                 foreach (var item in PerfectMatchSettings.drinks )
-                { CriteriaModel.CharacterSearchSettings.drinkslist.Add(item.drink.description ); }
+                { CriteriaModel.CharacterSearchSettings.drinkslist.Add(item.drink ); }
 
                 //FIX after database update
                 foreach (var item in PerfectMatchSettings.exercises )
-                { CriteriaModel.CharacterSearchSettings.exerciselist.Add(item.exercise.description ); }
+                { CriteriaModel.CharacterSearchSettings.exerciselist.Add(item.exercise ); }
 
                 foreach (var item in PerfectMatchSettings.smokes )
-                { CriteriaModel.CharacterSearchSettings.smokeslist.Add(item.smoke.description ); }
+                { CriteriaModel.CharacterSearchSettings.smokeslist.Add(item.smoke ); }
 
                 foreach (var item in PerfectMatchSettings.signs )
-                { CriteriaModel.CharacterSearchSettings.signlist.Add(item.sign.description ); }
+                { CriteriaModel.CharacterSearchSettings.signlist.Add(item.sign ); }
 
                 foreach (var item in PerfectMatchSettings.politicalviews )
-                { CriteriaModel.CharacterSearchSettings.politicalviewlist.Add(item.politicalview.description ); }
+                { CriteriaModel.CharacterSearchSettings.politicalviewlist.Add(item.politicalview ); }
 
                 foreach (var item in PerfectMatchSettings.religions )
-                { CriteriaModel.CharacterSearchSettings.religionlist.Add(item.religion.description); }
+                { CriteriaModel.CharacterSearchSettings.religionlist.Add(item.religion); }
 
                 foreach (var item in PerfectMatchSettings.religiousattendances )
-                { CriteriaModel.CharacterSearchSettings.religiousattendancelist.Add(item.religiousattendance.description ); }
+                { CriteriaModel.CharacterSearchSettings.religiousattendancelist.Add(item.religiousattendance ); }
 
 
                 return CriteriaModel;
@@ -795,10 +795,10 @@ namespace Shell.MVC2.Data
 
                 model.mycountryname = "United States";// georepository.getcountrynamebycountryid(profile.profiledata.countryid);
 #else
-            model.mycountryname = georepository.getcountrynamebycountryid(profile.profiledata.countryid);
+            model.mycountryname = georepository.getcountrynamebycountryid(profile.profiledata.countryid.GetValueOrDefault());
 #endif
 
-                model.mycountryid =profile.profiledata.countryid;
+                model.mycountryid =profile.profiledata.countryid.GetValueOrDefault();
                 model.mycity =profile.profiledata.city;
                 //TO DO items need to be populated with real values, in this case change model to double for latt
                 model.mylatitude =profile.profiledata.latitude.ToString(); //model.Lattitude
@@ -949,7 +949,7 @@ namespace Shell.MVC2.Data
             LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id.GetValueOrDefault())) : LookingForBodyTypesValues;
 
             HashSet<int> LookingForEthnicityValues = new HashSet<int>();
-            LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicitys.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
+            LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicities.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
 
             HashSet<int> LookingForEyeColorValues = new HashSet<int>();
             LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.eyecolors.Select(c => c.id.GetValueOrDefault())) : LookingForEyeColorValues;
@@ -1107,7 +1107,7 @@ namespace Shell.MVC2.Data
                 LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id.GetValueOrDefault())) : LookingForBodyTypesValues;
 
                 HashSet<int> LookingForEthnicityValues = new HashSet<int>();
-                LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicitys.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
+                LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicities.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
 
                 HashSet<int> LookingForEyeColorValues = new HashSet<int>();
                 LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.eyecolors.Select(c => c.id.GetValueOrDefault())) : LookingForEyeColorValues;

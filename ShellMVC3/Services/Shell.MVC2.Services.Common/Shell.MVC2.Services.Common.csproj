@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</ProjectGuid>
+    <ProjectGuid>{7C23C034-12AE-4697-BBF2-8A45F3EFAB73}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Shell.MVC2.Services.Contracts</RootNamespace>
-    <AssemblyName>Shell.MVC2.Services.Contracts</AssemblyName>
+    <RootNamespace>Shell.MVC2.Services.Common</RootNamespace>
+    <AssemblyName>Shell.MVC2.Services.Common</AssemblyName>
     <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -33,62 +33,36 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoCacheDebug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\NoCacheDebug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IEditMemberService.cs" />
-    <Compile Include="IEditSearchService.cs" />
-    <Compile Include="ErrorHandling\ServiceFualt.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ILookupService.cs" />
-    <Compile Include="IErrorLoggingService.cs" />
-    <Compile Include="IGeoService.cs" />
-    <Compile Include="IInfoNotificationService.cs" />
-    <Compile Include="IMemberActionsService.cs" />
-    <Compile Include="IMemberService.cs" />
-    <Compile Include="IAuthenticationService.cs" />
-    <Compile Include="IMembersMapperService.cs" />
-    <Compile Include="IPhotoService.cs" />
-    <Compile Include="IUserRepairService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LookupService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
-      <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
-      <Name>Dating.Server.Data.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Domain\Entities\Shell.MVC2.Domain.Entities\Shell.MVC2.Domain.Entities.csproj">
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Entities\Shell.MVC2.Domain.Entities\Shell.MVC2.Domain.Entities.csproj">
       <Project>{3413A2BC-A142-4383-A9BD-72145457C6CB}</Project>
       <Name>Shell.MVC2.Domain.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\Entities\Shell.MVC.Infrastructure.Entities\Shell.MVC2.Infrastructure.Entities.csproj">
-      <Project>{92B7DBBB-2313-4C2E-88AB-970751B229F1}</Project>
-      <Name>Shell.MVC2.Infrastructure.Entities</Name>
+    <ProjectReference Include="..\..\Domain\Interfaces\Shell.MVC2.Interfaces\Shell.MVC2.Interfaces.csproj">
+      <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
+      <Name>Shell.MVC2.Interfaces</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ApiDocumentation\ApikeyDocumentation.txt" />
+    <ProjectReference Include="..\Contracts\Shell.MVC2.Services.Contracts\Shell.MVC2.Services.Contracts.csproj">
+      <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
+      <Name>Shell.MVC2.Services.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
