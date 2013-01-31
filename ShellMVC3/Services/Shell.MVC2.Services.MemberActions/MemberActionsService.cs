@@ -55,7 +55,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwhoiaminterestedincount(string profileid)
         {
-            return _memberactionsrepository.getwhoiaminterestedincount(profileid);
+            return _memberactionsrepository.getwhoiaminterestedincount(Convert.ToInt32(profileid));
         }
 
         //count methods first
@@ -64,7 +64,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwhoisinterestedinmecount(string profileid)
         {
-            return _memberactionsrepository.getwhoisinterestedinmecount(profileid);
+            return _memberactionsrepository.getwhoisinterestedinmecount(Convert.ToInt32(profileid));
         }
 
         //count methods first
@@ -73,7 +73,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwhoisinterestedinmenewcount(string profileid)
         {
-            return _memberactionsrepository.getwhoisinterestedinmenewcount(profileid);
+            return _memberactionsrepository.getwhoisinterestedinmenewcount(Convert.ToInt32(profileid));
         }
 
         #endregion
@@ -84,7 +84,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public List<MemberSearchViewModel> getinterests(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getinterests(profileid, page, numberperpage);
+            return _memberactionsrepository.getinterests(Convert.ToInt32(profileid),Convert.ToInt32(page) ,Convert.ToInt32(numberperpage));
 
         }
 
@@ -94,7 +94,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public List<MemberSearchViewModel> getwhoisinterestedinme(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhoisinterestedinme(profileid, page, numberperpage);
+            return _memberactionsrepository.getwhoisinterestedinme(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public List<MemberSearchViewModel> getwhoisinterestedinmenew(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhoisinterestedinmenew(profileid, page, numberperpage); ;
+            return _memberactionsrepository.getwhoisinterestedinmenew(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage)); ;
         }
 
         #region "update/check/change actions"
@@ -113,27 +113,27 @@ namespace Shell.MVC2.Services.Dating
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutualinterests(string profileid, int targetprofileid)
+        public List<MemberSearchViewModel> getmutualinterests(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.getmutualinterests(profileid,targetprofileid);
+            return _memberactionsrepository.getmutualinterests(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
 
         }
         /// <summary>
         /// //checks if you already sent and interest to the target profile
         /// </summary        
-        public bool checkinterest(string profileid, int targetprofileid)
+        public bool checkinterest(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.checkinterest(profileid, targetprofileid);
+            return _memberactionsrepository.checkinterest(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
      }
 
         /// <summary>
         /// Adds a New interest
         /// </summary>
-        public bool addinterest(string profileid, int targetprofileid)
+        public bool addinterest(string profileid, string targetprofileid)
         {
 
 
-            return _memberactionsrepository.addinterest(profileid, targetprofileid);
+            return _memberactionsrepository.addinterest(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
 
 
         }
@@ -143,9 +143,9 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool removeinterestbyprofileid(string profileid, int interestprofile_id)
+        public bool removeinterestbyprofileid(string profileid, string interestprofile_id)
         {
-            return _memberactionsrepository.removeinterestbyinterestprofileid(profileid, interestprofile_id);
+            return _memberactionsrepository.removeinterestbyinterestprofileid(Convert.ToInt32(profileid),Convert.ToInt32(interestprofile_id));
 
         }
 
@@ -154,10 +154,10 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool removeinterestbyinterestprofileid(int interestprofile_id, string profileid)
+        public bool removeinterestbyinterestprofileid(string interestprofile_id, string profileid)
         {
 
-            return _memberactionsrepository.removeinterestbyinterestprofileid(interestprofile_id, profileid);
+            return _memberactionsrepository.removeinterestbyinterestprofileid(Convert.ToInt32(interestprofile_id), Convert.ToInt32(profileid));
         }
 
         /// <summary>
@@ -165,10 +165,10 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreinterestbyprofileid(string profileid, int interestprofile_id)
+        public bool restoreinterestbyprofileid(string profileid,string interestprofile_id)
         {
 
-            return _memberactionsrepository.restoreinterestbyprofileid(profileid, interestprofile_id);
+            return _memberactionsrepository.restoreinterestbyprofileid(Convert.ToInt32(profileid),Convert.ToInt32(interestprofile_id));
         }
 
         /// <summary>
@@ -176,9 +176,9 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreinterestbyinterestprofileid(int interestprofile_id, string profileid)
+        public bool restoreinterestbyinterestprofileid(string interestprofile_id, string profileid)
         {
-            return _memberactionsrepository.restoreinterestbyinterestprofileid(interestprofile_id, profileid);
+            return _memberactionsrepository.restoreinterestbyinterestprofileid(Convert.ToInt32(interestprofile_id), Convert.ToInt32(profileid));
 
         }
 
@@ -188,7 +188,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public bool removeinterestsbyprofileidandscreennames(string profileid, List<String> screennames)
         {
-            return _memberactionsrepository.removeinterestsbyprofileidandscreennames(profileid, screennames);
+            return _memberactionsrepository.removeinterestsbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
         }
 
         /// <summary>
@@ -199,17 +199,17 @@ namespace Shell.MVC2.Services.Dating
         {
 
 
-            return _memberactionsrepository.restoreinterestsbyprofileidandscreennames(profileid, screennames);
+            return _memberactionsrepository.restoreinterestsbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
 
         }
 
         /// <summary>
         ///  Update interest with a view     
         /// </summary 
-        public bool updateinterestviewstatus(string profileid, int targetprofileid)
+        public bool updateinterestviewstatus(string profileid, string targetprofileid)
         {
 
-            return _memberactionsrepository.updatelikeviewstatus(profileid, targetprofileid);
+            return _memberactionsrepository.updatelikeviewstatus(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
         }
 
         #endregion
@@ -233,7 +233,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwhoipeekedatcount(string profileid)
         {
-            return _memberactionsrepository.getwhoipeekedatcount(profileid);
+            return _memberactionsrepository.getwhoipeekedatcount(Convert.ToInt32(profileid));
         }
 
         //count methods first
@@ -242,7 +242,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwhopeekedatmecount(string profileid)
         {
-            return _memberactionsrepository.getwhopeekedatmecount(profileid);
+            return _memberactionsrepository.getwhopeekedatmecount(Convert.ToInt32(profileid));
         }
 
         //count methods first
@@ -251,7 +251,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwhopeekedatmenewcount(string profileid)
         {
-            return _memberactionsrepository.getwhopeekedatmenewcount(profileid);
+            return _memberactionsrepository.getwhopeekedatmenewcount(Convert.ToInt32(profileid));
         }
 
         #endregion
@@ -263,7 +263,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public List<MemberSearchViewModel> getwhopeekedatme(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhopeekedatme(profileid, page, numberperpage);
+            return _memberactionsrepository.getwhopeekedatme(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
         }
 
 
@@ -273,7 +273,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>
         public List<MemberSearchViewModel> getwhopeekedatmenew(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhopeekedatmenew(profileid, page, numberperpage);
+            return _memberactionsrepository.getwhopeekedatmenew(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
         }
 
 
@@ -284,7 +284,7 @@ namespace Shell.MVC2.Services.Dating
         public List<MemberSearchViewModel> getwhoipeekedat(string profileid, string page, string numberperpage)
         {
 
-            return _memberactionsrepository.getwhoipeekedat(profileid, page, numberperpage);
+            return _memberactionsrepository.getwhoipeekedat(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
         }
 
 
@@ -298,27 +298,27 @@ namespace Shell.MVC2.Services.Dating
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutualpeeks(string profileid, int targetprofileid)
+        public List<MemberSearchViewModel> getmutualpeeks(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.getmutualpeeks(profileid, targetprofileid);
+            return _memberactionsrepository.getmutualpeeks(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
 
         }
         /// <summary>
         /// //checks if you already sent and peek to the target profile
         /// </summary        
-        public bool checkpeek(string profileid, int targetprofileid)
+        public bool checkpeek(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.checkpeek(profileid, targetprofileid);
+            return _memberactionsrepository.checkpeek(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
       
       }
 
         /// <summary>
         /// Adds a New peek
         /// </summary>
-        public bool addpeek(string profileid, int targetprofileid)
+        public bool addpeek(string profileid, string targetprofileid)
         {
 
-            return _memberactionsrepository.addpeek(profileid, targetprofileid);
+            return _memberactionsrepository.addpeek(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
 
         }
 
@@ -327,10 +327,10 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool removepeekbyprofileid(string profileid, int peekprofile_id)
+        public bool removepeekbyprofileid(string profileid, string peekprofile_id)
         {
 
-            return _memberactionsrepository.removepeekbypeekprofileid(profileid, peekprofile_id);
+            return _memberactionsrepository.removepeekbypeekprofileid(Convert.ToInt32(profileid), Convert.ToInt32(peekprofile_id));
 
         }
 
@@ -339,10 +339,10 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool removepeekbypeekprofileid(int peekprofile_id, string profileid)
+        public bool removepeekbypeekprofileid(string peekprofile_id, string profileid)
         {
 
-            return _memberactionsrepository.removepeekbypeekprofileid(peekprofile_id, profileid);
+            return _memberactionsrepository.removepeekbypeekprofileid(Convert.ToInt32(peekprofile_id), Convert.ToInt32(profileid));
         }
 
         /// <summary>
@@ -350,11 +350,11 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool restorepeekbyprofileid(string profileid, int peekprofile_id)
+        public bool restorepeekbyprofileid(string profileid, string peekprofile_id)
         {
 
 
-            return _memberactionsrepository.restorepeekbypeekprofileid(profileid, peekprofile_id);
+            return _memberactionsrepository.restorepeekbypeekprofileid(Convert.ToInt32(profileid), Convert.ToInt32(peekprofile_id));
 
         }
 
@@ -363,9 +363,9 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool restorepeekbypeekprofileid(int peekprofile_id, string profileid)
+        public bool restorepeekbypeekprofileid(string peekprofile_id, string profileid)
         {
-            return _memberactionsrepository.restorepeekbypeekprofileid(peekprofile_id, profileid);
+            return _memberactionsrepository.restorepeekbypeekprofileid( Convert.ToInt32(peekprofile_id), Convert.ToInt32(profileid));
 
         }
 
@@ -375,7 +375,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public bool removepeeksbyprofileidandscreennames(string profileid, List<String> screennames)
         {
-            return _memberactionsrepository.removepeeksbyprofileidandscreennames(profileid, screennames);
+            return _memberactionsrepository.removepeeksbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
         }
 
         /// <summary>
@@ -385,17 +385,17 @@ namespace Shell.MVC2.Services.Dating
         public bool restorepeeksbyprofileidandscreennames(string profileid, List<String> screennames)
         {
 
-            return _memberactionsrepository.restorepeeksbyprofileidandscreennames(profileid, screennames);
+            return _memberactionsrepository.restorepeeksbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
 
         }
 
         /// <summary>
         ///  Update peek with a view     
         /// </summary 
-        public bool updatepeekviewstatus(string profileid, int targetprofileid)
+        public bool updatepeekviewstatus(string profileid, string targetprofileid)
         {
 
-            return _memberactionsrepository.updatepeekviewstatus(profileid, targetprofileid);
+            return _memberactionsrepository.updatepeekviewstatus(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
 
         }
 
@@ -416,7 +416,7 @@ namespace Shell.MVC2.Services.Dating
         public int getwhoiblockedcount(string profileid)
         {
 
-            return _memberactionsrepository.getwhoiblockedcount(profileid);
+            return _memberactionsrepository.getwhoiblockedcount(Convert.ToInt32(profileid));
         }
 
         /// <summary>
@@ -425,7 +425,7 @@ namespace Shell.MVC2.Services.Dating
         public List<MemberSearchViewModel> getwhoiblocked(string profileid, string page, string numberperpage)
         {
 
-            return _memberactionsrepository.getwhoiblocked(profileid, page, numberperpage);
+            return _memberactionsrepository.getwhoiblocked(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
         }
 
         /// <summary>
@@ -434,7 +434,7 @@ namespace Shell.MVC2.Services.Dating
         public List<MemberSearchViewModel> getwhoblockedme(string profileid, string page, string numberperpage)
         {
           
-           return _memberactionsrepository.getwhoblockedme(profileid, page, numberperpage);
+           return _memberactionsrepository.getwhoblockedme(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
         }
 
 
@@ -445,27 +445,27 @@ namespace Shell.MVC2.Services.Dating
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutualblocks(string profileid, int targetprofileid)
+        public List<MemberSearchViewModel> getmutualblocks(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.getmutualblocks(profileid, targetprofileid);
+            return _memberactionsrepository.getmutualblocks(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
 
         }
         /// <summary>
         /// //checks if you already sent and block to the target profile
         /// </summary        
-        public bool checkblock(string profileid, int targetprofileid)
+        public bool checkblock(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.checkblock(profileid, targetprofileid);
+            return _memberactionsrepository.checkblock(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
       
       }
 
         /// <summary>
         /// Adds a New block
         /// </summary>
-        public bool addblock(string profileid, int targetprofileid)
+        public bool addblock(string profileid, string targetprofileid)
         {
 
-            return _memberactionsrepository.addblock(profileid, targetprofileid);
+            return _memberactionsrepository.addblock(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
 
         }
 
@@ -474,10 +474,10 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can block u
         ///  //not inmplemented
         /// </summary 
-        public bool removeblock(string profileid, int blockprofile_id)
+        public bool removeblock(string profileid, string blockprofile_id)
         {
 
-            return _memberactionsrepository.removeblock(profileid, blockprofile_id);
+            return _memberactionsrepository.removeblock(Convert.ToInt32(profileid), Convert.ToInt32(blockprofile_id));
         }
 
         /// <summary>
@@ -485,9 +485,9 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can block u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreblock(string profileid, int blockprofile_id)
+        public bool restoreblock(string profileid, string blockprofile_id)
         {
-            return _memberactionsrepository.restoreblock(profileid, blockprofile_id);
+            return _memberactionsrepository.restoreblock(Convert.ToInt32(profileid), Convert.ToInt32(blockprofile_id));
         }
 
         /// <summary>
@@ -497,7 +497,7 @@ namespace Shell.MVC2.Services.Dating
         public bool removeblocksbyscreennames(string profileid, List<String> screennames)
         {
 
-            return _memberactionsrepository.removeblocksbyscreennames(profileid, screennames);
+            return _memberactionsrepository.removeblocksbyscreennames(Convert.ToInt32(profileid), screennames);
 
         }
 
@@ -509,7 +509,7 @@ namespace Shell.MVC2.Services.Dating
         {
 
 
-            return _memberactionsrepository.restoreblocksbyscreennames(profileid, screennames);
+            return _memberactionsrepository.restoreblocksbyscreennames(Convert.ToInt32(profileid), screennames);
 
         }
 
@@ -518,9 +518,9 @@ namespace Shell.MVC2.Services.Dating
         ///  Update block with a view     
         /// </summary 
         /// 
-        public bool updateblockreviewstatus(string profileid, int targetprofileid, int reviewerid)
+        public bool updateblockreviewstatus(string profileid, string targetprofileid, string reviewerid)
         {
-            return _memberactionsrepository.updateblockreviewstatus(profileid, targetprofileid, reviewerid);
+            return _memberactionsrepository.updateblockreviewstatus(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid), Convert.ToInt32( reviewerid));
         }
         #endregion
 
@@ -538,7 +538,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwhoilikecount(string profileid)
         {
-            return _memberactionsrepository.getwhoilikecount (profileid);
+            return _memberactionsrepository.getwhoilikecount (Convert.ToInt32(profileid));
         }
 
         //count methods first
@@ -548,7 +548,7 @@ namespace Shell.MVC2.Services.Dating
         public int getwholikesmecount(string profileid)
         {
 
-            return _memberactionsrepository.getwholikesmecount(profileid);
+            return _memberactionsrepository.getwholikesmecount(Convert.ToInt32(profileid));
         }
 
         //count methods first
@@ -557,7 +557,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>       
         public int getwhoislikesmenewcount(string profileid)
         {
-            return _memberactionsrepository.getwholikesmenewcount(profileid);
+            return _memberactionsrepository.getwholikesmenewcount(Convert.ToInt32(profileid));
         }
 
         #endregion
@@ -569,7 +569,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>
         public List<MemberSearchViewModel> getwholikesmenew(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwholikesmenew(profileid, page, numberperpage);
+            return _memberactionsrepository.getwholikesmenew(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
 
         }
 
@@ -579,7 +579,7 @@ namespace Shell.MVC2.Services.Dating
         public List<MemberSearchViewModel> getwholikesme(string profileid, string page, string numberperpage)
         {
 
-            return _memberactionsrepository.getwholikesme(profileid, page, numberperpage);
+            return _memberactionsrepository.getwholikesme(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
         }
 
 
@@ -588,7 +588,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public List<MemberSearchViewModel> getwhoilike(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhoilike(profileid, page, numberperpage);
+            return _memberactionsrepository.getwhoilike(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
         }
 
 
@@ -600,27 +600,27 @@ namespace Shell.MVC2.Services.Dating
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutuallikes(string profileid, int targetprofileid)
+        public List<MemberSearchViewModel> getmutuallikes(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.getmutuallikes(profileid, targetprofileid);
+            return _memberactionsrepository.getmutuallikes(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
 
         }
         /// <summary>
         /// //checks if you already sent and like to the target profile
         /// </summary        
-        public bool checklike(string profileid, int targetprofileid)
+        public bool checklike(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.checklike(profileid, targetprofileid);
+            return _memberactionsrepository.checklike(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
        }
 
         /// <summary>
         /// Adds a New like
         /// </summary>
-        public bool addlike(string profileid, int targetprofileid)
+        public bool addlike(string profileid, string targetprofileid)
         {
 
 
-            return _memberactionsrepository.addlike(profileid, targetprofileid);
+            return _memberactionsrepository.addlike(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
 
 
         }
@@ -630,10 +630,10 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool removelikebyprofileid(string profileid, int likeprofile_id)
+        public bool removelikebyprofileid(string profileid, string likeprofile_id)
         {
 
-            return _memberactionsrepository.removelikebylikeprofileid(profileid, likeprofile_id);
+            return _memberactionsrepository.removelikebylikeprofileid(Convert.ToInt32(profileid), Convert.ToInt32(likeprofile_id));
         }
 
         /// <summary>
@@ -641,11 +641,11 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool removelikebylikeprofileid(int likeprofile_id, string profileid)
+        public bool removelikebylikeprofileid(string likeprofile_id, string profileid)
         {
 
 
-            return _memberactionsrepository.removelikebylikeprofileid(likeprofile_id, profileid);
+            return _memberactionsrepository.removelikebylikeprofileid(Convert.ToInt32(likeprofile_id), Convert.ToInt32(profileid));
 
         }
 
@@ -654,9 +654,9 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool restorelikebyprofileid(string profileid, int likeprofile_id)
+        public bool restorelikebyprofileid(string profileid, string likeprofile_id)
         {
-            return _memberactionsrepository.restorelikebyprofileid(profileid, likeprofile_id);
+            return _memberactionsrepository.restorelikebyprofileid(Convert.ToInt32(profileid), Convert.ToInt32(likeprofile_id));
         }
 
         /// <summary>
@@ -664,11 +664,11 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool restorelikebylikeprofileid(int likeprofile_id, string profileid)
+        public bool restorelikebylikeprofileid(string likeprofile_id, string profileid)
         {
 
 
-            return _memberactionsrepository.restorelikebylikeprofileid(likeprofile_id, profileid);
+            return _memberactionsrepository.restorelikebylikeprofileid(Convert.ToInt32(likeprofile_id), Convert.ToInt32(profileid));
 
         }
 
@@ -678,7 +678,7 @@ namespace Shell.MVC2.Services.Dating
         /// </summary 
         public bool removelikesbyprofileidandscreennames(string profileid, List<String> screennames)
         {
-            return _memberactionsrepository.removelikesbyprofileidandscreennames(profileid, screennames);
+            return _memberactionsrepository.removelikesbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
         }
 
         /// <summary>
@@ -689,15 +689,15 @@ namespace Shell.MVC2.Services.Dating
         {
 
 
-            return _memberactionsrepository.restorelikesbyprofileidandscreennames(profileid, screennames);
+            return _memberactionsrepository.restorelikesbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
         }
 
         /// <summary>
         ///  Update like with a view     
         /// </summary 
-        public bool updatelikeviewstatus(string profileid, int targetprofileid)
+        public bool updatelikeviewstatus(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.updatelikeviewstatus(profileid, targetprofileid);
+            return _memberactionsrepository.updatelikeviewstatus(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
 
         }
 

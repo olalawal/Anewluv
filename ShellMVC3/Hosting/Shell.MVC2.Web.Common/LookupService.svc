@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Shell.MVC2.Web.Common.Service1" CodeBehind="Service1.svc.cs" %>
+﻿<%@ ServiceHost Factory="Shell.MVC2.Web.Common.ServiceHostFactories.NinjectServiceHostFactory" Service="Shell.MVC2.Services.Common.LookupService"  %>
