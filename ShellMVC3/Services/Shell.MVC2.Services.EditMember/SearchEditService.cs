@@ -17,19 +17,19 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using System.ServiceModel.Activation;
 
 
-namespace Shell.MVC2.Services.Editsearch
+namespace Shell.MVC2.Services.Edit
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "searchsService" in both code and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
-    public class EditsearchService : IEditSearchService 
+    public class EditsearchService : ISearchEditService 
     {
 
 
-        private IEditSearchRepository _editsearchrepository;
+        private ISearchEditRepository _editsearchrepository;
         // private string _apikey;
 
-        public EditsearchService(IEditSearchRepository editsearchrepository)
+        public EditsearchService(ISearchEditRepository editsearchrepository)
         {
             _editsearchrepository = editsearchrepository;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];

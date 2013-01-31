@@ -69,8 +69,9 @@
     <Compile Include="Modules\ContextModules\PostalDataContextModule.cs" />
     <Compile Include="Modules\ContextModules\CustomErrorLogContextModule.cs" />
     <Compile Include="Modules\ContextModules\NotificationContextModule.cs" />
-    <Compile Include="Modules\EditMemberModule.cs" />
-    <Compile Include="Modules\EditSearchModule.cs" />
+    <Compile Include="Modules\LookupModule.cs" />
+    <Compile Include="Modules\MemberEditModule.cs" />
+    <Compile Include="Modules\SearchEditModule.cs" />
     <Compile Include="Modules\MailModule.cs" />
     <Compile Include="Modules\PostalDataServiceModule.cs" />
     <Compile Include="Modules\ErrroLoggingModule.cs" />

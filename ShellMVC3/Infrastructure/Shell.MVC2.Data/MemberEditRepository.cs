@@ -32,14 +32,14 @@ namespace Shell.MVC2.Data
 /// <summary>
 /// TO DO split off search settings methods , if needed they should be references as an interface
 /// </summary>
-   public  class EditMemberRepository : MemberRepositoryBase  , IEditMemberRepository 
+   public  class MemberEditRepository : MemberRepositoryBase  , IMemberEditRepository 
     {
 
        
        
         private  AnewluvContext db; // = new AnewluvContext();    
     //    private IMemberRepository _membersrepository;
-       // private IEditSearchRepository  _searchrepository;
+       // private ISearchEditRepository  _searchrepository;
         
        //private  PostalData2Entities postaldb; //= new PostalData2Entities();
 
@@ -50,7 +50,7 @@ namespace Shell.MVC2.Data
         //    public bool selected { get; set; }
         //}
 
-        public EditMemberRepository(AnewluvContext datingcontext)
+        public MemberEditRepository(AnewluvContext datingcontext)
             : base(datingcontext)
         {
            // _membersrepository = membersrepository;
@@ -313,7 +313,7 @@ namespace Shell.MVC2.Data
 
        #region "Edit profile Basic Settings Updates here
 
-       public AnewluvMessages editmemberbasicsettings(BasicSettingsModel newmodel, int profileid)
+       public AnewluvMessages membereditbasicsettings(BasicSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
@@ -323,7 +323,7 @@ namespace Shell.MVC2.Data
 
            
            messages = (updatememberbasicsettings(newmodel, p, messages));
-           //  messages=(editmemberBasicSettingsPage2Update(newmodel,profileid ,messages));
+           //  messages=(membereditBasicSettingsPage2Update(newmodel,profileid ,messages));
 
 
            if (messages.errormessages.Count > 0)
@@ -395,7 +395,7 @@ namespace Shell.MVC2.Data
        //#region "other editpages to implement"
        #region "Edit profile Appeareance Settings Updates here"
 
-       public AnewluvMessages editmemberappearancesettings(AppearanceSettingsModel newmodel, int profileid)
+       public AnewluvMessages membereditappearancesettings(AppearanceSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
@@ -405,9 +405,9 @@ namespace Shell.MVC2.Data
            profile p = db.profiles.Where(z => z.id == profileid).First(); 
 
            messages = (updatememberappearancesettings(newmodel, p, messages));
-           // messages = (editmemberAppearanceSettingsPage2Update(newmodel, profileid, messages));
-           // messages = (editmemberAppearanceSettingsPage3Update(newmodel, profileid, messages));
-           //  messages = (editmemberAppearanceSettingsPage4Update(newmodel, profileid, messages));
+           // messages = (membereditAppearanceSettingsPage2Update(newmodel, profileid, messages));
+           // messages = (membereditAppearanceSettingsPage3Update(newmodel, profileid, messages));
+           //  messages = (membereditAppearanceSettingsPage4Update(newmodel, profileid, messages));
 
            if (messages.errormessages.Count > 0)
            {
@@ -497,7 +497,7 @@ namespace Shell.MVC2.Data
 
        #region "Edit profile LifeStyle Settings Updates here"
 
-       public AnewluvMessages editmemberlifestylesettings(LifeStyleSettingsModel newmodel, int profileid)
+       public AnewluvMessages membereditlifestylesettings(LifeStyleSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
@@ -507,9 +507,9 @@ namespace Shell.MVC2.Data
            profile p = db.profiles.Where(z => z.id == profileid).First(); 
 
            messages = (updatememberlifestylesettings(newmodel, p, messages));
-           // messages = (editmemberlifestyleSettingsPage2Update(newmodel, profileid, messages));
-           // messages = (editmemberlifestyleSettingsPage3Update(newmodel, profileid, messages));
-           //  messages = (editmemberlifestyleSettingsPage4Update(newmodel, profileid, messages));
+           // messages = (membereditlifestyleSettingsPage2Update(newmodel, profileid, messages));
+           // messages = (membereditlifestyleSettingsPage3Update(newmodel, profileid, messages));
+           //  messages = (membereditlifestyleSettingsPage4Update(newmodel, profileid, messages));
 
            if (messages.errormessages.Count > 0)
            {
@@ -603,7 +603,7 @@ namespace Shell.MVC2.Data
        #region "Edit profile Character Settings Updates here"
 
 
-       public AnewluvMessages editmembercharactersettings(CharacterSettingsModel newmodel, int profileid)
+       public AnewluvMessages membereditcharactersettings(CharacterSettingsModel newmodel, int profileid)
        {
            //create a new messages object
            AnewluvMessages messages = new AnewluvMessages();
@@ -613,9 +613,9 @@ namespace Shell.MVC2.Data
            profile p = db.profiles.Where(z => z.id == profileid).First(); 
 
            messages = (updatemembercharactersettings(newmodel, p, messages));
-           // messages = (editmembercharacterSettingsPage2Update(newmodel, profileid, messages));
-           // messages = (editmembercharacterSettingsPage3Update(newmodel, profileid, messages));
-           //  messages = (editmembercharacterSettingsPage4Update(newmodel, profileid, messages));
+           // messages = (membereditcharacterSettingsPage2Update(newmodel, profileid, messages));
+           // messages = (membereditcharacterSettingsPage3Update(newmodel, profileid, messages));
+           //  messages = (membereditcharacterSettingsPage4Update(newmodel, profileid, messages));
 
            if (messages.errormessages.Count > 0)
            {

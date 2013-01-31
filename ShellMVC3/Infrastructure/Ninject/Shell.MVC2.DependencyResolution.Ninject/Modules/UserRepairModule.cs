@@ -22,9 +22,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
     public class UserRepairLogModule : NinjectModule
     {
         public override void Load()
-        {
-
-           
+        {           
 
             Kernel.Bind<IUserRepairRepository>().ToConstructor(
              ctorArg => new UserRepairRepository(ctorArg.Inject<UserRepairLogContext>()));

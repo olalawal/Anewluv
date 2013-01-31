@@ -18,11 +18,6 @@ using Shell.MVC2.Interfaces;
 using Shell.MVC2.AppFabric ;
 
 
-
-
-
-
-
 namespace Shell.MVC2.Data
 {
     public class LookupRepository : MemberRepositoryBase, ILookupRepository

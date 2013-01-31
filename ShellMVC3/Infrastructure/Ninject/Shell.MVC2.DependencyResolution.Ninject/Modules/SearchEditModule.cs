@@ -18,19 +18,21 @@ using Dating.Server.Data.Models ;
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
 using Shell.MVC2.Domain.Entities.Anewluv;
+using Shell.MVC2.Infrastructure.Interfaces;
+using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
-	public class EditSearchModule : NinjectModule
+	public class SearchEditModule : NinjectModule
 	{
 		public override void Load()
 		{
-                
-           
-            Kernel.Bind<IEditSearchRepository >().ToConstructor(
-            ctorArg => new EditSearchRepository (ctorArg.Inject<AnewluvContext>()));
+
+            Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));
+            Kernel.Bind<ISearchEditRepository >().ToConstructor(
+            ctorArg => new SearchEditRepository (ctorArg.Inject<AnewluvContext>()));
             
 			//services
-            Kernel.Bind<IEditSearchService>().ToSelf();
+            Kernel.Bind<ISearchEditService>().ToSelf();
          
       }
 	}

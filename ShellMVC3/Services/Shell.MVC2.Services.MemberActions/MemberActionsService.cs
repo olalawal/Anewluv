@@ -53,7 +53,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public int getwhoiaminterestedincount(int profileid)
+        public int getwhoiaminterestedincount(string profileid)
         {
             return _memberactionsrepository.getwhoiaminterestedincount(profileid);
         }
@@ -62,7 +62,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public int getwhoisinterestedinmecount(int profileid)
+        public int getwhoisinterestedinmecount(string profileid)
         {
             return _memberactionsrepository.getwhoisinterestedinmecount(profileid);
         }
@@ -71,7 +71,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public int getwhoisinterestedinmenewcount(int profileid)
+        public int getwhoisinterestedinmenewcount(string profileid)
         {
             return _memberactionsrepository.getwhoisinterestedinmenewcount(profileid);
         }
@@ -82,9 +82,9 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// //gets list of all the profiles I am interested in
         /// </summary 
-        public List<MemberSearchViewModel> getinterests(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getinterests(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getinterests(profileid, Page, NumberPerPage);
+            return _memberactionsrepository.getinterests(profileid, page, numberperpage);
 
         }
 
@@ -92,17 +92,17 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// //gets all the members who are interested in me
         /// </summary 
-        public List<MemberSearchViewModel> getwhoisinterestedinme(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoisinterestedinme(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhoisinterestedinme(profileid, Page, NumberPerPage);
+            return _memberactionsrepository.getwhoisinterestedinme(profileid, page, numberperpage);
         }
 
         /// <summary>
         /// //gets all the members who are interested in me, that ive not viewd yet
         /// </summary 
-        public List<MemberSearchViewModel> getwhoisinterestedinmenew(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoisinterestedinmenew(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhoisinterestedinmenew(profileid, Page, NumberPerPage); ;
+            return _memberactionsrepository.getwhoisinterestedinmenew(profileid, page, numberperpage); ;
         }
 
         #region "update/check/change actions"
@@ -113,7 +113,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutualinterests(int profileid, int targetprofileid)
+        public List<MemberSearchViewModel> getmutualinterests(string profileid, int targetprofileid)
         {
             return _memberactionsrepository.getmutualinterests(profileid,targetprofileid);
 
@@ -121,7 +121,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// //checks if you already sent and interest to the target profile
         /// </summary        
-        public bool checkinterest(int profileid, int targetprofileid)
+        public bool checkinterest(string profileid, int targetprofileid)
         {
             return _memberactionsrepository.checkinterest(profileid, targetprofileid);
      }
@@ -129,7 +129,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// Adds a New interest
         /// </summary>
-        public bool addinterest(int profileid, int targetprofileid)
+        public bool addinterest(string profileid, int targetprofileid)
         {
 
 
@@ -143,7 +143,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool removeinterestbyprofileid(int profileid, int interestprofile_id)
+        public bool removeinterestbyprofileid(string profileid, int interestprofile_id)
         {
             return _memberactionsrepository.removeinterestbyinterestprofileid(profileid, interestprofile_id);
 
@@ -154,7 +154,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool removeinterestbyinterestprofileid(int interestprofile_id, int profileid)
+        public bool removeinterestbyinterestprofileid(int interestprofile_id, string profileid)
         {
 
             return _memberactionsrepository.removeinterestbyinterestprofileid(interestprofile_id, profileid);
@@ -165,7 +165,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreinterestbyprofileid(int profileid, int interestprofile_id)
+        public bool restoreinterestbyprofileid(string profileid, int interestprofile_id)
         {
 
             return _memberactionsrepository.restoreinterestbyprofileid(profileid, interestprofile_id);
@@ -176,7 +176,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreinterestbyinterestprofileid(int interestprofile_id, int profileid)
+        public bool restoreinterestbyinterestprofileid(int interestprofile_id, string profileid)
         {
             return _memberactionsrepository.restoreinterestbyinterestprofileid(interestprofile_id, profileid);
 
@@ -186,7 +186,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removeinterestsbyprofileidandscreennames(int profileid, List<String> screennames)
+        public bool removeinterestsbyprofileidandscreennames(string profileid, List<String> screennames)
         {
             return _memberactionsrepository.removeinterestsbyprofileidandscreennames(profileid, screennames);
         }
@@ -195,7 +195,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restoreinterestsbyprofileidandscreennames(int profileid, List<String> screennames)
+        public bool restoreinterestsbyprofileidandscreennames(string profileid, List<String> screennames)
         {
 
 
@@ -206,7 +206,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         ///  Update interest with a view     
         /// </summary 
-        public bool updateinterestviewstatus(int profileid, int targetprofileid)
+        public bool updateinterestviewstatus(string profileid, int targetprofileid)
         {
 
             return _memberactionsrepository.updatelikeviewstatus(profileid, targetprofileid);
@@ -231,7 +231,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// count all total peeks
         /// </summary>       
-        public int getwhoipeekedatcount(int profileid)
+        public int getwhoipeekedatcount(string profileid)
         {
             return _memberactionsrepository.getwhoipeekedatcount(profileid);
         }
@@ -240,7 +240,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// count all total peeks
         /// </summary>       
-        public int getwhopeekedatmecount(int profileid)
+        public int getwhopeekedatmecount(string profileid)
         {
             return _memberactionsrepository.getwhopeekedatmecount(profileid);
         }
@@ -249,7 +249,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// count all total peeks
         /// </summary>       
-        public int getwhopeekedatmenewcount(int profileid)
+        public int getwhopeekedatmenewcount(string profileid)
         {
             return _memberactionsrepository.getwhopeekedatmenewcount(profileid);
         }
@@ -261,9 +261,9 @@ namespace Shell.MVC2.Services.Dating
         /// //gets all the members who are interested in me
         /// //TODO add filtering for blocked members that you blocked and system blocked
         /// </summary 
-        public List<MemberSearchViewModel> getwhopeekedatme(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhopeekedatme(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhopeekedatme(profileid, Page, NumberPerPage);
+            return _memberactionsrepository.getwhopeekedatme(profileid, page, numberperpage);
         }
 
 
@@ -271,9 +271,9 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// return all  new  Peeks as an object
         /// </summary>
-        public List<MemberSearchViewModel> getwhopeekedatmenew(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhopeekedatmenew(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhopeekedatmenew(profileid, Page, NumberPerPage);
+            return _memberactionsrepository.getwhopeekedatmenew(profileid, page, numberperpage);
         }
 
 
@@ -281,10 +281,10 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// //gets list of all the profiles I Peeked at in
         /// </summary 
-        public List<MemberSearchViewModel> getwhoipeekedat(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoipeekedat(string profileid, string page, string numberperpage)
         {
 
-            return _memberactionsrepository.getwhoipeekedat(profileid, Page, NumberPerPage);
+            return _memberactionsrepository.getwhoipeekedat(profileid, page, numberperpage);
         }
 
 
@@ -298,7 +298,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutualpeeks(int profileid, int targetprofileid)
+        public List<MemberSearchViewModel> getmutualpeeks(string profileid, int targetprofileid)
         {
             return _memberactionsrepository.getmutualpeeks(profileid, targetprofileid);
 
@@ -306,7 +306,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// //checks if you already sent and peek to the target profile
         /// </summary        
-        public bool checkpeek(int profileid, int targetprofileid)
+        public bool checkpeek(string profileid, int targetprofileid)
         {
             return _memberactionsrepository.checkpeek(profileid, targetprofileid);
       
@@ -315,7 +315,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// Adds a New peek
         /// </summary>
-        public bool addpeek(int profileid, int targetprofileid)
+        public bool addpeek(string profileid, int targetprofileid)
         {
 
             return _memberactionsrepository.addpeek(profileid, targetprofileid);
@@ -327,7 +327,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool removepeekbyprofileid(int profileid, int peekprofile_id)
+        public bool removepeekbyprofileid(string profileid, int peekprofile_id)
         {
 
             return _memberactionsrepository.removepeekbypeekprofileid(profileid, peekprofile_id);
@@ -339,7 +339,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool removepeekbypeekprofileid(int peekprofile_id, int profileid)
+        public bool removepeekbypeekprofileid(int peekprofile_id, string profileid)
         {
 
             return _memberactionsrepository.removepeekbypeekprofileid(peekprofile_id, profileid);
@@ -350,7 +350,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool restorepeekbyprofileid(int profileid, int peekprofile_id)
+        public bool restorepeekbyprofileid(string profileid, int peekprofile_id)
         {
 
 
@@ -363,7 +363,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool restorepeekbypeekprofileid(int peekprofile_id, int profileid)
+        public bool restorepeekbypeekprofileid(int peekprofile_id, string profileid)
         {
             return _memberactionsrepository.restorepeekbypeekprofileid(peekprofile_id, profileid);
 
@@ -373,7 +373,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removepeeksbyprofileidandscreennames(int profileid, List<String> screennames)
+        public bool removepeeksbyprofileidandscreennames(string profileid, List<String> screennames)
         {
             return _memberactionsrepository.removepeeksbyprofileidandscreennames(profileid, screennames);
         }
@@ -382,7 +382,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //Removes a peek i.e makes is seem like you never peeeked at  anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restorepeeksbyprofileidandscreennames(int profileid, List<String> screennames)
+        public bool restorepeeksbyprofileidandscreennames(string profileid, List<String> screennames)
         {
 
             return _memberactionsrepository.restorepeeksbyprofileidandscreennames(profileid, screennames);
@@ -392,7 +392,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         ///  Update peek with a view     
         /// </summary 
-        public bool updatepeekviewstatus(int profileid, int targetprofileid)
+        public bool updatepeekviewstatus(string profileid, int targetprofileid)
         {
 
             return _memberactionsrepository.updatepeekviewstatus(profileid, targetprofileid);
@@ -413,7 +413,7 @@ namespace Shell.MVC2.Services.Dating
         /// count all total blocks
         /// </summary>
 
-        public int getwhoiblockedcount(int profileid)
+        public int getwhoiblockedcount(string profileid)
         {
 
             return _memberactionsrepository.getwhoiblockedcount(profileid);
@@ -422,19 +422,19 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// return all    block as an object
         /// </summary>
-        public List<MemberSearchViewModel> getwhoiblocked(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoiblocked(string profileid, string page, string numberperpage)
         {
 
-            return _memberactionsrepository.getwhoiblocked(profileid, Page, NumberPerPage);
+            return _memberactionsrepository.getwhoiblocked(profileid, page, numberperpage);
         }
 
         /// <summary>
         /// //gets all the members who areblocked in me
         /// </summary 
-        public List<MemberSearchViewModel> getwhoblockedme(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoblockedme(string profileid, string page, string numberperpage)
         {
           
-           return _memberactionsrepository.getwhoblockedme(profileid, Page, NumberPerPage);
+           return _memberactionsrepository.getwhoblockedme(profileid, page, numberperpage);
         }
 
 
@@ -445,7 +445,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutualblocks(int profileid, int targetprofileid)
+        public List<MemberSearchViewModel> getmutualblocks(string profileid, int targetprofileid)
         {
             return _memberactionsrepository.getmutualblocks(profileid, targetprofileid);
 
@@ -453,7 +453,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// //checks if you already sent and block to the target profile
         /// </summary        
-        public bool checkblock(int profileid, int targetprofileid)
+        public bool checkblock(string profileid, int targetprofileid)
         {
             return _memberactionsrepository.checkblock(profileid, targetprofileid);
       
@@ -462,7 +462,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// Adds a New block
         /// </summary>
-        public bool addblock(int profileid, int targetprofileid)
+        public bool addblock(string profileid, int targetprofileid)
         {
 
             return _memberactionsrepository.addblock(profileid, targetprofileid);
@@ -474,7 +474,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can block u
         ///  //not inmplemented
         /// </summary 
-        public bool removeblock(int profileid, int blockprofile_id)
+        public bool removeblock(string profileid, int blockprofile_id)
         {
 
             return _memberactionsrepository.removeblock(profileid, blockprofile_id);
@@ -485,7 +485,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can block u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreblock(int profileid, int blockprofile_id)
+        public bool restoreblock(string profileid, int blockprofile_id)
         {
             return _memberactionsrepository.restoreblock(profileid, blockprofile_id);
         }
@@ -494,7 +494,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removeblocksbyscreennames(int profileid, List<String> screennames)
+        public bool removeblocksbyscreennames(string profileid, List<String> screennames)
         {
 
             return _memberactionsrepository.removeblocksbyscreennames(profileid, screennames);
@@ -505,7 +505,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restoreblocksbyscreennames(int profileid, List<String> screennames)
+        public bool restoreblocksbyscreennames(string profileid, List<String> screennames)
         {
 
 
@@ -518,7 +518,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Update block with a view     
         /// </summary 
         /// 
-        public bool updateblockreviewstatus(int profileid, int targetprofileid, int reviewerid)
+        public bool updateblockreviewstatus(string profileid, int targetprofileid, int reviewerid)
         {
             return _memberactionsrepository.updateblockreviewstatus(profileid, targetprofileid, reviewerid);
         }
@@ -536,7 +536,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// count all total likes
         /// </summary>       
-        public int getwhoilikecount(int profileid)
+        public int getwhoilikecount(string profileid)
         {
             return _memberactionsrepository.getwhoilikecount (profileid);
         }
@@ -545,7 +545,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// count all total likes
         /// </summary>       
-        public int getwholikesmecount(int profileid)
+        public int getwholikesmecount(string profileid)
         {
 
             return _memberactionsrepository.getwholikesmecount(profileid);
@@ -555,7 +555,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// count all total likes
         /// </summary>       
-        public int getwhoislikesmenewcount(int profileid)
+        public int getwhoislikesmenewcount(string profileid)
         {
             return _memberactionsrepository.getwholikesmenewcount(profileid);
         }
@@ -567,28 +567,28 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// return all  new  likes as an object
         /// </summary>
-        public List<MemberSearchViewModel> getwholikesmenew(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwholikesmenew(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwholikesmenew(profileid, Page, NumberPerPage);
+            return _memberactionsrepository.getwholikesmenew(profileid, page, numberperpage);
 
         }
 
         /// <summary>
         /// //gets all the members who Like Me
         /// </summary 
-        public List<MemberSearchViewModel> getwholikesme(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwholikesme(string profileid, string page, string numberperpage)
         {
 
-            return _memberactionsrepository.getwholikesme(profileid, Page, NumberPerPage);
+            return _memberactionsrepository.getwholikesme(profileid, page, numberperpage);
         }
 
 
         /// <summary>
         /// //gets all the members who Like Me
         /// </summary 
-        public List<MemberSearchViewModel> getwhoilike(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoilike(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhoilike(profileid, Page, NumberPerPage);
+            return _memberactionsrepository.getwhoilike(profileid, page, numberperpage);
         }
 
 
@@ -600,7 +600,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutuallikes(int profileid, int targetprofileid)
+        public List<MemberSearchViewModel> getmutuallikes(string profileid, int targetprofileid)
         {
             return _memberactionsrepository.getmutuallikes(profileid, targetprofileid);
 
@@ -608,7 +608,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// //checks if you already sent and like to the target profile
         /// </summary        
-        public bool checklike(int profileid, int targetprofileid)
+        public bool checklike(string profileid, int targetprofileid)
         {
             return _memberactionsrepository.checklike(profileid, targetprofileid);
        }
@@ -616,7 +616,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         /// Adds a New like
         /// </summary>
-        public bool addlike(int profileid, int targetprofileid)
+        public bool addlike(string profileid, int targetprofileid)
         {
 
 
@@ -630,7 +630,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool removelikebyprofileid(int profileid, int likeprofile_id)
+        public bool removelikebyprofileid(string profileid, int likeprofile_id)
         {
 
             return _memberactionsrepository.removelikebylikeprofileid(profileid, likeprofile_id);
@@ -641,7 +641,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool removelikebylikeprofileid(int likeprofile_id, int profileid)
+        public bool removelikebylikeprofileid(int likeprofile_id, string profileid)
         {
 
 
@@ -654,7 +654,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool restorelikebyprofileid(int profileid, int likeprofile_id)
+        public bool restorelikebyprofileid(string profileid, int likeprofile_id)
         {
             return _memberactionsrepository.restorelikebyprofileid(profileid, likeprofile_id);
         }
@@ -664,7 +664,7 @@ namespace Shell.MVC2.Services.Dating
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool restorelikebylikeprofileid(int likeprofile_id, int profileid)
+        public bool restorelikebylikeprofileid(int likeprofile_id, string profileid)
         {
 
 
@@ -676,7 +676,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removelikesbyprofileidandscreennames(int profileid, List<String> screennames)
+        public bool removelikesbyprofileidandscreennames(string profileid, List<String> screennames)
         {
             return _memberactionsrepository.removelikesbyprofileidandscreennames(profileid, screennames);
         }
@@ -685,7 +685,7 @@ namespace Shell.MVC2.Services.Dating
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restorelikesbyprofileidandscreennames(int profileid, List<String> screennames)
+        public bool restorelikesbyprofileidandscreennames(string profileid, List<String> screennames)
         {
 
 
@@ -695,7 +695,7 @@ namespace Shell.MVC2.Services.Dating
         /// <summary>
         ///  Update like with a view     
         /// </summary 
-        public bool updatelikeviewstatus(int profileid, int targetprofileid)
+        public bool updatelikeviewstatus(string profileid, int targetprofileid)
         {
             return _memberactionsrepository.updatelikeviewstatus(profileid, targetprofileid);
 
@@ -708,104 +708,7 @@ namespace Shell.MVC2.Services.Dating
 
         #region "Search methods"
 
-        ////updated do not use the data from the members stuff since we are correctly populating values now , just find the lat long for the city and country entered
-        //public List<MemberSearchViewModel> GetQuickSearchMembers(int intAgeFrom, int intAgeTo,
-        //                                            string strLookingForSelectedGenderName, int intSelectedCountryId,
-        //                                            string strSelectedCity, string strSelectedStateProvince, double maxdistancefromme, bool HasPhoto, MembersViewModel model)
-        //{
-        //    List<MemberSearchViewModel> MemberSearchViewmodels;
-
-
-        //    DateTime today = DateTime.Today;
-        //    DateTime max = today.AddYears(-(intAgeFrom + 1));
-        //    DateTime min = today.AddYears(-intAgeTo);
-
-        //    // var years = employee.Where(e => e.DOB != null && e.DOB > min && e.DOB <= max); 
-
-
-        //    //if selected sity is all or empty lets just pull the top 100 members, that macth the rest of the ce
-
-        //    //if selected sity is all or empty lets just pull the top 100 members, that macth the rest of the ce           
-        //    //TO DO
-        //    //make this more efficnet and resitrcted later maybe only vip members
-        //    //  where (strSelectedCity != "ALL" || x.city == strSelectedCity)
-        //    //(x.age >= intAgeFrom && x.age <= intAgeTo  )
-        //    //let age = System.Data.Objects.SqlClient.SqlFunctions.DateDiff("y", x.birthdate, DateTime.Now)  
-        //    //from uir in Aspnet_UsersInRoles 
-        //    //            from r in Aspnet_Roles.Where( _r => _r.RoleId == uir.RoleId).DefaultIfEmpty() 
-        //    //            group r.RoleName by uir.UserId into gr 
-        //    //            join u in Aspnet_Users on gr.Key equals u.UserId         
-        //    //            from up in UserProfiles.Where( _up => _up.UserId == u.UserId ).DefaultIfEmpty() 
-        //    //            orderby  up.FirstName, up.LastName, u.username 
-        //    //            select new 
-        //    //            { 
-
-        //    // ObjectSet <profiledata> products = db.profiledata ;  
-
-
-        //    //******** visiblitysettings test code ************************
-
-        //    //// test all the values you are pulling here
-        //    //var TestModel = (from x in db.profiledata.Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
-        //    //                      select x).FirstOrDefault();
-        //    //  var MinVis = today.AddYears(-(TestModel.ProfileVisiblitySetting.AgeMaxVisibility.GetValueOrDefault() + 1));
-        //    // bool TestgenderMatch = (TestModel.ProfileVisiblitySetting.GenderID  != null || TestModel.ProfileVisiblitySetting.GenderID == model.profiledata.GenderID) ? true : false;
-
-        //    // var testmodel2 = (from x in db.profiledata.Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
-        //    //                     .Where(z=>z.ProfileVisiblitySetting !=null || z.ProfileVisiblitySetting.ProfileVisiblity == true)
-        //    //                     select x).FirstOrDefault();
-
-        //    // Expression<Func<profiledata, bool>> MyWhereExpr = default(Expression<Func<profiledata,  bool>>);
-
-
-
-        //    MemberSearchViewmodels = (from x in _datingcontext.profiledata.Include("ProfileVisiblitySetting").Where(p => p.gender.GenderName == strLookingForSelectedGenderName && p.birthdate > min && p.birthdate <= max)
-        //                             .WhereIf(strSelectedCity == "ALL", z => z.countryid == intSelectedCountryId)                                      
-        //                              join  f in _datingcontext.profiles on x.profileid equals f.profile_id
-        //                              // from fp in f  where(x.countryid == intSelectedCountryId)
-        //                              //join z in db.photos on x.profileid equals z.profileid
-        //                              select new MemberSearchViewModel
-        //                              {
-        //                                  // MyCatchyIntroLineQuickSearch = x.AboutMe,
-        //                                  profileid = x.profileid,
-        //                                  stateprovince = x.stateprovince,
-        //                                  postalcode = x.postalcode,
-        //                                  countryid = x.countryid,
-        //                                  GenderID = x.GenderID,
-        //                                  birthdate = x.birthdate,
-        //                                  profile = f,
-        //                                  longitude = (double)x.longitude,
-        //                                  latitude = (double)x.latitude,
-        //                                  HasGalleryPhoto = (from p in _datingcontext.photos.Where(i => i.profileid == f.profile_id && i.ProfileImageType == "Gallery") select p.ProfileImageType).FirstOrDefault(),
-        //                                  creationdate = f.creationdate,
-        //                                  city = _datingcontext.fnTruncateString(x.city, 11),
-        //                                  lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.LoginDate),
-        //                                  lastlogindate = f.LoginDate,
-        //                                  Online = _datingcontext.fnGetUserOlineStatus(x.profileid),
-        //                                  DistanceFromMe = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude, model.MyQuickSearch.MySelectedlattitude.Value, model.MyQuickSearch.MySelectedLongitude.Value, "Miles"),
-        //                                  ProfileVisibility = x.ProfileVisiblitySetting.ProfileVisiblity
-
-        //                              }).ToList();
-
-
-        //    //these could be added to where if as well, also limits values if they did selected all
-        //    var Profiles = (maxdistancefromme > 0 && strSelectedCity != "ALL") ? (from q in MemberSearchViewmodels.Where(a => a.DistanceFromMe <= maxdistancefromme) select q) : MemberSearchViewmodels.Take(500);
-        //    //     Profiles; ; 
-        //    // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
-        //    //               Profiles;
-
-        //    //TO DO switch this to most active postible and then filter by last logged in date instead .ThenByDescending(p => p.lastlogindate)
-        //    //final ordering 
-        //    Profiles = Profiles.OrderByDescending(p => p.HasGalleryPhoto == "Gallery").ThenByDescending(p => p.creationdate).ThenByDescending(p => p.DistanceFromMe);
-
-
-        //    //5-15-2012 filter out by visiblity settings and other visiblity stuff
-        //    Profiles = Profiles.Where(x => x.ProfileVisibility != false);
-
-
-        //    return Profiles.ToList();
-
-        //}
+        
 
         #endregion
 

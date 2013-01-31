@@ -55,8 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IEditMemberRepository.cs" />
-    <Compile Include="IEditSearchRepository.cs" />
+    <Compile Include="IMemberEditRepository.cs" />
+    <Compile Include="ISearchEditRepository.cs" />
     <Compile Include="IChatRepository.cs" />
     <Compile Include="IAnewLuvMembershipProvider.cs" />
     <Compile Include="IGeoRepository.cs" />

@@ -17,7 +17,7 @@ namespace Shell.MVC2.Data
     /// <summary>
     /// we will move anything that updates search to public/private methdos here eventually
     /// </summary>
-   public  class EditSearchRepository : MemberRepositoryBase ,IEditSearchRepository 
+   public  class SearchEditRepository : MemberRepositoryBase ,ISearchEditRepository 
     {
 
        
@@ -27,7 +27,7 @@ namespace Shell.MVC2.Data
 
 
 
-        public EditSearchRepository(AnewluvContext datingcontext)
+        public SearchEditRepository(AnewluvContext datingcontext)
             : base(datingcontext)
         {
         }

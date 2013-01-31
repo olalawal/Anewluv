@@ -10,7 +10,7 @@ using System.Web;
 
 namespace Shell.MVC2.Interfaces
 {
-    public interface IEditMemberRepository
+    public interface IMemberEditRepository
     {
 
         bool updatemembervisibilitysettings(visiblitysetting model); 
@@ -26,13 +26,13 @@ namespace Shell.MVC2.Interfaces
         //The actual values will bind to viewmodel I think
          CharacterSettingsModel getcharactersettingsmodel(int intprofileid)  ;
 
-         AnewluvMessages editmemberbasicsettings(BasicSettingsModel newmodel, int profileid)  ; 
+         AnewluvMessages membereditbasicsettings(BasicSettingsModel newmodel, int profileid)  ; 
      
-         AnewluvMessages editmemberappearancesettings(AppearanceSettingsModel newmodel, int profileid);
+         AnewluvMessages membereditappearancesettings(AppearanceSettingsModel newmodel, int profileid);
      
-         AnewluvMessages editmemberlifestylesettings(LifeStyleSettingsModel newmodel, int profileid);
+         AnewluvMessages membereditlifestylesettings(LifeStyleSettingsModel newmodel, int profileid);
 
-         AnewluvMessages editmembercharactersettings(CharacterSettingsModel newmodel, int profileid);
+         AnewluvMessages membereditcharactersettings(CharacterSettingsModel newmodel, int profileid);
        
     
     }

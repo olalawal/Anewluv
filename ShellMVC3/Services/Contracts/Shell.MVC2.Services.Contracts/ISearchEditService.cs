@@ -12,7 +12,7 @@ namespace Shell.MVC2.Services.Contracts
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IMembersService" in both code and config file together.
     [ServiceContract]
-    public interface IEditSearchService
+    public interface ISearchEditService
     {
         //TO Do posibly move this to a separate service for benchmarking
         //member viewmodoem mapping and registration models mappers

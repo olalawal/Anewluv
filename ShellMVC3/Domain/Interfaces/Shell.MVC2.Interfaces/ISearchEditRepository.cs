@@ -10,7 +10,7 @@ using System.Web;
 
 namespace Shell.MVC2.Interfaces
 {
-    public interface IEditSearchRepository
+    public interface ISearchEditRepository
     {
 
 

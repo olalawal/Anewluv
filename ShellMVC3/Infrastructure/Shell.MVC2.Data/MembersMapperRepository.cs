@@ -59,7 +59,7 @@ namespace Shell.MVC2.Data
                // DatingService db = new DatingService();
                 //  MembersRepository membersrepo=  new MembersRepository();
                 profile profile =membersrepository.getprofilebyprofileid(profileId); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
-                //  editmemberRepository editmemberRepository = new editmemberRepository();
+                //  membereditRepository membereditRepository = new membereditRepository();
 
                    //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
                     if (viewerprofile.latitude != null &&
@@ -97,12 +97,12 @@ namespace Shell.MVC2.Data
                 //or instead just have the photo the select zoom up
                 int page = 1;
                 int ps = 12;
-               // var MyPhotos = editmemberRepository.MyPhotos(model.profile.username);
-               // var Approved = editmemberRepository.GetApproved(MyPhotos, "Yes", page, ps);
-               // var NotApproved = editmemberRepository.GetApproved(MyPhotos, "No", page, ps);
-               // var Private = editmemberRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
+               // var MyPhotos = membereditRepository.MyPhotos(model.profile.username);
+               // var Approved = membereditRepository.GetApproved(MyPhotos, "Yes", page, ps);
+               // var NotApproved = membereditRepository.GetApproved(MyPhotos, "No", page, ps);
+               // var Private = membereditRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
                 model.profilephotos = new PhotoViewModel();
-                model.profilephotos.ProfilePhotosApproved  = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id,photoapprovalstatusEnum.Approved ,photoformatEnum.Thumbnail,  page, ps);   //editmemberRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                model.profilephotos.ProfilePhotosApproved  = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id,photoapprovalstatusEnum.Approved ,photoformatEnum.Thumbnail,  page, ps);   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
                // approvedphotos = photorepository.
 
                return model;
@@ -132,7 +132,7 @@ namespace Shell.MVC2.Data
                     // DatingService db = new DatingService();
                     //  MembersRepository membersrepo=  new MembersRepository();
                     profile profile = membersrepository.getprofilebyprofileid(item); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
-                    //  editmemberRepository editmemberRepository = new editmemberRepository();
+                    //  membereditRepository membereditRepository = new membereditRepository();
 
                     //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
                     if (viewerprofile.latitude != null &&
@@ -170,13 +170,13 @@ namespace Shell.MVC2.Data
                     //or instead just have the photo the select zoom up
                     int page = 1;
                     int ps = 12;
-                    // var MyPhotos = editmemberRepository.MyPhotos(model.profile.username);
-                    // var Approved = editmemberRepository.GetApproved(MyPhotos, "Yes", page, ps);
-                    // var NotApproved = editmemberRepository.GetApproved(MyPhotos, "No", page, ps);
-                    // var Private = editmemberRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
+                    // var MyPhotos = membereditRepository.MyPhotos(model.profile.username);
+                    // var Approved = membereditRepository.GetApproved(MyPhotos, "Yes", page, ps);
+                    // var NotApproved = membereditRepository.GetApproved(MyPhotos, "No", page, ps);
+                    // var Private = membereditRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
                   //12-27-2012 olawal added a contrructore to photoviewmodel to avoid null collections
                     model.profilephotos = new PhotoViewModel();
-                    model.profilephotos.ProfilePhotosApproved = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id, photoapprovalstatusEnum.Approved, photoformatEnum.Thumbnail, page, ps);   //editmemberRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                    model.profilephotos.ProfilePhotosApproved = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id, photoapprovalstatusEnum.Approved, photoformatEnum.Thumbnail, page, ps);   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
                     // approvedphotos = photorepository.
 
                 }

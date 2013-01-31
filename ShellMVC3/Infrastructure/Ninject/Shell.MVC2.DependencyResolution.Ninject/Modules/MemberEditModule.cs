@@ -18,20 +18,21 @@ using Dating.Server.Data.Models ;
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
 using Shell.MVC2.Domain.Entities.Anewluv;
+using Shell.MVC2.Infrastructure.Interfaces;
+using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
-	public class EditMemberModule : NinjectModule
+	public class MemberEditModule : NinjectModule
 	{
 		public override void Load()
 		{
-                
-           
-            Kernel.Bind<IEditMemberRepository>().ToConstructor(
-             ctorArg => new EditMemberRepository(ctorArg.Inject<AnewluvContext>()));
 
-
+            Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));
+            Kernel.Bind<IMemberEditRepository>().ToConstructor(
+             ctorArg => new MemberEditRepository(ctorArg.Inject<AnewluvContext>()));
+            
 			//services
-            Kernel.Bind<IEditMemberService>().ToSelf();
+            Kernel.Bind<IMemberEditService>().ToSelf();
          
       }
 	}

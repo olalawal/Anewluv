@@ -17,21 +17,21 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using System.ServiceModel.Activation;
 
 
-namespace Shell.MVC2.Services.EditMember
+namespace Shell.MVC2.Services.Edit
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
-    public class EditMemberService : IEditMemberService  
+    public class MemberEditService : IMemberEditService  
     {
 
 
-        private IEditMemberRepository _editmemberrepository;
+        private IMemberEditRepository _membereditrepository;
        // private string _apikey;
 
-        public EditMemberService(IEditMemberRepository editmemberrepository)
+        public MemberEditService(IMemberEditRepository membereditrepository)
             {
-                _editmemberrepository = editmemberrepository;
+                _membereditrepository = membereditrepository;
               //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
              //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
                
@@ -41,53 +41,53 @@ namespace Shell.MVC2.Services.EditMember
 
        public bool updateprofilevisibilitysettings(visiblitysetting model)
         {
-            return _editmemberrepository.updatemembervisibilitysettings(model);
+            return _membereditrepository.updatemembervisibilitysettings(model);
         }
         // constructor
         public BasicSettingsModel getbasicsettingsmodel(string profileid)
         {
-            return _editmemberrepository.getbasicsettingsmodel(Convert.ToInt32(profileid));
+            return _membereditrepository.getbasicsettingsmodel(Convert.ToInt32(profileid));
         }
 
         //The actual values will bind to viewmodel I think
         public AppearanceSettingsModel getappearancesettingsmodel(string profileid)
         {
-            return _editmemberrepository.getappearancesettingsmodel(Convert.ToInt32(profileid));
+            return _membereditrepository.getappearancesettingsmodel(Convert.ToInt32(profileid));
         }
 
         //populate the enities
         public LifeStyleSettingsModel getlifestylesettingsmodel(string profileid)
         {
-            return _editmemberrepository.getlifestylesettingsmodel(Convert.ToInt32(profileid));
+            return _membereditrepository.getlifestylesettingsmodel(Convert.ToInt32(profileid));
         }
 
            //The actual values will bind to viewmodel I think
         public CharacterSettingsModel getcharactersettingsmodel(string profileid)
         {
-            return _editmemberrepository.getcharactersettingsmodel(Convert.ToInt32(profileid));
+            return _membereditrepository.getcharactersettingsmodel(Convert.ToInt32(profileid));
         }
 
 
-        public AnewluvMessages editmemberbasicsettings(BasicSettingsModel newmodel, string profileid)
+        public AnewluvMessages membereditbasicsettings(BasicSettingsModel newmodel, string profileid)
         {
-            return _editmemberrepository.editmemberbasicsettings(newmodel, Convert.ToInt32(profileid));
+            return _membereditrepository.membereditbasicsettings(newmodel, Convert.ToInt32(profileid));
         }
 
-        public AnewluvMessages editmemberappearancesettings(AppearanceSettingsModel newmodel, string profileid)
+        public AnewluvMessages membereditappearancesettings(AppearanceSettingsModel newmodel, string profileid)
         {
-            return _editmemberrepository.editmemberappearancesettings(newmodel, Convert.ToInt32(profileid));
+            return _membereditrepository.membereditappearancesettings(newmodel, Convert.ToInt32(profileid));
         }
 
 
-        public AnewluvMessages editmemberlifestylesettings(LifeStyleSettingsModel newmodel, string profileid)
+        public AnewluvMessages membereditlifestylesettings(LifeStyleSettingsModel newmodel, string profileid)
         {
-            return _editmemberrepository.editmemberlifestylesettings(newmodel, Convert.ToInt32(profileid));
+            return _membereditrepository.membereditlifestylesettings(newmodel, Convert.ToInt32(profileid));
 
         }
 
-        public AnewluvMessages editmembercharactersettings(CharacterSettingsModel newmodel, string profileid)
+        public AnewluvMessages membereditcharactersettings(CharacterSettingsModel newmodel, string profileid)
         {
-            return _editmemberrepository.editmembercharactersettings(newmodel, Convert.ToInt32(profileid));
+            return _membereditrepository.membereditcharactersettings(newmodel, Convert.ToInt32(profileid));
         }
 
 

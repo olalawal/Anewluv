@@ -12,7 +12,7 @@ namespace Shell.MVC2.Services.Contracts
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IMembersService" in both code and config file together.
     [ServiceContract]
-    public interface IEditMemberService
+    public interface IMemberEditService
     {
         //TO Do posibly move this to a separate service for benchmarking
         //member viewmodoem mapping and registration models mappers
@@ -44,20 +44,20 @@ namespace Shell.MVC2.Services.Contracts
         CharacterSettingsModel getcharactersettingsmodel(string profileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/editmemberbasicsettings/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]   
-        AnewluvMessages editmemberbasicsettings(BasicSettingsModel newmodel, string profileid);
+        [WebInvoke(UriTemplate = "/membereditbasicsettings/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]   
+        AnewluvMessages membereditbasicsettings(BasicSettingsModel newmodel, string profileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/editmemberappearancesettings/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]   
-        AnewluvMessages editmemberappearancesettings(AppearanceSettingsModel newmodel, string profileid);
+        [WebInvoke(UriTemplate = "/membereditappearancesettings/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]   
+        AnewluvMessages membereditappearancesettings(AppearanceSettingsModel newmodel, string profileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/editmemberlifestylesettings/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]   
-        AnewluvMessages editmemberlifestylesettings(LifeStyleSettingsModel newmodel, string profileid);
+        [WebInvoke(UriTemplate = "/membereditlifestylesettings/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]   
+        AnewluvMessages membereditlifestylesettings(LifeStyleSettingsModel newmodel, string profileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/editmembercharactersettings/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]   
-        AnewluvMessages editmembercharactersettings(CharacterSettingsModel newmodel, string profileid);
+        [WebInvoke(UriTemplate = "/membereditcharactersettings/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]   
+        AnewluvMessages membereditcharactersettings(CharacterSettingsModel newmodel, string profileid);
 
     }
 }
