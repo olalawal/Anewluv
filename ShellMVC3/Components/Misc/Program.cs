@@ -15,11 +15,11 @@ namespace Misc
            MisFunctions.StartDebuggingTest();
 
 
-           MisFunctions.ConvertFlatProfileandprofiledata();
-           MisFunctions.ConvertProfileCollections();
-         MisFunctions.ConvertProfileMetaDataBasicCollections();
-           MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
-          MisFunctions.ConvertProfileSearchSettingsCollections();
+         //  MisFunctions.ConvertFlatProfileandprofiledata();
+         //  MisFunctions.ConvertProfileCollections();
+        // MisFunctions.ConvertProfileMetaDataBasicCollections();
+         //  MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
+        //  MisFunctions.ConvertProfileSearchSettingsCollections();
 
           //  MisFunctions.FixBadUserGeoData();
           //  FixBadUserGeoData();

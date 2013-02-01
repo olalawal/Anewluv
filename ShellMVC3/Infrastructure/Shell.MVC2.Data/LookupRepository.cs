@@ -183,7 +183,7 @@ namespace Shell.MVC2.Data
         {
 
             
-                return CachingFactory.SharedObjectHelper.getmetricheightlist();
+              return CachingFactory.SharedObjectHelper.getmetricheightlist();
             
 
         }
@@ -741,8 +741,6 @@ namespace Shell.MVC2.Data
                 return wantskidslist;
                 
 #else
-
-
 
                 return _datingcontext.lu_wantskids.OrderBy(x => x.description).ToList();
 

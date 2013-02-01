@@ -45,6 +45,12 @@
     <Reference Include="CommonInstanceFactory.Extensions.Wcf.Ninject">
       <HintPath>..\..\Shell.MVC2\packages\CommonInstanceFactory.Extensions.Wcf.Ninject.1.0.0.0\lib\net40\CommonInstanceFactory.Extensions.Wcf.Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Shell.MVC2\packages\ServerAppFabric.Client.1.1.2106\lib\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Shell.MVC2\packages\ServerAppFabric.Client.1.1.2106\lib\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ninject">
       <HintPath>..\..\Shell.MVC2\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
