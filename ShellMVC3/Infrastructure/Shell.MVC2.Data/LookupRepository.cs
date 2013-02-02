@@ -164,8 +164,7 @@ namespace Shell.MVC2.Data
                 List<lu_gender> genderlist = new List<lu_gender>();
                 genderlist.Add(new lu_gender { description = "Male",  id  = 1, selected   = false });
                 genderlist.Add(new lu_gender { description = "Female", id = 2, selected = false });
-                return genderlist;
-                
+                return genderlist;                
 #else
             return CachingFactory.SharedObjectHelper.getgenderlist(_datingcontext);
                 // return temp;
@@ -180,32 +179,20 @@ namespace Shell.MVC2.Data
             
         }
         public List<metricheight> getmetricheightlist()
-        {
-
-            
-              return CachingFactory.SharedObjectHelper.getmetricheightlist();
-            
+        {            
+              return CachingFactory.SharedObjectHelper.getmetricheightlist();           
 
         }
 
         #endregion
 
-
-        //public SelectList GendersSelectList()
-        //{
-        //    SelectList genders = new SelectList(_datingcontext.GetGenders().ToList(), "GenderID", "GenderName");
-        //    return genders;
-        //}
-                
+  
         #region "Criteria Appearance dropdowns"
 
 
 
         public List<lu_bodytype> getbodytypelist()
         {
-          
-
-
 #if DISCONECTED
                 List<lu_bodytype> bodytypelist = new List<lu_bodytype>();
                 bodytypelist.Add(new lu_bodytype { description = "Male",  id  = 1, selected   = false });
@@ -213,24 +200,12 @@ namespace Shell.MVC2.Data
                 return bodytypelist;
                 
 #else
-
-
-
                 return CachingFactory.SharedObjectHelper.getbodytypelist(_datingcontext);
-
-
-
                 // return temp;
-#endif
-
-            
+#endif            
         }
-
-
         public List<lu_ethnicity> getethnicitylist()
         {
-
-
 
 #if DISCONECTED
             List<lu_ethnicity> ethnicitylist = new List<lu_ethnicity>();
@@ -239,23 +214,13 @@ namespace Shell.MVC2.Data
             return ethnicitylist;
 
 #else
-
-
-
                 return CachingFactory.SharedObjectHelper.getethnicitylist(_datingcontext);
-
-
-        
                 // return temp;
 #endif
 
-        }
-        
+        }        
         public List<lu_eyecolor> geteyecolorlist()
         {
-           
-
-
 #if DISCONECTED
                 List<lu_eyecolor> eyecolorlist = new List<lu_eyecolor>();
                 eyecolorlist.Add(new lu_eyecolor { description = "Male",  id  = 1, selected   = false });
@@ -263,21 +228,13 @@ namespace Shell.MVC2.Data
                 return eyecolorlist;
                 
 #else
-
-
-
-                return CachingFactory.SharedObjectHelper.geteyecolorlist(_datingcontext);
-
-
-
+            return CachingFactory.SharedObjectHelper.geteyecolorlist(_datingcontext);
                 // return temp;
 #endif
 
-            }
-        
+            }        
         public List<lu_haircolor> gethaircolorlist()
-        {
-           
+        {           
 
 #if DISCONECTED
                 List<lu_haircolor> haircolorlist = new List<lu_haircolor>();
@@ -286,13 +243,7 @@ namespace Shell.MVC2.Data
                 return haircolorlist;
                 
 #else
-
-
-
                 return CachingFactory.SharedObjectHelper.gethaircolorlist(_datingcontext);
-
-
-
                 // return temp;
 #endif
 
@@ -314,10 +265,8 @@ namespace Shell.MVC2.Data
                 return dietlist;
                 
 #else
-
-
-
-                return _datingcontext.lu_diet.OrderBy(x => x.description).ToList();
+            return CachingFactory.SharedObjectHelper.getdietlist(_datingcontext);
+              //  return _datingcontext.lu_diet.OrderBy(x => x.description).ToList();
 
 
 
@@ -337,10 +286,7 @@ namespace Shell.MVC2.Data
                 return drinkslist;
                 
 #else
-
-
-
-                return _datingcontext.lu_drinks.OrderBy(x => x.description).ToList();
+            return CachingFactory.SharedObjectHelper.getdrinkslist (_datingcontext);
 
 
 
@@ -352,8 +298,6 @@ namespace Shell.MVC2.Data
         public List<lu_exercise> getexerciselist()
         {
             
-
-
 #if DISCONECTED
                 List<lu_exercise> exerciselist = new List<lu_exercise>();
                 exerciselist.Add(new lu_exercise { description = "Male",  id  = 1, selected   = false });
@@ -361,13 +305,7 @@ namespace Shell.MVC2.Data
                 return exerciselist;
                 
 #else
-
-
-
-                return _datingcontext.lu_exercise.OrderBy(x => x.description).ToList();
-
-
-
+            return CachingFactory.SharedObjectHelper.getexerciselist (_datingcontext);
                 // return temp;
 #endif
 
@@ -375,9 +313,7 @@ namespace Shell.MVC2.Data
         }
         public List<lu_hobby> gethobbylist()
         {
-            
-
-
+           
 #if DISCONECTED
                 List<lu_hobby> hobbylist = new List<lu_hobby>();
                 hobbylist.Add(new lu_hobby { description = "Male",  id  = 1, selected   = false });
@@ -386,12 +322,7 @@ namespace Shell.MVC2.Data
                 
 #else
 
-
-
-                return _datingcontext.lu_hobby.OrderBy(x => x.description).ToList();
-
-
-
+            return CachingFactory.SharedObjectHelper.gethobbylist (_datingcontext);
                 // return temp;
 #endif
 
@@ -409,11 +340,7 @@ namespace Shell.MVC2.Data
                 
 #else
 
-
-
-                return _datingcontext.lu_humor.OrderBy(x => x.description).ToList();
-
-
+            return CachingFactory.SharedObjectHelper.gethumorlist(_datingcontext); ;
 
                 // return temp;
 #endif
@@ -422,7 +349,6 @@ namespace Shell.MVC2.Data
         }
         public List<lu_politicalview> getpoliticalviewlist()
         {
-           
 
 #if DISCONECTED
                 List<lu_politicalview> politicalviewlist = new List<lu_politicalview>();
@@ -431,13 +357,7 @@ namespace Shell.MVC2.Data
                 return politicalviewlist;
                 
 #else
-
-
-
-                return _datingcontext.lu_politicalview.OrderBy(x => x.description).ToList();
-
-
-
+            return CachingFactory.SharedObjectHelper.getpoliticalviewlist(_datingcontext);
                 // return temp;
 #endif
 
@@ -446,7 +366,6 @@ namespace Shell.MVC2.Data
         public List<lu_religion> getreligionlist()
         {
           
-
 #if DISCONECTED
                 List<lu_religion> religionlist = new List<lu_religion>();
                 religionlist.Add(new lu_religion { description = "Male",  id  = 1, selected   = false });
@@ -454,12 +373,7 @@ namespace Shell.MVC2.Data
                 return religionlist;
                 
 #else
-
-
-
-                return _datingcontext.lu_religion.OrderBy(x => x.description).ToList();
-
-
+            return CachingFactory.SharedObjectHelper.getreligionlist(_datingcontext);
 
                 // return temp;
 #endif
@@ -468,8 +382,6 @@ namespace Shell.MVC2.Data
         }
         public List<lu_religiousattendance> getreligiousattendancelist()
         {
-          
-
 #if DISCONECTED
                 List<lu_religiousattendance> religiousattendancelist = new List<lu_religiousattendance>();
                 religiousattendancelist.Add(new lu_religiousattendance { description = "Male",  id  = 1, selected   = false });
@@ -477,13 +389,7 @@ namespace Shell.MVC2.Data
                 return religiousattendancelist;
                 
 #else
-
-
-
-                return _datingcontext.lu_religiousattendance.OrderBy(x => x.description).ToList();
-
-
-
+            return CachingFactory.SharedObjectHelper.getreligiousattendancelist (_datingcontext);
                 // return temp;
 #endif
 
@@ -491,8 +397,7 @@ namespace Shell.MVC2.Data
         }
         public List<lu_sign> getsignlist()
         {
-            
-
+           
 
 #if DISCONECTED
                 List<lu_sign> signlist = new List<lu_sign>();
@@ -501,13 +406,7 @@ namespace Shell.MVC2.Data
                 return signlist;
                 
 #else
-
-
-
-                return _datingcontext.lu_sign.OrderBy(x => x.description).ToList();
-
-
-
+            return CachingFactory.SharedObjectHelper.getsignlist (_datingcontext);
                 // return temp;
 #endif
 
@@ -515,8 +414,6 @@ namespace Shell.MVC2.Data
         }
         public List<lu_smokes> getsmokeslist()
         {
-           
-
 #if DISCONECTED
                 List<lu_smokes> smokeslist = new List<lu_smokes>();
                 smokeslist.Add(new lu_smokes { description = "Male",  id  = 1, selected   = false });
@@ -524,13 +421,7 @@ namespace Shell.MVC2.Data
                 return smokeslist;
                 
 #else
-
-
-
-                return _datingcontext.lu_smokes.OrderBy(x => x.description).ToList();
-
-
-
+            return CachingFactory.SharedObjectHelper.getsmokeslist(_datingcontext);
                 // return temp;
 #endif
 
@@ -544,9 +435,6 @@ namespace Shell.MVC2.Data
 
         public List<lu_educationlevel> geteducationlevellist()
         {
-            
-
-
 #if DISCONECTED
                 List<lu_educationlevel> educationlevellist = new List<lu_educationlevel>();
                 educationlevellist.Add(new lu_educationlevel { description = "Male",  id  = 1, selected   = false });
@@ -554,13 +442,7 @@ namespace Shell.MVC2.Data
                 return educationlevellist;
                 
 #else
-
-
-
-                return _datingcontext.lu_educationlevel.OrderBy(x => x.description).ToList();
-
-
-
+            return CachingFactory.SharedObjectHelper.geteducationlevellist(_datingcontext);
                 // return temp;
 #endif
 
@@ -576,22 +458,14 @@ namespace Shell.MVC2.Data
                 return employmentstatuslist;
                 
 #else
+            return CachingFactory.SharedObjectHelper.getemploymentstatuslist(_datingcontext);
 
-
-
-                return _datingcontext.lu_employmentstatus.OrderBy(x => x.description).ToList();
-
-
-
-                // return temp;
 #endif
 
             
         }
         public List<lu_havekids> gethavekidslist()
         {
-          
-
 #if DISCONECTED
                 List<lu_havekids> havekidslist = new List<lu_havekids>();
                 havekidslist.Add(new lu_havekids { description = "Male",  id  = 1, selected   = false });
@@ -599,14 +473,7 @@ namespace Shell.MVC2.Data
                 return havekidslist;
                 
 #else
-
-
-
-                return _datingcontext.lu_havekids.OrderBy(x => x.description).ToList();
-
-
-
-                // return temp;
+            return CachingFactory.SharedObjectHelper.gethavekidslist (_datingcontext);
 #endif
 
             
@@ -614,7 +481,6 @@ namespace Shell.MVC2.Data
         public List<lu_incomelevel> getincomelevellist()
         {
            
-
 
 #if DISCONECTED
                 List<lu_incomelevel> incomelevellist = new List<lu_incomelevel>();
@@ -624,13 +490,7 @@ namespace Shell.MVC2.Data
                 
 #else
 
-
-
-                return _datingcontext.lu_incomelevel.OrderBy(x => x.description).ToList();
-
-
-
-                // return temp;
+            return CachingFactory.SharedObjectHelper.getincomelevellist(_datingcontext);
 #endif
 
             
@@ -646,14 +506,7 @@ namespace Shell.MVC2.Data
                 return livingsituationlist;
                 
 #else
-
-
-
-                return _datingcontext.lu_livingsituation.OrderBy(x => x.description).ToList();
-
-
-
-                // return temp;
+            return CachingFactory.SharedObjectHelper.getlivingsituationlist(_datingcontext);
 #endif
 
             
@@ -661,8 +514,6 @@ namespace Shell.MVC2.Data
         public List<lu_lookingfor> getlookingforlist()
         {
             
-
-
 #if DISCONECTED
                 List<lu_lookingfor> lookingforlist = new List<lu_lookingfor>();
                 lookingforlist.Add(new lu_lookingfor { description = "Male",  id  = 1, selected   = false });
@@ -670,22 +521,14 @@ namespace Shell.MVC2.Data
                 return lookingforlist;
                 
 #else
-
-
-
-                return _datingcontext.lu_lookingfor.OrderBy(x => x.description).ToList();
-
-
-
-                // return temp;
+            return CachingFactory.SharedObjectHelper.getlookingforlist (_datingcontext);
 #endif
 
             
         }
         public List<lu_maritalstatus> getmaritalstatuslist()
         {
-            
-
+           
 
 #if DISCONECTED
                 List<lu_maritalstatus> maritalstatuslist = new List<lu_maritalstatus>();
@@ -694,14 +537,8 @@ namespace Shell.MVC2.Data
                 return maritalstatuslist;
                 
 #else
+            return CachingFactory.SharedObjectHelper.getmaritalstatuslist(_datingcontext);
 
-
-
-                return _datingcontext.lu_maritalstatus.OrderBy(x => x.description).ToList();
-
-
-
-                // return temp;
 #endif
 
             
@@ -717,22 +554,13 @@ namespace Shell.MVC2.Data
                 return professionlist;
                 
 #else
-
-
-
-                return _datingcontext.lu_profession.OrderBy(x => x.description).ToList();
-
-
-
-                // return temp;
+            return CachingFactory.SharedObjectHelper.getprofessionlist(_datingcontext);
 #endif
 
            
         }
         public List<lu_wantskids> getwantskidslist()
         {
-           
-
 
 #if DISCONECTED
                 List<lu_wantskids> wantskidslist = new List<lu_wantskids>();
@@ -742,11 +570,8 @@ namespace Shell.MVC2.Data
                 
 #else
 
-                return _datingcontext.lu_wantskids.OrderBy(x => x.description).ToList();
+            return CachingFactory.SharedObjectHelper.getwantskidslist(_datingcontext);
 
-
-
-                // return temp;
 #endif
 
             

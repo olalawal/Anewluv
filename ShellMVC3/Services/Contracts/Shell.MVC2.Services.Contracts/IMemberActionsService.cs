@@ -179,12 +179,12 @@ namespace Shell.MVC2.Services.Contracts
         int getwhoiblockedcount(string profileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getwhoiblocked/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/getwhoiblocked/{profileid}/{page}/{numberperpage}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
         List<MemberSearchViewModel> getwhoiblocked(string profileid, string page, string numberperpage);
 
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getmutualblocks/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/getmutualblocks/{profileid}/{targetprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
         List<MemberSearchViewModel> getmutualblocks(string profileid, string targetprofileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]

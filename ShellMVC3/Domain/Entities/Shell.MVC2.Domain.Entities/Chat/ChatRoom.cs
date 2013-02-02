@@ -15,25 +15,22 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
 
         public DateTime? LastNudged { get; set; }
         public string Name { get; set; }
-        public bool Closed { get; set; }
+        public bool? Closed { get; set; }
         [StringLength(80)]
         public string Topic { get; set; }
         public string TopicScreenName { get; set; }
         //using topic and topic starter to show the names of the chatting parties in the chatboxes
         public string TopicStarter { get; set; }
         public string TopicStarterScreenName { get; set; }
-
         // Private rooms
         public bool Private { get; set; }
         public virtual ICollection<ChatUser> AllowedUsers { get; set; }
         public string InviteCode { get; set; }
-
         //roomtypes (enum)
         public string Type { get; set; }
-
         //ChatRequestRooms flags
-        public bool ChatRequestRejected { get; set; }
-        public bool ChatRequestAccepted { get; set; }
+        public bool? ChatRequestRejected { get; set; }
+        public bool? ChatRequestAccepted { get; set; }
 
         public virtual ICollection<ChatUser> AllowedChatRequestUsers { get; set; } //might not be needed
 

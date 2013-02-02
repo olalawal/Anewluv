@@ -17,7 +17,7 @@ namespace Shell.MVC2.Web.MembersActionsService.ServiceHostFactories
         {
             IKernel container = new StandardKernel();
             container.Load<NinjectModules.ApiKeyContextModule>();
-          //  container.Load<NinjectModules.DatingContextModule>();       
+            container.Load<NinjectModules.AnewLuvContextModule>();
             container.Load<NinjectModules.MemberActionsModule>();
             return container;
         }

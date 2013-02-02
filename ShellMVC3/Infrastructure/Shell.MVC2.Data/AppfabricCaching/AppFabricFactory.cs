@@ -44,6 +44,11 @@ namespace Shell.MVC2.AppFabric
 
         /// <summary>
         /// Summary description for Cache
+        /// this cache is used to store session state data so we can use acrcoss mobile etc
+        /// i.e its decoupled from the server?
+        ///  2-1-2013 olawal : modfied the code to exit gracefully when no cache server is active
+        /// most functions require it , but now we still need to notify admin when the cache servers are down 
+        /// withoute destorying the app.
         /// </summary>
         private static DataCache GetCache
         {
@@ -53,95 +58,85 @@ namespace Shell.MVC2.AppFabric
             {
 #if DISCONECTED
                 return null;
-
 #else
-        if (_cacheFactory == null)
-        {           
+                bool lockTaken = false;
+        try
             {
-
-                if (Monitor.TryEnter(_locker, 20000))	{
-
-                
                 if (_cacheFactory == null)
                 {
-                    try
+
+
+                    if (Monitor.TryEnter(_locker, 20000))
                     {
+                        lockTaken = true;
                         _cacheFactory = new DataCacheFactory();
                         //-------------------------
                         // Configure Cache Client 
                         //-------------------------
-
                         //Define Array for 1 Cache Host
                         List<DataCacheServerEndpoint> servers = new List<DataCacheServerEndpoint>(1);
-
                         //Specify Cache Host Details 
                         //  Parameter 1 = host name
                         //  Parameter 2 = cache port number
                         servers.Add(new DataCacheServerEndpoint(_LeadCacheHost, 22233));
-
                         //Create cache configuration
                         DataCacheFactoryConfiguration configuration = new DataCacheFactoryConfiguration();
-
                         //Set the cache host(s)
                         configuration.Servers = servers;
-
                         //Set default properties for local cache (local cache disabled)
                         configuration.LocalCacheProperties = new DataCacheLocalCacheProperties();
-
                         //Disable tracing to avoid informational/verbose messages on the web page
                         DataCacheClientLogManager.ChangeLogLevel(System.Diagnostics.TraceLevel.Off);
-
                         //Pass configuration settings to cacheFactory constructor
                         _cacheFactory = new DataCacheFactory(configuration);
-
+                        DataCache cache = null;
+                        if (_cacheFactory != null)
+                        {
+                            cache = _cacheFactory.GetCache(_sessionStateCacheName);
+                        }
+                        //make sure that any regions needed exist as well
+                        return createaewluvregions(cache);
                     }
-                    catch (DataCacheException ex)
-                    {
-                        //throw ex;
-                        // log the execption message
-                        return null;
-                    }
-                    catch (Exception ex)
-                    {
-
-                        //log andmessage the exception moveon
-                        return null;
-                    }
-
-                    finally		
-                    {			
-                        Monitor.Exit(_locker);
-                    }
+                   
                 }
+                else
+                {
+                    //handle case where cache already exists 
+                    return _cacheFactory.GetCache(_sessionStateCacheName);
                 }
-
-
             }
-
-
-        }
-
-        DataCache cache = null;
-
-        if (_cacheFactory != null)
+        catch (DataCacheException ex)
         {
-            cache = _cacheFactory.GetCache(_sessionStateCacheName);
+            //TO DO NOTIFY AND LOG!!!
+            // log the execption message     
+            //throw ex;
         }
-        
-        //make sure that any regions needed exist as well
-        return createaewluvregions(cache);
+        catch (Exception ex)
+        {
+            //log andmessage the exception moveon  
+            throw ex;
+        }
+        finally
+        {
+            if (lockTaken)
+            Monitor.Exit(_locker);
+        }
+        return null;
+        }
+           
 #endif
 
-            }
-        }
-
+   }
+ 
+        /// <summary>
+        /// 2-1-2013 olawal : modfied the code to exit gracefully when no cache server is active
+        /// most functions require it , but now we still need to notify admin when the cache servers are down 
+        /// withoute destorying the app.
+        /// Persistant cache is never cleared and used for things such as lookup lists 
+        /// and persistant user data that has to get wiped manually if it is needed to be removed
+        /// </summary>
         private static DataCache GetPersistantCache
         {
-
-
-
-
-
 
             get
             {
@@ -150,81 +145,99 @@ namespace Shell.MVC2.AppFabric
                 return null;
 
 #else
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                           if (_cacheFactory == null)
-               {
-                   {
+                bool lockTaken = false;
+                try                    
+                {
+                    //makes sure the lock is active if we try and kill it when done
+                  
 
-                       if (Monitor.TryEnter(_locker, 20000))
-                       {
-                           if (_cacheFactory == null)
-                           {
-                               try
-                               {
+                    if (_cacheFactory == null)
+                    {
+                        if (Monitor.TryEnter(_locker, 20000))
+                        {
+                            lockTaken =true;
+                            _cacheFactory = new DataCacheFactory();
+                            //-------------------------
+                            // Configure Cache Client 
+                            //-------------------------
+                            //Define Array for 1 Cache Host
+                            List<DataCacheServerEndpoint> servers = new List<DataCacheServerEndpoint>(1);
+                            //Specify Cache Host Details 
+                            //  Parameter 1 = host name
+                            //  Parameter 2 = cache port number
+                            servers.Add(new DataCacheServerEndpoint(_LeadCacheHost, 22233));
+                            //Create cache configuration
+                            DataCacheFactoryConfiguration configuration = new DataCacheFactoryConfiguration();
+                            //Set the cache host(s)
+                            configuration.Servers = servers;
+                            //Set default properties for local cache (local cache disabled)
+                            configuration.LocalCacheProperties = new DataCacheLocalCacheProperties();
+                            //Disable tracing to avoid informational/verbose messages on the web page
+                            DataCacheClientLogManager.ChangeLogLevel(System.Diagnostics.TraceLevel.Off);
+                            //Pass configuration settings to cacheFactory constructor
+                            _cacheFactory = new DataCacheFactory(configuration);
+                            //reset cache values ?
+                            DataCache cache = null;
+                            if (_cacheFactory != null)
+                            {
+                                cache = _cacheFactory.GetCache(_persistantCacheName);
+                            }
+                            //make sure that any regions needed exist as well
+                            return createaewluvregions(cache);
+                        }
 
-
-
-                                   _cacheFactory = new DataCacheFactory();
-                                   //-------------------------
-                                   // Configure Cache Client 
-                                   //-------------------------
-
-                                   //Define Array for 1 Cache Host
-                                   List<DataCacheServerEndpoint> servers = new List<DataCacheServerEndpoint>(1);
-
-                                   //Specify Cache Host Details 
-                                   //  Parameter 1 = host name
-                                   //  Parameter 2 = cache port number
-                                   servers.Add(new DataCacheServerEndpoint(_LeadCacheHost, 22233));
-
-                                   //Create cache configuration
-                                   DataCacheFactoryConfiguration configuration = new DataCacheFactoryConfiguration();
-
-                                   //Set the cache host(s)
-                                   configuration.Servers = servers;
-
-                                   //Set default properties for local cache (local cache disabled)
-                                   configuration.LocalCacheProperties = new DataCacheLocalCacheProperties();
-
-                                   //Disable tracing to avoid informational/verbose messages on the web page
-                                   DataCacheClientLogManager.ChangeLogLevel(System.Diagnostics.TraceLevel.Off);
-
-                                   //Pass configuration settings to cacheFactory constructor
-                                   _cacheFactory = new DataCacheFactory(configuration);
-
-
-
-
-                               }
-                               catch (DataCacheException ex)
-                               {
-                                   //log cache error
-                                   throw ex;
-                                   // log the execption message
-                                   //return false;
-                                   return null;
-                               }
-
-                               finally
-                               {
-                                   Monitor.Exit(_locker);
-                               }
-                           }
-                       }
-                   }
-               }
-               //reset cache values ?
-               DataCache cache = null;
-
-               if (_cacheFactory != null)
-               {
-                   cache = _cacheFactory.GetCache(_persistantCacheName);
-               }
-
-               //make sure that any regions needed exist as well
-               return createaewluvregions(cache);
-
+                    }
+                    else
+                    {
+                        //return the  cache if it already was peristed
+                       _cacheFactory.GetCache(_persistantCacheName);
+                    }
+             }
+            catch (DataCacheException ex)
+            {
+                //TO DO NOTIFY AND LOG!!!
+                //log cache error
+                //log the execption message
+                // throw ex;
+            }
+            catch (Exception ex)
+            {
+                //log cache error
+                // log the execption message
+                throw ex;
+            }
+            finally
+            {
+                if (lockTaken)
+                Monitor.Exit(_locker);
+            }
+                //just needed for the getter accsor
+            return null;
 #endif
             }
+
+        }
+
+
+        //only creating a region for guests since we want scalablituy for members
+        //named caches in version 1.0 are limited to cache servers cannot be on clusters
+        public static DataCache createaewluvregions(DataCache NamedCache)
+        {
+            // Always test if region exists;
+            try
+            {
+                NamedCache.CreateRegion("Guests");
+            }
+            catch (DataCacheException dcex)
+            {
+                // if region already exists it's ok, 
+                // otherwise rethrow the exception
+                //12-27-2012 olawal not throwingg the error anymore justneedto logand send theemail
+                //TO DO log error andsend email toadmin
+                if (dcex.ErrorCode != DataCacheErrorCode.RegionAlreadyExists)
+                    return null;
+            }
+            return NamedCache;
 
         }
 
@@ -247,34 +260,7 @@ namespace Shell.MVC2.AppFabric
             return true;
 
         }
-
-
-
-        //only creating a region for guests since we want scalablituy for members
-        //named caches in version 1.0 are limited to cache servers cannot be on clusters
-        public static DataCache createaewluvregions(DataCache NamedCache)
-        {
-
-            // Always test if region exists;
-            try
-            {
-                NamedCache.CreateRegion("Guests");
-            }
-            catch (DataCacheException dcex)
-            {
-                // if region already exists it's ok, 
-                // otherwise rethrow the exception
-                //12-27-2012 olawal not throwingg the error anymore justneedto logand send theemail
-                //TO DO log error andsend email toadmin
-                if (dcex.ErrorCode != DataCacheErrorCode.RegionAlreadyExists)
-                 return null;  
-            }
-
-            return NamedCache;
-
-
-        }
-
+        
         #endregion
 
         #region "Save and Retreival of Common strings
@@ -733,7 +719,6 @@ namespace Shell.MVC2.AppFabric
             }
 
         }
-
         public static class ProfileBrowseModelsHelper
         {
             public static List<ProfileBrowseModel> getmembercurrentsearchresults(string profileid)
@@ -1022,7 +1007,6 @@ namespace Shell.MVC2.AppFabric
             }
         }
 
-
         //only runs on application start, if the objects are not found then we will want to 
         //add all thier getters and setters here 
         public static class SharedObjectHelper
@@ -1041,7 +1025,8 @@ namespace Shell.MVC2.AppFabric
                     try { if (dataCache != null) photoformat = dataCache.Get("photoformatlist") as List<lu_photoformat>; }
                     catch (DataCacheException)
                     {
-                        throw new InvalidOperationException();
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
                     }
                     catch (Exception ex)
                     {
@@ -1089,7 +1074,8 @@ namespace Shell.MVC2.AppFabric
                     try { if (dataCache != null) photoapprovalstatus = dataCache.Get("photoapprovalstatuslist") as List<lu_photoapprovalstatus>; }
                     catch (DataCacheException)
                     {
-                        throw new InvalidOperationException();
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
                     }
                     catch (Exception ex)
                     {
@@ -1137,7 +1123,8 @@ namespace Shell.MVC2.AppFabric
                     try { if (dataCache != null) photorejectionreason = dataCache.Get("photorejectionreasonlist") as List<lu_photorejectionreason>; }
                     catch (DataCacheException)
                     {
-                        throw new InvalidOperationException();
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
                     }
                     catch (Exception ex)
                     {
@@ -1185,7 +1172,8 @@ namespace Shell.MVC2.AppFabric
                     try { if (dataCache != null) photostatus = dataCache.Get("photostatuslist") as List<lu_photostatus>; }
                     catch (DataCacheException)
                     {
-                        throw new InvalidOperationException();
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
                     }
                     catch (Exception ex)
                     {
@@ -1233,7 +1221,8 @@ namespace Shell.MVC2.AppFabric
                     try { if (dataCache != null) photoimagetype = dataCache.Get("photoimagetypelist") as List<lu_photoimagetype>; }
                     catch (DataCacheException)
                     {
-                        throw new InvalidOperationException();
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
                     }
                     catch (Exception ex)
                     {
@@ -1325,19 +1314,14 @@ namespace Shell.MVC2.AppFabric
                 }
                 if (ageslist == null)
                 {
-
-
-                    ageslist = generatedlists.ageslist();
-                    
-                    // Datings context = new modelContext();
-                    // model = context.models.Single(c => c.Id == id);
-
+                    ageslist = generatedlists.ageslist();    
                     //if we still have no datacahe no need to do the put
                     if (dataCache != null)
                         dataCache.Put("agelist", ageslist);
 
                 } return ageslist;
             }
+
             public static List<metricheight> getmetricheightlist()
             {
                 DataCache dataCache;
@@ -1345,7 +1329,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<metricheight> heights = null;
-                try { heights = dataCache.Get("metricheightlist") as List<metricheight>; }
+                try { if (dataCache != null) heights = dataCache.Get("metricheightlist") as List<metricheight>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1408,9 +1392,9 @@ namespace Shell.MVC2.AppFabric
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
-
                 List<lu_bodytype> bodytype = null;
-                try { bodytype = dataCache.Get("bodytypelist") as List<lu_bodytype>; }
+
+                try { if (dataCache != null) bodytype = dataCache.Get("bodytypelist") as List<lu_bodytype>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1426,8 +1410,10 @@ namespace Shell.MVC2.AppFabric
                     //remafill the ages list from the repositry and exit
                     bodytype  = context.lu_bodytype.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("bodytypelist", bodytype);
+                    
+                    //put this into the cache since it was not in here already 
+                    if (dataCache != null)
+                        dataCache.Put("bodytypelist", bodytype);
 
                 } return bodytype;
             }
@@ -1438,7 +1424,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_ethnicity> ethnicity = null;
-                try { ethnicity = dataCache.Get("ethnicitylist") as List<lu_ethnicity>; }
+                try { if (dataCache != null) ethnicity = dataCache.Get("ethnicitylist") as List<lu_ethnicity>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1455,6 +1441,7 @@ namespace Shell.MVC2.AppFabric
                     ethnicity = context.lu_ethnicity.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
+                    if (dataCache != null)
                     dataCache.Put("ethnicitylist", ethnicity);
 
                 } return ethnicity;
@@ -1466,7 +1453,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_eyecolor> eyecolor = null;
-                try { eyecolor = dataCache.Get("eyecolorlist") as List<lu_eyecolor>; }
+                try { if (dataCache != null) eyecolor = dataCache.Get("eyecolorlist") as List<lu_eyecolor>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1483,7 +1470,7 @@ namespace Shell.MVC2.AppFabric
                     eyecolor = context.lu_eyecolor.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("eyecolorlist", eyecolor);
+                    if (dataCache != null) dataCache.Put("eyecolorlist", eyecolor);
 
                 } return eyecolor;
             }
@@ -1494,7 +1481,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_haircolor> haircolor = null;
-                try { haircolor = dataCache.Get("haircolorlist") as List<lu_haircolor>; }
+                try { if (dataCache != null)haircolor = dataCache.Get("haircolorlist") as List<lu_haircolor>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1511,7 +1498,7 @@ namespace Shell.MVC2.AppFabric
                     haircolor = context.lu_haircolor.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("haircolorlist", haircolor);
+                    if (dataCache != null) dataCache.Put("haircolorlist", haircolor);
 
                 } return haircolor;
             }
@@ -1526,7 +1513,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_diet> diet = null;
-                try { diet = dataCache.Get("dietlist") as List<lu_diet>; }
+                try { if (dataCache != null) diet = dataCache.Get("dietlist") as List<lu_diet>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1543,7 +1530,7 @@ namespace Shell.MVC2.AppFabric
                     diet = context.lu_diet.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("dietlist", diet);
+                    if (dataCache != null) dataCache.Put("dietlist", diet);
 
                 } return diet;
             }
@@ -1554,7 +1541,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_drinks> drinks = null;
-                try { drinks = dataCache.Get("drinkslist") as List<lu_drinks>; }
+                try { if (dataCache != null) drinks = dataCache.Get("drinkslist") as List<lu_drinks>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1571,7 +1558,7 @@ namespace Shell.MVC2.AppFabric
                     drinks = context.lu_drinks.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("drinkslist", drinks);
+                    if (dataCache != null) dataCache.Put("drinkslist", drinks);
 
                 } return drinks;
             }
@@ -1582,7 +1569,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_exercise> exercise = null;
-                try { exercise = dataCache.Get("exerciselist") as List<lu_exercise>; }
+                try { if (dataCache != null) exercise = dataCache.Get("exerciselist") as List<lu_exercise>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1599,7 +1586,7 @@ namespace Shell.MVC2.AppFabric
                     exercise = context.lu_exercise.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("exerciselist", exercise);
+                    if (dataCache != null) dataCache.Put("exerciselist", exercise);
 
                 } return exercise;
             }
@@ -1610,7 +1597,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_hobby> hobby = null;
-                try { hobby = dataCache.Get("hobbylist") as List<lu_hobby>; }
+                try { if (dataCache != null) hobby = dataCache.Get("hobbylist") as List<lu_hobby>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1627,7 +1614,7 @@ namespace Shell.MVC2.AppFabric
                     hobby = context.lu_hobby.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("hobbylist", hobby);
+                    if (dataCache != null) dataCache.Put("hobbylist", hobby);
 
                 } return hobby;
             }
@@ -1638,7 +1625,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_humor> humor = null;
-                try { humor = dataCache.Get("humorlist") as List<lu_humor>; }
+                try { if (dataCache != null) humor = dataCache.Get("humorlist") as List<lu_humor>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1655,7 +1642,7 @@ namespace Shell.MVC2.AppFabric
                     humor = context.lu_humor.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("humorlist", humor);
+                    if (dataCache != null)  dataCache.Put("humorlist", humor);
 
                 } return humor;
             }
@@ -1666,7 +1653,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_politicalview> politicalview = null;
-                try { politicalview = dataCache.Get("politicalviewlist") as List<lu_politicalview>; }
+                try { if (dataCache != null) politicalview = dataCache.Get("politicalviewlist") as List<lu_politicalview>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1683,7 +1670,7 @@ namespace Shell.MVC2.AppFabric
                     politicalview = context.lu_politicalview.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("politicalviewlist", politicalview);
+                    if (dataCache != null)  dataCache.Put("politicalviewlist", politicalview);
 
                 } return politicalview;
             }
@@ -1694,7 +1681,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_religion> religion = null;
-                try { religion = dataCache.Get("religionlist") as List<lu_religion>; }
+                try { if (dataCache != null)  religion = dataCache.Get("religionlist") as List<lu_religion>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1711,7 +1698,7 @@ namespace Shell.MVC2.AppFabric
                     religion = context.lu_religion.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("religionlist", religion);
+                    if (dataCache != null) dataCache.Put("religionlist", religion);
 
                 } return religion;
             }
@@ -1722,7 +1709,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_religiousattendance> religiousattendance = null;
-                try { religiousattendance = dataCache.Get("religiousattendancelist") as List<lu_religiousattendance>; }
+                try { if (dataCache != null) religiousattendance = dataCache.Get("religiousattendancelist") as List<lu_religiousattendance>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1739,7 +1726,7 @@ namespace Shell.MVC2.AppFabric
                     religiousattendance = context.lu_religiousattendance.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("religiousattendancelist", religiousattendance);
+                    if (dataCache != null) dataCache.Put("religiousattendancelist", religiousattendance);
 
                 } return religiousattendance;
             }
@@ -1750,7 +1737,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_sign> sign = null;
-                try { sign = dataCache.Get("signlist") as List<lu_sign>; }
+                try { if (dataCache != null) sign = dataCache.Get("signlist") as List<lu_sign>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1767,7 +1754,7 @@ namespace Shell.MVC2.AppFabric
                     sign = context.lu_sign.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("signlist", sign);
+                    if (dataCache != null)  dataCache.Put("signlist", sign);
 
                 } return sign;
             }
@@ -1778,7 +1765,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_smokes> smokes = null;
-                try { smokes = dataCache.Get("smokeslist") as List<lu_smokes>; }
+                try { if (dataCache != null)  smokes = dataCache.Get("smokeslist") as List<lu_smokes>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1795,7 +1782,7 @@ namespace Shell.MVC2.AppFabric
                     smokes = context.lu_smokes.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("smokeslist", smokes);
+                    if (dataCache != null) dataCache.Put("smokeslist", smokes);
 
                 } return smokes;
             }
@@ -1811,7 +1798,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_educationlevel> educationlevel = null;
-                try { educationlevel = dataCache.Get("educationlevellist") as List<lu_educationlevel>; }
+                try { if (dataCache != null) educationlevel = dataCache.Get("educationlevellist") as List<lu_educationlevel>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1828,7 +1815,7 @@ namespace Shell.MVC2.AppFabric
                     educationlevel = context.lu_educationlevel.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("educationlevellist", educationlevel);
+                    if (dataCache != null) dataCache.Put("educationlevellist", educationlevel);
 
                 } return educationlevel;
             }
@@ -1839,7 +1826,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_employmentstatus> employmentstatus = null;
-                try { employmentstatus = dataCache.Get("employmentstatuslist") as List<lu_employmentstatus>; }
+                try { if (dataCache != null) employmentstatus = dataCache.Get("employmentstatuslist") as List<lu_employmentstatus>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1856,7 +1843,7 @@ namespace Shell.MVC2.AppFabric
                     employmentstatus = context.lu_employmentstatus.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("employmentstatuslist", employmentstatus);
+                    if (dataCache != null) dataCache.Put("employmentstatuslist", employmentstatus);
 
                 } return employmentstatus;
             }
@@ -1867,7 +1854,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_havekids> havekids = null;
-                try { havekids = dataCache.Get("havekidslist") as List<lu_havekids>; }
+                try { if (dataCache != null) havekids = dataCache.Get("havekidslist") as List<lu_havekids>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1884,7 +1871,7 @@ namespace Shell.MVC2.AppFabric
                     havekids = context.lu_havekids.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("havekidslist", havekids);
+                    if (dataCache != null) dataCache.Put("havekidslist", havekids);
 
                 } return havekids;
             }
@@ -1895,7 +1882,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_incomelevel> incomelevel = null;
-                try { incomelevel = dataCache.Get("incomelevellist") as List<lu_incomelevel>; }
+                try { if (dataCache != null) incomelevel = dataCache.Get("incomelevellist") as List<lu_incomelevel>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1912,7 +1899,7 @@ namespace Shell.MVC2.AppFabric
                     incomelevel = context.lu_incomelevel.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("incomelevellist", incomelevel);
+                    if (dataCache != null) dataCache.Put("incomelevellist", incomelevel);
 
                 } return incomelevel;
             }
@@ -1923,7 +1910,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_livingsituation> livingsituation = null;
-                try { livingsituation = dataCache.Get("livingsituationlist") as List<lu_livingsituation>; }
+                try { if (dataCache != null) livingsituation = dataCache.Get("livingsituationlist") as List<lu_livingsituation>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1940,7 +1927,7 @@ namespace Shell.MVC2.AppFabric
                     livingsituation = context.lu_livingsituation.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("livingsituationlist", livingsituation);
+                    if (dataCache != null)  dataCache.Put("livingsituationlist", livingsituation);
 
                 } return livingsituation;
             }
@@ -1951,7 +1938,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_lookingfor> lookingfor = null;
-                try { lookingfor = dataCache.Get("lookingforlist") as List<lu_lookingfor>; }
+                try { if (dataCache != null) lookingfor = dataCache.Get("lookingforlist") as List<lu_lookingfor>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1968,7 +1955,7 @@ namespace Shell.MVC2.AppFabric
                     lookingfor = context.lu_lookingfor.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("lookingforlist", lookingfor);
+                    if (dataCache != null) dataCache.Put("lookingforlist", lookingfor);
 
                 } return lookingfor;
             }
@@ -1979,7 +1966,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_maritalstatus> maritalstatus = null;
-                try { maritalstatus = dataCache.Get("maritalstatuslist") as List<lu_maritalstatus>; }
+                try { if (dataCache != null) maritalstatus = dataCache.Get("maritalstatuslist") as List<lu_maritalstatus>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -1996,7 +1983,7 @@ namespace Shell.MVC2.AppFabric
                     maritalstatus = context.lu_maritalstatus.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("maritalstatuslist", maritalstatus);
+                    if (dataCache != null)  dataCache.Put("maritalstatuslist", maritalstatus);
 
                 } return maritalstatus;
             }
@@ -2007,7 +1994,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_profession> profession = null;
-                try { profession = dataCache.Get("professionlist") as List<lu_profession>; }
+                try { if (dataCache != null) profession = dataCache.Get("professionlist") as List<lu_profession>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -2024,7 +2011,7 @@ namespace Shell.MVC2.AppFabric
                     profession = context.lu_profession.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("professionlist", profession);
+                    if (dataCache != null) dataCache.Put("professionlist", profession);
 
                 } return profession;
             }
@@ -2035,7 +2022,7 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
                 List<lu_wantskids> wantskids = null;
-                try { wantskids = dataCache.Get("wantskidslist") as List<lu_wantskids>; }
+                try { if (dataCache != null) wantskids = dataCache.Get("wantskidslist") as List<lu_wantskids>; }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
@@ -2052,7 +2039,7 @@ namespace Shell.MVC2.AppFabric
                     wantskids = context.lu_wantskids.OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     // model = context.models.Single(c => c.Id == id);
-                    dataCache.Put("wantskidslist", wantskids);
+                    if (dataCache != null) dataCache.Put("wantskidslist", wantskids);
 
                 } return wantskids;
             }

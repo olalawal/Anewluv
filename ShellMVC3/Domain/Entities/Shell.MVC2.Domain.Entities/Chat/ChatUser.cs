@@ -14,7 +14,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
         {
             [Key]
             public int Key { get; set; }
-
             public string Id { get; set; }
             public string Name { get; set; }
             //added gender for the hell of it altought we are nop populating it right now
@@ -34,7 +33,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
             [StringLength(2)]
             public string Flag { get; set; }
             public string ScreenName { get; set; }
+            public int profileid { get; set; }
             public string Email { get; set; }
+            public string HasMobileAccess { get; set; }
             // List of clients that are currently connected for this user
             public virtual ICollection<ChatClient> ConnectedClients { get; set; }
             public virtual ICollection<ChatRoom> OwnedRooms { get; set; }

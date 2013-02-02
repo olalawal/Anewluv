@@ -1760,7 +1760,7 @@ namespace Shell.MVC2.Data
 
 
 
-                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.likedate  ).ToList();
+                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.likedate.Value   ).ToList();
 
           //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(wholikesme, Page ?? 1, NumberPerPage.GetValueOrDefault());
             return wholikesme;
