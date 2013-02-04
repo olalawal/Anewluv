@@ -61,7 +61,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.GeoService",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.AuthenticationService", "..\Hosting\Shell.MVC2.Web.AuthenticationService\Shell.MVC2.Web.AuthenticationService.csproj", "{30A884DD-6557-4F8E-9B57-EA774D129FA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.MemberActionService", "..\Hosting\Shell.MVC2.Web.MemberActions\Shell.MVC2.Web.MemberActionService.csproj", "{425B82F1-8CD4-4F2B-8D44-B68BD5A4A0B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.MemberActionsService", "..\Hosting\Shell.MVC2.Web.MemberActions\Shell.MVC2.Web.MemberActionsService.csproj", "{425B82F1-8CD4-4F2B-8D44-B68BD5A4A0B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interfaces", "Interfaces", "{C131338F-F0A8-4E36-A73F-8689C82A1638}"
 EndProject
