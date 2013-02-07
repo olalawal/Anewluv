@@ -14,14 +14,31 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     [DataContract]
     public enum ApplicationEnum : int
     {
-        [Description("NotSet")][EnumMember]
-        Echain = 1,
-        [Description("NotSet")][EnumMember]
-        WebApp = 2,
-        [Description("NotSet")][EnumMember]
-        LoggingService = 3,
-        [Description("NotSet")][EnumMember]
-        NotificationService = 4
+        [Description("MemberActionsService")]
+        [EnumMember]
+        MemberActionsService = 1,
+        [Description("WebClient")]
+        [EnumMember]
+        WebClient = 2,
+        [Description("MemberService")]
+        [EnumMember]
+        MemberService = 3,
+        [Description("EditMemberService")]
+        [EnumMember]
+        EditMemberService = 4,
+        [Description("EditSearchService")]
+        [EnumMember]
+        EditSearchService = 5,
+        [Description("SearchService")]
+        [EnumMember]
+        SearchService = 6,
+        [Description("UserAuthorizationService")]
+        [EnumMember]
+        UserAuthorizationService = 7,
+        [Description("Logging Service")][EnumMember]
+        LoggingService = 8,
+        [Description("Notification Service")][EnumMember]
+        NotificationService = 9
     }
 
 }

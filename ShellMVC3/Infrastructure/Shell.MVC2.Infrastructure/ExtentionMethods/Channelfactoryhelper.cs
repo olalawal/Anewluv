@@ -155,7 +155,7 @@ namespace Shell.MVC2.Infrastructure
             {
                 var type = typeof(T);
                 var fullName = type.FullName;
-
+                var name = type.Name;
                 lock (cacheLocker)
                 {
                     if (cachedEndpointNames.ContainsKey(type))
@@ -163,16 +163,21 @@ namespace Shell.MVC2.Infrastructure
                         return cachedEndpointNames[type];
                     }
 
-                    var serviceModel = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).SectionGroups["system.serviceModel"] as ServiceModelSectionGroup;
+               
 
-                    if ((serviceModel != null) && !string.IsNullOrEmpty(fullName))
-                    {
-                        foreach (var endpointName in serviceModel.Client.Endpoints.Cast<ChannelEndpointElement>().Where(endpoint => fullName.EndsWith(endpoint.Contract)).Select(endpoint => endpoint.Name))
-                        {
-                            cachedEndpointNames.Add(type, endpointName);
-                            return endpointName;
-                        }
-                    }
+                   ////var serviceModel = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).SectionGroups["system.serviceModel"] as ServiceModelSectionGroup;
+
+                   // if ((serviceModel != null) && !string.IsNullOrEmpty(fullName))
+                   // {
+                   //     foreach (var endpointName in serviceModel.Client.Endpoints.Cast<ChannelEndpointElement>().Where(endpoint => fullName.EndsWith(endpoint.Contract)).Select(endpoint => endpoint.Name))
+                   //     {
+                   //         cachedEndpointNames.Add(type, endpointName);
+                   //         return endpointName;
+                   //     }
+                   // }
+
+                    cachedEndpointNames.Add(type, name);
+                    return fullName;
                 }
 
                 throw new InvalidOperationException("Could not find endpoint element for type '" + fullName + "' in the ServiceModel client configuration section. This might be because no configuration file was found for your application, or because no endpoint element matching this name could be found in the client element.");

@@ -22,14 +22,14 @@ namespace Shell.MVC2.Services.Edit
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "searchsService" in both code and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
-    public class EditsearchService : ISearchEditService 
+    public class SearchEditService : ISearchEditService 
     {
 
 
         private ISearchEditRepository _editsearchrepository;
         // private string _apikey;
 
-        public EditsearchService(ISearchEditRepository editsearchrepository)
+        public SearchEditService(ISearchEditRepository editsearchrepository)
         {
             _editsearchrepository = editsearchrepository;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];

@@ -55,13 +55,13 @@ namespace LoggingLibrary
             set { oLogEntry.IPAddress = value; }
         }
 
-        public ErroLogging(int ApplicationID)
+        public ErroLogging(ApplicationEnum Application)
         {
 
             errorpass = 0;
             //lstMessages = new List<LogMessage>();
             // lstValues = new List<LogValue>();
-            iApplicationID = ApplicationID;
+            iApplicationID = Convert.ToInt32(Application);
            // var myendpoint  = CreateLoggingServiceEndpoint();
             //Binding binding = new WSHttpBinding();
             //EndpointAddress endpointAddress = new EndpointAddress("http://localhost/LoggingService/ErrorLoggingService.svc?wsdl");
@@ -70,11 +70,11 @@ namespace LoggingLibrary
             //mysClient.Test();
             // LogClient = new Log;//LoggerSoapClient();
             //oLogEntry = CreateLgEntryObject(null, null, LogSeverityEnum.Information);
-            ErrorLoggingfactory = new ChannelFactory<IErrorLoggingService>("WSHttpBinding_IErrorLoggingService");//(mysClient.Endpoint);
+            ErrorLoggingfactory = new ChannelFactory<IErrorLoggingService>("ErrorLoggingService.soap");//(mysClient.Endpoint);
             LoggingServiceProxy = ErrorLoggingfactory.CreateChannel();
 
             //create chanle for notifcaiton servierc
-           InfoNotificationfactory = new ChannelFactory<IInfoNotificationService>("WSHttpBinding_IErrorNotificationService");//(mysClient.Endpoint);
+            InfoNotificationfactory = new ChannelFactory<IInfoNotificationService>("InfoNotificationService.soap");//(mysClient.Endpoint);
            InfoNotificationServiceProxy =InfoNotificationfactory.CreateChannel();
 
             oLogEntry = new CustomErrorLog();
@@ -117,10 +117,8 @@ namespace LoggingLibrary
         /// <param name="OrderNumber">The order number.</param>
         /// <param name="RequisitionNumber">The requisition number.</param>
 
-        public void WriteSingleEntry(LogSeverityEnum severityLevelvalue, Exception referedexception,
-                                    HttpContextBase context = null,
-                                    string OrderNumber = null,
-            string RequisitionNumber = null)
+        public void WriteSingleEntry(LogSeverityEnum severityLevelvalue, Exception referedexception,int? profileid=null,
+                                    HttpContextBase context = null)
         {
             //set the error pass since this function can be used recursively
             errorpass = errorpass + 1;
@@ -136,12 +134,6 @@ namespace LoggingLibrary
             MethodBase methodBase = stackFrame.GetMethod();
 
             var inspectmoduletest = methodBase.Module;
-
-
-
-
-
-
 
             //   ex.ToString();
             //   Get stack trace for the exception with source file information 
@@ -189,28 +181,27 @@ namespace LoggingLibrary
                 oLogEntry.Request  = context.Request.Form.ToString();
                 oLogEntry.QueryString  = context.Request.QueryString.ToString();
             }
-
-         
-                 
+  
                  oLogEntry.application_id = this.iApplicationID ;
                  oLogEntry.logseverity_id   = (int)severityLevelvalue;
                 
                 //replace with profile ID if we dont have it
-                if (OrderNumber != null & !object.ReferenceEquals(OrderNumber, string.Empty))
+                if (profileid  != null & !object.ReferenceEquals(profileid , string.Empty))
                 {
-                    oLogEntry.ProfileID  = OrderNumber;
+                    oLogEntry.ProfileID  =  Convert.ToString(profileid) ;
                 }
 
-
+                //first  write database entry
                 Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Use(d =>
                 {
                    var id= d.WriteCompleteLogEntry(oLogEntry);
                    oLogEntry.id = id;
                 }
                 );
-               // var test = LoggingServiceProxy.WriteCompleteLogEntry(oLogEntry);
+                //var test = LoggingServiceProxy.WriteCompleteLogEntry(oLogEntry);
                 //modified to log the error and send message in one stroke
 
+                //now write the email and send it
                 Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IInfoNotificationService>.Use(d =>
                 {
                     WriteCustomErrorNotificationEntry(oLogEntry);
@@ -252,6 +243,7 @@ namespace LoggingLibrary
             //modified to log the error and send message in one stroke
             try
             {
+
                 InfoNotificationServiceProxy.senderrormessage(error, addresstypeenum.Developer.ToString());
             }
             catch (Exception ex)

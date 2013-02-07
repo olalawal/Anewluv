@@ -35,18 +35,10 @@ namespace Shell.MVC2.Data
             try
             {
                
-                // Perform validation on the updated order before applying the changes.
-                //get the lookup obkects 
-               // lu_application application = (_context.lu_application.Where(x => x.id == logEntry.Application.id)).First();
-                //lu_logSeverity logseverity = (_context.lu_logSeverity.Where(x => x.id == logEntry.LogSeverity.id)).First();
-
-               // logEntry.LogSeverity = logseverity;
-                //logEntry.Application = application;
-                // The Add method examines the change tracking information 
-                // contained in the graph of self-tracking entities to infer the set of operations
-                // that need to be performed to reflect the changes in the database. 
                 _context.CustomErrorLogs.Add(logEntry);
+
                 _context.SaveChanges();
+                
                 return logEntry.id;
             }
             catch (UpdateException ex)

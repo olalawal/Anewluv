@@ -14,7 +14,9 @@ using Shell.MVC2.Interfaces;
 
 
 using Shell.MVC2.Data.Infrastructure;
+using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 
+using LoggingLibrary;
 
 //TO DO move this kind of code to client
 ////return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoisinterestedinme, Page ?? 1, NumberPerPage.GetValueOrDefault())
@@ -26,11 +28,13 @@ namespace Shell.MVC2.Data
         //TO DO do this a different way I think
         //private AnewluvContext  _datingcontext;
         private IMemberRepository  _membersrepository;
+        private LoggingLibrary.ErroLogging  logger;
 
         public MemberActionsRepository(AnewluvContext datingcontext ,IMemberRepository membersrepository ) 
             :base(datingcontext)
         {
             _membersrepository = membersrepository;
+          
         }
 
 
@@ -55,20 +59,28 @@ namespace Shell.MVC2.Data
             int? count = null;
             int defaultvalue = 0;
 
-            count = (
-               from f in _datingcontext.interests 
-               where (f.profile_id   == profileid && f.deletedbymemberdate == null)
+            try
+            {
+                count = (
+               from f in _datingcontext.interests
+               where (f.profile_id == profileid && f.deletedbymemberdate == null)
                select f).Count();
+                // ?? operator example.
+                // y = x, unless x is null, in which case y = -1.
+                defaultvalue = count ?? 0;
+                return defaultvalue;
+            }
+            catch (Exception ex)
+            {
+                logger = new ErroLogging(ApplicationEnum.MemberActionsService);
+                logger.WriteSingleEntry(LogSeverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
+            }
 
-            // ?? operator example.
-
-
-            // y = x, unless x is null, in which case y = -1.
-            defaultvalue = count ?? 0;
-
-
-
-            return defaultvalue;
+            
         }
 
         //count methods first
@@ -143,49 +155,63 @@ namespace Shell.MVC2.Data
         public List<MemberSearchViewModel> getinterests(int profileid, int? Page, int? NumberPerPage)
         {
                         //gets all  interestets from the interest table based on if the person's profiles are stil lvalid tho
+;
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id   == profileid && p.removedate  == null)
-                                 select new
-                                 {
-                                     ProfilesBlockedId = c.blockprofile_id 
-                                 };
-
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-         var   interests = (from p in _datingcontext.interests.Where(p => p.profile_id    == profileid)
-                         join f in _datingcontext.profiledata on p.interestprofile_id  equals f.profile_id  
-                         join z in _datingcontext.profiles on p.interestprofile_id equals z.id
-                         where (f.profile.status.id  < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id  ))
-                         select new MemberSearchViewModel
-                         {
-                                   creationdate    = p.creationdate ,
-                             id = p.id ,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                           genderid  = f.gender.id,
-                             postalcode = f.postalcode,
-                              lastlogindate    = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                            screenname  = z.screenname,
-                             mycatchyintroline   = f.mycatchyintroLine,
-                          aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+         try
+         {
 
 
+             var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                                  select new
+                                  {
+                                      ProfilesBlockedId = c.blockprofile_id
+                                  };
 
-                         }).OrderByDescending(f => f.lastlogindate  ).ThenByDescending(f => f.interestdate  ).ToList();
-
-         return interests; //new PaginatedList<MemberSearchViewModel>().GetPageableList(interests, Page ?? 1, NumberPerPage.GetValueOrDefault());
+             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+             //rematerialize on the back end.
+             //final query to send back only the profile datatas of the interests we want
+             var interests = (from p in _datingcontext.interests.Where(p => p.profile_id == profileid)
+                              join f in _datingcontext.profiledata on p.interestprofile_id equals f.profile_id
+                              join z in _datingcontext.profiles on p.interestprofile_id equals z.id
+                              where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                              select new MemberSearchViewModel
+                              {
+                                  creationdate = p.creationdate,
+                                  id = p.id,
+                                  age = f.age,
+                                  birthdate = f.birthdate,
+                                  city = f.city,
+                                  countryid = f.countryid,
+                                  stateprovince = f.stateprovince,
+                                  longitude = (double)f.longitude,
+                                  latitude = (double)f.latitude,
+                                  genderid = f.gender.id,
+                                  postalcode = f.postalcode,
+                                  lastlogindate = z.logindate,
+                                  //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
+                                  screenname = z.screenname,
+                                  mycatchyintroline = f.mycatchyintroLine,
+                                  aboutme = f.aboutme,
+                                  perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
 
+                              }).OrderByDescending(f => f.lastlogindate.Value ).ThenByDescending(f => f.interestdate ).ToList();
+
+             return interests; //new PaginatedList<MemberSearchViewModel>().GetPageableList(interests, Page ?? 1, NumberPerPage.GetValueOrDefault())
+
+         }
+         catch (Exception ex)
+         {
+             //instantiate logger here so it does not break anything else.
+             logger = new ErroLogging(ApplicationEnum.MemberActionsService);
+             logger.WriteSingleEntry(LogSeverityEnum.CriticalError, ex, profileid, null);
+             //log error mesasge
+             //handle logging here
+             var message = ex.Message;
+             throw ex;
+         }
 
 
         }

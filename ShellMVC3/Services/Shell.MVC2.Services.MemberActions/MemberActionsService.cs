@@ -55,7 +55,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>       
         public int getwhoiaminterestedincount(string profileid)
         {
-            return _memberactionsrepository.getwhoiaminterestedincount(Convert.ToInt32(profileid));
+           
+            try
+            {
+                return _memberactionsrepository.getwhoiaminterestedincount(Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         //count methods first
@@ -64,7 +77,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>       
         public int getwhoisinterestedinmecount(string profileid)
         {
-            return _memberactionsrepository.getwhoisinterestedinmecount(Convert.ToInt32(profileid));
+        
+            try
+            {
+                return _memberactionsrepository.getwhoisinterestedinmecount(Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         //count methods first
@@ -73,7 +99,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>       
         public int getwhoisinterestedinmenewcount(string profileid)
         {
-            return _memberactionsrepository.getwhoisinterestedinmenewcount(Convert.ToInt32(profileid));
+           
+            try
+            {
+                return _memberactionsrepository.getwhoisinterestedinmenewcount(Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         #endregion
@@ -84,7 +123,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getinterests(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getinterests(Convert.ToInt32(profileid),Convert.ToInt32(page) ,Convert.ToInt32(numberperpage));
+           
+            try
+            {
+                return _memberactionsrepository.getinterests(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -94,7 +146,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhoisinterestedinme(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhoisinterestedinme(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
+            try
+            {
+
+                return _memberactionsrepository.getwhoisinterestedinme(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -102,7 +167,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhoisinterestedinmenew(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhoisinterestedinmenew(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage)); ;
+          
+            try
+            {
+                return _memberactionsrepository.getwhoisinterestedinmenew(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage)); ;
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         #region "update/check/change actions"
@@ -115,7 +193,20 @@ namespace Shell.MVC2.Services.Actions
         //work on this later
         public List<MemberSearchViewModel> getmutualinterests(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.getmutualinterests(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+          
+            try
+            {
+                return _memberactionsrepository.getmutualinterests(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
         /// <summary>
@@ -123,7 +214,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary        
         public bool checkinterest(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.checkinterest(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+          
+            try
+            {
+                return _memberactionsrepository.checkinterest(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
      }
 
         /// <summary>
@@ -133,7 +237,20 @@ namespace Shell.MVC2.Services.Actions
         {
 
 
-            return _memberactionsrepository.addinterest(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+        
+            try
+            {
+                return _memberactionsrepository.addinterest(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
 
         }
@@ -145,7 +262,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public bool removeinterestbyprofileid(string profileid, string interestprofile_id)
         {
-            return _memberactionsrepository.removeinterestbyinterestprofileid(Convert.ToInt32(profileid),Convert.ToInt32(interestprofile_id));
+         
+            try
+            {
+                return _memberactionsrepository.removeinterestbyinterestprofileid(Convert.ToInt32(profileid), Convert.ToInt32(interestprofile_id));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -157,7 +287,20 @@ namespace Shell.MVC2.Services.Actions
         public bool removeinterestbyinterestprofileid(string interestprofile_id, string profileid)
         {
 
-            return _memberactionsrepository.removeinterestbyinterestprofileid(Convert.ToInt32(interestprofile_id), Convert.ToInt32(profileid));
+            try
+            {
+
+                return _memberactionsrepository.removeinterestbyinterestprofileid(Convert.ToInt32(interestprofile_id), Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -168,7 +311,20 @@ namespace Shell.MVC2.Services.Actions
         public bool restoreinterestbyprofileid(string profileid,string interestprofile_id)
         {
 
-            return _memberactionsrepository.restoreinterestbyprofileid(Convert.ToInt32(profileid),Convert.ToInt32(interestprofile_id));
+          
+            try
+            {
+                return _memberactionsrepository.restoreinterestbyprofileid(Convert.ToInt32(profileid), Convert.ToInt32(interestprofile_id));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -178,7 +334,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public bool restoreinterestbyinterestprofileid(string interestprofile_id, string profileid)
         {
-            return _memberactionsrepository.restoreinterestbyinterestprofileid(Convert.ToInt32(interestprofile_id), Convert.ToInt32(profileid));
+         
+            try
+            {
+                return _memberactionsrepository.restoreinterestbyinterestprofileid(Convert.ToInt32(interestprofile_id), Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -188,7 +357,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public bool removeinterestsbyprofileidandscreennames(string profileid, List<String> screennames)
         {
-            return _memberactionsrepository.removeinterestsbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+          
+            try
+            {
+                return _memberactionsrepository.removeinterestsbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -199,7 +381,20 @@ namespace Shell.MVC2.Services.Actions
         {
 
 
-            return _memberactionsrepository.restoreinterestsbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+        
+            try
+            {
+                return _memberactionsrepository.restoreinterestsbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -209,7 +404,20 @@ namespace Shell.MVC2.Services.Actions
         public bool updateinterestviewstatus(string profileid, string targetprofileid)
         {
 
-            return _memberactionsrepository.updatelikeviewstatus(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+          
+            try
+            {
+                return _memberactionsrepository.updatelikeviewstatus(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         #endregion
@@ -233,7 +441,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>       
         public int getwhoipeekedatcount(string profileid)
         {
-            return _memberactionsrepository.getwhoipeekedatcount(Convert.ToInt32(profileid));
+          
+            try
+            {
+                return _memberactionsrepository.getwhoipeekedatcount(Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         //count methods first
@@ -242,7 +463,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>       
         public int getwhopeekedatmecount(string profileid)
         {
-            return _memberactionsrepository.getwhopeekedatmecount(Convert.ToInt32(profileid));
+          
+            try
+            {
+                return _memberactionsrepository.getwhopeekedatmecount(Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         //count methods first
@@ -251,7 +485,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>       
         public int getwhopeekedatmenewcount(string profileid)
         {
-            return _memberactionsrepository.getwhopeekedatmenewcount(Convert.ToInt32(profileid));
+          
+            try
+            {
+                return _memberactionsrepository.getwhopeekedatmenewcount(Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         #endregion
@@ -263,7 +510,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhopeekedatme(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhopeekedatme(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
+          
+            try
+            {
+                return _memberactionsrepository.getwhopeekedatme(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
 
@@ -273,7 +533,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>
         public List<MemberSearchViewModel> getwhopeekedatmenew(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhopeekedatmenew(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
+           
+            try
+            {
+                return _memberactionsrepository.getwhopeekedatmenew(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
 
@@ -284,7 +557,20 @@ namespace Shell.MVC2.Services.Actions
         public List<MemberSearchViewModel> getwhoipeekedat(string profileid, string page, string numberperpage)
         {
 
-            return _memberactionsrepository.getwhoipeekedat(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
+          
+            try
+            {
+                return _memberactionsrepository.getwhoipeekedat(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
 
@@ -300,7 +586,20 @@ namespace Shell.MVC2.Services.Actions
         //work on this later
         public List<MemberSearchViewModel> getmutualpeeks(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.getmutualpeeks(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+         
+            try
+            {
+                return _memberactionsrepository.getmutualpeeks(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
         /// <summary>
@@ -308,7 +607,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary        
         public bool checkpeek(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.checkpeek(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+           
+            try
+            {
+                return _memberactionsrepository.checkpeek(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
       
       }
 
@@ -318,7 +630,20 @@ namespace Shell.MVC2.Services.Actions
         public bool addpeek(string profileid, string targetprofileid)
         {
 
-            return _memberactionsrepository.addpeek(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+         
+            try
+            {
+                   return _memberactionsrepository.addpeek(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -330,7 +655,20 @@ namespace Shell.MVC2.Services.Actions
         public bool removepeekbyprofileid(string profileid, string peekprofile_id)
         {
 
-            return _memberactionsrepository.removepeekbypeekprofileid(Convert.ToInt32(profileid), Convert.ToInt32(peekprofile_id));
+      
+            try
+            {
+                return _memberactionsrepository.removepeekbypeekprofileid(Convert.ToInt32(profileid), Convert.ToInt32(peekprofile_id));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -342,7 +680,20 @@ namespace Shell.MVC2.Services.Actions
         public bool removepeekbypeekprofileid(string peekprofile_id, string profileid)
         {
 
-            return _memberactionsrepository.removepeekbypeekprofileid(Convert.ToInt32(peekprofile_id), Convert.ToInt32(profileid));
+      
+            try
+            {
+                return _memberactionsrepository.removepeekbypeekprofileid(Convert.ToInt32(peekprofile_id), Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -354,7 +705,20 @@ namespace Shell.MVC2.Services.Actions
         {
 
 
-            return _memberactionsrepository.restorepeekbypeekprofileid(Convert.ToInt32(profileid), Convert.ToInt32(peekprofile_id));
+       
+            try
+            {
+                return _memberactionsrepository.restorepeekbypeekprofileid(Convert.ToInt32(profileid), Convert.ToInt32(peekprofile_id));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -365,7 +729,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public bool restorepeekbypeekprofileid(string peekprofile_id, string profileid)
         {
-            return _memberactionsrepository.restorepeekbypeekprofileid( Convert.ToInt32(peekprofile_id), Convert.ToInt32(profileid));
+         
+            try
+            {
+                return _memberactionsrepository.restorepeekbypeekprofileid(Convert.ToInt32(peekprofile_id), Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -375,7 +752,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public bool removepeeksbyprofileidandscreennames(string profileid, List<String> screennames)
         {
-            return _memberactionsrepository.removepeeksbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+        
+            try
+            {
+                return _memberactionsrepository.removepeeksbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -385,7 +775,20 @@ namespace Shell.MVC2.Services.Actions
         public bool restorepeeksbyprofileidandscreennames(string profileid, List<String> screennames)
         {
 
-            return _memberactionsrepository.restorepeeksbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+         
+            try
+            {
+                return _memberactionsrepository.restorepeeksbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -395,7 +798,20 @@ namespace Shell.MVC2.Services.Actions
         public bool updatepeekviewstatus(string profileid, string targetprofileid)
         {
 
-            return _memberactionsrepository.updatepeekviewstatus(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+     
+            try
+            {
+                return _memberactionsrepository.updatepeekviewstatus(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -416,7 +832,20 @@ namespace Shell.MVC2.Services.Actions
         public int getwhoiblockedcount(string profileid)
         {
 
-            return _memberactionsrepository.getwhoiblockedcount(Convert.ToInt32(profileid));
+         
+            try
+            {
+                return _memberactionsrepository.getwhoiblockedcount(Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -425,7 +854,20 @@ namespace Shell.MVC2.Services.Actions
         public List<MemberSearchViewModel> getwhoiblocked(string profileid, string page, string numberperpage)
         {
 
-            return _memberactionsrepository.getwhoiblocked(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
+         
+            try
+            {
+                return _memberactionsrepository.getwhoiblocked(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -433,8 +875,21 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhoblockedme(string profileid, string page, string numberperpage)
         {
-          
-           return _memberactionsrepository.getwhoblockedme(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
+      
+           try
+           {
+
+               return _memberactionsrepository.getwhoblockedme(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+
+           }
+           catch (Exception ex)
+           {
+               //can parse the error to build a more custom error mssage and populate fualt faultreason
+               FaultReason faultreason = new FaultReason("Error in member actions service");
+               string ErrorMessage = "";
+               string ErrorDetail = "ErrorMessage: " + ex.Message;
+               throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+           }
         }
 
 
@@ -447,7 +902,20 @@ namespace Shell.MVC2.Services.Actions
         //work on this later
         public List<MemberSearchViewModel> getmutualblocks(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.getmutualblocks(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+            
+            try
+            {
+                return _memberactionsrepository.getmutualblocks(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
         /// <summary>
@@ -455,7 +923,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary        
         public bool checkblock(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.checkblock(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+           try
+            {
+                return _memberactionsrepository.checkblock(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+           
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
       
       }
 
@@ -465,7 +946,20 @@ namespace Shell.MVC2.Services.Actions
         public bool addblock(string profileid, string targetprofileid)
         {
 
-            return _memberactionsrepository.addblock(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+          
+            try
+            {
+                return _memberactionsrepository.addblock(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -477,7 +971,20 @@ namespace Shell.MVC2.Services.Actions
         public bool removeblock(string profileid, string blockprofile_id)
         {
 
-            return _memberactionsrepository.removeblock(Convert.ToInt32(profileid), Convert.ToInt32(blockprofile_id));
+           try
+            {
+                return _memberactionsrepository.removeblock(Convert.ToInt32(profileid), Convert.ToInt32(blockprofile_id));
+
+      
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -487,7 +994,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public bool restoreblock(string profileid, string blockprofile_id)
         {
-            return _memberactionsrepository.restoreblock(Convert.ToInt32(profileid), Convert.ToInt32(blockprofile_id));
+           try
+            {
+                return _memberactionsrepository.restoreblock(Convert.ToInt32(profileid), Convert.ToInt32(blockprofile_id));
+
+           
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -497,7 +1017,20 @@ namespace Shell.MVC2.Services.Actions
         public bool removeblocksbyscreennames(string profileid, List<String> screennames)
         {
 
-            return _memberactionsrepository.removeblocksbyscreennames(Convert.ToInt32(profileid), screennames);
+         
+            try
+            {
+                return _memberactionsrepository.removeblocksbyscreennames(Convert.ToInt32(profileid), screennames);
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -509,7 +1042,20 @@ namespace Shell.MVC2.Services.Actions
         {
 
 
-            return _memberactionsrepository.restoreblocksbyscreennames(Convert.ToInt32(profileid), screennames);
+          
+            try
+            {
+                return _memberactionsrepository.restoreblocksbyscreennames(Convert.ToInt32(profileid), screennames);
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -520,7 +1066,20 @@ namespace Shell.MVC2.Services.Actions
         /// 
         public bool updateblockreviewstatus(string profileid, string targetprofileid, string reviewerid)
         {
-            return _memberactionsrepository.updateblockreviewstatus(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid), Convert.ToInt32( reviewerid));
+            
+            try
+            {
+                return _memberactionsrepository.updateblockreviewstatus(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid), Convert.ToInt32(reviewerid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
         #endregion
 
@@ -538,7 +1097,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>       
         public int getwhoilikecount(string profileid)
         {
-            return _memberactionsrepository.getwhoilikecount (Convert.ToInt32(profileid));
+         
+            try
+            {
+                return _memberactionsrepository.getwhoilikecount(Convert.ToInt32(profileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         //count methods first
@@ -547,8 +1119,21 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>       
         public int getwholikesmecount(string profileid)
         {
+         try
+            {
 
-            return _memberactionsrepository.getwholikesmecount(Convert.ToInt32(profileid));
+                return _memberactionsrepository.getwholikesmecount(Convert.ToInt32(profileid));
+
+        
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         //count methods first
@@ -557,7 +1142,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>       
         public int getwhoislikesmenewcount(string profileid)
         {
-            return _memberactionsrepository.getwholikesmenewcount(Convert.ToInt32(profileid));
+          try
+            {
+                return _memberactionsrepository.getwholikesmenewcount(Convert.ToInt32(profileid));
+
+           
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         #endregion
@@ -569,8 +1167,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>
         public List<MemberSearchViewModel> getwholikesmenew(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwholikesmenew(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
+           
+            try
+            {
+                return _memberactionsrepository.getwholikesmenew(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
 
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -579,7 +1189,19 @@ namespace Shell.MVC2.Services.Actions
         public List<MemberSearchViewModel> getwholikesme(string profileid, string page, string numberperpage)
         {
 
-            return _memberactionsrepository.getwholikesme(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
+           try
+            {
+                return _memberactionsrepository.getwholikesme(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+          
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
 
@@ -588,7 +1210,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhoilike(string profileid, string page, string numberperpage)
         {
-            return _memberactionsrepository.getwhoilike(Convert.ToInt32(profileid),Convert.ToInt32(page),Convert.ToInt32(numberperpage));
+      
+            try
+            {
+                return _memberactionsrepository.getwhoilike(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
 
@@ -602,7 +1237,20 @@ namespace Shell.MVC2.Services.Actions
         //work on this later
         public List<MemberSearchViewModel> getmutuallikes(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.getmutuallikes(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+         
+
+            try
+            {
+                return _memberactionsrepository.getmutuallikes(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
         /// <summary>
@@ -610,7 +1258,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary        
         public bool checklike(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.checklike(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+      
+
+            try
+            {
+                return _memberactionsrepository.checklike(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
        }
 
         /// <summary>
@@ -620,7 +1281,20 @@ namespace Shell.MVC2.Services.Actions
         {
 
 
-            return _memberactionsrepository.addlike(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+
+
+            try
+            {
+                return _memberactionsrepository.addlike(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
 
         }
@@ -633,7 +1307,20 @@ namespace Shell.MVC2.Services.Actions
         public bool removelikebyprofileid(string profileid, string likeprofile_id)
         {
 
-            return _memberactionsrepository.removelikebylikeprofileid(Convert.ToInt32(profileid), Convert.ToInt32(likeprofile_id));
+         
+
+            try
+            {
+                return _memberactionsrepository.removelikebylikeprofileid(Convert.ToInt32(profileid), Convert.ToInt32(likeprofile_id));
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -645,7 +1332,20 @@ namespace Shell.MVC2.Services.Actions
         {
 
 
-            return _memberactionsrepository.removelikebylikeprofileid(Convert.ToInt32(likeprofile_id), Convert.ToInt32(profileid));
+       
+
+            try
+            {
+                return _memberactionsrepository.removelikebylikeprofileid(Convert.ToInt32(likeprofile_id), Convert.ToInt32(profileid));
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -656,7 +1356,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public bool restorelikebyprofileid(string profileid, string likeprofile_id)
         {
-            return _memberactionsrepository.restorelikebyprofileid(Convert.ToInt32(profileid), Convert.ToInt32(likeprofile_id));
+     
+
+            try
+            {
+                return _memberactionsrepository.restorelikebyprofileid(Convert.ToInt32(profileid), Convert.ToInt32(likeprofile_id));
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -668,7 +1381,20 @@ namespace Shell.MVC2.Services.Actions
         {
 
 
-            return _memberactionsrepository.restorelikebylikeprofileid(Convert.ToInt32(likeprofile_id), Convert.ToInt32(profileid));
+  
+
+            try
+            {
+                return _memberactionsrepository.restorelikebylikeprofileid(Convert.ToInt32(likeprofile_id), Convert.ToInt32(profileid));
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 
@@ -678,7 +1404,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public bool removelikesbyprofileidandscreennames(string profileid, List<String> screennames)
         {
-            return _memberactionsrepository.removelikesbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+          
+
+            try
+            {
+                return _memberactionsrepository.removelikesbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -689,7 +1428,20 @@ namespace Shell.MVC2.Services.Actions
         {
 
 
-            return _memberactionsrepository.restorelikesbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+          
+            try
+            {
+                return _memberactionsrepository.restorelikesbyprofileidandscreennames(Convert.ToInt32(profileid), screennames);
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -697,7 +1449,20 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public bool updatelikeviewstatus(string profileid, string targetprofileid)
         {
-            return _memberactionsrepository.updatelikeviewstatus(Convert.ToInt32(profileid),Convert.ToInt32(targetprofileid));
+           
+            try
+            {
+                return _memberactionsrepository.updatelikeviewstatus(Convert.ToInt32(profileid), Convert.ToInt32(targetprofileid));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 

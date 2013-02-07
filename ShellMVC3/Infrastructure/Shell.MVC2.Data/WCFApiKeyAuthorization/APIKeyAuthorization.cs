@@ -32,7 +32,7 @@ namespace Shell.MVC2.Data
         }
 
 
-
+        //TO DO re-activate this code when you complete basic testing
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
             //for now while testing ignore api key
