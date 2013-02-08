@@ -41,7 +41,7 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
 
         protected override void Seed(NotificationModel.NotificationContext context)
         {
-            SeedMethods.seedgenerallookups(context);
+            SeedMethodsNotificationModel.seedgenerallookups(context);
 
         }
 
@@ -72,32 +72,7 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
             //    );
             //
 
-            //TO DO migrations here
-            //populate the lookup table for log severity
-            var LogSeverityList = Enum.GetValues(typeof(LogSeverityEnum))
-           .Cast<LogSeverityEnum>()
-            .ToDictionary(t => (int)t, t => t.ToString()).ToList();
-
-            // var jobInstanceStateList = EnumExtensions.ConvertEnumToDictionary<LogSeverityEnum >().ToList(); 
-            LogSeverityList.ForEach(kvp => context.lu_logSeverity.Add(new lu_logSeverity()
-            {
-                id = kvp.Key,
-                Description = kvp.Value
-            }));
-            context.SaveChanges();
-
-            //populate the lookup table for applications           
-            var ApplicationList = Enum.GetValues(typeof(ApplicationEnum))
-           .Cast<ApplicationEnum>()
-            .ToDictionary(t => (int)t, t => t.ToString()).ToList();
-
-            // var jobInstanceStateList = EnumExtensions.ConvertEnumToDictionary<ApplicationEnum >().ToList(); 
-            ApplicationList.ForEach(kvp => context.lu_Application.Add(new lu_Application()
-            {
-                id = kvp.Key,
-                ApplicationName = kvp.Value
-            }));
-            context.SaveChanges();
+            SeedMethodsCustomErrorLogModel.seedgenerallookups(context);
         }
 
         

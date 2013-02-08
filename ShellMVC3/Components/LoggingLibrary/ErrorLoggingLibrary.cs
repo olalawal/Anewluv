@@ -26,7 +26,7 @@ namespace LoggingLibrary
     {
         private int iApplicationID;
         //private int lLogEntryID = 0;
-        private CustomErrorLog oLogEntry = null;
+        private errorlog oLogEntry = null;
         // private List<LogMessage> lstMessages;
         // private List<LogValue> lstValues;
 
@@ -77,7 +77,7 @@ namespace LoggingLibrary
             InfoNotificationfactory = new ChannelFactory<IInfoNotificationService>("InfoNotificationService.soap");//(mysClient.Endpoint);
            InfoNotificationServiceProxy =InfoNotificationfactory.CreateChannel();
 
-            oLogEntry = new CustomErrorLog();
+            oLogEntry = new errorlog();
 
 
         }
@@ -123,7 +123,7 @@ namespace LoggingLibrary
             //set the error pass since this function can be used recursively
             errorpass = errorpass + 1;
             //build the error object
-            oLogEntry = new CustomErrorLog();
+            oLogEntry = new errorlog();
           
 
             //build the error stuff
@@ -238,7 +238,7 @@ namespace LoggingLibrary
 
 
         //uses the Notification servcice to send an error to the developer
-        public void WriteCustomErrorNotificationEntry(CustomErrorLog error)
+        public void WriteCustomErrorNotificationEntry(errorlog error)
         {
             //modified to log the error and send message in one stroke
             try
@@ -263,10 +263,10 @@ namespace LoggingLibrary
         /// <param name="sessionID">The session ID.</param>
         /// <param name="severityLevel">The severity level.</param>
         /// <returns></returns>
-        private CustomErrorLog CreateLogEntryObject(MethodBase method, string sessionID, LogSeverityEnum severityLevel)
+        private errorlog CreateLogEntryObject(MethodBase method, string sessionID, LogSeverityEnum severityLevel)
         {
 
-            CustomErrorLog entry = new CustomErrorLog();
+            errorlog entry = new errorlog();
 
             if (method != null)
             {

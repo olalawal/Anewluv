@@ -22,7 +22,7 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
                                  //   where value != messageapplicationenum.NotSet
                                  orderby value // to sort by value; remove otherwise 
                                  select value;
-            applicationqry.ToList().ForEach(kvp => context.lu_applications.AddOrUpdate(new lu_application()
+            applicationqry.ToList().ForEach(kvp => context.lu_applications.AddOrUpdate(new lu_application_apikey()
             {
                 id = (int)kvp,
                 description = EnumExtensionMethods.ToDescription(kvp)

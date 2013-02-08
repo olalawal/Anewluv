@@ -14,15 +14,19 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum LogSeverityEnum : int
+    public enum logseverityEnum : int
     {
-        [Description("NotSet")][EnumMember]
+        [Description("Information")]
+        [EnumMember]
         Information = 1,
-        [Description("NotSet")][EnumMember]
+        [Description("Warning")]
+        [EnumMember]
         Warning = 2,
-        [Description("NotSet")][EnumMember]
+        [Description("CriticalError")]
+        [EnumMember]
         CriticalError = 3,
-        [Description("NotSet")][EnumMember]
+        [Description("MaxSeverity")]
+        [EnumMember]
         MaxSeverity = 4
     }
 

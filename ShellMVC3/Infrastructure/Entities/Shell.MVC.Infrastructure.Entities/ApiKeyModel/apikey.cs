@@ -22,7 +22,7 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
             public int id { get; set; }
             [DataMember]
             public DateTime? timestamp { get; set; }      
-            public virtual lu_application  application { get; set; }        
+            public virtual lu_application_apikey  application { get; set; }        
             public virtual lu_accesslevel  accesslevel { get; set; } 
             public string externalapplicationname { get; set; }
             public virtual ICollection<user> registeredusers { get; set; }

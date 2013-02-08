@@ -5,18 +5,20 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
+namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
 {
 
 
 
-    public class lu_application
+    public class lu_application_apikey
     {
         //we generate this manually from enums for now
         [Key]
         public int id { get; set; }
         [DataMember()]
         public string description { get; set; }
-        
+
+
+
     }
 }

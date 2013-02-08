@@ -26,7 +26,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [DataMember]
         public DateTime? creationdate { get; set; }
         [DataMember]
-        public ICollection<abusereportnotes> notes { get; set; }
+        public virtual  ICollection<abusereportnotes> notes { get; set; }
 
 
 

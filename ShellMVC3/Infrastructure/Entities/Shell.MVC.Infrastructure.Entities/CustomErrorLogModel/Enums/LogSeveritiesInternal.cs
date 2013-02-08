@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.ComponentModel;
 
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
@@ -10,11 +11,21 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     /// <summary>
     /// This is used to convert .NET log severity levels to our values
     /// </summary>
-    public enum LogSeverityInternal : byte
+    /// 
+    [DataContract]
+    public enum logseverityinternalEnum : byte
     {
+        [Description("Information")]
+        [EnumMember]
         Information = 1,
+        [Description("Warning")]
+        [EnumMember]
         Warning = 2,
+        [Description("CriticalError")]
+        [EnumMember]
         CriticalError = 3,
+        [Description("MaxSeverity")]
+        [EnumMember]
         MaxSeverity = 4
     }
 }

@@ -28,7 +28,7 @@ namespace Shell.MVC2.Services.Contracts
         //temporary method for use by designer to get the message information formated for them
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/senderrormessage/{addresstype}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        EmailModel senderrormessage(CustomErrorLog error, string addresstype);
+        EmailModel senderrormessage(errorlog error, string addresstype);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/sendcontactusemail", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	      

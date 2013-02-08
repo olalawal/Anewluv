@@ -16,15 +16,14 @@ using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
 
-    public class lu_logSeverity
+    public class lu_logseverity
     {
         //we generate this manually from enums for now
        [Key]
         [DataMember()]
         public int id { get; set; }
-
         [DataMember()]
-        public string Description { get; set; }
+        public string description { get; set; }
 
 
 
@@ -75,27 +74,27 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     /// </summary>
     public class LogSeverityUtil
     {
-        public static LogSeverityInternal TranslateLogSeverity(LogSeverityEnum LogLevel)
+        public static logseverityinternalEnum TranslateLogSeverity(logseverityEnum LogLevel)
         {
-            if (LogLevel == LogSeverityEnum.Information)
+            if (LogLevel == logseverityEnum.Information)
             {
-                return LogSeverityInternal.Information;
+                return logseverityinternalEnum.Information;
             }
-            else if (LogLevel == LogSeverityEnum.Warning)
+            else if (LogLevel == logseverityEnum.Warning)
             {
-                return LogSeverityInternal.Warning;
+                return logseverityinternalEnum.Warning;
             }
-            else if (LogLevel == LogSeverityEnum.CriticalError)
+            else if (LogLevel == logseverityEnum.CriticalError)
             {
-                return LogSeverityInternal.CriticalError;
+                return logseverityinternalEnum.CriticalError;
             }
-            else if (LogLevel == LogSeverityEnum.MaxSeverity)
+            else if (LogLevel == logseverityEnum.MaxSeverity)
             {
-                return LogSeverityInternal.MaxSeverity;
+                return logseverityinternalEnum.MaxSeverity;
             }
             else
             {
-                return LogSeverityInternal.MaxSeverity;
+                return logseverityinternalEnum.MaxSeverity;
             }
         }
 

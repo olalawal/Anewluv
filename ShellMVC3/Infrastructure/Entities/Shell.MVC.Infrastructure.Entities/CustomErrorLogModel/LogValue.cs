@@ -13,13 +13,13 @@ using System.Runtime.Serialization;
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
   
-    public class LogValue
+    public class logvalue
     {
         private string mName;
         private string mType;
         private string mValue;
 
-        public LogValue()
+        public logvalue()
         {
         }
 

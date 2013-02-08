@@ -7,11 +7,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
-     public class CustomErrorLog
+     public class errorlog
     {
 
 
-         public CustomErrorLog() 
+         public errorlog() 
           {
             //  LogSeverity = new lu_logSeverity();
             //  Application = new lu_application();
@@ -22,10 +22,9 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
             [Key]
             public int id { get; set; }
             [DataMember]
-            public DateTime? TimeStamp { get; set; }
-
-            public int logseverity_id { get; set; }
-            public virtual lu_logSeverity  LogSeverity { get; set; } 
+            public DateTime? timestamp { get; set; }          
+            public  lu_logseverity  logseverity { get; set; }     
+            public  lu_logseverityinternal logseverityinternal { get; set; } 
             //public virtual  LogSeverity Severity  { get; set; }  //complex type mapper
             //[NotMapped]
             //public LogSeverityEnum LogSeverityEnum
@@ -33,45 +32,45 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
             //    get { return (LogSeverityEnum)LogSeverityLookupID; }
             //    set { LogSeverityLookupID = (int)value; }
             //} 
-
-            public string LoggedUser { get; set; }
+           [DataMember]
+            public string loggeduser { get; set; }
             [DataMember]
-            public object LoggedObject { get; set; }
+            public object loggedobject { get; set; }
 
-            public int application_id { get; set; }
-            public virtual lu_Application   Application { get; set; }
+            //public int application_id { get; set; }
+            public lu_application   application { get; set; }
             
-            public string IPAddress { get; set; }
+            public string ipaddress { get; set; }
             [DataMember]
-            public string AssemblyName { get; set; }
+            public string assemblyname { get; set; }
             [DataMember]
-            public string ClassName { get; set; }
+            public string classname { get; set; }
             [DataMember]
-            public string MethodName { get; set; }
+            public string methodname { get; set; }
             [DataMember]
-            public string ParentMethodName { get; set; }
+            public string parentmethodname { get; set; }
             [DataMember]
-            public string ProfileID { get; set; }
+            public string profileid { get; set; }
             [DataMember]
-            public string ErrorPage { get; set; }
+            public string errorpage { get; set; }
           [DataMember]
-            public string Type { get; set; }
+            public string type { get; set; }
           [DataMember]
-            public int LineNumbers { get; set; }
+            public int linenumbers { get; set; }
           [DataMember]
-            public string Stacktrace { get; set; }
+            public string stacktrace { get; set; }
           [DataMember]
-            public string Message { get; set; }
+            public string message { get; set; }
           [DataMember]
-          public string Sessionid { get; set; }
+          public string sessionid { get; set; }
           [DataMember]
-          public string QueryString { get; set; }
+          public string querystring { get; set; }
           [DataMember]
-          public string Request { get; set; }
+          public string request { get; set; }
 
-          public static CustomErrorLog Create(Action<CustomErrorLog> init)
+          public static errorlog Create(Action<errorlog> init)
           {
-              CustomErrorLog CustomErrorLog = new CustomErrorLog();
+              errorlog CustomErrorLog = new errorlog();
             //  CustomErrorLog.LogSeverity = new lu_logSeverity();
             //  CustomErrorLog.Application = new lu_application();
 

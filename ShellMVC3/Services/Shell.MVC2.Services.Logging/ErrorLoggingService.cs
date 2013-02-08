@@ -31,7 +31,7 @@ namespace Shell.MVC2.Services.Logging
 
 
  
-        public int WriteCompleteLogEntry(CustomErrorLog logEntry)
+        public int WriteCompleteLogEntry(errorlog logEntry)
         {
             return _errorloggingrepository.WriteCompleteLogEntry(logEntry);
         }

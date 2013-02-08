@@ -22,7 +22,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [DataMember]
         public virtual profilemetadata blockedprofilemetadata { get; set; }
         [DataMember]
-        public ICollection<blocknotes> notes { get; set; }
+        public virtual ICollection<blocknotes> notes { get; set; }
         [DataMember]
         public DateTime? creationdate { get; set; }
         [DataMember]

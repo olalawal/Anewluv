@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
     
-    public class LogMessage
+    public class logmessage
     {
         private string m_text;
         private string m_assemblyName;
@@ -18,7 +18,7 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
         private string m_serverIp;
 
         private Nullable<byte> m_logLevel;
-        public LogMessage(string text, string assemblyName, string className, string methodName, string serverIp, byte logLevel)
+        public logmessage(string text, string assemblyName, string className, string methodName, string serverIp, byte logLevel)
         {
             m_text = text;
             m_assemblyName = assemblyName;
@@ -27,7 +27,7 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
             m_serverIp = serverIp;
             m_logLevel = logLevel;
         }
-        public LogMessage(string delimitedString)
+        public logmessage(string delimitedString)
         {
             string[] items = delimitedString.Split('|');
             m_text = items[0];
@@ -37,7 +37,7 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
             m_serverIp = items[4];
             m_logLevel = Convert.ToByte(items[5]);
         }
-        public LogMessage()
+        public logmessage()
         {
             m_text = Text;
             m_assemblyName = string.Empty;

@@ -21,7 +21,7 @@ namespace Shell.MVC2.Services.Contracts
 
          [OperationContract]
         [WebInvoke]
-        int WriteCompleteLogEntry(CustomErrorLog logEntry);
+        int WriteCompleteLogEntry(errorlog logEntry);
 
          [OperationContract]
          [WebInvoke]

@@ -6,12 +6,11 @@ using System.Data.Entity;
 
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
-    public class CustomErrorLogContext : DbContext 
+    public partial  class CustomErrorLogContext : DbContext 
     {
        
-        public DbSet<CustomErrorLog> CustomErrorLogs { get; set; }
-        public DbSet<lu_Application> lu_Application { get; set; }
-        public DbSet<lu_logSeverity> lu_logSeverity{ get; set; }
+        public DbSet<errorlog> errorlogs { get; set; }
+       
 
        public CustomErrorLogContext()
             : base("name=CustomErrorLogContext")
@@ -27,14 +26,8 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 
        protected override void OnModelCreating(DbModelBuilder modelBuilder)
        {
-           modelBuilder.Entity<CustomErrorLog>().ToTable("CustomErrorLogs", schemaName: "Logging");
-           modelBuilder.Entity<lu_Application>().ToTable("lu_Application", schemaName: "Logging");
-           modelBuilder.Entity<lu_logSeverity>().ToTable("lu_logSeverity", schemaName: "Logging");
 
-           //setup FK relationsships 
-           modelBuilder.Entity<CustomErrorLog>().HasRequired(p => p.Application).WithMany().HasForeignKey(p=>p.logseverity_id);
-           modelBuilder.Entity<CustomErrorLog>().HasRequired(p => p.LogSeverity).WithMany().HasForeignKey(p=>p.application_id);
-
+           customerrorlogmodelbuilder.buildgeneralmodels(modelBuilder);
        }
 
       

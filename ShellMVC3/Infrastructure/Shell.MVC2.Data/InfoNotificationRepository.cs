@@ -197,7 +197,7 @@ namespace Shell.MVC2.Data
         #endregion
 
 
-        public   EmailModel senderrormessage(CustomErrorLog error,addresstypeenum addresstype)
+        public   EmailModel senderrormessage(errorlog error,addresstypeenum addresstype)
         {
 
             EmailModel emailmodels = new EmailModel();

@@ -9,7 +9,7 @@ using Shell.MVC2.Infrastructure;
 
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
-    public class SeedMethods
+    public class SeedMethodsNotificationModel
     {
 
         public static void seedgenerallookups(NotificationContext  context)

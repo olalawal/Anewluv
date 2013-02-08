@@ -26,7 +26,7 @@ namespace Shell.MVC2.Data
             return string.Format("You entered: {0}", value);
         }
 
-        public int WriteCompleteLogEntry(CustomErrorLog logEntry)
+        public int WriteCompleteLogEntry(errorlog logEntry)
         {
             // logEntry.dtTimeStamp = DateTime.Now;
 

@@ -19,7 +19,7 @@ namespace Shell.MVC2.Infrastructure.Interfaces
         //int WriteLogEntry(CustomErrorLog logEntry);
 
       
-        int WriteCompleteLogEntry(CustomErrorLog logEntry);
+        int WriteCompleteLogEntry(errorlog logEntry);
 
      
         //void WriteValue(int logEntryID, string name, object value);

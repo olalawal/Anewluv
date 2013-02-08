@@ -12,7 +12,7 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     /// this is parsed into database values when the context is created
     /// </summary>
     [DataContract]
-    public enum ApplicationEnum : int
+    public enum applicationEnum : int
     {
         [Description("MemberActionsService")]
         [EnumMember]
@@ -38,7 +38,10 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
         [Description("Logging Service")][EnumMember]
         LoggingService = 8,
         [Description("Notification Service")][EnumMember]
-        NotificationService = 9
+        NotificationService = 9,
+        [Description("General Application Error")]
+        [EnumMember]
+        GeneralApplicationError = 10
     }
 
 }

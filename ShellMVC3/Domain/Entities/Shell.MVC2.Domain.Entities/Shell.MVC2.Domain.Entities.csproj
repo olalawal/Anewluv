@@ -61,6 +61,14 @@
   <ItemGroup>
     <Compile Include="Anewluv\abusereport.cs" />
     <Compile Include="Anewluv\abusereportnotes.cs" />
+    <Compile Include="Anewluv\Applications\application.cs" />
+    <Compile Include="Anewluv\Applications\lu_applicationitemtransfertype.cs" />
+    <Compile Include="Anewluv\Applications\lu_applicationtype.cs" />
+    <Compile Include="Anewluv\Applications\applicationicons.cs" />
+    <Compile Include="Anewluv\Applications\applicationroles.cs" />
+    <Compile Include="Anewluv\Applications\applicationitems.cs" />
+    <Compile Include="Anewluv\Applications\lu_applicationpaymenttype.cs" />
+    <Compile Include="Anewluv\Applications\lu_applicationicontype.cs" />
     <Compile Include="Anewluv\Lookups\enums\photorejectionreasonusermessage.cs" />
     <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
     <Compile Include="Anewluv\photo_securitylevel.cs" />

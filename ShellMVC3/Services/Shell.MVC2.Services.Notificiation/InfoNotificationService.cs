@@ -40,7 +40,7 @@ namespace Shell.MVC2.Services.Notification
             }
 
 
-       public EmailModel senderrormessage(CustomErrorLog error, string addresstype)
+       public EmailModel senderrormessage(errorlog error, string addresstype)
        {
 
     
