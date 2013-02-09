@@ -26,7 +26,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DateTime? activateddate { get; set; }
         public DateTime? expirationdate { get; set; }
         public lu_applicationitemtransfertype transfertype { get; set; }
-        public lu_applicationpaymenttype paymenttype { get; set; }
-        public 
+        public lu_applicationitempaymenttype paymenttype { get; set; }
+    
     }
 }

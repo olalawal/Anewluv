@@ -18,7 +18,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public bool active { get; set; }
         [DataMember]
         public DateTime? deactivationdate { get; set; }
-        public virtual ICollection<applicationicons> icons { get; set; }
-        public virtual ICollection<applicationitem> icons { get; set; }
+        public virtual ICollection<applicationiconconversions> icons { get; set; }
+        public virtual ICollection<applicationitem> items { get; set; }
     }
 }

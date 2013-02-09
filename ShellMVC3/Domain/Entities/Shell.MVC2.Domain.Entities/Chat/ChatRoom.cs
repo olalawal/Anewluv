@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
 {
     //TO do get rid of this topic crap and use what is in user list, match up user's on UI side
+    [DataContract]
     public class ChatRoom
     {
         [Key]
@@ -39,7 +41,6 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
 
         // Creator and owners
         public virtual ICollection<ChatUser> Owners { get; set; }
-
         public virtual ICollection<ChatMessage> Messages { get; set; }
         public virtual ICollection<ChatUser> Users { get; set; }
 

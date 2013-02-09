@@ -31,5 +31,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DbSet<lu_flagyesno> lu_flagyesno { get; set; }
         //1-25-2012 olawal added viratual
         //public DbSet<lu_location> lu_location { get; set; }
+        //2-08-2013 olawal added lookups for applicaition and icons
+
+
+
+
     }
 }

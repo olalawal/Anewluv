@@ -4,12 +4,13 @@ using System.Linq;
 using System.Web;
 
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 //using Shell.MVC2.Infastructure.Chat;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
 {
   
-
+    [DataContract]
         public class ChatUser
         {
             [Key]
@@ -35,7 +36,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
             public string ScreenName { get; set; }
             public int profileid { get; set; }
             public string Email { get; set; }
-            public string HasMobileAccess { get; set; }
+            public bool? HasMobileAccess { get; set; }
             // List of clients that are currently connected for this user
             public virtual ICollection<ChatClient> ConnectedClients { get; set; }
             public virtual ICollection<ChatRoom> OwnedRooms { get; set; }

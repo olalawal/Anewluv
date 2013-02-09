@@ -62,13 +62,19 @@
     <Compile Include="Anewluv\abusereport.cs" />
     <Compile Include="Anewluv\abusereportnotes.cs" />
     <Compile Include="Anewluv\Applications\application.cs" />
+    <Compile Include="Anewluv\Applications\enums\applicationtype.cs" />
+    <Compile Include="Anewluv\Applications\enums\applicationitempaymenttype.cs" />
+    <Compile Include="Anewluv\Applications\enums\applicationitemtransfertype.cs" />
+    <Compile Include="Anewluv\Applications\enums\iconImageresizerformat.cs" />
     <Compile Include="Anewluv\Applications\lu_applicationitemtransfertype.cs" />
     <Compile Include="Anewluv\Applications\lu_applicationtype.cs" />
-    <Compile Include="Anewluv\Applications\applicationicons.cs" />
+    <Compile Include="Anewluv\Applications\applicationiconconversions.cs" />
     <Compile Include="Anewluv\Applications\applicationroles.cs" />
     <Compile Include="Anewluv\Applications\applicationitems.cs" />
-    <Compile Include="Anewluv\Applications\lu_applicationpaymenttype.cs" />
-    <Compile Include="Anewluv\Applications\lu_applicationicontype.cs" />
+    <Compile Include="Anewluv\Applications\lu_applicationitempaymenttype.cs" />
+    <Compile Include="Anewluv\Applications\lu_iconformat.cs" />
+    <Compile Include="Anewluv\Applications\lu_iconImagersizerformat.cs" />
+    <Compile Include="Anewluv\Context\Anewluv.Context.Application.cs" />
     <Compile Include="Anewluv\Lookups\enums\photorejectionreasonusermessage.cs" />
     <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
     <Compile Include="Anewluv\photo_securitylevel.cs" />
@@ -285,16 +291,24 @@
     <Compile Include="Anewluv\LookupsCriteria\lu_wantskids.cs" />
     <Compile Include="Anewluv\membersinrole.cs" />
     <Compile Include="Anewluv\photoreview.cs" />
-    <Compile Include="Anewluv\Lookups\lu_photosize.cs" />
+    <Compile Include="Anewluv\Lookups\lu_photoImagersizerformat.cs" />
     <Compile Include="Anewluv\LookupsCriteria\lu_bodytype.cs" />
     <Compile Include="Anewluv\LookupsCriteria\lu_ethnicity.cs" />
     <Compile Include="Chat\ChatClient.cs" />
     <Compile Include="Chat\ChatMessage.cs" />
     <Compile Include="Chat\ChatRoom.cs" />
     <Compile Include="Chat\ChatUser.cs" />
-    <Compile Include="Chat\ClientMessage.cs" />
-    <Compile Include="Chat\ClientState.cs" />
-    <Compile Include="Chat\UserStatus.cs" />
+    <Compile Include="Chat\ClientOnlyModels\ClientMessage.cs" />
+    <Compile Include="Chat\ClientOnlyModels\ClientState.cs" />
+    <Compile Include="Chat\Context\Chat.Context.cs" />
+    <Compile Include="Chat\Context\Chat.Context.Lookups.cs" />
+    <Compile Include="Chat\Context\ChatModelbuilder.cs" />
+    <Compile Include="Chat\Context\SeedingConversions.cs" />
+    <Compile Include="Chat\Context\SeedMethods.cs" />
+    <Compile Include="Chat\Lookups\Enums\roomstatus.cs" />
+    <Compile Include="Chat\Lookups\lu_roomstatus.cs" />
+    <Compile Include="Chat\Lookups\Enums\userstatus.cs" />
+    <Compile Include="Chat\Lookups\lu_userstatus.cs" />
     <Compile Include="Chat\ViewModels\MessageViewModel.cs" />
     <Compile Include="Chat\ViewModels\RoomViewModel.cs" />
     <Compile Include="Chat\ViewModels\UserViewModel.cs" />
@@ -323,8 +337,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Anewluv\ViewModels\Search\" />
-    <Folder Include="Chat\Context\" />
-    <Folder Include="Chat\Lookups\Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

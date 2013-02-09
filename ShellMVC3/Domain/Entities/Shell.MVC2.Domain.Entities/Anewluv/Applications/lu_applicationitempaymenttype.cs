@@ -4,22 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
-    public class applicationicons
-    {
-
+    [DataContract]
+    public class lu_applicationitempaymenttype
+    {     
         [DataMember]
         [Key]
         public int id { get; set; }
         [DataMember]
-        public application application { get; set; }
-        [DataMember]
-        public lu_applicationicontype imagetype { get; set; }
-        [DataMember]
-        public DateTime? creationdate { get; set; }
-        [DataMember ]
-        public byte? icon { get; set; } 
+        public string description { get; set; }              
+        [NotMapped]
+        public bool selected { get; set; }    
     }
 }

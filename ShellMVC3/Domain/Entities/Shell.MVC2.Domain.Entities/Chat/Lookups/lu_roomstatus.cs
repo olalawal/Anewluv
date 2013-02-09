@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;using System.ComponentModel.DataAnnotations;using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv
+namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
 {
     [DataContract]
-    public class lu_abusetype
+    public class lu_roomstatus
     {
       
         [Key]

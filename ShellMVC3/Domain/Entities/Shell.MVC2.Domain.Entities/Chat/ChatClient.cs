@@ -13,6 +13,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
         public string Id { get; set; }
         public ChatUser User { get; set; }
         public string UserAgent { get; set; }
+        //public virtual ICollection<ClientMessage> clientmessages
         public DateTimeOffset LastActivity { get; set; }
     }
 }
