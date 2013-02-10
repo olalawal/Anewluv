@@ -75,8 +75,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
   
         public virtual ICollection<userlogtime> logontimes { get; set; }
 
-      
+        //2-9-2013 olawal added collection of applications  items
 
+        public virtual ICollection<applicationitem> purchasedapplicationitems { get; set; }
+
+        public virtual ICollection<applicationitem> transferedapplicationitems { get; set; }
 
 
     }

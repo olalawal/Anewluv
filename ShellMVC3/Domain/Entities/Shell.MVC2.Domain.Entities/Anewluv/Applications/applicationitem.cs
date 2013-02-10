@@ -12,11 +12,16 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     {     
         [DataMember]
         [Key]
-        public int id { get; set; }
+        public int id { get; set; }   
         [DataMember]
+        public int application_id { get; set; }
         public application application { get; set; }
         [DataMember]
+        public int purchaserprofile_id { get; set; }
+        [DataMember]
         public profile purchaserprofile { get; set; }
+        [DataMember]
+        public int transferprofile_id { get; set; }
         [DataMember]
         public profile transferprofile { get; set; }
         [DataMember]

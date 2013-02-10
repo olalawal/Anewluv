@@ -11,18 +11,18 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     /// similar to photo conversion for icons and applications
     /// </summary>
     [DataContract ]
-    public class applicationiconconversions
+    public class applicationiconconversion
     {
 
         [DataMember]
         [Key]
         public int id { get; set; }
         [DataMember]
-        public Guid application_id { get; set; }
+        public int application_id { get; set; }
         [DataMember]
         public virtual  application application { get; set; }
         [DataMember]
-        public lu_iconformat  imagetype { get; set; }
+        public lu_iconformat  iconformat { get; set; }
         [DataMember]
         public DateTime? creationdate { get; set; }
         //actual image data

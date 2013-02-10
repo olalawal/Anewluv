@@ -39,6 +39,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
             public bool? HasMobileAccess { get; set; }
             // List of clients that are currently connected for this user
             public virtual ICollection<ChatClient> ConnectedClients { get; set; }
+            public virtual ICollection<ChatMessage> SentMessages { get; set; }
+            public virtual ICollection<ChatMessage> RecivedMessages { get; set; }
             public virtual ICollection<ChatRoom> OwnedRooms { get; set; }
             public virtual ICollection<ChatRoom> Rooms { get; set; }
 

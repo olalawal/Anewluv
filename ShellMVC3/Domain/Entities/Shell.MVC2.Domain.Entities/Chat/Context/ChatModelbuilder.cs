@@ -15,47 +15,75 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
         public static void buildgeneralmodels(DbModelBuilder modelBuilder)
         {
 
-            
-            // modelBuilder.Entity<message>().ToTable("messages", schemaName: "Logging");
-            //modelBuilder.Entity<address>().ToTable("messageAddresses", schemaName: "Logging");
-            // modelBuilder.Entity<systemAddress>().ToTable("messageSystemAddresses", schemaName: "Logging");
-            // modelBuilder.Entity<lu_template>().ToTable("lu_messageTemplate", schemaName: "Logging");
-            // modelBuilder.Entity<lu_messageType>().ToTable("lu_messageType", schemaName: "Logging");
-            // modelBuilder.Entity<lu_systemAddressType>().ToTable("lu_messageSystemAddressType", schemaName: "Logging");
+         //chat client user first
+            ////////////////////////
+            modelBuilder.Entity<ChatClient>().HasRequired(x => x.User )
+                .WithMany()
+                .HasForeignKey(z => z.User_id)
+                .WillCascadeOnDelete(false);
+      
+            //chat message next
+            ////////////////////////
+            modelBuilder.Entity<ChatMessage>().HasRequired(x => x.User)
+              .WithMany()
+              .HasForeignKey(z => z.User_id)
+              .WillCascadeOnDelete(false);
 
-            // map one to many relation shipds for metadatata table from its side 
-            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+              modelBuilder.Entity<ChatMessage>().HasRequired(x => x.Room  )
+              .WithMany()
+              .HasForeignKey(z => z.Room_id )
+              .WillCascadeOnDelete(false);
 
+            //Chatuser
+            ////////////////////////
+            //do the many to one relationships first
+            modelBuilder.Entity<ChatUser>().HasMany(t => t.ConnectedClients)
+           .WithRequired(p => p.User).HasForeignKey(p => p.User_id ).WillCascadeOnDelete(false);
 
-          //  modelBuilder.Entity<profile>().HasOptional(zm => zm.profilemetadata).WithRequired(r => r.profile );
-           // modelBuilder.Entity<profile>().HasOptional(zm => zm.profiledata).WithRequired(r => r.profile );
+            modelBuilder.Entity<ChatUser>().HasMany(t => t.SentMessages)
+           .WithRequired(p => p.User).HasForeignKey(p => p.User_id).WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<ChatUser>().HasMany(t => t.RecivedMessages)
+           .WithRequired(p => p.User).HasForeignKey(p => p.User_id).WillCascadeOnDelete(false);
 
+            //chat user many to many
+            //room owned to users
+            modelBuilder.Entity<ChatUser>().HasMany(i => i.OwnedRooms )
+            .WithMany(c => c.Owners)
+            .Map(mc =>
+            {
+                mc.MapLeftKey("Room_Id");
+                mc.MapRightKey("User_Id");
+                mc.ToTable("ChatUserOwnedRoom");
+            });
 
-            //11-23-2012 olawal added code to map profile_id's to profiledata  and profilemetadata
-            //11-23-2012 olawal added code to map profile_id's to and profilemetadata
-            modelBuilder.Entity<profiledata>()
-            .HasKey(e => e.profile_id);
-            modelBuilder.Entity<profiledata>()
-                        .Property(e => e.profile_id)
-                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-            modelBuilder.Entity<profiledata>()
-                        .HasRequired(e => e.profile)
-                        .WithRequiredDependent(r => r.profiledata);
+            //users to rooms
+            modelBuilder.Entity<ChatUser>().HasMany(i => i.Rooms)
+            .WithMany(c => c.Users)
+            .Map(mc =>
+            {
+                mc.MapLeftKey("Room_Id");
+                mc.MapRightKey("User_Id");
+                mc.ToTable("ChatUserRoom");
+            });
 
-           // modelBuilder.Entity<profiledata>().HasOptional(zm => zm.profilemetadata).WithRequired(r => r.profiledata);
+            //allowed rooms i.e list of users allowed to acces room
 
+            modelBuilder.Entity<ChatUser>().HasMany(i => i.AllowedRooms)
+          .WithMany(c => c.AllowedUsers)
+          .Map(mc =>
+          {
+              mc.MapLeftKey("Room_Id");
+              mc.MapRightKey("User_Id");
+              mc.ToTable("ChatUserAllowedRoom");
+          });
 
+           //Rooms now
+            ////////////////////////
 
-            //11-23-2012 olawal added code to map profile_id's to profiledata  an
-            modelBuilder.Entity<profilemetadata>()
-            .HasKey(e => e.profile_id );
-            modelBuilder.Entity<profilemetadata>()
-                        .Property(e => e.profile_id )
-                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-            modelBuilder.Entity<profilemetadata>()
-                        .HasRequired(e => e.profile )
-                        .WithRequiredDependent(r => r.profilemetadata );
+            modelBuilder.Entity<ChatRoom >().HasMany(t => t.Messages )
+           .WithRequired(p => p.Room ).HasForeignKey(p => p.Room_id ).WillCascadeOnDelete(false);
+
 
            // modelBuilder.Entity<profilemetadata>()
              //         .HasRequired(e => e.profiledata )

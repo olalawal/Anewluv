@@ -12,6 +12,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
         public int Key { get; set; }
         public string Content { get; set; }
         public string Id { get; set; }
+        public int Room_id { get; set; }
+            public int User_id { get; set; }
         public virtual ChatRoom Room { get; set; }
         public virtual ChatUser User { get; set; }
         public DateTimeOffset When { get; set; }

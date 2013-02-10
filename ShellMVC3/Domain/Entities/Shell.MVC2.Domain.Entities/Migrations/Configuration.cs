@@ -31,8 +31,30 @@ namespace Shell.MVC2.Domain.Entities.Migrations
             // 
             SeedMethods.seedgenerallookups(context);
             SeedMethods.seedcriterialookups(context);
+            SeedMethods.seedapplicationlookups(context);
 
 
         }
+
+
+
+    }
+
+    internal sealed class ConfigurationChat : DbMigrationsConfiguration<Shell.MVC2.Domain.Entities.Anewluv.Chat.ChatContext >
+    {
+        public ConfigurationChat()
+        {
+            AutomaticMigrationsEnabled = true;
+            MigrationsNamespace = "Shell.MVC2.Domain.Entities.Anewluv.Chat";
+        }
+
+        protected override void Seed(Shell.MVC2.Domain.Entities.Anewluv.Chat.ChatContext  context)
+        {
+            ChatSeedMethods.seedgenerallookups(context);
+            // SeedMethodsApiKeyModel.seedcascadeddata(context);
+
+        }
+
+
     }
 }

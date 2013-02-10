@@ -28,13 +28,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
         public bool Private { get; set; }
         public virtual ICollection<ChatUser> AllowedUsers { get; set; }
         public string InviteCode { get; set; }
+
         //roomtypes (enum)
         public string Type { get; set; }
         //ChatRequestRooms flags
         public bool? ChatRequestRejected { get; set; }
         public bool? ChatRequestAccepted { get; set; }
 
-        public virtual ICollection<ChatUser> AllowedChatRequestUsers { get; set; } //might not be needed
+        //public virtual ICollection<ChatUser> AllowedChatRequestUsers { get; set; } //might not be needed
 
         // Creator of the room
         public virtual ChatUser Creator { get; set; }

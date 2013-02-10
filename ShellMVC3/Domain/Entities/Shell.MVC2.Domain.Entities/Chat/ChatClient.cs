@@ -11,9 +11,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
         [Key]
         public int Key { get; set; }
         public string Id { get; set; }
+        public int User_id { get; set; }
         public ChatUser User { get; set; }
-        public string UserAgent { get; set; }
-        //public virtual ICollection<ClientMessage> clientmessages
+        public string UserAgent { get; set; }       
         public DateTimeOffset LastActivity { get; set; }
     }
 }

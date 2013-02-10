@@ -50,7 +50,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
             
         }
 
-        public class Initializer : IDatabaseInitializer<AnewluvContext >
+        public class Initializer : IDatabaseInitializer<ChatContext>
         {
             public void InitializeDatabase(ChatContext  context)
             {

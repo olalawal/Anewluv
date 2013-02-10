@@ -599,6 +599,81 @@ namespace Shell.MVC2.Domain.Entities.Migrations
           
         }
 
+        public static void seedapplicationlookups(AnewluvContext context)
+        {
 
+            //has to come after image resizer format.
+            //iconformats
+            //filter an enum for not set since that is the zero value i.e  
+            var iconformatqry = from iconformatEnum value in Enum.GetValues(typeof(iconformatEnum))
+                                 where value != iconformatEnum.NotSet
+                                 orderby value // to sort by value; remove otherwise 
+                                 select value;
+            iconformatqry.ToList().ForEach(kvp => context.lu_iconformat.AddOrUpdate(new lu_iconformat()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp),
+                iconImagersizerformat_id = (int)kvp  //this only works since these loookups have same order
+
+
+            }));
+
+
+
+            //applicationpaymenttype
+            //filter an enum for not set since that is the zero value i.e  
+            var applicationpaymenttypeqry = from applicationpaymenttypeEnum value in Enum.GetValues(typeof(applicationpaymenttypeEnum))
+                                            where value != applicationpaymenttypeEnum.NotSet
+                               orderby value // to sort by value; remove otherwise 
+                               select value;
+            applicationpaymenttypeqry.ToList().ForEach(kvp => context.lu_applicationitempaymenttype.AddOrUpdate(new lu_applicationitempaymenttype()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+
+            //applicationitemtransfertype
+            //filter an enum for not set since that is the zero value i.e  
+            var applicationitemtransfertypeqry = from applicationitemtransfertypeEnum value in Enum.GetValues(typeof(applicationitemtransfertypeEnum))
+                                            where value != applicationitemtransfertypeEnum.NotSet
+                                            orderby value // to sort by value; remove otherwise 
+                                            select value;
+            applicationitemtransfertypeqry.ToList().ForEach(kvp => context.lu_applicationitempaymenttype.AddOrUpdate(new lu_applicationitempaymenttype()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+
+
+            //applicationtype
+            //filter an enum for not set since that is the zero value i.e  
+            var applicationtypeqry = from applicationtypeEnum value in Enum.GetValues(typeof(applicationtypeEnum))
+                                            where value != applicationtypeEnum.NotSet
+                                            orderby value // to sort by value; remove otherwise 
+                                            select value;
+            applicationtypeqry.ToList().ForEach(kvp => context.lu_applicationitempaymenttype.AddOrUpdate(new lu_applicationitempaymenttype()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+
+            //iconImageresizerformat
+            //filter an enum for not set since that is the zero value i.e  
+            var iconImageresizerformatqry = from iconImageresizerformatEnum value in Enum.GetValues(typeof(iconImageresizerformatEnum))
+                                            where value != iconImageresizerformatEnum.NotSet
+                                            orderby value // to sort by value; remove otherwise 
+                                            select value;
+            iconImageresizerformatqry.ToList().ForEach(kvp => context.lu_applicationitempaymenttype.AddOrUpdate(new lu_applicationitempaymenttype()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+            
+
+        }
     }
 }
