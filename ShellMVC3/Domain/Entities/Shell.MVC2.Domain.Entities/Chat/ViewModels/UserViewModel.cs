@@ -9,7 +9,21 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels
 {
     public class UserViewModel
     {
-      
+
+        public UserViewModel(ChatUser user)
+        {
+            Name = user.Name;
+            Hash = user.Hash;
+            Active = user.Status == (int)userstatusEnum.Active;
+            Status = ((userstatusEnum)user.Status).ToString();
+            Note = user.Note;
+            AfkNote = user.AfkNote;
+            IsAfk = user.IsAfk;
+            Flag = user.Flag;
+            Country = ChatService.GetCountry(user.Flag);
+            LastActivity = user.LastActivity;
+            IsAdmin = user.IsAdmin;
+        }
 
         public string Name { get; private set; }
         public string ScreenName { get; set; }

@@ -17,7 +17,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
 
         public DateTime? LastNudged { get; set; }
         public string Name { get; set; }
-        public bool? Closed { get; set; }
+        public bool Closed { get; set; }
         [StringLength(80)]
         public string Topic { get; set; }
         public string TopicScreenName { get; set; }

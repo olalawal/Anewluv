@@ -8,7 +8,14 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels
 {
     public class MessageViewModel
     {
-       
+        public MessageViewModel(ChatMessage message)
+        {
+            Id = message.Id;
+            Content = message.Content;
+            User = new UserViewModel(message.User);
+            When = message.When;
+            HtmlEncoded = message.HtmlEncoded;
+        }
 
         public string Id { get; set; }
         public string Content { get; set; }

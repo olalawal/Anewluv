@@ -139,11 +139,16 @@
     <Compile Include="Advanced.aspx.designer.cs" />
     <Compile Include="AppfabricCaching\AppFabricFactory.cs" />
     <Compile Include="AuthenticationAndMembership\AnewLuvMembershipProvider.cs" />
+    <Compile Include="BaseClasses\ChatRepositoryBase.cs" />
     <Compile Include="BaseClasses\GeoRepositoryBase.cs" />
     <Compile Include="APIkeyRepository.cs" />
+    <Compile Include="ChatRepository.cs" />
     <Compile Include="MemberEditRepository.cs" />
     <Compile Include="ImageResizer\ImageResizerUtils.cs" />
     <Compile Include="LookupRepository.cs" />
+    <Compile Include="RepositoryExtentions\ChatRepositoryExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SearchEditRepository.cs" />
     <Compile Include="OpenidRepositiory.cs" />
     <Compile Include="MailRepository.cs" />
@@ -208,6 +213,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

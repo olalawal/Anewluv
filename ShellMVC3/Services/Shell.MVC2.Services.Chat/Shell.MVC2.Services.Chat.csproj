@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6AF3685D-3C0F-4CC8-B0EE-1960462C6DE9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Shell.MVC2.Services.Chat</RootNamespace>
+    <AssemblyName>Shell.MVC2.Services.Chat</AssemblyName>
+    <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\Shell.MVC2\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\Shell.MVC2\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR">
+      <HintPath>..\..\Shell.MVC2\packages\SignalR.Server.0.5.3\lib\net40\SignalR.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR.Hosting.AspNet">
+      <HintPath>..\..\Shell.MVC2\packages\SignalR.Hosting.AspNet.0.5.3\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR.Hosting.Common">
+      <HintPath>..\..\Shell.MVC2\packages\SignalR.Hosting.Common.0.5.3\lib\net40\SignalR.Hosting.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Shell.MVC2\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Shell.MVC2\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Shell.MVC2\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Shell.MVC2\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebAPIDoodle.SignalR">
+      <HintPath>..\..\Shell.MVC2\packages\WebAPIDoodle.SignalR.1.3.0\lib\net40\WebAPIDoodle.SignalR.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChatNotificationService.cs" />
+    <Compile Include="Infrastructure\ChatClienManager.cs" />
+    <Compile Include="Infrastructure\ChatInfrastructure.cs" />
+    <Compile Include="Infrastructure\Commands\CommandManager.cs" />
+    <Compile Include="Infrastructure\Http.cs" />
+    <Compile Include="Infrastructure\RandomUtils.cs" />
+    <Compile Include="Infrastructure\RegexExtensions.cs" />
+    <Compile Include="Infrastructure\SafeCollection.cs" />
+    <Compile Include="Infrastructure\StringExtentions.cs" />
+    <Compile Include="Infrastructure\TaskAsyncHelper.cs" />
+    <Compile Include="Infrastructure\TextTransform.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ChatService.cs" />
+    <Compile Include="SignalR\Chat.cs" />
+    <Compile Include="SignalR\ChatNotifications.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Entities\Shell.MVC2.Domain.Entities\Shell.MVC2.Domain.Entities.csproj">
+      <Project>{3413A2BC-A142-4383-A9BD-72145457C6CB}</Project>
+      <Name>Shell.MVC2.Domain.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Interfaces\Shell.MVC2.Interfaces\Shell.MVC2.Interfaces.csproj">
+      <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
+      <Name>Shell.MVC2.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Shell.MVC2.Data\Shell.MVC2.Data.csproj">
+      <Project>{69ACF655-FC62-490E-A321-4049873F69DF}</Project>
+      <Name>Shell.MVC2.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contracts\Shell.MVC2.Services.Contracts\Shell.MVC2.Services.Contracts.csproj">
+      <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
+      <Name>Shell.MVC2.Services.Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{3D9AD99F-2412-4246-B90B-4EAA41C64699}">
+        <WcfProjectProperties>
+          <AutoStart>True</AutoStart>
+        </WcfProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
