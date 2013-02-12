@@ -39,6 +39,6 @@ namespace Shell.MVC2.Infrastructure.Interfaces
         //void WriteLogMessage(int logEntryID);
 
    
-        int TranslateLogSeverity(LogSeverityEnum LogSeverityValue);
+        int TranslateLogSeverity(logseverityEnum LogSeverityValue);
     }
 }

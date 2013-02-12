@@ -72,8 +72,8 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                logger = new ErroLogging(ApplicationEnum.MemberActionsService);
-                logger.WriteSingleEntry(LogSeverityEnum.CriticalError, ex, profileid, null);
+                logger = new ErroLogging(applicationEnum.MemberActionsService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
@@ -205,8 +205,8 @@ namespace Shell.MVC2.Data
          catch (Exception ex)
          {
              //instantiate logger here so it does not break anything else.
-             logger = new ErroLogging(ApplicationEnum.MemberActionsService);
-             logger.WriteSingleEntry(LogSeverityEnum.CriticalError, ex, profileid, null);
+             logger = new ErroLogging(applicationEnum.MemberActionsService);
+             logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
              //log error mesasge
              //handle logging here
              var message = ex.Message;

@@ -42,7 +42,7 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="lu_logSeverity" nillable="true" type="tns:lu_logSeverity" />
-  <xs:simpleType name="LogSeverityEnum">
+  <xs:simpleType name="logseverityEnum">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Information">
         <xs:annotation>
@@ -74,5 +74,5 @@
       </xs:enumeration>
     </xs:restriction>
   </xs:simpleType>
-  <xs:element name="LogSeverityEnum" nillable="true" type="tns:LogSeverityEnum" />
+  <xs:element name="logseverityEnum" nillable="true" type="tns:logseverityEnum" />
 </xs:schema>

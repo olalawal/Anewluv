@@ -35,7 +35,7 @@ namespace Shell.MVC2.Data
             try
             {
                
-                _context.CustomErrorLogs.Add(logEntry);
+                _context.errorlogs.Add(logEntry);
 
                 _context.SaveChanges();
                 

@@ -27,9 +27,9 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
             public  lu_logseverityinternal logseverityinternal { get; set; } 
             //public virtual  LogSeverity Severity  { get; set; }  //complex type mapper
             //[NotMapped]
-            //public LogSeverityEnum LogSeverityEnum
+            //public logseverityEnum logseverityEnum
             //{
-            //    get { return (LogSeverityEnum)LogSeverityLookupID; }
+            //    get { return (logseverityEnum)LogSeverityLookupID; }
             //    set { LogSeverityLookupID = (int)value; }
             //} 
            [DataMember]

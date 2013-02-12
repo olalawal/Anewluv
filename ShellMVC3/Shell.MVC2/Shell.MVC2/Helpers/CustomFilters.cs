@@ -200,7 +200,7 @@ namespace Shell.MVC2.Filters
              ErroLogging myLogger = new ErroLogging(1);
              using (myLogger)
              {                  
-              myLogger.WriteSingleEntry(LogSeverityEnum.CriticalError, e,context);
+              myLogger.WriteSingleEntry(logseverityEnum.CriticalError, e,context);
              }
              
          }

@@ -69,7 +69,7 @@ namespace LoggingLibrary
 
             //mysClient.Test();
             // LogClient = new Log;//LoggerSoapClient();
-            //oLogEntry = CreateLgEntryObject(null, null, LogSeverityEnum.Information);
+            //oLogEntry = CreateLgEntryObject(null, null, logseverityEnum.Information);
             ErrorLoggingfactory = new ChannelFactory<IErrorLoggingService>("ErrorLoggingService.soap");//(mysClient.Endpoint);
             LoggingServiceProxy = ErrorLoggingfactory.CreateChannel();
 

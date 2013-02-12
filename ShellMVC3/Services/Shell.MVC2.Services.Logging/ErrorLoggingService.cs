@@ -38,7 +38,7 @@ namespace Shell.MVC2.Services.Logging
 
 
 
-        public int TranslateLogSeverity(LogSeverityEnum LogSeverityValue)
+        public int TranslateLogSeverity(logseverityEnum LogSeverityValue)
         {
             return _errorloggingrepository.TranslateLogSeverity(LogSeverityValue);
         }

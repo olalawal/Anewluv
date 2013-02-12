@@ -50,7 +50,7 @@ namespace Shell.MVC2.Data
 
            public IQueryable<ChatUser> GetOnlineUsers()
            {
-               return _chatcontext.ChatUsers.Include("ConnectedClients").();
+               return _chatcontext.ChatUsers.Include("ConnectedClients").Online();
            }
 
 
@@ -84,7 +84,28 @@ namespace Shell.MVC2.Data
                _chatcontext.SaveChanges();
            }
 
-        
+           public bool Update(ChatRoom room)
+           {
+               if ( _chatcontext.ChatRooms.Contains(room))
+               {
+                   Remove(room);
+                   Add(room);
+                   return true;
+               }
+               return false;
+           }
+
+           public bool Update(ChatUser user)
+           {
+               if ( _chatcontext.ChatUsers .Contains(user))
+               {
+                   Remove(user);
+                   Add(user);
+                   return true;
+               }
+               return false;
+
+           }
 
            public void Dispose()
            {
@@ -120,6 +141,11 @@ namespace Shell.MVC2.Data
            public IQueryable<ChatMessage> GetMessagesByRoom(string roomName)
            {
                return _chatcontext.ChatMessages.Include("ChatRoom").Where(r => r.Room .Name == roomName);
+           }
+
+           public ChatMessage GetMessageById(string id)
+           {
+               return _chatcontext.ChatMessages.FirstOrDefault(m => m.Id == id);
            }
 
            public IQueryable<ChatMessage> GetPreviousMessages(string messageId)
@@ -259,7 +285,7 @@ namespace Shell.MVC2.Data
 
 
               //updated this to also remove empty spaces
-        public   string NormalizeUserName(string userName)
+        public  string NormalizeUserName(string userName)
         {
 
             return userName.StartsWith("@") ? userName.Substring(1) : userName;

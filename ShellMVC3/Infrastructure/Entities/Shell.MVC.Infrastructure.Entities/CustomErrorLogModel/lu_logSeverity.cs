@@ -31,9 +31,9 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 
     //TO DO these are objects for wrapping enums
 
-    //public class LogSeverityWrapper : EnumWrapper<LogSeverityEnum>
+    //public class LogSeverityWrapper : EnumWrapper<logseverityEnum>
     //{
-    //    public static implicit operator LogSeverityWrapper(LogSeverityEnum e)
+    //    public static implicit operator LogSeverityWrapper(logseverityEnum e)
     //    {
     //        return new LogSeverityWrapper() { Enum = e };
     //    }
@@ -49,20 +49,20 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     //     public virtual LogSeverityLookup LogSeverityLookup { get; set; }
 
     //     // actors        
-    //     public LogSeverity() : this(LogSeverityEnum.Warning ) 
+    //     public LogSeverity() : this(logseverityEnum.Warning ) 
     //     {}
-    //     public LogSeverity(LogSeverityEnum value)
+    //     public LogSeverity(logseverityEnum value)
     //     {
     //         LogSeverityLookupID = (int)value;       
     //     }       
     //     // implicit operators for auto casting the complex type to enum val   
-    //     public static implicit operator LogSeverityEnum(LogSeverity type)
+    //     public static implicit operator logseverityEnum(LogSeverity type)
     //     {
-    //         return (LogSeverityEnum)type.LogSeverityLookupID;  
+    //         return (logseverityEnum)type.LogSeverityLookupID;  
 
     //     }
 
-    //     public static implicit operator LogSeverity(LogSeverityEnum type)    
+    //     public static implicit operator LogSeverity(logseverityEnum type)    
     //     {
     //         return new LogSeverity(type);        
     //     }     

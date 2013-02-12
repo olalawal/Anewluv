@@ -20,9 +20,10 @@ namespace Shell.MVC2.Interfaces
 
             IQueryable<ChatUser> SearchUsers(string name);
             IQueryable<ChatMessage> GetMessagesByRoom(string roomName);
+            ChatMessage GetMessageById(string id);
             IQueryable<ChatMessage> GetPreviousMessages(string messageId);
             IQueryable<ChatRoom> GetAllowedRooms(ChatUser user);
-            ChatMessage GetMessagesById(string id);
+           
 
 
             ChatUser GetUserById(string userId);
@@ -71,9 +72,9 @@ namespace Shell.MVC2.Interfaces
             //public static ChatUser VerifyUser( string userName);
 
             //updated this to also remove empty spaces
-            public static string NormalizeUserName(string userName);
+              string NormalizeUserName(string userName);
 
-            public static string NormalizeRoomName(string roomName);
+              string NormalizeRoomName(string roomName);
             
     }
 }

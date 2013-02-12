@@ -214,8 +214,8 @@ namespace Shell.MVC2.Data
                     EmailModel returnmodel = new EmailModel();
                     returnmodel = getemailbytemplateid(templateenum.GenericErrorMessage);
                     //fill in the rest of the email model values 
-                    returnmodel.subject = String.Format(returnmodel.subject, error.ProfileID);
-                    returnmodel.body = String.Format(returnmodel.body, error.ProfileID, error.Message);                    
+                    returnmodel.subject = String.Format(returnmodel.subject, error.profileid);
+                    returnmodel.body = String.Format(returnmodel.body, error.profileid, error.message);                    
                 
 
                  //Now build the message e

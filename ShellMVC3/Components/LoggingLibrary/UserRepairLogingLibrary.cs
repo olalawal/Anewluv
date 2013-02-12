@@ -56,7 +56,7 @@ namespace LoggingLibrary
 
             //mysClient.Test();
             // LogClient = new Log;//LoggerSoapClient();
-            //oLogEntry = CreateLgEntryObject(null, null, LogSeverityEnum.Information);
+            //oLogEntry = CreateLgEntryObject(null, null, logseverityEnum.Information);
             factory = new ChannelFactory<IUserRepairService>("WSHttpBinding_IUserRepairService");//(mysClient.Endpoint);
             LoggingServiceProxy = factory.CreateChannel();
             oLogEntry = new UserRepairLog();

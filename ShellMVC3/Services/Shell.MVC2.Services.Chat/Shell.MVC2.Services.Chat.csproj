@@ -103,10 +103,6 @@
       <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
       <Name>Shell.MVC2.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Shell.MVC2.Data\Shell.MVC2.Data.csproj">
-      <Project>{69ACF655-FC62-490E-A321-4049873F69DF}</Project>
-      <Name>Shell.MVC2.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contracts\Shell.MVC2.Services.Contracts\Shell.MVC2.Services.Contracts.csproj">
       <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
       <Name>Shell.MVC2.Services.Contracts</Name>

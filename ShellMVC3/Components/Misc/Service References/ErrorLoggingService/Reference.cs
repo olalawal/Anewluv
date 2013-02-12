@@ -20,7 +20,7 @@ namespace Misc.ErrorLoggingService {
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(Misc.ErrorLoggingService.lu_Application))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(Misc.ErrorLoggingService.lu_logSeverity))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Misc.ErrorLoggingService.LogSeverityEnum))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Misc.ErrorLoggingService.logseverityEnum))]
     public partial class CustomErrorLog : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
@@ -523,9 +523,9 @@ namespace Misc.ErrorLoggingService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LogSeverityEnum", Namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Infrastructure.Entities.Custom" +
+    [System.Runtime.Serialization.DataContractAttribute(Name="logseverityEnum", Namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Infrastructure.Entities.Custom" +
         "ErrorLogModel")]
-    public enum LogSeverityEnum : int {
+    public enum logseverityEnum : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Information = 1,
@@ -551,7 +551,7 @@ namespace Misc.ErrorLoggingService {
         int WriteCompleteLogEntry(Misc.ErrorLoggingService.CustomErrorLog logEntry);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IErrorLoggingService/TranslateLogSeverity", ReplyAction="http://tempuri.org/IErrorLoggingService/TranslateLogSeverityResponse")]
-        int TranslateLogSeverity(Misc.ErrorLoggingService.LogSeverityEnum LogSeverityValue);
+        int TranslateLogSeverity(Misc.ErrorLoggingService.logseverityEnum LogSeverityValue);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -589,7 +589,7 @@ namespace Misc.ErrorLoggingService {
             return base.Channel.WriteCompleteLogEntry(logEntry);
         }
         
-        public int TranslateLogSeverity(Misc.ErrorLoggingService.LogSeverityEnum LogSeverityValue) {
+        public int TranslateLogSeverity(Misc.ErrorLoggingService.logseverityEnum LogSeverityValue) {
             return base.Channel.TranslateLogSeverity(LogSeverityValue);
         }
     }
