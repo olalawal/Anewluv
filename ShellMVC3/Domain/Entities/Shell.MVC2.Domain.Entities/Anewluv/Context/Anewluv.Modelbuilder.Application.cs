@@ -19,7 +19,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Context
             //confgure 1 to 1 required relatonship woth p lu_iconformat
             //********************************************
             modelBuilder.Entity<lu_iconformat>()
-           .HasRequired(p => p.imageresizerformat).WithMany().HasForeignKey(z => z.imagersizerformat_id );
+           .HasRequired(p => p.iconImageresizerformat ).WithMany().HasForeignKey(z => z.iconImagersizerformat_id );
 
             //application item
             //********************************************
@@ -35,7 +35,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Context
             //applicationiconconversion item
             //********************************************
             modelBuilder.Entity<lu_iconformat>()
-          .HasRequired(p => p.imageresizerformat).WithMany().HasForeignKey(z => z.imagersizerformat_id);
+          .HasRequired(p => p.iconImageresizerformat ).WithMany().HasForeignKey(z => z.iconImagersizerformat_id);
 
 
             //application item

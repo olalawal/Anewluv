@@ -25,7 +25,7 @@ namespace Shell.MVC2.Services.Contracts
 
          [OperationContract]
          [WebInvoke]
-         int TranslateLogSeverity(LogSeverityEnum LogSeverityValue);
+         int TranslateLogSeverity( logseverityEnum LogSeverityValue);
 
 
         //void WriteValue(int logEntryID, string name, object value);

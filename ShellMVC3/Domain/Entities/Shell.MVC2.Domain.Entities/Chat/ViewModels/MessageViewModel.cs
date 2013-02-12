@@ -14,7 +14,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels
             Content = message.Content;
             User = new UserViewModel(message.User);
             When = message.When;
-            HtmlEncoded = message.HtmlEncoded;
+            //HtmlEncoded = message.HtmlEncoded;
         }
 
         public string Id { get; set; }

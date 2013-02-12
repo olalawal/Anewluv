@@ -61,12 +61,12 @@ namespace Shell.MVC2.Data
 
         }
 
-        public int TranslateLogSeverity(LogSeverityEnum logseverityValue)
+        public int TranslateLogSeverity(logseverityEnum logseverityValue)
         {
             try
             {
                 return Convert.ToInt32(LogSeverityUtil.TranslateLogSeverity(logseverityValue));
-                return 1;
+                //return 1;
             }
             catch (Exception ex)
             {

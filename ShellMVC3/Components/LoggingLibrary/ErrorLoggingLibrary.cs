@@ -51,11 +51,11 @@ namespace LoggingLibrary
 
         public string ClientIP
         {
-            get { return oLogEntry.IPAddress; }
-            set { oLogEntry.IPAddress = value; }
+            get { return oLogEntry.ipaddress ; }
+            set { oLogEntry.ipaddress  = value; }
         }
 
-        public ErroLogging(ApplicationEnum Application)
+        public ErroLogging(applicationEnum  Application)
         {
 
             errorpass = 0;
@@ -117,7 +117,7 @@ namespace LoggingLibrary
         /// <param name="OrderNumber">The order number.</param>
         /// <param name="RequisitionNumber">The requisition number.</param>
 
-        public void WriteSingleEntry(LogSeverityEnum severityLevelvalue, Exception referedexception,int? profileid=null,
+        public void WriteSingleEntry(logseverityEnum  severityLevelvalue, Exception referedexception,int? profileid=null,
                                     HttpContextBase context = null)
         {
             //set the error pass since this function can be used recursively
@@ -158,37 +158,37 @@ namespace LoggingLibrary
 
             if (referedexception != null && stackTrace != null)
             {
-                oLogEntry.Message = referedexception.ToString();
-                oLogEntry.Stacktrace = stackTrace.ToString();
-                oLogEntry.LineNumbers = stackFrame.GetFileLineNumber();
-                oLogEntry.MethodName = methodBase.Name; ;
-                oLogEntry.AssemblyName = GetAssemblyNameFromMethodBase(methodBase);
-                oLogEntry.ParentMethodName = WhoCalledMe(referedexception);
-                oLogEntry.ClassName = methodBase.DeclaringType.Name;
-                oLogEntry.TimeStamp = DateTime.UtcNow;
+                oLogEntry.message = referedexception.ToString();
+                oLogEntry.stacktrace = stackTrace.ToString();
+                oLogEntry.linenumbers = stackFrame.GetFileLineNumber();
+                oLogEntry.methodname = methodBase.Name; ;
+                oLogEntry.assemblyname = GetAssemblyNameFromMethodBase(methodBase);
+                oLogEntry.parentmethodname = WhoCalledMe(referedexception);
+                oLogEntry.classname = methodBase.DeclaringType.Name;
+                oLogEntry.timestamp = DateTime.UtcNow;
                  
             }
 
 
             if (context != null & !object.ReferenceEquals(context, string.Empty))
             {
-                oLogEntry.LoggedUser = context.User.Identity.Name;
-                oLogEntry.IPAddress = context.Request.UserHostAddress;
-                oLogEntry.ErrorPage = context.Request.Path;
-                oLogEntry.Sessionid = context.Session.SessionID;
+                oLogEntry.loggeduser = context.User.Identity.Name;
+                oLogEntry.ipaddress = context.Request.UserHostAddress;
+                oLogEntry.errorpage = context.Request.Path;
+                oLogEntry.sessionid = context.Session.SessionID;
                
                 //
-                oLogEntry.Request  = context.Request.Form.ToString();
-                oLogEntry.QueryString  = context.Request.QueryString.ToString();
+                oLogEntry.request  = context.Request.Form.ToString();
+                oLogEntry.querystring  = context.Request.QueryString.ToString();
             }
   
-                 oLogEntry.application_id = this.iApplicationID ;
-                 oLogEntry.logseverity_id   = (int)severityLevelvalue;
+                 oLogEntry.application.id  = this.iApplicationID ;
+                 oLogEntry.logseverity.id    = (int)severityLevelvalue;
                 
                 //replace with profile ID if we dont have it
                 if (profileid  != null & !object.ReferenceEquals(profileid , string.Empty))
                 {
-                    oLogEntry.ProfileID  =  Convert.ToString(profileid) ;
+                    oLogEntry.profileid   =  Convert.ToString(profileid) ;
                 }
 
                 //first  write database entry
@@ -221,7 +221,7 @@ namespace LoggingLibrary
                 if (!(errorpass >= 2))
                 {
                     //log error if we only ran this once or twice
-                    WriteSingleEntry(LogSeverityEnum.CriticalError, ex);
+                    WriteSingleEntry( logseverityEnum.CriticalError , ex);
                 }
 
             }
@@ -249,7 +249,7 @@ namespace LoggingLibrary
             catch (Exception ex)
             {
                 //log whatever error we had here
-                WriteSingleEntry(LogSeverityEnum.CriticalError, ex);
+                WriteSingleEntry(logseverityEnum.CriticalError, ex);
 
             }
 
@@ -263,24 +263,24 @@ namespace LoggingLibrary
         /// <param name="sessionID">The session ID.</param>
         /// <param name="severityLevel">The severity level.</param>
         /// <returns></returns>
-        private errorlog CreateLogEntryObject(MethodBase method, string sessionID, LogSeverityEnum severityLevel)
+        private errorlog CreateLogEntryObject(MethodBase method, string sessionID, logseverityEnum severityLevel)
         {
 
             errorlog entry = new errorlog();
 
             if (method != null)
             {
-                entry.AssemblyName = GetAssemblyNameFromMethodBase(method);
-                entry.ClassName = method.DeclaringType.Name;
-                entry.MethodName = method.Name;
+                entry.assemblyname = GetAssemblyNameFromMethodBase(method);
+                entry.classname = method.DeclaringType.Name;
+                entry.methodname = method.Name;
             }
             entry.id  = iApplicationID;
-            if (entry.IPAddress == null || object.ReferenceEquals(entry.IPAddress, string.Empty))
+            if (entry.ipaddress == null || object.ReferenceEquals(entry.ipaddress, string.Empty))
             {
-                entry.IPAddress = System.Net.Dns.GetHostAddresses(System.Net.Dns.GetHostName()).ToString();
+                entry.ipaddress = System.Net.Dns.GetHostAddresses(System.Net.Dns.GetHostName()).ToString();
             }
 
-            entry.LoggedUser = sessionID;
+            entry.loggeduser = sessionID;
             using (new OperationContextScope((IContextChannel)LoggingServiceProxy))
             {
                 entry.id = LoggingServiceProxy.TranslateLogSeverity(severityLevel);
