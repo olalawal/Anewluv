@@ -16,6 +16,9 @@ namespace Shell.MVC2.Services.Contracts
     {
         #region "Interest Methods"
 
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebGet(UriTemplate = "/getmyrelationshipsfiltered/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]       
+        List<MemberSearchViewModel> getmyrelationshipsfiltered(string profileid, List<profilefiltertypeEnum> types);
 
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
@@ -31,8 +34,8 @@ namespace Shell.MVC2.Services.Contracts
         int getwhoisinterestedinmenewcount(string profileid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getinterests/{profileid}/{page}/{numberperpage}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<MemberSearchViewModel> getinterests(string profileid, string page, string numberperpage);
+        [WebGet(UriTemplate = "/getwhoiaminterestedin/{profileid}/{page}/{numberperpage}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<MemberSearchViewModel> getwhoiaminterestedin(string profileid, string page, string numberperpage);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebGet(UriTemplate = "/getwhoisinterestedinme/{profileid}/{page}/{numberperpage}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]

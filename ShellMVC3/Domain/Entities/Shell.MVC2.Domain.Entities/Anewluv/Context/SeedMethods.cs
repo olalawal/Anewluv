@@ -595,6 +595,18 @@ namespace Shell.MVC2.Domain.Entities.Migrations
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
+            //2-13-2013 olawa lseed method for filter types addded late
+            //profilefiltertypes
+            //filter an enum for not set since that is the zero value i.e  
+            var profilefiltertypeqry = from profilefiltertypeEnum value in Enum.GetValues(typeof(profilefiltertypeEnum))
+                               where value != profilefiltertypeEnum.NotSet
+                               orderby value // to sort by value; remove otherwise 
+                               select value;
+            profilefiltertypeqry.ToList().ForEach(kvp => context.lu_profilefiltertype.AddOrUpdate(new lu_profilefiltertype()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
 
           
         }

@@ -77,6 +77,8 @@
     <Compile Include="Anewluv\Applications\lu_iconImagersizerformat.cs" />
     <Compile Include="Anewluv\Context\Anewluv.Context.Application.cs" />
     <Compile Include="Anewluv\Context\Anewluv.Modelbuilder.Application.cs" />
+    <Compile Include="Anewluv\Lookups\lu_profilefiltertype.cs" />
+    <Compile Include="Anewluv\Lookups\enums\Copy of role.cs" />
     <Compile Include="Anewluv\Lookups\enums\photorejectionreasonusermessage.cs" />
     <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
     <Compile Include="Anewluv\photo_securitylevel.cs" />
@@ -126,7 +128,7 @@
     <Compile Include="Anewluv\LookupsCriteria\Enums\religiousattendance.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\wantskids.cs" />
     <Compile Include="Anewluv\Lookups\enums\sortbytype.cs" />
-    <Compile Include="Anewluv\Lookups\enums\role.cs" />
+    <Compile Include="Anewluv\Lookups\enums\profilefiltertype.cs" />
     <Compile Include="Anewluv\Lookups\enums\gender.cs" />
     <Compile Include="Anewluv\Lookups\enums\showme.cs" />
     <Compile Include="Anewluv\Lookups\lu_securityleveltype.cs" />

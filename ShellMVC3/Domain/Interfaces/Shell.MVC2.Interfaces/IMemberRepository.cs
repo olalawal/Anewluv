@@ -19,6 +19,8 @@ namespace Shell.MVC2.Interfaces
        // registermodel mapregistrationtest();  
        //end of profile mapping
 
+       membersinrole getmemberrolebyprofileid(int profileid);
+
        //initial profile stuffs
         Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyusername(string username);
         profiledata getprofiledatabyprofileid(int profileid) ;

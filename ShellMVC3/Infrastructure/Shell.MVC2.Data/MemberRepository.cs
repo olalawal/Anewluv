@@ -32,14 +32,16 @@ namespace Shell.MVC2.Data
        }
 
        
-             //Auth stuff, dunno if its doing anything now but we can use it to secure queries 
-             //private IPrincipal _User;
-             //public override void Initialize(DomainServiceContext context)
-             //{
-             //    base.Initialize(context);
-             //    // Debug.WriteLine(context.User.Identity.Name);
-             //    _User = context.User;
-             //}
+           
+       //2-13-2013 olawal
+       //new stuff to get a users roles 
+
+       public  membersinrole   getmemberrolebyprofileid(int profileid)
+       {
+           return this._datingcontext.membersinroles.Where(p => p.profile_id == profileid).FirstOrDefault();
+       }
+
+
 
 
 
@@ -989,12 +991,7 @@ namespace Shell.MVC2.Data
     }
 
    
-
-       
-
-       //Start of stuff pulled from MVC members repository
-
-    
+          
          
         public string getgenderbyscreenname(string screenname)
         {

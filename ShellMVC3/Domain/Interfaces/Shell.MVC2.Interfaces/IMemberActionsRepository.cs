@@ -12,13 +12,18 @@ using Dating.Server.Data;
 using System.Data.Objects;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using System.ComponentModel.DataAnnotations;
+using Shell.MVC2.Domain.Entities.Anewluv;
 
 
 namespace Shell.MVC2.Interfaces
 {
     public  interface IMemberActionsRepository
     {
-   
+
+
+
+        List<MemberSearchViewModel> getmyrelationshipsfiltered(int profileid, List<profilefiltertypeEnum> types);
+       
 
         #region "Interest Methods"
 
@@ -29,8 +34,8 @@ namespace Shell.MVC2.Interfaces
       int getwhoisinterestedinmecount(int profileid);
        
       int getwhoisinterestedinmenewcount(int profileid);
-        
-       List<MemberSearchViewModel> getinterests(int profileid, int? Page, int? NumberPerPage);
+
+      List<MemberSearchViewModel> getwhoiaminterestedin(int profileid, int? Page, int? NumberPerPage);
 
        List<MemberSearchViewModel> getwhoisinterestedinme(int profileid, int? Page, int? NumberPerPage);
 

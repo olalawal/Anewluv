@@ -36,6 +36,23 @@ namespace Shell.MVC2.Services.Actions
                
             }
 
+        public List<MemberSearchViewModel> getmyrelationshipsfiltered(string profileid, List<profilefiltertypeEnum> types)
+        {
+
+            try
+            {
+                return _memberactionsrepository.getmyrelationshipsfiltered(Convert.ToInt32(profileid),types);
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member actions service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
 
 
         #region "Interest Methods"
@@ -121,12 +138,12 @@ namespace Shell.MVC2.Services.Actions
         /// <summary>
         /// //gets list of all the profiles I am interested in
         /// </summary 
-        public List<MemberSearchViewModel> getinterests(string profileid, string page, string numberperpage)
+        public List<MemberSearchViewModel> getwhoiaminterestedin(string profileid, string page, string numberperpage)
         {
            
             try
             {
-                return _memberactionsrepository.getinterests(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+                return _memberactionsrepository.getwhoiaminterestedin (Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
 
             }
             catch (Exception ex)

@@ -37,8 +37,281 @@ namespace Shell.MVC2.Data
           
         }
 
+        //2-13-2013 olawal 
+        //new methods here get all profileIds of certain types
+
+        /// <summary>
+        /// //gets all the members who are interested in me
+        /// //TODO add filtering for blocked members that you blocked and system blocked
+        /// </summary 
+        public List<MemberSearchViewModel> getmyrelationshipsfiltered(int profileid,List<profilefiltertypeEnum> types)
+        {
+           //remove blocks regardless for now
+            var MyActiveblocks =  activeblocksbyprofileid(profileid);
+
+            List<MemberSearchViewModel> currentrelationships = new List<MemberSearchViewModel>();
+
+            foreach (var value in types)
+            {
+                switch (value)
+                {
+                     //   lstAccounts.Where(Function(x) Not currentAddedAccounts.Any(Function(y) y.AcctNumber = x.AcctNumber
+                    case profilefiltertypeEnum.NotSet :
+                        break;
+                    case profilefiltertypeEnum.WhoisInterestsedinMe :
+                        currentrelationships.AddRange(getunpagedwhoisinterestedinme(profileid, MyActiveblocks).Where( x=>! currentrelationships.Any(y=>y.id ==x.id)));
+                        break;
+                     case profilefiltertypeEnum.WhoIamInterestedin  :
+                        currentrelationships.AddRange(getunpagedwhoiaminsterestedin(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id)));                    
+                        break;
+                        case profilefiltertypeEnum.WhoPeekedAtMe  :
+                        currentrelationships.AddRange(getunpagedwhopeekedatme(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id))); 
+                        break;
+                        case profilefiltertypeEnum.WhoIPeekedAt  :
+                        currentrelationships.AddRange(getunpagedwhoipeekedat(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id))); 
+                        break;
+                        case profilefiltertypeEnum.WhoIBlocked  :
+                        currentrelationships.AddRange(getunpagedblocks(profileid).Where(x => !currentrelationships.Any(y => y.id == x.id))); 
+                        break;
+                        case profilefiltertypeEnum.WhoLIkesMe  :
+                        currentrelationships.AddRange(getunpagedwholikesme(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id))); 
+                        break;
+                        case profilefiltertypeEnum.WhoILike  :
+                        currentrelationships.AddRange(getunpagedwhoilike(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id))); 
+                        break;
+                }
+               
+                       
+            }
+            
+             return currentrelationships;
+
+        }
+
+        private IQueryable<block> activeblocksbyprofileid(int profileid)
+        {
+            //filter out blocked profiles 
+            return  _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null);
+            
+        }
+        private List<MemberSearchViewModel> getunpagedwhoisinterestedinme(int profileid, IQueryable<block> MyActiveblocks)
+        {
+            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+            //rematerialize on the back end.
+            //final query to send back only the profile datatas of the interests we want
+             return (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid & p.deletedbymemberdate == null)
+                             join f in _datingcontext.profiledata on p.profile_id  equals f.profile_id
+                             join z in _datingcontext.profiles on p.profile_id  equals z.id
+                             where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id  == f.profile_id))
+                             select new MemberSearchViewModel
+                             {
+                                 creationdate = p.creationdate,
+                                 id = p.id,
+                                 age = f.age,
+                                 birthdate = f.birthdate,
+                                 city = f.city,
+                                 countryid = f.countryid,
+                                 stateprovince = f.stateprovince,
+                                 longitude = (double)f.longitude,
+                                 latitude = (double)f.latitude,
+                                 genderid = f.gender.id,
+                                 postalcode = f.postalcode,
+                                 lastlogindate = z.logindate,                           
+                                 screenname = z.screenname,
+                                 mycatchyintroline = f.mycatchyintroLine,
+                                 aboutme = f.aboutme 
+                             }).ToList();
+        }
+        private List<MemberSearchViewModel> getunpagedwhoiaminsterestedin(int profileid, IQueryable<block> MyActiveblocks)
+        {
+            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+            //rematerialize on the back end.
+            //final query to send back only the profile datatas of the interests we want
+            return (from p in _datingcontext.interests.Where(p => p.profile_id == profileid & p.deletedbymemberdate == null)
+                    join f in _datingcontext.profiledata on p.interestprofile_id equals f.profile_id
+                    join z in _datingcontext.profiles on p.interestprofile_id equals z.id
+                    where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+                    select new MemberSearchViewModel
+                    {
+                        creationdate = p.creationdate,
+                        id = p.id,
+                        age = f.age,
+                        birthdate = f.birthdate,
+                        city = f.city,
+                        countryid = f.countryid,
+                        stateprovince = f.stateprovince,
+                        longitude = (double)f.longitude,
+                        latitude = (double)f.latitude,
+                        genderid = f.gender.id,
+                        postalcode = f.postalcode,
+                        lastlogindate = z.logindate,
+                        screenname = z.screenname,
+                        mycatchyintroline = f.mycatchyintroLine,
+                        aboutme = f.aboutme
+                    }).ToList();
+        }
+        private List<MemberSearchViewModel> getunpagedwhopeekedatme(int profileid, IQueryable<block> MyActiveblocks)
+        {
+            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+            //rematerialize on the back end.
+            //final query to send back only the profile datatas of the interests we want
+            return (from p in _datingcontext.peeks.Where(p => p.peekprofile_id == profileid && p.deletedbymemberdate == null)
+                    join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                    join z in _datingcontext.profiles on p.profile_id equals z.id
+                    where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+                    select new MemberSearchViewModel
+                    {
+                        peekdate = p.creationdate,
+                        id = p.profile_id,
+                        age = f.age,
+                        birthdate = f.birthdate,
+                        city = f.city,
+                        countryid = f.countryid,
+                        stateprovince = f.stateprovince,
+                        longitude = (double)f.longitude,
+                        latitude = (double)f.latitude,
+                        genderid = f.gender.id,
+                        postalcode = f.postalcode,
+                        lastlogindate = z.logindate,
+                        //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
+                        screenname = z.screenname,
+                        mycatchyintroline = f.mycatchyintroLine,
+                        aboutme = f.aboutme,
+                        perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
+
+                    }).ToList();
+        }     
+        private List<MemberSearchViewModel> getunpagedwhoipeekedat(int profileid, IQueryable<block> MyActiveblocks)
+        {
+
+            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+            //rematerialize on the back end.
+            //final query to send back only the profile datatas of the interests we want
+            return (from p in _datingcontext.peeks.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
+                         join f in _datingcontext.profiledata on p.peekprofile_id  equals f.profile_id
+                         join z in _datingcontext.profiles on p.peekprofile_id  equals z.id
+                         where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id  == f.profile_id))
+                         select new MemberSearchViewModel
+                         {
+                             peekdate = p.creationdate,
+                             id = p.profile_id,
+                             age = f.age,
+                             birthdate = f.birthdate,
+                             city = f.city,
+                             countryid = f.countryid,
+                             stateprovince = f.stateprovince,
+                             longitude = (double)f.longitude,
+                             latitude = (double)f.latitude,
+                             genderid = f.gender.id,
+                             postalcode = f.postalcode,
+                             lastlogindate = z.logindate,
+                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
+                             screenname = z.screenname,
+                             mycatchyintroline = f.mycatchyintroLine,
+                             aboutme = f.aboutme                            
+
+
+                         }).ToList();
+        }
+        private List<MemberSearchViewModel> getunpagedblocks(int profileid)
+        {
+            return (from p in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                    join f in _datingcontext.profiledata on p.blockprofile_id equals f.profile_id
+                    join z in _datingcontext.profiles on p.blockprofile_id equals z.id
+                    where (f.profile.status.id < 3)
+                    orderby (p.creationdate) descending
+                    select new MemberSearchViewModel
+                    {
+                        blockdate = p.creationdate,
+                        id = p.profile_id,
+                        age = f.age,
+                        birthdate = f.birthdate,
+                        city = f.city,
+                        countryid = f.countryid,
+                        stateprovince = f.stateprovince,
+                        longitude = (double)f.longitude,
+                        latitude = (double)f.latitude,
+                        genderid = f.gender.id,
+                        postalcode = f.postalcode,
+                        lastlogindate = z.logindate,
+                        //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
+                        screenname = z.screenname,
+                        mycatchyintroline = f.mycatchyintroLine,
+                        aboutme = f.aboutme
+
+                    }).ToList();
+        }
+        private List<MemberSearchViewModel> getunpagedwholikesme(int profileid, IQueryable<block> MyActiveblocks)
+           {
+          //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+          //rematerialize on the back end.
+          //final query to send back only the profile datatas of the interests we want
+          return (from p in _datingcontext.likes.Where(p => p.likeprofile_id == profileid && p.deletedbylikedate == null)
+                  join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                  join z in _datingcontext.profiles on p.profile_id equals z.id
+                  where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+                  orderby (p.creationdate) descending
+                  select new MemberSearchViewModel
+                  {
+                      creationdate = p.creationdate,
+                      id = p.profile_id,
+                      age = f.age,
+                      birthdate = f.birthdate,
+                      city = f.city,
+                      countryid = f.countryid,
+                      stateprovince = f.stateprovince,
+                      longitude = (double)f.longitude,
+                      latitude = (double)f.latitude,
+                      genderid = f.gender.id,
+                      postalcode = f.postalcode,
+                      lastlogindate = z.logindate,
+                      //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
+                      screenname = z.screenname,
+                      mycatchyintroline = f.mycatchyintroLine,
+                      aboutme = f.aboutme,
+                      perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+
+
+
+                  }).ToList();
+      }        
+        private List<MemberSearchViewModel> getunpagedwhoilike(int profileid, IQueryable<block> MyActiveblocks)
+        {
+            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+            //rematerialize on the back end.
+            //final query to send back only the profile datatas of the interests we want
+     return  (from p in _datingcontext.likes.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
+                            join f in _datingcontext.profiledata on p.likeprofile_id equals f.profile_id
+                            join z in _datingcontext.profiles on p.likeprofile_id equals z.id
+                            where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id  == f.profile_id))
+                            orderby (p.creationdate) descending
+                            select new MemberSearchViewModel
+                            {
+                                creationdate = p.creationdate,
+                                id = p.profile_id,
+                                age = f.age,
+                                birthdate = f.birthdate,
+                                city = f.city,
+                                countryid = f.countryid,
+                                stateprovince = f.stateprovince,
+                                longitude = (double)f.longitude,
+                                latitude = (double)f.latitude,
+                                genderid = f.gender.id,
+                                postalcode = f.postalcode,
+                                lastlogindate = z.logindate,
+                                //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
+                                screenname = z.screenname,
+                                mycatchyintroline = f.mycatchyintroLine,
+                                aboutme = f.aboutme,
+                                perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+
+
+
+                            }).ToList();
+        }
+   
         #region "Interest Methods"
 
         //added 1/29/2010 ola lawal
@@ -147,17 +420,13 @@ namespace Shell.MVC2.Data
         }
 
         #endregion
-
-       
+              
         /// <summary>
         /// //gets list of all the profiles I am interested in
         /// </summary 
-        public List<MemberSearchViewModel> getinterests(int profileid, int? Page, int? NumberPerPage)
+        public List<MemberSearchViewModel> getwhoiaminterestedin(int profileid, int? Page, int? NumberPerPage)
         {
                         //gets all  interestets from the interest table based on if the person's profiles are stil lvalid tho
-;
-
-
          try
          {
 
@@ -171,8 +440,8 @@ namespace Shell.MVC2.Data
              //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
              //rematerialize on the back end.
              //final query to send back only the profile datatas of the interests we want
-             var interests = (from p in _datingcontext.interests.Where(p => p.profile_id == profileid)
-                              join f in _datingcontext.profiledata on p.interestprofile_id equals f.profile_id
+             var interests = (from p in _datingcontext.interests.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
+                              join f in _datingcontext.profiledata on p.interestprofile_id   equals f.profile_id
                               join z in _datingcontext.profiles on p.interestprofile_id equals z.id
                               where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                               select new MemberSearchViewModel
@@ -233,7 +502,7 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-         var   whoisinterestedinme = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid)
+            var whoisinterestedinme = (from p in _datingcontext.interests.Where(p => p.interestprofile_id   == profileid && p.deletedbymemberdate == null)
                                     join f in _datingcontext.profiledata on p.profile_id equals f.profile_id 
                                    join z in _datingcontext.profiles on p.profile_id  equals z.id 
                                    where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id ))
@@ -736,6 +1005,59 @@ namespace Shell.MVC2.Data
         #endregion
 
 
+
+        /// <summary>
+        /// //gets list of all the profiles I Peeked at in
+        /// </summary 
+        public List<MemberSearchViewModel> getwhoipeekedat(int profileid, int? Page, int? NumberPerPage)
+        {
+            //Page, int? NumberPerPage
+            //  List<MemberSearchViewModel> peeks = default(List<MemberSearchViewModel>);        
+
+            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                                 select new
+                                 {
+                                     ProfilesBlockedId = c.blockprofile_id
+                                 };
+
+            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+            //rematerialize on the back end.
+            //final query to send back only the profile datatas of the interests we want
+            var peeks = (from p in _datingcontext.peeks.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
+                         join f in _datingcontext.profiledata on p.peekprofile_id  equals f.profile_id
+                         join z in _datingcontext.profiles on p.peekprofile_id  equals z.id
+                         where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                         select new MemberSearchViewModel
+                         {
+                             peekdate = p.creationdate,
+                             id = p.profile_id,
+                             age = f.age,
+                             birthdate = f.birthdate,
+                             city = f.city,
+                             countryid = f.countryid,
+                             stateprovince = f.stateprovince,
+                             longitude = (double)f.longitude,
+                             latitude = (double)f.latitude,
+                             genderid = f.gender.id,
+                             postalcode = f.postalcode,
+                             lastlogindate = z.logindate,
+                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
+                             screenname = z.screenname,
+                             mycatchyintroline = f.mycatchyintroLine,
+                             aboutme = f.aboutme,
+                             perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+
+
+
+                         }).OrderByDescending(f => f.lastlogindate).ThenByDescending(f => f.creationdate).ToList();
+
+            // return new PaginatedList<MemberSearchViewModel>().GetPageableList(peeks, Page ?? 1, NumberPerPage.GetValueOrDefault());
+            return peeks;
+
+        }
+
+
+
         /// <summary>
         /// //gets all the members who are interested in me
         /// //TODO add filtering for blocked members that you blocked and system blocked
@@ -755,7 +1077,7 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-         var   WhoPeekedAtMe = (from p in _datingcontext.peeks.Where(p => p.peekprofile_id  == profileid)
+            var WhoPeekedAtMe = (from p in _datingcontext.peeks.Where(p => p.peekprofile_id == profileid && p.deletedbymemberdate == null)
                                 join f in _datingcontext.profiledata on p.profile_id equals f.profile_id 
                              join z in _datingcontext.profiles on p.profile_id  equals z.id
                                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
@@ -842,57 +1164,6 @@ namespace Shell.MVC2.Data
         }
 
    
-
-        /// <summary>
-        /// //gets list of all the profiles I Peeked at in
-        /// </summary 
-        public List<MemberSearchViewModel> getwhoipeekedat(int profileid, int? Page, int? NumberPerPage)
-        {
-            //Page, int? NumberPerPage
-            //  List<MemberSearchViewModel> peeks = default(List<MemberSearchViewModel>);        
-
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
-                                 select new
-                                 {
-                                    ProfilesBlockedId = c.blockprofile_id 
-                                 };
-
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            var peeks = (from p in _datingcontext.peeks.Where(p => p.profile_id  == profileid && p.deletedbymemberdate == null)
-                         join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
-                         join z in _datingcontext.profiles on p.profile_id  equals z.id
-                         where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                         select new MemberSearchViewModel
-                         {
-                            peekdate = p.creationdate ,
-                           id = p.profile_id,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                           genderid  = f.gender.id,
-                             postalcode = f.postalcode,
-                             lastlogindate    = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                            screenname  = z.screenname,
-                             mycatchyintroline   = f.mycatchyintroLine,
-                          aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-
-
-
-                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.creationdate ).ToList();
-
-           // return new PaginatedList<MemberSearchViewModel>().GetPageableList(peeks, Page ?? 1, NumberPerPage.GetValueOrDefault());
-            return peeks;
-            
-        }
-
 
 
 
