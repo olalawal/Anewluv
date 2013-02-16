@@ -11,12 +11,20 @@ using System.Xml.Linq;
 using System.Net;
 using Shell.MVC2.Infrastructure.Interfaces;
 using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
+using Shell.MVC2.Data.AuthenticationAndMembership;
+using Shell.MVC2.Interfaces;
+using Shell.MVC2.Domain.Entities.Anewluv;
 
 namespace Shell.MVC2.Data
 {
     public class APIKeyAuthorization : ServiceAuthorizationManager
     {
         IAPIkeyRepository _apikeyrepository;
+        AnewLuvMembershipProvider _membmbershipprovider;
+        private IGeoRepository _georepository;
+        private IMemberRepository _memberepository;
+        private AnewluvContext _datingcontext;
+        private IPhotoRepository _photorepository;
 
         //public APIKeyAuthorization(IAPIkeyRepository apikeyrepository)
         //{
@@ -29,14 +37,22 @@ namespace Shell.MVC2.Data
              ApiKeyContext context = new ApiKeyContext();
             _apikeyrepository = new APIkeyRepository(context);
 
+            _membmbershipprovider = new AnewLuvMembershipProvider(_datingcontext, _georepository, _memberepository, _photorepository);
+
         }
 
 
         //TO DO re-activate this code when you complete basic testing
+        //2-15-2013 olawal validate username password for some URI's
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
+            bool validrequest = false;
+
+
             //for now while testing ignore api key
-            return true;
+            
+
+        
 
 
             string[] urisegments = OperationContext.Current.IncomingMessageHeaders.To.Segments;
@@ -56,26 +72,29 @@ namespace Shell.MVC2.Data
               {
                   string key = GetAPIKey(operationContext);
 
-                  // _apikeyrepository.IsValidAPIKey(key);
-
-                  if (_apikeyrepository.IsValidAPIKey(key))
-                  {
-                      return true;
-                  }
-                  else
-                  {
-                      // Send back an HTML reply
-                      CreateErrorReply(operationContext, key);
-                      return false;
-                  }
+              
+                  //TO DO re-implect api key
+                  //if (_apikeyrepository.IsValidAPIKey(key))
+                  //{
+                  //    validrequest = true;
+                  //}
+                  //else
+                  //{
+                  //    // Send back an HTML reply
+                  //    CreateErrorReply(operationContext, key);
+                  //    validrequest = false;
+                  //}
               }
               else
               {
-                  return true;
+                  validrequest = true;
               }
            
+             //get username and password
 
-          
+
+
+              return validrequest;
         }
 
         public string GetAPIKey(OperationContext operationContext)

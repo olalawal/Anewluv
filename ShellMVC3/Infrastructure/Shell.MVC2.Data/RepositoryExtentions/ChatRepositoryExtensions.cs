@@ -9,7 +9,7 @@ using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Interfaces;
 namespace Shell.MVC2.Data
 {
-    public static class RepositoryExtensions
+    public static class RepositoryExtensionsOLD
     {
         public static IQueryable<ChatUser> Online(this IQueryable<ChatUser> source)
         {

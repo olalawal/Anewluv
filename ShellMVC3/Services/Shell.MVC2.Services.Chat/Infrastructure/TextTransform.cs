@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
-using Shell.MVC2.Models.Chat;
-using Shell.MVC2.Repositories.Chat;  
+using Shell.MVC2.Domain.Entities.Anewluv.Chat;
+using Shell.MVC2.Interfaces;  
 
 namespace Shell.MVC2.Infastructure.Chat
 {
@@ -57,7 +57,8 @@ namespace Shell.MVC2.Infastructure.Chat
 
                 string url = httpPortion + m.Value;
 
-                urls.Add(HttpUtility.HtmlDecode(url));
+                //urls.Add(HttpUtility.HtmlDecode(url));
+                urls.Add(url);
 
                 return String.Format(CultureInfo.InvariantCulture,
                                      "<a rel=\"nofollow external\" target=\"_blank\" href=\"{0}\" title=\"{1}\">{1}</a>",

@@ -44,8 +44,8 @@ namespace Shell.MVC2.Data
            {
                return _chatcontext.Entry(room)
                          .Collection(r => r.Users)
-                         .Query()
-                         .Online();
+                         .Query().Online();
+                           
            }
 
            public IQueryable<ChatUser> GetOnlineUsers()
@@ -297,150 +297,291 @@ namespace Shell.MVC2.Data
         }
 
 
-        //public static ChatUser UserOnline(this IChatRepository repository, string name)
-        //   {
-        //       ChatUser user = repository.GetUserByName(name);
 
-        //       if (user != null && user.Status != (int)userstatusEnum.Offline )
-        //           return user;
+       
 
-        //       return null;
+        public  IEnumerable<ChatUser> Online(IEnumerable<ChatUser> source)
+        {
+            return source.Where(u => u.Status != (int)userstatusEnum.Offline);
+        }
 
-        //   }
+        public  ChatUser UserOnline( string name)
+        {
+            ChatUser user = _chatrepository.GetUserByName(name);
 
-        //public static IEnumerable<ChatRoom> Allowed(this IEnumerable<ChatRoom> rooms, string userId)
-        //   {
-        //       return from r in rooms
-        //              where !r.Private ||
-        //                    r.Private && r.AllowedUsers.Any(u => u.Id == userId)
-        //              select r;
-        //   }
+            if (user != null && user.Status != (int)userstatusEnum.Offline)
+                return user;
 
-        //public  ChatRoom VerifyUserRoom(ChatUser user, string roomName)
-        //   {
-        //       if (String.IsNullOrEmpty(roomName))
-        //       {
-        //           throw new InvalidOperationException("Use '/join room' to join a room.");
-        //       }
+            return null;
 
-        //       //3-24-2011 added code to get the room if it already existed 
-        //       ChatRoom room = GetRoomIfCreatedBefore(roomName);
-        //       //if (room == null)
-        //       //{
-        //       //    roomName = ChatService.NormalizeRoomName(roomName);
-        //       //    room = repository.GetRoomByName(roomName);
-        //       //}
+        }
 
-        //       if (room == null)
-        //       {
-        //           throw new InvalidOperationException(String.Format("You're in '{0}' but it doesn't exist.", roomName));
-        //       }
-
-        //       if (!room.Users.Any(u => u.Name.Equals(user.Name, StringComparison.OrdinalIgnoreCase)))
-        //       {
-        //           throw new InvalidOperationException(String.Format("You're not in '{0}'. Use '/join {0}' to join it.", roomName));
-        //       }
-
-        //       return room;
-        //   }
-
-        //public  ChatUser VerifyUserId(this IChatRepository  repository, string userId)
-        //{
-        //    ChatUser user = repository.GetUserById(userId);
-
-        //    if (user == null)
-        //    {
-        //        // The user isn't logged in 
-        //        throw new InvalidOperationException("You're not logged in.");
-        //    }
-
-        //    return user;
-        //}
-        ///// <summary>
-        ///// updated 3-22-2012 check the room back wards and forwars i.e handle issues such as Kelly_Dar and Dar_kelly , make sure nethier exists.
-        ///// </summary>
-        ///// <param name="repository"></param>
-        ///// <param name="roomName"></param>
-        ///// <param name="OpenIfClosed"></param>
-        ///// <returns></returns>
-        //public  ChatRoom VerifyAndOpenRoomIfExists(string roomName, bool OpenIfClosed= true)
-        //{
+        public  IEnumerable<ChatRoom> Allowed(IEnumerable<ChatRoom> rooms, string userId)
+        {
+            return from r in rooms
+                   where !r.Private ||
+                         r.Private && r.AllowedUsers.Any(u => u.Id == userId)
+                   select r;
+        }
 
 
+        public  ChatRoom VerifyUserRoom( ChatUser user, string roomName)
+        {
+            if (String.IsNullOrEmpty(roomName))
+            {
+                throw new InvalidOperationException("Use '/join room' to join a room.");
+            }
 
-        //    if (String.IsNullOrWhiteSpace(roomName))
-        //    {
-        //        throw new InvalidOperationException("Room name cannot be blank!");
-        //    }
+            //3-24-2011 added code to get the room if it already existed 
+            ChatRoom room = GetRoomIfCreatedBefore(roomName);
+            //if (room == null)
+            //{
+            //    roomName = ChatService.NormalizeRoomName(roomName);
+            //    room = repository.GetRoomByName(roomName);
+            //}
 
-        //        //best wau uf ut works
-        //    var room = GetRoomIfCreatedBefore(roomName);
+            if (room == null)
+            {
+                throw new InvalidOperationException(String.Format("You're in '{0}' but it doesn't exist.", roomName));
+            }
+
+            if (!room.Users.Any(u => u.Name.Equals(user.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new InvalidOperationException(String.Format("You're not in '{0}'. Use '/join {0}' to join it.", roomName));
+            }
+
+            return room;
+        }
+
+        public  ChatUser VerifyUserId( string userId)
+        {
+            ChatUser user = _chatrepository.GetUserById(userId);
+
+            if (user == null)
+            {
+                // The user isn't logged in 
+                throw new InvalidOperationException("You're not logged in.");
+            }
+
+            return user;
+        }
+        /// <summary>
+        /// updated 3-22-2012 check the room back wards and forwars i.e handle issues such as Kelly_Dar and Dar_kelly , make sure nethier exists.
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="roomName"></param>
+        /// <param name="OpenIfClosed"></param>
+        /// <returns></returns>
+        public  ChatRoom VerifyAndOpenRoomIfExists(string roomName, bool OpenIfClosed = true)
+        {
 
 
-        //    if (room == null)
-        //    {
-        //        return null;
-        //    }
 
-        //    if (room.Closed  && OpenIfClosed)
-        //    {
-        //        room.Closed = false;
-        //        return room;
-        //    }
+            if (String.IsNullOrWhiteSpace(roomName))
+            {
+                throw new InvalidOperationException("Room name cannot be blank!");
+            }
 
-        //    return room;
-        //}
-
-        //public  ChatRoom GetRoomIfCreatedBefore(string roomName)
-        //{
-        //    // var toUserName = parts[1];          
-        //    string[] RoomMembers = roomName.Split('_');
-        //    if (RoomMembers.Count() > 0)           
-        //    //make sure room does not exist
-        //    return  (from z in this.Rooms where RoomMembers.All(s => z.Name.Contains(s)) select z).FirstOrDefault();
-
-        //    roomName = this.NormalizeRoomName(roomName);            
-        //    return this.GetRoomByName(roomName);
-
-        //}
-
-        //public  ChatRoom VerifyRoom(string roomName, bool mustBeOpen = true)
-        //{
-        //    if (String.IsNullOrWhiteSpace(roomName))
-        //    {
-        //        throw new InvalidOperationException("Room name cannot be blank!");
-        //    }
+            //best wau uf ut works
+            var room = GetRoomIfCreatedBefore(roomName);
 
 
-        //    //3-24-2011 added code to get the room if it already existed 
-        //    ChatRoom room = GetRoomIfCreatedBefore(roomName);
+            if (room == null)
+            {
+                return null;
+            }
 
-        //    if (room == null)
-        //    {
-        //        throw new InvalidOperationException(String.Format("Unable to find room '{0}'", roomName));
-        //    }
+            if (room.Closed && OpenIfClosed)
+            {
+                room.Closed = false;
+                return room;
+            }
 
-        //    if (room.Closed && mustBeOpen)
-        //    {
-        //        throw new InvalidOperationException(String.Format("The room '{0}' is closed", roomName));
-        //    }
+            return room;
+        }
 
-        //    return room;
-        //}
+        public  ChatRoom GetRoomIfCreatedBefore( string roomName)
+        {
+            // var toUserName = parts[1];          
+            string[] RoomMembers = roomName.Split('_');
+            if (RoomMembers.Count() > 0)
+                //make sure room does not exist
+                return (from z in _chatrepository.Rooms where RoomMembers.All(s => z.Name.Contains(s)) select z).FirstOrDefault();
 
-        //public  ChatUser VerifyUser(string userName)
-        //{
-        //    userName = this.NormalizeUserName(userName);
+            roomName = roomName.StartsWith("#") ? roomName.Substring(1) : roomName;
+            return _chatrepository.GetRoomByName(roomName);
 
-        //    ChatUser user =  this.GetUserByName(userName);
+        }
 
-        //    if (user == null)
-        //    {
-        //        throw new InvalidOperationException(String.Format("Unable to find user '{0}'.", userName));
-        //    }
 
-        //    return user;
-        //}
+        public static ChatRoom VerifyRoom( string roomName, bool mustBeOpen = true)
+        {
+            if (String.IsNullOrWhiteSpace(roomName))
+            {
+                throw new InvalidOperationException("Room name cannot be blank!");
+            }
+
+
+            //3-24-2011 added code to get the room if it already existed 
+            ChatRoom room = GetRoomIfCreatedBefore(roomName);
+
+            if (room == null)
+            {
+                throw new InvalidOperationException(String.Format("Unable to find room '{0}'", roomName));
+            }
+
+            if (room.Closed && mustBeOpen)
+            {
+                throw new InvalidOperationException(String.Format("The room '{0}' is closed", roomName));
+            }
+
+            return room;
+        }
+
+        public  ChatUser VerifyUser( string userName)
+        {
+            userName = userName.StartsWith("@") ? userName.Substring(1) : userName;
+
+            ChatUser user = _chatrepository.GetUserByName(userName);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException(String.Format("Unable to find user '{0}'.", userName));
+            }
+
+            return user;
+        }
+
+
+       
+
+     
+        public ChatRoom VerifyUserRoom(ChatUser user, string roomName)
+        {
+            if (String.IsNullOrEmpty(roomName))
+            {
+                throw new InvalidOperationException("Use '/join room' to join a room.");
+            }
+
+            //3-24-2011 added code to get the room if it already existed 
+            ChatRoom room = GetRoomIfCreatedBefore(roomName);
+            //if (room == null)
+            //{
+            //    roomName = ChatService.NormalizeRoomName(roomName);
+            //    room = repository.GetRoomByName(roomName);
+            //}
+
+            if (room == null)
+            {
+                throw new InvalidOperationException(String.Format("You're in '{0}' but it doesn't exist.", roomName));
+            }
+
+            if (!room.Users.Any(u => u.Name.Equals(user.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new InvalidOperationException(String.Format("You're not in '{0}'. Use '/join {0}' to join it.", roomName));
+            }
+
+            return room;
+        }
+
+        public ChatUser VerifyUserId(string userId)
+        {
+
+            ChatUser user = _chatrepository.GetUserById(userId);
+
+            if (user == null)
+            {
+                // The user isn't logged in 
+                throw new InvalidOperationException("You're not logged in.");
+            }
+
+            return user;
+        }
+        /// <summary>
+        /// updated 3-22-2012 check the room back wards and forwars i.e handle issues such as Kelly_Dar and Dar_kelly , make sure nethier exists.
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="roomName"></param>
+        /// <param name="OpenIfClosed"></param>
+        /// <returns></returns>
+        public ChatRoom VerifyAndOpenRoomIfExists(string roomName, bool OpenIfClosed = true)
+        {
+
+
+
+            if (String.IsNullOrWhiteSpace(roomName))
+            {
+                throw new InvalidOperationException("Room name cannot be blank!");
+            }
+
+            //best wau uf ut works
+            var room = GetRoomIfCreatedBefore(roomName);
+
+
+            if (room == null)
+            {
+                return null;
+            }
+
+            if (room.Closed && OpenIfClosed)
+            {
+                room.Closed = false;
+                return room;
+            }
+
+            return room;
+        }
+
+        public ChatRoom GetRoomIfCreatedBefore(string roomName)
+        {
+            // var toUserName = parts[1];          
+            string[] RoomMembers = roomName.Split('_');
+            if (RoomMembers.Count() > 0)
+                //make sure room does not exist
+                return (from z in this.Rooms where RoomMembers.All(s => z.Name.Contains(s)) select z).FirstOrDefault();
+
+            roomName = this.NormalizeRoomName(roomName);
+            return this.GetRoomByName(roomName);
+
+        }
+
+        public ChatRoom VerifyRoom(string roomName, bool mustBeOpen = true)
+        {
+            if (String.IsNullOrWhiteSpace(roomName))
+            {
+                throw new InvalidOperationException("Room name cannot be blank!");
+            }
+
+
+            //3-24-2011 added code to get the room if it already existed 
+            ChatRoom room = GetRoomIfCreatedBefore(roomName);
+
+            if (room == null)
+            {
+                throw new InvalidOperationException(String.Format("Unable to find room '{0}'", roomName));
+            }
+
+            if (room.Closed && mustBeOpen)
+            {
+                throw new InvalidOperationException(String.Format("The room '{0}' is closed", roomName));
+            }
+
+            return room;
+        }
+
+        public ChatUser VerifyUser(string userName)
+        {
+            userName = this.NormalizeUserName(userName);
+
+            ChatUser user = this.GetUserByName(userName);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException(String.Format("Unable to find user '{0}'.", userName));
+            }
+
+            return user;
+        }
 
        }
 

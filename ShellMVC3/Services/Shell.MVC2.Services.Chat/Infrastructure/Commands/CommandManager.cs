@@ -5,9 +5,9 @@ using System.Web;
 
 
 
-using Shell.MVC2.Models.Chat;
+using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 using Shell.MVC2.Services.Chat;
-using Shell.MVC2.Repositories.Chat;
+using Shell.MVC2.Interfaces;
 
 namespace Shell.MVC2.Infastructure.Chat
 {
@@ -17,7 +17,7 @@ namespace Shell.MVC2.Infastructure.Chat
         private readonly string _userAgent;
         private readonly string _userId;
         private string _roomName;       //switched this from read only since roomname could already exist
-        private readonly INotificationService _notificationService;
+        private readonly IChatNotificationService _notificationService;
         private readonly IChatService _chatService;
         private readonly IChatRepository  _repository;
 
@@ -26,7 +26,7 @@ namespace Shell.MVC2.Infastructure.Chat
                               string roomName,
                               IChatService service,
                               IChatRepository repository,
-                              INotificationService notificationService)
+                              IChatNotificationService notificationService)
             : this(clientId, null, userId, roomName, service, repository, notificationService)
         {
         }
@@ -37,7 +37,7 @@ namespace Shell.MVC2.Infastructure.Chat
                               string roomName,
                               IChatService service,
                               IChatRepository repository,
-                              INotificationService notificationService)
+                              IChatNotificationService notificationService)
         {
             _clientId = clientId;
             _userAgent = userAgent;

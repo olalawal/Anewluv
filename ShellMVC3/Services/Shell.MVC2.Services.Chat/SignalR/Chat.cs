@@ -15,7 +15,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 using System.Diagnostics;
 using System.Globalization;
 using Shell.MVC2.Interfaces;
-using Shell.MVC2.Data ;
+using Shell.MVC2.Domain.Entities.Anewluv.Chat  ;
 
 using Newtonsoft.Json;
 using Shell.MVC2.Infastructure.Chat;
@@ -468,8 +468,8 @@ namespace Shell.MVC2
              TopicStarter = room.TopicStarter,
              TopicStarterScreenName = room.TopicStarterScreenName ,
              Type = room.Type ,
-             ChatRequestRejected = room.ChatRequestRejected,
-             ChatRequestAccepted= room.ChatRequestAccepted
+             ChatRequestRejected = room.ChatRequestRejected.GetValueOrDefault(),
+             ChatRequestAccepted= room.ChatRequestAccepted.GetValueOrDefault()
          };
      }
      private string ConvertUrlsAndRoomLinks(string message)
@@ -494,7 +494,7 @@ namespace Shell.MVC2
 
          foreach (var client in user.ConnectedClients)
          {
-             GroupManager.RemoveFromGroup(client.Id, room.Name).Wait();
+           Groups.Remove  (client.Id, room.Name).Wait();
          }
 
 
@@ -549,9 +549,9 @@ namespace Shell.MVC2
 
              // Update the room count
              OnRoomChanged(room);
-
+            
              // Add the caller to the group so they receive messages
-             GroupManager.AddToGroup(clientId, room.Name).Wait();
+            Groups.Add (clientId, room.Name).Wait();
 
              // Add to the list of room names
              rooms.Add(new RoomViewModel
@@ -559,8 +559,8 @@ namespace Shell.MVC2
                  Name = room.Name,
                  Private = room.Private,
                  Type = room.Type,
-                 ChatRequestAccepted=room.ChatRequestAccepted,
-                 ChatRequestRejected= room.ChatRequestRejected 
+                 ChatRequestAccepted=room.ChatRequestAccepted.GetValueOrDefault(),
+                 ChatRequestRejected= room.ChatRequestRejected.GetValueOrDefault()
              });
          }
 
@@ -709,8 +709,8 @@ namespace Shell.MVC2
          {
              Name = room.Name,
              Private = room.Private,
-             ChatRequestRejected = room.ChatRequestRejected,
-             ChatRequestAccepted = room.ChatRequestAccepted,
+             ChatRequestRejected = room.ChatRequestRejected.GetValueOrDefault(),
+             ChatRequestAccepted = room.ChatRequestAccepted.GetValueOrDefault(),
              Topic = room.Topic , 
              TopicScreenName = room.TopicScreenName ,
              TopicStarter = room.TopicStarter ,
@@ -737,7 +737,7 @@ namespace Shell.MVC2
          foreach (var client in user.ConnectedClients)
          {
              // Add the caller to the group so they receive messages
-             GroupManager.AddToGroup(client.Id, room.Name).Wait();
+             Groups.Add(client.Id, room.Name).Wait();
          }
      }
      void IChatNotificationService.AllowUser(ChatUser targetUser, ChatRoom targetRoom)

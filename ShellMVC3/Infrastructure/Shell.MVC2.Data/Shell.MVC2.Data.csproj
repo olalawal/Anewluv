@@ -119,6 +119,7 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.DomainServices.EntityFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -139,6 +140,7 @@
     <Compile Include="Advanced.aspx.designer.cs" />
     <Compile Include="AppfabricCaching\AppFabricFactory.cs" />
     <Compile Include="AuthenticationAndMembership\AnewLuvMembershipProvider.cs" />
+    <Compile Include="AuthenticationAndMembership\PasswordValidator.cs" />
     <Compile Include="BaseClasses\ChatRepositoryBase.cs" />
     <Compile Include="BaseClasses\GeoRepositoryBase.cs" />
     <Compile Include="APIkeyRepository.cs" />

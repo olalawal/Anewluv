@@ -9,7 +9,7 @@ namespace Shell.MVC2.Interfaces
     
 
     
-        public interface IChatRepository : IDisposable
+        public interface IChatRepository: IDisposable
         {
 
             IQueryable<ChatRoom> Rooms { get; }
@@ -55,21 +55,21 @@ namespace Shell.MVC2.Interfaces
 
             bool IsUserInRoom(ChatUser user, ChatRoom room);
 
-            ////new items that were extentions 
-            //public static ChatUser UserOnline(string name);
-            //public static ChatRoom VerifyUserRoom(ChatUser user, string roomName);
-            //public static ChatUser VerifyUserId(string userId);            
-            ///// <summary>
-            ///// updated 3-22-2012 check the room back wards and forwars i.e handle issues such as Kelly_Dar and Dar_kelly , make sure nethier exists.
-            ///// </summary>
-            ///// <param name="repository"></param>
-            ///// <param name="roomName"></param>
-            ///// <param name="OpenIfClosed"></param>
-            ///// <returns></returns>
-            //public static ChatRoom VerifyAndOpenRoomIfExists(string roomName, bool OpenIfClosed = true);
-            //public static ChatRoom GetRoomIfCreatedBefore(string roomName);     
-            //public static ChatRoom VerifyRoom(string roomName, bool mustBeOpen = true);           
-            //public static ChatUser VerifyUser( string userName);
+            //new items that were extentions 
+              ChatUser UserOnline(string name);
+              ChatRoom VerifyUserRoom(ChatUser user, string roomName);
+              ChatUser VerifyUserId(string userId);            
+            /// <summary>
+            /// updated 3-22-2012 check the room back wards and forwars i.e handle issues such as Kelly_Dar and Dar_kelly , make sure nethier exists.
+            /// </summary>
+            /// <param name="repository"></param>
+            /// <param name="roomName"></param>
+            /// <param name="OpenIfClosed"></param>
+            /// <returns></returns>
+              ChatRoom VerifyAndOpenRoomIfExists(string roomName, bool OpenIfClosed = true);
+              ChatRoom GetRoomIfCreatedBefore(string roomName);     
+              ChatRoom VerifyRoom(string roomName, bool mustBeOpen = true);           
+              ChatUser VerifyUser( string userName);
 
             //updated this to also remove empty spaces
               string NormalizeUserName(string userName);
