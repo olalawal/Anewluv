@@ -15,7 +15,10 @@ namespace Shell.MVC2.Interfaces
             IQueryable<ChatRoom> Rooms { get; }
             IQueryable<ChatUser> Users { get; }
 
-            IQueryable<ChatUser> GetOnlineUsers(ChatRoom room);
+            //TO DO why are my extentions not working argh!!
+            IQueryable<ChatUser> GetOnlineUsersInRoom(ChatRoom room);
+            IQueryable<ChatUser> GetOnlineOwnersInRoom(ChatRoom room);
+            //IQueryable<ChatUser> GetOnlineAllowedUsersInRooms(List<ChatRoom> rooms);
             IQueryable<ChatUser> GetOnlineUsers();
 
             IQueryable<ChatUser> SearchUsers(string name);

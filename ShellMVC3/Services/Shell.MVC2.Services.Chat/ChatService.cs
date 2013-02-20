@@ -9,6 +9,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels ;
 using Shell.MVC2.Interfaces;
 using System.ServiceModel.Activation;
+using System.Text.RegularExpressions;
 
 namespace Shell.MVC2.Services.Chat
 {
@@ -41,7 +42,7 @@ namespace Shell.MVC2.Services.Chat
         //returns a user who is online
         public List<ChatUser> GetOnlineUsers()
         {
-            return _repository.Users.Online().OrderBy(s => s.Name).ToList();
+            return _repository.GetOnlineUsers().OrderBy(s => s.Name).ToList();
         }
 
 
@@ -71,7 +72,7 @@ namespace Shell.MVC2.Services.Chat
             var user = new ChatUser
             {
                 Name = userName,
-                Status = (int)UserStatus.Active,
+                Status = (int)userstatusEnum.Active,
                 Email = email,
                 Gender = gender,
                 // Hash = email.ToMD5(),
@@ -114,7 +115,7 @@ namespace Shell.MVC2.Services.Chat
                 Name = userName,
                 ScreenName = ScreenName,
                 Gender = gender,
-                Status = (int)UserStatus.Active,
+                Status = (int)userstatusEnum.Active,
                 Id = Guid.NewGuid().ToString("d"),
                 //  Salt = _crypto.CreateSalt(),
                 LastActivity = DateTime.UtcNow
@@ -260,7 +261,7 @@ namespace Shell.MVC2.Services.Chat
 
         public void UpdateActivity(ChatUser user, string clientId, string userAgent)
         {
-            user.Status = (int)UserStatus.Active;
+            user.Status = (int)userstatusEnum.Active;
             user.LastActivity = DateTime.UtcNow;
 
             ChatClient client = AddClient(user, clientId, userAgent);
@@ -411,7 +412,7 @@ namespace Shell.MVC2.Services.Chat
                 if (!user.ConnectedClients.Any())
                 {
                     // If no more clients mark the user as offline
-                    user.Status = (int)UserStatus.Offline;
+                    user.Status = (int)userstatusEnum.Offline;
                 }
 
                 _repository.Remove(client);
@@ -582,7 +583,7 @@ namespace Shell.MVC2.Services.Chat
             user.AllowedRooms.Add(targetRoom);
 
             // Make all users in the current room allowed
-            foreach (var u in targetRoom.Users.Online())
+            foreach (var u in _repository.GetOnlineUsersInRoom(targetRoom) )  ///targetRoom.Users.Online()
             {
                 u.AllowedRooms.Add(targetRoom);
                 targetRoom.AllowedUsers.Add(u);

@@ -45,8 +45,17 @@
     <Reference Include="EntityFramework">
       <HintPath>..\..\Entities\Shell.MVC.Infrastructure.Entities\bin\Debug\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\..\..\Shell.MVC2\packages\Microsoft.AspNet.SignalR.Core.1.0.0\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\Shell.MVC2\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\Shell.MVC2\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR.Ninject">
+      <HintPath>..\..\..\Shell.MVC2\packages\SignalR.Ninject.0.4\lib\net40\SignalR.Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -65,10 +74,13 @@
   <ItemGroup>
     <Compile Include="Modules\ContextModules\AnewluvContextModule.cs" />
     <Compile Include="Modules\ContextModules\ApiKeyContextModule.cs" />
+    <Compile Include="Modules\ContextModules\ChatContextModule.cs" />
+    <Compile Include="Modules\ContextModules\Copy of AnewluvContextModule.cs" />
     <Compile Include="Modules\ContextModules\UserRepairLogContextModule.cs" />
     <Compile Include="Modules\ContextModules\PostalDataContextModule.cs" />
     <Compile Include="Modules\ContextModules\CustomErrorLogContextModule.cs" />
     <Compile Include="Modules\ContextModules\NotificationContextModule.cs" />
+    <Compile Include="Modules\ChatModule.cs" />
     <Compile Include="Modules\LookupModule.cs" />
     <Compile Include="Modules\MemberEditModule.cs" />
     <Compile Include="Modules\SearchEditModule.cs" />

@@ -12,6 +12,9 @@ using SignalR;
 
 using SignalR;
 using SignalR.Infrastructure;
+using Shell.MVC2.Interfaces;
+using Shell.MVC2.Domain.Entities.Anewluv.Chat;
+using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels;
 
 namespace Shell.MVC2.Infastructure.Chat
 {
@@ -31,7 +34,7 @@ namespace Shell.MVC2.Infastructure.Chat
                 {
                     if (u.IsAfk)
                     {
-                        u.Status = (int)UserStatus.Offline;
+                        u.Status = (int)userstatusEnum.Offline;
                     }
                 }
 
@@ -43,16 +46,17 @@ namespace Shell.MVC2.Infastructure.Chat
               //  Elmah.ErrorLog.GetDefault(null).Log(new Error(ex));
             }
         }
+    
         private static void MarkInactiveUsers(IChatRepository repo,  IDependencyResolver  resolver)
         {
             var connectionManager = resolver.Resolve<IConnectionManager>();
-            var clients = connectionManager.GetClients<Shell.MVC2.Chat>();
+            var clients = connectionManager.GetHubContext("chatHub").Clients;
             var inactiveUsers = new List<ChatUser>();
 
             foreach (var user in repo.Users)
             {
-                var status = (UserStatus)user.Status;
-                if (status == UserStatus.Offline)
+                var status = (userstatusEnum)user.Status;
+                if (status == userstatusEnum.Offline)
                 {
                     // Skip offline users
                     continue;
@@ -68,7 +72,7 @@ namespace Shell.MVC2.Infastructure.Chat
 
                 if (elapsed.TotalMinutes > 15)
                 {
-                    user.Status = (int)UserStatus.Inactive;
+                    user.Status = (int)userstatusEnum.Inactive;
                     inactiveUsers.Add(user);
                 }
             }

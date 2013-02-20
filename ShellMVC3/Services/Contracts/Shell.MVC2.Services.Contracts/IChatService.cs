@@ -11,7 +11,7 @@ using System.Text;
 using System.ServiceModel.Web;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 
-namespace Shell.MVC2.Services.Chat
+namespace Shell.MVC2.Services.Contracts
 {
     public interface IChatService
     {

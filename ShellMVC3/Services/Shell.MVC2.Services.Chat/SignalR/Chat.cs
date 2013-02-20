@@ -1,5 +1,4 @@
-﻿using SignalR.Hubs;
-using SignalR;
+﻿
 
 using System.Threading.Tasks;
 
@@ -15,12 +14,15 @@ using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 using System.Diagnostics;
 using System.Globalization;
 using Shell.MVC2.Interfaces;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat  ;
+
 
 using Newtonsoft.Json;
 using Shell.MVC2.Infastructure.Chat;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels;
-
+using Shell.MVC2.Services.Contracts;
+using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNet.SignalR;
+using Shell.MVC2.Services.Chat.SignalR;
 
 
 namespace Shell.MVC2
@@ -192,7 +194,7 @@ namespace Shell.MVC2
                 var isOwner = user.OwnedRooms.Contains(room);
 
                 // Tell the people in this room that you've joined
-                Clients[room.Name].addUser(userViewModel, room.Name, isOwner).Wait();
+                 Clients[room.Name].addUser(userViewModel, room.Name, isOwner).Wait();
 
                 // Update the room count
                 OnRoomChanged(room);
@@ -374,7 +376,7 @@ namespace Shell.MVC2
          };
 
          // Update the room count
-         Clients.updateRoomCount(roomViewModel, room.Users.Online().Count());
+         Clients.updateRoomCount(roomViewModel,_repository.GetOnlineUsersInRoom(room).Count () ) ;// room.Users.Online().Count());
      }             
      private ClientState GetClientState()
      {
@@ -401,11 +403,16 @@ namespace Shell.MVC2
      }
      private string GetCookieValue(string key)
      {
-         string value = Context.Cookies[key];
-         return value != null ? HttpUtility.UrlDecode(value) : null;
+         var request = HttpContext.Current.Request;
+
+         if (request.Cookies.Count > 0)
+         {
+             string value = request.Cookies[key].ToString();
+             return value != null ? HttpUtility.UrlDecode(value) : null;
+         }
+
+         return null;
      }
-
-
 
      public IEnumerable<RoomViewModel> GetRooms()
      {
@@ -458,9 +465,9 @@ namespace Shell.MVC2
          return new RoomViewModel
          {
              Name = room.Name,
-             Users = from u in room.Users.Online()
+             Users = from u in  _repository.GetOnlineUsersInRoom(room)// room.Users.Online()
                      select new UserViewModel(u),
-             Owners = from u in room.Owners.Online()
+             Owners = from u in _repository.GetOnlineOwnersInRoom(room) // room.Owners.Online()
                       select u.Name,
              RecentMessages = recentMessages.AsEnumerable().Reverse().Select(m => new MessageViewModel(m)),
              Topic = room.Topic ,  
@@ -972,12 +979,15 @@ namespace Shell.MVC2
          string userId = Caller.id;
          var userModel = new UserViewModel(user);
 
-         Caller.showUsersRoomList(userModel, user.Rooms.Allowed(userId).Select(r => r.Name));
+         Caller.showUsersRoomList(userModel, user.Rooms.Where(z=>z.AllowedUsers.Contains(user)).Select(r=>r.Name)); //Allowed(userId).Select(r => r.Name));
+
+          // Caller.showUsersRoomList(userModel,_repository.GetOnlineAllowedUsersInRoom(user.rooms).Where(u=>user.Id == userId).Select(r=>r.Name);
      }
 
      void IChatNotificationService.ListUsers()
      {
-         var users = _repository.Users.Online().Select(s => s.Name).OrderBy(s => s);
+         var users = _repository.GetOnlineUsers().Select(s => s.Name).OrderBy(s => s);
+         //_repository.Users.Online().Select(s => s.Name).OrderBy(s => s);
          Caller.listUsers(users);
      }
      void IChatNotificationService.ListUsers(IEnumerable<ChatUser> users)
@@ -1071,20 +1081,22 @@ namespace Shell.MVC2
      void IChatNotificationService.ShowUserInfo(ChatUser user)
      {
          string userId = Caller.id;
-
-         Caller.showUserInfo(new
+        // _repository.GetAllowedRooms(user)
+         
+         Caller.showUserInfo(new 
          {
              Name = user.Name,
-             OwnedRooms = user.OwnedRooms
-                 .Allowed(userId)
-                 .Where(r => !r.Closed)
-                 .Select(r => r.Name),
-             Status = ((userstatusEnumEnum)user.Status).ToString(),
+             OwnedRooms = user.OwnedRooms.Where(r=>!r.Closed).Select(r=>r.Name) ,
+                 //.Allowed(userId),
+                 //.Where(r => !r.Closed),
+                 //.Select(r => r.Name),
+             Status = ((userstatusEnum)user.Status).ToString(),
              LastActivity = user.LastActivity,
+             
              IsAfk = user.IsAfk,
              AfkNote = user.AfkNote,
              Note = user.Note,
-             Rooms = user.Rooms.Allowed(userId).Select(r => r.Name)
+             Rooms = _repository.GetAllowedRooms(user) // (userId).Select(r => r.Name)
              
          });
      }

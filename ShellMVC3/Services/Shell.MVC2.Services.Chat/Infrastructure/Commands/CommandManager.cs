@@ -8,6 +8,7 @@ using System.Web;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 using Shell.MVC2.Services.Chat;
 using Shell.MVC2.Interfaces;
+using Shell.MVC2.Services.Contracts;
 
 namespace Shell.MVC2.Infastructure.Chat
 {
@@ -557,7 +558,7 @@ namespace Shell.MVC2.Infastructure.Chat
             string roomName = parts[1];
             ChatRoom room = _repository.VerifyRoom(roomName);
 
-            var names = room.Users.Online().Select(s => s.Name);
+            var names = _repository.GetOnlineOwnersInRoom(room).Select(s => s.Name);
 
             _notificationService.ListUsers(room, names);
         }
