@@ -25,19 +25,19 @@ using Microsoft.AspNet.SignalR;
 using Shell.MVC2.Services.Chat.SignalR;
 
 
-namespace Shell.MVC2
+namespace Shell.MVC2.Services.Chat
 {
     //, IControllerFactory 
 
     [HubName("chatHub")]
-    public partial  class Chat : Hub,  IDisconnect  , IChatNotificationService
+    public class Chat : Hub,   IChatNotificationService
 {
 
     private readonly IChatRepository  _repository;
     private readonly IChatService _service;
   //  private readonly IResourceProcessor _resourceProcessor;
     //private readonly IApplicationSettings _settings;
-
+    private static readonly Version _version = typeof(Chat).Assembly.GetName().Version;
 
     public Chat(IChatService service, IChatRepository  repository)
     {
@@ -61,9 +61,9 @@ namespace Shell.MVC2
     {
         get
         {
-            string version = Caller.version;
+            string version = Clients.Caller.version;
             return String.IsNullOrEmpty(version) ||
-                    new Version(version) != typeof(Chat).Assembly.GetName().Version;
+                    new Version(version) != _version;
         }
     }
 
@@ -74,9 +74,9 @@ namespace Shell.MVC2
     //    var clientId = this.Context.User.Identity.Name;
 
     //    // clients[clientId].method();             
-    //    Caller.guid = clientId;
+    //    Clients.Caller.guid = clientId;
 
-    //    _service.AddUser(clientId, Caller.guid, "");
+    //    _service.AddUser(clientId, Clients.Caller.guid, "");
 
     //    return null;//Caller.guid;
     //}
@@ -86,7 +86,7 @@ namespace Shell.MVC2
     //    //find the client ID'
     //    //    string id = this.Context.ClientId;
     //    string id2 = this.Context.User.Identity.Name;
-    //    string callerID = Caller.id;
+    //    string callerID = Clients.Caller.id;
 
     //    var msg = new ChatMessageModel
     //    {
@@ -127,19 +127,22 @@ namespace Shell.MVC2
 
         /// <summary>
         /// handles intial join to chat service
+        /// assumed user was already added...
         /// </summary>
         /// <returns></returns>
-    public bool  Join()
+    public bool  Join(string UserId)
      {
-
-
-     //   Startup();
+         
+         SetVersion();
+        //Startup();
          
          // Get the client state
          ClientState clientState = GetClientState();
 
+
          // Try to get the user from the client state
-         ChatUser user = _repository.GetUserById(clientState.UserId);
+         //ChatUser user = _repository.GetUserById(clientState.UserId);
+         ChatUser user = _repository.GetUserById(UserId);
 
          // Threre's no user being tracked
          if (user == null)
@@ -157,20 +160,18 @@ namespace Shell.MVC2
 
          return true;
       }   
-
     private void SetVersion()
     {
         // Set the version on the client
-        Caller.version = typeof(Chat).Assembly.GetName().Version.ToString();
+        Clients.Caller.version = typeof(Chat).Assembly.GetName().Version.ToString();
     }
-
     public bool CheckStatus()
     {
         bool outOfSync = OutOfSync;
 
-        // SetVersion();
+        SetVersion();
 
-        string id = Caller.id;
+        string id = Clients.Caller.id;
 
         ChatUser user = _repository.VerifyUserId(id);
 
@@ -206,19 +207,17 @@ namespace Shell.MVC2
 
         return outOfSync;
     }
-
     private void OnUserInitialize(ClientState clientState, ChatUser user)
     {
         // Update the active room on the client (only if it's still a valid room)
         if (user.Rooms.Any(room => room.Name.Equals(clientState.ActiveRoom, StringComparison.OrdinalIgnoreCase)))
         {
             // Update the active room on the client (only if it's still a valid room)
-            Caller.activeRoom = clientState.ActiveRoom;
+            Clients.Caller.activeRoom = clientState.ActiveRoom;
         }
 
         LogOn(user, Context.ConnectionId);
     }
-
     public bool Send(string content, string roomName)
     {
         var message = new ClientMessage
@@ -230,7 +229,6 @@ namespace Shell.MVC2
 
         return Send(message);
     }
-
     public bool Send(ClientMessage message)
     {
         bool outOfSync = OutOfSync;
@@ -246,7 +244,7 @@ namespace Shell.MVC2
             return outOfSync;
         }
 
-        string id = Caller.id;
+        string id = Clients.Caller.id;
 
         ChatUser user = _repository.VerifyUserId(id);
         ChatRoom room = _repository.VerifyUserRoom(user, message.Room);
@@ -280,55 +278,42 @@ namespace Shell.MVC2
 
         return outOfSync;
     }
-
-    //// TODO: Deprecate
-    //public bool Send(string content)
-    //{
-    //    string roomName = Caller.activeRoom;
-    //    return Send(content, roomName);
-    //}
-
     private string ParseChatMessageText(string content, out HashSet<string> links)
     {
         var textTransform = new TextTransform(_repository);
         string message = textTransform.Parse(content);
         return TextTransform.TransformAndExtractUrls(message, out links);
     }
-
     public UserViewModel GetUserInfo()
     {
-        string id = Caller.id;
+        string id = Clients.Caller.id;
 
         ChatUser user = _repository.VerifyUserId(id);
 
         return new UserViewModel(user);
     }
-
     public string GetUserName()
     {
-        string id = Caller.id;
+        string id = Clients.Caller.id;
 
         ChatUser user = _repository.VerifyUserId(id);
 
         return new UserViewModel(user).Name;
     }
-
     public string GetUserScreenName()
     {
-        string id = Caller.id;
+        string id = Clients.Caller.id;
 
         ChatUser user = _repository.VerifyUserId(id);
 
         return new UserViewModel(user).ScreenName ;
     }
-
     public Task Disconnect()
     {
         DisconnectClient(Context.ConnectionId);
 
         return null;
     }
-
     public object GetCommands()
     {
         return new[] {
@@ -361,10 +346,8 @@ namespace Shell.MVC2
                 new { Name = "topic", Description = "Type /topic [topic] to set the room topic. Type /topic to clear the room's topic." },
                 new { Name = "chatreq", Description = "Type /chatreq @nickname (message) to send a private chatrequest to nickname. @ is optional." }
             };
-    }
-
-   
-     private void OnRoomChanged(ChatRoom room)
+    }   
+    private void OnRoomChanged(ChatRoom room)
      {
          var roomViewModel = new RoomViewModel
          {
@@ -378,7 +361,7 @@ namespace Shell.MVC2
          // Update the room count
          Clients.updateRoomCount(roomViewModel,_repository.GetOnlineUsersInRoom(room).Count () ) ;// room.Users.Online().Count());
      }             
-     private ClientState GetClientState()
+    private ClientState GetClientState()
      {
          // New client state
          var jabbrState = GetCookieValue("jabbr.state");
@@ -395,13 +378,13 @@ namespace Shell.MVC2
          }
 
          // Read the id from the caller if there's no cookie
-         clientState.UserId = clientState.UserId ?? Caller.guid;
+         clientState.UserId = clientState.UserId ?? Clients.Caller.guid;
 
-        // string id = Caller.id;
+        // string id = Clients.Caller.id;
 
          return clientState;
      }
-     private string GetCookieValue(string key)
+    private string GetCookieValue(string key)
      {
          var request = HttpContext.Current.Request;
 
@@ -413,10 +396,9 @@ namespace Shell.MVC2
 
          return null;
      }
-
-     public IEnumerable<RoomViewModel> GetRooms()
+    public IEnumerable<RoomViewModel> GetRooms()
      {
-         string id = Caller.id;
+         string id = Clients.Caller.id;
          ChatUser user = _repository.VerifyUserId(id);
 
          var rooms = _repository.GetAllowedRooms(user).Select(r => new RoomViewModel
@@ -431,7 +413,7 @@ namespace Shell.MVC2
 
          return rooms;
      }
-     public IEnumerable<MessageViewModel> GetPreviousMessages(string messageId)
+    public IEnumerable<MessageViewModel> GetPreviousMessages(string messageId)
      {
          var previousMessages = (from m in _repository.GetPreviousMessages(messageId)
                                  orderby m.When descending
@@ -442,7 +424,7 @@ namespace Shell.MVC2
                                 .Reverse()
                                 .Select(m => new MessageViewModel(m));
      }
-     public RoomViewModel GetRoomInfo(string roomName)
+    public RoomViewModel GetRoomInfo(string roomName)
      {
          if (String.IsNullOrEmpty(roomName))
          {
@@ -479,19 +461,19 @@ namespace Shell.MVC2
              ChatRequestAccepted= room.ChatRequestAccepted.GetValueOrDefault()
          };
      }
-     private string ConvertUrlsAndRoomLinks(string message)
+    private string ConvertUrlsAndRoomLinks(string message)
      {
          TextTransform textTransform = new TextTransform(_repository);
          message = textTransform.ConvertHashtagsToRoomLinks(message);
          HashSet<string> urls;
          return TextTransform.TransformAndExtractUrls(message, out urls);
      }
-     private void OnUpdateActivity(ChatUser user, ChatRoom room)
+    private void OnUpdateActivity(ChatUser user, ChatRoom room)
      {
          var userViewModel = new UserViewModel(user);
          Clients[room.Name].updateActivity(userViewModel, room.Name);
      }
-     private void LeaveRoom(ChatUser user, ChatRoom room)
+    private void LeaveRoom(ChatUser user, ChatRoom room)
      {
          var userViewModel = new UserViewModel(user);
          Clients[room.Name].leave(userViewModel, room.Name).Wait();
@@ -507,20 +489,16 @@ namespace Shell.MVC2
 
          OnRoomChanged(room);
      }
-
-
      // TODO: Deprecate
-     public void Typing()
+    public void Typing()
      {
-         string roomName = Caller.activeRoom;
+         string roomName = Clients.Caller.activeRoom;
 
          Typing(roomName);
      }
-
-
-     public void Typing(string roomName)
+    public void Typing(string roomName)
      {
-         string id = Caller.id;
+         string id = Clients.Caller.id;
          ChatUser user = _repository.GetUserById(id);
 
          if (user == null)
@@ -534,12 +512,12 @@ namespace Shell.MVC2
          var userViewModel = new UserViewModel(user);
          Clients[room.Name].setTyping(userViewModel, room.Name);
      }
-     private void LogOn(ChatUser user, string clientId)
+    private void LogOn(ChatUser user, string clientId)
      {
          // Update the client state
-         Caller.id = user.Id;
-         Caller.name = user.Name;
-         Caller.hash = user.Hash;
+         Clients.Caller.id = user.Id;
+         Clients.Caller.name = user.Name;
+         Clients.Caller.hash = user.Hash;
 
          //test code : get all the avialble rooms
          
@@ -572,21 +550,21 @@ namespace Shell.MVC2
          }
 
          // Initialize the chat with the rooms the user is in
-         Caller.logOn(rooms);
+         Clients.Caller.logOn(rooms);
      }
-     private void UpdateActivity(ChatUser user, ChatRoom room)
+    private void UpdateActivity(ChatUser user, ChatRoom room)
      {
          UpdateActivity(user);
 
          OnUpdateActivity(user, room);
      }
-     private void UpdateActivity(ChatUser user)
+    private void UpdateActivity(ChatUser user)
      {
          _service.UpdateActivity(user, Context.ConnectionId, UserAgent);
 
          _repository.CommitChanges();
      }
-     //private void ProcessUrls(IEnumerable<string> links, ChatRoom room, ChatMessage chatMessage)
+    //private void ProcessUrls(IEnumerable<string> links, ChatRoom room, ChatMessage chatMessage)
      //{
      //    // Use this id when talking to the client to update the message content
      //    string id = chatMessage.Id;
@@ -624,18 +602,17 @@ namespace Shell.MVC2
      //    });
      //}
 
-      //  TO DO add commands down the line
-   
-     private bool TryHandleCommand(string command, string room)
+      //  TO DO add commands down the line   
+    private bool TryHandleCommand(string command, string room)
      {
          string clientId = Context.ConnectionId;
-         string userId = Caller.id;
+         string userId = Clients.Caller.id;
 
          var commandManager = new CommandManager(clientId, UserAgent, userId, room, _service, _repository, this);
          return commandManager.TryHandleCommand(command);
          //return false;
      }
-     private void DisconnectClient(string clientId)
+    private void DisconnectClient(string clientId)
      {
          ChatUser user = _service.DisconnectClient(clientId);
 
@@ -669,11 +646,11 @@ namespace Shell.MVC2
      }
      void IChatNotificationService.ChangePassword()
      {
-         Caller.changePassword();
+         Clients.Caller.changePassword();
      }
      void IChatNotificationService.SetPassword()
      {
-         Caller.setPassword();
+         Clients.Caller.setPassword();
      }
      void IChatNotificationService.KickUser(ChatUser targetUser, ChatRoom room)
      {
@@ -693,12 +670,12 @@ namespace Shell.MVC2
      void IChatNotificationService.OnUserCreated(ChatUser user)
      {
          // Set some client state
-         Caller.name = user.Name;
-         Caller.id = user.Id;
-         Caller.hash = user.Hash;
+         Clients.Caller.name = user.Name;
+         Clients.Caller.id = user.Id;
+         Clients.Caller.hash = user.Hash;
 
          // Tell the client a user was created
-         Caller.userCreated();
+         Clients.Caller.userCreated();
      }
 
      /// <summary>
@@ -756,7 +733,7 @@ namespace Shell.MVC2
          }
 
          // Tell the calling client the granting permission into the room was successful
-         Caller.userAllowed(targetUser.Name, targetRoom.Name);
+         Clients.Caller.userAllowed(targetUser.Name, targetRoom.Name);
      }
      void IChatNotificationService.UnallowUser(ChatUser targetUser, ChatRoom targetRoom)
      {
@@ -770,7 +747,7 @@ namespace Shell.MVC2
          }
 
          // Tell the calling client the granting permission into the room was successful
-         Caller.userUnallowed(targetUser.Name, targetRoom.Name);
+         Clients.Caller.userUnallowed(targetUser.Name, targetRoom.Name);
      }
      void IChatNotificationService.AddOwner(ChatUser targetUser, ChatRoom targetRoom)
      {
@@ -790,7 +767,7 @@ namespace Shell.MVC2
          }
 
          // Tell the calling client the granting of ownership was successful
-         Caller.ownerMade(targetUser.Name, targetRoom.Name);
+         Clients.Caller.ownerMade(targetUser.Name, targetRoom.Name);
      }
      void IChatNotificationService.RemoveOwner(ChatUser targetUser, ChatRoom targetRoom)
      {
@@ -810,11 +787,11 @@ namespace Shell.MVC2
          }
 
          // Tell the calling client the removal of ownership was successful
-         Caller.ownerRemoved(targetUser.Name, targetRoom.Name);
+         Clients.Caller.ownerRemoved(targetUser.Name, targetRoom.Name);
      }
      void IChatNotificationService.ChangeGravatar(ChatUser user)
      {
-         Caller.hash = user.Hash;
+         Clients.Caller.hash = user.Hash;
 
          // Update the calling client
          foreach (var client in user.ConnectedClients)
@@ -976,27 +953,27 @@ namespace Shell.MVC2
 
      void IChatNotificationService.ListRooms(ChatUser user)
      {
-         string userId = Caller.id;
+         string userId = Clients.Caller.id;
          var userModel = new UserViewModel(user);
 
-         Caller.showUsersRoomList(userModel, user.Rooms.Where(z=>z.AllowedUsers.Contains(user)).Select(r=>r.Name)); //Allowed(userId).Select(r => r.Name));
+         Clients.Caller.showUsersRoomList(userModel, user.Rooms.Where(z=>z.AllowedUsers.Contains(user)).Select(r=>r.Name)); //Allowed(userId).Select(r => r.Name));
 
-          // Caller.showUsersRoomList(userModel,_repository.GetOnlineAllowedUsersInRoom(user.rooms).Where(u=>user.Id == userId).Select(r=>r.Name);
+          // Clients.Caller.showUsersRoomList(userModel,_repository.GetOnlineAllowedUsersInRoom(user.rooms).Where(u=>user.Id == userId).Select(r=>r.Name);
      }
 
      void IChatNotificationService.ListUsers()
      {
          var users = _repository.GetOnlineUsers().Select(s => s.Name).OrderBy(s => s);
          //_repository.Users.Online().Select(s => s.Name).OrderBy(s => s);
-         Caller.listUsers(users);
+         Clients.Caller.listUsers(users);
      }
      void IChatNotificationService.ListUsers(IEnumerable<ChatUser> users)
      {
-         Caller.listUsers(users.Select(s => s.Name));
+         Clients.Caller.listUsers(users.Select(s => s.Name));
      }
      void IChatNotificationService.ListUsers(ChatRoom room, IEnumerable<string> names)
      {
-         Caller.showUsersInRoom(room.Name, names);
+         Clients.Caller.showUsersInRoom(room.Name, names);
      }
      void IChatNotificationService.LockRoom(ChatUser targetUser, ChatRoom room)
      {
@@ -1006,7 +983,7 @@ namespace Shell.MVC2
          Clients.lockRoom(userViewModel, room.Name);
 
          // Tell the caller the room was successfully locked
-         Caller.roomLocked(room.Name);
+         Clients.Caller.roomLocked(room.Name);
 
          // Notify people of the change
          OnRoomChanged(room);
@@ -1019,7 +996,7 @@ namespace Shell.MVC2
      //    Clients.convertToChatRequestRoom(userViewModel, room.Name);
 
      //    // Tell the caller the room was successfully locked
-     //    Caller.chatRequestRoomCreated(room.Name);
+     //    Clients.Caller.chatRequestRoomCreated(room.Name);
 
      //    // Notify people of the change
      //    OnRoomChanged(room);
@@ -1044,7 +1021,7 @@ namespace Shell.MVC2
          //Clients.convertToChatRequestRoom(userViewModel, room.Name);
 
          // Tell the caller the room was successfully locked
-         // Caller.chatRequestRoomCreated(room.Name);
+         // Clients.Caller.chatRequestRoomCreated(room.Name);
 
          // Notify people of the change
          //  OnRoomChanged(room);
@@ -1068,7 +1045,7 @@ namespace Shell.MVC2
          }
 
          // Tell the caller the room was successfully closed.
-         Caller.roomClosed(room.Name);
+         Clients.Caller.roomClosed(room.Name);
      }
      void IChatNotificationService.LogOut(ChatUser user, string clientId)
      {
@@ -1076,14 +1053,14 @@ namespace Shell.MVC2
 
          var rooms = user.Rooms.Select(r => r.Name);
 
-         Caller.logOut(rooms);
+         Clients.Caller.logOut(rooms);
      }
      void IChatNotificationService.ShowUserInfo(ChatUser user)
      {
-         string userId = Caller.id;
+         string userId = Clients.Caller.id;
         // _repository.GetAllowedRooms(user)
          
-         Caller.showUserInfo(new 
+         Clients.Caller.showUserInfo(new 
          {
              Name = user.Name,
              OwnedRooms = user.OwnedRooms.Where(r=>!r.Closed).Select(r=>r.Name) ,
@@ -1102,11 +1079,11 @@ namespace Shell.MVC2
      }
      void IChatNotificationService.ShowHelp()
      {
-         Caller.showCommands();
+         Clients.Caller.showCommands();
      }
      void IChatNotificationService.ShowRooms()
      {
-         Caller.showRooms(GetRooms());
+         Clients.Caller.showRooms(GetRooms());
      }
      void IChatNotificationService.NugeUser(ChatUser user, ChatUser targetUser)
      {

@@ -23,24 +23,18 @@ using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 using Microsoft.AspNet.SignalR.Hosting ;
 using Shell.MVC2.Services.Contracts;
-using Owin;
-
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
-	public class ChatModule : NinjectModule
+	public class ChatModuleModule : NinjectModule
 	{
         const string SignalRBaseAddress = "http://localhost:8081/";
-      
+        static Owin.IAppBuilder _SignalRServer;
 
 		public override void Load()
 		{
 
-            Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));           
-            Kernel.Bind<IChatRepository>().ToConstructor(
-             ctorArg => new ChatRepository(ctorArg.Inject<ChatContext>(), ctorArg.Inject<AnewluvContext>()));
-            Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>()));
-            //services
-            Kernel.Bind<IChatService>().ToSelf().InSingletonScope();
+          
+           
          
             //bind the SignalR stuff as well
 
@@ -50,7 +44,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 
             //now all the services are regiseters reslove the kernal and access it
             var resolver = new SignalR.Ninject.NinjectDependencyResolver(Kernel);
-            
+
             //TO DO figure out how to start this 
             // Start the sweeper
          //   var repositoryFactory = new Func<IChatRepository>(() => Kernel.Resolve(IChatRepository));

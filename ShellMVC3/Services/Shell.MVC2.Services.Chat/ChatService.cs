@@ -10,6 +10,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels ;
 using Shell.MVC2.Interfaces;
 using System.ServiceModel.Activation;
 using System.Text.RegularExpressions;
+using Microsoft.AspNet.SignalR;
 
 namespace Shell.MVC2.Services.Chat
 {
@@ -18,6 +19,8 @@ namespace Shell.MVC2.Services.Chat
     public class ChatService : IChatService
     {
         private readonly IChatRepository _repository;
+        //added for functions require comunication with the hub
+       // private readonly Hub _chathub; 
 
         // private readonly ICryptoService _crypto;
         //private readonly AccountMembershipService _membership;
@@ -30,6 +33,7 @@ namespace Shell.MVC2.Services.Chat
         {
             _repository = repository;
             _membersrepository = membersrepository;
+           // _chathub = chathub;  //just  to see if this resloves
             // _crypto = crypto;
         }
 
@@ -83,6 +87,8 @@ namespace Shell.MVC2.Services.Chat
 
             _repository.Add(user);
             _repository.CommitChanges();
+
+
 
             return user;
         }
