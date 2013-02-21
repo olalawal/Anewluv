@@ -5,16 +5,15 @@ using System.Web;
 
 
 
-using SignalR;
 
 
 
 
-using SignalR;
-using SignalR.Infrastructure;
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 
 namespace Shell.MVC2.Infastructure.Chat
 {
@@ -89,7 +88,7 @@ namespace Shell.MVC2.Infastructure.Chat
 
             foreach (var roomGroup in roomGroups)
             {
-                clients[roomGroup.Room.Name].markInactive(roomGroup.Users).Wait();
+                clients.All(roomGroup.Room.Name).markInactive(roomGroup.Users).Wait();
             }
         }
        public static void Sweep(Func<IChatRepository> repositoryFactory, IDependencyResolver resolver)

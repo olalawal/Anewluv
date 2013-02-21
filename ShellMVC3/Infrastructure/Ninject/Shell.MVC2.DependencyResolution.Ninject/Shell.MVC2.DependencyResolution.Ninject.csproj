@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\NinjectSignalRDependencyResolver.cs" />
     <Compile Include="Modules\ContextModules\AnewluvContextModule.cs" />
     <Compile Include="Modules\ContextModules\ApiKeyContextModule.cs" />
     <Compile Include="Modules\ContextModules\ChatContextModule.cs" />
@@ -123,6 +124,10 @@
       <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
       <Name>Shell.MVC2.Services.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Services\Shell.MVC2.Services.Chat\Shell.MVC2.Services.Chat.csproj">
+      <Project>{6AF3685D-3C0F-4CC8-B0EE-1960462C6DE9}</Project>
+      <Name>Shell.MVC2.Services.Chat</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Entities\Shell.MVC.Infrastructure.Entities\Shell.MVC2.Infrastructure.Entities.csproj">
       <Project>{92B7DBBB-2313-4C2E-88AB-970751B229F1}</Project>
       <Name>Shell.MVC2.Infrastructure.Entities</Name>
@@ -136,6 +141,7 @@
       <Name>Shell.MVC2.Data</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

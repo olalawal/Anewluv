@@ -365,10 +365,7 @@ namespace Shell.MVC2.Data
         /// <returns></returns>
         public  ChatRoom VerifyAndOpenRoomIfExists(string roomName, bool OpenIfClosed = true)
         {
-
-
-
-            if (String.IsNullOrWhiteSpace(roomName))
+             if (String.IsNullOrWhiteSpace(roomName))
             {
                 throw new InvalidOperationException("Room name cannot be blank!");
             }
@@ -441,41 +438,7 @@ namespace Shell.MVC2.Data
 
             return user;
         }
-        /// <summary>
-        /// updated 3-22-2012 check the room back wards and forwars i.e handle issues such as Kelly_Dar and Dar_kelly , make sure nethier exists.
-        /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="roomName"></param>
-        /// <param name="OpenIfClosed"></param>
-        /// <returns></returns>
-        public ChatRoom VerifyAndOpenRoomIfExists(string roomName, bool OpenIfClosed = true)
-        {
-
-
-
-            if (String.IsNullOrWhiteSpace(roomName))
-            {
-                throw new InvalidOperationException("Room name cannot be blank!");
-            }
-
-            //best wau uf ut works
-            var room = GetRoomIfCreatedBefore(roomName);
-
-
-            if (room == null)
-            {
-                return null;
-            }
-
-            if (room.Closed && OpenIfClosed)
-            {
-                room.Closed = false;
-                return room;
-            }
-
-            return room;
-        }
-   
+    
         public ChatUser VerifyUser(string userName)
         {
             userName = this.NormalizeUserName(userName);

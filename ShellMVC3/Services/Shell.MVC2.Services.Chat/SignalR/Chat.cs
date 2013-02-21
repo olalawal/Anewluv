@@ -9,7 +9,7 @@ using System.Web;
 
 using Shell.MVC2.Services.Chat;
 
-using Shell.MVC2.Domain.Entities.Anewluv.Chat;
+
 
 using System.Diagnostics;
 using System.Globalization;
@@ -20,6 +20,8 @@ using Newtonsoft.Json;
 using Shell.MVC2.Infastructure.Chat;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels;
 using Shell.MVC2.Services.Contracts;
+using Shell.MVC2.Domain.Entities.Anewluv.Chat;
+
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR;
 using Shell.MVC2.Services.Chat.SignalR;
@@ -195,7 +197,7 @@ namespace Shell.MVC2.Services.Chat
                 var isOwner = user.OwnedRooms.Contains(room);
 
                 // Tell the people in this room that you've joined
-                 Clients[room.Name].addUser(userViewModel, room.Name, isOwner).Wait();
+                 Clients.Group(room.Name).addUser(userViewModel, room.Name, isOwner).Wait();
 
                 // Update the room count
                 OnRoomChanged(room);
@@ -259,7 +261,7 @@ namespace Shell.MVC2.Services.Chat
 
 
         var messageViewModel = new MessageViewModel(chatMessage);
-        Clients[room.Name].addMessage(messageViewModel, room.Name);
+        Clients.Group(room.Name).addMessage(messageViewModel, room.Name);
 
         _repository.CommitChanges();
 
@@ -359,7 +361,7 @@ namespace Shell.MVC2.Services.Chat
          };
 
          // Update the room count
-         Clients.updateRoomCount(roomViewModel,_repository.GetOnlineUsersInRoom(room).Count () ) ;// room.Users.Online().Count());
+         Clients.All.updateRoomCount(roomViewModel,_repository.GetOnlineUsersInRoom(room).Count () ) ;// room.Users.Online().Count());
      }             
     private ClientState GetClientState()
      {
@@ -471,14 +473,14 @@ namespace Shell.MVC2.Services.Chat
     private void OnUpdateActivity(ChatUser user, ChatRoom room)
      {
          var userViewModel = new UserViewModel(user);
-         Clients[room.Name].updateActivity(userViewModel, room.Name);
+         Clients.Group(room.Name).updateActivity(userViewModel, room.Name);
      }
     private void LeaveRoom(ChatUser user, ChatRoom room)
      {
          var userViewModel = new UserViewModel(user);
-         Clients[room.Name].leave(userViewModel, room.Name).Wait();
+         Clients.Group(room.Name).leave(userViewModel, room.Name).Wait();
 
-         //var test = Clients[room.Name];
+         //var test = Clients.Group(room.Name);
          
 
          foreach (var client in user.ConnectedClients)
@@ -510,7 +512,7 @@ namespace Shell.MVC2.Services.Chat
 
          UpdateActivity(user, room);
          var userViewModel = new UserViewModel(user);
-         Clients[room.Name].setTyping(userViewModel, room.Name);
+         Clients.Group(room.Name).setTyping(userViewModel, room.Name);
      }
     private void LogOn(ChatUser user, string clientId)
      {
@@ -530,7 +532,7 @@ namespace Shell.MVC2.Services.Chat
              var isOwner = user.OwnedRooms.Contains(room);
 
              // Tell the people in this room that you've joined
-             Clients[room.Name].addUser(userViewModel, room.Name, isOwner).Wait();
+             Clients.Group(room.Name).addUser(userViewModel, room.Name, isOwner).Wait();
 
              // Update the room count
              OnRoomChanged(room);
@@ -594,7 +596,7 @@ namespace Shell.MVC2.Services.Chat
      //            chatMessage.Content += extractedContent;
 
      //            // Notify the room
-     //            Clients[room.Name].addMessageContent(id, extractedContent, room.Name);
+     //            Clients.Group(room.Name).addMessageContent(id, extractedContent, room.Name);
 
      //            // Commit the changes
      //            _repository.CommitChanges();
@@ -629,7 +631,7 @@ namespace Shell.MVC2.Services.Chat
              {
                  var userViewModel = new UserViewModel(user);
 
-                 Clients[room.Name].leave(userViewModel, room.Name).Wait();
+                 Clients.Group(room.Name).leave(userViewModel, room.Name).Wait();
 
                  OnRoomChanged(room);
              }
@@ -657,7 +659,7 @@ namespace Shell.MVC2.Services.Chat
          foreach (var client in targetUser.ConnectedClients)
          {
              // Kick the user from this room
-             Clients[client.Id].kick(room.Name);
+             Clients.Client(client.Id).kick(room.Name);
 
              // Remove the user from this the room group so he doesn't get the leave message
             Groups.Remove (client.Id, room.Name).Wait();
@@ -707,13 +709,13 @@ namespace Shell.MVC2.Services.Chat
          // Tell all clients to join this room
          foreach (var client in user.ConnectedClients)
          {
-             Clients[client.Id].joinRoom(roomViewModel);
+             Clients.Client(client.Id).joinRoom(roomViewModel);
          }
 
 
 
          // Tell the people in this room that you've joined
-         Clients[room.Name].addUser(userViewModel, room.Name, isOwner).Wait();
+         Clients.Group(room.Name).addUser(userViewModel, room.Name, isOwner).Wait();
 
          // Notify users of the room count change
          OnRoomChanged(room);
@@ -729,7 +731,7 @@ namespace Shell.MVC2.Services.Chat
          foreach (var client in targetUser.ConnectedClients)
          {
              // Tell this client it's an owner
-             Clients[client.Id].allowUser(targetRoom.Name);
+             Clients.Client(client.Id).allowUser(targetRoom.Name);
          }
 
          // Tell the calling client the granting permission into the room was successful
@@ -743,7 +745,7 @@ namespace Shell.MVC2.Services.Chat
          foreach (var client in targetUser.ConnectedClients)
          {
              // Tell this client it's an owner
-             Clients[client.Id].unallowUser(targetRoom.Name);
+             Clients.Client(client.Id).unallowUser(targetRoom.Name);
          }
 
          // Tell the calling client the granting permission into the room was successful
@@ -754,7 +756,7 @@ namespace Shell.MVC2.Services.Chat
          foreach (var client in targetUser.ConnectedClients)
          {
              // Tell this client it's an owner
-             Clients[client.Id].makeOwner(targetRoom.Name);
+             Clients.Client(client.Id).makeOwner(targetRoom.Name);
          }
 
          var userViewModel = new UserViewModel(targetUser);
@@ -763,7 +765,7 @@ namespace Shell.MVC2.Services.Chat
          // Tell everyone in the target room that a new owner was added
          if (ChatService.IsUserInRoom(targetRoom, targetUser))
          {
-             Clients[targetRoom.Name].addOwner(userViewModel, targetRoom.Name);
+             Clients.Group(targetRoom.Name).addOwner(userViewModel, targetRoom.Name);
          }
 
          // Tell the calling client the granting of ownership was successful
@@ -774,7 +776,7 @@ namespace Shell.MVC2.Services.Chat
          foreach (var client in targetUser.ConnectedClients)
          {
              // Tell this client it's no longer an owner
-             Clients[client.Id].demoteOwner(targetRoom.Name);
+             Clients.Client(client.Id).demoteOwner(targetRoom.Name);
          }
 
          var userViewModel = new UserViewModel(targetUser);
@@ -783,7 +785,7 @@ namespace Shell.MVC2.Services.Chat
          // Tell everyone in the target room that the owner was removed
          if (ChatService.IsUserInRoom(targetRoom, targetUser))
          {
-             Clients[targetRoom.Name].removeOwner(userViewModel, targetRoom.Name);
+             Clients.Group(targetRoom.Name).removeOwner(userViewModel, targetRoom.Name);
          }
 
          // Tell the calling client the removal of ownership was successful
@@ -796,7 +798,7 @@ namespace Shell.MVC2.Services.Chat
          // Update the calling client
          foreach (var client in user.ConnectedClients)
          {
-             Clients[client.Id].gravatarChanged();
+             Clients.Client(client.Id).gravatarChanged();
          }
 
          // Create the view model
@@ -805,24 +807,24 @@ namespace Shell.MVC2.Services.Chat
          // Tell all users in rooms to change the gravatar
          foreach (var room in user.Rooms)
          {
-             Clients[room.Name].changeGravatar(userViewModel, room.Name);
+             Clients.Group(room.Name).changeGravatar(userViewModel, room.Name);
          }
      }
      void IChatNotificationService.OnSelfMessage(ChatRoom room, ChatUser user, string content)
      {
-         Clients[room.Name].sendMeMessage(user.Name, content, room.Name);
+         Clients.Group(room.Name).sendMeMessage(user.Name, content, room.Name);
      }
      void IChatNotificationService.SendPrivateMessage(ChatUser fromUser, ChatUser toUser, string messageText)
      {
          // Send a message to the sender and the sendee
          foreach (var client in fromUser.ConnectedClients)
          {
-             Clients[client.Id].sendPrivateMessage(fromUser.Name, toUser.Name, messageText);
+             Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText);
          }
 
          foreach (var client in toUser.ConnectedClients)
          {
-             Clients[client.Id].sendPrivateMessage(fromUser.Name, toUser.Name, messageText);
+             Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText);
          }
      }
 
@@ -852,14 +854,14 @@ namespace Shell.MVC2.Services.Chat
          // Send a nudge message to the sender and the sendee
          foreach (var client in fromUser.ConnectedClients)
          {
-             Clients[client.Id].sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
+             Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
 
-            // Clients[client.Id].sentChatRequestNotification(toUser.Name, messageText, room);
+            // Clients.Client(client.Id).sentChatRequestNotification(toUser.Name, messageText, room);
          }
 
          foreach (var client in toUser.ConnectedClients)
          {
-             Clients[client.Id].sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
+             Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
          }
 
      }
@@ -891,14 +893,14 @@ namespace Shell.MVC2.Services.Chat
          // Send a nudge message to the sender and the sendee
          foreach (var client in fromUser.ConnectedClients)
          {
-             Clients[client.Id].sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
+             Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
 
-             // Clients[client.Id].sentChatRequestNotification(toUser.Name, messageText, room);
+             // Clients.Client(client.Id).sentChatRequestNotification(toUser.Name, messageText, room);
          }
 
          foreach (var client in toUser.ConnectedClients)
          {
-             Clients[client.Id].sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
+             Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
          }
 
      }
@@ -931,14 +933,14 @@ namespace Shell.MVC2.Services.Chat
          // Send a nudge message to the sender and the sendee
          foreach (var client in fromUser.ConnectedClients)
          {
-             Clients[client.Id].sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
+             Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
 
-             // Clients[client.Id].sentChatRequestNotification(toUser.Name, messageText, room);
+             // Clients.Client(client.Id).sentChatRequestNotification(toUser.Name, messageText, room);
          }
 
          foreach (var client in toUser.ConnectedClients)
          {
-             Clients[client.Id].sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
+             Clients.Client(client.Id).sendPrivateMessage(fromUser.Name, toUser.Name, messageText, roomViewModel);
          }
 
      }
@@ -947,7 +949,7 @@ namespace Shell.MVC2.Services.Chat
      {
          foreach (var client in user.ConnectedClients)
          {
-             Clients[client.Id].postNotification(message, room.Name);
+             Clients.Client(client.Id).postNotification(message, room.Name);
          }
      }
 
@@ -980,7 +982,7 @@ namespace Shell.MVC2.Services.Chat
          var userViewModel = new UserViewModel(targetUser);
 
          // Tell the room it's locked
-         Clients.lockRoom(userViewModel, room.Name);
+         Clients.All.lockRoom(userViewModel, room.Name);
 
          // Tell the caller the room was successfully locked
          Clients.Caller.roomLocked(room.Name);
@@ -1008,13 +1010,13 @@ namespace Shell.MVC2.Services.Chat
 
          foreach (var client in targetUser.ConnectedClients)
          {
-             Clients[client.Id].postNotification(message, "");
+             Clients.Client(client.Id).postNotification(message, "");
          }
 
 
          //  foreach (var client in targetUser.ConnectedClients)
          // {
-         //   Clients[client.Id].sendDialognotification(targetUser.Name, message);
+         //   Clients.Client(client.Id).sendDialognotification(targetUser.Name, message);
          // }
 
          // Tell the room it's locked
@@ -1035,7 +1037,7 @@ namespace Shell.MVC2.Services.Chat
              foreach (var client in user.ConnectedClients)
              {
                  // Kick the user from this room
-                 Clients[client.Id].kick(room.Name);
+                 Clients.Client(client.Id).kick(room.Name);
 
                  // Remove the user from this the room group so he doesn't get the leave message
                  Groups.Remove(client.Id, room.Name).Wait();
@@ -1090,17 +1092,17 @@ namespace Shell.MVC2.Services.Chat
          // Send a nudge message to the sender and the sendee
          foreach (var client in targetUser.ConnectedClients)
          {
-             Clients[client.Id].nudge(user.Name, targetUser.Name);
+             Clients.Client(client.Id).nudge(user.Name, targetUser.Name);
          }
 
          foreach (var client in user.ConnectedClients)
          {
-             Clients[client.Id].sendPrivateMessage(user.Name, targetUser.Name, "nudged " + targetUser.Name);
+             Clients.Client(client.Id).sendPrivateMessage(user.Name, targetUser.Name, "nudged " + targetUser.Name);
          }
      }
      void IChatNotificationService.NudgeRoom(ChatRoom room, ChatUser user)
      {
-         Clients[room.Name].nudge(user.Name);
+         Clients.Group(room.Name).nudge(user.Name);
      }
      void IChatNotificationService.LeaveRoom(ChatUser user, ChatRoom room)
      {
@@ -1114,13 +1116,13 @@ namespace Shell.MVC2.Services.Chat
          // Tell the user's connected clients that the name changed
          foreach (var client in user.ConnectedClients)
          {
-             Clients[client.Id].userNameChanged(userViewModel);
+             Clients.Client(client.Id).userNameChanged(userViewModel);
          }
 
          // Notify all users in the rooms
          foreach (var room in user.Rooms)
          {
-             Clients[room.Name].changeUserName(oldUserName, userViewModel, room.Name);
+             Clients.Group(room.Name).changeUserName(oldUserName, userViewModel, room.Name);
          }
      }
      void IChatNotificationService.ChangeNote(ChatUser user)
@@ -1130,7 +1132,7 @@ namespace Shell.MVC2.Services.Chat
          // Update the calling client
          foreach (var client in user.ConnectedClients)
          {
-             Clients[client.Id].noteChanged(user.IsAfk, isNoteCleared);
+             Clients.Client(client.Id).noteChanged(user.IsAfk, isNoteCleared);
          }
 
          // Create the view model
@@ -1139,7 +1141,7 @@ namespace Shell.MVC2.Services.Chat
          // Tell all users in rooms to change the note
          foreach (var room in user.Rooms)
          {
-             Clients[room.Name].changeNote(userViewModel, room.Name);
+             Clients.Group(room.Name).changeNote(userViewModel, room.Name);
          }
      }
      void IChatNotificationService.ChangeFlag(ChatUser user)
@@ -1152,13 +1154,13 @@ namespace Shell.MVC2.Services.Chat
          // Update the calling client
          foreach (var client in user.ConnectedClients)
          {
-             Clients[client.Id].flagChanged(isFlagCleared, userViewModel.Country);
+             Clients.Client(client.Id).flagChanged(isFlagCleared, userViewModel.Country);
          }
 
          // Tell all users in rooms to change the flag
          foreach (var room in user.Rooms)
          {
-             Clients[room.Name].changeFlag(userViewModel, room.Name);
+             Clients.Group(room.Name).changeFlag(userViewModel, room.Name);
          }
      }
      void IChatNotificationService.ChangeTopic(ChatUser user, ChatRoom room)
@@ -1169,7 +1171,7 @@ namespace Shell.MVC2.Services.Chat
          var parsedTopic = room.Topic;
          foreach (var client in user.ConnectedClients)
          {
-             Clients[client.Id].topicChanged(isTopicCleared, parsedTopic);
+             Clients.Client(client.Id).topicChanged(isTopicCleared, parsedTopic);
          }
          // Create the view model
          var roomViewModel = new RoomViewModel
@@ -1177,7 +1179,7 @@ namespace Shell.MVC2.Services.Chat
              Name = room.Name,
              Topic = parsedTopic
          };
-         Clients[room.Name].changeTopic(roomViewModel);
+         Clients.Group(room.Name).changeTopic(roomViewModel);
      }
      #endregion
 
