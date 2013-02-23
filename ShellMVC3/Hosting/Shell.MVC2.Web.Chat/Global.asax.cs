@@ -27,7 +27,7 @@ namespace Shell.MVC2.Web.Chat
         protected void Application_Start(object sender, EventArgs e)
         {                       
 
-            GlobalHost.ConnectionManager.GetHubContext<Shell.MVC2.Services.Chat.Chat>();
+           // GlobalHost.ConnectionManager.GetHubContext<Shell.MVC2.Services.Chat.Chat>();
         }
 
         public void Configuration()
