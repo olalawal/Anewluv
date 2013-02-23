@@ -12,6 +12,9 @@ using Shell.MVC2.Web.Common.ServiceHostFactories;
 using Shell.MVC2.DependencyResolution.Ninject.Infrastructure;
 using Ninject;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using Ninject;
+using NinjectModules = Shell.MVC2.DependencyResolution.Ninject.Modules;
+using System.Web.Routing;
 
 namespace Shell.MVC2.Web.Chat
 {
@@ -27,7 +30,9 @@ namespace Shell.MVC2.Web.Chat
         protected void Application_Start(object sender, EventArgs e)
         {                       
 
-           // GlobalHost.ConnectionManager.GetHubContext<Shell.MVC2.Services.Chat.Chat>();
+         //  GlobalHost.ConnectionManager.GetHubContext<Shell.MVC2.Services.Chat.Chat>();
+            RouteTable.Routes.MapHubs(); 
+
         }
 
         public void Configuration()
@@ -41,13 +46,13 @@ namespace Shell.MVC2.Web.Chat
             //}
 
             // var kernel = new StandardKernel(new[] { new FactoryModule() });
-            var kernel = new StandardKernel();
+            //var kernel = new StandardKernel();
 
            
             // We're doing this manually since we want the chat repository to be shared
             // between the chat service and the chat hub itself
             
-            SetupSignalR(kernel);
+           // SetupSignalR(kernel);
             //SetupWebApi(kernel, app);
             //SetupMiddleware(app);
            // SetupNancy(kernel, app);

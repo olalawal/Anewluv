@@ -45,30 +45,36 @@
     <Reference Include="CommonInstanceFactory.Extensions.Wcf.Ninject">
       <HintPath>..\..\Shell.MVC2\packages\CommonInstanceFactory.Extensions.Wcf.Ninject.1.0.0.0\lib\net40\CommonInstanceFactory.Extensions.Wcf.Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Core">
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\Shell.MVC2\packages\Microsoft.AspNet.SignalR.Core.1.0.0\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Owin">
+    <Reference Include="Microsoft.AspNet.SignalR.Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\Shell.MVC2\packages\Microsoft.AspNet.SignalR.Owin.1.0.0\lib\net40\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\Shell.MVC2\packages\Microsoft.AspNet.SignalR.SystemWeb.1.0.0\lib\net40\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\Shell.MVC2\packages\Microsoft.Owin.Host.SystemWeb.1.0.0\lib\net40\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\Shell.MVC2\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\Shell.MVC2\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\Shell.MVC2\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Owin">
+    <Reference Include="Ninject.Web">
+      <HintPath>..\..\Shell.MVC2\packages\Ninject.Web.3.0.0.5\lib\net40-full\Ninject.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common">
+      <HintPath>..\..\Shell.MVC2\packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\Shell.MVC2\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel.Activation" />
@@ -89,6 +95,9 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivator">
+      <HintPath>..\..\Shell.MVC2\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ChatService.svc" />
@@ -111,9 +120,12 @@
     <Content Include="WebForm1.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\NinjectWeb.cs" />
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\Chat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceHostFactories\NinjectServiceHostFactory.cs" />
     <Compile Include="WebForm1.aspx.cs">
@@ -135,6 +147,10 @@
       <Project>{0145184E-916D-4DB2-BB19-E069DF0F1F36}</Project>
       <Name>Shell.MVC2.DependencyResolution.Ninject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Services\Contracts\Shell.MVC2.Services.Contracts\Shell.MVC2.Services.Contracts.csproj">
+      <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
+      <Name>Shell.MVC2.Services.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\Shell.MVC2.Services.Chat\Shell.MVC2.Services.Chat.csproj">
       <Project>{6AF3685D-3C0F-4CC8-B0EE-1960462C6DE9}</Project>
       <Name>Shell.MVC2.Services.Chat</Name>
@@ -146,12 +162,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>64252</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost/Shell.MVC2.Web.Chat</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

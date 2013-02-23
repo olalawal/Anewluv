@@ -6,80 +6,43 @@
 <head id="Head1" runat="server">
     <title></title>
   
-        <script src="Scripts/jquery-1.6.4.js" ></script>
-          <script src="Scripts/json2.js"></script>
-        <script src="Scripts/jquery.signalR-1.0.0.js"></script>
+   <script src="http://code.jquery.com/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="Scripts/json2.js" type="text/javascript" ></script>
+<script src="Scripts/jquery.signalR-1.0.0.min.js" type="text/javascript"></script>
+<!--  If this is an MVC project then use the following -->
+<!--  <script src="~/signalr/hubs" type="text/javascript"></script> -->
+<script src="/signalr/hubs" type="text/javascript"></script> 
 </head>
 <body>
 
-    <button id="internal">Internal</button>
-    <button id="external">External</button>
+<script type="text/javascript">
+    $(function () {
+        // Proxy created on the fly          
+        var chat = $.connection.chat;
 
-    <script type="text/javascript">
-        $(function () {
+        // Declare a function on the chat hub so the server can invoke it          
+        chat.client.addMessage = function (message) {
+            $('#messages').append('<li>' + message + '</li>');
+        };
 
-            var cn = $.hubConnection();
-
-           // var internal = cn.createProxy('chatHub');
-            var chat = $.hubConnection.chatHub
-
-
-            internal.on('Join', function (msg) {
-                alert(msg);
-            });
-
-            chat.join()
-                .fail(function (e) {
-                    ui.addMessage(e, 'error');
-                })
-                .done(function (success) {
-                    if (success === false) {
-                        //ui.showLogin();
-                        //ui.addMessage('Type /login to show the login screen', 'notification');
-                    }
-                    //if we  are logged in fine send chat user name to UI
-                    else {
-                        //get the userName and make it avialable to UI
-                        chat.getUserName()
-                    .done(function (username) {
-                        //ui.setUserName(username);
-                    });
-                    }
-                    //show the chat info on screen on how to use chat 
-
-
-
-                    // get list of available commands
-                    //                    chat.getCommands()
-                    //                        .done(function (commands) {
-                    //                            ui.setCommands(commands);
-                    //                        });
-                });
-
-
-            internal.on('onSomeInternalMethod', function (msg) {
-                alert(msg);
-            });
-
-            $('#internal').click(function () {
-                internal.invoke('someInternalMethod');
-            });
-
-            var external = cn.createProxy('externalHub');
-
-            external.on('onSomeExternalMethod', function (msg) {
-                alert(msg);
-            });
-
-            $('#external').click(function () {
-                external.invoke('someExternalMethod');
-            });
-
-            cn.start(function () {
-                alert('started');
+        // Start the connection
+        $.connection.hub.start().done(function () {
+            $("#broadcast").click(function () {
+                // Call the chat method on the server
+                chat.server.send($('#msg').val());
             });
         });
-    </script>
+    });
+</script>
+  
+  <div>
+    <input type="text" id="msg" />
+<input type="button" id="broadcast" value="broadcast" />
+
+<ul id="messages">
+</ul>
+  </div>
+
 
 </body>
 </html>
