@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ServiceModel;
-using CommonInstanceFactory.Extensions.Wcf;
-using CommonInstanceFactory.Extensions.Wcf.Ninject;
+//using CommonInstanceFactory.Extensions.Wcf;
+//using CommonInstanceFactory.Extensions.Wcf.Ninject;
 using Ninject;
 using NinjectModules = Shell.MVC2.DependencyResolution.Ninject.Modules;
 

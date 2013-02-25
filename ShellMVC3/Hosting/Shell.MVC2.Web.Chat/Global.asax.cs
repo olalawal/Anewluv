@@ -8,11 +8,10 @@ using System.Threading.Tasks ;
 using System.Threading;
 using Microsoft.AspNet.SignalR;
 using Shell.MVC2.Services.Chat;
-using Shell.MVC2.Web.Common.ServiceHostFactories;
+//using Shell.MVC2.Web.Common.ServiceHostFactories;
 using Shell.MVC2.DependencyResolution.Ninject.Infrastructure;
 using Ninject;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using Ninject;
 using NinjectModules = Shell.MVC2.DependencyResolution.Ninject.Modules;
 using System.Web.Routing;
 
@@ -31,7 +30,9 @@ namespace Shell.MVC2.Web.Chat
         {                       
 
          //  GlobalHost.ConnectionManager.GetHubContext<Shell.MVC2.Services.Chat.Chat>();
-            RouteTable.Routes.MapHubs(); 
+            RouteTable.Routes.MapHubs();
+            
+            GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
 
         }
 

@@ -32,16 +32,16 @@ namespace Shell.MVC2.Services.Chat
     //, IControllerFactory 
 
     [HubName("chatHub")]
-    public class Chat : Hub,   IChatNotificationService
+    public class ChatHub : Hub,   IChatNotificationService
 {
 
     private readonly IChatRepository  _repository;
     private readonly IChatService _service;
   //  private readonly IResourceProcessor _resourceProcessor;
     //private readonly IApplicationSettings _settings;
-    private static readonly Version _version = typeof(Chat).Assembly.GetName().Version;
+    private static readonly Version _version = typeof(ChatHub).Assembly.GetName().Version;
 
-    public Chat(IChatService service, IChatRepository  repository)
+    public ChatHub(IChatService service, IChatRepository  repository)
     {
         _service = service;
         _repository = repository;
@@ -67,6 +67,14 @@ namespace Shell.MVC2.Services.Chat
             return String.IsNullOrEmpty(version) ||
                     new Version(version) != _version;
         }
+    }
+
+    public void Sendtest()
+    {
+        // Call the broadcastMessage method to update clients. 
+        Clients.All.broadcastMessage("","");
+
+
     }
 
     #region "Custom non jabra methods"
@@ -165,7 +173,7 @@ namespace Shell.MVC2.Services.Chat
     private void SetVersion()
     {
         // Set the version on the client
-        Clients.Caller.version = typeof(Chat).Assembly.GetName().Version.ToString();
+        Clients.Caller.version = typeof(ChatHub).Assembly.GetName().Version.ToString();
     }
     public bool CheckStatus()
     {

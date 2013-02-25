@@ -66,7 +66,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 
             //Other binding option
             //TO DO move chat hub to separate assembly so we do not have to import the chaervice into this
-            Kernel.Bind<Chat>().ToConstructor(ctorArg => new Chat(ctorArg.Inject<IChatService>(),ctorArg.Inject<IChatRepository >())).InSingletonScope();
+            Kernel.Bind<ChatHub>().ToConstructor(ctorArg => new ChatHub(ctorArg.Inject<IChatService>(),ctorArg.Inject<IChatRepository >())).InSingletonScope();
 
             //TO DO move chat hub to separate assembly so we do not have to import the chaervice into this
             // We're doing this manually since we want the chat repository to be shared

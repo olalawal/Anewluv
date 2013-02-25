@@ -11,6 +11,14 @@ namespace Shell.MVC2.Web.Chat
         {
             // Call the broadcastMessage method to update clients. 
             Clients.All.broadcastMessage(name, message);
+
+
+        }
+
+
+        public void SomeInternalMethod()
+        {
+            Clients.Caller.onSomeInternalMethod("internal test");
         }
     }
 }
