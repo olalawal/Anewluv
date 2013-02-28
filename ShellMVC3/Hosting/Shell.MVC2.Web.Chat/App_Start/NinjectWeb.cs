@@ -13,7 +13,7 @@ namespace Shell.MVC2.Web.Chat.App_Start
         /// </summary>
         public static void Start() 
         {
-           // DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
+            DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
         }
     }
 }

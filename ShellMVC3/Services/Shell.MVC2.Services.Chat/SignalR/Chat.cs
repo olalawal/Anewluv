@@ -47,6 +47,20 @@ namespace Shell.MVC2.Services.Chat
         _repository = repository;
     }
 
+    public void SomeInternalMethod()
+    {
+        Clients.Caller.onSomeInternalMethod("internal test");
+
+    }
+
+    public void Sendtest()
+    {
+        // Call the broadcastMessage method to update clients. 
+        Clients.All.broadcastMessage("", "");
+
+
+    }
+
         //public vars
     private string UserAgent
     {
@@ -69,13 +83,9 @@ namespace Shell.MVC2.Services.Chat
         }
     }
 
-    public void Sendtest()
-    {
-        // Call the broadcastMessage method to update clients. 
-        Clients.All.broadcastMessage("","");
+ 
 
 
-    }
 
     #region "Custom non jabra methods"
     //public Task Startup()

@@ -1,11 +1,8 @@
-
-
-using Ninject;
 using NinjectModules = Shell.MVC2.DependencyResolution.Ninject.Modules;
+
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(Shell.MVC2.Web.Chat.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Shell.MVC2.Web.Chat.App_Start.NinjectWebCommon), "Stop")]
-
 
 namespace Shell.MVC2.Web.Chat.App_Start
 {
@@ -17,7 +14,7 @@ namespace Shell.MVC2.Web.Chat.App_Start
     using Ninject;
     using Ninject.Web.Common;
     using Shell.MVC2.DependencyResolution.Ninject.Infrastructure;
-    using Microsoft.AspNet.SignalR;
+    using Shell.MVC2.SignalR.Hubs;
 
     public static class NinjectWebCommon 
     {
@@ -50,12 +47,11 @@ namespace Shell.MVC2.Web.Chat.App_Start
             var kernel = new StandardKernel();
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
-            kernel.Load<NinjectModules.ApiKeyContextModule>();
-            kernel.Load<NinjectModules.AnewLuvContextModule>();
-            kernel.Load<NinjectModules.ChatContextModule>();
-            kernel.Load<NinjectModules.ChatModule>();
-          
+
+
+            var resolver = new NinjectSignalRDependencyResolver(kernel);
+            Microsoft.AspNet.SignalR.GlobalHost.DependencyResolver = resolver;
+
             RegisterServices(kernel);
             return kernel;
         }
@@ -66,13 +62,12 @@ namespace Shell.MVC2.Web.Chat.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-           // Microsoft.AspNet.SignalR.set(new SignalR.Ninject.NinjectDependencyResolver(kernel));
-            //var resolver = new NinjectSignalRDependencyResolver(kernel);
-            // SignalR Injection
-            GlobalHost.DependencyResolver = new NinjectSignalRDependencyResolver(kernel);
 
-
-            
+            kernel.Bind<IDateTimeDependencyResolver>().To<DateTimeDependencyResolver>();
+            kernel.Load<NinjectModules.ApiKeyContextModule>();
+            kernel.Load<NinjectModules.AnewLuvContextModule>();
+            kernel.Load<NinjectModules.ChatContextModule>();
+            kernel.Load<NinjectModules.ChatModule>();
         }        
     }
 }

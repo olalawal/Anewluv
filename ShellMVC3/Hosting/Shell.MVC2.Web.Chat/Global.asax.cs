@@ -4,111 +4,60 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
-using System.Threading.Tasks ;
-using System.Threading;
-using Microsoft.AspNet.SignalR;
-using Shell.MVC2.Services.Chat;
+
+
 //using Shell.MVC2.Web.Common.ServiceHostFactories;
 using Shell.MVC2.DependencyResolution.Ninject.Infrastructure;
-using Ninject;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using NinjectModules = Shell.MVC2.DependencyResolution.Ninject.Modules;
 using System.Web.Routing;
+using Shell.MVC2.SignalR.Hubs;
+
+
 
 namespace Shell.MVC2.Web.Chat
 {
-   
     public class Global : System.Web.HttpApplication
     {
 
-        // Background task info , timer if fo chat sweeping nad cleaning
-        private static Timer _timer;
-        private static readonly TimeSpan _sweepInterval = TimeSpan.FromMinutes(15);
+        void Application_Start(object sender, EventArgs e)
+        {
+            // Code that runs on application startup
 
-
-        protected void Application_Start(object sender, EventArgs e)
-        {                       
-
-         //  GlobalHost.ConnectionManager.GetHubContext<Shell.MVC2.Services.Chat.Chat>();
+            //  GlobalHost.ConnectionManager.GetHubContext<Shell.MVC2.Services.Chat.Chat>();
             RouteTable.Routes.MapHubs();
-            
+
             GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
-
+            GlobalHost.ConnectionManager.GetHubContext<ExternalHub>();
         }
 
-        public void Configuration()
+        void Application_End(object sender, EventArgs e)
         {
-            //var settings = new ApplicationSettings();
+            //  Code that runs on application shutdown
 
-            //if (settings.MigrateDatabase)
-            //{
-            //    // Perform the required migrations
-            //    DoMigrations();
-            //}
-
-            // var kernel = new StandardKernel(new[] { new FactoryModule() });
-            //var kernel = new StandardKernel();
-
-           
-            // We're doing this manually since we want the chat repository to be shared
-            // between the chat service and the chat hub itself
-            
-           // SetupSignalR(kernel);
-            //SetupWebApi(kernel, app);
-            //SetupMiddleware(app);
-           // SetupNancy(kernel, app);
-
-           // SetupErrorHandling();
         }
 
-        private static void SetupSignalR(IKernel kernel)
+        void Application_Error(object sender, EventArgs e)
         {
-            //var resolver = new NinjectSignalRDependencyResolver(kernel);
-            //var connectionManager = resolver.Resolve<IConnectionManager>();
+            // Code that runs when an unhandled error occurs
 
-            //kernel.Bind<IConnectionManager>()
-            //      .ToConstant(connectionManager);
-
-            //var config = new HubConfiguration
-            //{
-            //    Resolver = resolver,
-            //    EnableDetailedErrors = true
-            //};
-
-            //app.MapHubs(config);
-
-            //Statr back gorund work stuff
-            //StartBackgroundWork(kernel, resolver);
         }
 
-        protected void Session_Start(object sender, EventArgs e)
+        void Session_Start(object sender, EventArgs e)
         {
+            // Code that runs when a new session is started
 
         }
 
-        protected void Application_BeginRequest(object sender, EventArgs e)
+        void Session_End(object sender, EventArgs e)
         {
+            // Code that runs when a session ends. 
+            // Note: The Session_End event is raised only when the sessionstate mode
+            // is set to InProc in the Web.config file. If session mode is set to StateServer 
+            // or SQLServer, the event is not raised.
 
         }
 
-        protected void Application_AuthenticateRequest(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Application_Error(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Session_End(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Application_End(object sender, EventArgs e)
-        {
-
-        }
     }
 }

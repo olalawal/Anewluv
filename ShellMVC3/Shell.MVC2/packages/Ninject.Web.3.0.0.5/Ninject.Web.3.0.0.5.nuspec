@@ -3,6 +3,7 @@
   <metadata>
     <id>Ninject.Web</id>
     <version>3.0.0.5</version>
+    <title>Ninject.Web</title>
     <authors>Ninject Project Contributors</authors>
     <owners>Ninject Project Contributors</owners>
     <licenseUrl>https://github.com/ninject/ninject.extensions.logging/raw/master/LICENSE.txt</licenseUrl>
@@ -10,6 +11,9 @@
     <iconUrl>https://github.com/ninject/ninject/raw/master/logos/Ninject-Logo32.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>ASP.NET application bootstrapper for Ninject</description>
+    <releaseNotes />
+    <copyright />
+    <language />
     <tags>Ninject ioc di logging</tags>
     <dependencies>
       <dependency id="Ninject" version="[3.0.0.0, 3.1.0.0)" />

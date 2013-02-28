@@ -10,7 +10,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels ;
 using Shell.MVC2.Interfaces;
 using System.ServiceModel.Activation;
 using System.Text.RegularExpressions;
-using Microsoft.AspNet.SignalR;
+
 
 namespace Shell.MVC2.Services.Chat
 {
@@ -48,7 +48,6 @@ namespace Shell.MVC2.Services.Chat
         {
             return _repository.GetOnlineUsers().OrderBy(s => s.Name).ToList();
         }
-
 
         public ChatUser AddUser(string userName, string ScreenName, string email)
         {
@@ -192,9 +191,6 @@ namespace Shell.MVC2.Services.Chat
             EnsureSaltedPassword(user, newPassword);
         }
 
-
-
-
         public ChatRoom AddRoom(ChatUser user, string name)
         {
             if (name.Equals("Lobby", StringComparison.OrdinalIgnoreCase))
@@ -281,9 +277,6 @@ namespace Shell.MVC2.Services.Chat
                 user.IsAfk = false;
             }
         }
-
-
-
 
         public void LeaveRoom(ChatUser user, ChatRoom room)
         {
@@ -442,7 +435,7 @@ namespace Shell.MVC2.Services.Chat
         }
 
         //updated this to also remove empty spaces
-        internal static string NormalizeUserName(string userName)
+       public string NormalizeUserName(string userName)
         {
 
             return userName.StartsWith("@") ? userName.Substring(1) : userName;
@@ -458,12 +451,12 @@ namespace Shell.MVC2.Services.Chat
             throw new InvalidOperationException(String.Format("Username {0} already taken, please pick a new one using '/nick nickname'.", userName));
         }
 
-        internal static void ThrowPasswordIsRequired()
+        public void ThrowPasswordIsRequired()
         {
             throw new InvalidOperationException("A password is required.");
         }
 
-        internal static bool IsUserInRoom(ChatRoom room, ChatUser user)
+        public bool IsUserInRoom(ChatRoom room, ChatUser user)
         {
             return room.Users.Any(r => r.Name.Equals(user.Name, StringComparison.OrdinalIgnoreCase));
         }
@@ -688,7 +681,7 @@ namespace Shell.MVC2.Services.Chat
             _repository.CommitChanges();
         }
 
-        internal static void ValidateNote(string note, string noteTypeName = "note", int? maxLength = null)
+        public void ValidateNote(string note, string noteTypeName = "note", int? maxLength = null)
         {
             var lengthToValidateFor = (maxLength ?? NoteMaximumLength);
             if (!String.IsNullOrWhiteSpace(note) &&
@@ -700,12 +693,12 @@ namespace Shell.MVC2.Services.Chat
             }
         }
 
-        internal static void ValidateTopic(string topic)
+        public void ValidateTopic(string topic)
         {
             ValidateNote(topic, noteTypeName: "topic", maxLength: TopicMaximumLength);
         }
 
-        internal static void ValidateIsoCode(string isoCode)
+        public void ValidateIsoCode(string isoCode)
         {
             string country = GetCountry(isoCode);
             if (String.IsNullOrWhiteSpace(country))

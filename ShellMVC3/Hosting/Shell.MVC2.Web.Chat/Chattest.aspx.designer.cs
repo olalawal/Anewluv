@@ -10,6 +10,6 @@
 namespace Shell.MVC2.Web.Chat {
     
     
-    public partial class Chattest {
+    public partial class ChatTest {
     }
 }

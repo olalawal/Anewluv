@@ -51,5 +51,13 @@ namespace Shell.MVC2.Services.Contracts
         void CloseRoom(ChatUser user, ChatRoom targetRoom);
         void OpenRoom(ChatUser user, ChatRoom targetRoom);
         void ChangeTopic(ChatUser user, ChatRoom room, string newTopic);
-    }
+
+        bool IsUserInRoom(ChatRoom room, ChatUser user);
+        void ValidateIsoCode(string isoCode);
+        void ThrowPasswordIsRequired();
+        void ValidateNote(string note, string noteTypeName = "note", int? maxLength = null);
+    string NormalizeUserName(string userName);
+    void ValidateTopic(string topic);
+
+        }
 }

@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Factory="Shell.MVC2.Web.ChatService.ServiceHostFactories.NinjectServiceHostFactory" Service="Shell.MVC2.Services.Chat.ChatService"  %>

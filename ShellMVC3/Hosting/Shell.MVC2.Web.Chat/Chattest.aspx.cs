@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace Shell.MVC2.Web.Chat
 {
-    public partial class Chattest : System.Web.UI.Page
+    public partial class ChatTest : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

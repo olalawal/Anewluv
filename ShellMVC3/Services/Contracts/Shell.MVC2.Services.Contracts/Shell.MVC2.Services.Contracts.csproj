@@ -58,7 +58,6 @@
   <ItemGroup>
     <Compile Include="IChatService.cs" />
     <Compile Include="IMemberEditService.cs" />
-    <Compile Include="IChatNotificationService.cs" />
     <Compile Include="ISearchEditService.cs" />
     <Compile Include="ErrorHandling\ServiceFualt.cs">
       <SubType>Code</SubType>
