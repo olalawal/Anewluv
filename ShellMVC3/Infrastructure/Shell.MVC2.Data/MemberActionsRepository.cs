@@ -446,7 +446,7 @@ namespace Shell.MVC2.Data
                               where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                               select new MemberSearchViewModel
                               {
-                                  creationdate = p.creationdate,
+                                  creationdate = p.creationdate,                                  
                                   id = p.id,
                                   age = f.age,
                                   birthdate = f.birthdate,
@@ -466,9 +466,11 @@ namespace Shell.MVC2.Data
 
 
 
-                              }).OrderByDescending(f => f.lastlogindate.Value ).ThenByDescending(f => f.interestdate ).ToList();
+                              }).OrderByDescending(f => f.creationdate.Value ).ThenByDescending(f => f.lastlogindate.Value  ).ToList();
 
              return interests; //new PaginatedList<MemberSearchViewModel>().GetPageableList(interests, Page ?? 1, NumberPerPage.GetValueOrDefault())
+
+//.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
 
          }
          catch (Exception ex)

@@ -18,8 +18,9 @@ namespace Shell.MVC2.Web.MembersActionsService.ServiceHostFactories
             IKernel container = new StandardKernel();
             container.Load<NinjectModules.ApiKeyContextModule>();
             container.Load<NinjectModules.AnewLuvContextModule>();
+            container.Load<NinjectModules.MembershipModule>(); //loading membership module first since they both share IMEMberepo
             container.Load<NinjectModules.MemberActionsModule>();
-            container.Load<NinjectModules.MembershipModule>();
+            
             return container;
         }
 
