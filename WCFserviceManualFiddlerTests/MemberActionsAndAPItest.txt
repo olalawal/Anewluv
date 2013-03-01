@@ -1,0 +1,14 @@
+Tests of MemberActions
+
+(using dasvisk:drive333)
+
+heade sample
+
+User-Agent: Fiddler
+Content-Type: text/json
+Host: localhost
+Authorization: ZGF2aXNrOmRyaXZlMzMz
+
+
+http://localhost/Shell.MVC2.Web.MemberActionsService/MemberActionsService.svc/Rest/getwhoiaminterestedin/2/1/4 
+

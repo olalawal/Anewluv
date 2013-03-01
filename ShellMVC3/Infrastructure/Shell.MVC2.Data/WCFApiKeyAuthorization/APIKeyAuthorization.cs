@@ -14,6 +14,51 @@ using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
 using Shell.MVC2.Data.AuthenticationAndMembership;
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Domain.Entities.Anewluv;
+using Dating.Server.Data.Models;
+using Shell.MVC2.Infastructure;
+
+
+//code sample of header and how to get it from this code
+
+//IT SHOULD APPEAR AS BELOW IN HEADER:
+
+//POST /MyURL/ HTTP/1.1 
+//Host hostname 
+//Content-Length 396 
+//Origin chrome-extension://cokgbflfommojglbmbpenpphppikmonn 
+//UserID 12345 
+//Password 98765abc 
+//User-Agent Mozilla/5.0 
+//AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11 
+//Content-Type application/json 
+//Accept / 
+//Accept-Encoding gzip,deflate,sdch 
+//Accept-Language en-US,en;q=0. 
+
+//code below shows how to add headers to request
+//        using (ChannelFactory<IMyServiceChannel> factory = 
+//   new ChannelFactory<IMyServiceChannel>(new NetTcpBinding()))
+//  {
+//   using (IMyServiceChannel proxy = factory.CreateChannel(...))
+//   {
+//      using ( OperationContextScope scope = new OperationContextScope(proxy) )
+//      {
+//         Guid apiKey = Guid.NewGuid();
+//         MessageHeader<Guid> mhg = new MessageHeader<Guid>(apiKey);
+//         MessageHeader untyped = mhg.GetUntypedHeader("apiKey", "ns");
+//         OperationContext.Current.OutgoingMessageHeaders.Add(untyped);
+
+//         proxy.DoOperation(...);
+//      }
+//   }                    
+//}
+
+//Retriving the header value
+//     Guid apiKey =
+//OperationContext.Current.IncomingMessageHeaders.GetHeader<Guid>("apiKey", "ns");
+
+
+
 
 namespace Shell.MVC2.Data
 {
@@ -36,6 +81,12 @@ namespace Shell.MVC2.Data
         {
              ApiKeyContext context = new ApiKeyContext();
             _apikeyrepository = new APIkeyRepository(context);
+         //   PostalData2Entities postalcontext = new PostalData2Entities();
+        //   _georepository = new GeoRepository(postalcontext);
+              AnewluvContext  datingcontext = new AnewluvContext();
+              _datingcontext = datingcontext;
+              _memberepository = new MemberRepository(datingcontext);
+             _photorepository = new PhotoRepository(datingcontext, _memberepository);
 
             _membmbershipprovider = new AnewLuvMembershipProvider(_datingcontext, _georepository, _memberepository, _photorepository);
 
@@ -72,7 +123,7 @@ namespace Shell.MVC2.Data
               {
                   string key = GetAPIKey(operationContext);
 
-              
+                  validrequest = true;
                   //TO DO re-implect api key
                   //if (_apikeyrepository.IsValidAPIKey(key))
                   //{
@@ -90,11 +141,21 @@ namespace Shell.MVC2.Data
                   validrequest = true;
               }
            
-             //get username and password
-
-
-
-              return validrequest;
+             //get username and password from request stuff if API key was valid
+            if (validrequest == true)
+            {
+                var authinfo = GetUserNamePassword(operationContext);
+                if (authinfo != null)
+                {
+                    return _membmbershipprovider.ValidateUser(authinfo[0], authinfo[1]);
+                }
+                else
+                {
+                    CreateUserNamePasswordErrorReply(operationContext);
+                }
+            }
+              
+             return validrequest;
         }
 
         public string GetAPIKey(OperationContext operationContext)
@@ -112,7 +173,32 @@ namespace Shell.MVC2.Data
             return queryParams[APIKEY];
         }
 
-        private static void CreateErrorReply(OperationContext operationContext, string key)
+        public string[] GetUserNamePassword(OperationContext operationContext )
+        {
+
+            try
+            {
+                var message = operationContext.RequestContext.RequestMessage;
+                var request = (HttpRequestMessageProperty)message.Properties[HttpRequestMessageProperty.Name];
+                string authorization = request.Headers[HttpRequestHeader.Authorization];
+                if (authorization  != "" ) 
+                return Encryption.DecodeBasicAuthenticationString(authorization);
+                return  null;
+
+               // string username = operationContext.IncomingMessageHeaders.GetHeader<string>("username","");
+              //  string password = operationContext.IncomingMessageHeaders.GetHeader <string>("password", string.Empty);
+               // return _membmbershipprovider.ValidateUser(username, password);
+            }
+            catch (Exception ex)
+            {
+                //return false;
+                throw ex;
+
+            }
+   
+        }
+
+        private static void CreateApiKeyErrorReply(OperationContext operationContext, string key)
         {
             // The error message is padded so that IE shows the response by default
             using (var sr = new StringReader("<?xml version=\"1.0\" encoding=\"utf-8\"?>" + APIErrorHTML))
@@ -121,6 +207,24 @@ namespace Shell.MVC2.Data
                 using (Message reply = Message.CreateMessage(MessageVersion.None, null, response))
                 {
                     HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.Unauthorized, StatusDescription = String.Format("'{0}' is an invalid API key", key) };
+                    responseProp.Headers[HttpResponseHeader.ContentType] = "text/html";
+                    reply.Properties[HttpResponseMessageProperty.Name] = responseProp;
+                    operationContext.RequestContext.Reply(reply);
+                    // set the request context to null to terminate processing of this request
+                    operationContext.RequestContext = null;
+                }
+            }
+        }
+
+        private static void CreateUserNamePasswordErrorReply(OperationContext operationContext)
+        {
+            // The error message is padded so that IE shows the response by default
+            using (var sr = new StringReader("<?xml version=\"1.0\" encoding=\"utf-8\"?>" + UserNamePasswordErrorHTML ))
+            {
+                XElement response = XElement.Load(sr);
+                using (Message reply = Message.CreateMessage(MessageVersion.None, null, response))
+                {
+                    HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.Unauthorized, StatusDescription = String.Format("Username and password is invlaid") };
                     responseProp.Headers[HttpResponseHeader.ContentType] = "text/html";
                     reply.Properties[HttpResponseMessageProperty.Name] = responseProp;
                     operationContext.RequestContext.Reply(reply);
@@ -153,6 +257,32 @@ namespace Shell.MVC2.Data
 </body>
 </html>
 ";
+
+        const string UserNameAndPassword = "UserNamePassword";
+        const string UserNamePasswordErrorHTML = @"
+<html>
+<head>
+    <title>Request Error - No username and password in request header</title>
+    <style type=""text/css"">
+        body
+        {
+            font-family: Verdana;
+            font-size: large;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        Request Error
+    </h1>
+    <p>
+        The request you made requires further authorization ! please include the username and password of the requestor 
+        requests to this service.
+    </p>
+</body>
+</html>
+";
+
     }
 
    

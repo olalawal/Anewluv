@@ -13,8 +13,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
     public class ChatRoom
     {
         [Key]
-        public int Key { get; set; }
-
+        public string Id { get; set; }
         public DateTime? LastNudged { get; set; }
         public string Name { get; set; }
         public bool Closed { get; set; }

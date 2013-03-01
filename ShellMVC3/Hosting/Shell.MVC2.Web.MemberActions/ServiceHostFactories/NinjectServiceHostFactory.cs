@@ -19,6 +19,7 @@ namespace Shell.MVC2.Web.MembersActionsService.ServiceHostFactories
             container.Load<NinjectModules.ApiKeyContextModule>();
             container.Load<NinjectModules.AnewLuvContextModule>();
             container.Load<NinjectModules.MemberActionsModule>();
+            container.Load<NinjectModules.MembershipModule>();
             return container;
         }
 

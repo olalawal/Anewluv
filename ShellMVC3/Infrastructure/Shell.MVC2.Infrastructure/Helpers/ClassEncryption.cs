@@ -380,7 +380,41 @@ public class Encryption
 
 	}
 
+    public static string EncodeBasicAuthenticationCredentials(string username, string password)
+    {
+        //first concatenate the user name and password, separated with :
+        string credentials = username + ":" + password;
 
+        //Http uses ascii character encoding, WP7 doesn’t include
+        // support for ascii encoding but it is easy enough to convert
+        // since the first 128 characters of unicode are equivalent to ascii.
+        // Any characters over 128 can’t be expressed in ascii so are replaced
+        // by ?
+       // var asciiCredentials = (from c in credentials
+         //                       select c <= 0x7f ? (byte)c : (byte)'?').ToArray();
+
+        //finally Base64 encode the result
+        return Convert.ToBase64String(Encoding.ASCII.GetBytes(credentials));
+    
+    }
+
+    public static string[] DecodeBasicAuthenticationString(string authheader)
+    {
+        //first concatenate the user name and password, separated with :
+      var basicData = System.Text.ASCIIEncoding.ASCII.GetString(System.Convert.FromBase64String(authheader));
+
+        //Http uses ascii character encoding, WP7 doesn’t include
+        // support for ascii encoding but it is easy enough to convert
+        // since the first 128 characters of unicode are equivalent to ascii.
+        // Any characters over 128 can’t be expressed in ascii so are replaced
+        // by ?
+        // var asciiCredentials = (from c in credentials
+        //                       select c <= 0x7f ? (byte)c : (byte)'?').ToArray();
+
+        //finally Base64 encode the result
+      return basicData.Split(':');
+
+    }
 
 }
 

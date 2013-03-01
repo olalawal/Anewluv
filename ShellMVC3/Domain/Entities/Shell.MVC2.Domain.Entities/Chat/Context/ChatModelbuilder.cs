@@ -38,13 +38,16 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
             ////////////////////////
             //do the many to one relationships first
             modelBuilder.Entity<ChatUser>().HasMany(t => t.ConnectedClients)
-           .WithRequired(p => p.User).HasForeignKey(p => p.User_id ).WillCascadeOnDelete(false);
+           .WithRequired(z => z.User).HasForeignKey(p => p.User_id ).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<ChatUser>().HasMany(t => t.SentMessages)
+       //     modelBuilder.Entity<profilemetadata>().HasMany(p => p.favoritesadded)
+      // .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ChatUser>().HasMany(t => t.ChatMessages )
            .WithRequired(p => p.User).HasForeignKey(p => p.User_id).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<ChatUser>().HasMany(t => t.RecivedMessages)
-           .WithRequired(p => p.User).HasForeignKey(p => p.User_id).WillCascadeOnDelete(false);
+          //  modelBuilder.Entity<ChatUser>().HasMany(t => t.RecivedMessages)
+          // .WithRequired(p => p.User).HasForeignKey(p => p.User_id).WillCascadeOnDelete(false);
 
             //chat user many to many
             //room owned to users

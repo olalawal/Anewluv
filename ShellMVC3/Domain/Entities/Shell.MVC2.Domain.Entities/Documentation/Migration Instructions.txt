@@ -3,8 +3,9 @@
  PM> Enable-Migrations  
 
  PM>  Update-Database -StartUpProjectName "Shell.MVC2.DOmain.Entities" -ConfigurationTypeName "ConfigurationAnewluv" -verbose -force
+ PM>  Update-Database -StartUpProjectName "Shell.MVC2.DOmain.Entities" -ConfigurationTypeName "ConfigurationChat" -verbose -force
 
-
+ 
 
 Automatic migration was not applied because it would result in data loss.
 

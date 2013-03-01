@@ -13,9 +13,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
     [DataContract]
         public class ChatUser
         {
-            [Key]
-            public int Key { get; set; }
-            public string Id { get; set; }
+            [Key]           
+            public string Id { get; set; }          
             public string Name { get; set; }
             //added gender for the hell of it altought we are nop populating it right now
             public string Gender { get; set; }
@@ -39,8 +38,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
             public bool? HasMobileAccess { get; set; }
             // List of clients that are currently connected for this user
             public virtual ICollection<ChatClient> ConnectedClients { get; set; }
-            public virtual ICollection<ChatMessage> SentMessages { get; set; }
-            public virtual ICollection<ChatMessage> RecivedMessages { get; set; }
+            public virtual ICollection<ChatMessage> ChatMessages { get; set; }
+            //public virtual ICollection<ChatMessage> RecivedMessages { get; set; }
             public virtual ICollection<ChatRoom> OwnedRooms { get; set; }
             public virtual ICollection<ChatRoom> Rooms { get; set; }
 

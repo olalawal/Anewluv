@@ -150,7 +150,7 @@ namespace Shell.MVC2.Data
                return _chatcontext.ChatRooms
                    .Where(r =>
                           (!r.Private  && !r.Closed ) ||
-                          (r.Private && !r.Closed && r.AllowedUsers.Any(u => u.Key == user.Key)));
+                          (r.Private && !r.Closed && r.AllowedUsers.Any(u => u.Id == user.Id )));
            }
 
            public IQueryable<ChatMessage> GetMessagesByRoom(string roomName)
@@ -287,7 +287,7 @@ namespace Shell.MVC2.Data
                return _chatcontext .Entry(user)
                          .Collection(r => r.Rooms)
                          .Query()
-                         .Where(r => r.Key == room.Key)
+                         .Where(r => r.Id == room.Id)
                          .Select(r => r.Name)
                          .FirstOrDefault() != null;
            }

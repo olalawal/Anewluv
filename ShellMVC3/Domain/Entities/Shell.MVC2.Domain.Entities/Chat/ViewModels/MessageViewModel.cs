@@ -10,7 +10,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels
     {
         public MessageViewModel(ChatMessage message)
         {
-            Id = message.Id;
+            Id = message.Id ;
             Content = message.Content;
             User = new UserViewModel(message.User);
             When = message.When;
