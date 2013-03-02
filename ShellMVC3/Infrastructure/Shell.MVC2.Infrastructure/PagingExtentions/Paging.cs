@@ -34,6 +34,17 @@ namespace Shell.MVC2.Infrastructure
                 PageIndex = page
             };
         }
+
+        public List<T> GetCurrentPages(List<T> source, int page, int pageSize)
+        {
+            if (source == null) return null;
+            var Count = source.Count();
+
+            return source.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                
+            
+        }
+
         static int GetPageCount(int pageSize, int count)
         {
             try

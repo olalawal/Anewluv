@@ -43,7 +43,7 @@ namespace Shell.MVC2.Data
 
         
         // constructor
-       public MemberSearchViewModel mapmembersearchviewmodel(int? viewerprofileid, MemberSearchViewModel modeltomap,bool allphotos)
+        public MemberSearchViewModel mapmembersearchviewmodel(int? viewerprofileid, MemberSearchViewModel modeltomap,bool allphotos)
        {
            try
            {
@@ -125,6 +125,29 @@ namespace Shell.MVC2.Data
            }
            return null;
        }
+        public List<MemberSearchViewModel> mapmembersearchviewmodels(int? viewerprofileid, List<MemberSearchViewModel> modelstomap,bool allphotos)
+        {
+            try
+            {
+                profiledata viewerprofile = new profiledata();
+                if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid(viewerprofileid.GetValueOrDefault());
+
+                List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+                foreach (var item in modelstomap)
+                {
+                    models.Add(mapmembersearchviewmodel(viewerprofileid,item,allphotos));                    
+
+                }
+                return models;
+            }
+            catch (Exception ex)
+            {
+                //log error
+
+            }
+
+            return null;
+        }
         public MemberSearchViewModel getmembersearchviewmodel(int? viewerprofileid,int profileId)
         {
             try

@@ -13,6 +13,17 @@ namespace Shell.MVC2.Services.Contracts
     [ServiceContract]
     public interface IMembersMapperService
     {
+        
+
+        
+
+               [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+               [WebInvoke(UriTemplate = "/mapmembersearchviewmodel/{viewerprofileid}/{allphotos}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        MemberSearchViewModel mapmembersearchviewmodel(string viewerprofileid, MemberSearchViewModel modeltomap, string allphotos);
+
+              [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+              [WebInvoke(UriTemplate = "/mapmembersearchviewmodels/{viewerprofileid}/{allphotos}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+               List<MemberSearchViewModel> mapmembersearchviewmodels(string viewerprofileid, List<MemberSearchViewModel> modelstomap, string allphotos);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebGet(UriTemplate = "/getmembersearchviewmodel/{viewerprofileid}/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]

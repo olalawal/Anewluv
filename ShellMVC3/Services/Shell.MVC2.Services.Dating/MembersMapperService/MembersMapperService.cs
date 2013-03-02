@@ -34,6 +34,18 @@ namespace Shell.MVC2.Services.Dating
 
 
         // constructor
+
+        public MemberSearchViewModel  mapmembersearchviewmodel(string viewerprofileid, MemberSearchViewModel modeltomap, string allphotos)
+        {
+
+            return _mapmembermapperrepo.mapmembersearchviewmodel(Convert.ToInt32(viewerprofileid), modeltomap, Convert.ToBoolean(allphotos));
+        }
+
+        List<MemberSearchViewModel> mapmembersearchviewmodels(string viewerprofileid, List<MemberSearchViewModel> modelstomap, string allphotos)
+        {
+            return _mapmembermapperrepo.mapmembersearchviewmodels(Convert.ToInt32(viewerprofileid), modelstomap, Convert.ToBoolean(allphotos));
+        }
+
         public MemberSearchViewModel getmembersearchviewmodel(string viewerprofileid,string profileid)
         {
             return _mapmembermapperrepo.getmembersearchviewmodel(Convert.ToInt32(profileid),Convert.ToInt32(profileid));

@@ -443,20 +443,24 @@ namespace Shell.MVC2.Data
              //rematerialize on the back end.
              //final query to send back only the profile datatas of the interests we want
              var interests = (from p in _datingcontext.interests.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
-                              join f in _datingcontext.profiledata on p.interestprofile_id   equals f.profile_id
+                              join f in _datingcontext.profiledata on p.interestprofile_id equals f.profile_id
                               join z in _datingcontext.profiles on p.interestprofile_id equals z.id
-                              where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))                     
+                              where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                               select new MemberSearchViewModel
                               {
-                                   interestdate  = p.creationdate,                                  
-                                  id = f.profile_id 
-                                 // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                }).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                                  interestdate = p.creationdate,
+                                  id = f.profile_id
+                                  // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                              });
          
-             return interests; //new PaginatedList<MemberSearchViewModel>().GetPageableList(interests, Page ?? 1, NumberPerPage.GetValueOrDefault())
+            // return interests; 
+                var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
+               
+               
+                _membermapperrepository.mapmembersearchviewmodel (profileid , e.id));
 
-                var data2 = interests.Select(e => _membermapperrepository.getmembersearchviewmodel(profileid , e.id));
+                return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
 //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
 
          }
