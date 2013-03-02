@@ -101,10 +101,11 @@ namespace Shell.MVC2.Data
 
 
             //for now while testing ignore api key
-            
 
-        
 
+
+            //TO DO add code to  call membership service and make sure the requestor has rights to view the data they are requesting
+            //TO DO List the Service URLS that and handle differing security for each 
 
             string[] urisegments = OperationContext.Current.IncomingMessageHeaders.To.Segments;
             string helpsegment = "help"; //this is the thing we are checking   
@@ -140,6 +141,7 @@ namespace Shell.MVC2.Data
               {
                   validrequest = true;
               }
+           
            
              //get username and password from request stuff if API key was valid
             if (validrequest == true)

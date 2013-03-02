@@ -36,14 +36,13 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
             Kernel.Bind<IGeoRepository>().ToConstructor(ctorArg => new GeoRepository(ctorArg.Inject<PostalData2Entities>()));
             Kernel.Bind<IPhotoRepository>().ToConstructor(ctorArg => new PhotoRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
             Kernel.Bind<IMailRepository>().ToConstructor(ctorArg => new MailRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
-            Kernel.Bind<IMemberActionsRepository>().ToConstructor(ctorArg => new MemberActionsRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
+            //Kernel.Bind<IMemberActionsRepository>().ToConstructor(ctorArg => new MemberActionsRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
 
             Kernel.Bind<IMembersMapperRepository>().ToConstructor(
              ctorArg => new MembersMapperRepository(
                  ctorArg.Inject<IGeoRepository>(),
                  ctorArg.Inject<IPhotoRepository>(),
-                 ctorArg.Inject<IMemberRepository>(),
-                 ctorArg.Inject<IMemberActionsRepository>(),
+                 ctorArg.Inject<IMemberRepository>(),                
                   ctorArg.Inject<IMailRepository>(),
                  ctorArg.Inject<AnewluvContext>()));
             

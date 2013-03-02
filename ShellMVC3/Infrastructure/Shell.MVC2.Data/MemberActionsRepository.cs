@@ -28,12 +28,14 @@ namespace Shell.MVC2.Data
         //TO DO do this a different way I think
         //private AnewluvContext  _datingcontext;
         private IMemberRepository  _membersrepository;
+        private IMembersMapperRepository _membermapperrepository;
         private LoggingLibrary.ErroLogging  logger;
 
-        public MemberActionsRepository(AnewluvContext datingcontext ,IMemberRepository membersrepository ) 
+        public MemberActionsRepository(AnewluvContext datingcontext, IMemberRepository membersrepository, IMembersMapperRepository membermapperrepository) 
             :base(datingcontext)
         {
             _membersrepository = membersrepository;
+            _membermapperrepository = membermapperrepository;
           
         }
 
@@ -443,33 +445,18 @@ namespace Shell.MVC2.Data
              var interests = (from p in _datingcontext.interests.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
                               join f in _datingcontext.profiledata on p.interestprofile_id   equals f.profile_id
                               join z in _datingcontext.profiles on p.interestprofile_id equals z.id
-                              where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                              where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))                     
                               select new MemberSearchViewModel
                               {
-                                  creationdate = p.creationdate,                                  
-                                  id = p.id,
-                                  age = f.age,
-                                  birthdate = f.birthdate,
-                                  city = f.city,
-                                  countryid = f.countryid,
-                                  stateprovince = f.stateprovince,
-                                  longitude = (double)f.longitude,
-                                  latitude = (double)f.latitude,
-                                  genderid = f.gender.id,
-                                  postalcode = f.postalcode,
-                                  lastlogindate = z.logindate,
-                                  //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                                  screenname = z.screenname,
-                                  mycatchyintroline = f.mycatchyintroLine,
-                                  aboutme = f.aboutme,
-                                  perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-
-
-
-                              }).OrderByDescending(f => f.creationdate.Value ).ThenByDescending(f => f.lastlogindate.Value  ).ToList();
-
+                                   interestdate  = p.creationdate,                                  
+                                  id = f.profile_id 
+                                 // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                }).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+         
              return interests; //new PaginatedList<MemberSearchViewModel>().GetPageableList(interests, Page ?? 1, NumberPerPage.GetValueOrDefault())
 
+
+                var data2 = interests.Select(e => _membermapperrepository.getmembersearchviewmodel(profileid , e.id));
 //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
 
          }
@@ -527,10 +514,7 @@ namespace Shell.MVC2.Data
                              mycatchyintroline   = f.mycatchyintroLine,
                           aboutme   = f.aboutme,
                               perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-
-
-
-                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.interestdate  ).ToList();
+                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.interestdate  ).ToList();
 
             //return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoisinterestedinme, Page ?? 1, NumberPerPage.GetValueOrDefault());
          return whoisinterestedinme;

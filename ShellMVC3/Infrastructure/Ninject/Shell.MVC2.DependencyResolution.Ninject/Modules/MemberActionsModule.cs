@@ -28,7 +28,8 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
            //  if (!Kernel.HasModule("Shell.MVC2.DependencyResolution.Ninject.Modules.MembersModule")) //only load if not already loaded into kernel
            //     Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>()));
             Kernel.Bind<IMemberActionsRepository>().ToConstructor(
-             ctorArg => new MemberActionsRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository >()));
+             ctorArg => new MemberActionsRepository(ctorArg.Inject<AnewluvContext>(),
+                 ctorArg.Inject<IMemberRepository >(),ctorArg.Inject<IMembersMapperRepository>()));
 
 
 			//services

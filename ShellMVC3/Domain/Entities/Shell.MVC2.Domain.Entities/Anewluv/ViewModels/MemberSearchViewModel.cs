@@ -71,6 +71,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
          [DataMember]
          public PhotoModel galleryphoto { get; set; }
 
+
+
         public photoconversion galleryphotoconverted { get; set; }
           [DataMember]
         public string countryname { get; set; }

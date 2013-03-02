@@ -23,27 +23,108 @@ namespace Shell.MVC2.Data
         private IGeoRepository georepository;
         private IPhotoRepository photorepository;
         private IMemberRepository membersrepository;
-        private IMemberActionsRepository memberactionsrepository;
+       // private IMemberActionsRepository memberactionsrepository;
         private IMailRepository mailrepository;
         // private AnewluvContext _db;
         //TO DO move from ria servives
        // private AnewluvContext  datingcontext;
 
        public MembersMapperRepository(IGeoRepository _georepository, IPhotoRepository
-           _photorepository, IMemberRepository _membersrepository, IMemberActionsRepository
-           _memberactionsrepository, IMailRepository _mailrepository, AnewluvContext datingcontext)
+           _photorepository, IMemberRepository _membersrepository,  IMailRepository _mailrepository, AnewluvContext datingcontext)
             : base(datingcontext)
         {
             georepository = _georepository;
             photorepository = _photorepository;
             membersrepository = _membersrepository;
-            memberactionsrepository = _memberactionsrepository ;
+           // memberactionsrepository = _memberactionsrepository ;
             mailrepository = _mailrepository;
            // datingcontext = _datingcontext;
         }
 
         
         // constructor
+       public MemberSearchViewModel mapmembersearchviewmodel(int? viewerprofileid, MemberSearchViewModel modeltomap,bool allphotos)
+       {
+           try
+           {
+               if (modeltomap.id != null)
+               {
+
+                   profiledata viewerprofile = new profiledata();
+                   if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid(viewerprofileid.GetValueOrDefault());
+
+                   MemberSearchViewModel model = modeltomap;
+                   //TO DO change to use Ninject maybe
+                   // DatingService db = new DatingService();
+                   //  MembersRepository membersrepo=  new MembersRepository();
+                   profile profile = membersrepository.getprofilebyprofileid(modeltomap.id); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
+                   //  membereditRepository membereditRepository = new membereditRepository();
+
+                   //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
+                   if (viewerprofile.latitude != null &&
+                       viewerprofile.longitude != null &&
+                       profile.profiledata.longitude != null &&
+                        profile.profiledata.latitude != null)
+                       model.distancefromme = georepository.getdistancebetweenmembers(
+                           viewerprofile.latitude.GetValueOrDefault(),
+                           viewerprofile.longitude.GetValueOrDefault(),
+                            profile.profiledata.latitude.GetValueOrDefault(),
+                           profile.profiledata.longitude.GetValueOrDefault(), "M");
+
+
+                   model.id = profile.id;
+                   model.screenname = model.screenname;
+                   
+                   model.profiledata = profile.profiledata;
+                   model.profile = profile;
+                   model.stateprovince = profile.profiledata.stateprovince;
+                   model.postalcode = profile.profiledata.postalcode;
+                   model.countryid = profile.profiledata.countryid;
+                   model.genderid = profile.profiledata.gender.id;
+                   model.birthdate = profile.profiledata.birthdate;
+                   // modelprofile = profile.profile;
+                   model.longitude = (double)profile.profiledata.longitude;
+                   model.latitude = (double)profile.profiledata.latitude;
+                   //  HasGalleryPhoto = (from p in db.photos.Where(i => i.ProfileID == f.ProfileID && i.ProfileImageType == "Gallery") select p.ProfileImageType).FirstOrDefault(),
+                   model.creationdate = profile.creationdate;
+                   model.city = Extensions.ReduceStringLength(profile.profiledata.city, 11);
+                   model.lastlogindate = profile.logindate;
+                   model.lastloggedonstring = membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
+                   model.mycatchyintroline = profile.profiledata.mycatchyintroLine;
+                   model.aboutme = profile.profiledata.aboutme;
+                   model.online = membersrepository.getuseronlinestatus(profile.id);
+                   model.perfectmatchsettings = profile.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault();
+                   // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
+                   //DistanceFromMe = 0  get distance from somwhere else
+                   //to do do something with the unaproved photos so it is a nullable value , private photos are linked too here
+                   //to do also figure out how to not show the gallery photo in the list but when they click off it allow it to default back
+                   //or instead just have the photo the select zoom up
+                   int page = 1;
+                   int ps = 12;
+                   // var MyPhotos = membereditRepository.MyPhotos(model.profile.username);
+                   // var Approved = membereditRepository.GetApproved(MyPhotos, "Yes", page, ps);
+                   // var NotApproved = membereditRepository.GetApproved(MyPhotos, "No", page, ps);
+                   // var Private = membereditRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
+                   model.profilephotos = new PhotoViewModel();
+                   if (allphotos == true)
+                   {
+                       model.profilephotos.ProfilePhotosApproved = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id, photoapprovalstatusEnum.Approved, photoformatEnum.Thumbnail, page, ps);   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                   }// approvedphotos = photorepository.
+                   else
+                   { 
+                       model.galleryphoto.photo  = photorepository.getgalleryphotobyprofileid (model.id,photoformatEnum.Thumbnail);
+                   }
+                   return model;
+               }
+               return null;
+           }
+           catch (Exception ex)
+           {
+               //log error 
+
+           }
+           return null;
+       }
         public MemberSearchViewModel getmembersearchviewmodel(int? viewerprofileid,int profileId)
         {
             try

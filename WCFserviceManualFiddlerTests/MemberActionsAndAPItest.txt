@@ -1,13 +1,17 @@
 Tests of MemberActions
 
-(using dasvisk:drive333)
+(using case:drive333)
+
+url for encoding passwords
+http://www.motobit.com/util/base64-decoder-encoder.asp
+
 
 heade sample
 
 User-Agent: Fiddler
 Content-Type: text/json
 Host: localhost
-Authorization: ZGF2aXNrOmRyaXZlMzMz
+Authorization: Y2FzZTpkcml2ZTMzMw==
 
 
 http://localhost/Shell.MVC2.Web.MemberActionsService/MemberActionsService.svc/Rest/getwhoiaminterestedin/2/1/4 
