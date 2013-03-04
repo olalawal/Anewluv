@@ -16,6 +16,8 @@ namespace Shell.MVC2.Interfaces
         #region "View Photo models"
 
         PhotoModel getphotomodelbyphotoid(Guid photoid, photoformatEnum format);
+
+        PhotoModel getphotomodelbyprofileid(int profileid, photoformatEnum format);
       
         List<PhotoModel> getphotomodelsbyprofileidandstatus(int profile_id, photoapprovalstatusEnum status, photoformatEnum format);
 

@@ -454,13 +454,19 @@ namespace Shell.MVC2.Data
                               });
          
             // return interests; 
-                var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+             var testpage = Page ?? 1;
+             var testnumberperpage = NumberPerPage ?? 4;
 
-               
-               
-                _membermapperrepository.mapmembersearchviewmodel (profileid , e.id));
+            // t/his.PageIndex = index;
+             var pageData = testpage > 1 ?
+                 interests.Skip((testpage - 1) * testnumberperpage).Take(testnumberperpage) : interests.Take(testnumberperpage);
+             //this.AddRange(pageData.ToList());
+            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-                return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
+             //return interests.ToList();
+             return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).ToList();
+
+               // return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
 //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
 
          }

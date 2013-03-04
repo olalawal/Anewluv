@@ -20,7 +20,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public string screenname { get; set; }
         [DataMember]
         public int profileid { get; set; }
-        [DataMember]
+       // [DataMember]
         public lu_photoformat photoformat { get; set; }
          [DataMember]
         public DateTime? creationdate { get; set; }

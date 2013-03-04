@@ -128,13 +128,9 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //check if decrypted string macthed username to upper  + secret
                 if (actualpasswordstring == decryptedPassword)
                 {
-
-
                     //log the user logtime here so it is common to silverlight and MVC
                     _memberepository.updateuserlogintime(username, HttpContext.Current.Session.SessionID);
                     //also update the profiledata for the last login date
-
-
                     return true;
                 }
                 else

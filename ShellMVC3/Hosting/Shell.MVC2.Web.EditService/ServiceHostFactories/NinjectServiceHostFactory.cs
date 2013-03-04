@@ -18,6 +18,7 @@ namespace Shell.MVC2.Web.EditService.ServiceHostFactories
             IKernel container = new StandardKernel();
             container.Load<NinjectModules.ApiKeyContextModule>();
             container.Load<NinjectModules.AnewLuvContextModule>();
+            container.Load<NinjectModules.MembershipModule>();
             container.Load<NinjectModules.MemberEditModule>();
             container.Load<NinjectModules.SearchEditModule>(); 
             return container;

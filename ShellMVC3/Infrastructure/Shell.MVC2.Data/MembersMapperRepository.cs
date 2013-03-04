@@ -73,10 +73,10 @@ namespace Shell.MVC2.Data
 
 
                    model.id = profile.id;
-                   model.screenname = model.screenname;
+                   model.screenname = profile.screenname;
                    
-                   model.profiledata = profile.profiledata;
-                   model.profile = profile;
+                   //model.profiledata = profile.profiledata;
+                   //model.profile = profile;
                    model.stateprovince = profile.profiledata.stateprovince;
                    model.postalcode = profile.profiledata.postalcode;
                    model.countryid = profile.profiledata.countryid;
@@ -108,11 +108,11 @@ namespace Shell.MVC2.Data
                    model.profilephotos = new PhotoViewModel();
                    if (allphotos == true)
                    {
-                       model.profilephotos.ProfilePhotosApproved = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id, photoapprovalstatusEnum.Approved, photoformatEnum.Thumbnail, page, ps);   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                       model.profilephotos.ProfilePhotosApproved = photorepository.getpagedphotomodelbyprofileidandstatus(profile.id, photoapprovalstatusEnum.Approved, photoformatEnum.Thumbnail, page, ps);   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
                    }// approvedphotos = photorepository.
                    else
-                   { 
-                       model.galleryphoto.photo  = photorepository.getgalleryphotobyprofileid (model.id,photoformatEnum.Thumbnail);
+                   {
+                       model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
                    }
                    return model;
                }
@@ -121,9 +121,9 @@ namespace Shell.MVC2.Data
            catch (Exception ex)
            {
                //log error 
-
+               throw ex;
            }
-           return null;
+          // return null;
        }
         public List<MemberSearchViewModel> mapmembersearchviewmodels(int? viewerprofileid, List<MemberSearchViewModel> modelstomap,bool allphotos)
         {

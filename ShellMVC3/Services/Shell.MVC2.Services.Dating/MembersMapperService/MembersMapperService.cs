@@ -41,7 +41,7 @@ namespace Shell.MVC2.Services.Dating
             return _mapmembermapperrepo.mapmembersearchviewmodel(Convert.ToInt32(viewerprofileid), modeltomap, Convert.ToBoolean(allphotos));
         }
 
-        List<MemberSearchViewModel> mapmembersearchviewmodels(string viewerprofileid, List<MemberSearchViewModel> modelstomap, string allphotos)
+       public List<MemberSearchViewModel> mapmembersearchviewmodels(string viewerprofileid, List<MemberSearchViewModel> modelstomap, string allphotos)
         {
             return _mapmembermapperrepo.mapmembersearchviewmodels(Convert.ToInt32(viewerprofileid), modelstomap, Convert.ToBoolean(allphotos));
         }

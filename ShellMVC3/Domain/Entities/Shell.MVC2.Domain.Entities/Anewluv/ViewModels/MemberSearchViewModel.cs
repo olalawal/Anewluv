@@ -43,7 +43,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
            [DataMember]
         public int? lookingforid { get; set; }
 
-        [DataMember]
+       // [DataMember]
         public profile profile { get; set; }
          
          public profiledata profiledata { get; set; }

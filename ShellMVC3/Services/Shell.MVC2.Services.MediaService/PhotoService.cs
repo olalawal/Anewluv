@@ -42,9 +42,18 @@ namespace Shell.MVC2.Services.Media
 
         #region "View Photo models"
 
+
+
+
         public PhotoModel getphotomodelbyphotoid(string photoid, string format)
         {
             return _photorepo.getphotomodelbyphotoid(Guid.Parse(photoid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
+        }
+
+        public PhotoModel getphotomodelbyprofileid(string profileid, string format)
+        {
+            return _photorepo.getphotomodelbyphotoid(Guid.Parse(profileid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));      
+
         }
 
         public List<PhotoModel> getphotomodelsbyprofileidandstatus(string profile_id, string status, string format)

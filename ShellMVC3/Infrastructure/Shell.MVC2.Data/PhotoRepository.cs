@@ -128,7 +128,35 @@ namespace Shell.MVC2.Data
                                         imagecaption = p.photo.imagecaption,
                                         creationdate = p.photo.creationdate,
                                         
-                                    }).Single();
+                                    }).FirstOrDefault();
+
+            // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
+
+            //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
+
+
+
+            return (model);
+
+
+        }
+
+        public PhotoModel getphotomodelbyprofileid(int profileid, photoformatEnum format)
+        {
+            PhotoModel model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && (a.photo.profile_id == profileid))
+                                select new PhotoModel
+                                {
+                                    photoid = p.photo.id,
+                                    profileid = p.photo.profile_id,
+                                    screenname = p.photo.profilemetadata.profile.screenname,
+                                    photo = p.image,
+                                    photoformat = p.formattype,
+                                    convertedsize = p.size,
+                                    orginalsize = p.photo.size,
+                                    imagecaption = p.photo.imagecaption,
+                                    creationdate = p.photo.creationdate,
+
+                                }).FirstOrDefault();
 
             // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
 
@@ -931,6 +959,7 @@ namespace Shell.MVC2.Data
                 //new code to only get the gallery conversion copy
                // return GalleryPhoto.conversions
                //.Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image;
+                if (GalleryPhoto != null)
                 return GalleryPhoto.image;
             }
             catch
@@ -961,7 +990,8 @@ namespace Shell.MVC2.Data
                 //new code to only get the gallery conversion copy
                 //return GalleryPhoto.conversions
                //.Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image;
-                return GalleryPhoto.image;
+                if (GalleryPhoto != null)
+                 return GalleryPhoto.image;
 
             }
             catch

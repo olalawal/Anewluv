@@ -11,7 +11,7 @@ namespace Shell.MVC2.Interfaces
 
        MemberSearchViewModel mapmembersearchviewmodel(int? viewerprofileid, MemberSearchViewModel modeltomap, bool allphotos);
 
-       List<MemberSearchViewModel> mapmembersearchviewmodels(string viewerprofileid, List<MemberSearchViewModel> modelstomap, bool allphotos);
+       List<MemberSearchViewModel> mapmembersearchviewmodels(int? viewerprofileid, List<MemberSearchViewModel> modelstomap, bool allphotos);
 
         MemberSearchViewModel getmembersearchviewmodel(int? viewerprofileid,int profileid);     
         List<MemberSearchViewModel> getmembersearchviewmodels(int? viewerprofileid,List<int> profileIds);   
