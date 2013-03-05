@@ -48,45 +48,64 @@ namespace Shell.MVC2.Data
         /// </summary 
         public List<MemberSearchViewModel> getmyrelationshipsfiltered(int profileid,List<profilefiltertypeEnum> types)
         {
-           //remove blocks regardless for now
-            var MyActiveblocks =  activeblocksbyprofileid(profileid);
+           
 
-            List<MemberSearchViewModel> currentrelationships = new List<MemberSearchViewModel>();
+             try
+             {
 
-            foreach (var value in types)
-            {
-                switch (value)
-                {
-                     //   lstAccounts.Where(Function(x) Not currentAddedAccounts.Any(Function(y) y.AcctNumber = x.AcctNumber
-                    case profilefiltertypeEnum.NotSet :
-                        break;
-                    case profilefiltertypeEnum.WhoisInterestsedinMe :
-                        currentrelationships.AddRange(getunpagedwhoisinterestedinme(profileid, MyActiveblocks).Where( x=>! currentrelationships.Any(y=>y.id ==x.id)));
-                        break;
-                     case profilefiltertypeEnum.WhoIamInterestedin  :
-                        currentrelationships.AddRange(getunpagedwhoiaminsterestedin(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id)));                    
-                        break;
-                        case profilefiltertypeEnum.WhoPeekedAtMe  :
-                        currentrelationships.AddRange(getunpagedwhopeekedatme(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id))); 
-                        break;
-                        case profilefiltertypeEnum.WhoIPeekedAt  :
-                        currentrelationships.AddRange(getunpagedwhoipeekedat(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id))); 
-                        break;
-                        case profilefiltertypeEnum.WhoIBlocked  :
-                        currentrelationships.AddRange(getunpagedblocks(profileid).Where(x => !currentrelationships.Any(y => y.id == x.id))); 
-                        break;
-                        case profilefiltertypeEnum.WhoLIkesMe  :
-                        currentrelationships.AddRange(getunpagedwholikesme(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id))); 
-                        break;
-                        case profilefiltertypeEnum.WhoILike  :
-                        currentrelationships.AddRange(getunpagedwhoilike(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id))); 
-                        break;
-                }
-               
-                       
-            }
-            
-             return currentrelationships;
+                 //remove blocks regardless for now
+                 var MyActiveblocks = activeblocksbyprofileid(profileid);
+
+                 List<MemberSearchViewModel> currentrelationships = new List<MemberSearchViewModel>();
+
+                 foreach (var value in types)
+                 {
+                     switch (value)
+                     {
+                         //   lstAccounts.Where(Function(x) Not currentAddedAccounts.Any(Function(y) y.AcctNumber = x.AcctNumber
+                         case profilefiltertypeEnum.NotSet:
+                             break;
+                         case profilefiltertypeEnum.WhoisInterestsedinMe:
+                             currentrelationships.AddRange(getunpagedwhoisinterestedinme(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id)));
+                             break;
+                         case profilefiltertypeEnum.WhoIamInterestedin:
+                             currentrelationships.AddRange(getunpagedwhoiaminsterestedin(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id)));
+                             break;
+                         case profilefiltertypeEnum.WhoPeekedAtMe:
+                             currentrelationships.AddRange(getunpagedwhopeekedatme(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id)));
+                             break;
+                         case profilefiltertypeEnum.WhoIPeekedAt:
+                             currentrelationships.AddRange(getunpagedwhoipeekedat(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id)));
+                             break;
+                         case profilefiltertypeEnum.WhoIBlocked:
+                             currentrelationships.AddRange(getunpagedblocks(profileid).Where(x => !currentrelationships.Any(y => y.id == x.id)));
+                             break;
+                         case profilefiltertypeEnum.WhoLIkesMe:
+                             currentrelationships.AddRange(getunpagedwholikesme(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id)));
+                             break;
+                         case profilefiltertypeEnum.WhoILike:
+                             currentrelationships.AddRange(getunpagedwhoilike(profileid, MyActiveblocks).Where(x => !currentrelationships.Any(y => y.id == x.id)));
+                             break;
+                     }
+
+
+                 }
+
+                 return currentrelationships;
+
+             }
+             catch (Exception ex)
+             {
+                 //instantiate logger here so it does not break anything else.
+                 logger = new ErroLogging(applicationEnum.MemberActionsService);
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                 //log error mesasge
+                 //handle logging here
+                 var message = ex.Message;
+                 throw ex;
+             }
+
+
 
         }
 
@@ -986,37 +1005,53 @@ namespace Shell.MVC2.Data
         /// </summary 
         public List<MemberSearchViewModel> getwhoipeekedat(int profileid, int? Page, int? NumberPerPage)
         {
-            //Page, int? NumberPerPage
-            //  List<MemberSearchViewModel> peeks = default(List<MemberSearchViewModel>);        
+      
+    
+            try
+            {
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
-                                 select new
-                                 {
-                                     ProfilesBlockedId = c.blockprofile_id
-                                 };
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                var peeks = (from p in _datingcontext.peeks.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
+                             join f in _datingcontext.profiledata on p.peekprofile_id equals f.profile_id
+                             join z in _datingcontext.profiles on p.peekprofile_id equals z.id
+                             where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                             select new MemberSearchViewModel
+                             {
+                                 peekdate = p.creationdate,
+                                 id = f.profile_id
+                                 // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                             }).ToList();
 
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            var peeks = (from p in _datingcontext.peeks.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
-                         join f in _datingcontext.profiledata on p.peekprofile_id  equals f.profile_id
-                         join z in _datingcontext.profiles on p.peekprofile_id  equals z.id
-                         where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                         select new MemberSearchViewModel
-                         {
-                             peekdate   = p.creationdate,
-                             id = f.profile_id
-                             // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                         }).ToList();
+                bool allowpaging = (peeks.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+                var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                    new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeks, Page ?? 1, NumberPerPage ?? 4) : peeks.Take(NumberPerPage.GetValueOrDefault());
+                //this.AddRange(pageData.ToList());
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-            bool allowpaging = (peeks.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
-            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
-                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeks, Page ?? 1, NumberPerPage ?? 4) : peeks.Take(NumberPerPage.GetValueOrDefault());
-            //this.AddRange(pageData.ToList());
-            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                //return interests.ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
-            //return interests.ToList();
-            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.MemberActionsService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
+            }
+
+
         }
 
 
