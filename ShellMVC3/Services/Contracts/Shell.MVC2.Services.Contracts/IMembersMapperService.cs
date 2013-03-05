@@ -26,20 +26,20 @@ namespace Shell.MVC2.Services.Contracts
                List<MemberSearchViewModel> mapmembersearchviewmodels(string viewerprofileid, List<MemberSearchViewModel> modelstomap, string allphotos);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getmembersearchviewmodel/{viewerprofileid}/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        MemberSearchViewModel getmembersearchviewmodel(string viewerprofileid,string profileid);
+        [WebGet(UriTemplate = "/getmembersearchviewmodel/{viewerprofileid}/{profileid}/{allphotos}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+              MemberSearchViewModel getmembersearchviewmodel(string viewerprofileid, string profileid, string allphotos);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/getmembersearchviewmodels/{viewerprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<MemberSearchViewModel> getmembersearchviewmodels(string viewerprofileid,List<int> profileids);
+        [WebInvoke(UriTemplate = "/getmembersearchviewmodels/{viewerprofileid}/{allphotos}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<MemberSearchViewModel> getmembersearchviewmodels(string viewerprofileid, List<int> profileids, string allphotos);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getprofilebrowsemodel/{viewerprofileid}/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        ProfileBrowseModel getprofilebrowsemodel(string viewerprofileid, string profileid);
+        [WebGet(UriTemplate = "/getprofilebrowsemodel/{viewerprofileid}/{profileid}/{allphotos}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        ProfileBrowseModel getprofilebrowsemodel(string viewerprofileid, string profileid,string allphotos);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/getprofilebrowsemodels/{viewerprofileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<ProfileBrowseModel> getprofilebrowsemodels(string viewerprofileid, List<int> profileids);
+        [WebInvoke(UriTemplate = "/getprofilebrowsemodels/{viewerprofileid}/{allphotos}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<ProfileBrowseModel> getprofilebrowsemodels(string viewerprofileid, List<int> profileids,string allphotos);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebGet(UriTemplate = "/getprofilecriteriamodel/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]

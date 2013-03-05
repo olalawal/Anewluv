@@ -140,7 +140,9 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhoiaminterestedin(string profileid, string page, string numberperpage)
         {
-           
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage =="0") numberperpage = "4";
+
             try
             {
                 return _memberactionsrepository.getwhoiaminterestedin (Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
@@ -163,6 +165,9 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhoisinterestedinme(string profileid, string page, string numberperpage)
         {
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+
             try
             {
 
@@ -184,7 +189,9 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhoisinterestedinmenew(string profileid, string page, string numberperpage)
         {
-          
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+
             try
             {
                 return _memberactionsrepository.getwhoisinterestedinmenew(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage)); ;
@@ -527,6 +534,9 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhopeekedatme(string profileid, string page, string numberperpage)
         {
+
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
           
             try
             {
@@ -550,6 +560,9 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>
         public List<MemberSearchViewModel> getwhopeekedatmenew(string profileid, string page, string numberperpage)
         {
+
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
            
             try
             {
@@ -574,6 +587,8 @@ namespace Shell.MVC2.Services.Actions
         public List<MemberSearchViewModel> getwhoipeekedat(string profileid, string page, string numberperpage)
         {
 
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
           
             try
             {
@@ -871,6 +886,9 @@ namespace Shell.MVC2.Services.Actions
         public List<MemberSearchViewModel> getwhoiblocked(string profileid, string page, string numberperpage)
         {
 
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+
          
             try
             {
@@ -892,6 +910,9 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhoblockedme(string profileid, string page, string numberperpage)
         {
+
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
       
            try
            {
@@ -1184,7 +1205,10 @@ namespace Shell.MVC2.Services.Actions
         /// </summary>
         public List<MemberSearchViewModel> getwholikesmenew(string profileid, string page, string numberperpage)
         {
-           
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+
+
             try
             {
                 return _memberactionsrepository.getwholikesmenew(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
@@ -1205,6 +1229,9 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwholikesme(string profileid, string page, string numberperpage)
         {
+
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
 
            try
             {
@@ -1227,7 +1254,9 @@ namespace Shell.MVC2.Services.Actions
         /// </summary 
         public List<MemberSearchViewModel> getwhoilike(string profileid, string page, string numberperpage)
         {
-      
+            if (page == "" | page == "0") page = "1";
+            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+
             try
             {
                 return _memberactionsrepository.getwhoilike(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));

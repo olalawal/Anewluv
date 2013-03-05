@@ -46,22 +46,22 @@ namespace Shell.MVC2.Services.Dating
             return _mapmembermapperrepo.mapmembersearchviewmodels(Convert.ToInt32(viewerprofileid), modelstomap, Convert.ToBoolean(allphotos));
         }
 
-        public MemberSearchViewModel getmembersearchviewmodel(string viewerprofileid,string profileid)
+        public MemberSearchViewModel getmembersearchviewmodel(string viewerprofileid,string profileid,string allphotos)
         {
-            return _mapmembermapperrepo.getmembersearchviewmodel(Convert.ToInt32(profileid),Convert.ToInt32(profileid));
+            return _mapmembermapperrepo.getmembersearchviewmodel(Convert.ToInt32(profileid), Convert.ToInt32(profileid), Convert.ToBoolean(allphotos));
         }
-        public List<MemberSearchViewModel> getmembersearchviewmodels(string viewerprofileid,List<int> profileIds)
+        public List<MemberSearchViewModel> getmembersearchviewmodels(string viewerprofileid, List<int> profileIds, string allphotos)
         {
-            return _mapmembermapperrepo.getmembersearchviewmodels(Convert.ToInt32(viewerprofileid),profileIds);
+            return _mapmembermapperrepo.getmembersearchviewmodels(Convert.ToInt32(viewerprofileid), profileIds, Convert.ToBoolean(allphotos));
         }
-        public ProfileBrowseModel getprofilebrowsemodel(string viewerprofileId, string profileid)
+        public ProfileBrowseModel getprofilebrowsemodel(string viewerprofileId, string profileid, string allphotos)
         {
-            return _mapmembermapperrepo.getprofilebrowsemodel(Convert.ToInt32(viewerprofileId), (Convert.ToInt32(profileid)));
+            return _mapmembermapperrepo.getprofilebrowsemodel(Convert.ToInt32(viewerprofileId), Convert.ToInt32(profileid), Convert.ToBoolean(allphotos));
         }
         //returns a list of profile browsemodles for a given user
-        public List<ProfileBrowseModel> getprofilebrowsemodels(string viewerprofileId, List<int> profileIds)
+        public List<ProfileBrowseModel> getprofilebrowsemodels(string viewerprofileId, List<int> profileIds, string allphotos)
         {
-            return _mapmembermapperrepo.getprofilebrowsemodels(Convert.ToInt32(viewerprofileId), profileIds);
+            return _mapmembermapperrepo.getprofilebrowsemodels(Convert.ToInt32(viewerprofileId), profileIds, Convert.ToBoolean(allphotos));
         }
         // constructor
         //4-12-2012 added screen name

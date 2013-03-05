@@ -364,7 +364,7 @@ namespace Shell.MVC2.Data
                 EmailViewModel returnmodel = new EmailViewModel();
                 returnmodel.EmailMatches = _membersmapperrepository.getemailmatches(model);
                 //get featured member
-                returnmodel.FeaturedMember = _membersmapperrepository.getmembersearchviewmodel(profileid, featuredmemberid);
+                returnmodel.FeaturedMember = _membersmapperrepository.getmembersearchviewmodel(profileid, featuredmemberid,false );
                 returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberMatchesSentMemberNotification);
                 returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberMatchestSentAdminNotificaton);
                 //fill in the rest of the email model values 

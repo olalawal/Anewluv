@@ -183,8 +183,9 @@ namespace Shell.MVC2.Data
                 var message = operationContext.RequestContext.RequestMessage;
                 var request = (HttpRequestMessageProperty)message.Properties[HttpRequestMessageProperty.Name];
                 string authorization = request.Headers[HttpRequestHeader.Authorization];
-                if (authorization  != "" ) 
+                if ( authorization !=null && authorization  != "" ) 
                 return Encryption.DecodeBasicAuthenticationString(authorization);
+                
                 return  null;
 
                // string username = operationContext.IncomingMessageHeaders.GetHeader<string>("username","");
@@ -264,7 +265,7 @@ namespace Shell.MVC2.Data
         const string UserNamePasswordErrorHTML = @"
 <html>
 <head>
-    <title>Request Error - No username and password in request header</title>
+    <title>Request Error - No username and password auth info in request header</title>
     <style type=""text/css"">
         body
         {

@@ -451,20 +451,16 @@ namespace Shell.MVC2.Data
                                   interestdate = p.creationdate,
                                   id = f.profile_id
                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                              });
+                              }).ToList();
          
-            // return interests; 
-             var testpage = Page ?? 1;
-             var testnumberperpage = NumberPerPage ?? 4;
-
-            // t/his.PageIndex = index;
-             var pageData = testpage > 1 ?
-                 interests.Skip((testpage - 1) * testnumberperpage).Take(testnumberperpage) : interests.Take(testnumberperpage);
+             bool allowpaging = (interests.Count >= (Page.GetValueOrDefault()  * NumberPerPage.GetValueOrDefault())? true: false) ;
+             var pageData = Page.GetValueOrDefault() > 1 & allowpaging  ? 
+                 new PaginatedList<MemberSearchViewModel>().GetCurrentPages(interests, Page ?? 1, NumberPerPage ?? 4) : interests.Take(NumberPerPage.GetValueOrDefault());
              //this.AddRange(pageData.ToList());
             // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
              //return interests.ToList();
-             return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).ToList();
+             return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                // return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
 //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
@@ -507,27 +503,20 @@ namespace Shell.MVC2.Data
                                    where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id ))
                                    select new MemberSearchViewModel
                                    {
-                                                creationdate    = p.creationdate,
-                           id = p.profile_id,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                           genderid  = f.gender.id,
-                             postalcode = f.postalcode,
-                             lastlogindate    = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                            screenname  = z.screenname,
-                             mycatchyintroline   = f.mycatchyintroLine,
-                          aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                          }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.interestdate  ).ToList();
+                                  interestdate = p.creationdate,
+                                  id = f.profile_id
+                                  // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                              }).ToList();
 
-            //return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoisinterestedinme, Page ?? 1, NumberPerPage.GetValueOrDefault());
-         return whoisinterestedinme;
+            bool allowpaging = (whoisinterestedinme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+             var pageData = Page.GetValueOrDefault() > 1 & allowpaging  ?
+                 new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinme, Page ?? 1, NumberPerPage ?? 4) : whoisinterestedinme.Take(NumberPerPage.GetValueOrDefault());
+             //this.AddRange(pageData.ToList());
+            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+             //return interests.ToList();
+             return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
         }
 
         /// <summary>
@@ -550,33 +539,23 @@ namespace Shell.MVC2.Data
           var  whoisinterestedinmenew = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid && p.viewdate  ==  null)
                                     join f in _datingcontext.profiledata on p.profile_id equals f.profile_id 
                                    join z in _datingcontext.profiles on p.profile_id  equals z.id
-                                         where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                                   select new MemberSearchViewModel
+                                        where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                 
+                                     select new MemberSearchViewModel
                                    {
-                                        creationdate    = p.creationdate ,
-                             id = p.profile_id ,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                             genderid  = f.gender.id,
-                             postalcode = f.postalcode,
-                              lastlogindate    = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                            screenname  = z.screenname,
-                             mycatchyintroline   = f.mycatchyintroLine,
-                          aboutme   = f.aboutme,
-                             perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                  interestdate = p.creationdate,
+                                  id = f.profile_id
+                                  // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                              }).ToList();
 
+          bool allowpaging = (whoisinterestedinmenew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+             var pageData = Page.GetValueOrDefault() > 1 & allowpaging  ?
+                 new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinmenew, Page ?? 1, NumberPerPage ?? 4) : whoisinterestedinmenew.Take(NumberPerPage.GetValueOrDefault());
+             //this.AddRange(pageData.ToList());
+            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-
-                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.interestdate  ).ToList();
-
-           // return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoisinterestedinmenew, Page ?? 1, NumberPerPage.GetValueOrDefault());
-          return whoisinterestedinmenew;
+             //return interests.ToList();
+             return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
         }
 
         #region "update/check/change actions"
@@ -1025,31 +1004,19 @@ namespace Shell.MVC2.Data
                          where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                          select new MemberSearchViewModel
                          {
-                             peekdate = p.creationdate,
-                             id = p.profile_id,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                             genderid = f.gender.id,
-                             postalcode = f.postalcode,
-                             lastlogindate = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                             screenname = z.screenname,
-                             mycatchyintroline = f.mycatchyintroLine,
-                             aboutme = f.aboutme,
-                             perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                             peekdate   = p.creationdate,
+                             id = f.profile_id
+                             // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                         }).ToList();
 
+            bool allowpaging = (peeks.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeks, Page ?? 1, NumberPerPage ?? 4) : peeks.Take(NumberPerPage.GetValueOrDefault());
+            //this.AddRange(pageData.ToList());
+            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-
-                         }).OrderByDescending(f => f.lastlogindate).ThenByDescending(f => f.creationdate).ToList();
-
-            // return new PaginatedList<MemberSearchViewModel>().GetPageableList(peeks, Page ?? 1, NumberPerPage.GetValueOrDefault());
-            return peeks;
-
+            //return interests.ToList();
+            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
         }
 
 
@@ -1077,32 +1044,21 @@ namespace Shell.MVC2.Data
                                 join f in _datingcontext.profiledata on p.profile_id equals f.profile_id 
                              join z in _datingcontext.profiles on p.profile_id  equals z.id
                                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                             select new MemberSearchViewModel
-                             {
-                                 peekdate  = p.creationdate ,
-                           id = p.profile_id,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                           genderid  = f.gender.id,
-                             postalcode = f.postalcode,
-                              lastlogindate    = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                            screenname  = z.screenname,
-                             mycatchyintroline   = f.mycatchyintroLine,
-                          aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                 select new MemberSearchViewModel
+                                 {
+                                     peekdate = p.creationdate ,
+                                     id = f.profile_id
+                                     // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                 }).ToList();
 
+            bool allowpaging = (WhoPeekedAtMe.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(WhoPeekedAtMe, Page ?? 1, NumberPerPage ?? 4) : WhoPeekedAtMe.Take(NumberPerPage.GetValueOrDefault());
+            //this.AddRange(pageData.ToList());
+            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-
-                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.peekdate ).ToList();
-
-          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(WhoPeekedAtMe, Page ?? 1, NumberPerPage.GetValueOrDefault());
-         return WhoPeekedAtMe;
+            //return interests.ToList();
+            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
         }
 
 
@@ -1126,37 +1082,25 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-            var PeekNew = (from p in _datingcontext.peeks .Where(p => p.peekprofile_id  == profileid && p.viewdate  == null)
+            var peeknew = (from p in _datingcontext.peeks .Where(p => p.peekprofile_id  == profileid && p.viewdate  == null)
                            join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
                        join z in _datingcontext.profiles on p.profile_id  equals z.id
                            where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                       select new MemberSearchViewModel
-                       {
-                             peekdate  = p.creationdate ,
-                           id = p.profile_id,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                           genderid  = f.gender.id,
-                             postalcode = f.postalcode,
-                              lastlogindate    = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                            screenname  = z.screenname,
-                             mycatchyintroline   = f.mycatchyintroLine,
-                          aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                           select new MemberSearchViewModel
+                           {
+                               peekdate = p.creationdate,
+                               id = f.profile_id
+                               // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                           }).ToList();
 
+            bool allowpaging = (peeknew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeknew, Page ?? 1, NumberPerPage ?? 4) : peeknew.Take(NumberPerPage.GetValueOrDefault());
+            //this.AddRange(pageData.ToList());
+            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-
-                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.peekdate ).ToList();
-
-          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(PeekNew, Page ?? 1, NumberPerPage.GetValueOrDefault());
-            return PeekNew;
-
+            //return interests.ToList();
+            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
         }
 
    
@@ -1530,37 +1474,26 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-          var  blockNew = (from p in _datingcontext.blocks.Where(p => p.profile_id   == profileid && p.removedate == null)
+          var  blocknew = (from p in _datingcontext.blocks.Where(p => p.profile_id   == profileid && p.removedate == null)
                            join f in _datingcontext.profiledata on p.blockprofile_id equals f.profile_id 
                                join z in _datingcontext.profiles on p.blockprofile_id equals z.id 
                                where (f.profile.status.id< 3)
                                orderby (p.creationdate) descending
-                               select new MemberSearchViewModel
-                               {
-                                    blockdate    = p.creationdate  ,
-                           id = p.profile_id,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                           genderid  = f.gender.id,
-                             postalcode = f.postalcode,
-                             lastlogindate    = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                            screenname  = z.screenname,
-                             mycatchyintroline   = f.mycatchyintroLine,
-                          aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                           select new MemberSearchViewModel
+                           {
+                               blockdate  = p.creationdate,
+                               id = f.profile_id
+                               // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                           }).ToList();
 
+          bool allowpaging = (blocknew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+          var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+              new PaginatedList<MemberSearchViewModel>().GetCurrentPages(blocknew, Page ?? 1, NumberPerPage ?? 4) : blocknew.Take(NumberPerPage.GetValueOrDefault());
+          //this.AddRange(pageData.ToList());
+          // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-
-                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.blockdate  ).ToList();
-
-         //   return new PaginatedList<MemberSearchViewModel>().GetPageableList(blockNew, Page ?? 1, NumberPerPage.GetValueOrDefault());
-          return blockNew;
+          //return interests.ToList();
+          return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
         }
 
            /// <summary>
@@ -1577,32 +1510,21 @@ namespace Shell.MVC2.Data
                                        join z in _datingcontext.profiles on p.profile_id  equals z.id 
                                        where (f.profile.status.id< 3)
                                        orderby (p.creationdate ) descending
-                                       select new MemberSearchViewModel
-                                       {
-                                            blockdate    = p.creationdate ,
-                           id = p.profile_id,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                           genderid  = f.gender.id,
-                             postalcode = f.postalcode,
-                              lastlogindate    = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                            screenname  = z.screenname,
-                             mycatchyintroline   = f.mycatchyintroLine,
-                          aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                               select new MemberSearchViewModel
+                               {
+                                   blockdate  = p.creationdate,
+                                   id = f.profile_id
+                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                               }).ToList();
 
+          bool allowpaging = (whoblockedme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+          var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+              new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoblockedme, Page ?? 1, NumberPerPage ?? 4) : whoblockedme.Take(NumberPerPage.GetValueOrDefault());
+          //this.AddRange(pageData.ToList());
+          // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-
-                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.blockdate  ).ToList();
-
-          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(whoblockedme, Page ?? 1, NumberPerPage.GetValueOrDefault());
-          return whoblockedme;
+          //return interests.ToList();
+          return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
         }
 
 
@@ -1975,37 +1897,26 @@ namespace Shell.MVC2.Data
             //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
             //rematerialize on the back end.
             //final query to send back only the profile datatas of the interests we want
-            var LikeNew = (from p in _datingcontext.likes.Where(p => p.likeprofile_id  == profileid && p.viewdate  == null)
+            var likenew = (from p in _datingcontext.likes.Where(p => p.likeprofile_id  == profileid && p.viewdate  == null)
                            join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
                        join z in _datingcontext.profiles on p.profile_id  equals z.id
                            where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                        orderby (p.creationdate) descending
-                       select new MemberSearchViewModel
-                       {
-                              likedate     = p.creationdate  ,
-                              id  = p.profile_id ,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                             genderid  = f.gender.id,
-                             postalcode = f.postalcode,
-                              lastlogindate    = z.logindate  ,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                             screenname  = z.screenname,
-                             mycatchyintroline   = f.mycatchyintroLine ,
-                             aboutme   = f.aboutme,
-                             perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                           select new MemberSearchViewModel
+                           {
+                               likedate  = p.creationdate,
+                               id = f.profile_id
+                               // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                           }).ToList();
 
+            bool allowpaging = (likenew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(likenew, Page ?? 1, NumberPerPage ?? 4) : likenew.Take(NumberPerPage.GetValueOrDefault());
+            //this.AddRange(pageData.ToList());
+            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-
-                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.likedate ).ToList();
-
-          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(LikeNew, Page ?? 1, NumberPerPage.GetValueOrDefault());
-            return LikeNew;
+            //return interests.ToList();
+            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
         }
 
@@ -2031,32 +1942,21 @@ namespace Shell.MVC2.Data
                      join z in _datingcontext.profiles on p.profile_id  equals z.id
                               where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                      orderby (p.creationdate ) descending
-                     select new MemberSearchViewModel
-                     {
-                            creationdate    = p.creationdate  ,
-                           id = p.profile_id,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                           genderid  = f.gender.id,
-                             postalcode = f.postalcode,
-                             lastlogindate     = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                            screenname  = z.screenname,
-                             mycatchyintroline   = f.mycatchyintroLine,
-                          aboutme   = f.aboutme,
-                              perfectmatchsettings   = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch  == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                              select new MemberSearchViewModel
+                              {
+                                  likedate = p.creationdate,
+                                  id = f.profile_id
+                                  // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                              }).ToList();
 
+            bool allowpaging = (wholikesme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(wholikesme, Page ?? 1, NumberPerPage ?? 4) : wholikesme.Take(NumberPerPage.GetValueOrDefault());
+            //this.AddRange(pageData.ToList());
+            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-
-                         }).OrderByDescending(f => f.lastlogindate ).ThenByDescending(f => f.likedate.Value   ).ToList();
-
-          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(wholikesme, Page ?? 1, NumberPerPage.GetValueOrDefault());
-            return wholikesme;
+            //return interests.ToList();
+            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
         }
 
 
@@ -2082,32 +1982,21 @@ namespace Shell.MVC2.Data
                               join z in _datingcontext.profiles on p.likeprofile_id  equals z.id
                             where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                               orderby (p.creationdate) descending
-                              select new MemberSearchViewModel
-                              {
-                                  creationdate = p.creationdate,
-                                  id = p.profile_id,
-                                  age = f.age,
-                                  birthdate = f.birthdate,
-                                  city = f.city,
-                                  countryid = f.countryid,
-                                  stateprovince = f.stateprovince,
-                                  longitude = (double)f.longitude,
-                                  latitude = (double)f.latitude,
-                                  genderid = f.gender.id,
-                                  postalcode = f.postalcode,
-                                  lastlogindate = z.logindate,
-                                  //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                                  screenname = z.screenname,
-                                  mycatchyintroline = f.mycatchyintroLine,
-                                  aboutme = f.aboutme,
-                                  perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                            select new MemberSearchViewModel
+                            {
+                                likedate = p.creationdate,
+                                id = f.profile_id
+                                // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                            }).ToList();
 
+            bool allowpaging = (whoilike.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoilike, Page ?? 1, NumberPerPage ?? 4) : whoilike.Take(NumberPerPage.GetValueOrDefault());
+            //this.AddRange(pageData.ToList());
+            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-
-                              }).OrderByDescending(f => f.lastlogindate).ThenByDescending(f => f.likedate).ToList();
-
-          //  return new PaginatedList<MemberSearchViewModel>().GetPageableList(wholikesme, Page ?? 1, NumberPerPage.GetValueOrDefault());
-            return whoilike;
+            //return interests.ToList();
+            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
         }
 
 

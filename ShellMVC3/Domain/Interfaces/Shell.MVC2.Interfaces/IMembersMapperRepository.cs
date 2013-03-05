@@ -13,10 +13,10 @@ namespace Shell.MVC2.Interfaces
 
        List<MemberSearchViewModel> mapmembersearchviewmodels(int? viewerprofileid, List<MemberSearchViewModel> modelstomap, bool allphotos);
 
-        MemberSearchViewModel getmembersearchviewmodel(int? viewerprofileid,int profileid);     
-        List<MemberSearchViewModel> getmembersearchviewmodels(int? viewerprofileid,List<int> profileIds);   
-        ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileid);  
-        List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds);   
+       MemberSearchViewModel getmembersearchviewmodel(int? viewerprofileid, int profileid, bool allphotos);
+       List<MemberSearchViewModel> getmembersearchviewmodels(int? viewerprofileid, List<int> profileIds, bool allphotos);
+       ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileid, bool allphotos);
+       List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds, bool allphotos);   
         ProfileCriteriaModel getprofilecriteriamodel(int profileid);       //overload for above
         ProfileCriteriaModel getprofilecriteriamodel();
          MembersViewModel getdefaultquicksearchsettingsmembers(MembersViewModel Model);     

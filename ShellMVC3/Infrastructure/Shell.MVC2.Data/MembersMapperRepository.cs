@@ -129,8 +129,8 @@ namespace Shell.MVC2.Data
         {
             try
             {
-                profiledata viewerprofile = new profiledata();
-                if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid(viewerprofileid.GetValueOrDefault());
+                //profiledata viewerprofile = new profiledata();
+               // if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid(viewerprofileid.GetValueOrDefault());
 
                 List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
                 foreach (var item in modelstomap)
@@ -148,68 +148,21 @@ namespace Shell.MVC2.Data
 
             return null;
         }
-        public MemberSearchViewModel getmembersearchviewmodel(int? viewerprofileid,int profileId)
+        public MemberSearchViewModel getmembersearchviewmodel(int? viewerprofileid,int profileId,bool allphotos)
         {
             try
             {
             if (profileId != null)
             {
 
-                 profiledata viewerprofile = new profiledata();
-                if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid(viewerprofileid.GetValueOrDefault());
 
-                MemberSearchViewModel model = new MemberSearchViewModel();
-                //TO DO change to use Ninject maybe
-               // DatingService db = new DatingService();
-                //  MembersRepository membersrepo=  new MembersRepository();
-                profile profile =membersrepository.getprofilebyprofileid(profileId); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
-                //  membereditRepository membereditRepository = new membereditRepository();
+                // List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+                MemberSearchViewModel modeltomap = new MemberSearchViewModel();
+                modeltomap.id = profileId;
+                return (mapmembersearchviewmodel(viewerprofileid, modeltomap, allphotos));
 
-                   //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
-                    if (viewerprofile.latitude != null &&
-                        viewerprofile.longitude != null &&
-                        profile.profiledata .longitude != null &&
-                         profile.profiledata.latitude != null)
-                        model.distancefromme = georepository.getdistancebetweenmembers(
-                            viewerprofile.latitude.GetValueOrDefault(), 
-                            viewerprofile.longitude.GetValueOrDefault(),
-                             profile.profiledata.latitude.GetValueOrDefault(),
-                            profile.profiledata.longitude.GetValueOrDefault(), "M");
-
-
-                model.id = profile.id  ;
-                model.profiledata = profile.profiledata ;
-                model.profile = profile;
-                model.stateprovince  = profile.profiledata.stateprovince;
-                model.postalcode = profile.profiledata.postalcode;
-                model.countryid = profile.profiledata.countryid;
-                model.genderid = profile.profiledata.gender.id;
-                model.birthdate = profile.profiledata.birthdate;
-                // modelprofile = profile.profile;
-                model.longitude = (double)profile.profiledata.longitude;
-                model.latitude = (double)profile.profiledata.latitude;
-                //  HasGalleryPhoto = (from p in db.photos.Where(i => i.ProfileID == f.ProfileID && i.ProfileImageType == "Gallery") select p.ProfileImageType).FirstOrDefault(),
-                model.creationdate  = profile.creationdate;
-                model.city = Extensions.ReduceStringLength(profile.profiledata.city, 11);
-                model.lastlogindate =  profile.logindate ;
-                model.lastloggedonstring = membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
-                model.online  = membersrepository.getuseronlinestatus(profile.id );
-                // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
-                //DistanceFromMe = 0  get distance from somwhere else
-                //to do do something with the unaproved photos so it is a nullable value , private photos are linked too here
-                //to do also figure out how to not show the gallery photo in the list but when they click off it allow it to default back
-                //or instead just have the photo the select zoom up
-                int page = 1;
-                int ps = 12;
-               // var MyPhotos = membereditRepository.MyPhotos(model.profile.username);
-               // var Approved = membereditRepository.GetApproved(MyPhotos, "Yes", page, ps);
-               // var NotApproved = membereditRepository.GetApproved(MyPhotos, "No", page, ps);
-               // var Private = membereditRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
-                model.profilephotos = new PhotoViewModel();
-                model.profilephotos.ProfilePhotosApproved  = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id,photoapprovalstatusEnum.Approved ,photoformatEnum.Thumbnail,  page, ps);   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
-               // approvedphotos = photorepository.
-
-               return model;
+                
+              
             }
             return null;
             }
@@ -220,68 +173,18 @@ namespace Shell.MVC2.Data
             }
             return null;
         }
-        public List<MemberSearchViewModel> getmembersearchviewmodels(int? viewerprofileid,List<int> profileIds)
+        public List<MemberSearchViewModel> getmembersearchviewmodels(int? viewerprofileid, List<int> profileIds, bool allphotos)
         {
             try
             {
-                profiledata viewerprofile = new profiledata();
-                if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid(viewerprofileid.GetValueOrDefault());
-
+               
                 List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+                MemberSearchViewModel modeltomap = new MemberSearchViewModel();
                 foreach (var item in profileIds)
                 {
-
-                    MemberSearchViewModel model = new MemberSearchViewModel();
-                    //TO DO change to use Ninject maybe
-                    // DatingService db = new DatingService();
-                    //  MembersRepository membersrepo=  new MembersRepository();
-                    profile profile = membersrepository.getprofilebyprofileid(item); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
-                    //  membereditRepository membereditRepository = new membereditRepository();
-
-                    //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
-                    if (viewerprofile.latitude != null &&
-                        viewerprofile.longitude != null &&
-                        profile.profiledata.longitude != null &&
-                         profile.profiledata.latitude != null)
-                        model.distancefromme = georepository.getdistancebetweenmembers(
-                            viewerprofile.latitude.GetValueOrDefault(),
-                            viewerprofile.longitude.GetValueOrDefault(),
-                             profile.profiledata.latitude.GetValueOrDefault(),
-                            profile.profiledata.longitude.GetValueOrDefault(), "M");
-
-
-                    model.id = profile.id;
-                    model.profiledata = profile.profiledata;
-                    model.profile = profile;
-                    model.stateprovince = profile.profiledata.stateprovince;
-                    model.postalcode = profile.profiledata.postalcode;
-                    model.countryid = profile.profiledata.countryid;
-                    model.genderid = profile.profiledata.gender.id;
-                    model.birthdate = profile.profiledata.birthdate;
-                    // modelprofile = profile.profile;
-                    model.longitude = (double)profile.profiledata.longitude;
-                    model.latitude = (double)profile.profiledata.latitude;
-                    //  HasGalleryPhoto = (from p in db.photos.Where(i => i.ProfileID == f.ProfileID && i.ProfileImageType == "Gallery") select p.ProfileImageType).FirstOrDefault(),
-                    model.creationdate = profile.creationdate;
-                    model.city = Extensions.ReduceStringLength(profile.profiledata.city, 11);
-                    model.lastlogindate = profile.logindate;
-                    model.lastloggedonstring = membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
-                    model.online = membersrepository.getuseronlinestatus(profile.id);
-                    // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
-                    //DistanceFromMe = 0  get distance from somwhere else
-                    //to do do something with the unaproved photos so it is a nullable value , private photos are linked too here
-                    //to do also figure out how to not show the gallery photo in the list but when they click off it allow it to default back
-                    //or instead just have the photo the select zoom up
-                    int page = 1;
-                    int ps = 12;
-                    // var MyPhotos = membereditRepository.MyPhotos(model.profile.username);
-                    // var Approved = membereditRepository.GetApproved(MyPhotos, "Yes", page, ps);
-                    // var NotApproved = membereditRepository.GetApproved(MyPhotos, "No", page, ps);
-                    // var Private = membereditRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
-                  //12-27-2012 olawal added a contrructore to photoviewmodel to avoid null collections
-                    model.profilephotos = new PhotoViewModel();
-                    model.profilephotos.ProfilePhotosApproved = photorepository.getpagedphotomodelbyprofileidandstatus(model.profile.id, photoapprovalstatusEnum.Approved, photoformatEnum.Thumbnail, page, ps);   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
-                    // approvedphotos = photorepository.
+                    modeltomap = null;
+                    modeltomap.id = item;
+                    models.Add(mapmembersearchviewmodel(viewerprofileid, modeltomap, allphotos));
 
                 }
                 return models;
@@ -294,7 +197,7 @@ namespace Shell.MVC2.Data
 
             return null;
         }
-        public ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileId)
+        public ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileId, bool allphotos)
         {
 
 
@@ -303,8 +206,8 @@ namespace Shell.MVC2.Data
             {
                 //TO Do user a mapper instead of a contructur and map it from the service
                 //Move all this to a service
-                ViewerProfileDetails = getmembersearchviewmodel(null,viewerprofileId),
-                ProfileDetails = getmembersearchviewmodel(null,profileId)
+                ViewerProfileDetails = getmembersearchviewmodel(null, viewerprofileId, allphotos),
+                ProfileDetails = getmembersearchviewmodel(null, profileId,allphotos)
             };
 
             //add in the ProfileCritera
@@ -315,7 +218,7 @@ namespace Shell.MVC2.Data
             return NewProfileBrowseModel;
         }
         //returns a list of profile browsemodles for a given user
-        public List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds)
+        public List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds, bool allphotos)
         {
             List<ProfileBrowseModel> BrowseModels = new List<ProfileBrowseModel>();
 
@@ -325,8 +228,8 @@ namespace Shell.MVC2.Data
                 {
                     //TO Do user a mapper instead of a contructur and map it from the service
                     //Move all this to a service
-                    ViewerProfileDetails = getmembersearchviewmodel(null,viewerprofileId),
-                    ProfileDetails = getmembersearchviewmodel(null,item)
+                    ViewerProfileDetails = getmembersearchviewmodel(null,viewerprofileId,allphotos),
+                    ProfileDetails = getmembersearchviewmodel(null,item, allphotos)
 
 
 
@@ -1192,7 +1095,7 @@ namespace Shell.MVC2.Data
 
 
                 //set variables
-                List<MemberSearchViewModel> MemberSearchViewmodels;
+                //  List<MemberSearchViewModel> MemberSearchViewmodels;
                 DateTime today = DateTime.Today;
                 DateTime max = today.AddYears(-(intAgeFrom + 1));
                 DateTime min = today.AddYears(-intAgeTo);
@@ -1287,7 +1190,7 @@ namespace Shell.MVC2.Data
 
                 //bind the models to the memberserch view model
 
-                var searchmodels = this.getmembersearchviewmodels(model.profile.id, models);
+                var searchmodels = this.getmembersearchviewmodels(model.profile.id, models,false );
 
                 var Profiles = searchmodels.Where(p => p.hasgalleryphoto == true).OrderBy(p => p.creationdate).ThenByDescending(p => p.distancefromme).Take(4);
 
