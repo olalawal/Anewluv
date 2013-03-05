@@ -47,7 +47,7 @@ namespace Shell.MVC2.Data
        {
            try
            {
-               if (modeltomap.id != null)
+               if (modeltomap.id != 0)
                {
 
                    profiledata viewerprofile = new profiledata();
