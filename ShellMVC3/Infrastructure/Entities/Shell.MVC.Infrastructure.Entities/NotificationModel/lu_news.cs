@@ -10,16 +10,22 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
 
 
-
+     [DataContract(Namespace = "")]
     public class lu_news
     {
         //we generate this manually from enums for now
         [Key]
+        [DataMember()]
         public int id { get; set; }
+        [DataMember()]
         public string description { get; set; }
+        [DataMember()]
         public DateTime? creationdate { get; set; }
-        public bool? active { get; set; }  
+        [DataMember()]
+        public bool? active { get; set; }
+        [DataMember()]
         public DateTime? removaldate { get; set; }
+        [DataMember()]
         public bool? curentmessagenews { get; set; }
 
     }

@@ -6,7 +6,10 @@ using System.ServiceModel;
 using System.Configuration;
 using System.ServiceModel.Configuration;
 using System.Threading;
-
+using System.ServiceModel.Channels;
+using System.Net;
+using System.ServiceModel.Activation;
+using System.Web.Configuration;
 namespace Shell.MVC2.Infrastructure
 {
    public class Channelfactoryhelper
@@ -31,6 +34,9 @@ namespace Shell.MVC2.Infrastructure
             /// </summary>
             private static readonly IDictionary<Type, string> cachedEndpointNames = new Dictionary<Type, string>();
 
+            public static string Authheader = "";
+            public static string ApiKey = "";
+
             /// <summary>
             /// A dictionary to hold created channel factories.
             /// </summary>
@@ -47,9 +53,24 @@ namespace Shell.MVC2.Infrastructure
             /// <param name="codeBlock">The code block.</param>
           public static void Use(UseServiceDelegate<T> codeBlock)
             {
+             
                 dynamic factory = GetChannelFactory();
                 dynamic proxy = (IClientChannel)factory.CreateChannel();
+              //test 
+              IClientChannel proxy2 = (IClientChannel)factory.CreateChannel(); 
                 dynamic success = false;
+            //  using (OperationContextScope contextScope = new OperationContextScope(proxy))    {  
+                //var appHeader = new MessageHeader<string>("appID1");
+             //string HeaderAppString = "application";           
+                MessageHeader header
+              = MessageHeader.CreateHeader(
+              "My-CustomHeader",
+              "http://myurl",
+              "Custom Header."
+              );
+
+
+     
 
                 Exception mostRecentEx = null;
                 for (int i = 0; i <= 4; i++)
@@ -57,8 +78,22 @@ namespace Shell.MVC2.Infrastructure
                     //        ' Attempt a maximum of 5 times 
                     try
                     {
-                        using (proxy)
+
+                        using (OperationContextScope contextScope = new OperationContextScope(proxy))    
                         {
+                            //for rest endpoint
+                            HttpRequestMessageProperty httpRequestProperty = new HttpRequestMessageProperty();
+                            httpRequestProperty.Headers.Add("Apikey", ApiKey);
+                            httpRequestProperty.Headers.Add(HttpRequestHeader.UserAgent, "my user agent");
+                            httpRequestProperty.Headers.Add(HttpRequestHeader.Authorization, Authheader);
+                            OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+
+
+                            //for soad
+                            //MessageHeader auth = MessageHeader.CreateHeader("Authorization","", Authheader);
+                            //MessageHeader apikey = MessageHeader.CreateHeader("Apikey", "", ApiKey);
+                           // OperationContext.Current.OutgoingMessageHeaders.Add(auth);
+                           // OperationContext.Current.OutgoingMessageHeaders.Add(apikey);
                             codeBlock((T)proxy);
                         }
 
@@ -66,7 +101,7 @@ namespace Shell.MVC2.Infrastructure
                     }
                     catch (ChannelTerminatedException cte)
                     {
-                        mostRecentEx = cte;
+                        mostRecentEx = cte;                        
                         proxy.Abort();
                         //  delay (backoff) and retry 
                         Thread.Sleep(1000 * (i + 1));
@@ -131,20 +166,31 @@ namespace Shell.MVC2.Infrastructure
             /// <returns>The channel factory.</returns>
             private static ChannelFactory<T> GetChannelFactory()
             {
-                lock (cacheLocker)
+                try
                 {
-                    var endpointName = GetEndpointName();
-
-                    if (cachedFactories.ContainsKey(endpointName))
+                    lock (cacheLocker)
                     {
-                        return cachedFactories[endpointName];
+                        var endpointName = GetEndpointName();
+
+                        if (cachedFactories.ContainsKey(endpointName))
+                        {
+                            return cachedFactories[endpointName];
+                        }
+
+                        var factory = new ChannelFactory<T>(endpointName);
+
+                        cachedFactories.Add(endpointName, factory);
+                        return factory;
                     }
-
-                    var factory = new ChannelFactory<T>(endpointName);
-
-                    cachedFactories.Add(endpointName, factory);
-                    return factory;
                 }
+                catch (Exception ex)
+                {
+                    var message = ex.Message;
+                    //find a way to communicate that we user the factory so we cannot log errors or anything
+                    throw ex;
+                }
+
+               
             }
 
             /// <summary>
@@ -163,25 +209,61 @@ namespace Shell.MVC2.Infrastructure
                         return cachedEndpointNames[type];
                     }
 
-               
+                    Configuration appConfig = GetDefaultConfig(); //ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    ServiceModelSectionGroup serviceModel = ServiceModelSectionGroup.GetSectionGroup(appConfig);
+                   // BindingsSection oBinding = serviceModel2.Bindings;
 
-                   ////var serviceModel = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).SectionGroups["system.serviceModel"] as ServiceModelSectionGroup;
+                    //var serviceModel = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).SectionGroups["system.serviceModel"] as ServiceModelSectionGroup;
 
-                   // if ((serviceModel != null) && !string.IsNullOrEmpty(fullName))
-                   // {
-                   //     foreach (var endpointName in serviceModel.Client.Endpoints.Cast<ChannelEndpointElement>().Where(endpoint => fullName.EndsWith(endpoint.Contract)).Select(endpoint => endpoint.Name))
-                   //     {
-                   //         cachedEndpointNames.Add(type, endpointName);
-                   //         return endpointName;
-                   //     }
-                   // }
+                    if ((serviceModel != null) && !string.IsNullOrEmpty(fullName))
+                    {
+                        foreach (var endpointName in serviceModel.Client.Endpoints.Cast<ChannelEndpointElement>().Where(endpoint => fullName.EndsWith(endpoint.Contract)).Select(endpoint => endpoint.Name))
+                        {
+                            cachedEndpointNames.Add(type, endpointName);
+                            return endpointName;
+                        }
+                    }
 
-                    cachedEndpointNames.Add(type, name);
-                    return fullName;
+                    //Old code where we get it from calling web config
+                   // cachedEndpointNames.Add(type, name);
+                   // return fullName;
                 }
 
                 throw new InvalidOperationException("Could not find endpoint element for type '" + fullName + "' in the ServiceModel client configuration section. This might be because no configuration file was found for your application, or because no endpoint element matching this name could be found in the client element.");
             }
+
+            private static Configuration GetDefaultConfig()
+            {    
+                Configuration cfg; 
+                System.Web.HttpContext ctx = System.Web.HttpContext.Current;
+                //WCF services hosted in IIS... 
+                VirtualPathExtension p = null;  
+                try    
+                {        
+                    p = OperationContext.Current.Host.Extensions.Find<VirtualPathExtension>(); 
+                }   
+                catch (Exception ex) 
+                {   
+                
+                }    
+                if (ctx != null)    
+                {       
+                    cfg = WebConfigurationManager.OpenWebConfiguration(ctx.Request.ApplicationPath);
+                    
+                }   
+                else if (p != null)   
+                {       
+                   cfg = WebConfigurationManager.OpenWebConfiguration(p.VirtualPath);
+                    
+                }    
+                else   
+                {      
+                    //cfg = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    cfg = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                }   
+                return cfg;
+            } 
+
         }
     }
 }

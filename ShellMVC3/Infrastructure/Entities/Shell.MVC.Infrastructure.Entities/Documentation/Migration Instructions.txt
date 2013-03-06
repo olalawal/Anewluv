@@ -2,7 +2,9 @@
 
  PM> Enable-Migrations  
 
-
+ Update-Database -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel" -verbose –force
+Update-Database -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose –force
+ Update-Database -StartUpProjectName "Shell.MVC2.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationApiKeyModel" -verbose 
 
 
 Automatic migration was not applied because it would result in data loss.

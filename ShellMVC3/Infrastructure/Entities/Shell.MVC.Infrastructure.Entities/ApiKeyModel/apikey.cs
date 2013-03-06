@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
 {
+    [DataContract(Namespace = "")]
      public class apikey
     {
 

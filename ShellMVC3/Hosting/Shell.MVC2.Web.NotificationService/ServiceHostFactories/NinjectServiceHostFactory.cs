@@ -24,6 +24,8 @@ namespace Shell.MVC2.Web.NotificationService.ServiceHostFactories
         
            // container.Load<NinjectModules.CustomErrorLogContextModule>();
             container.Load<NinjectModules.AnewLuvContextModule>();
+            container.Load<NinjectModules.ApiKeyContextModule>();
+            container.Load<NinjectModules.MembershipModule>();
             container.Load<NinjectModules.NotificationContextModule >();
             container.Load<NinjectModules.InfoNotificationModule>();                   
             return container;

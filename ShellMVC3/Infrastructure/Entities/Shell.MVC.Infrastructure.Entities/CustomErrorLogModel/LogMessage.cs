@@ -5,10 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
-    
+    [DataContract(Namespace = "")]
     public class logmessage
     {
         private string m_text;

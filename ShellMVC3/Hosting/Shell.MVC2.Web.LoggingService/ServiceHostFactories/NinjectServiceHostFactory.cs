@@ -18,6 +18,7 @@ namespace Shell.MVC2.Web.LoggingService.ServiceHostFactories
         {
             IKernel container = new StandardKernel();
             container.Load<NinjectModules.ApiKeyContextModule>();
+            container.Load<NinjectModules.MembershipModule>();
             container.Load<NinjectModules.CustomErrorLogContextModule>();
             container.Load<NinjectModules.ErrorLoggingModule>();         
             return container;

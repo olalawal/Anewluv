@@ -8,23 +8,33 @@ using System.Runtime.Serialization;
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
 
-   
-    [DataContract]
+
+   [DataContract(Namespace = "")]
     public class lu_template
     {
         //we generate this manually from enums for now
      
  [Key]
+       [DataMember()]
        public int id { get; set; }
-       public string description { get; set; }    
-       public string physicallocation { get; set; }
-       public string filename { get; set; } 
-       public DateTime? creationdate { get; set; }   
-       public DateTime? removaldate { get; set; }     
-       public bool active { get; set; }    
-       public string razortemplatebody { get; set; } 
-       public virtual lu_templatebody bodystring { get; set; }
-       public virtual lu_templatesubject subjectstring { get; set; }
+ [DataMember()]
+ public string description { get; set; }
+ [DataMember()]
+ public string physicallocation { get; set; }
+ [DataMember()]
+ public string filename { get; set; }
+ [DataMember()]
+ public DateTime? creationdate { get; set; }
+ [DataMember()]
+ public DateTime? removaldate { get; set; }
+ [DataMember()]
+ public bool active { get; set; }
+ [DataMember()]
+ public string razortemplatebody { get; set; }
+ [DataMember()]
+ public virtual lu_templatebody bodystring { get; set; }
+ [DataMember()]
+ public virtual lu_templatesubject subjectstring { get; set; }
 
         public static lu_template Create(Action<lu_template> init)
         {

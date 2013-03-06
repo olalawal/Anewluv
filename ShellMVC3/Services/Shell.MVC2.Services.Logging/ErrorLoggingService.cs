@@ -24,9 +24,9 @@ namespace Shell.MVC2.Services.Logging
         }
 
         
-        public string GetData(int value)
+        public string GetData(string value)
         {
-           return _errorloggingrepository.GetData(value);
+           return _errorloggingrepository.GetData(Convert.ToInt32(value));
         }
 
 

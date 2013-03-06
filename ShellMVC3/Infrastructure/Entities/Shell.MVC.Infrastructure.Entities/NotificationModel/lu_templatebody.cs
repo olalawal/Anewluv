@@ -10,16 +10,21 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 
 
 
-
+     [DataContract(Namespace = "")]
     public class lu_templatebody
     {
        
         //we generate this manually from enums for now
         [Key]
-        public int id { get; set; }      
-        public string description { get; set; }         
-        public bool? active { get; set; }       
-        public DateTime? creationdate { get; set; }  
+         [DataMember()]
+         public int id { get; set; }
+        [DataMember()]
+        public string description { get; set; }
+        [DataMember()]
+        public bool? active { get; set; }
+        [DataMember()]
+        public DateTime? creationdate { get; set; }
+        [DataMember()]
         public DateTime? removaldate { get; set; }
 
 

@@ -13,19 +13,23 @@ namespace Shell.MVC2.Services.Contracts
     [ServiceContract]
     public interface IErrorLoggingService
     {
-         [OperationContract]
-        string GetData(int value);
-
+        [OperationContract(Name = "GetData"), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebGet(UriTemplate = "/GetData/{value}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]       
+         string GetData(string value);
+ 
         //[OperationContract]
         //int WriteLogEntry(CustomErrorLog logEntry);
 
-         [OperationContract]
-        [WebInvoke]
+     
+         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+         [ServiceKnownType(typeof(errorlog))]
+         [WebInvoke(UriTemplate = "/WriteCompleteLogEntry", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
         int WriteCompleteLogEntry(errorlog logEntry);
 
-         [OperationContract]
-         [WebInvoke]
-         int TranslateLogSeverity( logseverityEnum LogSeverityValue);
+         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+         [ServiceKnownType(typeof(logseverityEnum))]
+         [WebInvoke(UriTemplate = "/TranslateLogSeverity", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+         int TranslateLogSeverity(logseverityEnum LogSeverityValue);
 
 
         //void WriteValue(int logEntryID, string name, object value);

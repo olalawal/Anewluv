@@ -15,7 +15,7 @@ using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
-
+    [DataContract(Namespace = "")]
     public class lu_logseverityinternal
     {
         //we generate this manually from enums for now

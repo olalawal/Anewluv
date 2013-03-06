@@ -19,6 +19,7 @@ using Shell.MVC2.Infrastructure.Entities.NotificationModel;
 using Shell.MVC2.Services.Contracts;
 
 using Shell.MVC2.Infrastructure;
+using System.Net;
 
 namespace LoggingLibrary
 {
@@ -70,12 +71,12 @@ namespace LoggingLibrary
             //mysClient.Test();
             // LogClient = new Log;//LoggerSoapClient();
             //oLogEntry = CreateLgEntryObject(null, null, logseverityEnum.Information);
-            ErrorLoggingfactory = new ChannelFactory<IErrorLoggingService>("ErrorLoggingService.soap");//(mysClient.Endpoint);
-            LoggingServiceProxy = ErrorLoggingfactory.CreateChannel();
+           // ErrorLoggingfactory = new ChannelFactory<IErrorLoggingService>("webHttpBinding_IErrorLoggingService");//(mysClient.Endpoint);
+           // LoggingServiceProxy = ErrorLoggingfactory.CreateChannel();
 
             //create chanle for notifcaiton servierc
-            InfoNotificationfactory = new ChannelFactory<IInfoNotificationService>("InfoNotificationService.soap");//(mysClient.Endpoint);
-           InfoNotificationServiceProxy =InfoNotificationfactory.CreateChannel();
+           // InfoNotificationfactory = new ChannelFactory<IInfoNotificationService>("InfoNotificationService.soap");//(mysClient.Endpoint);
+           //InfoNotificationServiceProxy =InfoNotificationfactory.CreateChannel();
 
             oLogEntry = new errorlog();
 
@@ -191,9 +192,23 @@ namespace LoggingLibrary
                     oLogEntry.profileid   =  Convert.ToString(profileid) ;
                 }
 
+
+                WebClient client = new WebClient();
+
+
+                // Add a user agent header in case the  
+                // requested URI contains a query.
+
+                client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+
+
+
                 //first  write database entry
+                //test of auth header info
+                Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Authheader = "Y2FzZTpkcml2ZTMzMw==";
                 Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Use(d =>
                 {
+
                    var id= d.WriteCompleteLogEntry(oLogEntry);
                    oLogEntry.id = id;
                 }
@@ -220,8 +235,10 @@ namespace LoggingLibrary
                 //attempt to log this error if this is our first pass
                 if (!(errorpass >= 2))
                 {
-                    //log error if we only ran this once or twice
-                    WriteSingleEntry( logseverityEnum.CriticalError , ex);
+                    //log error directly via DLL if we only ran this once or twice
+                    //WriteSingleEntry( logseverityEnum.CriticalError , ex);
+                    // find a way to notify admins that logging service id down
+
                 }
 
             }
@@ -281,10 +298,20 @@ namespace LoggingLibrary
             }
 
             entry.loggeduser = sessionID;
-            using (new OperationContextScope((IContextChannel)LoggingServiceProxy))
-            {
-                entry.id = LoggingServiceProxy.TranslateLogSeverity(severityLevel);
+
+
+            Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Use(d =>
+            { 
+                
+                entry.id = d.TranslateLogSeverity(severityLevel);
+               
             }
+            );
+
+            //using (new OperationContextScope((IContextChannel)LoggingServiceProxy))
+            //{
+            //    entry.id = LoggingServiceProxy.TranslateLogSeverity(severityLevel);
+            //}
 
 
             //entry.LoggedObject = new LogObject();

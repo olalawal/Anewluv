@@ -3,24 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
+     [DataContract(Namespace = "")]
     public class systemaddress
     {
         
         [Key]
-        public int id { get; set; }
+         [DataMember()]
+         public int id { get; set; }
         //public int systemaddresstype_id { get; set; }
-        public virtual lu_systemaddresstype systemaddresstype { get; set; }              
+     [DataMember ()]  public virtual lu_systemaddresstype systemaddresstype { get; set; }              
         public string emailaddress { get; set; }
+        [DataMember()]
         public string hostip { get; set; }
+        [DataMember()]
         public string hostname { get; set; }
-        public string createdby { get; set; }   
+        [DataMember()]
+        public string createdby { get; set; }
+        [DataMember()]
         public string credentialusername { get; set; }
+        [DataMember()]
         public string credentialpassword { get; set; }    //salt password  plain text for now   
-        public bool? active { get; set; }       
+        [DataMember()]
+        public bool? active { get; set; }
+        [DataMember()]
         public DateTime? creationdate { get; set; }
+        [DataMember()]
         public DateTime? removaldate { get; set; }
 
         public static systemaddress Create(Action<systemaddress> init)

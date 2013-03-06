@@ -9,7 +9,7 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
 {
 
 
-
+    [DataContract(Namespace = "")]
     public class lu_application_apikey
     {
         //we generate this manually from enums for now

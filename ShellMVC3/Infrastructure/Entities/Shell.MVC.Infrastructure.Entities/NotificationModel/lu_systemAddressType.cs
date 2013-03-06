@@ -7,11 +7,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
-   
 
-  
 
-    [DataContract]
+
+
+    [DataContract(Namespace = "")]
     public class lu_systemaddresstype
     {
         //we generate this manually from enums for now

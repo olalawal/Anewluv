@@ -322,6 +322,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UxMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service References\ErrorLogging\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\ServiceReference1\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2141,10 +2146,27 @@
     <Content Include="Scripts\modernizr.js" />
     <Content Include="Scripts\quicksilver.js" />
     <None Include="Properties\DataSources\LoggingLibrary.ServiceReference1.CompositeType.datasource" />
+    <None Include="Service References\ErrorLogging\ErrorLoggingService.wsdl" />
+    <None Include="Service References\ErrorLogging\ErrorLoggingService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ErrorLogging\ErrorLoggingService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ErrorLogging\ErrorLoggingService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ServiceReference1\InfoNotificationService.disco" />
     <None Include="Service References\ServiceReference1\configuration91.svcinfo" />
     <None Include="Service References\ServiceReference1\configuration.svcinfo" />
     <None Include="Service References\ServiceReference1\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ErrorLogging\ErrorLoggingService.disco" />
+    <None Include="Service References\ErrorLogging\configuration91.svcinfo" />
+    <None Include="Service References\ErrorLogging\configuration.svcinfo" />
+    <None Include="Service References\ErrorLogging\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
@@ -2379,6 +2401,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ErrorLogging\" />
     <WCFMetadataStorage Include="Service References\ServiceReference1\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

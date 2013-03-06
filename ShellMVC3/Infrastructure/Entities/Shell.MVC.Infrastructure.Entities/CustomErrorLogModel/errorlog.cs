@@ -7,14 +7,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
+
+    [DataContract(Namespace = "")]
      public class errorlog
     {
 
 
          public errorlog() 
           {
-            //  LogSeverity = new lu_logSeverity();
-            //  Application = new lu_application();
+              logseverity = new lu_logseverity();
+              application = new lu_application();
           
           } 
             

@@ -471,7 +471,9 @@ namespace Shell.MVC2.Data
                                   id = f.profile_id
                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                               }).ToList();
-         
+             var dd2 = 0;
+             var dd = 2 /  dd2;
+
              bool allowpaging = (interests.Count >= (Page.GetValueOrDefault()  * NumberPerPage.GetValueOrDefault())? true: false) ;
              var pageData = Page.GetValueOrDefault() > 1 & allowpaging  ? 
                  new PaginatedList<MemberSearchViewModel>().GetCurrentPages(interests, Page ?? 1, NumberPerPage ?? 4) : interests.Take(NumberPerPage.GetValueOrDefault());

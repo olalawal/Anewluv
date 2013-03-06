@@ -9,7 +9,7 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
 {
 
 
-
+    [DataContract(Namespace = "")]
     public class lu_accesslevel
     {
         //we generate this manually from enums for now

@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 
 namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
 {
-    [DataContract]
+   [DataContract(Namespace = "")]
     public class message
     {
      
@@ -23,18 +23,31 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
          }
         
         [Key]
-        public int id { get; set; }        
-        public virtual lu_messagetype  messagetype { get; set; }    
-        public virtual lu_template  template { get; set; }        
+        [DataMember()]
+        public int id { get; set; }
+        [DataMember()]
+        public virtual lu_messagetype messagetype { get; set; }
+        [DataMember()]
+        public virtual lu_template template { get; set; }
+        [DataMember()]
         public virtual systemaddress systemaddress { get; set; }
+        [DataMember()]
         public virtual ICollection<address> recipients { get; set; }
+        [DataMember()]
         public string sendingapplication { get; set; }  //TO do convert applications to enum as well
+        [DataMember()]
         public string content { get; set; }
+        [DataMember()]
         public string body { get; set; }
+        [DataMember()]
         public string subject { get; set; }
-        public object attachMents { get; set; }      
+        [DataMember()]
+        public object attachMents { get; set; }
+        [DataMember()]
         public DateTime? creationdate { get; set; }
+        [DataMember()]
         public int? sendattempts { get; set; }
+        [DataMember()]
         public bool? sent { get; set; }
         
 

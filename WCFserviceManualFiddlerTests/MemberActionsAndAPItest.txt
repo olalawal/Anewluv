@@ -16,3 +16,8 @@ Authorization: Y2FzZTpkcml2ZTMzMw==
 
 http://localhost/Shell.MVC2.Web.MemberActionsService/MemberActionsService.svc/Rest/getwhoiaminterestedin/2/1/4 
 
+
+
+peek stuff
+
+http://localhost/Shell.MVC2.Web.MemberActionsService/MemberActionsService.svc/Rest/getwhoipeekedatcount/2

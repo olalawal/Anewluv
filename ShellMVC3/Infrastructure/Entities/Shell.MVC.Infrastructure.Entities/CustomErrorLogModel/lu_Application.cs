@@ -9,7 +9,7 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
 {
 
 
-
+    [DataContract(Namespace = "")]
     public class lu_application
     {
         //we generate this manually from enums for now
