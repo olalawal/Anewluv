@@ -98,6 +98,8 @@ namespace Shell.MVC2.Infrastructure
                         }
 
                         success = true;
+                      
+                        
                     }
                     catch (ChannelTerminatedException cte)
                     {
@@ -144,16 +146,23 @@ namespace Shell.MVC2.Infrastructure
                         if (!success)
                         {
                             proxy.Abort();
+                           
                         }
                     }
 
+                    //if we have success it means no error we can stop attempty to connect
+                    //leave the loop
+                    if (success) break;
                 }
+
+              
+              
                 if (mostRecentEx != null)
                 {
                     proxy.Abort();
                     throw new Exception("WCF call failed after 5 retries.", mostRecentEx);
                 }
-
+                
 
             }
 

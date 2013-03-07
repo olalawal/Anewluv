@@ -24,9 +24,11 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
             [Key]
             public int id { get; set; }
             [DataMember]
-            public DateTime? timestamp { get; set; }          
-            public  lu_logseverity  logseverity { get; set; }     
-            public  lu_logseverityinternal logseverityinternal { get; set; } 
+            public DateTime? timestamp { get; set; }
+            [DataMember]
+            public lu_logseverity logseverity { get; set; }
+            [DataMember]
+            public lu_logseverityinternal logseverityinternal { get; set; } 
             //public virtual  LogSeverity Severity  { get; set; }  //complex type mapper
             //[NotMapped]
             //public logseverityEnum logseverityEnum
@@ -40,7 +42,8 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
             public object loggedobject { get; set; }
 
             //public int application_id { get; set; }
-            public lu_application   application { get; set; }
+            [DataMember]
+            public lu_application application { get; set; }
             
             public string ipaddress { get; set; }
             [DataMember]

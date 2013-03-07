@@ -34,10 +34,18 @@ namespace Shell.MVC2.Data
           //  {
             try
             {
-               
-                _context.errorlogs.Add(logEntry);
 
-                _context.SaveChanges();
+                //make sure we valid desc and log severites so we are not adding new ones
+                lu_application application  =_context.lu_application.Where(p=>p.id == logEntry.application.id).FirstOrDefault();
+                lu_logseverity logseverity  = _context.lu_logseverity.Where(p=>p.id == logEntry.logseverity.id).FirstOrDefault();
+
+                //set as default error messages if blank
+                logEntry.application = application != null ? application : _context.lu_application.Where(p => p.id == (int)applicationEnum.GeneralApplicationError).FirstOrDefault();
+                logEntry.logseverity = logseverity != null ? logseverity : _context.lu_logseverity.Where(p => p.id ==  (int)logseverityEnum.Warning).FirstOrDefault(); ;
+
+                
+               _context.errorlogs.Add(logEntry);                
+              _context.SaveChanges();
                 
                 return logEntry.id;
             }

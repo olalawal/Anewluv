@@ -14,6 +14,7 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
     {
         //we generate this manually from enums for now
         [Key]
+        [DataMember()]
         public int id { get; set; }
         [DataMember()]
         public string description { get; set; }

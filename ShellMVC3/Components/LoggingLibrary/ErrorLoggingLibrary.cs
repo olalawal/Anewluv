@@ -31,14 +31,14 @@ namespace LoggingLibrary
         // private List<LogMessage> lstMessages;
         // private List<LogValue> lstValues;
 
-        private IErrorLoggingService LoggingServiceProxy;
-        ChannelFactory<IErrorLoggingService> ErrorLoggingfactory;
+        //private IErrorLoggingService LoggingServiceProxy;
+        //ChannelFactory<IErrorLoggingService> ErrorLoggingfactory;
         private bool disposed = false;
         private int errorpass = 0;
 
         //chanle for notifications 
-        private IInfoNotificationService InfoNotificationServiceProxy;
-        ChannelFactory<IInfoNotificationService> InfoNotificationfactory;
+        //private IInfoNotificationService InfoNotificationServiceProxy;
+        //ChannelFactory<IInfoNotificationService> InfoNotificationfactory;
        
 
         /// <summary>
@@ -122,156 +122,156 @@ namespace LoggingLibrary
                                     HttpContextBase context = null)
         {
             //set the error pass since this function can be used recursively
-            errorpass = errorpass + 1;
-            //build the error object
-            oLogEntry = new errorlog();
+            //errorpass = errorpass + 1;
+
+           // for (int i = 0; i <= 1; i++)
+          //  {
+               
+                //        ' Attempt a maximum of 2 times if anything fails
+
+            try
+            {
+
+                    //first  write database entry
+                    //test of auth header info
+                    Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Authheader = "Y2FzZTpkcml2ZTMzMw==";
+                    Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Use(d =>
+                    {
+
+                        var id = d.WriteCompleteLogEntry(CreateErrorLog(severityLevelvalue,referedexception,profileid,context));
+                        oLogEntry.id = id;
+                    }
+                    );
+                    //var test = LoggingServiceProxy.WriteCompleteLogEntry(oLogEntry);
+                    //modified to log the error and send message in one stroke
+                    //moved this to a separate call
+                    //ErrorNotificationServiceProxy.SendErrorMessageToDevelopers(oLogEntry);
+                    // Clear();
+                }
+
+                //if we had an error logging this error log this
+                catch (Exception ex)
+                {
+                   //we get an error trying to log log it here I guess i.e connecting or watatever
+                    //write error directly
+                    Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Use(d =>
+                    {
+                        var id = d.WriteCompleteLogEntry(CreateErrorLog(logseverityEnum.CriticalError, ex));
+                        oLogEntry.id = id;
+                    });
+                }
+
+               //Attempt to send the notification 
+                try
+                {
+                    //now write the email and send it
+                    Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IInfoNotificationService>.Use(d =>
+                    {
+                        d.senderrormessage(oLogEntry, addresstypeenum.Developer.ToString());
+                    }
+                    );
+
+
+                }
+                catch(Exception ex)
+                {
+                    //write error directly
+                    Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Use(d =>
+                    {
+                        var id = d.WriteCompleteLogEntry(CreateErrorLog(logseverityEnum.CriticalError  ,ex));
+                        oLogEntry.id = id;
+                    }
+                   );
+
+                }
+         
+
+        }
+
+
+
+
+        public errorlog CreateErrorLog(logseverityEnum severityLevelvalue, Exception referedexception, int? profileid = null,
+                                  HttpContextBase context = null) 
+          {
           
 
-            //build the error stuff
-            try
-            {
-                StackTrace stackTrace = new StackTrace(referedexception, true);
-            StackFrame stackFrame = stackTrace.GetFrame(0);
-            MethodBase methodBase = stackFrame.GetMethod();
-
-            var inspectmoduletest = methodBase.Module;
-
-            //   ex.ToString();
-            //   Get stack trace for the exception with source file information 
-            //   var st = new StackTrace(ex, true);
-            //   Get the top stack frame 
-            //  var frame = st.GetFrame(0);
-            //     Get the line number from the stack frame 
-            //  var line = frame.GetFileLineNumber();
+                //build the error object
+                oLogEntry = new errorlog();
 
 
+                //build the error stuff
+                try
+                {
+                    StackTrace stackTrace = new StackTrace(referedexception, true);
+                    StackFrame stackFrame = stackTrace.GetFrame(0);
+                    MethodBase methodBase = stackFrame.GetMethod();
 
+                    var inspectmoduletest = methodBase.Module;
 
-            var messagetemp = referedexception.Message.ToString();
-            var Source = referedexception.Source;
-            var TargetSite = referedexception.TargetSite;
-            var StackTrace = referedexception.StackTrace;
+                    //   ex.ToString();
+                    //   Get stack trace for the exception with source file information 
+                    //   var st = new StackTrace(ex, true);
+                    //   Get the top stack frame 
+                    //  var frame = st.GetFrame(0);
+                    //     Get the line number from the stack frame 
+                    //  var line = frame.GetFileLineNumber();
 
 
 
 
+                    var messagetemp = referedexception.Message.ToString();
+                    var Source = referedexception.Source;
+                    var TargetSite = referedexception.TargetSite;
+                    var StackTrace = referedexception.StackTrace;
 
 
-            if (referedexception != null && stackTrace != null)
-            {
-                oLogEntry.message = referedexception.ToString();
-                oLogEntry.stacktrace = stackTrace.ToString();
-                oLogEntry.linenumbers = stackFrame.GetFileLineNumber();
-                oLogEntry.methodname = methodBase.Name; ;
-                oLogEntry.assemblyname = GetAssemblyNameFromMethodBase(methodBase);
-                oLogEntry.parentmethodname = WhoCalledMe(referedexception);
-                oLogEntry.classname = methodBase.DeclaringType.Name;
-                oLogEntry.timestamp = DateTime.UtcNow;
-                 
+
+
+
+
+                    if (referedexception != null && stackTrace != null)
+                    {
+                        oLogEntry.message = referedexception.ToString();
+                        oLogEntry.stacktrace = stackTrace.ToString();
+                        oLogEntry.linenumbers = stackFrame.GetFileLineNumber();
+                        oLogEntry.methodname = methodBase.Name; ;
+                        oLogEntry.assemblyname = GetAssemblyNameFromMethodBase(methodBase);
+                        oLogEntry.parentmethodname = WhoCalledMe(referedexception);
+                        oLogEntry.classname = methodBase.DeclaringType.Name;
+                        oLogEntry.timestamp = DateTime.UtcNow;
+
+                    }
+
+
+                    if (context != null & !object.ReferenceEquals(context, string.Empty))
+                    {
+                        oLogEntry.loggeduser = context.User.Identity.Name;
+                        oLogEntry.ipaddress = context.Request.UserHostAddress;
+                        oLogEntry.errorpage = context.Request.Path;
+                        oLogEntry.sessionid = context.Session.SessionID;
+
+                        //
+                        oLogEntry.request = context.Request.Form.ToString();
+                        oLogEntry.querystring = context.Request.QueryString.ToString();
+                    }
+
+                    oLogEntry.application.id = this.iApplicationID;
+                    oLogEntry.logseverity.id = (int)severityLevelvalue;
+
+                    //replace with profile ID if we dont have it
+                    if (profileid != null & !object.ReferenceEquals(profileid, string.Empty))
+                    {
+                        oLogEntry.profileid = Convert.ToString(profileid);
+                    }
             }
-
-
-            if (context != null & !object.ReferenceEquals(context, string.Empty))
+                catch
             {
-                oLogEntry.loggeduser = context.User.Identity.Name;
-                oLogEntry.ipaddress = context.Request.UserHostAddress;
-                oLogEntry.errorpage = context.Request.Path;
-                oLogEntry.sessionid = context.Session.SessionID;
-               
-                //
-                oLogEntry.request  = context.Request.Form.ToString();
-                oLogEntry.querystring  = context.Request.QueryString.ToString();
-            }
-  
-                 oLogEntry.application.id  = this.iApplicationID ;
-                 oLogEntry.logseverity.id    = (int)severityLevelvalue;
+
                 
-                //replace with profile ID if we dont have it
-                if (profileid  != null & !object.ReferenceEquals(profileid , string.Empty))
-                {
-                    oLogEntry.profileid   =  Convert.ToString(profileid) ;
-                }
-
-
-                WebClient client = new WebClient();
-
-
-                // Add a user agent header in case the  
-                // requested URI contains a query.
-
-                client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-
-
-
-                //first  write database entry
-                //test of auth header info
-                Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Authheader = "Y2FzZTpkcml2ZTMzMw==";
-                Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Use(d =>
-                {
-
-                   var id= d.WriteCompleteLogEntry(oLogEntry);
-                   oLogEntry.id = id;
-                }
-                );
-                //var test = LoggingServiceProxy.WriteCompleteLogEntry(oLogEntry);
-                //modified to log the error and send message in one stroke
-
-                //now write the email and send it
-                Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IInfoNotificationService>.Use(d =>
-                {
-                    WriteCustomErrorNotificationEntry(oLogEntry);
-                }
-                );
-
-               
-                //moved this to a separate call
-                //ErrorNotificationServiceProxy.SendErrorMessageToDevelopers(oLogEntry);
-                // Clear();
-            }
-
-            //if we had an error logging this error log this
-            catch (Exception ex)
-            {
-                //attempt to log this error if this is our first pass
-                if (!(errorpass >= 2))
-                {
-                    //log error directly via DLL if we only ran this once or twice
-                    //WriteSingleEntry( logseverityEnum.CriticalError , ex);
-                    // find a way to notify admins that logging service id down
-
-                }
-
-            }
-            //finally
-            //  {
-            //     Clear();
-            //  }
-           
-
-
-        }
-
-
-
-
-        //uses the Notification servcice to send an error to the developer
-        public void WriteCustomErrorNotificationEntry(errorlog error)
-        {
-            //modified to log the error and send message in one stroke
-            try
-            {
-
-                InfoNotificationServiceProxy.senderrormessage(error, addresstypeenum.Developer.ToString());
-            }
-            catch (Exception ex)
-            {
-                //log whatever error we had here
-                WriteSingleEntry(logseverityEnum.CriticalError, ex);
-
-            }
-
-        }
-           
+    }
+            return oLogEntry;
+          }
 
         /// <summary>
         /// Creates a new log entry and populate it with needed data.  This procedure does not write a log entry.
@@ -330,11 +330,11 @@ namespace LoggingLibrary
             //reset this
             oLogEntry = null;
             //lstValues.Clear();
-            // lstMessages.Clear();
-            ((IClientChannel)LoggingServiceProxy).Close();
-            ((IClientChannel)InfoNotificationServiceProxy).Close();
-            ErrorLoggingfactory.Close();
-           InfoNotificationfactory.Close();
+            //// lstMessages.Clear();
+           // ((IClientChannel)LoggingServiceProxy).Close();
+           // ((IClientChannel)InfoNotificationServiceProxy).Close();
+           // ErrorLoggingfactory.Close();
+           //InfoNotificationfactory.Close();
           
         }
 
