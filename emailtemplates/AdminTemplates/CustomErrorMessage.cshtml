@@ -1,15 +1,23 @@
-﻿
-
+﻿@model EmailModel
+@{
+    Layout = null;
+}
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>CustomErrorMessage generated a @Model. </title>
+    <title>An error from AnewLuv.com</title> 
 </head>
 <body>
-ErrorMessage: @Model.Message
+<div>
+Subject : @Model.subject
+</div>
+Message detail : 
+<div></div>
+<div></div>
+ @Model.body
 </body>
 </html>
-<html>
-<head>
+
+

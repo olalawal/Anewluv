@@ -14,6 +14,7 @@ using Shell.MVC2.Interfaces;
 using System.Data;
 using System.Net.Mail;
 using Shell.MVC2.Infrastructure;
+using LoggingLibrary;
 
 namespace Shell.MVC2.Data
 {
@@ -207,10 +208,13 @@ namespace Shell.MVC2.Data
             {
                 dynamic systemsenderaddress = (from x in (_notificationcontext.systemaddress.Where(f => f.id == (int)(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
                 lu_template  template = (from x in (_notificationcontext.lu_template.Where(f => f.id == (int)(templateenum.GenericErrorMessage))) select x).First();
-                dynamic recipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == (int)(addresstype))) select x);
+                lu_messagetype  messagetype = (from x in (_notificationcontext.lu_messagetype .Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).First();
+                var recipientemailaddresss = (from x in (_notificationcontext.address.Where(f => f.id == (int)(addresstype))) select x).ToList();
                
                  //build the recipient address objects
                  
+
+
                     EmailModel returnmodel = new EmailModel();
                     returnmodel = getemailbytemplateid(templateenum.GenericErrorMessage);
                     //fill in the rest of the email model values 
@@ -226,11 +230,11 @@ namespace Shell.MVC2.Data
                  message = (message.Create(c =>
                  {
                      //c.id = (int)templateenum.GenericErrorMessage;
-                     c.template.id = (int)templateenum.GenericErrorMessage;
-                     c.messagetype.id = (int)messagetypeenum.DeveloperError;
+                     c.template = template;
+                     c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
                      c.body = TemplateParser.RazorFileTemplate(template.filename , ref returnmodel); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
                      c.subject = returnmodel.subject;
-                     c.recipients = recipientemailaddresss.ToList();
+                     c.recipients = recipientemailaddresss;
                      c.sendingapplication = "InfoNotificationService";
                      c.systemaddress = systemsenderaddress;
                  }));
@@ -242,9 +246,8 @@ namespace Shell.MVC2.Data
               catch (Exception ex)
               {
                   //log error mesasge
-                  //handle logging here
-                  var message = ex.Message;
-                  throw ex;
+                  new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning , ex, null, null,false);
+                 
               }
              
               

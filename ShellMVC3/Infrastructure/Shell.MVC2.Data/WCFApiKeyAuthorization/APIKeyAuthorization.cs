@@ -101,9 +101,16 @@ namespace Shell.MVC2.Data
 
 
             //for now while testing ignore api key
+            //Inject this somewhere or add to API key repo
+            List<string> nonauthenticatedservices = new List<string>();
+            List<string> nonauthenticatedURLS = new List<string>();
 
-
-
+            //TO DO this list needs to be more broken down
+            nonauthenticatedservices.Add("Shell.MVC2.Web.NotificationService");
+            nonauthenticatedservices.Add("Shell.MVC2.Web.AuthenticationService");
+            nonauthenticatedservices.Add("Shell.MVC2.Web.Common");
+            nonauthenticatedservices.Add("Shell.MVC2.Web.GeoService");
+            nonauthenticatedservices.Add("Shell.MVC2.Web.MediaService");
             //TO DO add code to  call membership service and make sure the requestor has rights to view the data they are requesting
             //TO DO List the Service URLS that and handle differing security for each 
 
@@ -118,7 +125,13 @@ namespace Shell.MVC2.Data
                 urisegments[4].Replace("/", ""  ) == helpsegment 
                 )
             return true;
-         
+            
+            //check if we are looking at the URLS or specific methods that allow Anonymoys access
+            if (nonauthenticatedservices.Contains(urisegments[1].ToString())) return true;
+            //look at the urls for specicif URLS that allow anonymous
+            if (nonauthenticatedURLS.Contains(urisegments[2].ToString())) return true;
+
+
               //allows service to be discovereable with no api key
               if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/","") != "$metadata") 
               {

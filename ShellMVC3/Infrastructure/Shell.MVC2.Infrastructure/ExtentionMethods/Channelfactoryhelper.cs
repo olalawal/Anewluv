@@ -10,6 +10,9 @@ using System.ServiceModel.Channels;
 using System.Net;
 using System.ServiceModel.Activation;
 using System.Web.Configuration;
+
+
+
 namespace Shell.MVC2.Infrastructure
 {
    public class Channelfactoryhelper
@@ -55,9 +58,9 @@ namespace Shell.MVC2.Infrastructure
             {
              
                 dynamic factory = GetChannelFactory();
-                dynamic proxy = (IClientChannel)factory.CreateChannel();
+               // dynamic proxy = (IClientChannel)factory.CreateChannel();
               //test 
-              IClientChannel proxy2 = (IClientChannel)factory.CreateChannel(); 
+              IClientChannel proxy = (IClientChannel)factory.CreateChannel(); 
                 dynamic success = false;
             //  using (OperationContextScope contextScope = new OperationContextScope(proxy))    {  
                 //var appHeader = new MessageHeader<string>("appID1");
@@ -68,10 +71,7 @@ namespace Shell.MVC2.Infrastructure
               "http://myurl",
               "Custom Header."
               );
-
-
-     
-
+             
                 Exception mostRecentEx = null;
                 for (int i = 0; i <= 4; i++)
                 {
@@ -132,21 +132,22 @@ namespace Shell.MVC2.Infrastructure
                     catch (CommunicationException commProblem)
                     {
                         //TO DO log this here
+                        //instantiate logger here so it does not break anything else.
+                        throw;
                     }
                     catch (Exception generatedExceptionName)
                     {
                         // rethrow any other exception not defined here
                         // You may want to define a custom Exception class to pass information such as failure count, and failure type
-                        proxy.Abort();
+                      
                         //TO DO log it here using the logger
-                        throw;
+                        throw ;
                     }
                     finally
                     {
                         if (!success)
                         {
-                            proxy.Abort();
-                           
+                            proxy.Abort();                           
                         }
                     }
 
@@ -196,7 +197,7 @@ namespace Shell.MVC2.Infrastructure
                 {
                     var message = ex.Message;
                     //find a way to communicate that we user the factory so we cannot log errors or anything
-                    throw ex;
+                    throw ;
                 }
 
                
@@ -252,8 +253,8 @@ namespace Shell.MVC2.Infrastructure
                     p = OperationContext.Current.Host.Extensions.Find<VirtualPathExtension>(); 
                 }   
                 catch (Exception ex) 
-                {   
-                
+                {
+                    throw;
                 }    
                 if (ctx != null)    
                 {       

@@ -83,31 +83,7 @@ namespace LoggingLibrary
 
         }
 
-        /// <summary>
-        /// to do this not working , , need to be able to read the app config directly
-        /// </summary>
-        /// <returns></returns>
-        //public ErrorLoggingServiceClient CreateLoggingServiceEndpoint()
-        //{
-        //    Binding binding = new WSHttpBinding();
-        //    EndpointAddress endpointAddress = null;//= new EndpointAddress("http://localhost/LoggingService/ErrorLoggingService.svc?wsdl");
-            
-
-        //    var config = ConfigurationManager.OpenExeConfiguration("LoggingLibrary.dll.config"); 
-        //    var wcfSection = ServiceModelSectionGroup.GetSectionGroup(config); 
-        //    var clientSection = wcfSection.Client; 
-        //    foreach (ChannelEndpointElement endpointElement in clientSection.Endpoints) 
-        //    { 
-        //       // if (endpointElement.Name == "XXX")
-        //        // { 
-        //          endpointAddress = new EndpointAddress(endpointElement.Address);
-        //          binding = new WSHttpBinding(endpointElement.BindingConfiguration);
-        //       //  } 
-        //    }
-
-        //    return new ErrorLoggingServiceClient(binding, endpointAddress);
-        //}
-
+      
 
         /// <summary>
         /// Writes a single entry.  No further writing to the current log entry is possible after commiting it.
@@ -119,7 +95,7 @@ namespace LoggingLibrary
         /// <param name="RequisitionNumber">The requisition number.</param>
 
         public void WriteSingleEntry(logseverityEnum  severityLevelvalue, Exception referedexception,int? profileid=null,
-                                    HttpContextBase context = null)
+                                    HttpContextBase context = null,bool? sendnotification= true )
         {
             //set the error pass since this function can be used recursively
             //errorpass = errorpass + 1;
@@ -161,11 +137,16 @@ namespace LoggingLibrary
                     });
                 }
 
-               //Attempt to send the notification 
+               //Attempt to send the notification if we requested it
+            //i.e if calling write log errror from the notification service its slef we should not be sending a notification !!! or its a loop
+            if (sendnotification == true)
+            {
                 try
                 {
                     //now write the email and send it
-                    Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IInfoNotificationService>.Use(d =>
+                    //add the auth header , later we will add API key
+                     Channelfactoryhelper.Service<IInfoNotificationService>.Authheader = "Y2FzZTpkcml2ZTMzMw==";
+                     Channelfactoryhelper.Service<IInfoNotificationService>.Use(d =>
                     {
                         d.senderrormessage(oLogEntry, addresstypeenum.Developer.ToString());
                     }
@@ -173,18 +154,18 @@ namespace LoggingLibrary
 
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     //write error directly
                     Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Use(d =>
                     {
-                        var id = d.WriteCompleteLogEntry(CreateErrorLog(logseverityEnum.CriticalError  ,ex));
+                        var id = d.WriteCompleteLogEntry(CreateErrorLog(logseverityEnum.CriticalError, ex));
                         oLogEntry.id = id;
                     }
                    );
 
                 }
-         
+            }
 
         }
 
@@ -225,11 +206,7 @@ namespace LoggingLibrary
                     var TargetSite = referedexception.TargetSite;
                     var StackTrace = referedexception.StackTrace;
 
-
-
-
-
-
+                    
                     if (referedexception != null && stackTrace != null)
                     {
                         oLogEntry.message = referedexception.ToString();
@@ -240,10 +217,8 @@ namespace LoggingLibrary
                         oLogEntry.parentmethodname = WhoCalledMe(referedexception);
                         oLogEntry.classname = methodBase.DeclaringType.Name;
                         oLogEntry.timestamp = DateTime.UtcNow;
-
                     }
-
-
+                    
                     if (context != null & !object.ReferenceEquals(context, string.Empty))
                     {
                         oLogEntry.loggeduser = context.User.Identity.Name;

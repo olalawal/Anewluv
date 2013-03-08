@@ -56,7 +56,7 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
             var message = new message();
             //address.MessageAddressID = Guid.NewGuid();
             //message.messagetype = new lu_messageType();
-          //  message.template = new lu_template();
+           // message.template = new lu_template();
           //  message.recipients = new List<address>();
             message.creationdate = DateTime.Now;
             message.sent =false;

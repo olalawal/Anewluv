@@ -17,16 +17,16 @@ namespace Shell.MVC2.Infrastructure
     public class TemplateParser
     {
 
-        const string  basepath = @"c:\temp\Anewluv\emailtemplates";
-       // const string admintemplateshomepath = @"E:\VisualStudio\GitHubShared\Webclients\AnewLuvWebClient\AnewLuv\Views\AdminTemplates";
-       // const string membertemplateshomepath = @"E:\VisualStudio\GitHubShared\Webclients\AnewLuvWebClient\AnewLuv\Views\MemberTemplates";
+        const string basepath = @"C:\temp\Sample Code\";
+        // const string basepath = @"E:\VisualStudio\GitHubShared\";
+        // const string membertemplateshomepath = @"E:\VisualStudio\GitHubShared\Anewluv\emailtemplates";
 
        //private static  string  basepath   = HttpContext.Current.Server.MapPath("/");
  
         //Image1.ImageUrl = Request.ApplicationPath + "/images/Image1.gif";
        // Label2.Text = Image1.ImageUrl;
-       private static string admintemplateshomepath = basepath + "/Views/AdminTemplates";
-       private static string membertemplateshomepath =basepath + "/Views/MemberTemplates";
+       private static string admintemplateshomepath = basepath + "Webclients/AnewLuvWebClient/AnewLuv/Views/AdminTemplates";
+       private static string membertemplateshomepath =basepath + "Webclients/AnewLuvWebClient/AnewLuv/Views/MemberTemplates";
 
         //Implement this when ALL templales are in DB
         public static string RazorDBTemplate<T>(string templatestring, ref T myobject)
@@ -46,8 +46,8 @@ namespace Shell.MVC2.Infrastructure
         public static string RazorFileTemplate<T>(string filename, ref T myobject)
         {
             string templatestring ="";
-            admintemplateshomepath = basepath + "/Views/AdminTemplates";
-            membertemplateshomepath = basepath + "/Views/MemberTemplates";
+            //admintemplateshomepath = basepath + "/AdminTemplates";
+           // membertemplateshomepath = basepath + "/MemberTemplates";
             try
             {
                 dynamic config = new TemplateServiceConfiguration { Language = RazorEngine.Language.CSharp, Debug = true };
