@@ -89,6 +89,7 @@
     <Compile Include="ExtentionMethods\Channelfactoryhelper.cs" />
     <Compile Include="Helpers\b64EncodeUserNamePassword.cs" />
     <Compile Include="Helpers\ClassEncryption.cs" />
+    <Compile Include="Helpers\Serialization.cs" />
     <Compile Include="JainRainAuthentication\Rpx.cs" />
     <Compile Include="JainRainAuthentication\RpxProfile.cs" />
     <Compile Include="JainRainAuthentication\RpxResponsParser.cs" />

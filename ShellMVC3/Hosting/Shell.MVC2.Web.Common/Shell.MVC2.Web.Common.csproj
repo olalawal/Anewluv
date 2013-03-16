@@ -75,6 +75,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CommonService.svc" />
     <Content Include="LookupService.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

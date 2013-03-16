@@ -18,14 +18,13 @@ namespace Shell.MVC2.Services.Contracts
     public interface ICommonService
     {
 
-        [WebGet]
-        [OperationContract]
-        List<systempagesetting> getsystempagesettinglist();
-        [WebGet]
-        [OperationContract]
-        List<lu_gender> getgenderlist();
      
-
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebGet]
+         string getNETJSONdatefromISO(string isodate);
+       
+     
+        
 
     }
 }

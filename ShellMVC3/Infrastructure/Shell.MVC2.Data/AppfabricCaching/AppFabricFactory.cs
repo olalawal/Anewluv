@@ -1258,6 +1258,548 @@ namespace Shell.MVC2.AppFabric
 
             }
 
+            //olawal 3-13-2013 other functions added after fact
+            public static List<lu_photostatusdescription> getphotostatusdescriptionlist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_photostatusdescription> photostatusdescription = null;
+                try
+                {
+
+                    try { if (dataCache != null) photostatusdescription = dataCache.Get("photostatusdescriptionlist") as List<lu_photostatusdescription>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (photostatusdescription == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        photostatusdescription = context.lu_photostatusdescription.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("photostatusdescriptionlist", photostatusdescription);
+
+                    } return photostatusdescription;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_abusetype> getabusetypelist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_abusetype> abusetype = null;
+                try
+                {
+
+                    try { if (dataCache != null) abusetype = dataCache.Get("abusetypelist") as List<lu_abusetype>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (abusetype == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        abusetype = context.lu_abusetype.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("abusetypelist", abusetype);
+
+                    } return abusetype;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_profilestatus> getprofilestatuslist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_profilestatus> profilestatus = null;
+                try
+                {
+
+                    try { if (dataCache != null) profilestatus = dataCache.Get("profilestatuslist") as List<lu_profilestatus>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (profilestatus == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        profilestatus = context.lu_profilestatus.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("profilestatuslist", profilestatus);
+
+                    } return profilestatus;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_photoImagersizerformat> getphotoImagersizerformatlist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_photoImagersizerformat> photoImagersizerformat = null;
+                try
+                {
+
+                    try { if (dataCache != null) photoImagersizerformat = dataCache.Get("getphotoImagersizerformat") as List<lu_photoImagersizerformat>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (photoImagersizerformat == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        photoImagersizerformat = context.lu_photoImagersizerformat.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("photoImagersizerformatlist", photoImagersizerformat);
+
+                    } return photoImagersizerformat;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_role> getrolelist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_role> role = null;
+                try
+                {
+
+                    try { if (dataCache != null) role = dataCache.Get("rolelist") as List<lu_role>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (role == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        role = context.lu_role.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("rolelist", role);
+
+                    } return role;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_securityleveltype> getsecurityleveltypelist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_securityleveltype> securityleveltype = null;
+                try
+                {
+
+                    try { if (dataCache != null) securityleveltype = dataCache.Get("securityleveltypelist") as List<lu_securityleveltype>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (securityleveltype == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        securityleveltype = context.lu_securityleveltype.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("securityleveltypelist", securityleveltype);
+
+                    } return securityleveltype;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_showme> getshowmelist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_showme> showme = null;
+                try
+                {
+
+                    try { if (dataCache != null) showme = dataCache.Get("showmelist") as List<lu_showme>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (showme == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        showme = context.lu_showme.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("showmelist", showme);
+
+                    } return showme;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_sortbytype> getsortbytypelist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_sortbytype> sortbytype = null;
+                try
+                {
+
+                    try { if (dataCache != null) sortbytype = dataCache.Get("sortbytypelist") as List<lu_sortbytype>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (sortbytype == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        sortbytype = context.lu_sortbytype.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("sortbytypelist", sortbytype);
+
+                    } return sortbytype;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_securityquestion> getsecurityquestionlist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_securityquestion> securityquestion = null;
+                try
+                {
+
+                    try { if (dataCache != null) securityquestion = dataCache.Get("securityquestionlist") as List<lu_securityquestion>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (securityquestion == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        securityquestion = context.lu_securityquestion.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("securityquestionlist", securityquestion);
+
+                    } return securityquestion;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_flagyesno> getflagyesnolist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_flagyesno> flagyesno = null;
+                try
+                {
+
+                    try { if (dataCache != null) flagyesno = dataCache.Get("flagyesnolist") as List<lu_flagyesno>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (flagyesno == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        flagyesno = context.lu_flagyesno.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("flagyesnolist", flagyesno);
+
+                    } return flagyesno;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+            public static List<lu_profilefiltertype> getprofilefiltertypelist(AnewluvContext context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_profilefiltertype> profilefiltertype = null;
+                try
+                {
+
+                    try { if (dataCache != null) profilefiltertype = dataCache.Get("profilefiltertypelist") as List<lu_profilefiltertype>; }
+                    catch (DataCacheException)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+
+                    if (profilefiltertype == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        profilefiltertype = context.lu_profilefiltertype.OrderBy(x => x.description).ToList();
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("profilefiltertypelist", profilefiltertype);
+
+                    } return profilefiltertype;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
+
+            }
+
+
             //generic functions
             public static List<lu_gender> getgenderlist(AnewluvContext context)
             {
@@ -1321,7 +1863,6 @@ namespace Shell.MVC2.AppFabric
 
                 } return ageslist;
             }
-
             public static List<metricheight> getmetricheightlist()
             {
                 DataCache dataCache;
@@ -1350,40 +1891,7 @@ namespace Shell.MVC2.AppFabric
 
                 } return heights;
             }           
-            public static List<lu_securityquestion> getsecurityquestionslist(AnewluvContext context)
-            {
-                DataCache dataCache;
-                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
-                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();              
-
-                List<lu_securityquestion> securityquestionslist = null;
-
-                try { if (dataCache != null)  securityquestionslist = dataCache.Get("securityquestionslist") as List<lu_securityquestion>; }
-                catch (DataCacheException)
-                {
-                    throw new InvalidOperationException();
-                }
-                catch (Exception ex)
-                {
-                    //put cleanup code here
-                    throw (ex);
-                }
-                if (securityquestionslist == null)
-                {
-                   // context context = new context();
-                    //remafill the SecurityQuestions s list from the repositry and exit
-
-                    securityquestionslist = context.lu_securityquestion.OrderBy(x => x.description).ToList();
-
-                    // Datings context = new modelContext();
-                    // model = context.models.Single(c => c.Id == id);
-                    if (dataCache != null)
-                        dataCache.Put("securityquestionslist", securityquestionslist);
-
-                }
-                return securityquestionslist;
-            }
-
+           
 
             #region "Creiteria Apperance lists cached here"
 

@@ -119,6 +119,173 @@ namespace Shell.MVC2.Data
 
         }
 
+        //olawawl 3-13-2012 added more items 
+        public List<lu_photostatusdescription> getphotostatusdescriptionlist()
+        {
+
+#if DISCONECTED
+                List<lu_photostatusdescription> photostatusdescriptionlist = new List<lu_photostatusdescription>();
+                photostatusdescriptionlist.Add(new lu_photostatusdescription { description = "Male",  id  = 1, selected   = false });
+                photostatusdescriptionlist.Add(new lu_photostatusdescription { description = "Female", id = 2, selected = false });
+                return photostatusdescriptionlist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getphotostatusdescriptionlist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_abusetype> getabusetypelist()
+        {
+
+#if DISCONECTED
+                List<lu_abusetype> abusetypelist = new List<lu_abusetype>();
+                abusetypelist.Add(new lu_abusetype { description = "Male",  id  = 1, selected   = false });
+                abusetypelist.Add(new lu_abusetype { description = "Female", id = 2, selected = false });
+                return abusetypelist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getabusetypelist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_photoImagersizerformat> getphotoImagersizerformatlist()
+        {
+
+#if DISCONECTED
+                List<lu_photoImagersizerformat> getphotoImagersizerformatlist = new List<lu_photoImagersizerformat>();
+                getphotoImagersizerformatlist.Add(new lu_photoImagersizerformat { description = "Male",  id  = 1, selected   = false });
+                getphotoImagersizerformatlist.Add(new lu_photoImagersizerformat { description = "Female", id = 2, selected = false });
+                return getphotoImagersizerformatlist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getphotoImagersizerformatlist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_profilestatus> getprofilestatuslist()
+        {
+
+#if DISCONECTED
+                List<lu_profilestatus> photoimagetypelist = new List<lu_profilestatus>();
+                photoimagetypelist.Add(new lu_profilestatus { description = "Male",  id  = 1, selected   = false });
+                photoimagetypelist.Add(new lu_profilestatus { description = "Female", id = 2, selected = false });
+                return photoimagetypelist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getprofilestatuslist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_role> getrolelist()
+        {
+
+#if DISCONECTED
+                List<lu_role> photoimagetypelist = new List<lu_role>();
+                photoimagetypelist.Add(new lu_role { description = "Male",  id  = 1, selected   = false });
+                photoimagetypelist.Add(new lu_role { description = "Female", id = 2, selected = false });
+                return photoimagetypelist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getrolelist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_securityleveltype> getsecurityleveltypelist()
+        {
+
+#if DISCONECTED
+                List<lu_securityleveltype> photoimagetypelist = new List<lu_securityleveltype>();
+                photoimagetypelist.Add(new lu_securityleveltype { description = "Male",  id  = 1, selected   = false });
+                photoimagetypelist.Add(new lu_securityleveltype { description = "Female", id = 2, selected = false });
+                return photoimagetypelist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getsecurityleveltypelist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_showme> getshowmelist()
+        {
+
+#if DISCONECTED
+                List<lu_showme> photoimagetypelist = new List<lu_showme>();
+                photoimagetypelist.Add(new lu_showme { description = "Male",  id  = 1, selected   = false });
+                photoimagetypelist.Add(new lu_showme { description = "Female", id = 2, selected = false });
+                return photoimagetypelist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getshowmelist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_sortbytype> getsortbytypelist()
+        {
+
+#if DISCONECTED
+                List<lu_sortbytype> photoimagetypelist = new List<lu_sortbytype>();
+                photoimagetypelist.Add(new lu_sortbytype { description = "Male",  id  = 1, selected   = false });
+                photoimagetypelist.Add(new lu_sortbytype { description = "Female", id = 2, selected = false });
+                return photoimagetypelist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getsortbytypelist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_securityquestion> getsecurityquestionlist()
+        {
+
+#if DISCONECTED
+                List<lu_securityquestion> photoimagetypelist = new List<lu_securityquestion>();
+                photoimagetypelist.Add(new lu_securityquestion { description = "Male",  id  = 1, selected   = false });
+                photoimagetypelist.Add(new lu_securityquestion { description = "Female", id = 2, selected = false });
+                return photoimagetypelist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getsecurityquestionlist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_flagyesno> getflagyesnolist()
+        {
+
+#if DISCONECTED
+                List<lu_flagyesno> photoimagetypelist = new List<lu_flagyesno>();
+                photoimagetypelist.Add(new lu_flagyesno { description = "Male",  id  = 1, selected   = false });
+                photoimagetypelist.Add(new lu_flagyesno { description = "Female", id = 2, selected = false });
+                return photoimagetypelist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getflagyesnolist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+        public List<lu_profilefiltertype> getprofilefiltertypelist()
+        {
+
+#if DISCONECTED
+                List<lu_profilefiltertype> photoimagetypelist = new List<lu_profilefiltertype>();
+                photoimagetypelist.Add(new lu_profilefiltertype { description = "Male",  id  = 1, selected   = false });
+                photoimagetypelist.Add(new lu_profilefiltertype { description = "Female", id = 2, selected = false });
+                return photoimagetypelist;
+                
+#else
+            return CachingFactory.SharedObjectHelper.getprofilefiltertypelist(_datingcontext);
+            // return temp;
+#endif
+
+        }
+
         #endregion
 
         #region "Load Other misc stuff such as list of pages etc"

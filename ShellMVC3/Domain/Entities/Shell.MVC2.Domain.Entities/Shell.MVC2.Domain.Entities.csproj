@@ -197,7 +197,7 @@
     <Compile Include="Anewluv\ViewModels\Account\LogonViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\LostAccountInfoModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\LostActivationCodeModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Account\RegisterModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\registermodel.cs" />
     <Compile Include="Anewluv\ViewModels\AdminPhotoModel.cs" />
     <Compile Include="Anewluv\ViewModels\Admin\AdminViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\ContactUsModel.cs" />

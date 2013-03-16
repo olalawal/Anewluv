@@ -18,7 +18,8 @@ namespace Shell.MVC2.Web.Common.ServiceHostFactories
             IKernel container = new StandardKernel();
             container.Load<NinjectModules.ApiKeyContextModule>();
             container.Load<NinjectModules.AnewLuvContextModule>();
-            container.Load<NinjectModules.LookupModule>();            
+            container.Load<NinjectModules.LookupModule>();
+            container.Load<NinjectModules.CommonModule>(); 
             return container;
         }
 

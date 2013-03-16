@@ -37,11 +37,210 @@ namespace Shell.MVC2.Services.Common
 
         }
 
-
-
-
-        public List<lu_photoformat> getphotoformatlist()
+      
+    
+      public  List<lu_photostatusdescription> getphotostatusdescriptionlist()
+    {
+        try
         {
+            return _lookuprepository.getphotostatusdescriptionlist();
+
+        }
+        catch (Exception ex)
+        {
+            //can parse the error to build a more custom error mssage and populate fualt faultreason
+            FaultReason faultreason = new FaultReason("Error in Lookup service");
+            string ErrorMessage = "";
+            string ErrorDetail = "ErrorMessage: " + ex.Message;
+            throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+        }
+        }
+
+
+      public List<lu_abusetype> getabusetypelist()
+        {
+            try
+            {
+                return _lookuprepository.getabusetypelist();
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in Lookup service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
+
+
+      public List<lu_profilestatus> getprofilestatuslist()
+        {
+            try
+            {
+                return _lookuprepository.getprofilestatuslist();
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in Lookup service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
+
+
+      public List<lu_photoImagersizerformat> getphotoImagersizerformatlist()
+        {
+
+            try
+            {
+                return _lookuprepository.getphotoImagersizerformatlist();
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in Lookup service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
+
+
+      public List<lu_role> getrolelist()
+        {
+
+            try
+            {
+                return _lookuprepository.getrolelist();
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in Lookup service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
+
+
+      public List<lu_securityleveltype> getsecurityleveltypelist()
+        {
+            try
+            {
+                return _lookuprepository.getsecurityleveltypelist();
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in Lookup service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
+
+
+      public List<lu_showme> getshowmelist()
+        {
+
+            try
+            {
+                return _lookuprepository.getshowmelist();
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in Lookup service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
+
+
+      public List<lu_sortbytype> getsortbytypelist()
+        {
+            try
+            {
+                return _lookuprepository.getsortbytypelist();
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in Lookup service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
+
+
+      public List<lu_securityquestion> getsecurityquestionlist()
+        {
+            try
+            {
+                return _lookuprepository.getsecurityquestionlist();
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in Lookup service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
+
+
+      public List<lu_flagyesno> getflagyesnolist()
+        {
+            try
+            {
+                return _lookuprepository.getflagyesnolist();
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in Lookup service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
+
+
+      public List<lu_profilefiltertype> getprofilefiltertypelist()
+        {
+            try
+            {
+                return _lookuprepository.getprofilefiltertypelist();
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in Lookup service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+        }
+
+
+        public List<lu_photoformat> getphotoformatlist()       {
 
              return _lookuprepository.getphotoformatlist();
 

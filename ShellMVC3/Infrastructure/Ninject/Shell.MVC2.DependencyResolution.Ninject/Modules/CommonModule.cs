@@ -22,18 +22,17 @@ using Shell.MVC2.Domain.Entities.Anewluv;
 
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
-    public class LookupModule : NinjectModule
+    public class CommonModule : NinjectModule
     {
         public override void Load()
         {
 
             //TO DO maybe we can remove this maybe ?
-            Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));
-            if (!Kernel.HasModule("Shell.MVC2.DependencyResolution.Ninject.Modules.MembersModule")) //only load if not already loaded into kernel
-            Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>()));          
-            Kernel.Bind<ILookupRepository>().ToConstructor(
-                ctorArg => new LookupRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
-            Kernel.Bind<ILookupService>().ToSelf();
+            Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));                    
+            Kernel.Bind<ICommonRepository>().ToConstructor(
+                ctorArg => new CommonRepository());
+
+            Kernel.Bind<ICommonService>().ToSelf();
 
 
         }

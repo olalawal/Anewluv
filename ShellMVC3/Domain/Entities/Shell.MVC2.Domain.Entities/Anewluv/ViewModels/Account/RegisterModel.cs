@@ -80,12 +80,19 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public string openidprovider { get; set; }
 
-           [DataMember]
+        [IgnoreDataMember]
         [Required]
         [DataType(DataType.Date)]
         [CustomValidation(typeof(registermodel), "ValidatebirthdateDate")]
         [DisplayName("Date of Birth")]
         public DateTime birthdate { get; set; }
+
+        [DataMember(Name = "birthdate")]
+        public string FormattedDate
+        {
+            get { return string.Format("{0:yyyy-MM-ddTHH:mm:ss.fffZ}", birthdate); }
+            set {;}
+        }
 
         [DataMember]
         public List<string> genders { get; set; }

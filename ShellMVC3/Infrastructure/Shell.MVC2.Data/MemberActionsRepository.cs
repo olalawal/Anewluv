@@ -111,8 +111,27 @@ namespace Shell.MVC2.Data
 
         private IQueryable<block> activeblocksbyprofileid(int profileid)
         {
-            //filter out blocked profiles 
-            return  _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null);
+         
+            try
+            {
+
+
+                //filter out blocked profiles 
+                return _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
             
         }
         private List<MemberSearchViewModel> getunpagedwhoisinterestedinme(int profileid, IQueryable<block> MyActiveblocks)
@@ -383,29 +402,50 @@ namespace Shell.MVC2.Data
         /// </summary>       
         public int getwhoisinterestedinmecount(int profileid)
         {
-            int? count = null;
-            int defaultvalue = 0;
-
-            //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks .Where(p => p.profile_id == profileid && p.removedate != null)
-                                 select new
-                                 {
-                                    ProfilesBlockedId = c.blockprofile_id 
-                                 };
-
-            count = (
-               from p in _datingcontext.interests where (p.interestprofile_id == profileid )
-               join f in _datingcontext.profiles  on p.profile_id   equals f.id
-               where (f.status.id  < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId  == f.id )) //filter out banned profiles or deleted profiles            
-               select f).Count();
-
-            // ?? operator example.
 
 
-            // y = x, unless x is null, in which case y = -1.
-            defaultvalue = count ?? 0;
-            
-            return defaultvalue;
+            try
+            {
+
+
+                int? count = null;
+                int defaultvalue = 0;
+
+                //filter out blocked profiles 
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
+
+                count = (
+                   from p in _datingcontext.interests
+                   where (p.interestprofile_id == profileid)
+                   join f in _datingcontext.profiles on p.profile_id equals f.id
+                   where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                   select f).Count();
+
+                // ?? operator example.
+
+
+                // y = x, unless x is null, in which case y = -1.
+                defaultvalue = count ?? 0;
+
+                return defaultvalue;
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+           
         }
 
         //count methods first
@@ -414,30 +454,49 @@ namespace Shell.MVC2.Data
         /// </summary>       
         public int getwhoisinterestedinmenewcount(int profileid)
         {
-            int? count = null;
-            int defaultvalue = 0;
-
-            //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
-                                 select new
-                                 {
-                                     ProfilesBlockedId = c.blockprofile_id
-                                 };
-
-            count = (
-               from p in _datingcontext.interests
-               where (p.interestprofile_id == profileid && p.viewdate  == null)
-               join f in _datingcontext.profiles on p.profile_id equals f.id
-               where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-               select f).Count();
-
-            // ?? operator example.
+            try
+            {
 
 
-            // y = x, unless x is null, in which case y = -1.
-            defaultvalue = count ?? 0;
+                int? count = null;
+                int defaultvalue = 0;
 
-            return defaultvalue;
+                //filter out blocked profiles 
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
+
+                count = (
+                   from p in _datingcontext.interests
+                   where (p.interestprofile_id == profileid && p.viewdate == null)
+                   join f in _datingcontext.profiles on p.profile_id equals f.id
+                   where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                   select f).Count();
+
+                // ?? operator example.
+
+
+                // y = x, unless x is null, in which case y = -1.
+                defaultvalue = count ?? 0;
+
+                return defaultvalue;
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+
+           
         }
 
         #endregion
@@ -471,8 +530,8 @@ namespace Shell.MVC2.Data
                                   id = f.profile_id
                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                               }).ToList();
-             var dd2 = 0;
-             var dd = 2 /  dd2;
+            // var dd2 = 0;
+             //var dd = 2 /  dd2;
 
              bool allowpaging = (interests.Count >= (Page.GetValueOrDefault()  * NumberPerPage.GetValueOrDefault())? true: false) ;
              var pageData = Page.GetValueOrDefault() > 1 & allowpaging  ? 
@@ -529,7 +588,7 @@ namespace Shell.MVC2.Data
                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                               }).ToList();
 
-            bool allowpaging = (whoisinterestedinme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+             bool allowpaging = (whoisinterestedinme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
              var pageData = Page.GetValueOrDefault() > 1 & allowpaging  ?
                  new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinme, Page ?? 1, NumberPerPage ?? 4) : whoisinterestedinme.Take(NumberPerPage.GetValueOrDefault());
              //this.AddRange(pageData.ToList());
@@ -589,8 +648,27 @@ namespace Shell.MVC2.Data
         //work on this later
           public List<MemberSearchViewModel> getmutualinterests(int profileid, int targetprofileid)
         {
-            IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
-            return mutualinterests.ToList();
+
+            try
+            {
+
+
+                IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
+                return mutualinterests.ToList();
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+        
 
         }
         /// <summary>
@@ -598,8 +676,26 @@ namespace Shell.MVC2.Data
         /// </summary        
         public bool checkinterest(int profileid, int targetprofileid)
         {
-            return this._datingcontext.interests.Any(r => r.profile_id == profileid && r.interestprofile_id  == targetprofileid);
-        }
+            try
+            {
+
+
+                return this._datingcontext.interests.Any(r => r.profile_id == profileid && r.interestprofile_id == targetprofileid);
+     
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+       }
 
         /// <summary>
         /// Adds a New interest
@@ -633,13 +729,16 @@ namespace Shell.MVC2.Data
                 this._datingcontext.SaveChanges();
 
             }
-            catch
+            catch (Exception ex)
             {
-                // log the execption message
-
-                return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
-
             return true;
 
 
@@ -673,9 +772,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -710,9 +813,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -747,9 +854,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -784,9 +895,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -815,9 +930,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
             return true;
         }
@@ -851,11 +970,14 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
-
             return true;
 
         }
@@ -885,9 +1007,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;

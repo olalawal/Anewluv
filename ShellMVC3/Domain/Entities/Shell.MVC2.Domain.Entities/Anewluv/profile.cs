@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv
 {
@@ -34,8 +35,18 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         public DateTime? logindate { get; set; }
            [DataMember]
         public DateTime? modificationdate { get; set; }
-           [DataMember]
+         
+        [IgnoreDataMember]
         public DateTime? creationdate { get; set; }
+
+          [NotMapped]
+        [DataMember(Name = "creationdate")]
+        public string formattedcreationdate
+        {
+            get { return string.Format("{0:yyyy-MM-ddTHH:mm:ss.fffZ}", creationdate.Value ); }
+            set { ;}
+        }
+
   
         public virtual lu_profilestatus status { get; set; }
            [DataMember]        

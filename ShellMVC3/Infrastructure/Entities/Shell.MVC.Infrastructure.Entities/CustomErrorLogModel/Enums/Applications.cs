@@ -41,7 +41,10 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
         NotificationService = 9,
         [Description("General Application Error")]
         [EnumMember]
-        GeneralApplicationError = 10
+        GeneralApplicationError = 11,
+         [Description("Lookup Service Error")]
+        [EnumMember]
+        LookupService = 11
     }
 
 }

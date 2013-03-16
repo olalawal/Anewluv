@@ -18,6 +18,45 @@ namespace Shell.MVC2.Services.Contracts
     public interface ILookupService
     {
 
+        #region "New Lookups"
+
+        [WebGet]
+        [OperationContract]
+        List<lu_photostatusdescription> getphotostatusdescriptionlist();
+        [WebGet]
+        [OperationContract]
+        List<lu_abusetype> getabusetypelist();
+        [WebGet]
+        [OperationContract]
+        List<lu_profilestatus> getprofilestatuslist();
+        [WebGet]
+        [OperationContract]
+        List<lu_photoImagersizerformat> getphotoImagersizerformatlist();
+        [WebGet]
+        [OperationContract]
+        List<lu_role> getrolelist();
+        [WebGet]
+        [OperationContract]
+        List<lu_securityleveltype> getsecurityleveltypelist();
+        [WebGet]
+        [OperationContract]
+        List<lu_showme> getshowmelist();
+        [WebGet]
+        [OperationContract]
+        List<lu_sortbytype> getsortbytypelist();
+        [WebGet]
+        [OperationContract]
+        List<lu_securityquestion> getsecurityquestionlist();
+        [WebGet]
+        [OperationContract]
+        List<lu_flagyesno> getflagyesnolist();
+        [WebGet]
+        [OperationContract]
+        List<lu_profilefiltertype> getprofilefiltertypelist();
+
+        #endregion
+
+
         [WebGet]
         [OperationContract]
         List<systempagesetting> getsystempagesettinglist();

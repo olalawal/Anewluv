@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICommonRepository.cs" />
     <Compile Include="IMemberEditRepository.cs" />
     <Compile Include="ISearchEditRepository.cs" />
     <Compile Include="IChatRepository.cs" />

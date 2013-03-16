@@ -87,6 +87,7 @@
     <Compile Include="Modules\ContextModules\CustomErrorLogContextModule.cs" />
     <Compile Include="Modules\ContextModules\NotificationContextModule.cs" />
     <Compile Include="Modules\ChatModule.cs" />
+    <Compile Include="Modules\CommonModule.cs" />
     <Compile Include="Modules\LookupModule.cs" />
     <Compile Include="Modules\MemberEditModule.cs" />
     <Compile Include="Modules\SearchEditModule.cs" />
