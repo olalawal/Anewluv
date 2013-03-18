@@ -16,6 +16,8 @@ using Shell.MVC2.Infrastructure;
 
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.AppFabric ;
+using LoggingLibrary;
+using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 
 
 namespace Shell.MVC2.Data
@@ -43,6 +45,12 @@ namespace Shell.MVC2.Data
         public List<lu_photoformat> getphotoformatlist()
         {
 
+
+
+            try
+            {
+
+
 #if DISCONECTED
                 List<lu_photoformat> photoformatlist = new List<lu_photoformat>();
                 photoformatlist.Add(new lu_photoformat { description = "Male",  id  = 1, selected   = false });
@@ -50,14 +58,32 @@ namespace Shell.MVC2.Data
                 return photoformatlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getphotoformatlist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getphotoformatlist(_datingcontext);
+                // return temp;
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService ).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+
 #endif
 
         }
         public List<lu_photoapprovalstatus> getphotoapprovalstatuslist()
         {
 
+
+
+            try
+            {
 
 #if DISCONECTED
                 List<lu_photoapprovalstatus> photoapprovalstatuslist = new List<lu_photoapprovalstatus>();
@@ -66,15 +92,32 @@ namespace Shell.MVC2.Data
                 return photoapprovalstatuslist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getphotoapprovalstatuslist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getphotoapprovalstatuslist(_datingcontext);
+                // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         
         }
         public List<lu_photorejectionreason> getphotorejecttionreasonlist()
         {
 
+
+
+             try
+            {
 
 #if DISCONECTED
                 List<lu_photorejectionreason> photorejectionreasonlist = new List<lu_photorejectionreason>();
@@ -83,13 +126,31 @@ namespace Shell.MVC2.Data
                 return photorejectionreasonlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getphotorejectionreasonlist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getphotorejectionreasonlist(_datingcontext);
+                // return temp;
 #endif
 
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService ).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_photostatus> getphotostatuslist()
         {
+
+
+            try
+            {
 
 #if DISCONECTED
                 List<lu_photostatus> photostatuslist = new List<lu_photostatus>();
@@ -98,13 +159,30 @@ namespace Shell.MVC2.Data
                 return photostatuslist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getphotostatuslist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getphotostatuslist(_datingcontext);
+                // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_photoimagetype> getphotoimagetypeslist()
         {
+
+
+            try
+            {
 
 #if DISCONECTED
                 List<lu_photoimagetype> photoimagetypelist = new List<lu_photoimagetype>();
@@ -113,15 +191,32 @@ namespace Shell.MVC2.Data
                 return photoimagetypelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getphotoimagetypelist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getphotoimagetypelist(_datingcontext);
+                // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
         //olawawl 3-13-2012 added more items 
         public List<lu_photostatusdescription> getphotostatusdescriptionlist()
         {
+
+
+            try
+            {
 
 #if DISCONECTED
                 List<lu_photostatusdescription> photostatusdescriptionlist = new List<lu_photostatusdescription>();
@@ -130,13 +225,31 @@ namespace Shell.MVC2.Data
                 return photostatusdescriptionlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getphotostatusdescriptionlist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getphotostatusdescriptionlist(_datingcontext);
+                // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_abusetype> getabusetypelist()
         {
+
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_abusetype> abusetypelist = new List<lu_abusetype>();
@@ -145,13 +258,29 @@ namespace Shell.MVC2.Data
                 return abusetypelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getabusetypelist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getabusetypelist(_datingcontext);
+                // return temp;
 #endif
 
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_photoImagersizerformat> getphotoImagersizerformatlist()
         {
+
+
+            try
+            {
 
 #if DISCONECTED
                 List<lu_photoImagersizerformat> getphotoImagersizerformatlist = new List<lu_photoImagersizerformat>();
@@ -160,13 +289,30 @@ namespace Shell.MVC2.Data
                 return getphotoImagersizerformatlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getphotoImagersizerformatlist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getphotoImagersizerformatlist(_datingcontext);
+                // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_profilestatus> getprofilestatuslist()
         {
+
+
+            try
+            {
 
 #if DISCONECTED
                 List<lu_profilestatus> photoimagetypelist = new List<lu_profilestatus>();
@@ -175,13 +321,31 @@ namespace Shell.MVC2.Data
                 return photoimagetypelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getprofilestatuslist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getprofilestatuslist(_datingcontext);
+                // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_role> getrolelist()
         {
+
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_role> photoimagetypelist = new List<lu_role>();
@@ -190,13 +354,29 @@ namespace Shell.MVC2.Data
                 return photoimagetypelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getrolelist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getrolelist(_datingcontext);
+                // return temp;
 #endif
 
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_securityleveltype> getsecurityleveltypelist()
         {
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_securityleveltype> photoimagetypelist = new List<lu_securityleveltype>();
@@ -205,13 +385,31 @@ namespace Shell.MVC2.Data
                 return photoimagetypelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getsecurityleveltypelist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getsecurityleveltypelist(_datingcontext);
+                // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_showme> getshowmelist()
         {
+
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_showme> photoimagetypelist = new List<lu_showme>();
@@ -220,13 +418,29 @@ namespace Shell.MVC2.Data
                 return photoimagetypelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getshowmelist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getshowmelist(_datingcontext);
+                // return temp;
 #endif
 
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_sortbytype> getsortbytypelist()
         {
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_sortbytype> photoimagetypelist = new List<lu_sortbytype>();
@@ -235,13 +449,31 @@ namespace Shell.MVC2.Data
                 return photoimagetypelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getsortbytypelist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getsortbytypelist(_datingcontext);
+                // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_securityquestion> getsecurityquestionlist()
         {
+
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_securityquestion> photoimagetypelist = new List<lu_securityquestion>();
@@ -250,13 +482,30 @@ namespace Shell.MVC2.Data
                 return photoimagetypelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getsecurityquestionlist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getsecurityquestionlist(_datingcontext);
+                // return temp;
 #endif
 
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_flagyesno> getflagyesnolist()
         {
+
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_flagyesno> photoimagetypelist = new List<lu_flagyesno>();
@@ -265,13 +514,29 @@ namespace Shell.MVC2.Data
                 return photoimagetypelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getflagyesnolist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getflagyesnolist(_datingcontext);
+                // return temp;
 #endif
 
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
         public List<lu_profilefiltertype> getprofilefiltertypelist()
         {
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_profilefiltertype> photoimagetypelist = new List<lu_profilefiltertype>();
@@ -280,10 +545,23 @@ namespace Shell.MVC2.Data
                 return photoimagetypelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getprofilefiltertypelist(_datingcontext);
-            // return temp;
+                return CachingFactory.SharedObjectHelper.getprofilefiltertypelist(_datingcontext);
+                // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
         #endregion
@@ -296,6 +574,10 @@ namespace Shell.MVC2.Data
            
                 List<systempagesetting> temp = new List<systempagesetting>();
 
+
+                try
+                {
+
 #if DISCONECTED
             
                 systempagesetting virtualpage = new systempagesetting();
@@ -307,16 +589,48 @@ namespace Shell.MVC2.Data
                             return temp;
 
 #else  //load list from database
-                temp = CachingFactory.CssStyleSelector.getsystempagesettingslist(_datingcontext);
-                return temp;
+                    temp = CachingFactory.CssStyleSelector.getsystempagesettingslist(_datingcontext);
+                    return temp;
 #endif
-            
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    //instantiate logger here so it does not break anything else.
+                    new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                    //log error mesasge
+                    //handle logging here
+                    var message = ex.Message;
+                    throw;
+                }   
         }
 
         public string getbodycssbypagename(string pagename)
         {
-        
-                return CachingFactory.CssStyleSelector.getbodycssbypagename(pagename,_datingcontext).ToString();
+                try
+                {
+
+
+
+                    return CachingFactory.CssStyleSelector.getbodycssbypagename(pagename, _datingcontext).ToString();
+
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    //instantiate logger here so it does not break anything else.
+                    new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                    //log error mesasge
+                    //handle logging here
+                    var message = ex.Message;
+                    throw;
+                }
         }
 
         #endregion
@@ -327,28 +641,79 @@ namespace Shell.MVC2.Data
         {
            
 
+
+            try
+            {
+
+
+
 #if DISCONECTED
                 List<lu_gender> genderlist = new List<lu_gender>();
                 genderlist.Add(new lu_gender { description = "Male",  id  = 1, selected   = false });
                 genderlist.Add(new lu_gender { description = "Female", id = 2, selected = false });
                 return genderlist;                
 #else
-            return CachingFactory.SharedObjectHelper.getgenderlist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.getgenderlist(_datingcontext);
                 // return temp;
 #endif
 
-            
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }    
         }       
         public List<age> getageslist()
         {
             
-               return  CachingFactory.SharedObjectHelper.getagelist();
+              try
+               {
+
+                   return CachingFactory.SharedObjectHelper.getagelist();
             
+
+
+
+               }
+               catch (Exception ex)
+               {
+                   //instantiate logger here so it does not break anything else.
+                   new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                   //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                   //log error mesasge
+                   //handle logging here
+                   var message = ex.Message;
+                   throw;
+               }    
         }
         public List<metricheight> getmetricheightlist()
         {            
-              return CachingFactory.SharedObjectHelper.getmetricheightlist();           
+             try
+              {
 
+
+
+                  return CachingFactory.SharedObjectHelper.getmetricheightlist();
+            
+
+              }
+              catch (Exception ex)
+              {
+                  //instantiate logger here so it does not break anything else.
+                  new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                  //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                  //log error mesasge
+                  //handle logging here
+                  var message = ex.Message;
+                  throw;
+              }
         }
 
         #endregion
@@ -360,6 +725,10 @@ namespace Shell.MVC2.Data
 
         public List<lu_bodytype> getbodytypelist()
         {
+  
+                try
+                {
+
 #if DISCONECTED
                 List<lu_bodytype> bodytypelist = new List<lu_bodytype>();
                 bodytypelist.Add(new lu_bodytype { description = "Male",  id  = 1, selected   = false });
@@ -367,12 +736,30 @@ namespace Shell.MVC2.Data
                 return bodytypelist;
                 
 #else
-                return CachingFactory.SharedObjectHelper.getbodytypelist(_datingcontext);
-                // return temp;
-#endif            
+                    return CachingFactory.SharedObjectHelper.getbodytypelist(_datingcontext);
+                    // return temp;
+#endif 
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    //instantiate logger here so it does not break anything else.
+                    new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                    //log error mesasge
+                    //handle logging here
+                    var message = ex.Message;
+                    throw;
+                }
         }
         public List<lu_ethnicity> getethnicitylist()
         {
+
+
+                try
+                {
 
 #if DISCONECTED
             List<lu_ethnicity> ethnicitylist = new List<lu_ethnicity>();
@@ -381,13 +768,30 @@ namespace Shell.MVC2.Data
             return ethnicitylist;
 
 #else
-                return CachingFactory.SharedObjectHelper.getethnicitylist(_datingcontext);
-                // return temp;
+                    return CachingFactory.SharedObjectHelper.getethnicitylist(_datingcontext);
+                    // return temp;
 #endif
 
+
+
+                }
+                catch (Exception ex)
+                {
+                    //instantiate logger here so it does not break anything else.
+                    new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                    //log error mesasge
+                    //handle logging here
+                    var message = ex.Message;
+                    throw;
+                }
         }        
         public List<lu_eyecolor> geteyecolorlist()
         {
+
+            try
+            {
+
 #if DISCONECTED
                 List<lu_eyecolor> eyecolorlist = new List<lu_eyecolor>();
                 eyecolorlist.Add(new lu_eyecolor { description = "Male",  id  = 1, selected   = false });
@@ -395,13 +799,31 @@ namespace Shell.MVC2.Data
                 return eyecolorlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.geteyecolorlist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.geteyecolorlist(_datingcontext);
                 // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
             }        
         public List<lu_haircolor> gethaircolorlist()
         {           
+
+
+
+                try
+                {
 
 #if DISCONECTED
                 List<lu_haircolor> haircolorlist = new List<lu_haircolor>();
@@ -410,11 +832,23 @@ namespace Shell.MVC2.Data
                 return haircolorlist;
                 
 #else
-                return CachingFactory.SharedObjectHelper.gethaircolorlist(_datingcontext);
-                // return temp;
+                    return CachingFactory.SharedObjectHelper.gethaircolorlist(_datingcontext);
+                    // return temp;
 #endif
 
-            
+
+
+                }
+                catch (Exception ex)
+                {
+                    //instantiate logger here so it does not break anything else.
+                    new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                    //log error mesasge
+                    //handle logging here
+                    var message = ex.Message;
+                    throw;
+                }     
         }       
         
         #endregion
@@ -425,6 +859,12 @@ namespace Shell.MVC2.Data
         {
            
 
+
+
+            try
+            {
+
+
 #if DISCONECTED
                 List<lu_diet> dietlist = new List<lu_diet>();
                 dietlist.Add(new lu_diet { description = "Male",  id  = 1, selected   = false });
@@ -432,19 +872,36 @@ namespace Shell.MVC2.Data
                 return dietlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getdietlist(_datingcontext);
-              //  return _datingcontext.lu_diet.OrderBy(x => x.description).ToList();
+                return CachingFactory.SharedObjectHelper.getdietlist(_datingcontext);
+                //  return _datingcontext.lu_diet.OrderBy(x => x.description).ToList();
 
 
 
                 // return temp;
 #endif
 
-            
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }     
         }
         public List<lu_drinks> getdrinkslist()
         {
            
+
+
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_drinks> drinkslist = new List<lu_drinks>();
@@ -453,18 +910,35 @@ namespace Shell.MVC2.Data
                 return drinkslist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getdrinkslist (_datingcontext);
+                return CachingFactory.SharedObjectHelper.getdrinkslist(_datingcontext);
 
 
 
                 // return temp;
 #endif
 
-            
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }        
         }
         public List<lu_exercise> getexerciselist()
         {
             
+
+
+            try
+            {
+
+
 #if DISCONECTED
                 List<lu_exercise> exerciselist = new List<lu_exercise>();
                 exerciselist.Add(new lu_exercise { description = "Male",  id  = 1, selected   = false });
@@ -472,15 +946,32 @@ namespace Shell.MVC2.Data
                 return exerciselist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getexerciselist (_datingcontext);
+                return CachingFactory.SharedObjectHelper.getexerciselist(_datingcontext);
                 // return temp;
 #endif
 
-            
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }        
         }
         public List<lu_hobby> gethobbylist()
         {
            
+
+
+            try
+            {
+
+
 #if DISCONECTED
                 List<lu_hobby> hobbylist = new List<lu_hobby>();
                 hobbylist.Add(new lu_hobby { description = "Male",  id  = 1, selected   = false });
@@ -489,15 +980,30 @@ namespace Shell.MVC2.Data
                 
 #else
 
-            return CachingFactory.SharedObjectHelper.gethobbylist (_datingcontext);
+                return CachingFactory.SharedObjectHelper.gethobbylist(_datingcontext);
                 // return temp;
 #endif
 
-            
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }      
         }
         public List<lu_humor> gethumorlist()
         {
            
+
+
+            try
+            {
 
 #if DISCONECTED
                 List<lu_humor> humorlist = new List<lu_humor>();
@@ -507,15 +1013,33 @@ namespace Shell.MVC2.Data
                 
 #else
 
-            return CachingFactory.SharedObjectHelper.gethumorlist(_datingcontext); ;
+                return CachingFactory.SharedObjectHelper.gethumorlist(_datingcontext); ;
 
                 // return temp;
 #endif
 
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
             
         }
         public List<lu_politicalview> getpoliticalviewlist()
         {
+
+
+
+            try
+            {
 
 #if DISCONECTED
                 List<lu_politicalview> politicalviewlist = new List<lu_politicalview>();
@@ -524,15 +1048,33 @@ namespace Shell.MVC2.Data
                 return politicalviewlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getpoliticalviewlist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.getpoliticalviewlist(_datingcontext);
                 // return temp;
 #endif
 
-            
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }      
         }
         public List<lu_religion> getreligionlist()
         {
-          
+
+
+            try
+            {
+
+
+
 #if DISCONECTED
                 List<lu_religion> religionlist = new List<lu_religion>();
                 religionlist.Add(new lu_religion { description = "Male",  id  = 1, selected   = false });
@@ -540,15 +1082,31 @@ namespace Shell.MVC2.Data
                 return religionlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getreligionlist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.getreligionlist(_datingcontext);
 
                 // return temp;
 #endif
 
-            
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }        
         }
         public List<lu_religiousattendance> getreligiousattendancelist()
         {
+
+            try
+            {
+
+
 #if DISCONECTED
                 List<lu_religiousattendance> religiousattendancelist = new List<lu_religiousattendance>();
                 religiousattendancelist.Add(new lu_religiousattendance { description = "Male",  id  = 1, selected   = false });
@@ -556,15 +1114,33 @@ namespace Shell.MVC2.Data
                 return religiousattendancelist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getreligiousattendancelist (_datingcontext);
+                return CachingFactory.SharedObjectHelper.getreligiousattendancelist(_datingcontext);
                 // return temp;
 #endif
 
-            
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }        
         }
         public List<lu_sign> getsignlist()
         {
            
+
+
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_sign> signlist = new List<lu_sign>();
@@ -573,14 +1149,31 @@ namespace Shell.MVC2.Data
                 return signlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getsignlist (_datingcontext);
+                return CachingFactory.SharedObjectHelper.getsignlist(_datingcontext);
                 // return temp;
 #endif
 
-            
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }         
         }
         public List<lu_smokes> getsmokeslist()
         {
+
+
+            try
+            {
+
+
 #if DISCONECTED
                 List<lu_smokes> smokeslist = new List<lu_smokes>();
                 smokeslist.Add(new lu_smokes { description = "Male",  id  = 1, selected   = false });
@@ -588,11 +1181,22 @@ namespace Shell.MVC2.Data
                 return smokeslist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getsmokeslist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.getsmokeslist(_datingcontext);
                 // return temp;
 #endif
 
-            
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }          
         }
 
 
@@ -602,6 +1206,11 @@ namespace Shell.MVC2.Data
 
         public List<lu_educationlevel> geteducationlevellist()
         {
+
+
+            try
+            {
+
 #if DISCONECTED
                 List<lu_educationlevel> educationlevellist = new List<lu_educationlevel>();
                 educationlevellist.Add(new lu_educationlevel { description = "Male",  id  = 1, selected   = false });
@@ -609,15 +1218,32 @@ namespace Shell.MVC2.Data
                 return educationlevellist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.geteducationlevellist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.geteducationlevellist(_datingcontext);
                 // return temp;
 #endif
 
-           
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }          
         }
         public List<lu_employmentstatus> getemploymentstatuslist()
         {
            
+
+
+            try
+            {
+
 #if DISCONECTED
                 List<lu_employmentstatus> employmentstatuslist = new List<lu_employmentstatus>();
                 employmentstatuslist.Add(new lu_employmentstatus { description = "Male",  id  = 1, selected   = false });
@@ -625,14 +1251,31 @@ namespace Shell.MVC2.Data
                 return employmentstatuslist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getemploymentstatuslist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.getemploymentstatuslist(_datingcontext);
 
 #endif
 
-            
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }         
         }
         public List<lu_havekids> gethavekidslist()
         {
+
+            try
+            {
+
+
 #if DISCONECTED
                 List<lu_havekids> havekidslist = new List<lu_havekids>();
                 havekidslist.Add(new lu_havekids { description = "Male",  id  = 1, selected   = false });
@@ -640,14 +1283,31 @@ namespace Shell.MVC2.Data
                 return havekidslist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.gethavekidslist (_datingcontext);
+                return CachingFactory.SharedObjectHelper.gethavekidslist(_datingcontext);
 #endif
 
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
             
         }
         public List<lu_incomelevel> getincomelevellist()
         {
            
+
+
+
+            try
+            {
 
 #if DISCONECTED
                 List<lu_incomelevel> incomelevellist = new List<lu_incomelevel>();
@@ -657,14 +1317,31 @@ namespace Shell.MVC2.Data
                 
 #else
 
-            return CachingFactory.SharedObjectHelper.getincomelevellist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.getincomelevellist(_datingcontext);
 #endif
 
-            
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }         
         }
         public List<lu_livingsituation> getlivingsituationlist()
         {
            
+
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_livingsituation> livingsituationlist = new List<lu_livingsituation>();
@@ -673,14 +1350,31 @@ namespace Shell.MVC2.Data
                 return livingsituationlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getlivingsituationlist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.getlivingsituationlist(_datingcontext);
 #endif
 
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
             
         }
         public List<lu_lookingfor> getlookingforlist()
         {
             
+
+
+            try
+            {
+
 #if DISCONECTED
                 List<lu_lookingfor> lookingforlist = new List<lu_lookingfor>();
                 lookingforlist.Add(new lu_lookingfor { description = "Male",  id  = 1, selected   = false });
@@ -688,14 +1382,32 @@ namespace Shell.MVC2.Data
                 return lookingforlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getlookingforlist (_datingcontext);
+                return CachingFactory.SharedObjectHelper.getlookingforlist(_datingcontext);
 #endif
 
-            
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }          
         }
         public List<lu_maritalstatus> getmaritalstatuslist()
         {
            
+
+
+            try
+            {
+
+
 
 #if DISCONECTED
                 List<lu_maritalstatus> maritalstatuslist = new List<lu_maritalstatus>();
@@ -704,15 +1416,31 @@ namespace Shell.MVC2.Data
                 return maritalstatuslist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getmaritalstatuslist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.getmaritalstatuslist(_datingcontext);
 
 #endif
 
-            
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }         
         }
         public List<lu_profession> getprofessionlist()
         {
            
+
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_profession> professionlist = new List<lu_profession>();
@@ -721,13 +1449,30 @@ namespace Shell.MVC2.Data
                 return professionlist;
                 
 #else
-            return CachingFactory.SharedObjectHelper.getprofessionlist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.getprofessionlist(_datingcontext);
 #endif
 
-           
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }         
         }
         public List<lu_wantskids> getwantskidslist()
         {
+
+
+            try
+            {
+
 
 #if DISCONECTED
                 List<lu_wantskids> wantskidslist = new List<lu_wantskids>();
@@ -737,11 +1482,23 @@ namespace Shell.MVC2.Data
                 
 #else
 
-            return CachingFactory.SharedObjectHelper.getwantskidslist(_datingcontext);
+                return CachingFactory.SharedObjectHelper.getwantskidslist(_datingcontext);
 
 #endif
 
-            
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }       
         }
 
         #endregion

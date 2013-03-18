@@ -276,12 +276,9 @@ namespace LoggingLibrary
 
 
             Shell.MVC2.Infrastructure.Channelfactoryhelper.Service<IErrorLoggingService>.Use(d =>
-            { 
-                
-                entry.id = d.TranslateLogSeverity(severityLevel);
-               
-            }
-            );
+            {                 
+                entry.id = d.TranslateLogSeverity(severityLevel);               
+            });
 
             //using (new OperationContextScope((IContextChannel)LoggingServiceProxy))
             //{

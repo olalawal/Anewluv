@@ -43,7 +43,7 @@ namespace Shell.MVC2.Data
         //new methods here get all profileIds of certain types
 
         /// <summary>
-        /// //gets all the members who are interested in me
+        /// //gets  all the relationships for a user based on the filter reuqest
         /// //TODO add filtering for blocked members that you blocked and system blocked
         /// </summary 
         public List<MemberSearchViewModel> getmyrelationshipsfiltered(int profileid,List<profilefiltertypeEnum> types)
@@ -91,7 +91,12 @@ namespace Shell.MVC2.Data
 
                  }
 
-                 return currentrelationships;
+                 //return currentrelationships;
+
+                 //3-18-2013 olawal added to do the mapping
+                 //TO DO add ability to sort all this
+                 return _membermapperrepository.mapmembersearchviewmodels(profileid, currentrelationships, false).OrderByDescending(f => f.lastlogindate).ToList();
+
 
              }
              catch (Exception ex)
@@ -108,17 +113,147 @@ namespace Shell.MVC2.Data
 
 
         }
-
+        #region "Private methods used internally to this repo"
         private IQueryable<block> activeblocksbyprofileid(int profileid)
         {
-         
+
             try
             {
 
-
                 //filter out blocked profiles 
                 return _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null);
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
 
+        }
+        private List<MemberSearchViewModel> getunpagedwhoisinterestedinme(int profileid, IQueryable<block> MyActiveblocks)
+        {
+            
+
+
+            try
+            {
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                return (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid & p.deletedbymemberdate == null)
+                        join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                        join z in _datingcontext.profiles on p.profile_id equals z.id
+                        where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+                        select new MemberSearchViewModel
+                        {
+                            interestdate = p.creationdate,
+                            id = f.profile_id
+                            // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                        }).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+
+        }
+        private List<MemberSearchViewModel> getunpagedwhoiaminsterestedin(int profileid, IQueryable<block> MyActiveblocks)
+        {
+
+
+            try
+            {
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                return (from p in _datingcontext.interests.Where(p => p.profile_id == profileid & p.deletedbymemberdate == null)
+                        join f in _datingcontext.profiledata on p.interestprofile_id equals f.profile_id
+                        join z in _datingcontext.profiles on p.interestprofile_id equals z.id
+                        where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+                        select new MemberSearchViewModel
+                        {
+                            interestdate = p.creationdate,
+                            id = f.profile_id
+                            // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                        }).ToList();
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+
+           
+        }
+        private List<MemberSearchViewModel> getunpagedwhopeekedatme(int profileid, IQueryable<block> MyActiveblocks)
+        {
+
+
+            try
+            {
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                return (from p in _datingcontext.peeks.Where(p => p.peekprofile_id == profileid && p.deletedbymemberdate == null)
+                        join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                        join z in _datingcontext.profiles on p.profile_id equals z.id
+                        where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+                        select new MemberSearchViewModel
+                        {
+                            peekdate = p.creationdate,
+                            id = f.profile_id
+                            // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                        }).ToList();
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+
+
+      
+        }
+        private List<MemberSearchViewModel> getunpagedwhoipeekedat(int profileid, IQueryable<block> MyActiveblocks)
+        {
+
+            try
+            {
+
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                return (from p in _datingcontext.peeks.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
+                        join f in _datingcontext.profiledata on p.peekprofile_id equals f.profile_id
+                        join z in _datingcontext.profiles on p.peekprofile_id equals z.id
+                        where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+                        select new MemberSearchViewModel
+                        {
+                            peekdate = p.creationdate,
+                            id = f.profile_id
+                        }).ToList();
 
 
             }
@@ -132,225 +267,126 @@ namespace Shell.MVC2.Data
                 var message = ex.Message;
                 throw;
             }
-            
-        }
-        private List<MemberSearchViewModel> getunpagedwhoisinterestedinme(int profileid, IQueryable<block> MyActiveblocks)
-        {
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-             return (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid & p.deletedbymemberdate == null)
-                             join f in _datingcontext.profiledata on p.profile_id  equals f.profile_id
-                             join z in _datingcontext.profiles on p.profile_id  equals z.id
-                             where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id  == f.profile_id))
-                             select new MemberSearchViewModel
-                             {
-                                 creationdate = p.creationdate,
-                                 id = p.id,
-                                 age = f.age,
-                                 birthdate = f.birthdate,
-                                 city = f.city,
-                                 countryid = f.countryid,
-                                 stateprovince = f.stateprovince,
-                                 longitude = (double)f.longitude,
-                                 latitude = (double)f.latitude,
-                                 genderid = f.gender.id,
-                                 postalcode = f.postalcode,
-                                 lastlogindate = z.logindate,                           
-                                 screenname = z.screenname,
-                                 mycatchyintroline = f.mycatchyintroLine,
-                                 aboutme = f.aboutme 
-                             }).ToList();
-        }
-        private List<MemberSearchViewModel> getunpagedwhoiaminsterestedin(int profileid, IQueryable<block> MyActiveblocks)
-        {
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            return (from p in _datingcontext.interests.Where(p => p.profile_id == profileid & p.deletedbymemberdate == null)
-                    join f in _datingcontext.profiledata on p.interestprofile_id equals f.profile_id
-                    join z in _datingcontext.profiles on p.interestprofile_id equals z.id
-                    where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
-                    select new MemberSearchViewModel
-                    {
-                        creationdate = p.creationdate,
-                        id = p.id,
-                        age = f.age,
-                        birthdate = f.birthdate,
-                        city = f.city,
-                        countryid = f.countryid,
-                        stateprovince = f.stateprovince,
-                        longitude = (double)f.longitude,
-                        latitude = (double)f.latitude,
-                        genderid = f.gender.id,
-                        postalcode = f.postalcode,
-                        lastlogindate = z.logindate,
-                        screenname = z.screenname,
-                        mycatchyintroline = f.mycatchyintroLine,
-                        aboutme = f.aboutme
-                    }).ToList();
-        }
-        private List<MemberSearchViewModel> getunpagedwhopeekedatme(int profileid, IQueryable<block> MyActiveblocks)
-        {
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            return (from p in _datingcontext.peeks.Where(p => p.peekprofile_id == profileid && p.deletedbymemberdate == null)
-                    join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
-                    join z in _datingcontext.profiles on p.profile_id equals z.id
-                    where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
-                    select new MemberSearchViewModel
-                    {
-                        peekdate = p.creationdate,
-                        id = p.profile_id,
-                        age = f.age,
-                        birthdate = f.birthdate,
-                        city = f.city,
-                        countryid = f.countryid,
-                        stateprovince = f.stateprovince,
-                        longitude = (double)f.longitude,
-                        latitude = (double)f.latitude,
-                        genderid = f.gender.id,
-                        postalcode = f.postalcode,
-                        lastlogindate = z.logindate,
-                        //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                        screenname = z.screenname,
-                        mycatchyintroline = f.mycatchyintroLine,
-                        aboutme = f.aboutme,
-                        perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
 
 
-
-                    }).ToList();
-        }     
-        private List<MemberSearchViewModel> getunpagedwhoipeekedat(int profileid, IQueryable<block> MyActiveblocks)
-        {
-
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            return (from p in _datingcontext.peeks.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
-                         join f in _datingcontext.profiledata on p.peekprofile_id  equals f.profile_id
-                         join z in _datingcontext.profiles on p.peekprofile_id  equals z.id
-                         where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id  == f.profile_id))
-                         select new MemberSearchViewModel
-                         {
-                             peekdate = p.creationdate,
-                             id = p.profile_id,
-                             age = f.age,
-                             birthdate = f.birthdate,
-                             city = f.city,
-                             countryid = f.countryid,
-                             stateprovince = f.stateprovince,
-                             longitude = (double)f.longitude,
-                             latitude = (double)f.latitude,
-                             genderid = f.gender.id,
-                             postalcode = f.postalcode,
-                             lastlogindate = z.logindate,
-                             //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                             screenname = z.screenname,
-                             mycatchyintroline = f.mycatchyintroLine,
-                             aboutme = f.aboutme                            
-
-
-                         }).ToList();
         }
         private List<MemberSearchViewModel> getunpagedblocks(int profileid)
         {
-            return (from p in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
-                    join f in _datingcontext.profiledata on p.blockprofile_id equals f.profile_id
-                    join z in _datingcontext.profiles on p.blockprofile_id equals z.id
-                    where (f.profile.status.id < 3)
-                    orderby (p.creationdate) descending
-                    select new MemberSearchViewModel
-                    {
-                        blockdate = p.creationdate,
-                        id = p.profile_id,
-                        age = f.age,
-                        birthdate = f.birthdate,
-                        city = f.city,
-                        countryid = f.countryid,
-                        stateprovince = f.stateprovince,
-                        longitude = (double)f.longitude,
-                        latitude = (double)f.latitude,
-                        genderid = f.gender.id,
-                        postalcode = f.postalcode,
-                        lastlogindate = z.logindate,
-                        //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                        screenname = z.screenname,
-                        mycatchyintroline = f.mycatchyintroLine,
-                        aboutme = f.aboutme
 
-                    }).ToList();
+            try
+            {
+
+
+                return (from p in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                        join f in _datingcontext.profiledata on p.blockprofile_id equals f.profile_id
+                        join z in _datingcontext.profiles on p.blockprofile_id equals z.id
+                        where (f.profile.status.id < 3)
+                        orderby (p.creationdate) descending
+                        select new MemberSearchViewModel
+                        {
+                            blockdate = p.creationdate,
+                            id = f.profile_id
+                        }).ToList();
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+        
         }
         private List<MemberSearchViewModel> getunpagedwholikesme(int profileid, IQueryable<block> MyActiveblocks)
-           {
-          //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-          //rematerialize on the back end.
-          //final query to send back only the profile datatas of the interests we want
-          return (from p in _datingcontext.likes.Where(p => p.likeprofile_id == profileid && p.deletedbylikedate == null)
-                  join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
-                  join z in _datingcontext.profiles on p.profile_id equals z.id
-                  where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
-                  orderby (p.creationdate) descending
-                  select new MemberSearchViewModel
-                  {
-                      creationdate = p.creationdate,
-                      id = p.profile_id,
-                      age = f.age,
-                      birthdate = f.birthdate,
-                      city = f.city,
-                      countryid = f.countryid,
-                      stateprovince = f.stateprovince,
-                      longitude = (double)f.longitude,
-                      latitude = (double)f.latitude,
-                      genderid = f.gender.id,
-                      postalcode = f.postalcode,
-                      lastlogindate = z.logindate,
-                      //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                      screenname = z.screenname,
-                      mycatchyintroline = f.mycatchyintroLine,
-                      aboutme = f.aboutme,
-                      perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+        {
+
+            try
+            {
 
 
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                return (from p in _datingcontext.likes.Where(p => p.likeprofile_id == profileid && p.deletedbylikedate == null)
+                        join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                        join z in _datingcontext.profiles on p.profile_id equals z.id
+                        where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+                        orderby (p.creationdate) descending
+                        select new MemberSearchViewModel
+                        {
+                            likedate = p.creationdate,
+                            id = f.profile_id
+                        }).ToList();
 
-                  }).ToList();
-      }        
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+
+     
+        }
         private List<MemberSearchViewModel> getunpagedwhoilike(int profileid, IQueryable<block> MyActiveblocks)
         {
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-     return  (from p in _datingcontext.likes.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
-                            join f in _datingcontext.profiledata on p.likeprofile_id equals f.profile_id
-                            join z in _datingcontext.profiles on p.likeprofile_id equals z.id
-                            where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id  == f.profile_id))
-                            orderby (p.creationdate) descending
-                            select new MemberSearchViewModel
-                            {
-                                creationdate = p.creationdate,
-                                id = p.profile_id,
-                                age = f.age,
-                                birthdate = f.birthdate,
-                                city = f.city,
-                                countryid = f.countryid,
-                                stateprovince = f.stateprovince,
-                                longitude = (double)f.longitude,
-                                latitude = (double)f.latitude,
-                                genderid = f.gender.id,
-                                postalcode = f.postalcode,
-                                lastlogindate = z.logindate,
-                                //  LastLoggedInString = _datingcontext.fnGetLastLoggedOnTime(z.LoginDate),
-                                screenname = z.screenname,
-                                mycatchyintroline = f.mycatchyintroLine,
-                                aboutme = f.aboutme,
-                                perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+
+            try
+            {
 
 
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                return (from p in _datingcontext.likes.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
+                        join f in _datingcontext.profiledata on p.likeprofile_id equals f.profile_id
+                        join z in _datingcontext.profiles on p.likeprofile_id equals z.id
+                        where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+                        orderby (p.creationdate) descending
+                        select new MemberSearchViewModel
+                        {
+                            likedate = p.creationdate,
+                            id = f.profile_id
+                        }).ToList();
 
-                            }).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+
+          
         }
+       
+        //MAke an anon method to handle this paging and apply to all paged methods 
+        //private int setpaging (MemberSearchViewModel models,int? page,int? numberperpage)
+        //{
+
+        //    bool allowpaging = (models.Count >= (page.GetValueOrDefault()  * numberperpage.GetValueOrDefault())) ? true : false);
+        //    var pageData = page.GetValueOrDefault() > 1 & allowpaging ?
+
+        //    new PaginatedList<MemberSearchViewModel>().GetCurrentPages(models, page ?? 1, numberperpage ?? 4) : models.Take(numberperpage.GetValueOrDefault());
+           
+        //}
+        #endregion
+
    
         #region "Interest Methods"
 
@@ -568,34 +604,53 @@ namespace Shell.MVC2.Data
         {
             //IEnumerable<MemberSearchViewModel> whoisinterestedinme = default(IEnumerable<MemberSearchViewModel>);
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
-                                 select new
-                                 {
-                                    ProfilesBlockedId = c.blockprofile_id 
-                                 };
+             try
+             {
 
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            var whoisinterestedinme = (from p in _datingcontext.interests.Where(p => p.interestprofile_id   == profileid && p.deletedbymemberdate == null)
-                                    join f in _datingcontext.profiledata on p.profile_id equals f.profile_id 
-                                   join z in _datingcontext.profiles on p.profile_id  equals z.id 
-                                   where (f.profile.status.id< 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id ))
-                                   select new MemberSearchViewModel
-                                   {
-                                  interestdate = p.creationdate,
-                                  id = f.profile_id
-                                  // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                              }).ToList();
 
-             bool allowpaging = (whoisinterestedinme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
-             var pageData = Page.GetValueOrDefault() > 1 & allowpaging  ?
-                 new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinme, Page ?? 1, NumberPerPage ?? 4) : whoisinterestedinme.Take(NumberPerPage.GetValueOrDefault());
-             //this.AddRange(pageData.ToList());
-            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                 var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                                      select new
+                                      {
+                                          ProfilesBlockedId = c.blockprofile_id
+                                      };
 
-             //return interests.ToList();
-             return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                 //rematerialize on the back end.
+                 //final query to send back only the profile datatas of the interests we want
+                 var whoisinterestedinme = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid && p.deletedbymemberdate == null)
+                                            join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                                            join z in _datingcontext.profiles on p.profile_id equals z.id
+                                            where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                            select new MemberSearchViewModel
+                                            {
+                                                interestdate = p.creationdate,
+                                                id = f.profile_id
+                                                // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                            }).ToList();
+
+                 bool allowpaging = (whoisinterestedinme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+                 var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinme, Page ?? 1, NumberPerPage ?? 4) : whoisinterestedinme.Take(NumberPerPage.GetValueOrDefault());
+                 //this.AddRange(pageData.ToList());
+                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                 //return interests.ToList();
+                 return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+
+
+             }
+             catch (Exception ex)
+             {
+                 //instantiate logger here so it does not break anything else.
+                 new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                 //log error mesasge
+                 //handle logging here
+                 var message = ex.Message;
+                 throw;
+             }
 
         }
 
@@ -607,35 +662,55 @@ namespace Shell.MVC2.Data
            // IEnumerable<MemberSearchViewModel> whoisinterestedinme = default(IEnumerable<MemberSearchViewModel>);
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
-                                 select new
-                                 {
-                                    ProfilesBlockedId = c.blockprofile_id 
-                                 };
+             try
+             {
 
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-          var  whoisinterestedinmenew = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid && p.viewdate  ==  null)
-                                    join f in _datingcontext.profiledata on p.profile_id equals f.profile_id 
-                                   join z in _datingcontext.profiles on p.profile_id  equals z.id
-                                        where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                                 
-                                     select new MemberSearchViewModel
-                                   {
-                                  interestdate = p.creationdate,
-                                  id = f.profile_id
-                                  // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                              }).ToList();
 
-          bool allowpaging = (whoisinterestedinmenew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
-             var pageData = Page.GetValueOrDefault() > 1 & allowpaging  ?
-                 new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinmenew, Page ?? 1, NumberPerPage ?? 4) : whoisinterestedinmenew.Take(NumberPerPage.GetValueOrDefault());
-             //this.AddRange(pageData.ToList());
-            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-             //return interests.ToList();
-             return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
+                                      select new
+                                      {
+                                          ProfilesBlockedId = c.blockprofile_id
+                                      };
+
+                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                 //rematerialize on the back end.
+                 //final query to send back only the profile datatas of the interests we want
+                 var whoisinterestedinmenew = (from p in _datingcontext.interests.Where(p => p.interestprofile_id == profileid && p.viewdate == null)
+                                               join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                                               join z in _datingcontext.profiles on p.profile_id equals z.id
+                                               where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+
+                                               select new MemberSearchViewModel
+                                               {
+                                                   interestdate = p.creationdate,
+                                                   id = f.profile_id
+                                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                               }).ToList();
+
+                 bool allowpaging = (whoisinterestedinmenew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+                 var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                    new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinmenew, Page ?? 1, NumberPerPage ?? 4) : whoisinterestedinmenew.Take(NumberPerPage.GetValueOrDefault());
+                 //this.AddRange(pageData.ToList());
+                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                 //return interests.ToList();
+                 return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+
+
+             }
+             catch (Exception ex)
+             {
+                 //instantiate logger here so it does not break anything else.
+                 new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                 //log error mesasge
+                 //handle logging here
+                 var message = ex.Message;
+                 throw;
+             }
         }
 
         #region "update/check/change actions"
@@ -1192,36 +1267,52 @@ namespace Shell.MVC2.Data
         {
           //  IEnumerable<MemberSearchViewModel> WhoPeekedAtMe = default(IEnumerable<MemberSearchViewModel>);
 
+            try
+            {
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
-                                 select new
-                                 {
-                                    ProfilesBlockedId = c.blockprofile_id 
-                                 };
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
 
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            var WhoPeekedAtMe = (from p in _datingcontext.peeks.Where(p => p.peekprofile_id == profileid && p.deletedbymemberdate == null)
-                                join f in _datingcontext.profiledata on p.profile_id equals f.profile_id 
-                             join z in _datingcontext.profiles on p.profile_id  equals z.id
-                                where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                                 select new MemberSearchViewModel
-                                 {
-                                     peekdate = p.creationdate ,
-                                     id = f.profile_id
-                                     // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                 }).ToList();
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                var WhoPeekedAtMe = (from p in _datingcontext.peeks.Where(p => p.peekprofile_id == profileid && p.deletedbymemberdate == null)
+                                     join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                                     join z in _datingcontext.profiles on p.profile_id equals z.id
+                                     where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                     select new MemberSearchViewModel
+                                     {
+                                         peekdate = p.creationdate,
+                                         id = f.profile_id
+                                         // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                     }).ToList();
 
-            bool allowpaging = (WhoPeekedAtMe.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
-            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
-                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(WhoPeekedAtMe, Page ?? 1, NumberPerPage ?? 4) : WhoPeekedAtMe.Take(NumberPerPage.GetValueOrDefault());
-            //this.AddRange(pageData.ToList());
-            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                bool allowpaging = (WhoPeekedAtMe.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+                var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                    new PaginatedList<MemberSearchViewModel>().GetCurrentPages(WhoPeekedAtMe, Page ?? 1, NumberPerPage ?? 4) : WhoPeekedAtMe.Take(NumberPerPage.GetValueOrDefault());
+                //this.AddRange(pageData.ToList());
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-            //return interests.ToList();
-            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate .Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                //return interests.ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
 
@@ -1231,39 +1322,58 @@ namespace Shell.MVC2.Data
         /// </summary>
         public List <MemberSearchViewModel> getwhopeekedatmenew(int profileid, int? Page, int? NumberPerPage)
         {
-           // IEnumerable<MemberSearchViewModel> PeekNew = default(IEnumerable<MemberSearchViewModel>);
+         
+            try
+            {
 
-            //gets all  interestets from the interest table based on if the person's profiles are stil lvalid tho
 
-            
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
-                                 select new
-                                 {
-                                    ProfilesBlockedId = c.blockprofile_id 
-                                 };
+                // IEnumerable<MemberSearchViewModel> PeekNew = default(IEnumerable<MemberSearchViewModel>);
 
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            var peeknew = (from p in _datingcontext.peeks .Where(p => p.peekprofile_id  == profileid && p.viewdate  == null)
-                           join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
-                       join z in _datingcontext.profiles on p.profile_id  equals z.id
-                           where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                           select new MemberSearchViewModel
-                           {
-                               peekdate = p.creationdate,
-                               id = f.profile_id
-                               // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                           }).ToList();
+                //gets all  interestets from the interest table based on if the person's profiles are stil lvalid tho
 
-            bool allowpaging = (peeknew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
-            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
-                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeknew, Page ?? 1, NumberPerPage ?? 4) : peeknew.Take(NumberPerPage.GetValueOrDefault());
-            //this.AddRange(pageData.ToList());
-            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-            //return interests.ToList();
-            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate .Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
+
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                var peeknew = (from p in _datingcontext.peeks.Where(p => p.peekprofile_id == profileid && p.viewdate == null)
+                               join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                               join z in _datingcontext.profiles on p.profile_id equals z.id
+                               where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                               select new MemberSearchViewModel
+                               {
+                                   peekdate = p.creationdate,
+                                   id = f.profile_id
+                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                               }).ToList();
+
+                bool allowpaging = (peeknew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+                var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                    new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeknew, Page ?? 1, NumberPerPage ?? 4) : peeknew.Take(NumberPerPage.GetValueOrDefault());
+                //this.AddRange(pageData.ToList());
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                //return interests.ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
    
@@ -1280,8 +1390,27 @@ namespace Shell.MVC2.Data
         //work on this later
           public List<MemberSearchViewModel> getmutualpeeks(int profileid, int targetprofileid)
         {
-            IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
-            return mutualinterests.ToList();
+      
+
+            try
+            {
+
+
+                IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
+                return mutualinterests.ToList();
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
 
         }
         /// <summary>
@@ -1289,7 +1418,26 @@ namespace Shell.MVC2.Data
         /// </summary        
         public bool checkpeek(int profileid, int targetprofileid)
         {
-            return this._datingcontext.peeks.Any(r => r.profile_id == profileid && r.peekprofile_id == targetprofileid);
+            try
+            {
+
+
+
+                return this._datingcontext.peeks.Any(r => r.profile_id == profileid && r.peekprofile_id == targetprofileid);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
         /// <summary>
@@ -1324,11 +1472,15 @@ namespace Shell.MVC2.Data
                 this._datingcontext.SaveChanges();
 
             }
-            catch
+            catch (Exception ex)
             {
-                // log the execption message
-
-                return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1364,9 +1516,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1401,9 +1557,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1438,9 +1598,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1475,9 +1639,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1506,9 +1674,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
             return true;
         }
@@ -1542,9 +1714,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1576,11 +1752,14 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
-
             return true;
 
         }
@@ -1601,23 +1780,42 @@ namespace Shell.MVC2.Data
        
         public int getwhoiblockedcount(int profileid)
         {
-            int? count = null;
-            int defaultvalue = 0;
+          
 
-            count = (
-              from f in _datingcontext.blocks
-              where (f.profile_id == profileid && f.removedate == null)
-              select f).Count();
+            try
+            {
 
-            // ?? operator example.
+                int? count = null;
+                int defaultvalue = 0;
+
+                count = (
+                  from f in _datingcontext.blocks
+                  where (f.profile_id == profileid && f.removedate == null)
+                  select f).Count();
+
+                // ?? operator example.
 
 
-            // y = x, unless x is null, in which case y = -1.
-            defaultvalue = count ?? 0;
+                // y = x, unless x is null, in which case y = -1.
+                defaultvalue = count ?? 0;
 
 
 
-            return defaultvalue;
+                return defaultvalue;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
         /// <summary>
@@ -1625,38 +1823,57 @@ namespace Shell.MVC2.Data
         /// </summary>
         public List<MemberSearchViewModel> getwhoiblocked(int profileid, int? Page, int? NumberPerPage)
         {
-            //IEnumerable<MemberSearchViewModel>blockNew = default(IEnumerable<MemberSearchViewModel>);
+          try
+          {
 
 
-            //var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profileid == profileid && p.BlockRemoved == false)
-            //                     select new
-            //                     {
-            //                        ProfilesBlockedId = c.blockprofile_id 
-            //                     };
 
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-          var  blocknew = (from p in _datingcontext.blocks.Where(p => p.profile_id   == profileid && p.removedate == null)
-                           join f in _datingcontext.profiledata on p.blockprofile_id equals f.profile_id 
-                               join z in _datingcontext.profiles on p.blockprofile_id equals z.id 
-                               where (f.profile.status.id< 3)
-                               orderby (p.creationdate) descending
-                           select new MemberSearchViewModel
-                           {
-                               blockdate  = p.creationdate,
-                               id = f.profile_id
-                               // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                           }).ToList();
+              //IEnumerable<MemberSearchViewModel>blockNew = default(IEnumerable<MemberSearchViewModel>);
 
-          bool allowpaging = (blocknew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
-          var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
-              new PaginatedList<MemberSearchViewModel>().GetCurrentPages(blocknew, Page ?? 1, NumberPerPage ?? 4) : blocknew.Take(NumberPerPage.GetValueOrDefault());
-          //this.AddRange(pageData.ToList());
-          // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-          //return interests.ToList();
-          return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.blockdate .Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+              //var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profileid == profileid && p.BlockRemoved == false)
+              //                     select new
+              //                     {
+              //                        ProfilesBlockedId = c.blockprofile_id 
+              //                     };
+
+              //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+              //rematerialize on the back end.
+              //final query to send back only the profile datatas of the interests we want
+              var blocknew = (from p in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                              join f in _datingcontext.profiledata on p.blockprofile_id equals f.profile_id
+                              join z in _datingcontext.profiles on p.blockprofile_id equals z.id
+                              where (f.profile.status.id < 3)
+                              orderby (p.creationdate) descending
+                              select new MemberSearchViewModel
+                              {
+                                  blockdate = p.creationdate,
+                                  id = f.profile_id
+                                  // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                              }).ToList();
+
+              bool allowpaging = (blocknew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+              var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                  new PaginatedList<MemberSearchViewModel>().GetCurrentPages(blocknew, Page ?? 1, NumberPerPage ?? 4) : blocknew.Take(NumberPerPage.GetValueOrDefault());
+              //this.AddRange(pageData.ToList());
+              // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+              //return interests.ToList();
+              return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+
+          }
+          catch (Exception ex)
+          {
+              //instantiate logger here so it does not break anything else.
+              new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+              //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+              //log error mesasge
+              //handle logging here
+              var message = ex.Message;
+              throw;
+          }
         }
 
            /// <summary>
@@ -1664,30 +1881,49 @@ namespace Shell.MVC2.Data
         /// </summary 
         public List <MemberSearchViewModel> getwhoblockedme(int profileid, int? Page, int? NumberPerPage)
         {
-           // IEnumerable<MemberSearchViewModel> whoisMailboxblockedinme = default(IEnumerable<MemberSearchViewModel>);
+       
+          try
+          {
+
+
+              // IEnumerable<MemberSearchViewModel> whoisMailboxblockedinme = default(IEnumerable<MemberSearchViewModel>);
 
 
 
-          var  whoblockedme = (from p in _datingcontext.blocks.Where(p => p.blockprofile_id  == profileid && p.removedate == null)
-                               join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
-                                       join z in _datingcontext.profiles on p.profile_id  equals z.id 
-                                       where (f.profile.status.id< 3)
-                                       orderby (p.creationdate ) descending
-                               select new MemberSearchViewModel
-                               {
-                                   blockdate  = p.creationdate,
-                                   id = f.profile_id
-                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                               }).ToList();
+              var whoblockedme = (from p in _datingcontext.blocks.Where(p => p.blockprofile_id == profileid && p.removedate == null)
+                                  join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                                  join z in _datingcontext.profiles on p.profile_id equals z.id
+                                  where (f.profile.status.id < 3)
+                                  orderby (p.creationdate) descending
+                                  select new MemberSearchViewModel
+                                  {
+                                      blockdate = p.creationdate,
+                                      id = f.profile_id
+                                      // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                  }).ToList();
 
-          bool allowpaging = (whoblockedme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
-          var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
-              new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoblockedme, Page ?? 1, NumberPerPage ?? 4) : whoblockedme.Take(NumberPerPage.GetValueOrDefault());
-          //this.AddRange(pageData.ToList());
-          // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+              bool allowpaging = (whoblockedme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+              var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                  new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoblockedme, Page ?? 1, NumberPerPage ?? 4) : whoblockedme.Take(NumberPerPage.GetValueOrDefault());
+              //this.AddRange(pageData.ToList());
+              // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-          //return interests.ToList();
-          return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+              //return interests.ToList();
+              return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+
+          }
+          catch (Exception ex)
+          {
+              //instantiate logger here so it does not break anything else.
+              new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+              //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+              //log error mesasge
+              //handle logging here
+              var message = ex.Message;
+              throw;
+          }
         }
 
 
@@ -1700,8 +1936,27 @@ namespace Shell.MVC2.Data
         //work on this later
           public List<MemberSearchViewModel> getmutualblocks(int profileid, int targetprofileid)
         {
-            IEnumerable<MemberSearchViewModel> mutualblocks = default(IEnumerable<MemberSearchViewModel>);
-            return mutualblocks.ToList();
+          
+            try
+            {
+
+
+                IEnumerable<MemberSearchViewModel> mutualblocks = default(IEnumerable<MemberSearchViewModel>);
+                return mutualblocks.ToList();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
 
         }
         /// <summary>
@@ -1709,7 +1964,26 @@ namespace Shell.MVC2.Data
         /// </summary        
         public bool checkblock(int profileid, int targetprofileid)
         {
-            return this._datingcontext.blocks.Any(r => r.profile_id == profileid && r.blockprofile_id == targetprofileid);
+          
+            try
+            {
+
+
+                return this._datingcontext.blocks.Any(r => r.profile_id == profileid && r.blockprofile_id == targetprofileid);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
         /// <summary>
@@ -1745,11 +2019,15 @@ namespace Shell.MVC2.Data
                 this._datingcontext.SaveChanges();
 
             }
-            catch
+            catch (Exception ex)
             {
-                // log the execption message
-
-                return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1785,9 +2063,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1822,11 +2104,14 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
-
             return true;
 
         }
@@ -1860,9 +2145,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1898,9 +2187,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1931,9 +2224,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -1955,23 +2252,42 @@ namespace Shell.MVC2.Data
         /// </summary>       
         public int getwhoilikecount(int profileid)
         {
-            int? count = null;
-            int defaultvalue = 0;
+          
 
-            count = (
-               from f in _datingcontext.likes
-               where (f.profile_id == profileid && f.deletedbymemberdate == null)
-               select f).Count();
-
-            // ?? operator example.
+            try
+            {
 
 
-            // y = x, unless x is null, in which case y = -1.
-            defaultvalue = count ?? 0;
+                int? count = null;
+                int defaultvalue = 0;
+
+                count = (
+                   from f in _datingcontext.likes
+                   where (f.profile_id == profileid && f.deletedbymemberdate == null)
+                   select f).Count();
+
+                // ?? operator example.
+
+
+                // y = x, unless x is null, in which case y = -1.
+                defaultvalue = count ?? 0;
 
 
 
-            return defaultvalue;
+                return defaultvalue;
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
         //count methods first
@@ -1980,30 +2296,49 @@ namespace Shell.MVC2.Data
         /// </summary>       
         public int getwholikesmecount(int profileid)
         {
-            int? count = null;
-            int defaultvalue = 0;
+           
 
-            //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
-                                 select new
-                                 {
-                                     ProfilesBlockedId = c.blockprofile_id
-                                 };
-
-            count = (
-               from p in _datingcontext.likes
-               where (p.likeprofile_id == profileid)
-               join f in _datingcontext.profiles on p.profile_id equals f.id
-               where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-               select f).Count();
-
-            // ?? operator example.
+            try
+            {
 
 
-            // y = x, unless x is null, in which case y = -1.
-            defaultvalue = count ?? 0;
+                int? count = null;
+                int defaultvalue = 0;
 
-            return defaultvalue;
+                //filter out blocked profiles 
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
+
+                count = (
+                   from p in _datingcontext.likes
+                   where (p.likeprofile_id == profileid)
+                   join f in _datingcontext.profiles on p.profile_id equals f.id
+                   where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                   select f).Count();
+
+                // ?? operator example.
+
+
+                // y = x, unless x is null, in which case y = -1.
+                defaultvalue = count ?? 0;
+
+                return defaultvalue;
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
         //count methods first
@@ -2012,30 +2347,49 @@ namespace Shell.MVC2.Data
         /// </summary>       
         public int getwholikesmenewcount(int profileid)
         {
-            int? count = null;
-            int defaultvalue = 0;
+            
 
-            //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
-                                 select new
-                                 {
-                                     ProfilesBlockedId = c.blockprofile_id
-                                 };
-
-            count = (
-               from p in _datingcontext.likes
-               where (p.likeprofile_id == profileid && p.viewdate == null)
-               join f in _datingcontext.profiles on p.profile_id equals f.id
-               where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-               select f).Count();
-
-            // ?? operator example.
+            try
+            {
 
 
-            // y = x, unless x is null, in which case y = -1.
-            defaultvalue = count ?? 0;
+                int? count = null;
+                int defaultvalue = 0;
 
-            return defaultvalue;
+                //filter out blocked profiles 
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
+
+                count = (
+                   from p in _datingcontext.likes
+                   where (p.likeprofile_id == profileid && p.viewdate == null)
+                   join f in _datingcontext.profiles on p.profile_id equals f.id
+                   where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                   select f).Count();
+
+                // ?? operator example.
+
+
+                // y = x, unless x is null, in which case y = -1.
+                defaultvalue = count ?? 0;
+
+                return defaultvalue;
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
         #endregion
@@ -2050,36 +2404,55 @@ namespace Shell.MVC2.Data
           //  IEnumerable<MemberSearchViewModel> LikeNew = default(IEnumerable<MemberSearchViewModel>);
 
 
+            try
+            {
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
-                                 select new
-                                 {
-                                    ProfilesBlockedId = c.blockprofile_id 
-                                 };
 
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            var likenew = (from p in _datingcontext.likes.Where(p => p.likeprofile_id  == profileid && p.viewdate  == null)
-                           join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
-                       join z in _datingcontext.profiles on p.profile_id  equals z.id
-                           where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                       orderby (p.creationdate) descending
-                           select new MemberSearchViewModel
-                           {
-                               likedate  = p.creationdate,
-                               id = f.profile_id
-                               // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                           }).ToList();
 
-            bool allowpaging = (likenew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
-            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
-                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(likenew, Page ?? 1, NumberPerPage ?? 4) : likenew.Take(NumberPerPage.GetValueOrDefault());
-            //this.AddRange(pageData.ToList());
-            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
 
-            //return interests.ToList();
-            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate .Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                var likenew = (from p in _datingcontext.likes.Where(p => p.likeprofile_id == profileid && p.viewdate == null)
+                               join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                               join z in _datingcontext.profiles on p.profile_id equals z.id
+                               where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                               orderby (p.creationdate) descending
+                               select new MemberSearchViewModel
+                               {
+                                   likedate = p.creationdate,
+                                   id = f.profile_id
+                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                               }).ToList();
+
+                bool allowpaging = (likenew.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+                var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                    new PaginatedList<MemberSearchViewModel>().GetCurrentPages(likenew, Page ?? 1, NumberPerPage ?? 4) : likenew.Take(NumberPerPage.GetValueOrDefault());
+                //this.AddRange(pageData.ToList());
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                //return interests.ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
 
         }
 
@@ -2088,38 +2461,57 @@ namespace Shell.MVC2.Data
         /// </summary 
         public List <MemberSearchViewModel> getwholikesme(int profileid, int? Page, int? NumberPerPage)
         {
-           // IEnumerable<MemberSearchViewModel> _Like = default(IEnumerable<MemberSearchViewModel>);
+
+            try
+            {
+
+                // IEnumerable<MemberSearchViewModel> _Like = default(IEnumerable<MemberSearchViewModel>);
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
-                                 select new
-                                 {
-                                    ProfilesBlockedId = c.blockprofile_id 
-                                 };
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
 
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            var wholikesme = (from p in _datingcontext.likes.Where(p => p.likeprofile_id   == profileid && p.deletedbylikedate == null)
-                              join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
-                     join z in _datingcontext.profiles on p.profile_id  equals z.id
-                              where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                     orderby (p.creationdate ) descending
-                              select new MemberSearchViewModel
-                              {
-                                  likedate = p.creationdate,
-                                  id = f.profile_id
-                                  // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                              }).ToList();
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                var wholikesme = (from p in _datingcontext.likes.Where(p => p.likeprofile_id == profileid && p.deletedbylikedate == null)
+                                  join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
+                                  join z in _datingcontext.profiles on p.profile_id equals z.id
+                                  where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                  orderby (p.creationdate) descending
+                                  select new MemberSearchViewModel
+                                  {
+                                      likedate = p.creationdate,
+                                      id = f.profile_id
+                                      // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                  }).ToList();
 
-            bool allowpaging = (wholikesme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
-            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
-                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(wholikesme, Page ?? 1, NumberPerPage ?? 4) : wholikesme.Take(NumberPerPage.GetValueOrDefault());
-            //this.AddRange(pageData.ToList());
-            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                bool allowpaging = (wholikesme.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+                var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                    new PaginatedList<MemberSearchViewModel>().GetCurrentPages(wholikesme, Page ?? 1, NumberPerPage ?? 4) : wholikesme.Take(NumberPerPage.GetValueOrDefault());
+                //this.AddRange(pageData.ToList());
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-            //return interests.ToList();
-            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                //return interests.ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
 
@@ -2128,38 +2520,57 @@ namespace Shell.MVC2.Data
         /// </summary 
         public List<MemberSearchViewModel> getwhoilike(int profileid, int? Page, int? NumberPerPage)
         {
-            // IEnumerable<MemberSearchViewModel> _Like = default(IEnumerable<MemberSearchViewModel>);
+       
+            try
+            {
 
 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
-                                 select new
-                                 {
-                                     ProfilesBlockedId = c.blockprofile_id
-                                 };
+                // IEnumerable<MemberSearchViewModel> _Like = default(IEnumerable<MemberSearchViewModel>);
 
-            //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-            //rematerialize on the back end.
-            //final query to send back only the profile datatas of the interests we want
-            var whoilike = (from p in _datingcontext.likes.Where(p => p.profile_id  == profileid && p.deletedbymemberdate == null)
-                            join f in _datingcontext.profiledata on p.likeprofile_id equals f.profile_id
-                              join z in _datingcontext.profiles on p.likeprofile_id  equals z.id
-                            where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                              orderby (p.creationdate) descending
-                            select new MemberSearchViewModel
-                            {
-                                likedate = p.creationdate,
-                                id = f.profile_id
-                                // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                            }).ToList();
 
-            bool allowpaging = (whoilike.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
-            var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
-                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoilike, Page ?? 1, NumberPerPage ?? 4) : whoilike.Take(NumberPerPage.GetValueOrDefault());
-            //this.AddRange(pageData.ToList());
-            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
 
-            //return interests.ToList();
-            return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate .Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                //rematerialize on the back end.
+                //final query to send back only the profile datatas of the interests we want
+                var whoilike = (from p in _datingcontext.likes.Where(p => p.profile_id == profileid && p.deletedbymemberdate == null)
+                                join f in _datingcontext.profiledata on p.likeprofile_id equals f.profile_id
+                                join z in _datingcontext.profiles on p.likeprofile_id equals z.id
+                                where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                orderby (p.creationdate) descending
+                                select new MemberSearchViewModel
+                                {
+                                    likedate = p.creationdate,
+                                    id = f.profile_id
+                                    // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                }).ToList();
+
+                bool allowpaging = (whoilike.Count >= (Page.GetValueOrDefault() * NumberPerPage.GetValueOrDefault()) ? true : false);
+                var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
+                    new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoilike, Page ?? 1, NumberPerPage ?? 4) : whoilike.Take(NumberPerPage.GetValueOrDefault());
+                //this.AddRange(pageData.ToList());
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                //return interests.ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
 
@@ -2173,8 +2584,27 @@ namespace Shell.MVC2.Data
         //work on this later
           public List<MemberSearchViewModel> getmutuallikes(int profileid, int targetprofileid)
         {
-            IEnumerable<MemberSearchViewModel> mutuallikes = default(IEnumerable<MemberSearchViewModel>);
-            return mutuallikes.ToList();
+         
+            try
+            {
+
+                IEnumerable<MemberSearchViewModel> mutuallikes = default(IEnumerable<MemberSearchViewModel>);
+                return mutuallikes.ToList();
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
 
         }
         /// <summary>
@@ -2182,7 +2612,26 @@ namespace Shell.MVC2.Data
         /// </summary        
         public bool checklike(int profileid, int targetprofileid)
         {
-            return this._datingcontext.likes.Any(r => r.profile_id == profileid && r.likeprofile_id == targetprofileid);
+            try
+            {
+
+
+                return this._datingcontext.likes.Any(r => r.profile_id == profileid && r.likeprofile_id == targetprofileid);
+
+         
+
+
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
 
         /// <summary>
@@ -2217,11 +2666,15 @@ namespace Shell.MVC2.Data
                 this._datingcontext.SaveChanges();
 
             }
-            catch
+            catch (Exception ex)
             {
-                // log the execption message
-
-                return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -2257,9 +2710,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -2294,11 +2751,14 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
-
             return true;
 
         }
@@ -2331,9 +2791,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -2368,9 +2832,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -2399,10 +2867,15 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
+
             return true;
         }
 
@@ -2435,9 +2908,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;
@@ -2469,9 +2946,13 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                throw ex;
-                // log the execption message
-                //return false;
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
             }
 
             return true;

@@ -70,13 +70,13 @@ public class Class1
 
 
 
-           
-           
+
+
         }
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+            new ErroLogging(applicationEnum.LookupService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
             //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
             //log error mesasge
             //handle logging here

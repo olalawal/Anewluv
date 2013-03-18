@@ -78,7 +78,6 @@ namespace Shell.MVC2.Infrastructure
                     //        ' Attempt a maximum of 5 times 
                     try
                     {
-
                         using (OperationContextScope contextScope = new OperationContextScope(proxy))    
                         {
                             //for rest endpoint
@@ -87,8 +86,6 @@ namespace Shell.MVC2.Infrastructure
                             httpRequestProperty.Headers.Add(HttpRequestHeader.UserAgent, "my user agent");
                             httpRequestProperty.Headers.Add(HttpRequestHeader.Authorization, Authheader);
                             OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
-
-
                             //for soad
                             //MessageHeader auth = MessageHeader.CreateHeader("Authorization","", Authheader);
                             //MessageHeader apikey = MessageHeader.CreateHeader("Apikey", "", ApiKey);
@@ -96,9 +93,7 @@ namespace Shell.MVC2.Infrastructure
                            // OperationContext.Current.OutgoingMessageHeaders.Add(apikey);
                             codeBlock((T)proxy);
                         }
-
-                        success = true;
-                      
+                        success = true;                     
                         
                     }
                     catch (ChannelTerminatedException cte)
@@ -107,7 +102,6 @@ namespace Shell.MVC2.Infrastructure
                         proxy.Abort();
                         //  delay (backoff) and retry 
                         Thread.Sleep(1000 * (i + 1));
-
                         // The following is thrown when a remote endpoint could not be found or reached.  The endpoint may not be found or 
                         // reachable because the remote endpoint is down, the remote endpoint is unreachable, or because the remote network is unreachable.
                     }
@@ -117,17 +111,14 @@ namespace Shell.MVC2.Infrastructure
                         proxy.Abort();
                         //  delay (backoff) and retry 
                         Thread.Sleep(1000 * (i + 1));
-
                         // The following exception that is thrown when a server is too busy to accept a message.
                     }
                     catch (ServerTooBusyException stbe)
                     {
                         mostRecentEx = stbe;
                         proxy.Abort();
-
                         //  delay (backoff) and retry 
                         Thread.Sleep(1000 * (i + 1));
-
                     }
                     catch (CommunicationException commProblem)
                     {
