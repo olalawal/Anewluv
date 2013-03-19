@@ -107,7 +107,7 @@ namespace Shell.MVC2.Data
                  //log error mesasge
                  //handle logging here
                  var message = ex.Message;
-                 throw ex;
+               throw;
              }
 
 
@@ -426,7 +426,7 @@ namespace Shell.MVC2.Data
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
-                throw ex;
+              throw;
             }
 
             
@@ -1251,7 +1251,7 @@ namespace Shell.MVC2.Data
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
-                throw ex;
+              throw;
             }
 
 

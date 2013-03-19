@@ -254,7 +254,7 @@ namespace Shell.MVC2.Data
                  }
                  catch (Exception ex)
                  {
-                     throw ex;
+                   throw;
                      // log the execption message
                     // return false;
                  }
@@ -330,7 +330,7 @@ namespace Shell.MVC2.Data
                     }
                     catch(Exception ex)
                     {
-                        throw ex;
+                      throw;
                         // log the execption message
                         //return false;
                     }
@@ -356,7 +356,7 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                      throw;
                         // log the execption message
                         //return false;
                     }
@@ -386,7 +386,7 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                      throw;
                         // log the execption message
                         //return false;
 
@@ -417,7 +417,7 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                      throw;
                         // log the execption message
                         //return false;
 
@@ -499,7 +499,7 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                      throw;
                         // log the execption message
                         //return false;
                     }
@@ -532,7 +532,7 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
 
-                        throw ex;
+                      throw;
                         // log the execption message
                         //return false;
                        // return null;
@@ -586,7 +586,7 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                      throw;
                         // log the execption message
                         //return false;
 
@@ -637,7 +637,7 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                      throw;
                         // log the execption message
                         //return false;
 

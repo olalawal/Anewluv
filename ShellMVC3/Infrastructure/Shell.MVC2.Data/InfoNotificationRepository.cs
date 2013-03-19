@@ -247,7 +247,7 @@ namespace Shell.MVC2.Data
               {
                   //log error mesasge
                   new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning , ex, null, null,false);
-                 
+                throw;
               }
              
               
@@ -349,9 +349,9 @@ namespace Shell.MVC2.Data
              }
              catch (Exception ex)
              {
-                 //handle logging here
-                 var message = ex.Message;
-                 throw ex;
+                 //log error mesasge
+                 new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               throw;
              }
             // return null;
          }
@@ -449,9 +449,9 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
-                //handle logging here
-                var message = ex.Message;
-                throw ex;
+                //log error mesasge
+                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+              throw;
             }
           
 
@@ -480,7 +480,9 @@ namespace Shell.MVC2.Data
              }
              catch (Exception ex)
              {
-                 //handle logging here
+                 //log error mesasge
+                 new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               throw;
              }
              return null;
       }
@@ -509,7 +511,9 @@ namespace Shell.MVC2.Data
           }
           catch (Exception ex)
           {
-              //handle logging here
+              //log error mesasge
+              new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+            throw;
           }
           return null;
       
@@ -542,7 +546,9 @@ namespace Shell.MVC2.Data
           }
           catch (Exception ex)
           {
-              //handle logging here
+              //log error mesasge
+              new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+              throw ;
           }
           return null;
 

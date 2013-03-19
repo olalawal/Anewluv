@@ -114,7 +114,7 @@ namespace Shell.MVC2.AppFabric
         catch (Exception ex)
         {
             //log andmessage the exception moveon  
-            throw ex;
+          throw;
         }
         finally
         {
@@ -204,7 +204,7 @@ namespace Shell.MVC2.AppFabric
             {
                 //log cache error
                 // log the execption message
-                throw ex;
+              throw;
             }
             finally
             {

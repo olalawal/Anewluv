@@ -146,7 +146,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //TO DO Log the error 
                 //handle logging here
                 var message = ex.Message;
-                throw ex;
+              throw;
             }
 
 
@@ -199,7 +199,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //TO DO Log the error 
                 //handle logging here
                 var message = ex.Message;
-                throw ex;
+              throw;
             }
             
         }
@@ -260,7 +260,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //TO DO Log the error 
                 //handle logging here
                 var message = ex.Message;
-                throw ex;
+              throw;
             }
 
 
@@ -414,7 +414,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             {
                 status = MembershipCreateStatus.ProviderError;
                 newUser = null;
-                throw ex;
+              throw;
             }
             
             return newUser;
@@ -464,7 +464,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //TO DO Log the error 
                 //handle logging here
                 var message = ex.Message;
-                throw ex;
+              throw;
             }
         }
 
@@ -575,7 +575,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             {
                 // status = MembershipCreateStatus.ProviderError;
                 //  newUser = null;
-                throw ex;
+              throw;
             }
 
 
@@ -670,7 +670,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //TO DO Log the error 
                 //handle logging here
                 var message = ex.Message;
-                throw ex;
+              throw;
             }
         }
 
@@ -862,7 +862,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //TO DO Log the error 
                 //handle logging here
                 var message = ex.Message;
-                throw ex;
+              throw;
             }
 
                    

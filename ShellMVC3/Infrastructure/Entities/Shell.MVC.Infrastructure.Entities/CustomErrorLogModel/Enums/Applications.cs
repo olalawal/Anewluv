@@ -44,8 +44,12 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
         GeneralApplicationError = 11,
          [Description("Lookup Service Error")]
         [EnumMember]
-        LookupService = 11
+        LookupService = 12,
+           [Description("Mapping And Quick Search Service")]
+        [EnumMember]
+        MemberMapperService = 13
     }
+    
 
 }
 

@@ -208,7 +208,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
                 //return false;
-                throw ex;
+              throw;
 
             }
    

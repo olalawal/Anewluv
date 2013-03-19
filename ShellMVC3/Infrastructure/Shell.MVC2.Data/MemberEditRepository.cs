@@ -126,7 +126,7 @@ namespace Shell.MVC2.Data
            {
                //handle logging here
                var message = ex.Message;
-               throw ex;
+             throw;
 
            }
         
@@ -193,7 +193,7 @@ namespace Shell.MVC2.Data
                {
                    //handle logging here
                    var message = ex.Message;
-                   throw ex;
+                 throw;
 
                }
           
@@ -244,7 +244,7 @@ namespace Shell.MVC2.Data
                {
                    //handle logging here
                    var message = ex.Message;
-                   throw ex;
+                 throw;
 
                }
      
@@ -297,7 +297,7 @@ namespace Shell.MVC2.Data
                {
                    //handle logging here
                    var message = ex.Message;
-                   throw ex;
+                 throw;
 
                }
         
@@ -382,7 +382,7 @@ namespace Shell.MVC2.Data
            {
                //handle logging here
                var message = ex.Message;
-               throw ex;
+             throw;
 
            }
            return messages;
@@ -483,7 +483,7 @@ namespace Shell.MVC2.Data
            {
                //handle logging here
                var message = ex.Message;
-               throw ex;
+             throw;
 
            }
            return messages;
@@ -588,7 +588,7 @@ namespace Shell.MVC2.Data
            {
                //handle logging here
                var message = ex.Message;
-               throw ex;
+             throw;
 
            }
            return messages;
@@ -695,7 +695,7 @@ namespace Shell.MVC2.Data
            {
                //handle logging here
                var message = ex.Message;
-               throw ex;
+             throw;
 
            }
            return messages;

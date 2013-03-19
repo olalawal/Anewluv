@@ -117,4 +117,33 @@ public class Class1
             throw;
         }
 	}
+
+    public class2()
+    {
+        try
+        {
+        
+        
+        }
+    
+      catch (DataException dx)
+           {
+               //Log the error (add a variable name after DataException) 
+               // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+               // return model;
+               //handle logging here
+               var message = dx.Message;
+               new ErroLogging(applicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               throw;
+           }
+           catch (Exception ex)
+           {
+               //log error mesasge
+               new ErroLogging(applicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               throw;
+           }
+
+
+
+    }
 }
