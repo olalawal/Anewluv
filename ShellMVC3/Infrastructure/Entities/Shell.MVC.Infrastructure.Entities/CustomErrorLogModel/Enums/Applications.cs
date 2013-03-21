@@ -47,7 +47,13 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
         LookupService = 12,
            [Description("Mapping And Quick Search Service")]
         [EnumMember]
-        MemberMapperService = 13
+        MemberMapperService = 13,
+           [Description("Geo location services")]
+           [EnumMember]
+           GeoLocationService = 14,
+           [Description("Mail Service")]
+           [EnumMember]
+           MailService = 15
     }
     
 

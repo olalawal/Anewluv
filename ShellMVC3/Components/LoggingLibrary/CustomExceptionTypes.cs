@@ -107,7 +107,63 @@ namespace LoggingLibrary
             }
         }
 
-     
+        [Serializable]
+        public class GeoLocationException : Exception, ISerializable
+        {
+
+            private string _countryid;
+            private string _stateprovince;
+            private string _profileid;
+
+
+            private GeoLocationException()
+            {
+
+            }
+
+            public GeoLocationException(string countryid,string stateprovince,string profileid)
+                : base()
+            {
+               _countryid = countryid ;
+               _stateprovince = stateprovince ;
+                _profileid= profileid ;
+            }
+
+            public GeoLocationException(string countryid,string stateprovince,string profileid, string message)
+                : base(message)
+            {
+                _countryid = countryid;
+                _stateprovince = stateprovince;
+                _profileid = profileid;
+            }
+
+            public GeoLocationException(string countryid,string stateprovince,string profileid, string message, Exception inner)
+                : base(message, inner)
+            {
+                _countryid = countryid;
+                _stateprovince = stateprovince;
+                _profileid = profileid;
+            }
+
+            protected GeoLocationException(SerializationInfo info, StreamingContext context)
+            {
+                if (info == null)
+                    throw new System.ArgumentNullException("info");
+
+                _countryid = (string)info.GetValue(_countryid, typeof(string));
+                _stateprovince = (string)info.GetValue(_stateprovince, typeof(string));
+                _profileid = (string)info.GetValue(_stateprovince, typeof(string));
+               // Model = (MembersViewModel)info.GetValue("Model", typeof(MembersViewModel));
+            }
+
+            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+            void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                if (info == null)
+                    throw new System.ArgumentNullException("info"); info.AddValue("countryid", _countryid, typeof(string));
+            }
+        }
+
 
         //#region "Sample exceptions"
         //[Serializable]
