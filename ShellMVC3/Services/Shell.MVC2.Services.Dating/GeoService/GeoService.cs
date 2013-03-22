@@ -36,20 +36,62 @@ namespace Shell.MVC2.Services.Dating
             }
 
 
-            public string getcountrynamebycountryid(int countryid)
+            public string getcountrynamebycountryid(string countryid)
             {
-                return _georepository.getcountrynamebycountryid(countryid);
+               
+                try
+                {
+
+                    return _georepository.getcountrynamebycountryid(Convert.ToInt32(countryid));
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
             public registermodel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model)
             {
-                return _georepository.verifyorupdateregistrationgeodata(model);
+              
+                try
+                {
+                    return _georepository.verifyorupdateregistrationgeodata(model);
+
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
 
             }
             //gets the country list and orders it
             //added sorting
             public List<Country_PostalCode_List> getcountry_postalcode_listandorderbycountry()
             {
-                return _georepository.getcountry_postalcode_listandorderbycountry();
+              
+                try
+                {
+
+                    return _georepository.getcountry_postalcode_listandorderbycountry();
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
 
             /// <summary>
@@ -58,70 +100,279 @@ namespace Shell.MVC2.Services.Dating
             /// 
             public int getcountry_postalcodestatusbycountryname(string strCountryName)
             {
-                return _georepository.getcountry_postalcodestatusbycountryname(strCountryName);
+              
+                try
+                {
+                    return _georepository.getcountry_postalcodestatusbycountryname(strCountryName);
+
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
 
             public int getcountryidbycountryname(string strCountryName)
             {
-                return _georepository.getcountryidbycountryname(strCountryName);
+               
+                try
+                {
+
+                    return _georepository.getcountryidbycountryname(strCountryName);
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
             //Dynamic LINQ to Entites quries 
             //*****************************************************************************************************************************************
             public List<CityList> getcitylistdynamic(string strCountryName, string strPrefixText, string strPostalcode)
             {
-                return _georepository.getcitylistdynamic(strCountryName,  strPrefixText,  strPostalcode);
+              
+                try
+                {
+                    return _georepository.getcitylistdynamic(strCountryName, strPrefixText, strPostalcode);
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
                      
             }
             public List<GpsData> getgpsdatabycountrypostalcodeandcity(string strCountryName, string strPostalcode, string strCity)
             {
-                return _georepository.getgpsdatabycountrypostalcodeandcity(strCountryName,  strPostalcode,  strCity);
+              
+                try
+                {
+                    return _georepository.getgpsdatabycountrypostalcodeandcity(strCountryName, strPostalcode, strCity);
+
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
             public List<GpsData> getgpsdatabycountryandcity(string strCountryName, string strCity)
             {
-                 return _georepository.getgpsdatabycountryandcity( strCountryName,  strCity);
+               
+                 try
+                 {
+                     return _georepository.getgpsdatabycountryandcity(strCountryName, strCity);
+
+
+                 }
+                 catch (Exception ex)
+                 {
+                     //can parse the error to build a more custom error mssage and populate fualt faultreason
+                     FaultReason faultreason = new FaultReason("Error in GeoService service");
+                     string ErrorMessage = "";
+                     string ErrorDetail = "ErrorMessage: " + ex.Message;
+                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                 }
             }
             public GpsData getgpsdatasinglebycitycountryandpostalcode(string strCountryName, string strPostalcode, string strCity)
             {
-                return _georepository.getgpsdatasinglebycitycountryandpostalcode(strCountryName,  strPostalcode,  strCity);
+               
+                try
+                {
+
+                    return _georepository.getgpsdatasinglebycitycountryandpostalcode(strCountryName, strPostalcode, strCity);
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
             public List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string strCountryName, string strCity, string StrprefixText)
             {
-                return _georepository.getpostalcodesbycountryandcityprefixdynamic(strCountryName,  strCity,  StrprefixText);
+                
+                try
+                {
+                    return _georepository.getpostalcodesbycountryandcityprefixdynamic(strCountryName, strCity, StrprefixText);
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
             //gets the single geo code as string
             public string getgeopostalcodebycountrynameandcity(string strCountryName, string strCity)
             {
-                return _georepository.getgeopostalcodebycountrynameandcity(strCountryName, strCity);
+               
+                try
+                {
+                    return _georepository.getgeopostalcodebycountrynameandcity(strCountryName, strCity);
+
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
 
             public bool validatepostalcodebycountryandcity(string strCountryName, string strCity, string StrPostalCode)
             {
-                return _georepository.validatepostalcodebycountryandcity(strCountryName,  strCity,  StrPostalCode);
+               
+                try
+                {
+                    return _georepository.validatepostalcodebycountryandcity(strCountryName, strCity, StrPostalCode);
+
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
 
             public List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string strCountryName, string strlattitude, string strlongitude)
             {
-                return _georepository.getpostalcodesbycountryandlatlongdynamic(strCountryName,  strlattitude,  strlongitude);
+               
+                try
+                {
+
+                    return _georepository.getpostalcodesbycountryandlatlongdynamic(strCountryName, strlattitude, strlongitude);
+
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
             public List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string strCountryName, string strCity, string strStateProvince)
             {
-                return _georepository.getpostalcodesbycountrynamecityandstateprovincedynamic(strCountryName, strCity,  strStateProvince);
+                
+                try
+                {
+                    return _georepository.getpostalcodesbycountrynamecityandstateprovincedynamic(strCountryName, strCity, strStateProvince);
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
             public List<country> getcountrylist()
             {
-                return _georepository.getcountrylist();
+                
+                try
+                {
+                    return _georepository.getcountrylist();
+
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
-            public List<citystateprovince> getfilteredcitiesold(string filter, string Country, int offset)
+
+            public List<citystateprovince> getfilteredcitiesold(string filter, string Country, string offset)
             {
-                return _georepository.getfilteredcitiesold(filter,  Country,  offset);
+              
+                try
+                {
+
+                    return _georepository.getfilteredcitiesold(filter, Country, Convert.ToInt32(offset));
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
-            public List<citystateprovince> getfilteredcities(string filter, string Country, int offset)
+            public List<citystateprovince> getfilteredcities(string filter, string Country, string offset)
             {
-                return _georepository.getfilteredcities(filter, Country, offset);
+             
+                try
+                {
+
+                    return _georepository.getfilteredcities(filter, Country, Convert.ToInt32(offset));
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
-            public List<postalcodes> getfilteredpostalcodes(string filter, string Country, string City, int offset)
+            public List<postalcodes> getfilteredpostalcodes(string filter, string Country, string City, string offset)
             {
-                return _georepository.getfilteredpostalcodes(filter, Country, City, offset);
+               
+                try
+                {
+
+                    return _georepository.getfilteredpostalcodes(filter, Country, City, Convert.ToInt32(offset));
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in GeoService service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
             }
      
         }

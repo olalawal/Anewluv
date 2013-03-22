@@ -41,19 +41,19 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
         NotificationService = 9,
         [Description("General Application Error")]
         [EnumMember]
-        GeneralApplicationError = 11,
+        GeneralApplicationError = 10,
          [Description("Lookup Service Error")]
         [EnumMember]
-        LookupService = 12,
+        LookupService = 11,
            [Description("Mapping And Quick Search Service")]
         [EnumMember]
-        MemberMapperService = 13,
+        MemberMapperService = 12,
            [Description("Geo location services")]
            [EnumMember]
-           GeoLocationService = 14,
+           GeoLocationService = 13,
            [Description("Mail Service")]
            [EnumMember]
-           MailService = 15
+           MailService = 14
     }
     
 

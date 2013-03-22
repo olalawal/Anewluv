@@ -154,8 +154,8 @@ namespace Shell.MVC2.Data
              try
             {
                 List<Country_PostalCode_List> CountryCodeQuery = default(List<Country_PostalCode_List>);
-
-            CountryCodeQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName == strCountryName).ToList();
+                 //3-18-2013 olawal added code to remove the the spaces when we test
+            CountryCodeQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName.Replace(" ","") == strCountryName).ToList();
 
             if (CountryCodeQuery.Count() > 0)
             {

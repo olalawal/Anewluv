@@ -127,7 +127,7 @@ namespace Shell.MVC2.Data
             return true;
             
             //check if we are looking at the URLS or specific methods that allow Anonymoys access
-            if (nonauthenticatedservices.Contains(urisegments[1].ToString())) return true;
+            if (nonauthenticatedservices.Contains(urisegments[1].ToString().Replace("/", ""  ))) return true;
             //look at the urls for specicif URLS that allow anonymous
             if (nonauthenticatedURLS.Contains(urisegments[2].ToString())) return true;
 
