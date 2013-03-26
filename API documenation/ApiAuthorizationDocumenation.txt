@@ -1,0 +1,38 @@
+
+General Service information (headers API keys and breif description of the types of calls)
+--------------------------------------------------------------------------------------------
+
+* note all calls require API key in header, some also require a username and password in the authorization header.  This will be indicated in the documenation 
+
+ApiKey info:
+Apikey to use on IOS : 460ad6f3-8216-469f-9b1c-52cffa5d812c
+Apikey to use on Andriod : 460ad6f3-8216-469f-9b1c-52cffa5d812c
+
+User name password info :
+passwords and user name are joined to gether and then base 64 encoded see sample:
+username: case:
+password: drive333
+
+you need to encode the string : case:drive333
+result : Y2FzZTpkcml2ZTMzMw==
+
+url for how encoding passwords (for testing)
+http://www.motobit.com/util/base64-decoder-encoder.asp
+
+
+sample headers:
+
+1.)header sample with just API key
+
+User-Agent: Fiddler
+Content-Type: text/json
+Host: localhost
+apkikey: 460ad6f3-8216-469f-9b1c-52cffa5d812c
+
+2.) header sample with API key an auth header 
+
+User-Agent: Fiddler
+Content-Type: text/json
+Host: localhost
+Authorization: Y2FzZTpkcml2ZTMzMw==
+apkikey: 460ad6f3-8216-469f-9b1c-52cffa5d812c
