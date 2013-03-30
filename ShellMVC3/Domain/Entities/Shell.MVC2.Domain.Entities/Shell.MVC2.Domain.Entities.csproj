@@ -77,8 +77,10 @@
     <Compile Include="Anewluv\Applications\lu_iconImagersizerformat.cs" />
     <Compile Include="Anewluv\Context\Anewluv.Context.Application.cs" />
     <Compile Include="Anewluv\Context\Anewluv.Modelbuilder.Application.cs" />
+    <Compile Include="Anewluv\Lookups\enums\openidprovider.cs" />
+    <Compile Include="Anewluv\Lookups\lu_openidproviders.cs" />
     <Compile Include="Anewluv\Lookups\lu_profilefiltertype.cs" />
-    <Compile Include="Anewluv\Lookups\enums\Copy of role.cs" />
+    <Compile Include="Anewluv\Lookups\enums\role.cs" />
     <Compile Include="Anewluv\Lookups\enums\photorejectionreasonusermessage.cs" />
     <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
     <Compile Include="Anewluv\photo_securitylevel.cs" />

@@ -213,8 +213,13 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //so they could be in order status 1
                 var myprofile = _datingcontext.profiles.Where(p => p.emailaddress == VerifedEmail && p.status.id <= 2).FirstOrDefault();
 
+                //get the openid providoer
+                lu_openidprovider provider = _datingcontext.lu_openidprovider.Where(p => (p.description).ToUpper() == openidProvidername.ToUpper()).FirstOrDefault();
+                if (provider == null) return false;
+
+
                 //check for the openIDidenfier , to see if it was used before , if it was do nothing but normal updates for user
-                var myopenIDstore = myprofile.openids.Where(p => p.openididentifier == openidIdentifer && p.openidprovidername == openidProvidername && p.active == true).FirstOrDefault();
+                var myopenIDstore = myprofile.openids.Where(p => p.openididentifier == openidIdentifer && provider.description.ToUpper()   == openidProvidername.ToUpper() && p.active == true).FirstOrDefault();
 
                 //if we found an openID store for this type
                 if (myopenIDstore == null && myprofile != null)

@@ -442,7 +442,11 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
            .WithRequired(p => p.visiblitysetting).HasForeignKey(p => p.visiblitysetting_id).WillCascadeOnDelete(false); 
 
 
+            //3-25-2013 olawal added stuff for openID provider relation ship
+           // modelBuilder.Entity<openid>().HasRequired(p => p.openidprovider);
+           
 
+          
         
         }
 

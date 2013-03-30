@@ -16,6 +16,19 @@ namespace Shell.MVC2.Domain.Entities.Migrations
         {
 
 
+            //3-25-2013 olawal
+            //added for open id
+            //openidprovider
+            //filter an enum for not set since that is the zero value i.e  
+            var openidproviderqry = from openidproviderEnum value in Enum.GetValues(typeof(openidproviderEnum))                                 
+                                  orderby value // to sort by value; remove otherwise 
+                                  select value;
+            openidproviderqry.ToList().ForEach(kvp => context.lu_openidprovider.AddOrUpdate(new lu_openidprovider()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
             //9-12-2012
             //added for profile activity type
             //activitytype

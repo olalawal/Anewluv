@@ -17,9 +17,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [DataMember]
         public DateTime? creationdate { get; set; }
         [DataMember]
-        public string openididentifier { get; set; }
+        public string openididentifier { get; set; }          
         [DataMember]
-        public string openidprovidername { get; set; }
+        public virtual lu_openidprovider openidprovider { get; set; }
         [DataMember]
         public int profile_id { get; set; }
         [DataMember]

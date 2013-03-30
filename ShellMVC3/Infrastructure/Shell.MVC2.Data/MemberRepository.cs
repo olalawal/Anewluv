@@ -408,7 +408,7 @@ namespace Shell.MVC2.Data
                            active = true,
                           creationdate  = DateTime.UtcNow ,
                            profile_id   = profileid,
-                        openidprovidername   = openidProvidername ,
+                         openidprovider    = _datingcontext.lu_openidprovider.Where(p=> (p.description ).ToUpper() == openidProvidername.ToUpper ()).FirstOrDefault(),
                            openididentifier   = openidIdentifer
                         };
                      this._datingcontext.opendIds.Add (profileOpenIDStore);
