@@ -16,6 +16,7 @@ using System.Data;
 using Shell.MVC2.Data.Infrastructure;
 using LoggingLibrary;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Shell.MVC2.AppFabric;
 
 namespace Shell.MVC2.Data
 {
@@ -34,19 +35,19 @@ namespace Shell.MVC2.Data
 
 
 
-        public string getcountrynamebycountryid(int countryId)
+        public string getcountrynamebycountryid(int countryid)
         {
             try
             {
                 return (from p in _postalcontext.Country_PostalCode_List
-                        where p.CountryID == countryId
-                        select p.CountryName).FirstOrDefault();
-                //return postaldataservicecontext.GetCountryNameByCountryID(profiledata.countryid);
+                        where p.CountryID  == countryid
+                        select p.CountryName ).FirstOrDefault();
+                //return postaldataservicecontext.GetcountryNameBycountryID(profiledata.countryid);
             }
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryId.ToString(),"","",ex.Message , ex.InnerException);
+                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(countryid.ToString(), "", "", ex.Message, ex.InnerException);
                new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
@@ -59,18 +60,18 @@ namespace Shell.MVC2.Data
             {
                //4-24-2012 fixed code to hanlde if we did not have a postcal code
             GpsData gpsData = new GpsData();
-            string[] tempCityAndStateProvince = model.GeoRegisterModel.city .Split(',');
+            string[] tempcityAndStateProvince = model.GeoRegisterModel.city .Split(',');
             //int countryID;
 
             //attmept to get postal postalcode if it is empty
             model.GeoRegisterModel.ziporpostalcode = (model.GeoRegisterModel.ziporpostalcode == null) ?
-            this.getgeopostalcodebycountrynameandcity(model.GeoRegisterModel.country, tempCityAndStateProvince[0]) : model.GeoRegisterModel.ziporpostalcode;
-            model.GeoRegisterModel.stateprovince = ((tempCityAndStateProvince.Count() > 1)) ? tempCityAndStateProvince[1] : "NA";
-            //countryID = postaldataservicecontext.GetCountryIdByCountryName(model.GeoRegisterModel.Country);
+            this.getgeopostalcodebycountrynameandcity(model.GeoRegisterModel.country, tempcityAndStateProvince[0]) : model.GeoRegisterModel.ziporpostalcode;
+            model.GeoRegisterModel.stateprovince = ((tempcityAndStateProvince.Count() > 1)) ? tempcityAndStateProvince[1] : "NA";
+            //countryID = postaldataservicecontext.GetcountryIdBycountryName(model.GeoRegisterModel.country);
 
             //check if the  city and country match
             if (model.GeoRegisterModel.country == model.GeoMembersModel.myquicksearch.myselectedcountryname && 
-                tempCityAndStateProvince[0] == model.GeoMembersModel.myquicksearch.myselectedcity)
+                tempcityAndStateProvince[0] == model.GeoMembersModel.myquicksearch.myselectedcity)
             {
                 if (model.GeoRegisterModel.lattitude  != null | model.GeoRegisterModel.lattitude  == 0)
                     return model.GeoRegisterModel;
@@ -83,7 +84,7 @@ namespace Shell.MVC2.Data
             //get the longidtue and latttude 
             //1-11-2011 postal code and city are flipped by the way not this function should be renamed
             //TO DO rename this function.                  
-            gpsData = this.getgpsdatasinglebycitycountryandpostalcode(model.GeoRegisterModel.country, model.GeoRegisterModel.ziporpostalcode, tempCityAndStateProvince[0]);
+            gpsData = this.getgpsdatasinglebycitycountryandpostalcode(model.GeoRegisterModel.country, model.GeoRegisterModel.ziporpostalcode, tempcityAndStateProvince[0]);
 
 
             model.GeoRegisterModel.lattitude  = (gpsData != null) ? gpsData.Latitude  : 0;
@@ -102,15 +103,22 @@ namespace Shell.MVC2.Data
         }
         //gets the country list and orders it
         //added sorting
-        public List<Country_PostalCode_List> getcountry_postalcode_listandorderbycountry()
+        public List<countrypostalcode> getcountryandpostalcodestatuslist()
         {
-           
+
+
+
              try
             {
-               List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);           
-            myQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName != "").OrderBy(p => p.CountryName).ToList();
+           //    List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);           
+           // myQuery = _postalcontext.Country_PostalCode_List.Where(p => p.countryName != "").OrderBy(p => p.countryName).ToList();
 
-            return myQuery;
+           //return (from s in myQuery select new countrypostalcode {  name   = s.countryName , code = s.country_Code , 
+           //    customregionid = s.countryCustomRegionID , region = s.country_Region , haspostalcode  = Convert.ToBoolean(s.PostalCodes)   }).ToList();
+
+           // return myQuery;
+
+                return CachingFactory.SharedObjectHelper.getcountryandpostalcodestatuslist(_postalcontext);
 
             }
             catch (Exception ex)
@@ -121,12 +129,11 @@ namespace Shell.MVC2.Data
                 throw convertedexcption;
             }
         }      
-
         /// <summary>
         /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
         /// </summary>
         /// 
-        public int getcountry_postalcodestatusbycountryname(string strCountryName)
+        public bool getpostalcodestatusbycountryname(string countryname)
         {
           
 
@@ -134,32 +141,32 @@ namespace Shell.MVC2.Data
             {
                 List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
             //Dim ctx As New Entities()
-            myQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName == strCountryName).ToList();
+            myQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName  == countryname).ToList();
 
-            return myQuery.FirstOrDefault().PostalCodes.Value;
+            return (myQuery.Count > 0 ? true : false);
+          //  return myQuery.FirstOrDefault().PostalCodes.Value;
             }
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName,"","",ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname,"","",ex.Message , ex.InnerException);
               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
               throw convertedexcption;
             }
-        }      
-      
-        public int getcountryidbycountryname(string strCountryName)
+        }            
+        public int getcountryidbycountryname(string countryname)
         {
           
 
              try
             {
-                List<Country_PostalCode_List> CountryCodeQuery = default(List<Country_PostalCode_List>);
+                List<Country_PostalCode_List> countryCodeQuery = default(List<Country_PostalCode_List>);
                  //3-18-2013 olawal added code to remove the the spaces when we test
-            CountryCodeQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName.Replace(" ","") == strCountryName).ToList();
+            countryCodeQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName .Replace(" ","") == countryname).ToList();
 
-            if (CountryCodeQuery.Count() > 0)
+            if (countryCodeQuery.Count() > 0)
             {
-                return CountryCodeQuery.FirstOrDefault().CountryID;
+                return countryCodeQuery.FirstOrDefault().CountryID ;
 
             }
             else
@@ -170,27 +177,27 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName,"","",ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname,"","",ex.Message , ex.InnerException);
               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
               throw convertedexcption;
             }
         }
         //Dynamic LINQ to Entites quries 
         //*****************************************************************************************************************************************
-        public List<CityList> getcitylistdynamic(string strCountryName, string strPrefixText, string strPostalcode)
+        public List<CityList> getcitylistdynamic(string countryname, string prefixtext, string postalcode)
         {
             List<CityList> functionReturnValue = default(List<CityList>);
 
 
 
-            List<CityList> _CityList = new List<CityList>();
-            strPostalcode = string.Format("{0}%", strPostalcode.Replace("'", "''"));
+            List<CityList> _cityList = new List<CityList>();
+            postalcode = string.Format("{0}%", postalcode.Replace("'", "''"));
             // fix country names if theres a space
-            strCountryName = string.Format(strCountryName.Replace(" ", ""));
+            countryname = string.Format(countryname.Replace(" ", ""));
 
             //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
             //for cites as well so its a 1 to 1 search no spaces on input and on db side
-            strPrefixText = string.Format("{0}%", strPrefixText.Replace(" ", ""));
+            prefixtext = string.Format("{0}%", prefixtext.Replace(" ", ""));
             //11/13/2009 addded wild ca
 
 
@@ -205,22 +212,22 @@ namespace Shell.MVC2.Data
                     // Create an EntityCommand. 
                     using (EntityCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "PostalData2Entities.GetCityListByCountryPostalCode";
+                        cmd.CommandText = "PostalData2Entities.GetcityListBycountryPostalCode";
                         cmd.CommandType = CommandType.StoredProcedure;
                         //add parameters
                         EntityParameter param = new EntityParameter();
                         EntityParameter param2 = new EntityParameter();
                         EntityParameter param3 = new EntityParameter();
-                        param.Value = strCountryName;
+                        param.Value = countryname;
                         param.ParameterName = "StrcountryDatabaseName";
                         cmd.Parameters.Add(param);
 
-                        param2.Value = strPrefixText;
-                        param2.ParameterName = "StrPrefixText";
+                        param2.Value = prefixtext;
+                        param2.ParameterName = "prefixtext";
                         cmd.Parameters.Add(param2);
 
-                        param3.Value = strPostalcode;
-                        param3.ParameterName = "StrPostalCode";
+                        param3.Value = postalcode;
+                        param3.ParameterName = "postalcode";
                         cmd.Parameters.Add(param3);
 
                         //ad a fake record ID for uniquenet contraint as well and append it to each row                    
@@ -230,14 +237,14 @@ namespace Shell.MVC2.Data
                             // Read the results returned by the stored procedure. 
                             while (objDataReader.Read())
                             {
-                                _CityList.Add(new CityList
+                                _cityList.Add(new CityList
                                 {
 
-                                   City  = objDataReader["city"].ToString(),
+                                   City    = objDataReader["city"].ToString(),
                                      State_Province   = objDataReader["stateprovince"].ToString()
                                 });
 
-                                // _CityList.Add(New CityList() With { _
+                                // _cityList.Add(New CityList() With { _
                                 //.city = objDataReader("city").ToString, .stateprovince = objDataReader("stateprovince").ToString, _
                                 //.postalcode = objDataReader("postalcode").ToString, .latitude = objDataReader("latitude").ToString, _
                                 //.longitude = objDataReader("longitude").ToString
@@ -249,7 +256,7 @@ namespace Shell.MVC2.Data
                     }
                     conn.Close();
                 }
-                functionReturnValue = _CityList.ToList();
+                functionReturnValue = _cityList.ToList();
                 //Return Me.ObjectContext.citylis
                 return functionReturnValue;
 
@@ -257,7 +264,7 @@ namespace Shell.MVC2.Data
            catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName ,"","",ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,"","",ex.Message , ex.InnerException);
                new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
@@ -266,7 +273,7 @@ namespace Shell.MVC2.Data
 
 
         }
-        public List<GpsData> getgpsdatabycountrypostalcodeandcity(string strCountryName, string strPostalcode, string strCity)
+        public List<GpsData> getgpsdatabycountrypostalcodeandcity(string countryname, string postalcode, string city)
         {
             
 
@@ -274,9 +281,9 @@ namespace Shell.MVC2.Data
             {
               List<GpsData> functionReturnValue = default(List<GpsData>);
             List<GpsData> _GpsData = new List<GpsData>();
-            strCountryName = string.Format(strCountryName.Replace(" ", ""));
+            countryname = string.Format(countryname.Replace(" ", ""));
             // fix country names if theres a space
-            // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
+            // city = String.Format("{0}%", city) '11/13/2009 addded wild ca
             using (EntityConnection conn = new EntityConnection("name=PostalData2Entities"))
             {
                 conn.Open();
@@ -284,22 +291,22 @@ namespace Shell.MVC2.Data
                 // Create an EntityCommand. 
                 using (EntityCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "PostalData2Entities.GetGpsDataByCityCountryAndPostalCode";
+                    cmd.CommandText = "PostalData2Entities.GetGpsDataBycitycountryAndPostalCode";
                     cmd.CommandType = CommandType.StoredProcedure;
                     //add parameters
                     EntityParameter param = new EntityParameter();
                     EntityParameter param2 = new EntityParameter();
                     EntityParameter param3 = new EntityParameter();
-                    param.Value = strCountryName;
-                    param.ParameterName = "StrcountryName";
+                    param.Value = countryname;
+                    param.ParameterName = "countryname";
                     cmd.Parameters.Add(param);
 
-                    param2.Value = strPostalcode;
-                    param2.ParameterName = "StrPostalCode";
+                    param2.Value = postalcode;
+                    param2.ParameterName = "postalcode";
                     cmd.Parameters.Add(param2);
 
-                    param3.Value = strCity;
-                    param3.ParameterName = "StrCity";
+                    param3.Value = city;
+                    param3.ParameterName = "city";
                     cmd.Parameters.Add(param3);
 
                     //ad a fake record ID for uniquenet contraint as well and append it to each row
@@ -330,13 +337,13 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName ,strPostalcode,"",ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,postalcode,"",ex.Message , ex.InnerException);
               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
         }
-        public List<GpsData> getgpsdatabycountryandcity(string strCountryName, string strCity)
+        public List<GpsData> getgpsdatabycountryandcity(string countryname, string city)
         {
            
 
@@ -345,9 +352,9 @@ namespace Shell.MVC2.Data
                 List<GpsData> functionReturnValue = default(List<GpsData>);
 
                 List<GpsData> _GpsData = new List<GpsData>();
-                strCountryName = string.Format(strCountryName.Replace(" ", ""));
+                countryname = string.Format(countryname.Replace(" ", ""));
                 // fix country names if theres a space
-                // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
+                // city = String.Format("{0}%", city) '11/13/2009 addded wild ca
 
 
                 using (EntityConnection conn = new EntityConnection("name=PostalData2Entities"))
@@ -357,18 +364,18 @@ namespace Shell.MVC2.Data
                     // Create an EntityCommand. 
                     using (EntityCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "PostalData2Entities.GetGpsDataByCountryNameAndCity";
+                        cmd.CommandText = "PostalData2Entities.GetGpsDataBycountryNameAndcity";
                         cmd.CommandType = CommandType.StoredProcedure;
                         //add parameters
                         EntityParameter param = new EntityParameter();
                         EntityParameter param2 = new EntityParameter();
                         EntityParameter param3 = new EntityParameter();
-                        param.Value = strCountryName;
-                        param.ParameterName = "StrcountryName";
+                        param.Value = countryname;
+                        param.ParameterName = "countryname";
                         cmd.Parameters.Add(param);
 
-                        param2.Value = strCity;
-                        param2.ParameterName = "StrCity";
+                        param2.Value = city;
+                        param2.ParameterName = "city";
                         cmd.Parameters.Add(param2);
 
                         //ad a fake record ID for uniquenet contraint as well and append it to each row
@@ -399,13 +406,13 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName,"","",ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname,"","",ex.Message , ex.InnerException);
               new ErroLogging(applicationEnum.GeoLocationService  ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
         }
-        public GpsData getgpsdatasinglebycitycountryandpostalcode(string strCountryName, string strPostalcode, string strCity)
+        public GpsData getgpsdatasinglebycitycountryandpostalcode(string countryname, string postalcode, string city)
         {
          
 
@@ -414,9 +421,9 @@ namespace Shell.MVC2.Data
                 //GpsData functionReturnValue = default(GpsData);
 
                 GpsData _GpsData = new GpsData();
-                strCountryName = string.Format(strCountryName.Replace(" ", ""));
+                countryname = string.Format(countryname.Replace(" ", ""));
                 // fix country names if theres a space
-                // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
+                // city = String.Format("{0}%", city) '11/13/2009 addded wild ca
 
 
                 using (EntityConnection conn = new EntityConnection("name=PostalData2Entities"))
@@ -426,22 +433,22 @@ namespace Shell.MVC2.Data
                     // Create an EntityCommand. 
                     using (EntityCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "PostalData2Entities.GetGpsDataByCityCountryAndPostalCode";
+                        cmd.CommandText = "PostalData2Entities.GetGpsDataBycitycountryAndPostalCode";
                         cmd.CommandType = CommandType.StoredProcedure;
                         //add parameters
                         EntityParameter param = new EntityParameter();
                         EntityParameter param2 = new EntityParameter();
                         EntityParameter param3 = new EntityParameter();
-                        param.Value = strCountryName;
-                        param.ParameterName = "StrcountryName";
+                        param.Value = countryname;
+                        param.ParameterName = "countryname";
                         cmd.Parameters.Add(param);
 
-                        param2.Value = strPostalcode;
-                        param2.ParameterName = "StrPostalCode";
+                        param2.Value = postalcode;
+                        param2.ParameterName = "postalcode";
                         cmd.Parameters.Add(param2);
 
-                        param3.Value = strCity;
-                        param3.ParameterName = "StrCity";
+                        param3.Value = city;
+                        param3.ParameterName = "city";
                         cmd.Parameters.Add(param3);
 
                         //ad a fake record ID for uniquenet contraint as well and append it to each row
@@ -468,14 +475,14 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName ,strPostalcode,"",ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,postalcode,"",ex.Message , ex.InnerException);
                new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
 
         }
-        public List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string strCountryName, string strCity, string StrprefixText)
+        public List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string countryname, string city, string prefixtext)
         {
       
 
@@ -484,13 +491,13 @@ namespace Shell.MVC2.Data
                 List<PostalCodeList> functionReturnValue = default(List<PostalCodeList>);
 
                 //added 5/12/2011 to handle empty countries
-                if (strCountryName == null) return null;
+                if (countryname == null) return null;
 
                 List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
-                strCity = string.Format("{0}%", strCity);
-                strCountryName = string.Format(strCountryName.Replace(" ", ""));
+                city = string.Format("{0}%", city);
+                countryname = string.Format(countryname.Replace(" ", ""));
                 // fix country names if theres a space
-                StrprefixText = string.Format("{0}%", StrprefixText);
+                prefixtext = string.Format("{0}%", prefixtext);
                 //11/13/2009 addded wild ca
 
 
@@ -501,22 +508,22 @@ namespace Shell.MVC2.Data
                     // Create an EntityCommand. 
                     using (EntityCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "PostalData2Entities.GetPostalCodesByCountryAndCityPrefixDynamic";
+                        cmd.CommandText = "PostalData2Entities.GetPostalCodesBycountryAndcityPrefixDynamic";
                         cmd.CommandType = CommandType.StoredProcedure;
                         //add parameters
                         EntityParameter param = new EntityParameter();
                         EntityParameter param2 = new EntityParameter();
                         EntityParameter param3 = new EntityParameter();
-                        param.Value = strCountryName;
+                        param.Value = countryname;
                         param.ParameterName = "StrcountryDatabaseName";
                         cmd.Parameters.Add(param);
 
-                        param2.Value = strCity;
-                        param2.ParameterName = "StrCity";
+                        param2.Value = city;
+                        param2.ParameterName = "city";
                         cmd.Parameters.Add(param2);
 
-                        param3.Value = StrprefixText;
-                        param3.ParameterName = "StrprefixText";
+                        param3.Value = prefixtext;
+                        param3.ParameterName = "prefixtext";
                         cmd.Parameters.Add(param3);
 
                         //ad a fake record ID for uniquenet contraint as well and append it to each row
@@ -543,21 +550,21 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName ,strCity ,"",ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,city ,"",ex.Message , ex.InnerException);
                new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
         }
         //gets the single geo code as string
-        public string getgeopostalcodebycountrynameandcity(string strCountryName, string strCity)
+        public string getgeopostalcodebycountrynameandcity(string countryname, string city)
         {
 
              try
             {
                 //Dim _PostalCodeList As New List(Of PostalCodeList)()
                 string geoCode = "";
-                //  strCity = String.Format(strCity)
-                strCountryName = string.Format(strCountryName.Replace(" ", ""));
+                //  city = String.Format(city)
+                countryname = string.Format(countryname.Replace(" ", ""));
                 // fix country names if theres a space
 
                 using (EntityConnection conn = new EntityConnection("name=PostalData2Entities"))
@@ -567,19 +574,19 @@ namespace Shell.MVC2.Data
                     // Create an EntityCommand. 
                     using (EntityCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "PostalData2Entities.GetGeoPostalCodebyCountryNameAndCity";
+                        cmd.CommandText = "PostalData2Entities.GetGeoPostalCodebycountryNameAndcity";
                         cmd.CommandType = CommandType.StoredProcedure;
                         //add parameters
                         EntityParameter param = new EntityParameter();
                         EntityParameter param2 = new EntityParameter();
                         EntityParameter param3 = new EntityParameter();
-                        param.Value = strCountryName;
-                        param.ParameterName = "StrcountryName";
+                        param.Value = countryname;
+                        param.ParameterName = "countryname";
                         cmd.Parameters.Add(param);
 
 
-                        param2.Value = strCity;
-                        param2.ParameterName = "StrCity";
+                        param2.Value = city;
+                        param2.ParameterName = "city";
                         cmd.Parameters.Add(param2);
 
                         //ad a fake record ID for uniquenet contraint as well and append it to each row
@@ -603,13 +610,13 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName ,strCity ,"",ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,city ,"",ex.Message , ex.InnerException);
                new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
         }
-        public bool validatepostalcodebycountryandcity(string strCountryName, string strCity, string StrPostalCode)
+        public bool validatepostalcodebycountryandcity(string countryname, string city, string postalcode)
         {
             
              try
@@ -617,10 +624,10 @@ namespace Shell.MVC2.Data
               string functionReturnValue = null;
 
             //Dim _PostalCodeList As New List(Of PostalCodeList)()
-            string postalcode = "";
+           // string postalcode = "";
 
-            strCity = string.Format("{0}%", strCity);
-            strCountryName = string.Format(strCountryName.Replace(" ", ""));
+            city = string.Format("{0}%", city);
+            countryname = string.Format(countryname.Replace(" ", ""));
             // fix country names if theres a space
 
 
@@ -631,24 +638,24 @@ namespace Shell.MVC2.Data
                 // Create an EntityCommand. 
                 using (EntityCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "PostalData2Entities.ValidatePostalCodeByCOuntryandCity";
+                    cmd.CommandText = "PostalData2Entities.ValidatePostalCodeBycountryandcity";
                     cmd.CommandType = CommandType.StoredProcedure;
                     //add parameters
                     EntityParameter param = new EntityParameter();
                     EntityParameter param2 = new EntityParameter();
                     EntityParameter param3 = new EntityParameter();
-                    param.Value = strCountryName;
-                    param.ParameterName = "StrcountryName";
+                    param.Value = countryname;
+                    param.ParameterName = "countryname";
                     cmd.Parameters.Add(param);
 
 
-                    param2.Value = strCity;
-                    param2.ParameterName = "StrCity";
+                    param2.Value = city;
+                    param2.ParameterName = "city";
                     cmd.Parameters.Add(param2);
 
 
-                    param3.Value = StrPostalCode;
-                    param3.ParameterName = "StrPostalCode";
+                    param3.Value = postalcode;
+                    param3.ParameterName = "postalcode";
                     cmd.Parameters.Add(param3);
 
 
@@ -678,13 +685,13 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName ,strCity,StrPostalCode,ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,city,postalcode,ex.Message , ex.InnerException);
               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
         }
-        public List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string strCountryName, string strlattitude, string strlongitude)
+        public List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string countryname, string lattitude, string strlongitude)
         {
            
              try
@@ -692,11 +699,11 @@ namespace Shell.MVC2.Data
                List<PostalCodeList> functionReturnValue = default(List<PostalCodeList>);
 
             //added 5/12/2011 to handle empty countries
-            if (strCountryName == null) return null;
+            if (countryname == null) return null;
             List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
-            strCountryName = string.Format(strCountryName.Replace(" ", ""));
+            countryname = string.Format(countryname.Replace(" ", ""));
             // fix country names if theres a space
-            //StrprefixText = string.Format("{0}%", StrprefixText);
+            //prefixtext = string.Format("{0}%", prefixtext);
 
 
 
@@ -707,19 +714,19 @@ namespace Shell.MVC2.Data
                 // Create an EntityCommand. 
                 using (EntityCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "PostalData2Entities.GetPostalCodesByCountryAndLatLong";
+                    cmd.CommandText = "PostalData2Entities.GetPostalCodesBycountryAndLatLong";
                     cmd.CommandType = CommandType.StoredProcedure;
                     //add parameters
                     EntityParameter param = new EntityParameter();
                     EntityParameter param2 = new EntityParameter();
                     EntityParameter param3 = new EntityParameter();
-                    param.Value = strCountryName;
+                    param.Value = countryname;
                     param.ParameterName = "StrcountryDatabaseName";
                     cmd.Parameters.Add(param);
 
 
-                    param2.Value = strlattitude;
-                    param2.ParameterName = "StrLattitude";
+                    param2.Value = lattitude;
+                    param2.ParameterName = "lattitude";
                     cmd.Parameters.Add(param2);
 
 
@@ -754,12 +761,12 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName,strlattitude, strlongitude,ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname,lattitude, strlongitude,ex.Message , ex.InnerException);
                new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
         }
-        public List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string strCountryName, string strCity, string strStateProvince)
+        public List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string countryname, string city, string strStateProvince)
         {
            
 
@@ -768,11 +775,11 @@ namespace Shell.MVC2.Data
                List<PostalCodeList> functionReturnValue = default(List<PostalCodeList>);
 
             //added 5/12/2011 to handle empty countries
-            if (strCountryName == null) return null;
+            if (countryname == null) return null;
             List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
-            strCountryName = string.Format(strCountryName.Replace(" ", ""));
+            countryname = string.Format(countryname.Replace(" ", ""));
             // fix country names if theres a space
-            //StrprefixText = string.Format("{0}%", StrprefixText);
+            //prefixtext = string.Format("{0}%", prefixtext);
 
 
 
@@ -783,18 +790,18 @@ namespace Shell.MVC2.Data
                 // Create an EntityCommand. 
                 using (EntityCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "PostalData2Entities.GetPostalCodesByCountryNameCityandStateProvince";
+                    cmd.CommandText = "PostalData2Entities.GetPostalCodesBycountryNamecityandStateProvince";
                     cmd.CommandType = CommandType.StoredProcedure;
                     //add parameters
                     EntityParameter param = new EntityParameter();
                     EntityParameter param2 = new EntityParameter();
                     EntityParameter param3 = new EntityParameter();
-                    param.Value = strCountryName;
+                    param.Value = countryname;
                     param.ParameterName = "StrcountryDatabaseName";
                     cmd.Parameters.Add(param);
 
-                    param2.Value = strCity;
-                    param2.ParameterName = "StrCity";
+                    param2.Value = city;
+                    param2.ParameterName = "city";
                     cmd.Parameters.Add(param2);
 
                     param3.Value = strStateProvince;
@@ -826,7 +833,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (strCountryName,strCity,strStateProvince,ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname,city,strStateProvince,ex.Message , ex.InnerException);
                new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
@@ -844,16 +851,18 @@ namespace Shell.MVC2.Data
                         return countrylist;
 
 #else
-                List<country> tmplist = new List<country>();
-                // Loop over the int List and modify it.
-                //insert the first one as ANY
-                tmplist.Add(new country { countryindex = "0", countryvalue = "Any" });
-                foreach (Country_PostalCode_List item in this.getcountry_postalcode_listandorderbycountry())
-                {
-                    var currentcountry = new country { countryindex = item.CountryID.ToString(), countryvalue = item.CountryName };
-                    tmplist.Add(currentcountry);
-                }
-                return tmplist;
+                //List<country> tmplist = new List<country>();
+                //// Loop over the int List and modify it.
+                ////insert the first one as ANY
+                //tmplist.Add(new country { id = "0", name  = "Any" });
+                //foreach (countrypostalcode item in this.getcountry_postalcode_listandorderbycountry())
+                //{
+                //    var currentcountry = new country { id = item.id .ToString(),  name = item.name   };
+                //    tmplist.Add(currentcountry);
+                //}
+                //return tmplist;
+                return CachingFactory.SharedObjectHelper.getcountrylist(_postalcontext);
+               
 #endif
             }
             catch (Exception ex)
@@ -865,53 +874,53 @@ namespace Shell.MVC2.Data
             }
 
         }
-        public List<citystateprovince> getfilteredcitiesold(string filter, string Country, int offset)
+        public List<citystateprovince> getfilteredcitiesold(string filter, string country, int offset)
         {
 
 
              try
             {
 
-                var customers = this.getcitylistdynamic(Country, filter, "");
-                return ((from s in customers.Take(50).ToList() select new citystateprovince { stateprovince = s.City + "," + s.State_Province }).ToList());
+                var customers = this.getcitylistdynamic(country, filter, "");
+                return ((from s in customers.Take(50).ToList() select new citystateprovince { stateprovince = s.City  + "," + s.State_Province }).ToList());
 
             }
             catch (Exception ex)
             {
 
-                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(Country, "", filter, ex.Message, ex.InnerException); 
+                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", filter, ex.Message, ex.InnerException); 
                 new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
         }
-        public List<citystateprovince> getfilteredcities(string filter, string Country, int offset)
+        public List<citystateprovince> getfilteredcities(string filter, string country, int offset)
         {
 
             List<citystateprovince> temp;
             try
             {
-                var customers = this.getcitylistdynamic(Country, filter, "").Take(50);
+                var customers = this.getcitylistdynamic(country, filter, "").Take(50);
 
-                temp = (from s in customers.ToList() select new citystateprovince { stateprovince = s.City + "," + s.State_Province }).ToList();
+                temp = (from s in customers.ToList() select new citystateprovince { stateprovince = s.City  + "," + s.State_Province }).ToList();
                 return temp;
 
             }
                catch (Exception ex)
             {
 
-                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(Country, "", filter, ex.Message, ex.InnerException); 
+                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", filter, ex.Message, ex.InnerException); 
                new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
         }
-        public List<postalcodes> getfilteredpostalcodes(string filter, string Country, string City, int offset)
+        public List<postalcodes> getfilteredpostalcodes(string filter, string country, string city, int offset)
         {
 
              try
             {
 
-                var customers = this.getpostalcodesbycountryandcityprefixdynamic(Country, City, filter);
+                var customers = this.getpostalcodesbycountryandcityprefixdynamic(country, city, filter);
 
                 return ((from s in customers.Skip(offset).Take(25).ToList() select new postalcodes { postalcodevalue = s.PostalCode }).ToList());
 
@@ -919,7 +928,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (Country,City,filter,ex.Message , ex.InnerException);
+              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (country,city,filter,ex.Message , ex.InnerException);
                new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
@@ -964,8 +973,8 @@ namespace Shell.MVC2.Data
         //    try
         //    {
         //        //get dps data now
-        //       // _GpsData[0] = postalService.GetGpsDataByCountryPostalCodeandCity (GetCountryNameByCountryID(tmpprofile[0].CountryID),tmpprofile[0].PostalCode,"");
-        //      //  _GpsData[1] = postalService.GetGpsDataByCountryPostalCodeandCity(GetCountryNameByCountryID(tmpprofile[1].CountryID), tmpprofile[1].PostalCode, ""); 
+        //       // _GpsData[0] = postalService.GetGpsDataBycountryPostalCodeandcity (GetcountryNameBycountryID(tmpprofile[0].countryID),tmpprofile[0].PostalCode,"");
+        //      //  _GpsData[1] = postalService.GetGpsDataBycountryPostalCodeandcity(GetcountryNameBycountryID(tmpprofile[1].countryID), tmpprofile[1].PostalCode, ""); 
 
 
         //        //now use gps data to get the values

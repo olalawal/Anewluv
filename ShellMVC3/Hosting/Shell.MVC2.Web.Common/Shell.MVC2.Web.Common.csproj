@@ -52,6 +52,12 @@
       <HintPath>..\..\Shell.MVC2\Shell.MVC2\bin\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.WindowsFabric.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\Shell.MVC2.Web.MembersService\bin\Microsoft.WindowsFabric.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsFabric.Data.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\Shell.MVC2.Web.MembersService\bin\Microsoft.WindowsFabric.Data.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\Shell.MVC2\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>

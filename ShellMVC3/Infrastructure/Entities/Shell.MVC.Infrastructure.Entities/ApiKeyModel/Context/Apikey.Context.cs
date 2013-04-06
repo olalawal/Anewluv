@@ -14,6 +14,7 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
     public class ApiKeyContext : DbContext
     {
         public DbSet<apikey> apikeys { get; set; }
+        public DbSet<apicall> apicalls { get; set; }
         public DbSet<user> users { get; set; }
         public DbSet<lu_accesslevel > lu_accesslevels { get; set; }
         public DbSet<lu_application_apikey > lu_applications { get; set; }

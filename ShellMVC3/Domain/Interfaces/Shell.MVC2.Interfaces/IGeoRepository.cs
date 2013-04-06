@@ -15,29 +15,29 @@ namespace Shell.MVC2.Interfaces
   public interface IGeoRepository
     {
 
-       string getcountrynamebycountryid(int countryId);
+       string getcountrynamebycountryid(int countryid);
        registermodel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model);
        //gets the country list and orders it
        //added sorting
-        List<Country_PostalCode_List> getcountry_postalcode_listandorderbycountry();
+        List<countrypostalcode> getcountryandpostalcodestatuslist();
         List<country> getcountrylist();//10-15-2012 ned method to for drop down lists
        /// <summary>
        /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
        /// </summary>
        ///       
-        int getcountry_postalcodestatusbycountryname(string strCountryName);
-     
-        int getcountryidbycountryname(string strCountryName);
-        List<CityList> getcitylistdynamic(string strCountryName, string strPrefixText, string strPostalcode);
-        List<GpsData> getgpsdatabycountrypostalcodeandcity(string strCountryName, string strPostalcode, string strCity);
-        List<GpsData> getgpsdatabycountryandcity(string strCountryName, string strCity);
-        GpsData getgpsdatasinglebycitycountryandpostalcode(string strCountryName, string strPostalcode, string strCity);
-        List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string strCountryName, string strCity, string StrprefixText);
+        bool getpostalcodestatusbycountryname(string countryname);
+
+        int getcountryidbycountryname(string countryname);
+        List<CityList> getcitylistdynamic(string countryname, string prefixtext, string postalcode);
+        List<GpsData> getgpsdatabycountrypostalcodeandcity(string countryname, string postalcode, string city);
+        List<GpsData> getgpsdatabycountryandcity(string countryname, string city);
+        GpsData getgpsdatasinglebycitycountryandpostalcode(string countryname, string postalcode, string city);
+        List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string countryname, string city, string prefixtext);
        //gets the single geo code as string
-        string getgeopostalcodebycountrynameandcity(string strCountryName, string strCity);
-        bool validatepostalcodebycountryandcity(string strCountryName, string strCity, string StrPostalCode);
-        List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string strCountryName, string strlattitude, string strlongitude);
-        List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string strCountryName, string strCity, string strStateProvince);
+        string getgeopostalcodebycountrynameandcity(string countryname, string city);
+        bool validatepostalcodebycountryandcity(string countryname, string city, string postalcode);
+        List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string countryname, string lattitude, string longitude);
+        List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string countryname, string city, string stateprovince);
 
              
     

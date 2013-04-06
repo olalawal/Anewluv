@@ -28,7 +28,7 @@ namespace Shell.MVC2.Interfaces
         searchsetting createmyperfectmatchsearchsettingsbyprofileid(int profileid);       
      
        //get full profile stuff       
-        string getgenderbyscreenname(string strScreenName);            
+        string getgenderbyscreenname(string screenname);            
         string getgenderbyphotoid(Guid guid);  
        //TO DO this needs to be  linked to roles
 

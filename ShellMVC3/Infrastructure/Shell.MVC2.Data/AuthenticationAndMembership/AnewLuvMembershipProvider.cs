@@ -30,6 +30,8 @@ using Shell.MVC2.Infrastructure;
 
     using System.Globalization;
 using Shell.MVC2.Interfaces;
+using LoggingLibrary;
+using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 
 
 namespace Shell.MVC2.Data.AuthenticationAndMembership
@@ -56,6 +58,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
          private IMemberRepository _memberepository;
          private AnewluvContext _datingcontext;
         private IPhotoRepository _photorepository;
+        private ErroLogging logger;
 
 
          public AnewLuvMembershipProvider(AnewluvContext datingcontext, IGeoRepository georepository,
@@ -72,10 +75,11 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         public override bool ValidateUser(string username, string password)
         {
 
+            IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
+
             try
             {
-                IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
-
+              
                 //first you have to get the encrypted sctring by email address and username 
                 string encryptedPassword = "";
                 //get profile created date
@@ -138,15 +142,17 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                     return false;
                 }
             }
-            catch (Exception ex)
+              catch (Exception ex)
             {
-                // model.activateprofilemodel.PhotoStatus = true;
-                //ModelState.Clear();
-                //return View(model);
-                //TO DO Log the error 
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.UserAuthorizationService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, myQuery !=null? myQuery.FirstOrDefault().id:0, null);
+                //log error mesasge
                 //handle logging here
                 var message = ex.Message;
-              throw;
+                // status = MembershipCreateStatus.ProviderError;
+                // newUser = null;
+                throw;
             }
 
 
@@ -159,7 +165,9 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         //overide for validate user that uses just the username, this can be used for pass through auth where a user was already prevalidated via another method
         public  bool ValidateUser(string username)
         {
-
+            //string encryptedPassword = Common.Encryption.EncodePasswordWithSalt(password, username);
+            IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
+            //Dim ctx As New Entities()
 
             try
             {
@@ -173,9 +181,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //use the encyrption service in common
                 //dynamic user = datingcontext.profiles.Where(u => u.username == username && u.Password == Common.Encryption.EncodePasswordWithSalt(password, username).FirstOrDefault());
                 // Return user IsNot Nothing
-                //string encryptedPassword = Common.Encryption.EncodePasswordWithSalt(password, username);
-                IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
-                //Dim ctx As New Entities()
+              
                 myQuery = _datingcontext.profiles.Where(p => p.username == username);//&& p.ProfileStatusID == 2);
 
 
@@ -193,13 +199,15 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             }
             catch (Exception ex)
             {
-                // model.activateprofilemodel.PhotoStatus = true;
-                //ModelState.Clear();
-                //return View(model);
-                //TO DO Log the error 
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.UserAuthorizationService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, myQuery != null ? myQuery.FirstOrDefault().id : 0, null);
+                //log error mesasge
                 //handle logging here
                 var message = ex.Message;
-              throw;
+                // status = MembershipCreateStatus.ProviderError;
+                // newUser = null;
+                throw;
             }
             
         }
@@ -207,11 +215,13 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         public  bool ValidateUser(string VerifedEmail, string openidIdentifer,string openidProvidername)
         {
 
+            Shell.MVC2.Domain.Entities.Anewluv.profile myprofile = new Domain.Entities.Anewluv.profile();
+          
             try
             {
                 //open ID members are already verifed but it is posublethat a member who is not activated tries to use open ID
                 //so they could be in order status 1
-                var myprofile = _datingcontext.profiles.Where(p => p.emailaddress == VerifedEmail && p.status.id <= 2).FirstOrDefault();
+                 myprofile = _datingcontext.profiles.Where(p => p.emailaddress == VerifedEmail && p.status.id <= 2).FirstOrDefault();
 
                 //get the openid providoer
                 lu_openidprovider provider = _datingcontext.lu_openidprovider.Where(p => (p.description).ToUpper() == openidProvidername.ToUpper()).FirstOrDefault();
@@ -259,13 +269,15 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             }
             catch (Exception ex)
             {
-                // model.activateprofilemodel.PhotoStatus = true;
-                //ModelState.Clear();
-                //return View(model);
-                //TO DO Log the error 
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.UserAuthorizationService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, myprofile != null ? myprofile.id : 0, null);
+                //log error mesasge
                 //handle logging here
                 var message = ex.Message;
-              throw;
+                // status = MembershipCreateStatus.ProviderError;
+                // newUser = null;
+                throw;
             }
 
 
@@ -417,6 +429,12 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             }
             catch (Exception ex)
             {
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.UserAuthorizationService );
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;               
                 status = MembershipCreateStatus.ProviderError;
                 newUser = null;
               throw;
@@ -429,8 +447,22 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         public override string ResetPassword(string profileID, string answer)
         {
 
-
-            return this.ResetPasswordCustom(Convert.ToInt16(profileID));
+            try
+            {
+                return this.ResetPasswordCustom(Convert.ToInt16(profileID));
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.UserAuthorizationService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+               // status = MembershipCreateStatus.ProviderError;
+               // newUser = null;
+                throw;
+            }
              
         }
 
@@ -463,14 +495,17 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             }
             catch (Exception ex)
             {
-                // model.activateprofilemodel.PhotoStatus = true;
-                //ModelState.Clear();
-                //return View(model);
-                //TO DO Log the error 
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.UserAuthorizationService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //log error mesasge
                 //handle logging here
                 var message = ex.Message;
-              throw;
+                // status = MembershipCreateStatus.ProviderError;
+                // newUser = null;
+                throw;
             }
+             
         }
 
         public override void UpdateUser(MembershipUser user)
@@ -578,10 +613,17 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             }
             catch (Exception ex)
             {
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.UserAuthorizationService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
                 // status = MembershipCreateStatus.ProviderError;
-                //  newUser = null;
-              throw;
+                // newUser = null;
+                throw;
             }
+             
 
 
 
@@ -669,14 +711,17 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             }
             catch (Exception ex)
             {
-                // model.activateprofilemodel.PhotoStatus = true;
-                //ModelState.Clear();
-                //return View(model);
-                //TO DO Log the error 
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.UserAuthorizationService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //log error mesasge
                 //handle logging here
                 var message = ex.Message;
-              throw;
+                // status = MembershipCreateStatus.ProviderError;
+                // newUser = null;
+                throw;
             }
+             
         }
 
   
@@ -696,6 +741,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             AnewluvMessages messages = new AnewluvMessages();
             messages.message = "";
             messages.errormessages = null;
+            Shell.MVC2.Domain.Entities.Anewluv.profile  profile= new    Shell.MVC2.Domain.Entities.Anewluv.profile();
             
             try
             {
@@ -706,7 +752,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             var membersmodel = new MembersViewModel();
 
             //get the macthcing member data using the profile ID/email entered
-           var  profile = _memberepository.getprofilebyprofileid  ( model.activateprofilemodel.profileid);
+             profile = _memberepository.getprofilebyprofileid  ( model.activateprofilemodel.profileid);
            //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
 
             //verify that user entered correct email before doing anything
@@ -805,9 +851,9 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
             
                 //get username here
-            string UserName = _memberepository.getusernamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
-            string ScreenName = _memberepository.getscreennamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
-                //build log on model
+                string UserName = _memberepository.getusernamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
+                string ScreenName = _memberepository.getscreennamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
+                    //build log on model
                 //create a new login model
                 var logonmodel = new LogOnModel();
                 var lostaccountinfomodel = new LostAccountInfoModel();
@@ -861,14 +907,17 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             }
             catch (Exception ex)
             {
-                // model.activateprofilemodel.PhotoStatus = true;
-                //ModelState.Clear();
-                //return View(model);
-                //TO DO Log the error 
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.UserAuthorizationService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,ex,model.activateprofilemodel.profileid  , null);
+                //log error mesasge
                 //handle logging here
                 var message = ex.Message;
-              throw;
+                // status = MembershipCreateStatus.ProviderError;
+                // newUser = null;
+                throw;
             }
+             
 
                    
         }

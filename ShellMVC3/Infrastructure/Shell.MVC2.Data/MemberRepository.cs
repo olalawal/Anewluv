@@ -11,6 +11,8 @@ using Shell.MVC2.Interfaces;
 using Shell.MVC2.Infrastructure;
 
 using Shell.MVC2.AppFabric;
+using LoggingLibrary;
+using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 
 namespace Shell.MVC2.Data
 {
@@ -22,8 +24,8 @@ namespace Shell.MVC2.Data
        // private  AnewluvContext _datingcontext; // = new AnewluvContext();
        //private  PostalData2Entities postaldb; //= new PostalData2Entities();
        //private IPhotoRepository _photorepository;
-       
-      
+
+       private LoggingLibrary.ErroLogging logger;
 
        public MemberRepository(AnewluvContext datingcontext) 
            :base(datingcontext)
@@ -56,136 +58,173 @@ namespace Shell.MVC2.Data
             
              public profiledata getprofiledatabyprofileid(int profileid)
              {
-                 ////attempt to load the search settings as well
-                 //var items = from i in this._datingcontext.profiledata.Include("searchsettings").Include("Profile")
-                 //            where (i.ProfileID == profileid) && (i.searchsettings.Any(t => t.myperfectmatch == true))     
-                 //   select i;
 
-                 //var PerfectMatchsearchsettings = GetPerFectMatchsearchsettingsByProfileID(profileid);
-
-                 //if (items.Count() > 0)
-                 //{
-                 //  return items.FirstOrDefault();
-                 //}
-                 //else
-                 //{
-                 //  items = from i in this._datingcontext.profiledata
-                 //            where (i.ProfileID == profileid)         
-                 //  select i;
-                 //  return items.FirstOrDefault();
-                 //}
-
-                 var items = from i in this._datingcontext.profiledata
-                             where (i.profile_id == profileid)
-                             select i;
-
-
-                 //now filter the search settings enity and only pull down the one that has the 
-                 //  get perfect match settings and add it 
-
-
-                 if (items.Count() > 0)
+                 try
                  {
-                 
+                     ////attempt to load the search settings as well
+                     //var items = from i in this._datingcontext.profiledata.Include("searchsettings").Include("Profile")
+                     //            where (i.ProfileID == profileid) && (i.searchsettings.Any(t => t.myperfectmatch == true))     
+                     //   select i;
 
-                     items.FirstOrDefault().profile.profilemetadata.searchsettings.Add(this.getperfectmatchsearchsettingsbyprofileid (profileid));
+                     //var PerfectMatchsearchsettings = GetPerFectMatchsearchsettingsByProfileID(profileid);
 
-                     return items.FirstOrDefault();
+                     //if (items.Count() > 0)
+                     //{
+                     //  return items.FirstOrDefault();
+                     //}
+                     //else
+                     //{
+                     //  items = from i in this._datingcontext.profiledata
+                     //            where (i.ProfileID == profileid)         
+                     //  select i;
+                     //  return items.FirstOrDefault();
+                     //}
+
+                     var items = from i in this._datingcontext.profiledata
+                                 where (i.profile_id == profileid)
+                                 select i;
+
+
+                     //now filter the search settings enity and only pull down the one that has the 
+                     //  get perfect match settings and add it 
+
+
+                     if (items.Count() > 0)
+                     {
+
+
+                         items.FirstOrDefault().profile.profilemetadata.searchsettings.Add(this.getperfectmatchsearchsettingsbyprofileid(profileid));
+
+                         return items.FirstOrDefault();
+
+                     }
+
+                     //return nothing if bad
+                     return null;
 
                  }
-
-                 //return nothing if bad
-                 return null;
-
-
+                 catch (Exception ex)
+                 {
+                     //instantiate logger here so it does not break anything else.
+                     logger = new ErroLogging(applicationEnum.MemberService);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                     //log error mesasge
+                     //handle logging here
+                     var message = ex.Message;
+                     throw;
+                 }
 
 
              }
 
              public searchsetting  getperfectmatchsearchsettingsbyprofileid(int profileid)
              {
-                 IQueryable<searchsetting> tmpsearchsettings = default(IQueryable<searchsetting>);
-                 //Dim ctx As New Entities()
-                 tmpsearchsettings = this._datingcontext.searchsetting
-                     // .Include("ProfileData1")
-                 //.Include("searchsettings_Genders")
-                 // .Include("searchsettings_BodyTypes")
-                 //  .Include("searchsettings_Diet")
-                 //   .Include("searchsettings_Drinks")
-                 // .Include("searchsettings_EducationLevel")
-                 // .Include("searchsettings_EmploymentStatus")
-                 //   .Include("searchsettings_Ethnicity")
-                 //  .Include("searchsettings_Exercise")
-                 //   .Include(" searchsettings_EyeColor")
-                 //   .Include("searchsettings_HairColor")
-                 //   .Include("searchsettings_HaveKids")
-                 //  .Include("searchsettings_Hobby")
-                 //   .Include("searchsettings_HotFeature")
-                 //  .Include("searchsettings_Humor")
-                 //  .Include("searchsettings_IncomeLevel")
-                 //  .Include("searchsettings_LivingStituation")
-                 //  .Include("searchsettings_Location")
-                 //  .Include("searchsettings_LookingFor")
-                 //   .Include("searchsettings_MaritalStatus")
-                 //  .Include("searchsettings_PoliticalView")
-                 //  .Include("searchsettings_Profession")
-                 //  .Include(" searchsettings_Religion")
-                 //  .Include("searchsettings_ReligiousAttendance")
-                 //   .Include("searchsettings_ShowMe")
-                 //   .Include("searchsettings_Sign")
-                 //  .Include("searchsettings_Smokes")
-                 //   .Include("searchsettings_SortByType")
-                 //  .Include("searchsettings_WantKids")
-                 //  .Include("searchsettings_Tribe")
-                 .Where(p => p.profile_id    == profileid && p.myperfectmatch  == true);
-
-                 //End If
-                 if (tmpsearchsettings.Count() > 0)
+                 try
                  {
-                     return tmpsearchsettings.FirstOrDefault();
+                     IQueryable<searchsetting> tmpsearchsettings = default(IQueryable<searchsetting>);
+                     //Dim ctx As New Entities()
+                     tmpsearchsettings = this._datingcontext.searchsetting
+                         // .Include("ProfileData1")
+                         //.Include("searchsettings_Genders")
+                         // .Include("searchsettings_BodyTypes")
+                         //  .Include("searchsettings_Diet")
+                         //   .Include("searchsettings_Drinks")
+                         // .Include("searchsettings_EducationLevel")
+                         // .Include("searchsettings_EmploymentStatus")
+                         //   .Include("searchsettings_Ethnicity")
+                         //  .Include("searchsettings_Exercise")
+                         //   .Include(" searchsettings_EyeColor")
+                         //   .Include("searchsettings_HairColor")
+                         //   .Include("searchsettings_HaveKids")
+                         //  .Include("searchsettings_Hobby")
+                         //   .Include("searchsettings_HotFeature")
+                         //  .Include("searchsettings_Humor")
+                         //  .Include("searchsettings_IncomeLevel")
+                         //  .Include("searchsettings_LivingStituation")
+                         //  .Include("searchsettings_Location")
+                         //  .Include("searchsettings_LookingFor")
+                         //   .Include("searchsettings_MaritalStatus")
+                         //  .Include("searchsettings_PoliticalView")
+                         //  .Include("searchsettings_Profession")
+                         //  .Include(" searchsettings_Religion")
+                         //  .Include("searchsettings_ReligiousAttendance")
+                         //   .Include("searchsettings_ShowMe")
+                         //   .Include("searchsettings_Sign")
+                         //  .Include("searchsettings_Smokes")
+                         //   .Include("searchsettings_SortByType")
+                         //  .Include("searchsettings_WantKids")
+                         //  .Include("searchsettings_Tribe")
+                     .Where(p => p.profile_id == profileid && p.myperfectmatch == true);
+
+                     //End If
+                     if (tmpsearchsettings.Count() > 0)
+                     {
+                         return tmpsearchsettings.FirstOrDefault();
+                     }
+                     else
+                     {
+                         //get the profileDta                    
+
+                         searchsetting Newsearchsettings = new searchsetting();
+
+                         Newsearchsettings = new searchsetting();
+                         Newsearchsettings.profile_id = profileid;
+                         Newsearchsettings.myperfectmatch = true;
+                         Newsearchsettings.searchname = "myperfectmatch";
+                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
+                         //  this._datingcontext.searchsettings.Add(Newsearchsettings);
+                         //  this._datingcontext.SaveChanges();
+                         //save the profile data with the search settings to the database so we dont have to create it again
+                         return Newsearchsettings;
+
+
+
+                     }
                  }
-                 else
+                 catch (Exception ex)
                  {
-                     //get the profileDta                    
-
-                     searchsetting Newsearchsettings = new searchsetting();
-
-                     Newsearchsettings = new searchsetting();
-                     Newsearchsettings.profile_id  = profileid;
-                     Newsearchsettings.myperfectmatch  = true;
-                     Newsearchsettings.searchname  = "myperfectmatch";
-                     //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
-                    //  this._datingcontext.searchsettings.Add(Newsearchsettings);
-                    //  this._datingcontext.SaveChanges();
-                     //save the profile data with the search settings to the database so we dont have to create it again
-                     return Newsearchsettings;
-
-
-
+                     //instantiate logger here so it does not break anything else.
+                     logger = new ErroLogging(applicationEnum.MemberService);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                     //log error mesasge
+                     //handle logging here
+                     var message = ex.Message;
+                     throw;
                  }
              }
 
              public searchsetting createmyperfectmatchsearchsettingsbyprofileid(int profileid)
              {
-                 
 
-                 
+
+                 try
+                 {
                      //get the profileDta                    
 
                      searchsetting Newsearchsettings = new searchsetting();
 
                      Newsearchsettings = new searchsetting();
-                     Newsearchsettings.profile_id  = profileid;
-                     Newsearchsettings.myperfectmatch  = true;
+                     Newsearchsettings.profile_id = profileid;
+                     Newsearchsettings.myperfectmatch = true;
                      Newsearchsettings.searchname = "myperfectmatch";
                      //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
-                       this._datingcontext.searchsetting.Add (Newsearchsettings);
-                       this._datingcontext.SaveChanges();
+                     this._datingcontext.searchsetting.Add(Newsearchsettings);
+                     this._datingcontext.SaveChanges();
 
 
                      //save the profile data with the search settings to the database so we dont have to create it again
                      return Newsearchsettings;
-
+                 }
+                 catch (Exception ex)
+                 {
+                     //instantiate logger here so it does not break anything else.
+                     logger = new ErroLogging(applicationEnum.MemberService);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                     //log error mesasge
+                     //handle logging here
+                     var message = ex.Message;
+                     throw;
+                 }
 
 
                  
@@ -196,15 +235,28 @@ namespace Shell.MVC2.Data
             
              public string getgenderbyphotoid(Guid guid)
              {
-                 lu_gender  _gender = new lu_gender ();
-                
-
-                 _gender = (from x in (_datingcontext.photos.Where(f=>f.id  == guid))
-                            join f in _datingcontext.profiledata on x.profile_id  equals f.profile_id    
-                            select f.gender).FirstOrDefault();
+                 try
+                 {
+                     lu_gender _gender = new lu_gender();
 
 
-                 return _gender.description ;
+                     _gender = (from x in (_datingcontext.photos.Where(f => f.id == guid))
+                                join f in _datingcontext.profiledata on x.profile_id equals f.profile_id
+                                select f.gender).FirstOrDefault();
+
+
+                     return _gender.description;
+                 }
+                 catch (Exception ex)
+                 {
+                     //instantiate logger here so it does not break anything else.
+                     logger = new ErroLogging(applicationEnum.MemberService);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                     //log error mesasge
+                     //handle logging here
+                     var message = ex.Message;
+                     throw;
+                 }
              }
 
             //TO DO this needs to be  linked to roles
@@ -254,9 +306,13 @@ namespace Shell.MVC2.Data
                  }
                  catch (Exception ex)
                  {
-                   throw;
-                     // log the execption message
-                    // return false;
+                     //instantiate logger here so it does not break anything else.
+                     logger = new ErroLogging(applicationEnum.MemberService);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                     //log error mesasge
+                     //handle logging here
+                     var message = ex.Message;
+                     throw;
                  }
 
                  return QuotaHit;
@@ -270,7 +326,9 @@ namespace Shell.MVC2.Data
                    
                     int max = 5;
                     int i = 1;
-                    try{
+                    try
+                    
+                    {
                     
                     for(i = 1; i < max;i++){
                    mailboxfolder    p = new mailboxfolder();
@@ -304,9 +362,15 @@ namespace Shell.MVC2.Data
                     }
                 
                     }
-                    catch {
-                        return false;   
-                        //log error here
+                    catch (Exception ex)
+                    {
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
 
                     return true;
@@ -328,11 +392,15 @@ namespace Shell.MVC2.Data
                         this._datingcontext.SaveChanges();
 
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
-                      throw;
-                        // log the execption message
-                        //return false;
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
                  
                     return true;
@@ -356,9 +424,13 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                      throw;
-                        // log the execption message
-                        //return false;
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
 
                     return true;
@@ -386,12 +458,13 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                      throw;
-                        // log the execption message
-                        //return false;
-
-                        // log the execption message
-                       //return false;
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
 
                     return true;
@@ -417,12 +490,13 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                      throw;
-                        // log the execption message
-                        //return false;
-
-                        // log the execption message
-                        //return false;
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
 
                     return true;
@@ -431,41 +505,64 @@ namespace Shell.MVC2.Data
                 //check if profile is activated 
                 public bool checkifprofileisactivated(int intprofileid)
                 {
-
-                    IQueryable<profile> myQuery = default(IQueryable<profile>);
-                    myQuery = this._datingcontext.profiles.Where(p => p.id  == intprofileid & p.status.id  != 1);
-
-
-                    if (myQuery.Count() > 0)
+                    try
                     {
-                        return true;
+                        IQueryable<profile> myQuery = default(IQueryable<profile>);
+                        myQuery = this._datingcontext.profiles.Where(p => p.id == intprofileid & p.status.id != 1);
+
+
+                        if (myQuery.Count() > 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+
+                        }
+
                     }
-                         else
+                    catch (Exception ex)
                     {
-                        return false;
-
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
-
-                   
                 }
 
                 //check if mailbox folder exist
                 public bool checkifmailboxfoldersarecreated(int intprofileid)
                 {
-
-                     mailboxfolder   myQuery;
-                    myQuery = this._datingcontext.mailboxfolders.Where(p => p.profiled_id   == intprofileid).FirstOrDefault();
-
-
-                    if (myQuery != null)
+                    try
                     {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
 
+                        mailboxfolder myQuery;
+                        myQuery = this._datingcontext.mailboxfolders.Where(p => p.profiled_id == intprofileid).FirstOrDefault();
+
+
+                        if (myQuery != null)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
+                    }
 
                 }
        
@@ -499,11 +596,14 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                      throw;
-                        // log the execption message
-                        //return false;
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
-
                     return true;
                 }
 
@@ -531,13 +631,14 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-
-                      throw;
-                        // log the execption message
-                        //return false;
-                       // return null;
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
-
 
 
                 }
@@ -586,12 +687,13 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                      throw;
-                        // log the execption message
-                        //return false;
-
-                        // log the execption message
-                      //  return false;
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
 
                     return true;
@@ -637,14 +739,14 @@ namespace Shell.MVC2.Data
                     }
                     catch (Exception ex)
                     {
-                      throw;
-                        // log the execption message
-                        //return false;
-
-                        // log the execption message
-                        //  return false;
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
-
                     return true;
                 }
 
@@ -654,92 +756,116 @@ namespace Shell.MVC2.Data
   //be it This Week,3 Weeks ago, 3 months Ago or In the last Six Months
   //Ola Lawal 7/10/2009 feel free to drill down even to the day
             
-   public string getlastloggedinstring( DateTime  logindate)
+                public string getlastloggedinstring( DateTime  logindate)
                 {
 
-
-                    if (logindate == null | string.IsNullOrEmpty(Convert.ToString(logindate)))
+                    try
                     {
-                        return "Three Weeks Ago";
+                        if (logindate == null | string.IsNullOrEmpty(Convert.ToString(logindate)))
+                        {
+                            return "Three Weeks Ago";
+                        }
+
+                        //'you can compare dates and times the same as you would any other number
+
+
+                        DateTime DateThreeDaysAgo;
+                        DateTime DateThreeWeeksago;
+                        DateTime DateOneWeekAgo;
+                        DateTime DateThreeMonthsAgo;
+                        DateTime DateSixMonthsAgo;
+                        DateTime DateOneMonthAgo;
+
+                        DateTime Today = DateTime.Now;
+
+
+                        DateThreeDaysAgo = Today.AddDays(-3);
+                        //Subtract 3 days
+                        DateOneWeekAgo = Today.AddDays(-7);
+                        //Subtract 1 weeks
+                        DateThreeWeeksago = Today.AddDays(-21);
+                        //Subtract one monthe
+                        DateOneMonthAgo = Today.AddMonths(-1);
+                        //Subtract 3 weeks
+                        DateThreeMonthsAgo = Today.AddMonths(-3);
+                        //Subtract 12 weeks =3 months
+                        DateSixMonthsAgo = Today.AddMonths(-6);
+                        //Subtract 24 weeks =6 months
+
+                        if (logindate > DateThreeDaysAgo)
+                        {
+                            return "Last Three Days";
+                        }
+                        else if (logindate > DateOneWeekAgo)
+                        {
+                            return "Last Week ";
+                        }
+                        else if (logindate > DateThreeWeeksago)
+                        {
+                            return "Three Weeks Ago";
+                        }
+                        else if (logindate > DateOneMonthAgo)
+                        {
+                            return "One Month Ago";
+                        }
+
+                        else if (logindate > DateThreeMonthsAgo)
+                        {
+                            return "Three Months Ago ";
+                        }
+                        else if (logindate > DateSixMonthsAgo)
+                        {
+                            return "Six Months Ago";
+                        }
+                        else
+                        {
+                            return "Over one Month";
+                        }
                     }
-
-                    //'you can compare dates and times the same as you would any other number
-
-                    
-                    DateTime DateThreeDaysAgo;
-                    DateTime DateThreeWeeksago; 
-                    DateTime DateOneWeekAgo ;
-                    DateTime DateThreeMonthsAgo; 
-                    DateTime DateSixMonthsAgo;                   
-                    DateTime DateOneMonthAgo;
-
-                   DateTime  Today = DateTime.Now;
-                    
-
-                    DateThreeDaysAgo = Today.AddDays(-3);
-                    //Subtract 3 days
-                    DateOneWeekAgo = Today.AddDays(-7);
-                    //Subtract 1 weeks
-                    DateThreeWeeksago = Today.AddDays(-21);
-                    //Subtract one monthe
-                    DateOneMonthAgo = Today.AddMonths(-1);
-                    //Subtract 3 weeks
-                    DateThreeMonthsAgo = Today.AddMonths(-3);
-                    //Subtract 12 weeks =3 months
-                    DateSixMonthsAgo = Today.AddMonths(-6);
-                    //Subtract 24 weeks =6 months
-
-                    if (logindate > DateThreeDaysAgo)
+                    catch (Exception ex)
                     {
-                        return "Last Three Days";
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
                     }
-                    else if (logindate > DateOneWeekAgo)
-                    {
-                        return "Last Week ";
-                    }
-                    else if (logindate > DateThreeWeeksago)
-                    {
-                        return "Three Weeks Ago";
-                    }
-                    else if (logindate > DateOneMonthAgo )
-                    {
-                        return "One Month Ago";
-                    }
-                   
-                    else if (logindate > DateThreeMonthsAgo)
-                    {
-                        return "Three Months Ago ";
-                    }
-                    else if (logindate > DateSixMonthsAgo)
-                    {
-                       return "Six Months Ago";
-                   }
-                    else
-                   {
-                       return "Over one Month";
-                   }
-
 
                 }
 
                 //returns true if somone logged on
      public bool getuseronlinestatus(int profileid)
                 {
-                    //get the profile
-                    //profile myProfile;
-                    IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
-
-                    myQuery = _datingcontext.userlogtimes.Where(p => p.profile_id  == profileid && p.offline  == false).Distinct().OrderBy(n => n.logintime);
-
-                    //            var queryB =
-                    //                (from o in db.Orders
-                    // select o.Employee.LastName)
-                    //.Distinct().OrderBy(n => n);
-                    if (myQuery.Count() > 0)
+                    try
                     {
-                        return true;
+                        //get the profile
+                        //profile myProfile;
+                        IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
+
+                        myQuery = _datingcontext.userlogtimes.Where(p => p.profile_id == profileid && p.offline == false).Distinct().OrderBy(n => n.logintime);
+
+                        //            var queryB =
+                        //                (from o in db.Orders
+                        // select o.Employee.LastName)
+                        //.Distinct().OrderBy(n => n);
+                        if (myQuery.Count() > 0)
+                        {
+                            return true;
+                        }
+                        else { return false; }
                     }
-                    else { return false; }
+                    catch (Exception ex)
+                    {
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
+                    }
                 }
                  
 
@@ -753,17 +879,32 @@ namespace Shell.MVC2.Data
    
    public bool checkifscreennamealreadyexists(string strscreenname)
         {
-            
-	        IQueryable<profile> myQuery = default(IQueryable<profile>);
-            myQuery = this._datingcontext.profiles.Where(p => p.screenname == strscreenname | p.screenname.Replace(" ", "") == strscreenname.Replace(" ", "") | p.screenname.Replace(" ", "") == strscreenname );
-           
+            try
+            {
+                IQueryable<profile> myQuery = default(IQueryable<profile>);
+                myQuery = this._datingcontext.profiles.Where(p => p.screenname == strscreenname | p.screenname.Replace(" ", "") == strscreenname.Replace(" ", "") | p.screenname.Replace(" ", "") == strscreenname);
 
-	        if (myQuery.Count() > 0) {
-		        return true;
-	        } else {
-		        return false;
 
-	        }
+                if (myQuery.Count() > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+
+                }
+            }
+         catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService );
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex,  null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
+        }
         }
 
    //5-20-2012 added to check if a user email is registered
@@ -771,46 +912,88 @@ namespace Shell.MVC2.Data
    public bool checkifprofileidalreadyexists(int profileid)
    {
 
-       IQueryable<profile> myQuery = default(IQueryable<profile>);
-       myQuery = this._datingcontext.profiles.Where(p => p.id  == profileid);
-
-
-       if (myQuery.Count() > 0)
+       try
        {
-           return true;
+           IQueryable<profile> myQuery = default(IQueryable<profile>);
+           myQuery = this._datingcontext.profiles.Where(p => p.id == profileid);
+
+
+           if (myQuery.Count() > 0)
+           {
+               return true;
+           }
+           else
+           {
+               return false;
+
+           }
        }
-       else
+       catch (Exception ex)
        {
-           return false;
-
+           //instantiate logger here so it does not break anything else.
+           logger = new ErroLogging(applicationEnum.MemberService);
+           logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+           //log error mesasge
+           //handle logging here
+           var message = ex.Message;
+           throw;
        }
    }
     
      public bool checkifusernamealreadyexists(string strusername)
     {
-	    IQueryable<profile> myQuery = default(IQueryable<profile>);
-	    myQuery =  this._datingcontext.profiles.Where(p=> p.username == strusername);
+        try
+        {
+            IQueryable<profile> myQuery = default(IQueryable<profile>);
+            myQuery = this._datingcontext.profiles.Where(p => p.username == strusername);
 
-	    if (myQuery.Count() > 0) {
-		    return true;
-	    } else {
-		    return false;
-	    }
+            if (myQuery.Count() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null,null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
+        }
     }
           
     public string validatesecurityansweriscorrect(int intprofileid ,int SecurityQuestionID,string strSecurityAnswer )
     {
-        IQueryable<profile> myQuery = default(IQueryable<profile>);
-        myQuery = this._datingcontext.profiles.Where(p => p.id   ==  intprofileid && p.securityanswer   == strSecurityAnswer && p.securityquestion.id   == SecurityQuestionID  );
-        
-        if ( myQuery.Count()>0)
+        try
         {
-            return myQuery.FirstOrDefault().username.ToString();
-            
+            IQueryable<profile> myQuery = default(IQueryable<profile>);
+            myQuery = this._datingcontext.profiles.Where(p => p.id == intprofileid && p.securityanswer == strSecurityAnswer && p.securityquestion.id == SecurityQuestionID);
+
+            if (myQuery.Count() > 0)
+            {
+                return myQuery.FirstOrDefault().username.ToString();
+
+            }
+            else
+            {
+                return "";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return "";
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
         }
     }
 
@@ -819,21 +1002,34 @@ namespace Shell.MVC2.Data
     /// </summary>
     public bool checkifactivationcodeisvalid(int intprofileid, string strActivationCode)
     {
+
         IQueryable<profile> myQuery = default(IQueryable<profile>);
-        //Dim ctx As New Entities()
-        myQuery = this._datingcontext.profiles.Where(p => p.activationcode  == strActivationCode & p.id == intprofileid);
-
-        //End If
-        if (myQuery.Count() > 0)
+        try
         {
-            return true;
+            //Dim ctx As New Entities()
+            myQuery = this._datingcontext.profiles.Where(p => p.activationcode == strActivationCode & p.id == intprofileid);
+
+            //End If
+            if (myQuery.Count() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return false;
-
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
         }
-
         // Return CInt(myQuery.First.screenname)
     }
        
@@ -844,17 +1040,30 @@ namespace Shell.MVC2.Data
 
         IQueryable<profile> tmpprofile = default(IQueryable<profile>);
         //Dim ctx As New Entities()
-        tmpprofile = this._datingcontext.profiles.Include("profiledata")
-            .Where(p => p.username == username);
-        //End If
-        if (tmpprofile.Count() > 0)
+        try
         {
-            return tmpprofile.FirstOrDefault();
-        }
-        else
-        {
-            return null;
+            tmpprofile = this._datingcontext.profiles.Include("profiledata")
+                .Where(p => p.username == username);
+            //End If
+            if (tmpprofile.Count() > 0)
+            {
+                return tmpprofile.FirstOrDefault();
+            }
+            else
+            {
+                return null;
 
+            }
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
         }
     }
 
@@ -865,35 +1074,73 @@ namespace Shell.MVC2.Data
 
         IQueryable<profile> tmpprofile = default(IQueryable<profile>);
         //Dim ctx As New Entities()
-        tmpprofile = this._datingcontext.profiles.Include("profiledata")
-            .Where(p => p.username == username);
-        //End If
-        if (tmpprofile.Count() > 0)
-        {
-            return tmpprofile.FirstOrDefault();
-        }
-        else
-        {
-            return null;
 
+        try
+        {
+            tmpprofile = this._datingcontext.profiles.Include("profiledata")
+            .Where(p => p.username == username);
+            //End If
+            if (tmpprofile.Count() > 0)
+            {
+                return tmpprofile.FirstOrDefault();
+            }
+            else
+            {
+                return null;
+
+            }
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
         }
     }
 
     public int getProfileIdbyusername(string User)
     {
-
-        return (from p in _datingcontext.profiles
-                where p.username == User
-                select p.id).FirstOrDefault();
+        try
+        {
+            return (from p in _datingcontext.profiles
+                    where p.username == User
+                    select p.id).FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
+        }
     }
 
 
     public profile getprofilebyprofileid(int profileid)
     {
-
-        return (from p in _datingcontext.profiles
-                where p.id  == profileid
-                select p).FirstOrDefault();
+        try
+        {
+            return (from p in _datingcontext.profiles
+                    where p.id == profileid
+                    select p).FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
+        }
     }
 
 
@@ -904,90 +1151,186 @@ namespace Shell.MVC2.Data
        /// <returns></returns>
     public int? getprofileidbyusername(string strusername)
     {
-        //IQueryable<profile> myQuery = default(IQueryable<profile>);
-       //return this._datingcontext.profiles.Where(p => p.username  == strusername ).FirstOrDefault().id;
-       return CachingFactory.getprofileidbyusername(strusername,this._datingcontext);
-        //if (myQuery.Count() > 0)
-        //{
-        //    return myQuery.FirstOrDefault().id.ToString();
-        //}
-        //else
-        //{
-        //    return "";
-        //}
+        try
+        {
+            //IQueryable<profile> myQuery = default(IQueryable<profile>);
+            //return this._datingcontext.profiles.Where(p => p.username  == strusername ).FirstOrDefault().id;
+            return CachingFactory.getprofileidbyusername(strusername, this._datingcontext);
+            //if (myQuery.Count() > 0)
+            //{
+            //    return myQuery.FirstOrDefault().id.ToString();
+            //}
+            //else
+            //{
+            //    return "";
+            //}
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
+        }
     }
                  
-    public int? getprofileidbyscreenname(string strscreenname)
+    public int? getprofileidbyscreenname(string screenname)
     {
-        return CachingFactory.getprofileidbyscreenname(strscreenname, this._datingcontext);
+        try
+        {
+            return CachingFactory.getprofileidbyscreenname(screenname, this._datingcontext);
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService );
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex,  null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
+        }
     }
 
     public int? getprofileidbyssessionid(string strsessionid)
     {
-        return CachingFactory.getprofileidbysessionid(strsessionid);
+        try
+        {
+            return CachingFactory.getprofileidbysessionid(strsessionid);
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
+        }
     }
    
     public string getusernamebyprofileid(int profileid)
     {
-        IQueryable<profile> myQuery = default(IQueryable<profile>);
-        myQuery = this._datingcontext.profiles.Where(p => p.id  == profileid );
+        try
+        {
+            IQueryable<profile> myQuery = default(IQueryable<profile>);
+            myQuery = this._datingcontext.profiles.Where(p => p.id == profileid);
 
-        if (myQuery.Count() > 0)
-        {
-            return myQuery.FirstOrDefault().username.ToString();
+            if (myQuery.Count() > 0)
+            {
+                return myQuery.FirstOrDefault().username.ToString();
+            }
+            else
+            {
+                return "";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return "";
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
         }
     }
    
     public string getscreennamebyprofileid(int profileid)
     {
-        IQueryable<profile> myQuery = default(IQueryable<profile>);
-        myQuery = this._datingcontext.profiles.Where(p => p.id == profileid);
+        try
+        {
+            IQueryable<profile> myQuery = default(IQueryable<profile>);
+            myQuery = this._datingcontext.profiles.Where(p => p.id == profileid);
 
-        if (myQuery.Count() > 0)
-        {
-            return myQuery.FirstOrDefault().screenname.ToString();
+            if (myQuery.Count() > 0)
+            {
+                return myQuery.FirstOrDefault().screenname.ToString();
+            }
+            else
+            {
+                return "";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return "";
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
         }
     }
  
     public string getscreennamebyusername(string username)
     {
-        IQueryable<profile> myQuery = default(IQueryable<profile>);
-        myQuery = this._datingcontext.profiles.Where(p => p.username == username);
+        try
+        {
+            IQueryable<profile> myQuery = default(IQueryable<profile>);
+            myQuery = this._datingcontext.profiles.Where(p => p.username == username);
 
-        if (myQuery.Count() > 0)
-        {
-            return myQuery.FirstOrDefault().screenname.ToString();
+            if (myQuery.Count() > 0)
+            {
+                return myQuery.FirstOrDefault().screenname.ToString();
+            }
+            else
+            {
+                return "";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return "";
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
         }
     }
 
      public bool checkifemailalreadyexists(string strEmail)
     {
-	    IQueryable<profile> myQuery = default(IQueryable<profile>);
-	    //Dim ctx As New Entities()
 
-	
-	    myQuery =  this._datingcontext.profiles.Where (p=> p.emailaddress  == strEmail);
-	
-	    if (myQuery.Count() > 0) {
-		    return true;
-	    } else {
-		    return false;
+        try
+        {
+            IQueryable<profile> myQuery = default(IQueryable<profile>);
+            //Dim ctx As New Entities()
 
-	    }
 
-	    // Return CInt(myQuery.First.screenname)
+            myQuery = this._datingcontext.profiles.Where(p => p.emailaddress == strEmail);
+
+            if (myQuery.Count() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
+
+            // Return CInt(myQuery.First.screenname)
+
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
+        }
     }
 
    
@@ -995,18 +1338,49 @@ namespace Shell.MVC2.Data
          
         public string getgenderbyscreenname(string screenname)
         {
-            if (screenname == null) return null;
 
-            return (from p in _datingcontext.profiles where p.screenname   == screenname
-                    join f in _datingcontext.profiledata on p.id equals f.profile_id
-                    select f.gender).FirstOrDefault().description ;
+            try
+            {
+                if (screenname == null) return null;
+
+                var profile = (from p in _datingcontext.profiles
+                               where p.screenname == screenname
+                               join f in _datingcontext.profiledata on p.id equals f.profile_id
+                               select f.gender).FirstOrDefault();
+
+                return profile != null ? profile.description : null;
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.MemberService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+
         }
        
         public visiblitysetting getprofilevisibilitysettingsbyprofileid(int profileid)
         {
-
-            return (from p in _datingcontext.visibilitysettings 
-                    where p.profile_id  == profileid  select p).FirstOrDefault();
+            try
+            {
+                return (from p in _datingcontext.visibilitysettings
+                        where p.profile_id == profileid
+                        select p).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.MemberService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
         }
        
      

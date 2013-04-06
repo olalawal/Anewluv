@@ -75,13 +75,13 @@ namespace Shell.MVC2.Services.Dating
             }
             //gets the country list and orders it
             //added sorting
-            public List<Country_PostalCode_List> getcountry_postalcode_listandorderbycountry()
+            public List<countrypostalcode> getcountryandpostalcodestatuslist()
             {
               
                 try
                 {
 
-                    return _georepository.getcountry_postalcode_listandorderbycountry();
+                    return _georepository.getcountryandpostalcodestatuslist();
 
                 }
                 catch (Exception ex)
@@ -98,12 +98,12 @@ namespace Shell.MVC2.Services.Dating
             /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
             /// </summary>
             /// 
-            public int getcountry_postalcodestatusbycountryname(string strCountryName)
+            public bool getpostalcodestatusbycountryname(string strcountryname)
             {
               
                 try
                 {
-                    return _georepository.getcountry_postalcodestatusbycountryname(strCountryName);
+                    return _georepository.getpostalcodestatusbycountryname(strcountryname);
 
 
                 }

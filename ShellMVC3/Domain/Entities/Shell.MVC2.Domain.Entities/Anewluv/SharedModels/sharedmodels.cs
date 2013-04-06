@@ -80,13 +80,32 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class country
     {
         [DataMember]
-        public string countryvalue { get; set; }
+        public string name { get; set; }
         [DataMember]
-        public string countryindex { get; set; }
+        public string id { get; set; }
         [DataMember]
         public bool selected { get; set; }
 
     }
+
+    [DataContract]
+    public class countrypostalcode
+    {
+         [DataMember]
+        public string code { get; set; }
+         [DataMember]
+         public string region { get; set; }
+         [DataMember]
+         public int? customregionid { get; set; }
+         [DataMember]
+         public string id { get; set; }
+         [DataMember]
+         public string name { get; set; }
+         [DataMember]
+         public bool? haspostalcode { get; set; }
+
+    }
+
 
     [DataContract]
     public class citystateprovince

@@ -33,6 +33,10 @@ namespace Shell.MVC2.Infrastructure.Entities.ApiKeyModel
             //set up required fiel lookups
             modelBuilder.Entity<apikey>()
            .HasRequired(t => t.accesslevel );
+
+            //set up required fiel lookups
+            modelBuilder.Entity<apicall>()
+           .HasRequired(t => t.apikey);
           
 
             modelBuilder.Entity<apikey >()

@@ -18,8 +18,8 @@ namespace Shell.MVC2.Services.Contracts
     {
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getcountrynamebycountryid/{countryId}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        string getcountrynamebycountryid(string countryId);
+        [WebGet(UriTemplate = "/getcountrynamebycountryid/{countryid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        string getcountrynamebycountryid(string countryid);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/verifyorupdateregistrationgeodata/", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
@@ -28,8 +28,8 @@ namespace Shell.MVC2.Services.Contracts
         //added sorting
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getcountry_postalcode_listandorderbycountry/", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<Country_PostalCode_List> getcountry_postalcode_listandorderbycountry();
+        [WebGet(UriTemplate = "/getcountryandpostalcodestatuslist/", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<countrypostalcode> getcountryandpostalcodestatuslist();
     
         /// <summary>
         /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
@@ -37,55 +37,55 @@ namespace Shell.MVC2.Services.Contracts
         ///       
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getcountry_postalcodestatusbycountryname/{strCountryName}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        int getcountry_postalcodestatusbycountryname(string strCountryName);
+        [WebGet(UriTemplate = "/getpostalcodestatusbycountryname/{countryname}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        bool getpostalcodestatusbycountryname(string countryname);
 
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getcountryidbycountryname/{strCountryName}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        int getcountryidbycountryname(string strCountryName);
+        [WebGet(UriTemplate = "/getcountryidbycountryname/{countryname}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        int getcountryidbycountryname(string countryname);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getcitylistdynamic/{strCountryName}/{strPrefixText}/{strPostalcode}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<CityList> getcitylistdynamic(string strCountryName, string strPrefixText, string strPostalcode);
+        [WebGet(UriTemplate = "/getcitylistdynamic/{countryname}/{prefixtext}/{postalcode}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<CityList> getcitylistdynamic(string countryname, string prefixtext, string postalcode);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getgpsdatabycountrypostalcodeandcity/{strCountryName}/{strPostalcode}/{strCity}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<GpsData> getgpsdatabycountrypostalcodeandcity(string strCountryName, string strPostalcode, string strCity);
+        [WebGet(UriTemplate = "/getgpsdatabycountrypostalcodeandcity/{countryname}/{postalcode}/{city}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<GpsData> getgpsdatabycountrypostalcodeandcity(string countryname, string postalcode, string city);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getgpsdatabycountryandcity/{strCountryName}/{strCity}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<GpsData> getgpsdatabycountryandcity(string strCountryName, string strCity);
+        [WebGet(UriTemplate = "/getgpsdatabycountryandcity/{countryname}/{city}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<GpsData> getgpsdatabycountryandcity(string countryname, string city);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getgpsdatasinglebycitycountryandpostalcode/{strCountryName}/{strPostalcode}/{strCity}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        GpsData getgpsdatasinglebycitycountryandpostalcode(string strCountryName, string strPostalcode, string strCity);
+        [WebGet(UriTemplate = "/getgpsdatasinglebycitycountryandpostalcode/{countryname}/{postalcode}/{city}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        GpsData getgpsdatasinglebycitycountryandpostalcode(string countryname, string postalcode, string city);
 
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getpostalcodesbycountryandcityprefixdynamic/{strCountryName}/{strCity}/{StrprefixText}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string strCountryName, string strCity, string StrprefixText);
+        [WebGet(UriTemplate = "/getpostalcodesbycountryandcityprefixdynamic/{countryname}/{city}/{prefixtext}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string countryname, string city, string prefixtext);
         //gets the single geo code as string
 
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getgeopostalcodebycountrynameandcity/{strCountryName}/{strCity}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        string getgeopostalcodebycountrynameandcity(string strCountryName, string strCity);
+        [WebGet(UriTemplate = "/getgeopostalcodebycountrynameandcity/{countryname}/{city}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        string getgeopostalcodebycountrynameandcity(string countryname, string city);
 
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/validatepostalcodebycountryandcity/{strCountryName}/{strCity}/{StrPostalCode}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        bool validatepostalcodebycountryandcity(string strCountryName, string strCity, string StrPostalCode);
+        [WebGet(UriTemplate = "/validatepostalcodebycountryandcity/{countryname}/{city}/{postalcode}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        bool validatepostalcodebycountryandcity(string countryname, string city, string postalcode);
 
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getpostalcodesbycountryandlatlongdynamic/{strCountryName}/{strlattitude}/{strlongitude}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string strCountryName, string strlattitude, string strlongitude);
+        [WebGet(UriTemplate = "/getpostalcodesbycountryandlatlongdynamic/{countryname}/{lattitude}/{longitude}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string countryname, string lattitude, string longitude);
 
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getpostalcodesbycountrynamecityandstateprovincedynamic/{strCountryName}/{strCity}/{strStateProvince}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string strCountryName, string strCity, string strStateProvince);
+        [WebGet(UriTemplate = "/getpostalcodesbycountrynamecityandstateprovincedynamic/{countryname}/{city}/{stateprovince}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string countryname, string city, string stateprovince);
 
         //TO DO move these lookups to geo
         // List<string> getcountrylist(string countryname);
@@ -106,8 +106,8 @@ namespace Shell.MVC2.Services.Contracts
 
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/getfilteredpostalcodes/{filter}/{country}/{City}/{offset}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        List<postalcodes> getfilteredpostalcodes(string filter, string country, string City, string offset);
+        [WebGet(UriTemplate = "/getfilteredpostalcodes/{filter}/{country}/{city}/{offset}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        List<postalcodes> getfilteredpostalcodes(string filter, string country, string city, string offset);
 
     }
 

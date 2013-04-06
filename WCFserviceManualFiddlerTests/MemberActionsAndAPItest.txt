@@ -1,0 +1,57 @@
+Tests of MemberActions
+
+(using case:drive333)
+
+url for encoding passwords
+http://www.motobit.com/util/base64-decoder-encoder.asp
+
+
+heade sample
+
+User-Agent: Fiddler
+Content-Type: text/json
+Host: localhost
+Authorization: Y2FzZTpkcml2ZTMzMw==
+
+
+http://localhost/Shell.MVC2.Web.MemberActionsService/MemberActionsService.svc/Rest/getwhoiaminterestedin/2/1/4 
+
+
+
+peek stuff
+
+http://localhost/Shell.MVC2.Web.MemberActionsService/MemberActionsService.svc/Rest/getwhoipeekedatcount/2
+
+
+geostuff
+--------------------
+http://localhost/Shell.MVC2.Web.GeoService/GeoService.svc/Rest/help/operations/getcountryidbycountryname/Unitedstates
+
+
+authentication test creat user
+------------
+
+
+http://localhost/Shell.MVC2.Web.AuthenticationService/MembershipService.svc/Rest/CreateUser
+
+{
+	"birthdate":"\/Date(928167600000-0500)\/",
+	"city":"String content",
+	"country":"String content",
+	"email":"String content",
+	"gender":"String content",
+	"isApproved":true,
+	"lattitude":1.26743233E+15,
+	"longitude":1.26743233E+15,
+	"openidIdentifer":"String content",
+	"openidProvidername":"String content",
+	"password":"String content",
+	"providerUserKey":{},
+	"screenname":"String content",
+	"securityAnswer":"String content",
+	"securityQuestion":"String content",
+	"stateprovince":"String content",
+	"status":0,
+	"username":"String content",
+	"zippostalcode":"String content"
+}

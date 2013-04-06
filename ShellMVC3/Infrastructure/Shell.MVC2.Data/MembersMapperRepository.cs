@@ -599,7 +599,7 @@ namespace Shell.MVC2.Data
                 quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(model.profile.profiledata.gender.id);
                 quicksearchmodel.myselectedcountryname = model.mycountryname; //use same country for now
                 //add the postal code status here as well
-                quicksearchmodel.myselectedpostalcodestatus = (georepository.getcountry_postalcodestatusbycountryname(model.mycountryname) == 1) ? true : false;
+                quicksearchmodel.myselectedpostalcodestatus = (georepository.getpostalcodestatusbycountryname (model.mycountryname)) ? true : false;
 
                 //TO do get this from search settings
                 //default for has photos only get this from the 

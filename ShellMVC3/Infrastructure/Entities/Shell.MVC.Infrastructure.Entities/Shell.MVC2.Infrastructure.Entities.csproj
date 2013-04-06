@@ -60,6 +60,7 @@
     <Compile Include="ApiKeyModel\Context\Apikey.Context.cs" />
     <Compile Include="ApiKeyModel\Context\ApikeyModelbuilder.cs" />
     <Compile Include="ApiKeyModel\Context\SeedMethods.cs" />
+    <Compile Include="ApiKeyModel\apicalls.cs" />
     <Compile Include="ApiKeyModel\user.cs" />
     <Compile Include="ApiKeyModel\lu_accesslevel.cs" />
     <Compile Include="ApiKeyModel\Enums\applications.cs" />

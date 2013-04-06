@@ -8,10 +8,13 @@ using System.Collections;
 using System.Threading;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+//link to old postal code model
+using Dating.Server.Data.Services;
 using LoggingLibrary;
 
 
 using Shell.MVC2.Interfaces;
+using Dating.Server.Data.Models;
 
 
 
@@ -236,6 +239,7 @@ namespace Shell.MVC2.AppFabric
                 //TO DO log error andsend email toadmin
                 if (dcex.ErrorCode != DataCacheErrorCode.RegionAlreadyExists)
                     return null;
+                throw ;
             }
             return NamedCache;
 
@@ -270,111 +274,150 @@ namespace Shell.MVC2.AppFabric
         //sowe can pick?
         public static int? getprofileidbyusername(string username, AnewluvContext _datingcontext)
         {
-            //handle case of null username
-            if (username == null || username == "") return null;
 
-            DataCache dataCache;
-            //DataCacheFactory dataCacheFactory = new DataCacheFactory();
-            dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
-            //create the guests region if it does not exists
+            try
+            {
+                //handle case of null username
+                if (username == null || username == "") return null;
+
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
+                //create the guests region if it does not exists
 
 
-            int? _profileid = null;
-            try { if (dataCache != null)  _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + username)); }
+                int? _profileid = null;
+                try { if (dataCache != null)  _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + username)); }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+                }
+                if (_profileid == null | _profileid == 0)
+                {
+                    //MembersRepository membersrepository = new MembersRepository();
+                    //get the correct value from DB
+                    var profile = _datingcontext.profiles.Where(p => p.username == username).FirstOrDefault();
+                    _profileid = (profile != null) ? profile.id : 0;
+                    //if we have an active cache we store the current value 
+                    if (dataCache != null && _profileid != 0)
+                    {
+                        //store it in the database
+                        if (_profileid != null) dataCache.Put("ProfileID" + username, _profileid);
+                       //  }
+                       // else if (_profileid != 0)
+                       //  {  //just return the value if no cahce
+                       //      return _profileid;
+                    }
+
+
+                }
+                //value came from cahce return it
+                return _profileid != 0 ? _profileid : null;
+            }
             catch (DataCacheException)
             {
                 throw new InvalidOperationException();
+
             }
-            if (_profileid == null | _profileid ==0)
+            catch (Exception ex)
             {
-                //MembersRepository membersrepository = new MembersRepository();
-                //get the correct value from DB
-                _profileid = _datingcontext.profiles.Where(p => p.username == username).FirstOrDefault().id;
-                    
-                //if we have an active cache we store the current value 
-                if (dataCache != null)
-                {
-                  //store it in the database
-                    if (_profileid != null) dataCache.Put("ProfileID" + username, _profileid);
-                }
-                else
-                {  //just return the value if no cahce
-                    return _profileid;
-
-                }
-
-
+                //put cleanup code here
+                throw ;
             }
-            //value came from cahce return it
-            return _profileid ;
 
         }
         //TO do dpreciate this and test using the Session ID as in below
         public static int? getprofileidbyscreenname(string screenname, AnewluvContext _datingcontext)
         {
-            //handle case of null screenname
-            if (screenname == null || screenname == "") return null;
 
-            DataCache dataCache;
-            //DataCacheFactory dataCacheFactory = new DataCacheFactory();
-            dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
-            //create the guests region if it does not exists
+            try
+            {
+                //handle case of null screenname
+                if (screenname == null || screenname == "") return null;
+
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
+                //create the guests region if it does not exists
 
 
-            int? _profileid = null;
-            try { if (dataCache != null)  _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + screenname)); }
+                int? _profileid = null;
+                try { if (dataCache != null)  _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + screenname)); }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+                }
+                if (_profileid == null | _profileid == 0)
+                {
+                    //MembersRepository membersrepository = new MembersRepository();
+                    //get the correct value from DB
+                     var profile = _datingcontext.profiles.Where(p => p.screenname == screenname).FirstOrDefault();
+                    _profileid = (profile != null)? profile.id : 0  ;
+
+                    //if we have an active cache we store the current value 
+                    if (dataCache != null && _profileid != 0  )
+                    {
+                        //store it in the database
+                        if (_profileid != null) dataCache.Put("ProfileID" + screenname, _profileid);
+                    }
+                 //   else if (_profileid != 0  )
+                   // {  //just return the value if no cahce
+                 //       return _profileid;
+//
+                 //   }
+
+
+                }
+                //value came from cahce return it
+                return _profileid !=0? _profileid:null;
+            }
             catch (DataCacheException)
             {
                 throw new InvalidOperationException();
+
             }
-            if (_profileid == null | _profileid == 0)
+            catch (Exception ex)
             {
-                //MembersRepository membersrepository = new MembersRepository();
-                //get the correct value from DB
-                _profileid = _datingcontext.profiles.Where(p => p.screenname == screenname).FirstOrDefault().id;
-
-                //if we have an active cache we store the current value 
-                if (dataCache != null)
-                {
-                    //store it in the database
-                    if (_profileid != null) dataCache.Put("ProfileID" + screenname, _profileid);
-                }
-                else
-                {  //just return the value if no cahce
-                    return _profileid;
-
-                }
-
-
+                //put cleanup code here
+                throw (ex);
             }
-            //value came from cahce return it
-            return _profileid;
-
         }
 
         //TO do dpreciate this and test using the Session ID as in below
         public static int? getprofileidbysessionid(string sessionid)
         {
+            try
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
+                //create the guests region if it does not exists
 
-            DataCache dataCache;
-            //DataCacheFactory dataCacheFactory = new DataCacheFactory();
-            dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
-            //create the guests region if it does not exists
 
+                int? _profileid = null;
+                try { _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + sessionid)); }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+                }
+                if (_profileid == null)
+                {
+                    return null;
 
-            int? _profileid = null;
-            try { _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + sessionid)); }
+                }
+
+                return _profileid;
+            }
             catch (DataCacheException)
             {
                 throw new InvalidOperationException();
+
             }
-            if (_profileid == null)
+            catch (Exception ex)
             {
-                return null;
-
+                //put cleanup code here
+                throw ;
             }
-
-            return _profileid;
 
         }
 
@@ -2558,39 +2601,125 @@ namespace Shell.MVC2.AppFabric
 
             #region "Geodata lists"
 
-            public static List<country> getcountrieslist(IGeoRepository georepository)
+            public static List<country> getcountrylist(PostalData2Entities _postalcontext)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<country> countrys = null;
+                List<country> countrys =  new List<country>();
 
-                try { if (dataCache != null) countrys = dataCache.Get("countrieslist") as List<country>; }
+                try
+                {
+
+                    try { if (dataCache != null) countrys = dataCache.Get("countrieslist") as List<country>; }
+                    catch (DataCacheException)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+                    if (countrys == null)
+                    {
+                        // context context = new context();
+                        //remafill the Countrys list from the repositry and exit
+
+                    //    List<country> tmplist = new List<country>();
+                        // Loop over the int List and modify it.
+                        //insert the first one as ANY
+                        countrys.Add(new country { id = "0", name = "Any" });
+                        foreach (Country_PostalCode_List item  in _postalcontext.Country_PostalCode_List.ToList().OrderBy(p=>p.CountryName))
+                        {
+                            var currentcountry = new country { id = item.CountryID.ToString(), name = item.CountryName  };
+                            countrys.Add(currentcountry);
+                        }
+                        //return tmplist;
+
+                        //if we still have no datacahe do tis
+
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+                        if (dataCache != null)
+                            dataCache.Put("countrieslist", countrys);
+
+                    } return countrys;
+                }
                 catch (DataCacheException)
                 {
                     throw new InvalidOperationException();
+
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
                     throw (ex);
                 }
-                if (countrys == null)
+            }
+
+            public static List<countrypostalcode> getcountryandpostalcodestatuslist(PostalData2Entities _postalcontext)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<countrypostalcode > countryandpostalcodes = null;
+
+                try
                 {
-                   // context context = new context();
-                    //remafill the Countrys list from the repositry and exit
 
-                    countrys = georepository.getcountrylist();
+                    try { if (dataCache != null) countryandpostalcodes = dataCache.Get("countryandpostalcodestatuslist") as List<countrypostalcode>; }
+                    catch (DataCacheException)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                        throw (ex);
+                    }
+                    if (countryandpostalcodes == null)
+                    {
+                        // context context = new context();
+                        //remafill the Countrys list from the repositry and exit
 
-                    //if we still have no datacahe do tis
 
-                    // Datings context = new modelContext();
-                    // model = context.models.Single(c => c.Id == id);
-                    if (dataCache != null)
-                        dataCache.Put("countrieslist", countrys);
+                        List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
+                        myQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName != "").OrderBy(p => p.CountryName).ToList();
 
-                } return countrys;
+                        countryandpostalcodes = (from s in myQuery
+                                                 select new countrypostalcode
+                                                 {
+                                                     name = s.CountryName,
+                                                     code = s.Country_Code,
+                                                     customregionid = s.CountryCustomRegionID,
+                                                     region = s.Country_Region,
+                                                     haspostalcode = Convert.ToBoolean(s.PostalCodes)
+                                                 }).ToList();
+
+                        //countryandpostalcodes = georepository.getcountrylist();
+
+                        //if we still have no datacahe do tis
+
+                        // Datings context = new modelContext();
+                        // model = context.models.Single(c => c.Id == id);
+                        if (dataCache != null)
+                            dataCache.Put("countryandpostalcodestatuslist", countryandpostalcodes);
+
+                    } return countryandpostalcodes;
+                }
+                catch (DataCacheException)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw (ex);
+                }
             }
 
             #endregion

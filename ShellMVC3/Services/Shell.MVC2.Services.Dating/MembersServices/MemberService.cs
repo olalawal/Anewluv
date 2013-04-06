@@ -255,9 +255,9 @@ namespace Shell.MVC2.Services.Dating
             return _memberrepository.getprofileidbyusername(strusername);
         }
 
-        public int? getprofileidbyscreenname(string strscreenname)
+        public int? getprofileidbyscreenname(string screenname)
         {
-            return _memberrepository.getprofileidbyscreenname(strscreenname);
+            return _memberrepository.getprofileidbyscreenname(screenname);
         }
 
         public int? getprofileidbyssessionid(string strsessionid)

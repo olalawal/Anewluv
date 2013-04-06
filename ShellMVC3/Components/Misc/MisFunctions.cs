@@ -294,7 +294,7 @@ namespace Misc
                         //openidobject.profile_id = matchedprofile.id;
                         openidobject.creationdate = openiditem.creationDate;
                         openidobject.openididentifier = openiditem.openidIdentifier;
-                        openidobject.openidprovidername = openiditem.openidProviderName;
+                        openidobject.openidprovider = context.lu_openidprovider.Where(p => p.description  == openiditem.openidIdentifier).FirstOrDefault(); //DbConte openiditem.openidProviderName;
                         //add the related
                         openidobject.profile = matchedprofile;
                         //add the object to profile object
