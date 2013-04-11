@@ -68,10 +68,8 @@ namespace Shell.MVC2.Services.Authentication
                 return _anewluvmembershipprovider.CreateUserCustom(model.username, model.password, model.openidIdentifer ,
                     model.openidProvidername,
                   model.email,                    
-                 DateTime.Now,
-                  "", "", "", "", null, null, "", "", "",
-                  false,
-                  null,
+                 DateTime.Now,model.gender , model.country ,model.city ,model.stateprovince ,model.longitude ,model.lattitude ,
+                 model.screenname ,model.zippostalcode ,model.activationcode ,false,model.providerUserKey,
                   out status );
             }
 

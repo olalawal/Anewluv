@@ -133,8 +133,8 @@ namespace Shell.MVC2.Services.Contracts
         
         //5-20-2012 added to check if a user email is registered  
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/checkifprofileidalreadyexists/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        bool checkifprofileidalreadyexists(string profileid);
+        [WebGet(UriTemplate = "/checkifusernamealreadyexists/{username}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        bool checkifusernamealreadyexists(string username);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebGet(UriTemplate = "/validatesecurityansweriscorrect/{profileid}/{securityquestionid}/{strsecurityanswer}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]

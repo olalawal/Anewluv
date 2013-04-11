@@ -80,7 +80,7 @@ namespace Shell.MVC2.Interfaces
         bool checkifscreennamealreadyexists(string strScreenName);
         bool checkifusernamealreadyexists(string strusername);  
        //5-20-2012 added to check if a user email is registered       
-        bool checkifprofileidalreadyexists(int profileid);     
+       // bool checkifusernamealreadyexists(int profileid);     
         string validatesecurityansweriscorrect(int strProfileID, int SecurityQuestionID, string strSecurityAnswer);  
         int? getprofileidbyusername(string strusername);
         int? getprofileidbyscreenname(string strscreenname);

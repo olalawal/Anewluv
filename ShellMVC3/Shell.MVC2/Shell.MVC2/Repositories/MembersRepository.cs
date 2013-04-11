@@ -303,10 +303,10 @@ namespace Shell.MVC2.Models
                     select p).FirstOrDefault();
         }
 
-        public bool  CheckIfProfileIDAlreadyExists(string profileID)
+        public bool  checkifusernamealreadyexists(string profileID)
         {
 
-            return datingservicecontext.CheckIfProfileIDAlreadyExists(profileID);
+            return datingservicecontext.checkifusernamealreadyexists(profileID);
         }    
         public string getGenderByScreenName(string ScreenName)
         {

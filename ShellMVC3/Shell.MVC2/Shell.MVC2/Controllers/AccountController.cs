@@ -133,7 +133,7 @@ namespace Shell.MVC2.Controllers
 
 
 #else
-                   if (!_membersrepository.CheckIfProfileIDAlreadyExists(response.verifiedEmail))
+                   if (!_membersrepository.checkifusernamealreadyexists(response.verifiedEmail))
                 {
                   
                    //get the geodata from the guesmodel for now

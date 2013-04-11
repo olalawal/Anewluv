@@ -199,15 +199,15 @@ namespace Shell.MVC2.Services.Dating
 
         //5-20-2012 added to check if a user email is registered
 
-        public bool checkifprofileidalreadyexists(string profileid)
-        {
-            return _memberrepository.checkifprofileidalreadyexists(Convert.ToInt32(profileid));
+        //public bool checkifusernamealreadyexists(string profileid)
+        //{
+        //    return _memberrepository.checkifusernamealreadyexists(Convert.ToInt32(profileid));
 
-        }
+        //}
 
-        public bool checkifusernamealreadyexists(string strusername)
+        public bool checkifusernamealreadyexists(string username)
         {
-            return _memberrepository.checkifusernamealreadyexists(strusername);
+            return _memberrepository.checkifusernamealreadyexists(username);
         }
 
         public string validatesecurityansweriscorrect(string profileid, string SecurityQuestionID, string strSecurityAnswer)

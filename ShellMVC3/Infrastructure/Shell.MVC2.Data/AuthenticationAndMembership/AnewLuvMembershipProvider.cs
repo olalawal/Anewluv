@@ -350,6 +350,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
                     Shell.MVC2.Domain.Entities.Anewluv.profile ObjProfileEntity = new Shell.MVC2.Domain.Entities.Anewluv.profile();
                profiledata objprofileDataEntity = new profiledata();
+
                //TO DO new entity for OPEN ID data
                int countryID = 0;
                Random objRandom = new Random();  
@@ -361,6 +362,8 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                //provider.PositiveSign = "pos";
 
 
+
+
                //conver the unquiqe coountry Name to an ID
                 using (PostalDataService postaldbContext = new PostalDataService())
                 {  //store country ID for use later
@@ -369,10 +372,34 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
                 //split up the city from state province
                 var tempCityAndStateProvince = city.Split(',');
+
+
+
+                //set all the entity values for profile
+                ObjProfileEntity.username = username;
+                ObjProfileEntity.emailaddress = email;
+                //changed the encryption to something stronger
+                //make username upper so that we can get actual mateches withoute user having to type in a case sensitive username
+                ObjProfileEntity.password = (openidIdentifer != "") ? Encryption.encryptString(password) : openidIdentifer;
+                // ObjProfileEntity.id   = email;
+                ObjProfileEntity.screenname = screenname;
+                //need to add a new feild
+                ObjProfileEntity.activationcode = activationcode;
+                //Mid(intStart, intStart, 14) & CStr(intLastTwo) 'need to beef this up with the session variable
+                ObjProfileEntity.creationdate = System.DateTime.Now;
+                ObjProfileEntity.modificationdate = System.DateTime.Now;
+                ObjProfileEntity.logindate = System.DateTime.Now;
+                // fix this to null
+                ObjProfileEntity.forwardmessages = 1;
+                //  ObjProfileEntity.SecurityQuestionID = 1;                
+                // ObjProfileEntity.SecurityAnswer =  securityAnswer;
+                ObjProfileEntity.status = (openidIdentifer == "" || openidIdentifer == null) ? dbContext.lu_profilestatus.Where(p => p.id == 1).FirstOrDefault() : dbContext.lu_profilestatus.Where(p => p.id == 2).FirstOrDefault();   //auto activate profiles fi we have an openID user since we have verifed thier info
+
+
              
                 //Build the profile data table
                // objprofileDataEntity.id  = ;
-                objprofileDataEntity.profile.emailaddress = email;
+                //objprofileDataEntity.profile.emailaddress = email;
                 objprofileDataEntity.latitude  = latitude ;
                 objprofileDataEntity.longitude  = longitude; //_GpsData.longitude;
                 objprofileDataEntity.city  = tempCityAndStateProvince[0];
@@ -382,8 +409,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
                 objprofileDataEntity.countryid  = countryID;
                 objprofileDataEntity.postalcode   = zippostalcode;
-                 
-                 objprofileDataEntity.gender.id  = Int32.Parse(gender);
+                objprofileDataEntity.gender = dbContext.lu_gender.Where(p => p.description == gender).FirstOrDefault();
                  
                 
              //  =  Int32.Parse(gender): objprofileDataEntity.gender.GenderName  = gender;
@@ -392,25 +418,6 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 objprofileDataEntity.aboutme  = "Hello";
 
 
-
-                //set all the entity values
-                ObjProfileEntity.username = username;
-                //changed the encryption to something stronger
-                //make username upper so that we can get actual mateches withoute user having to type in a case sensitive username
-                    ObjProfileEntity.password  = (openidIdentifer !="") ? Encryption.encryptString(password) : openidIdentifer;
-               // ObjProfileEntity.id   = email;
-                ObjProfileEntity.screenname  = screenname;
-                //need to add a new feild
-                ObjProfileEntity.activationcode   = activationcode;
-                //Mid(intStart, intStart, 14) & CStr(intLastTwo) 'need to beef this up with the session variable
-                ObjProfileEntity.creationdate  = System.DateTime.Now;
-                ObjProfileEntity.modificationdate  = System.DateTime.Now;
-                ObjProfileEntity.logindate = System.DateTime.Now;
-                // fix this to null
-                ObjProfileEntity.forwardmessages  = 1;
-              //  ObjProfileEntity.SecurityQuestionID = 1;                
-               // ObjProfileEntity.SecurityAnswer =  securityAnswer;
-              ObjProfileEntity.status.id  = (openidIdentifer ==  "" ||  openidIdentifer == null)?   1 : 2;  //auto activate profiles fi we have an openID user since we have verifed thier info
 
                 //TOD DO add open ID identifier as well Profider type to ssoProvider table 
 

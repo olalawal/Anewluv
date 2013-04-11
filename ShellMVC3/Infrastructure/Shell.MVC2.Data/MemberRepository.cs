@@ -909,36 +909,36 @@ namespace Shell.MVC2.Data
 
    //5-20-2012 added to check if a user email is registered
   
-   public bool checkifprofileidalreadyexists(int profileid)
-   {
+   //public bool checkifusernamealreadyexists(int profileid)
+   //{
 
-       try
-       {
-           IQueryable<profile> myQuery = default(IQueryable<profile>);
-           myQuery = this._datingcontext.profiles.Where(p => p.id == profileid);
+   //    try
+   //    {
+   //        IQueryable<profile> myQuery = default(IQueryable<profile>);
+   //        myQuery = this._datingcontext.profiles.Where(p => p.id == profileid);
 
 
-           if (myQuery.Count() > 0)
-           {
-               return true;
-           }
-           else
-           {
-               return false;
+   //        if (myQuery.Count() > 0)
+   //        {
+   //            return true;
+   //        }
+   //        else
+   //        {
+   //            return false;
 
-           }
-       }
-       catch (Exception ex)
-       {
-           //instantiate logger here so it does not break anything else.
-           logger = new ErroLogging(applicationEnum.MemberService);
-           logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
-           //log error mesasge
-           //handle logging here
-           var message = ex.Message;
-           throw;
-       }
-   }
+   //        }
+   //    }
+   //    catch (Exception ex)
+   //    {
+   //        //instantiate logger here so it does not break anything else.
+   //        logger = new ErroLogging(applicationEnum.MemberService);
+   //        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+   //        //log error mesasge
+   //        //handle logging here
+   //        var message = ex.Message;
+   //        throw;
+   //    }
+   //}
     
      public bool checkifusernamealreadyexists(string strusername)
     {
