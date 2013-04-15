@@ -197,7 +197,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
 
             }
 
+               public AnewLuvMembershipUser()
+            {
 
+            }
 
         }
     

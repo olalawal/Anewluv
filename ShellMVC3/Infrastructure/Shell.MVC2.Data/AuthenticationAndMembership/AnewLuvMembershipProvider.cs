@@ -337,7 +337,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
 
 
-            AnewLuvMembershipUser membershipprovider = null;
+            AnewLuvMembershipUser membershipprovider = new AnewLuvMembershipUser();
             
             try
             {
