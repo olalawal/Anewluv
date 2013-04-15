@@ -72,7 +72,7 @@ namespace Shell.MVC2.Interfaces
                 DateTime birthdate, string gender, string country, string city, string zippostalcode);
 
 
-          AnewluvMessages activateprofile(activateprofilecontainerviewmodel model);
+          AnewluvMessages activateprofile(activateprofilemodel  model);
 
        // MembershipUser CreateUser(string username, string password, string email, string securityQuestion, string securityAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status);
    

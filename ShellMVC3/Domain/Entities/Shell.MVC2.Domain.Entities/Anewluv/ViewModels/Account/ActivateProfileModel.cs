@@ -49,7 +49,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public bool photostatus { get; set; }
 
         [DataMember]
-        public photoeditmodel photos { get; set; }
+        public PhotoUploadViewModel photouploadviewmodel { get; set; }
 
         [DataMember]
        public int profileid { get; set; }

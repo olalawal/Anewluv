@@ -16,10 +16,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     {
         [DataMember]        
         public activateprofilemodel activateprofilemodel { get; set; }
+        //[DataMember]
+        //public registermodel registermodel { get; set; }
         [DataMember]
-        public registermodel registermodel { get; set; }
-        [DataMember]
-        public photoeditmodel  activateprofilephotos { get; set; }
+        public List<PhotoUploadModel>  activateprofilephotos { get; set; }
     }
 
    

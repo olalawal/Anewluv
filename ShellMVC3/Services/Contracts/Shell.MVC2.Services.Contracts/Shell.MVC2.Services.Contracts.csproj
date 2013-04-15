@@ -74,6 +74,14 @@
     <Compile Include="IPhotoService.cs" />
     <Compile Include="IUserRepairService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceResponse\ResponseMessage.cs" />
+    <Compile Include="ServiceResponse\Enums\DocumentTypes.cs" />
+    <Compile Include="ServiceResponse\IAttachment.cs" />
+    <Compile Include="ServiceResponse\IMessage.cs" />
+    <Compile Include="ServiceResponse\IProfileStatus.cs" />
+    <Compile Include="ServiceResponse\IResponse.cs" />
+    <Compile Include="ServiceResponse\Document.cs" />
+    <Compile Include="ServiceResponse\AnewluvResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">

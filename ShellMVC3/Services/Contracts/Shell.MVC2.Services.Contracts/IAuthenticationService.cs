@@ -9,6 +9,7 @@ using System.Web.Security;
 using Dating.Server.Data.Models;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using Shell.MVC2.Services.Contracts.ServiceResponse;
 
 
 
@@ -20,25 +21,25 @@ namespace Shell.MVC2.Services.Contracts
     {
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/ValidateUser/{username}/{password}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        bool ValidateUser(string username, string password); 
+        [WebGet(UriTemplate = "/validateuser/{username}/{password}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        bool validateuser(string username, string password); 
           
             //5-82012 updated to only valudate username
             //overide for validate user that uses just the username, this can be used for pass through auth where a user was already prevalidated via another method
              
-        [OperationContract(Name = "ValidateUserByUsername"), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/ValidateUser/{username}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-         bool ValidateUser(string username);
+        [OperationContract(Name = "validateuserbyusername"), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebGet(UriTemplate = "/validateuser/{username}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+         bool validateuser(string username);
 
        
        
-        [OperationContract(Name = "ValidateUserByOpenID"), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/ValidateUser/{VerifedEmail}/{openidIdentifer}/{openidProvidername}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]       
-        bool ValidateUser(string VerifedEmail, string openidIdentifer, string openidProvidername);
+        [OperationContract(Name = "validateuserbyopenid"), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebGet(UriTemplate = "/validateuser/{verifedemail}/{openididentifer}/{openidprovidername}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]       
+        bool validateuser(string verifedemail, string openididentifer, string openidprovidername);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/ApplicationName", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	      
-        string ApplicationName();
+        [WebGet(UriTemplate = "/applicationname", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	      
+        string applicationname();
 
 
        // [WebInvoke(UriTemplate =
@@ -48,51 +49,51 @@ namespace Shell.MVC2.Services.Contracts
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [ServiceKnownType(typeof(MembershipUser))]
-        [WebInvoke(UriTemplate = "/CreateUser", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        MembershipUser CreateUser(MembershipUserViewModel model);
+        [WebInvoke(UriTemplate = "/createuser", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        AnewluvResponse  createuser(MembershipUserViewModel model);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [ServiceKnownType(typeof(AnewLuvMembershipUser))]
-        [WebInvoke(UriTemplate = "/CreateUserCustom", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        AnewLuvMembershipUser  CreateUserCustom(MembershipUserViewModel model);
+        [WebInvoke(UriTemplate = "/createusercustom", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        AnewLuvMembershipUser  createusercustom(MembershipUserViewModel model);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/ResetPassword/{profileID}/{answer}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        string ResetPassword(string profileID, string answer);
+        [WebGet(UriTemplate = "/resetpassword/{profileid}/{answer}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        string resetpassword(string profileid, string answer);
             
             //handles reseting password duties.  First verifys that security uqestion was correct for the profile ID, the generated a password
             // using the local generatepassword method the send the encyrpted passwoerd and profile ID to the dating service so it can be updated in the DB
             //finally returns the new password to the calling functon or an empty string if failure.
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/ResetPasswordCustom/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	  
-         string ResetPasswordCustom(string profileid) ;
+        [WebGet(UriTemplate = "/resetpasswordcustom/{profileid}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	  
+         string resetpasswordcustom(string profileid) ;
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [ServiceKnownType(typeof(AnewLuvMembershipUser))]
-        [WebInvoke(UriTemplate = "/UpdateUser", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-              void UpdateUser(MembershipUser user);
+        [WebInvoke(UriTemplate = "/updateuser", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+              void updateuser(MembershipUser user);
 
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/GetUser/{username}/{userIsOnline}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-              MembershipUser GetUser(string username, string  userIsOnline);
+        [WebGet(UriTemplate = "/getuser/{username}/{userisonline}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+              MembershipUser getuser(string username, string  userIsOnline);
            
             //custom remapped membership get user function
      
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/GetUserCustom/{username}/{userIsOnline}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
-        AnewLuvMembershipUser GetUserCustom(string username, string  userIsOnline);
+        [WebGet(UriTemplate = "/getusercustom/{username}/{userisonline}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	
+        AnewLuvMembershipUser getusercustom(string username, string  userisonline);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebGet(UriTemplate = "/GeneratePassword", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	                         
-         string GeneratePassword()  ;
+        [WebGet(UriTemplate = "/generatepassword", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]	                         
+         string generatepassword()  ;
 
         #region "Custom methods specific for AnewLuv"
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [ServiceKnownType(typeof(AnewluvMessages))]
         [WebInvoke(UriTemplate = "/activateprofile", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        AnewluvMessages activateprofile(activateprofilecontainerviewmodel model);
+        AnewluvResponse activateprofile(activateprofilemodel model);
 
         #endregion
         

@@ -335,9 +335,9 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
         {
 
-           
 
-           AnewLuvMembershipUser  newUser = null;
+
+            AnewLuvMembershipUser membershipprovider = null;
             
             try
             {
@@ -347,8 +347,21 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 using (AnewluvContext  dbContext = new  AnewluvContext())
                 {
 
+               //4/12/2013 OLAWAL  added code to make sure that dupe email,username is not allowed is now allowed
+                  
+                    if (_memberepository.checkifemailalreadyexists(email) == true)
+                    {
+                        status = MembershipCreateStatus.DuplicateEmail  ;
+                        return membershipprovider;
+                    }
+                    if (_memberepository.checkifusernamealreadyexists(username ) == true)
+                    {
+                        status = MembershipCreateStatus.DuplicateUserName ;
+                        return membershipprovider;
+                    }
+                   
 
-                    Shell.MVC2.Domain.Entities.Anewluv.profile ObjProfileEntity = new Shell.MVC2.Domain.Entities.Anewluv.profile();
+               Shell.MVC2.Domain.Entities.Anewluv.profile ObjProfileEntity = new Shell.MVC2.Domain.Entities.Anewluv.profile();
                profiledata objprofileDataEntity = new profiledata();
 
                //TO DO new entity for OPEN ID data
@@ -429,8 +442,10 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                   
                 }
 
-
-
+                //populate the object to send back so we do not have to requery from athe service side
+                Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberepository.getprofilebyusername(username);
+                membershipprovider.profileid = profile.id;
+                membershipprovider.Email = email;
 
                 status = MembershipCreateStatus.Success;
             }
@@ -443,11 +458,11 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //handle logging here
                 var message = ex.Message;               
                 status = MembershipCreateStatus.ProviderError;
-                newUser = null;
+                membershipprovider = null;
               throw;
             }
-            
-            return newUser;
+
+            return membershipprovider;
         }
 
 
@@ -743,7 +758,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         #region "Extra Methods added to interface to clean up MVC controllers that do member stuff"
 
        //1-8-2013 olawal addedrobust method for activating profiles
-        public AnewluvMessages activateprofile(activateprofilecontainerviewmodel model)
+        public AnewluvMessages activateprofile(activateprofilemodel model)
         {
             AnewluvMessages messages = new AnewluvMessages();
             messages.message = "";
@@ -752,37 +767,38 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             
             try
             {
-            //Clear any errors kinda redundant tho
-           
-
+            //Clear any errors kinda redundant tho  
             //also create a members view model to store pertinent data i.e persist photos profile ID etc
             var membersmodel = new MembersViewModel();
-
             //get the macthcing member data using the profile ID/email entered
-             profile = _memberepository.getprofilebyprofileid  ( model.activateprofilemodel.profileid);
+             profile = _memberepository.getprofilebyprofileid  ( model.profileid);
            //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
 
             //verify that user entered correct email before doing anything
             //TO DO add these error messages to resource files
-            if (profile == null)
+             if (profile == null | _memberepository.checkifemailalreadyexists(profile.emailaddress) == false)
             {
-                messages.errormessages.Add("There is no registered account with the email address: " +  model.activateprofilemodel.emailaddress  + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
+                messages.errormessages.Add("There is no registered account with the email address: " +  model.emailaddress  + " and profileid" + model.profileid + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
                 //hide the photo view in thsi case
-                model.activateprofilemodel.photostatus = true;
+                model.photostatus = true;
                 return messages;
              }            
-                
+               
+ 
+
             //11-1-2011
             //store the valid profileID in appfarbic cache
-           // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
+            // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
+            model.photostatus =  _photorepository.checkforuploadedphotobyprofileid(Convert.ToInt32( model.profileid));
 
            
             //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
            // photoeditmodel photoviewmodel = new photoeditmodel();
             //registermodel registerviewmodel = new registermodel();
-            model.registermodel.emailaddress  = profile.emailaddress ;
-            model.registermodel.activationcode = profile.activationcode ; //model.activateprofilemodel.ActivationCode;
-            model.registermodel.username  =  profile.username; // model.activateprofilemodel.profileid;  //store the profileID i.e email addy into photo viewmodel
+            model.emailaddress  = profile.emailaddress ;
+            model.activationcode = profile.activationcode; //model.activateprofilemodel.ActivationCode;
+            model.profileid = profile.id;
+           // model.activateprofilemodel.username = profile.username; // model.activateprofilemodel.profileid;  //store the profileID i.e email addy into photo viewmodel
             //registerviewmodel.RegistrationPhotos = photoviewmodel;  //map it to the empty photo view model
             //add the registermodel to the activate model          
             //membersmodel.Register = registerviewmodel;         
@@ -802,13 +818,16 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
             // create temprary instances of both models since the partial view only passes one or the other not both
             //depending on which partial view made the request
-            var activateProfileModel = new activateprofilemodel();
-            var photoModel = new photoeditmodel();
+            //var activateProfileModel = new activateprofilemodel();
+            //var photoModel = new photoeditmodel();
 
             //5/11/2011
             // add photo view model stuff
-            model.activateprofilephotos = photoModel;
-
+            //Need to me made to run asynch
+            if (model.photouploadviewmodel.photosuploaded.Count() > 0)
+            {
+                _photorepository.addphotos(model.photouploadviewmodel);
+            }
 
             //store temporary variables for this request
            // TempData["ProfileID"] =  model.activateprofilemodel.profileid;
@@ -825,14 +844,14 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             //*****************************************************************************
                 
             //validate the profileID first i.e dont even attemp to allow them to upload a photo if that was the issue if the profile ID is inccorect the just ruturn the view with the generic activaion code error
-            if (_memberepository.checkifemailalreadyexists(profile.emailaddress) == false)
-            {
-                messages.errormessages.Add ("Invalid Activation Code or Email Address");
-                //hide the photo view in thsi case
-                // model.activateprofilemodel.PhotoStatus = true;
-                //return View(model);
-                return messages ;
-            }
+            //if (_memberepository.checkifemailalreadyexists(profile.emailaddress) == false)
+            //{
+            //    messages.errormessages.Add ("Invalid Activation Code or Email Address");
+            //    //hide the photo view in thsi case
+            //    // model.activateprofilemodel.PhotoStatus = true;
+            //    //return View(model);
+            //    return messages ;
+            //}
             //else
             //{
             //    ModelState.Clear();  // clear the model state , i.e removes prevalidation
@@ -842,10 +861,10 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             //first check to see if there is an email address for the given user on the server add it to the data anotaions validation                 
             //get a value for photo status so we know weather to display uplodad phot dialog or not
             //if the photo status is TRUE then hide the upload photo div
-            model.activateprofilemodel.photostatus =  _photorepository.checkforuploadedphotobyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
-            if (model.activateprofilemodel.photostatus == false)
+
+            if (model.photostatus == false | model.photouploadviewmodel.photosuploaded.Count() > 0)
             {
-                 messages.errormessages.Add("Please upload at least one profile photo using the browser below");
+                messages.errormessages.Add("Please upload at least one profile photo using the browser below");
                 return messages ;
                 
             }
@@ -858,23 +877,23 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
             
                 //get username here
-                string UserName = _memberepository.getusernamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
-                string ScreenName = _memberepository.getscreennamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
+               // string UserName = _memberepository.getusernamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
+               // string ScreenName = _memberepository.getscreennamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
                     //build log on model
                 //create a new login model
-                var logonmodel = new LogOnModel();
-                var lostaccountinfomodel = new LostAccountInfoModel();
-                var lostActivationcodemodel = new LostActivationCodeModel();
-                var _logonmodel = new LogonViewModel
-                {
-                    LogOnModel = logonmodel,
-                    LostAccountInfoModel = lostaccountinfomodel,
-                    LostActivationCodeModel = lostActivationcodemodel
-                };
+                //var logonmodel = new LogOnModel();
+               // var lostaccountinfomodel = new LostAccountInfoModel();
+               // var lostActivationcodemodel = new LostActivationCodeModel();
+               // var _logonmodel = new LogonViewModel
+              //  {
+              //      LogOnModel = logonmodel,
+               //     LostAccountInfoModel = lostaccountinfomodel,
+               //     LostActivationCodeModel = lostActivationcodemodel
+             //   };
 
                 //popualate values
-                _logonmodel.LogOnModel.UserName = UserName;
-                _logonmodel.LogOnModel.Password = "";  //we do not sent password over wire
+             //   _logonmodel.LogOnModel.UserName = UserName;
+               // _logonmodel.LogOnModel.Password = "";  //we do not sent password over wire
 
                 //Check here if the profile was alrady activated, if it is add the error and return the view, 
                 //If the profile was actived then the next check is if the mailbox folders were created, if they are not then create them here as well
@@ -882,7 +901,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
 
 
-                if (_memberepository.checkifprofileisactivated( model.activateprofilemodel.profileid) == true)
+                if (_memberepository.checkifprofileisactivated( model.profileid) == true)
                 {
                     messages.errormessages.Add ( "Your Profile has already been activated");
                     //hide the photo view in thsi case
@@ -893,11 +912,11 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //activaate profile here
                 else
                 {
-                    _memberepository.activateprofile( model.activateprofilemodel.profileid);
+                    _memberepository.activateprofile( model.profileid);
                 }
 
                 //check if mailbox folders exist, if they dont create em , don't add any error status
-                if (_memberepository.checkifmailboxfoldersarecreated( model.activateprofilemodel.profileid) == true)
+                if (_memberepository.checkifmailboxfoldersarecreated( model.profileid) == true)
                 {
                     //ModelState.AddModelError("", "Your Profile has already been activated");
                     //hide the photo view in thsi case                  
@@ -905,7 +924,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //create the mailbox folders if they do not exist
                 else
                 {
-                    _memberepository.createmailboxfolders( model.activateprofilemodel.profileid);
+                    _memberepository.createmailboxfolders( model.profileid);
                 }
 
                 messages.message = "Activation Sucssesful";
@@ -916,7 +935,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             {
                 //instantiate logger here so it does not break anything else.
                 logger = new ErroLogging(applicationEnum.UserAuthorizationService);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError,ex,model.activateprofilemodel.profileid  , null);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,ex,model.profileid  , null);
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
