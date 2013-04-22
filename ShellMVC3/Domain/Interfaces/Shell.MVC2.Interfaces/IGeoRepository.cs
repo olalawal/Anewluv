@@ -28,23 +28,23 @@ namespace Shell.MVC2.Interfaces
         bool getpostalcodestatusbycountryname(string countryname);
 
         int getcountryidbycountryname(string countryname);
-        List<CityList> getcitylistdynamic(string countryname, string prefixtext, string postalcode);
-        List<GpsData> getgpsdatabycountrypostalcodeandcity(string countryname, string postalcode, string city);
-        List<GpsData> getgpsdatabycountryandcity(string countryname, string city);
-        GpsData getgpsdatasinglebycitycountryandpostalcode(string countryname, string postalcode, string city);
-        List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string countryname, string city, string prefixtext);
+        List<citystateprovince> getcitylistdynamic(string countryname, string postalcode, string prfefixtext);
+        List<gpsdata> getgpsdatabycountrypostalcodeandcity(string countryname, string postalcode, string city);
+        List<gpsdata> getgpsdatabycountryandcity(string countryname, string city);
+        gpsdata getgpsdatasinglebycitycountryandpostalcode(string countryname, string postalcode, string city);
+        List<postalcode > getpostalcodesbycountryandcityprefixdynamic(string countryname, string city, string prefixtext);
        //gets the single geo code as string
-        string getgeopostalcodebycountrynameandcity(string countryname, string city);
+        List<postalcode> getgeopostalcodebycountrynameandcity(string countryname, string city);
         bool validatepostalcodebycountryandcity(string countryname, string city, string postalcode);
-        List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string countryname, string lattitude, string longitude);
-        List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string countryname, string city, string stateprovince);
+        List<postalcode> getpostalcodesbycountryandlatlongdynamic(string countryname, string lattitude, string longitude);
+        List<postalcode> getpostalcodesbycountrynamecityandstateprovincedynamic(string countryname, string city, string stateprovince);
 
              
     
  //Moved from lookup service
         List<citystateprovince> getfilteredcitiesold(string filter, string country, int offset);    
-        List<citystateprovince> getfilteredcities(string filter, string country, int offset);    
-        List<postalcodes> getfilteredpostalcodes(string filter, string country, string City, int offset);
+        List<citystateprovince> getfilteredcities(string filter, string country, int offset);
+        List<postalcode> getfilteredpostalcodes(string filter, string country, string City, int offset);
 
         double? getdistancebetweenmembers(double lat1, double lon1, double lat2, double lon2, string unit);
     }

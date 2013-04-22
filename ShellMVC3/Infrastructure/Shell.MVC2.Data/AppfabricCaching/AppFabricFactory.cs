@@ -15,6 +15,7 @@ using LoggingLibrary;
 
 using Shell.MVC2.Interfaces;
 using Dating.Server.Data.Models;
+using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 
 
 
@@ -24,6 +25,7 @@ namespace Shell.MVC2.AppFabric
 
     public class CachingFactory
     {
+        private static  ErroLogging logger;
         // public  LoggingServiceClient  svcloggingService;
         public static DataCacheFactory _cacheFactory;
         private static DataCache _cache;
@@ -199,15 +201,19 @@ namespace Shell.MVC2.AppFabric
             catch (DataCacheException ex)
             {
                 //TO DO NOTIFY AND LOG!!!
+                logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                 //log cache error
                 //log the execption message
-                // throw ex;
+            //    throw ;
             }
             catch (Exception ex)
             {
+                logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                 //log cache error
                 // log the execption message
-              throw;
+             // throw;
             }
             finally
             {
@@ -247,18 +253,27 @@ namespace Shell.MVC2.AppFabric
 
         public static bool clearcurrentsessioncache(string _ProfileID, string sessionid)
         {
-
-            //clear out guest data
-            MembersViewModelHelper.removeguestdata(sessionid);
-            //ProfileBrowseModelsHelper.removeguestresults(context);
-            //clear out member data if member is authenticated
-            //TO DO worry about maybe to deleted this to wonder about peristing it?
-            //Due to speed considerations
-
-            if (_ProfileID != null)
+            try
             {
-             //   MembersViewModelHelper.RemoveMemberData(_ProfileID);
-             //   ProfileBrowseModelsHelper.RemoveMemberResults(_ProfileID);
+                //clear out guest data
+                MembersViewModelHelper.removeguestdata(sessionid);
+                //ProfileBrowseModelsHelper.removeguestresults(context);
+                //clear out member data if member is authenticated
+                //TO DO worry about maybe to deleted this to wonder about peristing it?
+                //Due to speed considerations
+
+                if (_ProfileID != null)
+                {
+                    //   MembersViewModelHelper.RemoveMemberData(_ProfileID);
+                    //   ProfileBrowseModelsHelper.RemoveMemberResults(_ProfileID);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                throw;
             }
 
             return true;
@@ -288,7 +303,7 @@ namespace Shell.MVC2.AppFabric
 
                 int? _profileid = null;
                 try { if (dataCache != null)  _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + username)); }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
@@ -314,13 +329,17 @@ namespace Shell.MVC2.AppFabric
                 //value came from cahce return it
                 return _profileid != 0 ? _profileid : null;
             }
-            catch (DataCacheException)
+           catch (DataCacheException ex)
             {
+                logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);               
                 throw new InvalidOperationException();
 
             }
             catch (Exception ex)
             {
+                logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);   
                 //put cleanup code here
                 throw ;
             }
@@ -343,7 +362,7 @@ namespace Shell.MVC2.AppFabric
 
                 int? _profileid = null;
                 try { if (dataCache != null)  _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + screenname)); }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
@@ -371,7 +390,7 @@ namespace Shell.MVC2.AppFabric
                 //value came from cahce return it
                 return _profileid !=0? _profileid:null;
             }
-            catch (DataCacheException)
+           catch (DataCacheException ex)
             {
                 throw new InvalidOperationException();
 
@@ -379,7 +398,7 @@ namespace Shell.MVC2.AppFabric
             catch (Exception ex)
             {
                 //put cleanup code here
-                throw (ex);
+              throw;
             }
         }
 
@@ -396,7 +415,7 @@ namespace Shell.MVC2.AppFabric
 
                 int? _profileid = null;
                 try { _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + sessionid)); }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
@@ -408,7 +427,7 @@ namespace Shell.MVC2.AppFabric
 
                 return _profileid;
             }
-            catch (DataCacheException)
+           catch (DataCacheException ex)
             {
                 throw new InvalidOperationException();
 
@@ -469,15 +488,22 @@ namespace Shell.MVC2.AppFabric
                         }
                     } return model;
                 }
-                catch (DataCacheException)
+                catch (DataCacheException ex)
                 {
-                    throw new InvalidOperationException();
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching );
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                   // throw new InvalidOperationException();
+                    throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", model);
+                   
 
                 }
                 catch (Exception ex)
                 {
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     //put cleanup code here
-                    throw (ex);
+                    throw;
                 }
             }
             //Items for guests are just dumped in the session area not the members region
@@ -530,13 +556,17 @@ namespace Shell.MVC2.AppFabric
                 }
                 // try { if (dataCache != null)  model = dataCache.Get("membersviewmodel" + context.Session.SessionID, "Guests") as MembersViewModel; }
 
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", model);
                     //log the datachae type of excpetion here and mark it handled and logged
                 }
                 catch (Exception ex)
                 {
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     var message = String.Format("Something went wrong with the cache method GetGuestData with this sessionid :  {0}", sessionid );
                     throw new LoggingLibrary.CustomExceptionTypes.AccountException(model, message, ex);
  
@@ -622,13 +652,17 @@ namespace Shell.MVC2.AppFabric
 
                     
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", p);
                     //log the datachae type of excpetion here and mark it handled and logged
                 }
                 catch (Exception ex)
                 {
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     var message = String.Format("Something went wrong with the cache method UpdateMemberData with this object or user :  {0}", p.profile.id);
                     throw new LoggingLibrary.CustomExceptionTypes.AccountException(p, message, ex);
 
@@ -744,16 +778,19 @@ namespace Shell.MVC2.AppFabric
 
 
                 try { dataCache.Remove("membersviewmodel" + sessionid, "Guests"); }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
-                    return false;
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    throw;
                 }
                 return true;
 
@@ -771,14 +808,16 @@ namespace Shell.MVC2.AppFabric
 
                 List<ProfileBrowseModel> model = null;
                 try { model = dataCache.Get("profilebrowsemodel" + profileid) as List<ProfileBrowseModel>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                  throw;
                 }
                 if (model.Count == 0)
                 {
@@ -804,15 +843,19 @@ namespace Shell.MVC2.AppFabric
 
                 List<ProfileBrowseModel> model = null;
                 try { model = dataCache.Get("profilebrowsemodel" +sessionid, "Guests") as List<ProfileBrowseModel>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     //load from DB or something
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (model == null)
                 {
@@ -838,16 +881,21 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetCache;
 
                 try { dataCache.Put("profilebrowsemodel" + profileid, p); }
-                catch (DataCacheException)
+                catch (DataCacheException ex)
                 {
+
                     //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     //throw new InvalidOperationException();
                     return false;
                 }
                 catch (Exception ex)
                 {
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
                 return true;
@@ -862,16 +910,22 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetCache;
 
                 try { dataCache.Put("profilebrowsemodel" + sessionid, "Guests"); }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     //Log error
                     //throw new InvalidOperationException();
+                    //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     return false;
                 }
                 catch (Exception ex)
                 {
+                    //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
                 return true;
@@ -886,16 +940,21 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetCache;
 
                 try { dataCache.Remove("profilebrowsemodel" + profileid); }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
-                    return false;
+                    //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);                   
                     throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
+                    //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
                 return true;
@@ -909,16 +968,20 @@ namespace Shell.MVC2.AppFabric
                 dataCache = GetCache;
 
                 try { dataCache.Remove("profilebrowsemodel" + sessionid, "Guests"); }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
-                    return false;
+                    //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
-                {
+                {  //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 return true;
 
@@ -983,14 +1046,19 @@ namespace Shell.MVC2.AppFabric
                     //else return the value from cache or database
                     return results.FirstOrDefault().bodycssstylename.Trim();
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
+                    //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
-                {
+                {  //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
 
@@ -1035,14 +1103,20 @@ namespace Shell.MVC2.AppFabric
 
                     return pages;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
+                    //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
+                    //Log error
+                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
 
@@ -1066,7 +1140,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) photoformat = dataCache.Get("photoformatlist") as List<lu_photoformat>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1074,7 +1148,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (photoformat == null)
@@ -1092,7 +1166,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return photoformat;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1100,7 +1174,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1115,7 +1189,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) photoapprovalstatus = dataCache.Get("photoapprovalstatuslist") as List<lu_photoapprovalstatus>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1123,7 +1197,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (photoapprovalstatus == null)
@@ -1141,7 +1215,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return photoapprovalstatus;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1149,7 +1223,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1164,7 +1238,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) photorejectionreason = dataCache.Get("photorejectionreasonlist") as List<lu_photorejectionreason>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1172,7 +1246,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (photorejectionreason == null)
@@ -1190,7 +1264,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return photorejectionreason;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1198,7 +1272,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1213,7 +1287,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) photostatus = dataCache.Get("photostatuslist") as List<lu_photostatus>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1221,7 +1295,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (photostatus == null)
@@ -1239,7 +1313,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return photostatus;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1247,7 +1321,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1262,7 +1336,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) photoimagetype = dataCache.Get("photoimagetypelist") as List<lu_photoimagetype>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1270,7 +1344,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (photoimagetype == null)
@@ -1288,7 +1362,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return photoimagetype;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1296,7 +1370,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1313,7 +1387,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) photostatusdescription = dataCache.Get("photostatusdescriptionlist") as List<lu_photostatusdescription>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1321,7 +1395,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (photostatusdescription == null)
@@ -1339,7 +1413,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return photostatusdescription;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1347,7 +1421,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1362,7 +1436,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) abusetype = dataCache.Get("abusetypelist") as List<lu_abusetype>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1370,7 +1444,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (abusetype == null)
@@ -1388,7 +1462,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return abusetype;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1396,7 +1470,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1411,7 +1485,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) profilestatus = dataCache.Get("profilestatuslist") as List<lu_profilestatus>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1419,7 +1493,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (profilestatus == null)
@@ -1437,7 +1511,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return profilestatus;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1445,7 +1519,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1460,7 +1534,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) photoImagersizerformat = dataCache.Get("getphotoImagersizerformat") as List<lu_photoImagersizerformat>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1468,7 +1542,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (photoImagersizerformat == null)
@@ -1486,7 +1560,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return photoImagersizerformat;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1494,7 +1568,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1509,7 +1583,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) role = dataCache.Get("rolelist") as List<lu_role>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1517,7 +1591,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (role == null)
@@ -1535,7 +1609,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return role;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1543,7 +1617,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1558,7 +1632,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) securityleveltype = dataCache.Get("securityleveltypelist") as List<lu_securityleveltype>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1566,7 +1640,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (securityleveltype == null)
@@ -1584,7 +1658,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return securityleveltype;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1592,7 +1666,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1607,7 +1681,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) showme = dataCache.Get("showmelist") as List<lu_showme>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1615,7 +1689,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (showme == null)
@@ -1633,7 +1707,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return showme;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1641,7 +1715,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1656,7 +1730,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) sortbytype = dataCache.Get("sortbytypelist") as List<lu_sortbytype>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1664,7 +1738,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (sortbytype == null)
@@ -1682,7 +1756,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return sortbytype;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1690,7 +1764,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1705,7 +1779,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) securityquestion = dataCache.Get("securityquestionlist") as List<lu_securityquestion>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1713,7 +1787,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (securityquestion == null)
@@ -1731,7 +1805,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return securityquestion;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1739,7 +1813,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1754,7 +1828,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) flagyesno = dataCache.Get("flagyesnolist") as List<lu_flagyesno>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1762,7 +1836,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (flagyesno == null)
@@ -1780,7 +1854,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return flagyesno;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1788,7 +1862,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1803,7 +1877,7 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) profilefiltertype = dataCache.Get("profilefiltertypelist") as List<lu_profilefiltertype>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         //TO DO LOG and NOTIFY HERE
                         //throw new InvalidOperationException();
@@ -1811,7 +1885,7 @@ namespace Shell.MVC2.AppFabric
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
 
                     if (profilefiltertype == null)
@@ -1829,7 +1903,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return profilefiltertype;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -1837,7 +1911,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
 
             }
@@ -1852,14 +1926,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_gender> genders = null;
                 try { if (dataCache != null) genders = dataCache.Get("genderlist") as List<lu_gender>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (genders == null)
                 {
@@ -1888,14 +1962,14 @@ namespace Shell.MVC2.AppFabric
 
                 //if we still have no datacahe do tis
                 try { if (dataCache != null) ageslist = dataCache.Get("agelist") as List<age>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (ageslist == null)
                 {
@@ -1914,14 +1988,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<metricheight> heights = null;
                 try { if (dataCache != null) heights = dataCache.Get("metricheightlist") as List<metricheight>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (heights == null)
                 {
@@ -1946,14 +2020,14 @@ namespace Shell.MVC2.AppFabric
                 List<lu_bodytype> bodytype = null;
 
                 try { if (dataCache != null) bodytype = dataCache.Get("bodytypelist") as List<lu_bodytype>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (bodytype == null)
                 {
@@ -1976,14 +2050,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_ethnicity> ethnicity = null;
                 try { if (dataCache != null) ethnicity = dataCache.Get("ethnicitylist") as List<lu_ethnicity>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (ethnicity == null)
                 {
@@ -2005,14 +2079,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_eyecolor> eyecolor = null;
                 try { if (dataCache != null) eyecolor = dataCache.Get("eyecolorlist") as List<lu_eyecolor>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (eyecolor == null)
                 {
@@ -2033,14 +2107,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_haircolor> haircolor = null;
                 try { if (dataCache != null)haircolor = dataCache.Get("haircolorlist") as List<lu_haircolor>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (haircolor == null)
                 {
@@ -2065,14 +2139,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_diet> diet = null;
                 try { if (dataCache != null) diet = dataCache.Get("dietlist") as List<lu_diet>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (diet == null)
                 {
@@ -2093,14 +2167,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_drinks> drinks = null;
                 try { if (dataCache != null) drinks = dataCache.Get("drinkslist") as List<lu_drinks>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (drinks == null)
                 {
@@ -2121,14 +2195,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_exercise> exercise = null;
                 try { if (dataCache != null) exercise = dataCache.Get("exerciselist") as List<lu_exercise>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (exercise == null)
                 {
@@ -2149,14 +2223,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_hobby> hobby = null;
                 try { if (dataCache != null) hobby = dataCache.Get("hobbylist") as List<lu_hobby>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (hobby == null)
                 {
@@ -2177,14 +2251,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_humor> humor = null;
                 try { if (dataCache != null) humor = dataCache.Get("humorlist") as List<lu_humor>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (humor == null)
                 {
@@ -2205,14 +2279,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_politicalview> politicalview = null;
                 try { if (dataCache != null) politicalview = dataCache.Get("politicalviewlist") as List<lu_politicalview>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (politicalview == null)
                 {
@@ -2233,14 +2307,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_religion> religion = null;
                 try { if (dataCache != null)  religion = dataCache.Get("religionlist") as List<lu_religion>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (religion == null)
                 {
@@ -2261,14 +2335,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_religiousattendance> religiousattendance = null;
                 try { if (dataCache != null) religiousattendance = dataCache.Get("religiousattendancelist") as List<lu_religiousattendance>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (religiousattendance == null)
                 {
@@ -2289,14 +2363,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_sign> sign = null;
                 try { if (dataCache != null) sign = dataCache.Get("signlist") as List<lu_sign>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (sign == null)
                 {
@@ -2317,14 +2391,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_smokes> smokes = null;
                 try { if (dataCache != null)  smokes = dataCache.Get("smokeslist") as List<lu_smokes>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (smokes == null)
                 {
@@ -2350,14 +2424,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_educationlevel> educationlevel = null;
                 try { if (dataCache != null) educationlevel = dataCache.Get("educationlevellist") as List<lu_educationlevel>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (educationlevel == null)
                 {
@@ -2378,14 +2452,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_employmentstatus> employmentstatus = null;
                 try { if (dataCache != null) employmentstatus = dataCache.Get("employmentstatuslist") as List<lu_employmentstatus>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (employmentstatus == null)
                 {
@@ -2406,14 +2480,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_havekids> havekids = null;
                 try { if (dataCache != null) havekids = dataCache.Get("havekidslist") as List<lu_havekids>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (havekids == null)
                 {
@@ -2434,14 +2508,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_incomelevel> incomelevel = null;
                 try { if (dataCache != null) incomelevel = dataCache.Get("incomelevellist") as List<lu_incomelevel>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (incomelevel == null)
                 {
@@ -2462,14 +2536,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_livingsituation> livingsituation = null;
                 try { if (dataCache != null) livingsituation = dataCache.Get("livingsituationlist") as List<lu_livingsituation>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (livingsituation == null)
                 {
@@ -2490,14 +2564,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_lookingfor> lookingfor = null;
                 try { if (dataCache != null) lookingfor = dataCache.Get("lookingforlist") as List<lu_lookingfor>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (lookingfor == null)
                 {
@@ -2518,14 +2592,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_maritalstatus> maritalstatus = null;
                 try { if (dataCache != null) maritalstatus = dataCache.Get("maritalstatuslist") as List<lu_maritalstatus>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (maritalstatus == null)
                 {
@@ -2546,14 +2620,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_profession> profession = null;
                 try { if (dataCache != null) profession = dataCache.Get("professionlist") as List<lu_profession>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (profession == null)
                 {
@@ -2574,14 +2648,14 @@ namespace Shell.MVC2.AppFabric
 
                 List<lu_wantskids> wantskids = null;
                 try { if (dataCache != null) wantskids = dataCache.Get("wantskidslist") as List<lu_wantskids>; }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
                 if (wantskids == null)
                 {
@@ -2607,22 +2681,23 @@ namespace Shell.MVC2.AppFabric
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
 
-                List<country> countrys =  new List<country>();
+                List<country> countrys = new List<country>();
 
                 try
                 {
+                  
 
                     try { if (dataCache != null) countrys = dataCache.Get("countrieslist") as List<country>; }
-                    catch (DataCacheException)
+                    catch (DataCacheException ex)
                     {
                         throw new InvalidOperationException();
                     }
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
-                    if (countrys == null)
+                    if (countrys.Count() == 0)
                     {
                         // context context = new context();
                         //remafill the Countrys list from the repositry and exit
@@ -2647,7 +2722,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return countrys;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -2655,7 +2730,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
             }
 
@@ -2671,14 +2746,14 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     try { if (dataCache != null) countryandpostalcodes = dataCache.Get("countryandpostalcodestatuslist") as List<countrypostalcode>; }
-                    catch (DataCacheException)
+                   catch (DataCacheException ex)
                     {
                         throw new InvalidOperationException();
                     }
                     catch (Exception ex)
                     {
                         //put cleanup code here
-                        throw (ex);
+                      throw;
                     }
                     if (countryandpostalcodes == null)
                     {
@@ -2710,7 +2785,7 @@ namespace Shell.MVC2.AppFabric
 
                     } return countryandpostalcodes;
                 }
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     throw new InvalidOperationException();
 
@@ -2718,7 +2793,7 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    throw (ex);
+                  throw;
                 }
             }
 
@@ -2764,7 +2839,7 @@ namespace Shell.MVC2.AppFabric
                   //  dataCache.Remove("VisibilityStealthSettingsList");
                 }
 
-                catch (DataCacheException)
+               catch (DataCacheException ex)
                 {
                     return false;
                     throw new InvalidOperationException();
@@ -2788,7 +2863,7 @@ namespace Shell.MVC2.AppFabric
 
             //    List<visiblitysetting> visibilitymailsettings = null;
             //    try { if (dataCache != null) visibilitymailsettings = dataCache.Get("visibilitymailsettingslist") as List<visiblitysetting>; }
-            //    catch (DataCacheException)
+            //   catch (DataCacheException ex)
             //    {
             //        throw new InvalidOperationException();
             //    }
@@ -2812,7 +2887,7 @@ namespace Shell.MVC2.AppFabric
 
             //    List<SelectListItem> VisibilityStealthSettings = null;
             //    try { if (dataCache != null) VisibilityStealthSettings = dataCache.Get("VisibilityStealthSettingsList") as List<SelectListItem>; }
-            //    catch (DataCacheException)
+            //   catch (DataCacheException ex)
             //    {
             //        throw new InvalidOperationException();
             //    }

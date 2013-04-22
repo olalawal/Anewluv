@@ -565,14 +565,14 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                      int  countryID = _georepository.getcountryidbycountryname(u.country);
 
                         //get the longidtue and latttude 
-                     GpsData _GpsData =  _georepository.getgpsdatasinglebycitycountryandpostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
+                     gpsdata _GpsData =  _georepository.getgpsdatasinglebycitycountryandpostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
 
 
 
                     //split up the city from state province
                     //Build the profile data table                   
-                    objprofileDateEntity.latitude = _GpsData.Latitude ;
-                    objprofileDateEntity.longitude = _GpsData.Longitude ;
+                    objprofileDateEntity.latitude = _GpsData.lattitude  ;
+                    objprofileDateEntity.longitude = _GpsData.longitude ;
                     objprofileDateEntity.city = tempCityAndStateProvince[0];
                     objprofileDateEntity.countryregion = "NA";
 

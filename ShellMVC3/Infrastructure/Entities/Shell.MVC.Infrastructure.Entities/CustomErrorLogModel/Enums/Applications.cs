@@ -53,7 +53,10 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
            GeoLocationService = 13,
            [Description("Mail Service")]
            [EnumMember]
-           MailService = 14
+           MailService = 14,
+         [Description("Appfabric Cache")]
+           [EnumMember]
+           AppfabricCaching = 15
     }
     
 

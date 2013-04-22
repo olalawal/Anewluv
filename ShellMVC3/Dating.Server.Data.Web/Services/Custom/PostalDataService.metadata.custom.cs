@@ -103,6 +103,7 @@ namespace Dating.Server.Data.Models
 
     }
 
+
       [MetadataTypeAttribute(typeof(PostalCodeList.PostalCodeListMetadata))]
     public partial class PostalCodeList
     {
@@ -126,6 +127,7 @@ namespace Dating.Server.Data.Models
                 set { m_PostalCode = value; }
             }
 
+      
             private string m_PostalCode;
 
 

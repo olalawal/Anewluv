@@ -137,7 +137,7 @@ namespace Shell.MVC2.Services.Dating
             }
             //Dynamic LINQ to Entites quries 
             //*****************************************************************************************************************************************
-            public List<CityList> getcitylistdynamic(string strCountryName, string strPrefixText, string strPostalcode)
+            public List<citystateprovince> getcitylistdynamic(string strCountryName, string strPrefixText, string strPostalcode)
             {
               
                 try
@@ -155,7 +155,7 @@ namespace Shell.MVC2.Services.Dating
                 }
                      
             }
-            public List<GpsData> getgpsdatabycountrypostalcodeandcity(string strCountryName, string strPostalcode, string strCity)
+            public List<gpsdata> getgpsdatabycountrypostalcodeandcity(string strCountryName, string strPostalcode, string strCity)
             {
               
                 try
@@ -173,7 +173,7 @@ namespace Shell.MVC2.Services.Dating
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            public List<GpsData> getgpsdatabycountryandcity(string strCountryName, string strCity)
+            public List<gpsdata> getgpsdatabycountryandcity(string strCountryName, string strCity)
             {
                
                  try
@@ -191,7 +191,7 @@ namespace Shell.MVC2.Services.Dating
                      throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                  }
             }
-            public GpsData getgpsdatasinglebycitycountryandpostalcode(string strCountryName, string strPostalcode, string strCity)
+            public gpsdata getgpsdatasinglebycitycountryandpostalcode(string strCountryName, string strPostalcode, string strCity)
             {
                
                 try
@@ -209,7 +209,7 @@ namespace Shell.MVC2.Services.Dating
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            public List<PostalCodeList> getpostalcodesbycountryandcityprefixdynamic(string strCountryName, string strCity, string StrprefixText)
+            public List<postalcode > getpostalcodesbycountryandcityprefixdynamic(string strCountryName, string strCity, string StrprefixText)
             {
                 
                 try
@@ -227,7 +227,7 @@ namespace Shell.MVC2.Services.Dating
                 }
             }
             //gets the single geo code as string
-            public string getgeopostalcodebycountrynameandcity(string strCountryName, string strCity)
+            public List<postalcode> getgeopostalcodebycountrynameandcity(string strCountryName, string strCity)
             {
                
                 try
@@ -265,7 +265,7 @@ namespace Shell.MVC2.Services.Dating
                 }
             }
 
-            public List<PostalCodeList> getpostalcodesbycountryandlatlongdynamic(string strCountryName, string strlattitude, string strlongitude)
+            public List<postalcode > getpostalcodesbycountryandlatlongdynamic(string strCountryName, string strlattitude, string strlongitude)
             {
                
                 try
@@ -284,7 +284,7 @@ namespace Shell.MVC2.Services.Dating
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            public List<PostalCodeList> getpostalcodesbycountrynamecityandstateprovincedynamic(string strCountryName, string strCity, string strStateProvince)
+            public List<postalcode > getpostalcodesbycountrynamecityandstateprovincedynamic(string strCountryName, string strCity, string strStateProvince)
             {
                 
                 try
@@ -319,7 +319,6 @@ namespace Shell.MVC2.Services.Dating
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-
             public List<citystateprovince> getfilteredcitiesold(string filter, string Country, string offset)
             {
               
@@ -356,7 +355,7 @@ namespace Shell.MVC2.Services.Dating
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            public List<postalcodes> getfilteredpostalcodes(string filter, string Country, string City, string offset)
+            public List<postalcode > getfilteredpostalcodes(string filter, string Country, string City, string offset)
             {
                
                 try
