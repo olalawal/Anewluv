@@ -28,7 +28,7 @@ namespace Dating.Server.Data.Services
 
 
 
-    public partial class PostalDataService : LinqToEntitiesDomainService<PostalData2Entities>
+    public partial  class PostalDataService : LinqToEntitiesDomainService<PostalData2Entities>
     {
 
         public override void Initialize(DomainServiceContext context)
@@ -50,20 +50,20 @@ namespace Dating.Server.Data.Services
         #region "Dynamic Stored Procs"        
 
 
-        public IQueryable<CityList> GetCityListDynamic(string strCountryName, string strPrefixText, string strPostalcode)
+        public  IQueryable<CityList> GetCityListDynamic(string strCountryName, string strPostalcode, string strPrefixText)
         {
             IQueryable<CityList> functionReturnValue = default(IQueryable<CityList>);
 
 
 
             List<CityList> _CityList = new List<CityList>();
-            strPostalcode = string.Format("{0}%", strPostalcode.Replace("'", "''"));
+            strPostalcode = string.Format("%{0}%", strPostalcode.Replace("'", "''"));
             // fix country names if theres a space
             strCountryName = string.Format(strCountryName.Replace(" ", ""));
 
             //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
             //for cites as well so its a 1 to 1 search no spaces on input and on db side
-            strPrefixText = string.Format("{0}%", strPrefixText.Replace(" ", ""));
+            strPrefixText = string.Format("%{0}%", strPrefixText.Replace(" ", ""));
             //11/13/2009 addded wild ca
 
 
@@ -109,9 +109,9 @@ namespace Dating.Server.Data.Services
                             while (objDataReader.Read())
                             {
                                 _CityList.Add(new CityList
-                                {
+                                {   
 
-                                    City = objDataReader["City"].ToString(),
+                                       City       = objDataReader["City"].ToString(),
                                     State_Province = objDataReader["State_Province"].ToString()
                                 });
 
@@ -145,7 +145,7 @@ namespace Dating.Server.Data.Services
            
 
         }
-
+       
         public IQueryable<GpsData> GetGpsDataByCountryPostalCodeandCity(string strCountryName,  string strPostalcode, string strCity)
         {
             IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
@@ -193,7 +193,7 @@ namespace Dating.Server.Data.Services
                         {
                             _GpsData.Add(new GpsData
                             {
-                               
+                                
                                 Latitude = float.Parse(objDataReader["Latitude"].ToString()),
                                 Longitude = float.Parse(objDataReader["Longitude"].ToString()),
                                 State_Province = objDataReader["State_Province"].ToString()
@@ -338,6 +338,74 @@ namespace Dating.Server.Data.Services
 
         }
 
+        public IQueryable<PostalCodeList> getpostalcodesbycountrynamecity (string strCountryName,string strCity)
+        {
+            IQueryable<PostalCodeList> functionReturnValue = default(IQueryable<PostalCodeList>);
+
+            //added 5/12/2011 to handle empty countries
+            if (strCountryName == null) return null;
+
+            List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
+            strCity = string.Format("%{0}%", strCity);
+            strCountryName = string.Format(strCountryName.Replace(" ", ""));
+            // fix country names if theres a space
+           // StrprefixText = string.Format("%{0}%", StrprefixText);
+            //11/13/2009 addded wild ca
+
+
+            using (EntityConnection conn = new EntityConnection("name=PostalData2Entities"))
+            {
+                conn.Open();
+
+                // Create an EntityCommand. 
+                using (EntityCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "PostalData2Entities.GetPostalCodesByCountryAndCity";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    //add parameters
+                    EntityParameter param = new EntityParameter();
+                    EntityParameter param2 = new EntityParameter();
+                    EntityParameter param3 = new EntityParameter();
+                    param.Value = strCountryName;
+                    param.ParameterName = "StrcountryDatabaseName";
+                    cmd.Parameters.Add(param);
+
+
+                    param2.Value = strCity;
+                    param2.ParameterName = "StrCity";
+                    cmd.Parameters.Add(param2);
+
+
+
+                   // param3.Value = StrprefixText;
+                   // param3.ParameterName = "StrprefixText";
+                   // cmd.Parameters.Add(param3);
+
+
+
+                    //ad a fake record ID for uniquenet contraint as well and append it to each row
+                    // int intRecordID = 1;
+                    // Execute the command. 
+                    using (EntityDataReader objDataReader = cmd.ExecuteReader(CommandBehavior.SequentialAccess))
+                    {
+                        // Read the results returned by the stored procedure. 
+                        while (objDataReader.Read())
+                        {
+                            _PostalCodeList.Add(new PostalCodeList { PostalCode = objDataReader["PostalCode"].ToString() });
+
+                            // Console.WriteLine("ID: {0} Grade: {1}", rdr("StudentID"), rdr("Grade"))
+                        }
+                    }
+                }
+                conn.Close();
+            }
+            functionReturnValue = _PostalCodeList.AsQueryable();
+            //Return Me.ObjectContext.citylis
+            return functionReturnValue;
+        }
+
+
+
         public IQueryable<PostalCodeList> GetPostalCodesByCountryAndCityPrefixDynamic(string strCountryName, string strCity, string StrprefixText)
         {
             IQueryable<PostalCodeList> functionReturnValue = default(IQueryable<PostalCodeList>);
@@ -346,10 +414,10 @@ namespace Dating.Server.Data.Services
             if (strCountryName == null) return null;
 
             List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
-            strCity = string.Format("{0}%", strCity);
+            strCity = string.Format("%{0}%", strCity);
             strCountryName = string.Format(strCountryName.Replace(" ", ""));
             // fix country names if theres a space
-            StrprefixText = string.Format("{0}%", StrprefixText);
+            StrprefixText = string.Format("%{0}%", StrprefixText);
             //11/13/2009 addded wild ca
 
 
@@ -467,7 +535,7 @@ namespace Dating.Server.Data.Services
             //Dim _PostalCodeList As New List(Of PostalCodeList)()
             string PostalCode = "";
 
-            strCity = string.Format("{0}%", strCity);
+            strCity = string.Format("%{0}%", strCity);
             strCountryName = string.Format(strCountryName.Replace(" ", ""));
             // fix country names if theres a space
 
@@ -533,7 +601,7 @@ namespace Dating.Server.Data.Services
             List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();    
             strCountryName = string.Format(strCountryName.Replace(" ", ""));
             // fix country names if theres a space
-            //StrprefixText = string.Format("{0}%", StrprefixText);
+            //StrprefixText = string.Format("%{0}%", StrprefixText);
    
 
 
@@ -588,8 +656,6 @@ namespace Dating.Server.Data.Services
             return functionReturnValue;
         }
 
-
-
         public IQueryable<PostalCodeList> GetPostalCodesByCountryNameCityandStateProvinceDynamic(string strCountryName, string strCity, string strStateProvince)
         {
             IQueryable<PostalCodeList> functionReturnValue = default(IQueryable<PostalCodeList>);
@@ -599,7 +665,7 @@ namespace Dating.Server.Data.Services
             List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
             strCountryName = string.Format(strCountryName.Replace(" ", ""));
             // fix country names if theres a space
-            //StrprefixText = string.Format("{0}%", StrprefixText);
+            //StrprefixText = string.Format("%{0}%", StrprefixText);
 
 
 

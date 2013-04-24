@@ -19,95 +19,95 @@ namespace Dating.Server.Data.Services
     // Also consider adding roles to restrict access as appropriate.
     // [RequiresAuthentication]
     [EnableClientAccess()]
-    public partial class PostalDataService : LinqToEntitiesDomainService<PostalData2Entities>
+    public partial  class PostalDataService : LinqToEntitiesDomainService<PostalData2Entities>
     {
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Afghanistans' query.
-        public IQueryable<Afghanistan> GetAfghanistans()
+        // To support paging you will need to add ordering to the 'Afghanistan' query.
+        public IQueryable<Afghanistan> GetAfghanistan()
         {
-            return this.ObjectContext.Afghanistans;
+            return this.ObjectContext.Afghanistan;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'AmericanSamoas' query.
-        public IQueryable<AmericanSamoa> GetAmericanSamoas()
+        // To support paging you will need to add ordering to the 'AmericanSamoa' query.
+        public IQueryable<AmericanSamoa> GetAmericanSamoa()
         {
-            return this.ObjectContext.AmericanSamoas;
+            return this.ObjectContext.AmericanSamoa;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Andorras' query.
-        public IQueryable<Andorra> GetAndorras()
+        // To support paging you will need to add ordering to the 'Andorra' query.
+        public IQueryable<Andorra> GetAndorra()
         {
-            return this.ObjectContext.Andorras;
+            return this.ObjectContext.Andorra;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Angolas' query.
-        public IQueryable<Angola> GetAngolas()
+        // To support paging you will need to add ordering to the 'Angola' query.
+        public IQueryable<Angola> GetAngola()
         {
-            return this.ObjectContext.Angolas;
+            return this.ObjectContext.Angola;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'AntiguaandBarbudas' query.
-        public IQueryable<AntiguaandBarbuda> GetAntiguaandBarbudas()
+        // To support paging you will need to add ordering to the 'AntiguaandBarbuda' query.
+        public IQueryable<AntiguaandBarbuda> GetAntiguaandBarbuda()
         {
-            return this.ObjectContext.AntiguaandBarbudas;
+            return this.ObjectContext.AntiguaandBarbuda;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Argentinas' query.
-        public IQueryable<Argentina> GetArgentinas()
+        // To support paging you will need to add ordering to the 'Argentina' query.
+        public IQueryable<Argentina> GetArgentina()
         {
-            return this.ObjectContext.Argentinas;
+            return this.ObjectContext.Argentina;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Australias' query.
-        public IQueryable<Australia> GetAustralias()
+        // To support paging you will need to add ordering to the 'Australia' query.
+        public IQueryable<Australia> GetAustralia()
         {
-            return this.ObjectContext.Australias;
+            return this.ObjectContext.Australia;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Austrias' query.
-        public IQueryable<Austria> GetAustrias()
+        // To support paging you will need to add ordering to the 'Austria' query.
+        public IQueryable<Austria> GetAustria()
         {
-            return this.ObjectContext.Austrias;
+            return this.ObjectContext.Austria;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Azerbaijans' query.
-        public IQueryable<Azerbaijan> GetAzerbaijans()
+        // To support paging you will need to add ordering to the 'Azerbaijan' query.
+        public IQueryable<Azerbaijan> GetAzerbaijan()
         {
-            return this.ObjectContext.Azerbaijans;
+            return this.ObjectContext.Azerbaijan;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'Bahamas' query.
-        public IQueryable<Bahama> GetBahamas()
+        public IQueryable<Bahamas> GetBahamas()
         {
             return this.ObjectContext.Bahamas;
         }
@@ -115,26 +115,26 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Bahrains' query.
-        public IQueryable<Bahrain> GetBahrains()
+        // To support paging you will need to add ordering to the 'Bahrain' query.
+        public IQueryable<Bahrain> GetBahrain()
         {
-            return this.ObjectContext.Bahrains;
+            return this.ObjectContext.Bahrain;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Bangladeshes' query.
-        public IQueryable<Bangladesh> GetBangladeshes()
+        // To support paging you will need to add ordering to the 'Bangladesh' query.
+        public IQueryable<Bangladesh> GetBangladesh()
         {
-            return this.ObjectContext.Bangladeshes;
+            return this.ObjectContext.Bangladesh;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'Barbados' query.
-        public IQueryable<Barbado> GetBarbados()
+        public IQueryable<Barbados> GetBarbados()
         {
             return this.ObjectContext.Barbados;
         }
@@ -142,35 +142,44 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Belgiums' query.
-        public IQueryable<Belgium> GetBelgiums()
+        // To support paging you will need to add ordering to the 'Belgium' query.
+        public IQueryable<Belgium> GetBelgium()
         {
-            return this.ObjectContext.Belgiums;
+            return this.ObjectContext.Belgium;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Bermudas' query.
-        public IQueryable<Bermuda> GetBermudas()
+        // To support paging you will need to add ordering to the 'Belize' query.
+        public IQueryable<Belize> GetBelize()
         {
-            return this.ObjectContext.Bermudas;
+            return this.ObjectContext.Belize;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Brazils' query.
-        public IQueryable<Brazil> GetBrazils()
+        // To support paging you will need to add ordering to the 'Bermuda' query.
+        public IQueryable<Bermuda> GetBermuda()
         {
-            return this.ObjectContext.Brazils;
+            return this.ObjectContext.Bermuda;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Brazil' query.
+        public IQueryable<Brazil> GetBrazil()
+        {
+            return this.ObjectContext.Brazil;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'BritishVirginIslands' query.
-        public IQueryable<BritishVirginIsland> GetBritishVirginIslands()
+        public IQueryable<BritishVirginIslands> GetBritishVirginIslands()
         {
             return this.ObjectContext.BritishVirginIslands;
         }
@@ -178,35 +187,35 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Bulgarias' query.
-        public IQueryable<Bulgaria> GetBulgarias()
+        // To support paging you will need to add ordering to the 'Bulgaria' query.
+        public IQueryable<Bulgaria> GetBulgaria()
         {
-            return this.ObjectContext.Bulgarias;
+            return this.ObjectContext.Bulgaria;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Canadas' query.
-        public IQueryable<Canada> GetCanadas()
+        // To support paging you will need to add ordering to the 'Canada' query.
+        public IQueryable<Canada> GetCanada()
         {
-            return this.ObjectContext.Canadas;
+            return this.ObjectContext.Canada;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'CapeVerdes' query.
-        public IQueryable<CapeVerde> GetCapeVerdes()
+        // To support paging you will need to add ordering to the 'CapeVerde' query.
+        public IQueryable<CapeVerde> GetCapeVerde()
         {
-            return this.ObjectContext.CapeVerdes;
+            return this.ObjectContext.CapeVerde;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'CaymanIslands' query.
-        public IQueryable<CaymanIsland> GetCaymanIslands()
+        public IQueryable<CaymanIslands> GetCaymanIslands()
         {
             return this.ObjectContext.CaymanIslands;
         }
@@ -214,10 +223,37 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Chinas' query.
-        public IQueryable<China> GetChinas()
+        // To support paging you will need to add ordering to the 'Chile' query.
+        public IQueryable<Chile> GetChile()
         {
-            return this.ObjectContext.Chinas;
+            return this.ObjectContext.Chile;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'China' query.
+        public IQueryable<China> GetChina()
+        {
+            return this.ObjectContext.China;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Colombia' query.
+        public IQueryable<Colombia> GetColombia()
+        {
+            return this.ObjectContext.Colombia;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Costa_Rica' query.
+        public IQueryable<Costa_Rica> GetCosta_Rica()
+        {
+            return this.ObjectContext.Costa_Rica;
         }
 
         // TODO:
@@ -242,7 +278,7 @@ namespace Dating.Server.Data.Services
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'CountryCodes' query.
-        public IQueryable<CountryCode> GetCountryCodes()
+        public IQueryable<CountryCodes> GetCountryCodes()
         {
             return this.ObjectContext.CountryCodes;
         }
@@ -250,17 +286,26 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Croatias' query.
-        public IQueryable<Croatia> GetCroatias()
+        // To support paging you will need to add ordering to the 'Croatia' query.
+        public IQueryable<Croatia> GetCroatia()
         {
-            return this.ObjectContext.Croatias;
+            return this.ObjectContext.Croatia;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Cuba' query.
+        public IQueryable<Cuba> GetCuba()
+        {
+            return this.ObjectContext.Cuba;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'CustomRegions' query.
-        public IQueryable<CustomRegion> GetCustomRegions()
+        public IQueryable<CustomRegions> GetCustomRegions()
         {
             return this.ObjectContext.CustomRegions;
         }
@@ -269,7 +314,7 @@ namespace Dating.Server.Data.Services
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'Cyprus' query.
-        public IQueryable<Cypru> GetCyprus()
+        public IQueryable<Cyprus> GetCyprus()
         {
             return this.ObjectContext.Cyprus;
         }
@@ -277,53 +322,53 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'CzechRepublics' query.
-        public IQueryable<CzechRepublic> GetCzechRepublics()
+        // To support paging you will need to add ordering to the 'CzechRepublic' query.
+        public IQueryable<CzechRepublic> GetCzechRepublic()
         {
-            return this.ObjectContext.CzechRepublics;
+            return this.ObjectContext.CzechRepublic;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Denmarks' query.
-        public IQueryable<Denmark> GetDenmarks()
+        // To support paging you will need to add ordering to the 'Denmark' query.
+        public IQueryable<Denmark> GetDenmark()
         {
-            return this.ObjectContext.Denmarks;
+            return this.ObjectContext.Denmark;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'DominicanRepublics' query.
-        public IQueryable<DominicanRepublic> GetDominicanRepublics()
+        // To support paging you will need to add ordering to the 'DominicanRepublic' query.
+        public IQueryable<DominicanRepublic> GetDominicanRepublic()
         {
-            return this.ObjectContext.DominicanRepublics;
+            return this.ObjectContext.DominicanRepublic;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Egypts' query.
-        public IQueryable<Egypt> GetEgypts()
+        // To support paging you will need to add ordering to the 'Egypt' query.
+        public IQueryable<Egypt> GetEgypt()
         {
-            return this.ObjectContext.Egypts;
+            return this.ObjectContext.Egypt;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Eritreas' query.
-        public IQueryable<Eritrea> GetEritreas()
+        // To support paging you will need to add ordering to the 'Eritrea' query.
+        public IQueryable<Eritrea> GetEritrea()
         {
-            return this.ObjectContext.Eritreas;
+            return this.ObjectContext.Eritrea;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'FalklandIslands' query.
-        public IQueryable<FalklandIsland> GetFalklandIslands()
+        public IQueryable<FalklandIslands> GetFalklandIslands()
         {
             return this.ObjectContext.FalklandIslands;
         }
@@ -331,143 +376,134 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Fijis' query.
-        public IQueryable<Fiji> GetFijis()
+        // To support paging you will need to add ordering to the 'Fiji' query.
+        public IQueryable<Fiji> GetFiji()
         {
-            return this.ObjectContext.Fijis;
+            return this.ObjectContext.Fiji;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Finlands' query.
-        public IQueryable<Finland> GetFinlands()
+        // To support paging you will need to add ordering to the 'Finland' query.
+        public IQueryable<Finland> GetFinland()
         {
-            return this.ObjectContext.Finlands;
+            return this.ObjectContext.Finland;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Frances' query.
-        public IQueryable<France> GetFrances()
+        // To support paging you will need to add ordering to the 'France' query.
+        public IQueryable<France> GetFrance()
         {
-            return this.ObjectContext.Frances;
+            return this.ObjectContext.France;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'FrenchGuianas' query.
-        public IQueryable<FrenchGuiana> GetFrenchGuianas()
+        // To support paging you will need to add ordering to the 'FrenchGuiana' query.
+        public IQueryable<FrenchGuiana> GetFrenchGuiana()
         {
-            return this.ObjectContext.FrenchGuianas;
+            return this.ObjectContext.FrenchGuiana;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'FrenchPolynesias' query.
-        public IQueryable<FrenchPolynesia> GetFrenchPolynesias()
+        // To support paging you will need to add ordering to the 'FrenchPolynesia' query.
+        public IQueryable<FrenchPolynesia> GetFrenchPolynesia()
         {
-            return this.ObjectContext.FrenchPolynesias;
+            return this.ObjectContext.FrenchPolynesia;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Germanies' query.
-        public IQueryable<Germany> GetGermanies()
+        // To support paging you will need to add ordering to the 'Germany' query.
+        public IQueryable<Germany> GetGermany()
         {
-            return this.ObjectContext.Germanies;
+            return this.ObjectContext.Germany;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Ghanas' query.
-        public IQueryable<Ghana> GetGhanas()
+        // To support paging you will need to add ordering to the 'Ghana' query.
+        public IQueryable<Ghana> GetGhana()
         {
-            return this.ObjectContext.Ghanas;
+            return this.ObjectContext.Ghana;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Gibraltars' query.
-        public IQueryable<Gibraltar> GetGibraltars()
+        // To support paging you will need to add ordering to the 'Gibraltar' query.
+        public IQueryable<Gibraltar> GetGibraltar()
         {
-            return this.ObjectContext.Gibraltars;
+            return this.ObjectContext.Gibraltar;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'GreatBritains' query.
-        public IQueryable<GreatBritain> GetGreatBritains()
+        // To support paging you will need to add ordering to the 'Greenland' query.
+        public IQueryable<Greenland> GetGreenland()
         {
-            return this.ObjectContext.GreatBritains;
+            return this.ObjectContext.Greenland;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Greenlands' query.
-        public IQueryable<Greenland> GetGreenlands()
+        // To support paging you will need to add ordering to the 'Guam' query.
+        public IQueryable<Guam> GetGuam()
         {
-            return this.ObjectContext.Greenlands;
+            return this.ObjectContext.Guam;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Guams' query.
-        public IQueryable<Guam> GetGuams()
+        // To support paging you will need to add ordering to the 'Guatemala' query.
+        public IQueryable<Guatemala> GetGuatemala()
         {
-            return this.ObjectContext.Guams;
+            return this.ObjectContext.Guatemala;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Guatemalas' query.
-        public IQueryable<Guatemala> GetGuatemalas()
+        // To support paging you will need to add ordering to the 'Guernsey' query.
+        public IQueryable<Guernsey> GetGuernsey()
         {
-            return this.ObjectContext.Guatemalas;
+            return this.ObjectContext.Guernsey;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Guernseys' query.
-        public IQueryable<Guernsey> GetGuernseys()
+        // To support paging you will need to add ordering to the 'Guyana' query.
+        public IQueryable<Guyana> GetGuyana()
         {
-            return this.ObjectContext.Guernseys;
+            return this.ObjectContext.Guyana;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Guyanas' query.
-        public IQueryable<Guyana> GetGuyanas()
+        // To support paging you will need to add ordering to the 'Haiti' query.
+        public IQueryable<Haiti> GetHaiti()
         {
-            return this.ObjectContext.Guyanas;
-        }
-
-        // TODO:
-        // Consider constraining the results of your query method.  If you need additional input you can
-        // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Haitis' query.
-        public IQueryable<Haiti> GetHaitis()
-        {
-            return this.ObjectContext.Haitis;
+            return this.ObjectContext.Haiti;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'Honduras' query.
-        public IQueryable<Hondura> GetHonduras()
+        public IQueryable<Honduras> GetHonduras()
         {
             return this.ObjectContext.Honduras;
         }
@@ -475,188 +511,233 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'HongKongs' query.
-        public IQueryable<HongKong> GetHongKongs()
+        // To support paging you will need to add ordering to the 'HongKong' query.
+        public IQueryable<HongKong> GetHongKong()
         {
-            return this.ObjectContext.HongKongs;
+            return this.ObjectContext.HongKong;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Hungaries' query.
-        public IQueryable<Hungary> GetHungaries()
+        // To support paging you will need to add ordering to the 'Hungary' query.
+        public IQueryable<Hungary> GetHungary()
         {
-            return this.ObjectContext.Hungaries;
+            return this.ObjectContext.Hungary;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Icelands' query.
-        public IQueryable<Iceland> GetIcelands()
+        // To support paging you will need to add ordering to the 'Iceland' query.
+        public IQueryable<Iceland> GetIceland()
         {
-            return this.ObjectContext.Icelands;
+            return this.ObjectContext.Iceland;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Indias' query.
-        public IQueryable<India> GetIndias()
+        // To support paging you will need to add ordering to the 'India' query.
+        public IQueryable<India> GetIndia()
         {
-            return this.ObjectContext.Indias;
+            return this.ObjectContext.India;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Indonesias' query.
-        public IQueryable<Indonesia> GetIndonesias()
+        // To support paging you will need to add ordering to the 'Indonesia' query.
+        public IQueryable<Indonesia> GetIndonesia()
         {
-            return this.ObjectContext.Indonesias;
+            return this.ObjectContext.Indonesia;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Iraqs' query.
-        public IQueryable<Iraq> GetIraqs()
+        // To support paging you will need to add ordering to the 'Iraq' query.
+        public IQueryable<Iraq> GetIraq()
         {
-            return this.ObjectContext.Iraqs;
+            return this.ObjectContext.Iraq;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'IsleOfMen' query.
-        public IQueryable<IsleOfMan> GetIsleOfMen()
+        // To support paging you will need to add ordering to the 'Ireland' query.
+        public IQueryable<Ireland> GetIreland()
         {
-            return this.ObjectContext.IsleOfMen;
+            return this.ObjectContext.Ireland;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Israels' query.
-        public IQueryable<Israel> GetIsraels()
+        // To support paging you will need to add ordering to the 'IsleOfMan' query.
+        public IQueryable<IsleOfMan> GetIsleOfMan()
         {
-            return this.ObjectContext.Israels;
+            return this.ObjectContext.IsleOfMan;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Italies' query.
-        public IQueryable<Italy> GetItalies()
+        // To support paging you will need to add ordering to the 'Israel' query.
+        public IQueryable<Israel> GetIsrael()
         {
-            return this.ObjectContext.Italies;
+            return this.ObjectContext.Israel;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Jamaicas' query.
-        public IQueryable<Jamaica> GetJamaicas()
+        // To support paging you will need to add ordering to the 'Italy' query.
+        public IQueryable<Italy> GetItaly()
         {
-            return this.ObjectContext.Jamaicas;
+            return this.ObjectContext.Italy;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Japans' query.
-        public IQueryable<Japan> GetJapans()
+        // To support paging you will need to add ordering to the 'IvoryCoast' query.
+        public IQueryable<IvoryCoast> GetIvoryCoast()
         {
-            return this.ObjectContext.Japans;
+            return this.ObjectContext.IvoryCoast;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Jerseys' query.
-        public IQueryable<Jersey> GetJerseys()
+        // To support paging you will need to add ordering to the 'Jamaica' query.
+        public IQueryable<Jamaica> GetJamaica()
         {
-            return this.ObjectContext.Jerseys;
+            return this.ObjectContext.Jamaica;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Jordans' query.
-        public IQueryable<Jordan> GetJordans()
+        // To support paging you will need to add ordering to the 'Japan' query.
+        public IQueryable<Japan> GetJapan()
         {
-            return this.ObjectContext.Jordans;
+            return this.ObjectContext.Japan;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Kenyas' query.
-        public IQueryable<Kenya> GetKenyas()
+        // To support paging you will need to add ordering to the 'Jersey' query.
+        public IQueryable<Jersey> GetJersey()
         {
-            return this.ObjectContext.Kenyas;
+            return this.ObjectContext.Jersey;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Lebanons' query.
-        public IQueryable<Lebanon> GetLebanons()
+        // To support paging you will need to add ordering to the 'Jordan' query.
+        public IQueryable<Jordan> GetJordan()
         {
-            return this.ObjectContext.Lebanons;
+            return this.ObjectContext.Jordan;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Liberias' query.
-        public IQueryable<Liberia> GetLiberias()
+        // To support paging you will need to add ordering to the 'Kenya' query.
+        public IQueryable<Kenya> GetKenya()
         {
-            return this.ObjectContext.Liberias;
+            return this.ObjectContext.Kenya;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Liechtensteins' query.
-        public IQueryable<Liechtenstein> GetLiechtensteins()
+        // To support paging you will need to add ordering to the 'Kiribati' query.
+        public IQueryable<Kiribati> GetKiribati()
         {
-            return this.ObjectContext.Liechtensteins;
+            return this.ObjectContext.Kiribati;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Luxembourgs' query.
-        public IQueryable<Luxembourg> GetLuxembourgs()
+        // To support paging you will need to add ordering to the 'Lebanon' query.
+        public IQueryable<Lebanon> GetLebanon()
         {
-            return this.ObjectContext.Luxembourgs;
+            return this.ObjectContext.Lebanon;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Macedonias' query.
-        public IQueryable<Macedonia> GetMacedonias()
+        // To support paging you will need to add ordering to the 'Liberia' query.
+        public IQueryable<Liberia> GetLiberia()
         {
-            return this.ObjectContext.Macedonias;
+            return this.ObjectContext.Liberia;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Madagascars' query.
-        public IQueryable<Madagascar> GetMadagascars()
+        // To support paging you will need to add ordering to the 'Liechtenstein' query.
+        public IQueryable<Liechtenstein> GetLiechtenstein()
         {
-            return this.ObjectContext.Madagascars;
+            return this.ObjectContext.Liechtenstein;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Luxembourg' query.
+        public IQueryable<Luxembourg> GetLuxembourg()
+        {
+            return this.ObjectContext.Luxembourg;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Macedonia' query.
+        public IQueryable<Macedonia> GetMacedonia()
+        {
+            return this.ObjectContext.Macedonia;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Madagascar' query.
+        public IQueryable<Madagascar> GetMadagascar()
+        {
+            return this.ObjectContext.Madagascar;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Malaysia' query.
+        public IQueryable<Malaysia> GetMalaysia()
+        {
+            return this.ObjectContext.Malaysia;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Malta' query.
+        public IQueryable<Malta> GetMalta()
+        {
+            return this.ObjectContext.Malta;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'MarshallIslands' query.
-        public IQueryable<MarshallIsland> GetMarshallIslands()
+        public IQueryable<MarshallIslands> GetMarshallIslands()
         {
             return this.ObjectContext.MarshallIslands;
         }
@@ -664,62 +745,71 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Martiniques' query.
-        public IQueryable<Martinique> GetMartiniques()
+        // To support paging you will need to add ordering to the 'Martinique' query.
+        public IQueryable<Martinique> GetMartinique()
         {
-            return this.ObjectContext.Martiniques;
+            return this.ObjectContext.Martinique;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Mayottes' query.
-        public IQueryable<Mayotte> GetMayottes()
+        // To support paging you will need to add ordering to the 'Mayotte' query.
+        public IQueryable<Mayotte> GetMayotte()
         {
-            return this.ObjectContext.Mayottes;
+            return this.ObjectContext.Mayotte;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Mexicoes' query.
-        public IQueryable<Mexico> GetMexicoes()
+        // To support paging you will need to add ordering to the 'Mexico' query.
+        public IQueryable<Mexico> GetMexico()
         {
-            return this.ObjectContext.Mexicoes;
+            return this.ObjectContext.Mexico;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Moldovas' query.
-        public IQueryable<Moldova> GetMoldovas()
+        // To support paging you will need to add ordering to the 'Moldova' query.
+        public IQueryable<Moldova> GetMoldova()
         {
-            return this.ObjectContext.Moldovas;
+            return this.ObjectContext.Moldova;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Monacoes' query.
-        public IQueryable<Monaco> GetMonacoes()
+        // To support paging you will need to add ordering to the 'Monaco' query.
+        public IQueryable<Monaco> GetMonaco()
         {
-            return this.ObjectContext.Monacoes;
+            return this.ObjectContext.Monaco;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Moroccoes' query.
-        public IQueryable<Morocco> GetMoroccoes()
+        // To support paging you will need to add ordering to the 'Morocco' query.
+        public IQueryable<Morocco> GetMorocco()
         {
-            return this.ObjectContext.Moroccoes;
+            return this.ObjectContext.Morocco;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Nepal' query.
+        public IQueryable<Nepal> GetNepal()
+        {
+            return this.ObjectContext.Nepal;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'Netherlands' query.
-        public IQueryable<Netherland> GetNetherlands()
+        public IQueryable<Netherlands> GetNetherlands()
         {
             return this.ObjectContext.Netherlands;
         }
@@ -728,7 +818,7 @@ namespace Dating.Server.Data.Services
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'NetherlandsAntilles' query.
-        public IQueryable<NetherlandsAntille> GetNetherlandsAntilles()
+        public IQueryable<NetherlandsAntilles> GetNetherlandsAntilles()
         {
             return this.ObjectContext.NetherlandsAntilles;
         }
@@ -736,26 +826,26 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'NewZealands' query.
-        public IQueryable<NewZealand> GetNewZealands()
+        // To support paging you will need to add ordering to the 'NewZealand' query.
+        public IQueryable<NewZealand> GetNewZealand()
         {
-            return this.ObjectContext.NewZealands;
+            return this.ObjectContext.NewZealand;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Nigerias' query.
-        public IQueryable<Nigeria> GetNigerias()
+        // To support paging you will need to add ordering to the 'Nigeria' query.
+        public IQueryable<Nigeria> GetNigeria()
         {
-            return this.ObjectContext.Nigerias;
+            return this.ObjectContext.Nigeria;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'NorthernMarianaIslands' query.
-        public IQueryable<NorthernMarianaIsland> GetNorthernMarianaIslands()
+        public IQueryable<NorthernMarianaIslands> GetNorthernMarianaIslands()
         {
             return this.ObjectContext.NorthernMarianaIslands;
         }
@@ -763,35 +853,44 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Norways' query.
-        public IQueryable<Norway> GetNorways()
+        // To support paging you will need to add ordering to the 'Norway' query.
+        public IQueryable<Norway> GetNorway()
         {
-            return this.ObjectContext.Norways;
+            return this.ObjectContext.Norway;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Pakistans' query.
-        public IQueryable<Pakistan> GetPakistans()
+        // To support paging you will need to add ordering to the 'Pakistan' query.
+        public IQueryable<Pakistan> GetPakistan()
         {
-            return this.ObjectContext.Pakistans;
+            return this.ObjectContext.Pakistan;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'PapuaNewGuineas' query.
-        public IQueryable<PapuaNewGuinea> GetPapuaNewGuineas()
+        // To support paging you will need to add ordering to the 'PapuaNewGuinea' query.
+        public IQueryable<PapuaNewGuinea> GetPapuaNewGuinea()
         {
-            return this.ObjectContext.PapuaNewGuineas;
+            return this.ObjectContext.PapuaNewGuinea;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Peru' query.
+        public IQueryable<Peru> GetPeru()
+        {
+            return this.ObjectContext.Peru;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'Philippines' query.
-        public IQueryable<Philippine> GetPhilippines()
+        public IQueryable<Philippines> GetPhilippines()
         {
             return this.ObjectContext.Philippines;
         }
@@ -799,116 +898,125 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Polands' query.
-        public IQueryable<Poland> GetPolands()
+        // To support paging you will need to add ordering to the 'Poland' query.
+        public IQueryable<Poland> GetPoland()
         {
-            return this.ObjectContext.Polands;
+            return this.ObjectContext.Poland;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Portugals' query.
-        public IQueryable<Portugal> GetPortugals()
+        // To support paging you will need to add ordering to the 'Portugal' query.
+        public IQueryable<Portugal> GetPortugal()
         {
-            return this.ObjectContext.Portugals;
+            return this.ObjectContext.Portugal;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'PuertoRicoes' query.
-        public IQueryable<PuertoRico> GetPuertoRicoes()
+        // To support paging you will need to add ordering to the 'PuertoRico' query.
+        public IQueryable<PuertoRico> GetPuertoRico()
         {
-            return this.ObjectContext.PuertoRicoes;
+            return this.ObjectContext.PuertoRico;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Qatars' query.
-        public IQueryable<Qatar> GetQatars()
+        // To support paging you will need to add ordering to the 'Qatar' query.
+        public IQueryable<Qatar> GetQatar()
         {
-            return this.ObjectContext.Qatars;
+            return this.ObjectContext.Qatar;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Reunions' query.
-        public IQueryable<Reunion> GetReunions()
+        // To support paging you will need to add ordering to the 'Reunion' query.
+        public IQueryable<Reunion> GetReunion()
         {
-            return this.ObjectContext.Reunions;
+            return this.ObjectContext.Reunion;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Russias' query.
-        public IQueryable<Russia> GetRussias()
+        // To support paging you will need to add ordering to the 'Russia' query.
+        public IQueryable<Russia> GetRussia()
         {
-            return this.ObjectContext.Russias;
+            return this.ObjectContext.Russia;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'SaintPierreandMiquelons' query.
-        public IQueryable<SaintPierreandMiquelon> GetSaintPierreandMiquelons()
+        // To support paging you will need to add ordering to the 'SaintPierreandMiquelon' query.
+        public IQueryable<SaintPierreandMiquelon> GetSaintPierreandMiquelon()
         {
-            return this.ObjectContext.SaintPierreandMiquelons;
+            return this.ObjectContext.SaintPierreandMiquelon;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Samoas' query.
-        public IQueryable<Samoa> GetSamoas()
+        // To support paging you will need to add ordering to the 'SaintVincentandtheGrenadines' query.
+        public IQueryable<SaintVincentandtheGrenadines> GetSaintVincentandtheGrenadines()
         {
-            return this.ObjectContext.Samoas;
+            return this.ObjectContext.SaintVincentandtheGrenadines;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'SaudiArabias' query.
-        public IQueryable<SaudiArabia> GetSaudiArabias()
+        // To support paging you will need to add ordering to the 'Samoa' query.
+        public IQueryable<Samoa> GetSamoa()
         {
-            return this.ObjectContext.SaudiArabias;
+            return this.ObjectContext.Samoa;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'SiriLankas' query.
-        public IQueryable<SiriLanka> GetSiriLankas()
+        // To support paging you will need to add ordering to the 'SaudiArabia' query.
+        public IQueryable<SaudiArabia> GetSaudiArabia()
         {
-            return this.ObjectContext.SiriLankas;
+            return this.ObjectContext.SaudiArabia;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Slovakias' query.
-        public IQueryable<Slovakia> GetSlovakias()
+        // To support paging you will need to add ordering to the 'Senegal' query.
+        public IQueryable<Senegal> GetSenegal()
         {
-            return this.ObjectContext.Slovakias;
+            return this.ObjectContext.Senegal;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Slovenias' query.
-        public IQueryable<Slovenia> GetSlovenias()
+        // To support paging you will need to add ordering to the 'Slovakia' query.
+        public IQueryable<Slovakia> GetSlovakia()
         {
-            return this.ObjectContext.Slovenias;
+            return this.ObjectContext.Slovakia;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Slovenia' query.
+        public IQueryable<Slovenia> GetSlovenia()
+        {
+            return this.ObjectContext.Slovenia;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'SolomonIslands' query.
-        public IQueryable<SolomonIsland> GetSolomonIslands()
+        public IQueryable<SolomonIslands> GetSolomonIslands()
         {
             return this.ObjectContext.SolomonIslands;
         }
@@ -916,53 +1024,62 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'SouthAfricas' query.
-        public IQueryable<SouthAfrica> GetSouthAfricas()
+        // To support paging you will need to add ordering to the 'SouthAfrica' query.
+        public IQueryable<SouthAfrica> GetSouthAfrica()
         {
-            return this.ObjectContext.SouthAfricas;
+            return this.ObjectContext.SouthAfrica;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Spains' query.
-        public IQueryable<Spain> GetSpains()
+        // To support paging you will need to add ordering to the 'Spain' query.
+        public IQueryable<Spain> GetSpain()
         {
-            return this.ObjectContext.Spains;
+            return this.ObjectContext.Spain;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Swedens' query.
-        public IQueryable<Sweden> GetSwedens()
+        // To support paging you will need to add ordering to the 'SriLanka' query.
+        public IQueryable<SriLanka> GetSriLanka()
         {
-            return this.ObjectContext.Swedens;
+            return this.ObjectContext.SriLanka;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Switzerlands' query.
-        public IQueryable<Switzerland> GetSwitzerlands()
+        // To support paging you will need to add ordering to the 'Sweden' query.
+        public IQueryable<Sweden> GetSweden()
         {
-            return this.ObjectContext.Switzerlands;
+            return this.ObjectContext.Sweden;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Syrias' query.
-        public IQueryable<Syria> GetSyrias()
+        // To support paging you will need to add ordering to the 'Switzerland' query.
+        public IQueryable<Switzerland> GetSwitzerland()
         {
-            return this.ObjectContext.Syrias;
+            return this.ObjectContext.Switzerland;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Syria' query.
+        public IQueryable<Syria> GetSyria()
+        {
+            return this.ObjectContext.Syria;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'sysdiagrams' query.
-        public IQueryable<sysdiagram> GetSysdiagrams()
+        public IQueryable<sysdiagrams> GetSysdiagrams()
         {
             return this.ObjectContext.sysdiagrams;
         }
@@ -970,53 +1087,71 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Taiwans' query.
-        public IQueryable<Taiwan> GetTaiwans()
+        // To support paging you will need to add ordering to the 'Taiwan' query.
+        public IQueryable<Taiwan> GetTaiwan()
         {
-            return this.ObjectContext.Taiwans;
+            return this.ObjectContext.Taiwan;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Thailands' query.
-        public IQueryable<Thailand> GetThailands()
+        // To support paging you will need to add ordering to the 'Tanzania' query.
+        public IQueryable<Tanzania> GetTanzania()
         {
-            return this.ObjectContext.Thailands;
+            return this.ObjectContext.Tanzania;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Turkeys' query.
-        public IQueryable<Turkey> GetTurkeys()
+        // To support paging you will need to add ordering to the 'Thailand' query.
+        public IQueryable<Thailand> GetThailand()
         {
-            return this.ObjectContext.Turkeys;
+            return this.ObjectContext.Thailand;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Ugandas' query.
-        public IQueryable<Uganda> GetUgandas()
+        // To support paging you will need to add ordering to the 'TrinidadandTobago' query.
+        public IQueryable<TrinidadandTobago> GetTrinidadandTobago()
         {
-            return this.ObjectContext.Ugandas;
+            return this.ObjectContext.TrinidadandTobago;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Ukraines' query.
-        public IQueryable<Ukraine> GetUkraines()
+        // To support paging you will need to add ordering to the 'Turkey' query.
+        public IQueryable<Turkey> GetTurkey()
         {
-            return this.ObjectContext.Ukraines;
+            return this.ObjectContext.Turkey;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Uganda' query.
+        public IQueryable<Uganda> GetUganda()
+        {
+            return this.ObjectContext.Uganda;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Ukraine' query.
+        public IQueryable<Ukraine> GetUkraine()
+        {
+            return this.ObjectContext.Ukraine;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'UnitedArabEmirates' query.
-        public IQueryable<UnitedArabEmirate> GetUnitedArabEmirates()
+        public IQueryable<UnitedArabEmirates> GetUnitedArabEmirates()
         {
             return this.ObjectContext.UnitedArabEmirates;
         }
@@ -1024,8 +1159,17 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'UnitedKingdom' query.
+        public IQueryable<UnitedKingdom> GetUnitedKingdom()
+        {
+            return this.ObjectContext.UnitedKingdom;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'UnitedStates' query.
-        public IQueryable<UnitedState> GetUnitedStates()
+        public IQueryable<UnitedStates> GetUnitedStates()
         {
             return this.ObjectContext.UnitedStates;
         }
@@ -1034,7 +1178,7 @@ namespace Dating.Server.Data.Services
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'USVirginIslands' query.
-        public IQueryable<USVirginIsland> GetUSVirginIslands()
+        public IQueryable<USVirginIslands> GetUSVirginIslands()
         {
             return this.ObjectContext.USVirginIslands;
         }
@@ -1042,17 +1186,26 @@ namespace Dating.Server.Data.Services
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'Vietnams' query.
-        public IQueryable<Vietnam> GetVietnams()
+        // To support paging you will need to add ordering to the 'Venezuela' query.
+        public IQueryable<Venezuela> GetVenezuela()
         {
-            return this.ObjectContext.Vietnams;
+            return this.ObjectContext.Venezuela;
+        }
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'Vietnam' query.
+        public IQueryable<Vietnam> GetVietnam()
+        {
+            return this.ObjectContext.Vietnam;
         }
 
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'Yemen' query.
-        public IQueryable<Yeman> GetYemen()
+        public IQueryable<Yemen> GetYemen()
         {
             return this.ObjectContext.Yemen;
         }

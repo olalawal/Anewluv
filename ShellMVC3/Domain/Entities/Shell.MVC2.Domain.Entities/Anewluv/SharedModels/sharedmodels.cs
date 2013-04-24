@@ -69,9 +69,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class city
     {
         [DataMember]
-        public string cityvalue { get; set; }
-        [DataMember]
-        public string cityindex { get; set; }
+        public string cityvalue { get; set; }    
         [DataMember]
         public bool selected { get; set; }
     }
@@ -110,12 +108,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     [DataContract]
     public class citystateprovince
     {
+     
         [DataMember]
-        public string city { get; set; }
-        [DataMember]
-        public string citystateprovinceindex { get; set; }
-        [DataMember]
-        public string stateprovince { get; set; }
+        public string  citystateprovincevalue { get; set; }    
         [DataMember]
         public bool selected { get; set; }
     }
@@ -125,9 +120,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
     public class postalcode
     {
         [DataMember]
-        public string postalcodevalue { get; set; }
-        [DataMember]
-        public string postalcodeindex { get; set; }
+        public string postalcodevalue { get; set; }     
         [DataMember]
         public bool selected { get; set; }
     }
@@ -142,9 +135,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         [DataMember]
         public double? lattitude { get; set; }
         [DataMember]     
-        public string stateprovince { get; set; }
-        [DataMember]
-        public string gpsdataindex { get; set; }
+        public string stateprovince { get; set; }      
         [DataMember]
         public bool selected { get; set; }
     }

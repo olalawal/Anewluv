@@ -12,10 +12,10 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     [Serializable]
     public class PhotoUploadViewModel
     {
-        public PhotoUploadViewModel()
-        {
+        //public PhotoUploadViewModel()
+        //{
 
-        }
+        //}
         [DataMember]
         public List<PhotoUploadModel> photosuploaded { get; set; }
         [DataMember]

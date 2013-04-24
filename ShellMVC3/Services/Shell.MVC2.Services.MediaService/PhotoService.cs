@@ -13,6 +13,7 @@ using Shell.MVC2.Services.Contracts;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using System.Net;
 using System.ServiceModel.Activation;
+using Shell.MVC2.Services.Contracts.ServiceResponse;
 
 namespace Shell.MVC2.Services.Media
 {
@@ -134,7 +135,7 @@ namespace Shell.MVC2.Services.Media
 
         //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
         //since photo is only a row no big deal if duplicates but since conversion is required we must roll back if the photo already exists
-        public bool addphotos(PhotoUploadViewModel model)
+        public AnewluvResponse addphotos(PhotoUploadViewModel model)
         {
             return _photorepo.addphotos(model);
         }

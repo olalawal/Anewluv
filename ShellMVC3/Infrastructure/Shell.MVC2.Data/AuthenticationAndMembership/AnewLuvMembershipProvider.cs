@@ -565,7 +565,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                      int  countryID = _georepository.getcountryidbycountryname(u.country);
 
                         //get the longidtue and latttude 
-                     gpsdata _GpsData =  _georepository.getgpsdatasinglebycitycountryandpostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
+                     gpsdata _GpsData =  _georepository.getgpsdatabycitycountrypostalcode (u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
 
 
 

@@ -175,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MisFunctions.cs" />
+    <Compile Include="OutputTypes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\ErrorLoggingService\Reference.cs">
@@ -192,6 +193,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Testlist.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -269,6 +271,10 @@
     <ProjectReference Include="..\..\Domain\Entities\Shell.MVC2.Domain.Entities\Shell.MVC2.Domain.Entities.csproj">
       <Project>{3413A2BC-A142-4383-A9BD-72145457C6CB}</Project>
       <Name>Shell.MVC2.Domain.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tests\Shell.MVC2.Tests.Common\Shell.MVC2.Tests.Common.csproj">
+      <Project>{BF35650C-A0C7-47EE-885A-DB2A1A9F5893}</Project>
+      <Name>Shell.MVC2.Tests.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -349,6 +355,9 @@
     <Content Include="Scripts\jquery-1.6.4.min.js" />
     <Content Include="Scripts\jquery.signalR-1.0.0.js" />
     <Content Include="Scripts\jquery.signalR-1.0.0.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

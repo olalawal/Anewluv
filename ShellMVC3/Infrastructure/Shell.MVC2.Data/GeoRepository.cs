@@ -23,9 +23,9 @@ namespace Shell.MVC2.Data
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "GeoService" in code, svc and config file together.
     public class GeoRepository : GeoRepositoryBase ,  IGeoRepository
     {
-       // private PostalData2Entities _postalcontext;
+       // private PostalDataService _postalcontext;
 
-        public GeoRepository(PostalData2Entities postalcontext)
+        public GeoRepository(PostalDataService  postalcontext)
             : base(postalcontext)
         {
            
@@ -39,7 +39,7 @@ namespace Shell.MVC2.Data
         {
             try
             {
-                return (from p in _postalcontext.Country_PostalCode_List
+                return (from p in _postalcontext.GetCountry_PostalCode_List()
                         where p.CountryID  == countryid
                         select p.CountryName ).FirstOrDefault();
                 //return postaldataservicecontext.GetcountryNameBycountryID(profiledata.countryid);
@@ -66,7 +66,7 @@ namespace Shell.MVC2.Data
             //attmept to get postal postalcode if it is empty
 
             model.GeoRegisterModel.ziporpostalcode = (model.GeoRegisterModel.ziporpostalcode == null) ? 
-           this.getgeopostalcodebycountrynameandcity(model.GeoRegisterModel.country, tempcityAndStateProvince[0]).Where(p=>p.postalcodevalue  == model.GeoRegisterModel.ziporpostalcode ).FirstOrDefault().postalcodevalue  :
+           this.getpostalcodesbycountrynamecity(model.GeoRegisterModel.country, tempcityAndStateProvince[0]).Where(p=>p.postalcodevalue  == model.GeoRegisterModel.ziporpostalcode ).FirstOrDefault().postalcodevalue  :
            model.GeoRegisterModel.ziporpostalcode;
             model.GeoRegisterModel.stateprovince = ((tempcityAndStateProvince.Count() > 1)) ? tempcityAndStateProvince[1] : "NA";
             //countryID = postaldataservicecontext.GetcountryIdBycountryName(model.GeoRegisterModel.country);
@@ -86,7 +86,7 @@ namespace Shell.MVC2.Data
             //get the longidtue and latttude 
             //1-11-2011 postal code and city are flipped by the way not this function should be renamed
             //TO DO rename this function.                  
-            gpsData = this.getgpsdatasinglebycitycountryandpostalcode(model.GeoRegisterModel.country, model.GeoRegisterModel.ziporpostalcode, tempcityAndStateProvince[0]);
+            gpsData = this.getgpsdatabycitycountrypostalcode(model.GeoRegisterModel.country, model.GeoRegisterModel.ziporpostalcode, tempcityAndStateProvince[0]);
 
 
             model.GeoRegisterModel.lattitude  = (gpsData != null) ? gpsData.lattitude   : 0;
@@ -130,7 +130,43 @@ namespace Shell.MVC2.Data
                new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
-        }      
+        }
+        public List<country> getcountrylist()
+        {
+
+            try
+            {
+#if DISCONECTED
+                       
+                        List<country> countrylist = new List<country>();
+                        countrylist.Add(new country { countryvalue = "United", countryindex = "44", selected = false });
+                        countrylist.Add(new country { countryvalue = "Canada", countryindex = "43", selected = false });
+                        return countrylist;
+
+#else
+                //List<country> tmplist = new List<country>();
+                //// Loop over the int List and modify it.
+                ////insert the first one as ANY
+                //tmplist.Add(new country { id = "0", name  = "Any" });
+                //foreach (countrypostalcode item in this.getcountry_postalcode_listandorderbycountry())
+                //{
+                //    var currentcountry = new country { id = item.id .ToString(),  name = item.name   };
+                //    tmplist.Add(currentcountry);
+                //}
+                //return tmplist;
+                return CachingFactory.SharedObjectHelper.getcountrylist(_postalcontext);
+
+#endif
+            }
+            catch (Exception ex)
+            {
+
+                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                throw convertedexcption;
+            }
+
+        }
         /// <summary>
         /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
         /// </summary>
@@ -143,7 +179,7 @@ namespace Shell.MVC2.Data
             {
                 List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
             //Dim ctx As New Entities()
-            myQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName  == countryname).ToList();
+            myQuery = _postalcontext.GetCountry_PostalCode_List().ToList().Where(p => p.CountryName  == countryname).ToList();
 
             return (myQuery.Count > 0 ? true : false);
           //  return myQuery.FirstOrDefault().PostalCodes.Value;
@@ -164,7 +200,7 @@ namespace Shell.MVC2.Data
             {
                 List<Country_PostalCode_List> countryCodeQuery = default(List<Country_PostalCode_List>);
                  //3-18-2013 olawal added code to remove the the spaces when we test
-            countryCodeQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName .Replace(" ","") == countryname).ToList();
+            countryCodeQuery = _postalcontext.GetCountry_PostalCode_List().ToList().Where(p => p.CountryName .Replace(" ","") == countryname).ToList();
 
             if (countryCodeQuery.Count() > 0)
             {
@@ -186,13 +222,13 @@ namespace Shell.MVC2.Data
         }
         //Dynamic LINQ to Entites quries 
         //*****************************************************************************************************************************************
-        public List<citystateprovince> getcitylistdynamic(string countryname, string postalcode, string prefixtext)
+        public List<citystateprovince> getcitystateprovincelistbycountrynamepostalcodefilter(string countryname, string postalcode, string filter)
         {
             try{
 
-                var citylist = _postalcontext.GetCityListByCountryPostalCode(countryname, postalcode,prefixtext ,false );
-
-                return ((from s in citylist.ToList() select new citystateprovince {  city = s.City ,stateprovince = s.State_Province }).ToList());
+                var citylist = _postalcontext.GetCityListDynamic (countryname, postalcode,filter );
+                int index = 0;
+                return ((from s in citylist.ToList() select new citystateprovince { citystateprovincevalue = s.City + "," + s.State_Province }).ToList());
          
             }
            catch (Exception ex)
@@ -207,14 +243,14 @@ namespace Shell.MVC2.Data
 
 
         }
-        public List<gpsdata> getgpsdatabycountrypostalcodeandcity(string countryname, string postalcode, string city)
+        public List<gpsdata> getgpsdatalistbycountrycitypostalcode(string countryname, string city, string postalcode)
         {
             
 
              try
             {
 
-                var gpsdatalist = _postalcontext.GetGpsDataByCityCountryAndPostalCode(countryname, postalcode,city, false);
+                var gpsdatalist = _postalcontext.GetGpsDataByCountryPostalCodeandCity (countryname, postalcode,city);
                 return ((from s in gpsdatalist.ToList() select new gpsdata { lattitude =s.Latitude , longitude = s.Longitude ,stateprovince = s.State_Province  }).ToList());
             
             }
@@ -227,13 +263,13 @@ namespace Shell.MVC2.Data
             }
 
         }
-        public List<gpsdata> getgpsdatabycountryandcity(string countryname, string city)
+        public List<gpsdata> getgpsdatalistbycountrycity(string countryname, string city)
         {
            
 
              try
             {
-                var gpsdatalist = _postalcontext.GetGpsDataByCountryNameAndCity(countryname,  city, false);
+                var gpsdatalist = _postalcontext.GetGpsDataByCountryAndCity (countryname,  city);
                 return ((from s in gpsdatalist.ToList() select new gpsdata { lattitude = s.Latitude, longitude = s.Longitude, stateprovince = s.State_Province }).ToList());
             
             }
@@ -246,13 +282,13 @@ namespace Shell.MVC2.Data
             }
 
         }
-        public gpsdata getgpsdatasinglebycitycountryandpostalcode(string countryname, string postalcode, string city)
+        public gpsdata getgpsdatabycitycountrypostalcode(string countryname, string city, string postalcode)
         {
          
              gpsdata gpsdata = new gpsdata();
              try
             {
-                var s = _postalcontext.GetGpsDataByCountryNameAndCity(countryname, city, false).FirstOrDefault();
+                var s = _postalcontext.GetGpsDataSingleByCityCountryAndPostalCode(countryname,postalcode , city);
                 if (s != null)
                 {
                     return new gpsdata { lattitude = s.Latitude, longitude = s.Longitude, stateprovince = s.State_Province };
@@ -270,15 +306,14 @@ namespace Shell.MVC2.Data
 
 
         }
-        public List<postalcode> getpostalcodesbycountryandcityprefixdynamic(string countryname, string city, string prefixtext)
-        {
-      
+        public List<postalcode> getpostalcodesbycountrycityfilter(string countryname, string city, string filter)
+        {      
 
              try
             {
 
 
-                var gpsdatalist = _postalcontext.GetPostalCodesByCountryAndCityPrefixDynamic(countryname, city, prefixtext, false);
+                var gpsdatalist = _postalcontext.GetPostalCodesByCountryAndCityPrefixDynamic(countryname, city, filter);
                 return ((from s in gpsdatalist.ToList() select new postalcode { postalcodevalue = s.PostalCode }).ToList());
             
             }
@@ -291,15 +326,15 @@ namespace Shell.MVC2.Data
             }
         }
         //gets the single geo code as string
-        public List<postalcode> getgeopostalcodebycountrynameandcity(string countryname, string city)
+        public List<postalcode> getpostalcodesbycountrynamecity(string countryname, string city)
         {
 
              try
             {
-                                      
-               // var dd = _postalcontext.GetGeoPostalCodebyCountryNameAndCity(countryname, city);
-                var gpsdatalist = _postalcontext.GetGeoPostalCodebyCountryNameAndCity(countryname, city);
-                return ((from s in gpsdatalist.ToList() select new postalcode { postalcodevalue = s.PostalCode }).ToList());
+                 
+                var postalcodelist = _postalcontext.getpostalcodesbycountrynamecity(countryname, city);
+                return ((from s in postalcodelist.ToList() select new postalcode { postalcodevalue = s.PostalCode }).ToList());
+                
             }
               
             
@@ -312,14 +347,15 @@ namespace Shell.MVC2.Data
             }
 
         }
-        public bool validatepostalcodebycountryandcity(string countryname, string city, string postalcode)
+        public bool validatepostalcodebycountrycitypostalcode(string countryname, string city, string postalcode)
         {
 
             try
             {
 
-                var foundpostalcodes =  _postalcontext.ValidatePostalCodeByCOuntryandCity(countryname, city,postalcode ,false );
-                if (foundpostalcodes.Count() > 0) return true;
+                var foundpostalcodes =  _postalcontext.ValidatePostalCodeByCOuntryandCity(countryname, city,postalcode  );
+                return foundpostalcodes;
+                //if (foundpostalcodes Count() > 0) return true;
 
             }
               
@@ -330,16 +366,16 @@ namespace Shell.MVC2.Data
                 new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
-              return false ;
+              //return false ;
         }
-        public List<postalcode> getpostalcodesbycountryandlatlongdynamic(string countryname, string lattitude, string longitude)
+        public List<postalcode> getpostalcodesbycountrylatlong(string countryname, string lattitude, string longitude)
         {
            
              try
             {
 
 
-                var geopostalcodes = _postalcontext.GetPostalCodesByCountryAndLatLong(countryname,lattitude ,longitude, false);
+                var geopostalcodes = _postalcontext.GetPostalCodesByCountryAndLatLongDynamic (countryname,lattitude ,longitude);
                 return ((from s in geopostalcodes.ToList() select new postalcode { postalcodevalue = s.PostalCode }).ToList());
             }
             catch (Exception ex)
@@ -350,14 +386,14 @@ namespace Shell.MVC2.Data
                 throw convertedexcption;
             }
         }
-        public List<postalcode> getpostalcodesbycountrynamecityandstateprovincedynamic(string countryname, string city, string stateprovince)
+        public List<postalcode> getpostalcodesbycountrynamecitystateprovince(string countryname, string city, string stateprovince)
         {
            
 
              try
             {
-                var geopostalcodes = _postalcontext.GetPostaCodesByCountryNameCityAndStateProvince(countryname, city, stateprovince,false);
-                return ((from s in geopostalcodes.ToList() select new postalcode { postalcodevalue = s.PostalCode }).ToList());
+                var geopostalcodes = _postalcontext.GetPostalCodesByCountryNameCityandStateProvinceDynamic(countryname, city, stateprovince);
+                return ((from s in geopostalcodes.ToList() select new postalcode { postalcodevalue  = s.PostalCode }).ToList());
             }
             catch (Exception ex)
             {
@@ -367,70 +403,17 @@ namespace Shell.MVC2.Data
                 throw convertedexcption;
             }
         }
-        public List<country> getcountrylist()
-        {
 
-             try
-            {
-#if DISCONECTED
-                       
-                        List<country> countrylist = new List<country>();
-                        countrylist.Add(new country { countryvalue = "United", countryindex = "44", selected = false });
-                        countrylist.Add(new country { countryvalue = "Canada", countryindex = "43", selected = false });
-                        return countrylist;
-
-#else
-                //List<country> tmplist = new List<country>();
-                //// Loop over the int List and modify it.
-                ////insert the first one as ANY
-                //tmplist.Add(new country { id = "0", name  = "Any" });
-                //foreach (countrypostalcode item in this.getcountry_postalcode_listandorderbycountry())
-                //{
-                //    var currentcountry = new country { id = item.id .ToString(),  name = item.name   };
-                //    tmplist.Add(currentcountry);
-                //}
-                //return tmplist;
-                return CachingFactory.SharedObjectHelper.getcountrylist(_postalcontext);
-               
-#endif
-            }
-            catch (Exception ex)
-            {
-
-              Exception convertedexcption = new CustomExceptionTypes.GeoLocationException ("","","",ex.Message , ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
-                throw convertedexcption;
-            }
-
-        }
-        public List<citystateprovince> getfilteredcitiesold(string filter, string country, int offset)
-        {
-
-
-             try
-            {
-
-                var customers = this.getcitylistdynamic(country, filter, "");
-                return ((from s in customers.Take(50).ToList() select new citystateprovince { city = s.city   + "," + s.stateprovince  }).ToList());
-
-            }
-            catch (Exception ex)
-            {
-
-                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", filter, ex.Message, ex.InnerException); 
-                new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
-                throw convertedexcption;
-            }
-        }
-        public List<citystateprovince> getfilteredcities(string filter, string country, int offset)
+       
+        public List<citystateprovince> getfilteredcitiesbycountryfilter(string country, string filter)
         {
 
             List<citystateprovince> temp;
             try
             {
-                var customers = this.getcitylistdynamic(country, filter, "").Take(50);
-
-                temp = (from s in customers.ToList() select new citystateprovince { stateprovince = s.city  + "," + s.stateprovince }).ToList();
+                var customers = _postalcontext.GetCityListDynamic  (country, "", filter).Take(50);
+                
+                temp = (from s in customers.ToList() select new citystateprovince { citystateprovincevalue = s.City + "," + s.State_Province }).ToList();
                 return temp;
 
             }
@@ -443,15 +426,15 @@ namespace Shell.MVC2.Data
             }
 
         }
-        public List<postalcode> getfilteredpostalcodes(string filter, string country, string city, int offset)
+        public List<postalcode> getfilteredpostalcodesbycountrycityfilter(string country, string city, string filter)
         {
 
              try
             {
 
-                var customers = this.getpostalcodesbycountryandcityprefixdynamic(country, city, filter);
+                var customers = _postalcontext.GetPostalCodesByCountryAndCityPrefixDynamic (country, city, filter);
 
-                return ((from s in customers.Skip(offset).Take(25).ToList() select new postalcode { postalcodevalue = s.postalcodevalue }).ToList());
+                return ((from s in customers.Take(25).ToList() select new postalcode { postalcodevalue = s.PostalCode  }).ToList());
 
             }
             catch (Exception ex)

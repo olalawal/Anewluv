@@ -25,27 +25,24 @@ namespace Shell.MVC2.Interfaces
        /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
        /// </summary>
        ///       
-        bool getpostalcodestatusbycountryname(string countryname);
-
-        int getcountryidbycountryname(string countryname);
-        List<citystateprovince> getcitylistdynamic(string countryname, string postalcode, string prfefixtext);
-        List<gpsdata> getgpsdatabycountrypostalcodeandcity(string countryname, string postalcode, string city);
-        List<gpsdata> getgpsdatabycountryandcity(string countryname, string city);
-        gpsdata getgpsdatasinglebycitycountryandpostalcode(string countryname, string postalcode, string city);
-        List<postalcode > getpostalcodesbycountryandcityprefixdynamic(string countryname, string city, string prefixtext);
+        bool getpostalcodestatusbycountryname(string country);
+        int getcountryidbycountryname(string country);
+        List<citystateprovince> getcitystateprovincelistbycountrynamepostalcodefilter(string country, string postalcode, string filter);
+        List<gpsdata> getgpsdatalistbycountrycitypostalcode(string country,  string city,string postalcode);
+        List<gpsdata> getgpsdatalistbycountrycity(string country, string city);
+        gpsdata getgpsdatabycitycountrypostalcode(string country,string city, string postalcode);
+        List<postalcode > getpostalcodesbycountrycityfilter(string country,string city, string filter);
        //gets the single geo code as string
-        List<postalcode> getgeopostalcodebycountrynameandcity(string countryname, string city);
-        bool validatepostalcodebycountryandcity(string countryname, string city, string postalcode);
-        List<postalcode> getpostalcodesbycountryandlatlongdynamic(string countryname, string lattitude, string longitude);
-        List<postalcode> getpostalcodesbycountrynamecityandstateprovincedynamic(string countryname, string city, string stateprovince);
-
-             
-    
+        List<postalcode> getpostalcodesbycountrynamecity(string country, string city);
+        bool validatepostalcodebycountrycitypostalcode(string country, string city, string postalcode);
+        List<postalcode> getpostalcodesbycountrylatlong(string country, string lattitude, string longitude);
+        List<postalcode> getpostalcodesbycountrynamecitystateprovince(string country, string city, string stateprovince);
+      
  //Moved from lookup service
-        List<citystateprovince> getfilteredcitiesold(string filter, string country, int offset);    
-        List<citystateprovince> getfilteredcities(string filter, string country, int offset);
-        List<postalcode> getfilteredpostalcodes(string filter, string country, string City, int offset);
-
-        double? getdistancebetweenmembers(double lat1, double lon1, double lat2, double lon2, string unit);
+        //List<citystateprovince> getfilteredcitiesold(string country, int MaxItems);    
+       List<citystateprovince> getfilteredcitiesbycountryfilter(string country,string filter);
+       List<postalcode> getfilteredpostalcodesbycountrycityfilter(string country, string city, string filter);
+      
+       double? getdistancebetweenmembers(double lat1, double lon1, double lat2, double lon2, string unit);
     }
 }

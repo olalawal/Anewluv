@@ -45,8 +45,7 @@ namespace Dating.Server.Data.Models
             }
 
 
-            [Key()]
-            [DataMember]
+            [Key()]          
             public string City
             {
                 get { return m_City; }
@@ -56,8 +55,7 @@ namespace Dating.Server.Data.Models
             private string m_City;
 
 
-            [Key()]
-            [DataMember]
+            [Key()]          
             public string State_Province
             {
                 get { return m_State_Province; }

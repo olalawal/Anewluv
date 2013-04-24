@@ -2675,7 +2675,7 @@ namespace Shell.MVC2.AppFabric
 
             #region "Geodata lists"
 
-            public static List<country> getcountrylist(PostalData2Entities _postalcontext)
+            public static List<country> getcountrylist(PostalDataService  _postalcontext)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2706,7 +2706,7 @@ namespace Shell.MVC2.AppFabric
                         // Loop over the int List and modify it.
                         //insert the first one as ANY
                         countrys.Add(new country { id = "0", name = "Any" });
-                        foreach (Country_PostalCode_List item  in _postalcontext.Country_PostalCode_List.ToList().OrderBy(p=>p.CountryName))
+                        foreach (Country_PostalCode_List item in _postalcontext.GetCountry_PostalCode_List().ToList().OrderBy(p => p.CountryName))
                         {
                             var currentcountry = new country { id = item.CountryID.ToString(), name = item.CountryName  };
                             countrys.Add(currentcountry);
@@ -2734,7 +2734,7 @@ namespace Shell.MVC2.AppFabric
                 }
             }
 
-            public static List<countrypostalcode> getcountryandpostalcodestatuslist(PostalData2Entities _postalcontext)
+            public static List<countrypostalcode> getcountryandpostalcodestatuslist(PostalDataService  _postalcontext)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2762,7 +2762,7 @@ namespace Shell.MVC2.AppFabric
 
 
                         List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
-                        myQuery = _postalcontext.Country_PostalCode_List.Where(p => p.CountryName != "").OrderBy(p => p.CountryName).ToList();
+                        myQuery = _postalcontext.GetCountry_PostalCode_List().ToList().Where(p => p.CountryName != "").OrderBy(p => p.CountryName).ToList();
 
                         countryandpostalcodes = (from s in myQuery
                                                  select new countrypostalcode

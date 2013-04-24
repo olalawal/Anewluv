@@ -9,8 +9,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
     //10-29-2011 moved the  edit photo stuff here but it is not edit only, probably should be in photomodel
     //9-20-2012 olawal created a specific model for just uploading photos since photo model is just a pointer now
-   [DataContract ]
-   
+   [DataContract ]  
     public class PhotoUploadModel
     {       
           
@@ -21,14 +20,13 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public string imagename { get; set; }
         [DataMember]
-        public byte[] image { get; set; } 
+        public byte?[] imagebytes { get; set; }
         [DataMember]
-        public int? size { get; set; }
-      
-
-       [DataMember]
-         public int? approvalstatusid { get; set; }
-
+        public string imageb64string { get; set; } 
+        [DataMember]
+        public int? size { get; set; } 
+        [DataMember]
+        public int? approvalstatusid { get; set; }
        [DataMember]
        public int? imagetypeid { get; set; }
 

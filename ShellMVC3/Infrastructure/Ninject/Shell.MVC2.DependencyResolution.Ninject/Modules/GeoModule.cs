@@ -24,7 +24,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 		{
            // Kernel.Bind<IPhotoRepository>().To<WesternGreetingRepository>();
             //We can bind the photo repo to a different repo as in above that implements the class
-            Kernel.Bind<IGeoRepository>().ToConstructor(ctorArg => new GeoRepository(ctorArg.Inject<PostalData2Entities>()));
+            Kernel.Bind<IGeoRepository>().ToConstructor(ctorArg => new GeoRepository(ctorArg.Inject<PostalDataService >()));
 			Kernel.Bind<IGeoService>().ToSelf();
 		}
 	}

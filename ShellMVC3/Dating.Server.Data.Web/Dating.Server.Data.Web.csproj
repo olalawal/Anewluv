@@ -224,9 +224,6 @@
     <Compile Include="Services\Custom\PostalDataService.metadata.custom.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\Custom\UserDefinedSQLFunctions.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Services\PostalDataService.cs" />
     <Compile Include="Services\PostalDataService.metadata.cs" />
   </ItemGroup>
@@ -252,17 +249,18 @@
       <DependentUpon>App.Config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
-    <EntityDeploy Include="Models\PostalDataModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>PostalDataModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <EntityDeploy Include="Models\OldDatingModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>OldDatingModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <EntityDeploy Include="Models\PostalDataModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>PostalDataModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Dating.Server.Data.Models.AnewluvFTSEntities.datasource" />
     <None Include="Properties\DataSources\Dating.Server.Data.Models.AnewLuvFTSEntities1.datasource" />
+    <None Include="Properties\DataSources\Dating.Server.Data.Models.AnewluvFtsEntities2.datasource" />
     <None Include="Properties\DataSources\Dating.Server.Data.Models.PostalData2Entities.datasource" />
   </ItemGroup>
   <ItemGroup>
