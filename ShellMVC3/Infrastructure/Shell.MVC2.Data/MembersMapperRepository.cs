@@ -749,7 +749,7 @@ namespace Shell.MVC2.Data
                 //or the openID provider name to customize
                 if (membersmodel.rpxmodel.photo != "")
                 {   //build the photobeinguploaded object
-                    photobeinguploaded.image = photorepository.getimagebytesfromurl(membersmodel.rpxmodel.photo, "");
+                    photobeinguploaded.imageb64string  = photorepository.getimageb64stringfromurl(membersmodel.rpxmodel.photo, "");
                     photobeinguploaded.imagetypeid = _datingcontext.lu_photoimagetype.Where(p => p.id == (int)photoimagetypeEnum.Jpeg).FirstOrDefault().id;
                     photobeinguploaded.creationdate = DateTime.Now;
                     photobeinguploaded.caption = membersmodel.rpxmodel.preferredusername;

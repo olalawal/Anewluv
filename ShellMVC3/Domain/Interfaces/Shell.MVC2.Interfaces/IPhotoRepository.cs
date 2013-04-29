@@ -44,33 +44,33 @@ namespace Shell.MVC2.Interfaces
         #endregion
 
         //general shared methods for photo actions
-        ResponseMessage deleteduserphoto(Guid photoid);
+        AnewluvMessages deleteuserphoto(Guid photoid);
 
-        ResponseMessage makeuserphoto_private(Guid PhotoID);
+        AnewluvMessages makeuserphoto_private(Guid PhotoID);
 
-        ResponseMessage makeuserphoto_public(Guid PhotoID);
+        AnewluvMessages makeuserphoto_public(Guid PhotoID);
         
         //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
         //since photo is only a row no big deal if duplicates but since conversion is required we must roll back if the photo already exists
-        ResponseMessage addphotos(PhotoUploadViewModel model);
+        AnewluvMessages addphotos(PhotoUploadViewModel model);
 
-        ResponseMessage addsinglephoto(PhotoUploadModel newphoto, int profileid);    
+        AnewluvMessages addsinglephoto(PhotoUploadModel newphoto, int profileid);    
 
         bool checkvalidjpggif(byte[] image);
        
-        byte[] getgalleryphotobyscreenname(string strScreenName, photoformatEnum format);
+       // byte[] getgalleryphotobyscreenname(string strScreenName, photoformatEnum format);
 
         string getgalleryphotobyscreenname(string strScreenName, photoformatEnum format);   
         
-        byte[] getgalleryimagebyphotoid(Guid strPhotoID, photoformatEnum format);
+        //byte[] getgalleryimagebyphotoid(Guid strPhotoID, photoformatEnum format);
 
         string getgalleryimagebyphotoid(Guid strPhotoID, photoformatEnum format);
        
-        byte[] getgalleryphotobyprofileid(int intProfileID, photoformatEnum format);
+       // byte[] getgalleryphotobyprofileid(int intProfileID, photoformatEnum format);
 
         string getgalleryphotobyprofileid(int intProfileID, photoformatEnum format);
        
-        byte[] getgalleryimagebynormalizedscreenname(string strScreenName, photoformatEnum format);
+       // byte[] getgalleryimagebynormalizedscreenname(string strScreenName, photoformatEnum format);
 
         string getgalleryimagebynormalizedscreenname(string strScreenName, photoformatEnum format);
         
@@ -80,7 +80,7 @@ namespace Shell.MVC2.Interfaces
        
         bool checkforuploadedphotobyprofileid(int intProfileID);
       
-        byte[] getimagebytesfromurl(string _imageUrl, string source);
+       // byte[] getimagebytesfromurl(string _imageUrl, string source);
 
        string getimageb64stringfromurl(string _imageUrl, string source);   
 

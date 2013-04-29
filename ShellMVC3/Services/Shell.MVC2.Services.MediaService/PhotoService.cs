@@ -120,24 +120,99 @@ namespace Shell.MVC2.Services.Media
         #endregion
 
 
-        public void deleteduserphoto(string photoid)
+        public AnewluvResponse deleteuserphoto(string photoid)
         {
-            _photorepo.deleteduserphoto(Guid.Parse(photoid));
+            try
+            {
+               
+               var message = _photorepo.deleteuserphoto(Guid.Parse(photoid));
+                AnewluvResponse response = new AnewluvResponse();
+                ResponseMessage responsemessage = new ResponseMessage();
+                responsemessage = new ResponseMessage("", message.message , "");
+                response.ResponseMessages.Add(responsemessage);
+                return response;         
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+
         }
-        public void makeuserphoto_private(string photoid)
+        public AnewluvResponse makeuserphoto_private(string photoid)
         {
-            _photorepo.makeuserphoto_private(Guid.Parse(photoid));
+          
+
+            try
+            {
+
+                var message =  _photorepo.makeuserphoto_private(Guid.Parse(photoid));
+                AnewluvResponse response = new AnewluvResponse();
+                ResponseMessage responsemessage = new ResponseMessage();
+                responsemessage = new ResponseMessage("", message.message ,"");
+                response.ResponseMessages.Add(responsemessage);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
-        public void makeuserphoto_public(string photoid)
+        public AnewluvResponse makeuserphoto_public(string photoid)
         {
-            _photorepo.makeuserphoto_private(Guid.Parse(photoid));
+          
+            try
+            {
+
+              var message =   _photorepo.makeuserphoto_private(Guid.Parse(photoid));
+
+                AnewluvResponse response = new AnewluvResponse();
+                ResponseMessage responsemessage = new ResponseMessage();
+                responsemessage = new ResponseMessage("", message.message , "");
+                response.ResponseMessages.Add(responsemessage);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
         //since photo is only a row no big deal if duplicates but since conversion is required we must roll back if the photo already exists
         public AnewluvResponse addphotos(PhotoUploadViewModel model)
         {
-            return _photorepo.addphotos(model);
+           
+
+            try
+            {
+
+               var message =    _photorepo.addphotos(model);
+                AnewluvResponse response = new AnewluvResponse();
+                ResponseMessage responsemessage = new ResponseMessage();
+                responsemessage = new ResponseMessage("", message.message , "");
+                response.ResponseMessages.Add(responsemessage);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         /// <summary>
@@ -146,9 +221,28 @@ namespace Shell.MVC2.Services.Media
         /// </summary>
         /// <param name="newphoto"></param>
         /// <returns></returns>
-        public bool addsinglephoto(PhotoUploadModel newphoto, string profileid)
+        public AnewluvResponse addsinglephoto(PhotoUploadModel newphoto, string profileid)
         {
-            return _photorepo.addsinglephoto(newphoto, Convert.ToInt32(profileid));
+            try
+            {
+
+                var message =  _photorepo.addsinglephoto(newphoto, Convert.ToInt32(profileid));
+                AnewluvResponse response = new AnewluvResponse();
+                ResponseMessage responsemessage = new ResponseMessage();
+                responsemessage = new ResponseMessage("", message.message  , "");
+                response.ResponseMessages.Add(responsemessage);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+
+          
         }
 
         //http://stackoverflow.com/questions/10484295/image-resizing-from-sql-database-on-the-fly-with-mvc2
@@ -162,22 +256,22 @@ namespace Shell.MVC2.Services.Media
         //Stuff pulled from dating service regular
         // added by Deshola on 5/17/2011
 
-        public byte[] getgalleryphotobyscreenname(string strScreenName,string format)
+         public string getgalleryphotobyscreenname(string strScreenName,string format)
         {
             return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName, ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
         }
 
-        public byte[] getgalleryimagebyphotoid(string photoid, string format)
+         public string getgalleryimagebyphotoid(string photoid, string format)
         {
             return _photorepo.getgalleryimagebyphotoid(Guid.Parse(photoid),(photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
         }
         //TO DO normalize name
-        public byte[] getgalleryphotobyprofileid(string profileid, string format)
+         public string getgalleryphotobyprofileid(string profileid, string format)
         {
             return _photorepo.getgalleryphotobyprofileid(Convert.ToInt32(profileid), ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
         }
 
-        public byte[] getgalleryimagebynormalizedscreenname(string strScreenName, string format)
+         public string getgalleryimagebynormalizedscreenname(string strScreenName, string format)
         {
             return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName, (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
         }
@@ -198,10 +292,10 @@ namespace Shell.MVC2.Services.Media
         }
 
 
-           public byte[] getimagebytesfromurl(string _imageUrl, string source)
+            public string getimagebytesfromurl(string _imageUrl, string source)
         {
 
-            return _photorepo.getimagebytesfromurl(_imageUrl, source);
+            return _photorepo.getimageb64stringfromurl(_imageUrl, source);
 
         }
 

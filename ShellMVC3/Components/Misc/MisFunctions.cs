@@ -727,7 +727,7 @@ namespace Misc
                             PhotoUploadModel uploadmodel = new PhotoUploadModel();
                             uploadmodel.caption = photositem.ImageCaption;
                             uploadmodel.creationdate = photositem.PhotoDate.GetValueOrDefault();
-                            uploadmodel.image = photositem.ProfileImage;
+                            uploadmodel.imageb64string = Convert.ToBase64String(photositem.ProfileImage); 
                             uploadmodel.size = photositem.PhotoSize;
                             uploadmodel.imagename = photositem.ImageCaption; //added name to help compare
 

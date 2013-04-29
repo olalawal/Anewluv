@@ -56,7 +56,10 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
            MailService = 14,
          [Description("Appfabric Cache")]
            [EnumMember]
-           AppfabricCaching = 15
+           AppfabricCaching = 15,
+         [Description("Media Service")]
+           [EnumMember]
+           MediaService = 16
     }
     
 

@@ -18,7 +18,8 @@ using System.IO;
 
 using System.Drawing;
 using ImageResizer;
-
+using LoggingLibrary;
+using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 
 
 namespace Shell.MVC2.Data
@@ -56,13 +57,66 @@ namespace Shell.MVC2.Data
         /// <param name="photouploaded"></param>
         /// <param name="formats"></param>
         /// <returns></returns>
-        private List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded)
+        //private List<photoconversion> addphotoconverions(photo photo, PhotoUploadModel photouploaded)
+        //{
+        //    //TemporaryImageUpload tempImageUpload = new TemporaryImageUpload();             
+        //    // tempImageUpload = _service.GetImageData(id) ?? null;
+        //    List<photoconversion> convertedphotos = new List<photoconversion>();
+
+        //    if (photouploaded.imagebytes   != null)
+        //    {
+
+        //        try
+        //        {
+
+        //            foreach (lu_photoformat currentformat in _datingcontext.lu_photoformat.ToList())
+        //            {
+        //                byte[] byteArray = photouploaded.imagebytes. ; //tempImageUpload.TempImageData; 
+        //                using (var outStream = new MemoryStream())
+        //                {
+        //                    using (var inStream = new MemoryStream(byteArray))
+        //                    {
+        //                        //var settings1 = new ResizeSettings("maxwidth=200&maxheight=200");
+        //                        var settings = new ResizeSettings(currentformat.imageresizerformat.description);
+        //                        ImageResizer.ImageBuilder.Current.Build(inStream, outStream, settings);
+        //                        var outBytes = outStream.ToArray();
+        //                        //double check that there is no conversion with matching size and the name
+        //                        var test = _datingcontext.photoconversions.Where(p => p.photo.profile_id == photo.profile_id).Any(p => p.size == photo.size);
+
+        //                        convertedphotos.Add(new photoconversion
+        //                        {
+        //                            creationdate = DateTime.Now,
+        //                            description = currentformat.description,
+        //                            formattype = currentformat,
+        //                            image = outBytes,
+        //                            size = outBytes.Length,
+        //                            photo_id = photo.id
+        //                        });
+
+
+
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //            var dd = ex.ToString();
+        //        }
+        //    }
+        //    return convertedphotos;
+
+
+        //}
+
+        private List<photoconversion> addphotoconverionsb64string(photo photo, PhotoUploadModel photouploaded)
         {
             //TemporaryImageUpload tempImageUpload = new TemporaryImageUpload();             
             // tempImageUpload = _service.GetImageData(id) ?? null;
             List<photoconversion> convertedphotos = new List<photoconversion>();
 
-            if (photouploaded.image != null)
+            if (photouploaded.imageb64string != null)
             {
 
                 try
@@ -70,7 +124,9 @@ namespace Shell.MVC2.Data
 
                     foreach (lu_photoformat currentformat in _datingcontext.lu_photoformat.ToList())
                     {
-                        byte[] byteArray = photouploaded.image; //tempImageUpload.TempImageData; 
+
+
+                        byte[] byteArray = System.Convert.FromBase64String(photouploaded.imageb64string);  //tempImageUpload.TempImageData; 
                         using (var outStream = new MemoryStream())
                         {
                             using (var inStream = new MemoryStream(byteArray))
@@ -80,7 +136,7 @@ namespace Shell.MVC2.Data
                                 ImageResizer.ImageBuilder.Current.Build(inStream, outStream, settings);
                                 var outBytes = outStream.ToArray();
                                 //double check that there is no conversion with matching size and the name
-                                var test = _datingcontext.photoconversions.Where(p => p.photo.profile_id == photo.profile_id).Any(p => p.size == photo.size);
+                               // var test = _datingcontext.photoconversions.Where(p => p.photo.profile_id == photo.profile_id).Any(p => p.size == photo.size);
 
                                 convertedphotos.Add(new photoconversion
                                 {
@@ -101,14 +157,15 @@ namespace Shell.MVC2.Data
                 catch (Exception ex)
                 {
 
-                    var dd = ex.ToString();
+                    Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                    throw convertedexcption;
                 }
             }
             return convertedphotos;
 
 
         }
-
         #endregion
 
         #region "View Photo models"
@@ -630,51 +687,97 @@ namespace Shell.MVC2.Data
 
       
         //general shared methods for photo actions
-        public void deleteduserphoto(Guid photoid)
+        public AnewluvMessages deleteuserphoto(Guid photoid)
         {
-            // Retrieve single value from photos table
-            photo PhotoModify = _datingcontext.photos.Single(u => u.id == photoid);
-           // PhotoModify.photostatus.id  = 4; //deletebyuser
-            PhotoModify.photostatus.id  = (int)photostatusEnum.deletedbyuser ;
-            // Update database
-            
 
-            //_datingcontext  //.PhotoModify, EntityState.Modified);
-            _datingcontext.SaveChanges();
+            try
+            {
+                // Retrieve single value from photos table
+                photo PhotoModify = _datingcontext.photos.Single(u => u.id == photoid);
+                // PhotoModify.photostatus.id  = 4; //deletebyuser
+                PhotoModify.photostatus.id = (int)photostatusEnum.deletedbyuser;
+                // Update database
+
+
+                //_datingcontext  //.PhotoModify, EntityState.Modified);
+                _datingcontext.SaveChanges();
+
+                return new AnewluvMessages { message = "photo deleted successfully" };
+            }
+            catch (Exception ex)
+            {
+
+                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                throw convertedexcption;
+            }
+
+           
+
         }
-        public void makeuserphoto_private(Guid PhotoID)
+        public AnewluvMessages makeuserphoto_private(Guid PhotoID)
         {
-            // Retrieve single value from photos table
-            photo PhotoModify = _datingcontext.photos.Single(u => u.id == PhotoID);
-            //check if this phot is already set private if not set it 
-           // PhotoModify.photostatus.id  = 3; //private
-           if (PhotoModify.photosecuritylevels.Any(z=>z.id  != (int)securityleveltypeEnum.Private ))
-           {
-               PhotoModify.photosecuritylevels.Add(new photo_securitylevel { photo_id = PhotoID ,
-                   securityleveltype = _datingcontext.lu_securityleveltype.Where(p=>p.id == (int)securityleveltypeEnum.Private).FirstOrDefault()  });
-              // newsecurity.id = (int)securityleveltypeEnum.Private;
-           }
-           // PhotoModify.ProfileImageType = "NoStatus";
-            // Update database
-          //  _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-            _datingcontext.SaveChanges();
+            try
+            {
+                // Retrieve single value from photos table
+                photo PhotoModify = _datingcontext.photos.Single(u => u.id == PhotoID);
+                //check if this phot is already set private if not set it 
+                // PhotoModify.photostatus.id  = 3; //private
+                if (PhotoModify.photosecuritylevels.Any(z => z.id != (int)securityleveltypeEnum.Private))
+                {
+                    PhotoModify.photosecuritylevels.Add(new photo_securitylevel
+                    {
+                        photo_id = PhotoID,
+                        securityleveltype = _datingcontext.lu_securityleveltype.Where(p => p.id == (int)securityleveltypeEnum.Private).FirstOrDefault()
+                    });
+                    // newsecurity.id = (int)securityleveltypeEnum.Private;
+                }
+                // PhotoModify.ProfileImageType = "NoStatus";
+                // Update database
+                //  _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                _datingcontext.SaveChanges();
+
+                return new AnewluvMessages { message = "photo privacy updated" };
+
+            }
+            catch (Exception ex)
+            {
+
+                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                throw convertedexcption;
+            }
+
+
         }
-        public void makeuserphoto_public(Guid PhotoID)
+        public AnewluvMessages makeuserphoto_public(Guid PhotoID)
         {
-            // Retrieve single value from photos table
-            photo PhotoModify = _datingcontext.photos.Single(u => u.id  == PhotoID);
-            PhotoModify.photostatus.id  = 1; //public values:1 or 2 are public values
-            // Update database
-           // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-            _datingcontext.SaveChanges();
+            try
+            {
+                // Retrieve single value from photos table
+                photo PhotoModify = _datingcontext.photos.Single(u => u.id == PhotoID);
+                PhotoModify.photostatus.id = 1; //public values:1 or 2 are public values
+                // Update database
+                // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                _datingcontext.SaveChanges();
+                return new AnewluvMessages { message = "photo privacy removed" };
+            }
+            catch (Exception ex)
+            {
+
+                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                throw convertedexcption;
+            }
+
         }
 
         //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
         //since photo is only a row no big deal if duplicates but since conversion is required we must roll back if the photo already exists
-        public bool addphotos(PhotoUploadViewModel model)
+        public AnewluvMessages addphotos(PhotoUploadViewModel model)
         {
 
-             List<photoconversion> convertedphotos = new List<photoconversion>();
+            List<photoconversion> convertedphotos = new List<photoconversion>();
              
 
             foreach (PhotoUploadModel  item in model.photosuploaded)
@@ -683,9 +786,13 @@ namespace Shell.MVC2.Data
                 //System.Console.WriteLine(i);
                 try
                 {
+                    //get all the photos for the profile ID and test to see if the uploaded image matches any of the gallery conversion base64 strng value
+                   // var conversions = 
+
+
                     //only add photos that are not dupes 
-                    if (!_datingcontext.photos.Where(p => p.profile_id == model.profileid).Any(p => p.size == item.size && p.imagename == item.imagename))
-                    {
+                    //if (!_datingcontext.photos.Where(p => p.profile_id == model.profileid).Any(p => p.conversio == item.size && p.imagename == item.imagename))
+                    //{
                         photo NewPhoto = new photo();
                         Guid identifier = Guid.NewGuid();                       
                         NewPhoto.id = identifier;
@@ -694,7 +801,7 @@ namespace Shell.MVC2.Data
                         NewPhoto.creationdate = item.creationdate;
                         NewPhoto.imagecaption = item.caption;
                         NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
-                        NewPhoto.size = item.size.GetValueOrDefault();
+                        NewPhoto.size = item.size.GetValueOrDefault();                        
                         //set the rest of the information as needed i.e approval status refecttion etc
                         NewPhoto.imagetype = (item.imagetypeid != null) ? _datingcontext.lu_photoimagetype.Where(p => p.id == item.imagetypeid).FirstOrDefault() : null; // : null; item.imagetypeid;
                         NewPhoto.approvalstatus = (item.approvalstatusid  != null) ? _datingcontext.lu_photoapprovalstatus.Where(p => p.id == item.approvalstatusid ).FirstOrDefault() : null;
@@ -710,15 +817,27 @@ namespace Shell.MVC2.Data
 
                         //get the existing photos for a user to compare the size so we do not import dupes
                         // existing
-                        _datingcontext.photos.Add(NewPhoto);
+                       // _datingcontext.photos.Add(NewPhoto);
                         //save the  photo here since we are somewhat checking before we try to crreate the conversions in the surrounding if
                         //olawal 12-26-2012
-                        _datingcontext.SaveChanges();
+                       // _datingcontext.SaveChanges();
 
 
-                        var temp = addphotoconverions(NewPhoto, item);
-                        if (temp.Count > 0)
+                        var temp = addphotoconverionsb64string(NewPhoto, item);
+                        if (temp.Count > 0 )
                         {
+                           
+                            //existing conversions to compare with new one : 
+                            var existingthumbnailconversion = _datingcontext.photoconversions.Where(z => z.photo.profile_id == model.profileid & z.formattype.id == (int)photoformatEnum.Thumbnail);
+                            var newphotothumbnailconversion = temp.Where(p => p.formattype.id  == (int)photoformatEnum.Thumbnail).FirstOrDefault();
+                            if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image ))
+                                return new AnewluvMessages { message="This photo has already been uploaded",  };
+
+
+                            //allow saving of new photo 
+                            _datingcontext.photos.Add(NewPhoto);
+                            _datingcontext.SaveChanges();
+
                             foreach (photoconversion convertedphoto in temp)
                             {
                                 //if this does not recognise the photo object we might need to save that and delete it later
@@ -734,27 +853,22 @@ namespace Shell.MVC2.Data
 
                     }
 
-                }
+               // }
 
                 catch (Exception ex)
-                {    //log error
-                    string dd = ex.ToString();
+                {
+
+                    Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                    throw convertedexcption;
                 }
-               
-
-
-                catch
-                {    //log error
-                    return false;
-                }
-
-             
-             
+                
 
             }
 
-
-            return true;
+            return new AnewluvMessages { message = model.photosuploaded.Count() + " Photo added succesfully " };
+          
+        
 
          
 
@@ -766,15 +880,15 @@ namespace Shell.MVC2.Data
         /// </summary>
         /// <param name="newphoto"></param>
         /// <returns></returns>
-        public bool addsinglephoto(PhotoUploadModel newphoto,int profileid)
+        public AnewluvMessages addsinglephoto(PhotoUploadModel newphoto, int profileid)
         {
 
             //System.Console.WriteLine(i);
             try
             {
                 //only add photos that are not dupes 
-                if (!_datingcontext.photos.Where(p => p.profile_id == profileid).Any(p => p.size == newphoto.size && p.imagename == newphoto.imagename ))
-                {
+               // if (!_datingcontext.photos.Where(p => p.profile_id == profileid).Any(p => p.size == newphoto.size && p.imagename == newphoto.imagename ))
+              //  {
                     photo NewPhoto = new photo();
                     Guid identifier = Guid.NewGuid();
                     NewPhoto.id = identifier;
@@ -795,15 +909,28 @@ namespace Shell.MVC2.Data
 
                     //get the existing photos for a user to compare the size so we do not import dupes
                     // existing
-                    _datingcontext.photos.Add(NewPhoto);
+                    //_datingcontext.photos.Add(NewPhoto);
                     //save the  photo here since we are somewhat checking before we try to crreate the conversions in the surrounding if
                     //olawal 12-26-2012
-                    _datingcontext.SaveChanges();
-                    
+                  //  _datingcontext.SaveChanges();
 
-                    var temp = addphotoconverions(NewPhoto, newphoto);
+
+                    var temp = addphotoconverionsb64string(NewPhoto, newphoto);
                     if (temp.Count > 0)
                     {
+                       
+                        //existing conversions to compare with new one : 
+                        var existingthumbnailconversion = _datingcontext.photoconversions.Where(z => z.photo.profile_id == profileid & z.formattype.id == (int)photoformatEnum.Thumbnail);
+                        var newphotothumbnailconversion = temp.Where(p => p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
+                        if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
+                            return new AnewluvMessages { message = "This photo has already been uploaded", };
+                       
+                        //allow saving of new photo 
+                        _datingcontext.photos.Add(NewPhoto);
+                        _datingcontext.SaveChanges();
+
+
+
                         foreach (photoconversion convertedphoto in temp)
                         {
                             //if this does not recognise the photo object we might need to save that and delete it later
@@ -819,14 +946,19 @@ namespace Shell.MVC2.Data
 
                 }
 
+            //}
+
+            catch (Exception ex)
+            {
+
+                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                throw convertedexcption;
             }
 
-            catch (Exception  ex)
-            {    //log error
-                string dd   = ex.ToString();
-            }
 
-            return true;
+            return new AnewluvMessages { message =  "photo added succesfully " };
+          
         }            
 
         public bool checkvalidjpggif(byte[] image)
@@ -863,34 +995,78 @@ namespace Shell.MVC2.Data
         //gets all approved non prviate photos athat are not gallery 
 
 
-        public byte[] getgalleryphotobyscreenname(string strScreenName, photoformatEnum format)
+        //public byte[] getgalleryphotobyscreenname(string strScreenName, photoformatEnum format)
+        //{
+        //    //IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
+        //    //Dim ctx As New Entities()
+
+        //    // string strProfileID = this.getprofileidbyscreenname(strScreenName);
+        //  //var  GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.screenname  == strScreenName)
+        //  //                  join f in _datingcontext.photos on p.id  equals f.profile_id
+        //  //                     where (f.approvalstatus != null && f.approvalstatus.id == (int)photoapprovalstatusEnum.Approved  
+        //  //                  && f.imagetype.id  == (int)photostatusEnum.Gallery  )
+        //  //                  select f).FirstOrDefault();
+
+
+        //  var GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.screenname == strScreenName)
+        //                      join f in _datingcontext.photoconversions on p.id equals f.photo.profile_id
+        //                      where (f.formattype.id == (int)format && f.photo.approvalstatus != null &&
+        //                      f.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved &&
+        //                      f.photo.imagetype.id == (int)photostatusEnum.Gallery)
+        //                      select f).FirstOrDefault();
+
+
+
+        //    try
+        //    {
+        //        //new code to only get the gallery conversion copy
+        //      //  return GalleryPhoto.conversions
+        //      // .Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image ;
+        //        return GalleryPhoto.image;
+
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //    return null;
+
+
+
+        //    // Return CInt(myQuery.First.ScreenName)
+
+        //}
+
+        public string getgalleryphotobyscreenname(string strScreenName, photoformatEnum format)
         {
             //IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
             //Dim ctx As New Entities()
 
             // string strProfileID = this.getprofileidbyscreenname(strScreenName);
-          //var  GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.screenname  == strScreenName)
-          //                  join f in _datingcontext.photos on p.id  equals f.profile_id
-          //                     where (f.approvalstatus != null && f.approvalstatus.id == (int)photoapprovalstatusEnum.Approved  
-          //                  && f.imagetype.id  == (int)photostatusEnum.Gallery  )
-          //                  select f).FirstOrDefault();
+            //var  GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.screenname  == strScreenName)
+            //                  join f in _datingcontext.photos on p.id  equals f.profile_id
+            //                     where (f.approvalstatus != null && f.approvalstatus.id == (int)photoapprovalstatusEnum.Approved  
+            //                  && f.imagetype.id  == (int)photostatusEnum.Gallery  )
+            //                  select f).FirstOrDefault();
 
 
-          var GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.screenname == strScreenName)
-                              join f in _datingcontext.photoconversions on p.id equals f.photo.profile_id
-                              where (f.formattype.id == (int)format && f.photo.approvalstatus != null &&
-                              f.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved &&
-                              f.photo.imagetype.id == (int)photostatusEnum.Gallery)
-                              select f).FirstOrDefault();
+            var GalleryPhoto = (from p in _datingcontext.profiles.Where(p => p.screenname == strScreenName)
+                                join f in _datingcontext.photoconversions on p.id equals f.photo.profile_id
+                                where (f.formattype.id == (int)format && f.photo.approvalstatus != null &&
+                                f.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved &&
+                                f.photo.imagetype.id == (int)photostatusEnum.Gallery)
+                                select f).FirstOrDefault();
 
 
 
             try
             {
                 //new code to only get the gallery conversion copy
-              //  return GalleryPhoto.conversions
-              // .Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image ;
-                return GalleryPhoto.image;
+                //  return GalleryPhoto.conversions
+                // .Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image ;
+                return  Convert.ToBase64String(GalleryPhoto.image);
+                
+               
 
             }
             catch
@@ -905,7 +1081,7 @@ namespace Shell.MVC2.Data
 
         }
 
-        public byte[] getgalleryimagebyphotoid(Guid strPhotoID, photoformatEnum format)
+        public string getgalleryimagebyphotoid(Guid strPhotoID, photoformatEnum format)
         {
            // IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
             //Dim ctx As New Entities()
@@ -924,7 +1100,7 @@ namespace Shell.MVC2.Data
                 //new code to only get the gallery conversion copy
                //return GalleryPhoto.conversions
               // .Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image;
-                return GalleryPhoto.image;
+                return Convert.ToBase64String(GalleryPhoto.image);
 
             }
             catch
@@ -939,7 +1115,7 @@ namespace Shell.MVC2.Data
 
         }
 
-        public byte[] getgalleryphotobyprofileid(int intProfileID, photoformatEnum format)
+        public string getgalleryphotobyprofileid(int intProfileID, photoformatEnum format)
         {
            // IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
             //Dim ctx As New Entities()
@@ -960,7 +1136,7 @@ namespace Shell.MVC2.Data
                // return GalleryPhoto.conversions
                //.Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image;
                 if (GalleryPhoto != null)
-                return GalleryPhoto.image;
+                    return Convert.ToBase64String(GalleryPhoto.image);
             }
             catch
             {
@@ -970,7 +1146,7 @@ namespace Shell.MVC2.Data
 
         }
 
-        public byte[] getgalleryimagebynormalizedscreenname(string strScreenName, photoformatEnum format)
+        public string getgalleryimagebynormalizedscreenname(string strScreenName, photoformatEnum format)
         {
             //IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
             //Dim ctx As New Entities()
@@ -991,7 +1167,7 @@ namespace Shell.MVC2.Data
                 //return GalleryPhoto.conversions
                //.Where(p => p.photo_id == GalleryPhoto.id && p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image;
                 if (GalleryPhoto != null)
-                 return GalleryPhoto.image;
+                    return Convert.ToBase64String(GalleryPhoto.image);
 
             }
             catch
@@ -1070,7 +1246,7 @@ namespace Shell.MVC2.Data
         /// <param name="_imageUrl"></param>
         /// <param name="caption"></param>
         /// <returns></returns>
-        public byte[] getimagebytesfromurl(string _imageUrl, string source)
+        public string getimageb64stringfromurl(string _imageUrl, string source)
         {
 
             //get current profileID from cache
@@ -1103,7 +1279,7 @@ namespace Shell.MVC2.Data
                 responseStream.Close();
                 imageResponse.Close();
 
-                return imageBytes;
+                return Convert.ToBase64String(imageBytes);
                 //photo.imagecaption = caption;
                 //photo.ImageUploaded = file;
                 // photo.ProfileImage = imageBytes;
