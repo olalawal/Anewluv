@@ -17,10 +17,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.Validation;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 {
-
-
-
-
+    
 
     // [ActivationCodeIsValid("ProfileId", "ActivationCode", ErrorMessage = "Invalid Activation Code or Email Address")]
     [DataContract]
