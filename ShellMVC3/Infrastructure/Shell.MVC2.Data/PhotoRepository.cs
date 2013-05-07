@@ -801,7 +801,7 @@ namespace Shell.MVC2.Data
                         NewPhoto.creationdate = item.creationdate;
                         NewPhoto.imagecaption = item.caption;
                         NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
-                        NewPhoto.size = item.size.GetValueOrDefault();                        
+                       // NewPhoto.size = item.size.GetValueOrDefault();                        
                         //set the rest of the information as needed i.e approval status refecttion etc
                         NewPhoto.imagetype = (item.imagetypeid != null) ? _datingcontext.lu_photoimagetype.Where(p => p.id == item.imagetypeid).FirstOrDefault() : null; // : null; item.imagetypeid;
                         NewPhoto.approvalstatus = (item.approvalstatusid  != null) ? _datingcontext.lu_photoapprovalstatus.Where(p => p.id == item.approvalstatusid ).FirstOrDefault() : null;
@@ -897,7 +897,7 @@ namespace Shell.MVC2.Data
                     NewPhoto.creationdate = newphoto.creationdate;
                     NewPhoto.imagecaption = newphoto.caption;
                     NewPhoto.imagename = newphoto.imagename; //11-26-2012 olawal added the name for comparisons 
-                    NewPhoto.size = newphoto.size.GetValueOrDefault();
+                   // NewPhoto.size = newphoto.size.GetValueOrDefault();
                     //set the rest of the information as needed i.e approval status refecttion etc
                     NewPhoto.imagetype = (newphoto.imagetypeid != null) ? _datingcontext.lu_photoimagetype.Where(p => p.id == newphoto.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
                     NewPhoto.approvalstatus = (newphoto.approvalstatusid != null) ? _datingcontext.lu_photoapprovalstatus.Where(p => p.id == newphoto.approvalstatusid).FirstOrDefault() : null;

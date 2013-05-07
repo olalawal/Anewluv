@@ -203,34 +203,45 @@ namespace Shell.MVC2.Infrastructure
                 var type = typeof(T);
                 var fullName = type.FullName;
                 var name = type.Name;
-                lock (cacheLocker)
+                try
                 {
-                    if (cachedEndpointNames.ContainsKey(type))
+                   
+                    lock (cacheLocker)
                     {
-                        return cachedEndpointNames[type];
-                    }
-
-                    Configuration appConfig = GetDefaultConfig(); //ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    ServiceModelSectionGroup serviceModel = ServiceModelSectionGroup.GetSectionGroup(appConfig);
-                   // BindingsSection oBinding = serviceModel2.Bindings;
-
-                    //var serviceModel = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).SectionGroups["system.serviceModel"] as ServiceModelSectionGroup;
-
-                    if ((serviceModel != null) && !string.IsNullOrEmpty(fullName))
-                    {
-                        foreach (var endpointName in serviceModel.Client.Endpoints.Cast<ChannelEndpointElement>().Where(endpoint => fullName.EndsWith(endpoint.Contract)).Select(endpoint => endpoint.Name))
+                        if (cachedEndpointNames.ContainsKey(type))
                         {
-                            cachedEndpointNames.Add(type, endpointName);
-                            return endpointName;
+                            return cachedEndpointNames[type];
                         }
-                    }
 
-                    //Old code where we get it from calling web config
-                   // cachedEndpointNames.Add(type, name);
-                   // return fullName;
+                        Configuration appConfig = GetDefaultConfig(); //ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                        ServiceModelSectionGroup serviceModel = ServiceModelSectionGroup.GetSectionGroup(appConfig);
+                        // BindingsSection oBinding = serviceModel2.Bindings;
+
+                        //var serviceModel = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).SectionGroups["system.serviceModel"] as ServiceModelSectionGroup;
+
+                        if ((serviceModel != null) && !string.IsNullOrEmpty(fullName))
+                        {
+                            foreach (var endpointName in serviceModel.Client.Endpoints.Cast<ChannelEndpointElement>().Where(endpoint => fullName.EndsWith(endpoint.Contract)).Select(endpoint => endpoint.Name))
+                            {
+                                cachedEndpointNames.Add(type, endpointName);
+                                return endpointName;
+                            }
+                        }
+
+                        //Old code where we get it from calling web config
+                        // cachedEndpointNames.Add(type, name);
+                        // return fullName;
+                    }
+                }
+                catch
+                {
+                    throw new InvalidOperationException("Could not find endpoint element for type '" + fullName + "' in the ServiceModel client configuration section. This might be because no configuration file was found for your application, or because no endpoint element matching this name could be found in the client element.");
+        
+
                 }
 
-                throw new InvalidOperationException("Could not find endpoint element for type '" + fullName + "' in the ServiceModel client configuration section. This might be because no configuration file was found for your application, or because no endpoint element matching this name could be found in the client element.");
+                return null;
+
             }
 
             private static Configuration GetDefaultConfig()

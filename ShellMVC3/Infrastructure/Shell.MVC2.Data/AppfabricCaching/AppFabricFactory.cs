@@ -151,6 +151,7 @@ namespace Shell.MVC2.AppFabric
 
 #else
                 bool lockTaken = false;
+                DataCache cache = null;
                 try                    
                 {
                     //makes sure the lock is active if we try and kill it when done
@@ -182,7 +183,7 @@ namespace Shell.MVC2.AppFabric
                             //Pass configuration settings to cacheFactory constructor
                             _cacheFactory = new DataCacheFactory(configuration);
                             //reset cache values ?
-                            DataCache cache = null;
+                           
                             if (_cacheFactory != null)
                             {
                                 cache = _cacheFactory.GetCache(_persistantCacheName);
@@ -195,7 +196,7 @@ namespace Shell.MVC2.AppFabric
                     else
                     {
                         //return the  cache if it already was peristed
-                       _cacheFactory.GetCache(_persistantCacheName);
+                     return  _cacheFactory.GetCache(_persistantCacheName);
                     }
              }
             catch (DataCacheException ex)
@@ -221,7 +222,8 @@ namespace Shell.MVC2.AppFabric
                 Monitor.Exit(_locker);
             }
                 //just needed for the getter accsor
-            return null;
+                //;
+                return cache;
 #endif
             }
 

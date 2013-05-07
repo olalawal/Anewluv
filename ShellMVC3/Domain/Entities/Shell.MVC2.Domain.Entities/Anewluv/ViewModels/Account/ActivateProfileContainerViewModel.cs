@@ -11,16 +11,16 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
        
     //defines a container for agreagating models
     //[Serializable]
-    [DataContract]
-    public class activateprofilecontainerviewmodel
-    {
-        [DataMember]        
-        public activateprofilemodel activateprofilemodel { get; set; }
-        //[DataMember]
-        //public registermodel registermodel { get; set; }
-        [DataMember]
-        public List<PhotoUploadModel>  activateprofilephotos { get; set; }
-    }
+    //[DataContract]
+    //public class activateprofilecontainerviewmodel
+    //{
+    //    [DataMember]        
+    //    public activateprofilemodel activateprofilemodel { get; set; }
+    //    //[DataMember]
+    //    //public registermodel registermodel { get; set; }
+    //    [DataMember]
+    //    public List<PhotoUploadModel>  activateprofilephotos { get; set; }
+    //}
 
    
 

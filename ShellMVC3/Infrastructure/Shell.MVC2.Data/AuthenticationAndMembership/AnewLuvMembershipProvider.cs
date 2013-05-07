@@ -829,34 +829,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 _photorepository.addphotos(model.photouploadviewmodel);
             }
 
-            //store temporary variables for this request
-           // TempData["ProfileID"] =  model.activateprofilemodel.profileid;
-           // TempData["ActivationCode"] = model.activateprofilemodel.ActivationCode;
-
-            //no need for this sicne we have a route for it
-            // HttpRequestBase rd = this.Request;
-            // model.ProfileId =  rd.QueryString.Get("ProfileId");
-            //model.ActivationCode = rd.QueryString.Get("ActivationCode");
-
-            //after a photo has been uploaded or if no photo needed to be uploaded, attempt to validate the user's information           
-
-            //Server side validation begins here  activation code is validated though the data model , but we still need to validate that the user has photo 
-            //*****************************************************************************
-                
-            //validate the profileID first i.e dont even attemp to allow them to upload a photo if that was the issue if the profile ID is inccorect the just ruturn the view with the generic activaion code error
-            //if (_memberepository.checkifemailalreadyexists(profile.emailaddress) == false)
-            //{
-            //    messages.errormessages.Add ("Invalid Activation Code or Email Address");
-            //    //hide the photo view in thsi case
-            //    // model.activateprofilemodel.PhotoStatus = true;
-            //    //return View(model);
-            //    return messages ;
-            //}
-            //else
-            //{
-            //    ModelState.Clear();  // clear the model state , i.e removes prevalidation
-            //}
-
+           
             //since we got here we can now check if the user has a photo
             //first check to see if there is an email address for the given user on the server add it to the data anotaions validation                 
             //get a value for photo status so we know weather to display uplodad phot dialog or not
@@ -868,42 +841,11 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 return messages ;
                 
             }
-            //else
-            //{
-            //    ModelState.Clear();  // clear the model state , i.e removes prevalidation
-            //}
-            //add the error to the model if 
-
-
-            
-                //get username here
-               // string UserName = _memberepository.getusernamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
-               // string ScreenName = _memberepository.getscreennamebyprofileid(Convert.ToInt32( model.activateprofilemodel.profileid));
-                    //build log on model
-                //create a new login model
-                //var logonmodel = new LogOnModel();
-               // var lostaccountinfomodel = new LostAccountInfoModel();
-               // var lostActivationcodemodel = new LostActivationCodeModel();
-               // var _logonmodel = new LogonViewModel
-              //  {
-              //      LogOnModel = logonmodel,
-               //     LostAccountInfoModel = lostaccountinfomodel,
-               //     LostActivationCodeModel = lostActivationcodemodel
-             //   };
-
-                //popualate values
-             //   _logonmodel.LogOnModel.UserName = UserName;
-               // _logonmodel.LogOnModel.Password = "";  //we do not sent password over wire
-
-                //Check here if the profile was alrady activated, if it is add the error and return the view, 
-                //If the profile was actived then the next check is if the mailbox folders were created, if they are not then create them here as well
-                //validate the profileID first i.e dont even attemp to allow them to upload a photo if that was the issue if the profile ID is inccorect the just ruturn the view with the generic activaion code error
-
-
+           
 
                 if (_memberepository.checkifprofileisactivated( model.profileid) == true)
                 {
-                    messages.errormessages.Add ( "Your Profile has already been activated");
+                    messages.errormessages.Add ("Your Profile has already been activated");
                     //hide the photo view in thsi case
                     //ViewData["ActivateProfileStatus"]=
                     // return View("LogOn", _logonmodel);
