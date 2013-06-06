@@ -20,109 +20,112 @@ namespace Shell.MVC2.Services.Contracts
 
         #region "New Lookups"
 
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getphotostatusdescriptionlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_photostatusdescription> getphotostatusdescriptionlist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getabusetypelist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_abusetype> getabusetypelist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getprofilestatuslist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_profilestatus> getprofilestatuslist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getphotoImagersizerformatlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_photoImagersizerformat> getphotoImagersizerformatlist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getrolelist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_role> getrolelist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getsecurityleveltypelist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_securityleveltype> getsecurityleveltypelist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getshowmelist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_showme> getshowmelist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getsortbytypelist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_sortbytype> getsortbytypelist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getsecurityquestionlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_securityquestion> getsecurityquestionlist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getflagyesnolist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_flagyesno> getflagyesnolist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getprofilefiltertypelist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_profilefiltertype> getprofilefiltertypelist();
 
         #endregion
 
 
-        [WebGet]
-        [OperationContract]
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebGet(UriTemplate = "/getsystempagesettinglist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
         List<systempagesetting> getsystempagesettinglist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/getgenderlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_gender> getgenderlist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/getageslist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<age> getageslist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/getmetricheightlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<metricheight> getmetricheightlist();
 
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getbodycssbypagename/{pagename}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         string getbodycssbypagename(string pagename);
         //List<age> createagelist(); //not created by database 
 
 
         #region "Criteria Appearance dropdowns"
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getethnicitylist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_ethnicity> getethnicitylist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getbodytypelist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_bodytype> getbodytypelist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/geteyecolorlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_eyecolor> geteyecolorlist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/gethaircolorlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_haircolor> gethaircolorlist();
 
 
         #endregion
 
         #region "Criteria Character Dropdowns"
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getdietlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_diet> getdietlist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getdrinkslist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_drinks> getdrinkslist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getexerciselist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_exercise> getexerciselist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/gethobbylist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_hobby> gethobbylist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/gethumorlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_humor> gethumorlist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getpoliticalviewlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_politicalview> getpoliticalviewlist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getreligionlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_religion> getreligionlist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getreligiousattendancelist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_religiousattendance> getreligiousattendancelist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getsignlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_sign> getsignlist();
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/getsmokeslist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_smokes> getsmokeslist();
 
 
@@ -130,32 +133,40 @@ namespace Shell.MVC2.Services.Contracts
         #endregion
 
         #region "Criteria Lifestyle Dropdowns"
-        [WebGet]
-        [OperationContract]
+          [WebGet(UriTemplate = "/geteducationlevellist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_educationlevel> geteducationlevellist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/getemploymentstatuslist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_employmentstatus> getemploymentstatuslist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/gethavekidslist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_havekids> gethavekidslist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/getincomelevellist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_incomelevel> getincomelevellist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/getlivingsituationlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_livingsituation> getlivingsituationlist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/getlookingforlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_lookingfor> getlookingforlist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/getmaritalstatuslist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_maritalstatus> getmaritalstatuslist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/getprofessionlist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_profession> getprofessionlist();
-        [WebGet]
-        [OperationContract]
+
+          [WebGet(UriTemplate = "/getwantskidslist", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]      
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         List<lu_wantskids> getwantskidslist();
 
 

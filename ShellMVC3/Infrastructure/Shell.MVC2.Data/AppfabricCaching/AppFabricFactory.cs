@@ -159,8 +159,8 @@ namespace Shell.MVC2.AppFabric
 
                     if (_cacheFactory == null)
                     {
-                        if (Monitor.TryEnter(_locker, 20000))
-                        {
+                       // if (Monitor.TryEnter(_locker, 20000))
+                       // {
                             lockTaken =true;
                             _cacheFactory = new DataCacheFactory();
                             //-------------------------
@@ -190,7 +190,7 @@ namespace Shell.MVC2.AppFabric
                             }
                             //make sure that any regions needed exist as well
                             return createaewluvregions(cache);
-                        }
+                       // }
 
                     }
                     else
