@@ -74,6 +74,8 @@ namespace Shell.MVC2.Interfaces
 
           AnewluvMessages activateprofile(activateprofilemodel  model);
 
+          AnewluvMessages recoveractivationcode(activateprofilemodel model);
+
        // MembershipUser CreateUser(string username, string password, string email, string securityQuestion, string securityAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status);
    
    

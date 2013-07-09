@@ -1653,10 +1653,6 @@
       <Project>{FF7B929D-6086-4509-9095-396845569906}</Project>
       <Name>LoggingLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
-      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
-      <Name>Shell.MVC2.Infrastructure</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\2012.1.419\jquery-1.7.1.min.js" />

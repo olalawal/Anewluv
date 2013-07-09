@@ -190,11 +190,11 @@ namespace Shell.MVC2.Services.Authentication
                 {
                     var anewluvmessages = _anewluvmembershipprovider.activateprofile(model);
 
-                    if (anewluvmessages.errormessages.Count() > 0)
+                    if (anewluvmessages.errormessages.Count() == 0)
                     {
                         //get the profile info to return
                         //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
-                        response.profileid1 = model.profileid.ToString();//profile.id.ToString();
+                      //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
                         response.email = model.emailaddress;//profile.emailaddress;
                         ResponseMessage reponsemessage = new ResponseMessage("", anewluvmessages.message , "");
                         response.ResponseMessages.Add(reponsemessage);
@@ -218,6 +218,47 @@ namespace Shell.MVC2.Services.Authentication
                 }
 
             }
+
+            public AnewluvResponse recoveractivationcode(activateprofilemodel model)
+            {
+                AnewluvResponse response = new AnewluvResponse();
+
+                try
+                {
+                    var anewluvmessages = _anewluvmembershipprovider.recoveractivationcode(model);
+
+                    if (anewluvmessages.errormessages.Count() == 0)
+                    {
+                        //get the profile info to return
+                        //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
+                      //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
+                        response.email = model.emailaddress;//profile.emailaddress;
+                        ResponseMessage reponsemessage = new ResponseMessage("", anewluvmessages.message, "");
+                        response.ResponseMessages.Add(reponsemessage);
+                        //send the email vai service
+
+                    }
+                    else
+                    {
+                        ResponseMessage reponsemessage = new ResponseMessage("", "There was a problem sending your activation code please try again later", anewluvmessages.errormessages.First());
+                        response.ResponseMessages.Add(reponsemessage);
+                    }
+
+                 
+
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error activating profile : authenticantion  service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
+
+            }
+
             #endregion
 
 

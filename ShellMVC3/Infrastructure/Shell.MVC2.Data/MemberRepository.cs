@@ -1143,6 +1143,25 @@ namespace Shell.MVC2.Data
         }
     }
 
+    public profile getprofilebyemailaddress(string email)
+    {
+        try
+        {
+            return (from p in _datingcontext.profiles
+                    where p.emailaddress  == email
+                    select p).FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
+        }
+    }
 
        /// <summary>
        /// added ability to grab from appfabric cache

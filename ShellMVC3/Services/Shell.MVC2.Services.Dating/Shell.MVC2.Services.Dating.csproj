@@ -74,6 +74,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Shell.MVC2.Services.Contracts\Shell.MVC2.Services.Contracts.csproj">
+      <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
+      <Name>Shell.MVC2.Services.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
       <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
       <Name>Dating.Server.Data.Web</Name>
@@ -85,10 +89,6 @@
     <ProjectReference Include="..\..\Domain\Interfaces\Shell.MVC2.Interfaces\Shell.MVC2.Interfaces.csproj">
       <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
       <Name>Shell.MVC2.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Contracts\Shell.MVC2.Services.Contracts\Shell.MVC2.Services.Contracts.csproj">
-      <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
-      <Name>Shell.MVC2.Services.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

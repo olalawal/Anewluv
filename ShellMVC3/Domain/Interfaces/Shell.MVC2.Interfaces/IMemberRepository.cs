@@ -23,6 +23,7 @@ namespace Shell.MVC2.Interfaces
 
        //initial profile stuffs
         Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyusername(string username);
+        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyemailaddress(string email);
         profiledata getprofiledatabyprofileid(int profileid) ;
         searchsetting getperfectmatchsearchsettingsbyprofileid(int profileid);
         searchsetting createmyperfectmatchsearchsettingsbyprofileid(int profileid);       

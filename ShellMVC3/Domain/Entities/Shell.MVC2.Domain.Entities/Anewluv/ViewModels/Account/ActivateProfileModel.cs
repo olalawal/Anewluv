@@ -48,8 +48,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public PhotoUploadViewModel photouploadviewmodel { get; set; }
 
-        [DataMember]
-       public int profileid { get; set; }
+       // [DataMember]
+     //  public int profileid { get; set; }
 
     }
 }

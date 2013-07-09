@@ -244,6 +244,11 @@ namespace Shell.MVC2.Services.Dating
 
         }
 
+       public profile getprofilebyemailaddress(string email)
+       {
+           return _memberrepository.getprofilebyemailaddress(email);
+       }
+
 
         /// <summary>
         /// added ability to grab from appfabric cache

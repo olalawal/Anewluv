@@ -168,6 +168,10 @@
     <Compile Include="WCFApiKeyAuthorization\APIKeyAuthorization.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
+      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
+      <Name>Shell.MVC2.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Components\LoggingLibrary\LoggingLibrary.csproj">
       <Project>{FF7B929D-6086-4509-9095-396845569906}</Project>
       <Name>LoggingLibrary</Name>
@@ -191,10 +195,6 @@
     <ProjectReference Include="..\Interfaces\Shell.MVC2.Infrastructure.Interfaces\Shell.MVC2.Infrastructure.Interfaces.csproj">
       <Project>{475514E9-91B6-4CC7-91C8-122BFEFC876C}</Project>
       <Name>Shell.MVC2.Infrastructure.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
-      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
-      <Name>Shell.MVC2.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

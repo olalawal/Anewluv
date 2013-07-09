@@ -57,10 +57,12 @@ namespace Shell.MVC2.AppFabric
         /// </summary>
         private static DataCache GetCache
         {
-
+           
 
             get
             {
+
+                return null;
 #if DISCONECTED
                 return null;
 #else
@@ -145,6 +147,7 @@ namespace Shell.MVC2.AppFabric
 
             get
             {
+                return null;
                 //added the code to handle disconnected clients
 #if DISCONECTED
                 return null;
