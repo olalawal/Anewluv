@@ -19,50 +19,50 @@ namespace Shell.MVC2.Interfaces
        // registermodel mapregistrationtest();  
        //end of profile mapping
 
-       membersinrole getmemberrolebyprofileid(int profileid);
+       membersinrole getmemberrolebyprofileid(ProfileModel model);
 
        //initial profile stuffs
-        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyusername(string username);
-        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyemailaddress(string email);
-        profiledata getprofiledatabyprofileid(int profileid) ;
-        searchsetting getperfectmatchsearchsettingsbyprofileid(int profileid);
-        searchsetting createmyperfectmatchsearchsettingsbyprofileid(int profileid);       
+        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyusername(ProfileModel model);
+        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyemailaddress(ProfileModel model);
+        profiledata getprofiledatabyprofileid(ProfileModel model) ;
+        searchsetting getperfectmatchsearchsettingsbyprofileid(ProfileModel model);
+        searchsetting createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model);       
      
        //get full profile stuff       
-        string getgenderbyscreenname(string screenname);            
-        string getgenderbyphotoid(Guid guid);  
+        string getgenderbyscreenname(ProfileModel model);
+        string getgenderbyphotoid(ProfileModel model);  
        //TO DO this needs to be  linked to roles
 
       //Message and Email Quota stuff
        // Description:	Updates the users logout time
        // added 1/18/2010 ola lawal
-        bool checkifquoutareachedandupdate(int profileid) ; 
+        bool checkifquoutareachedandupdate(ProfileModel model) ; 
        //Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
        //update the database i.e create folders and change profile status from guest to active ?!
-        bool createmailboxfolders(int strProfileID);
-        bool activateprofile(int strProfileID);      
+        bool createmailboxfolders(ProfileModel model);
+        bool activateprofile(ProfileModel model);      
      
        //updates the profile with a password that is presumed to be already encyrpted
-        bool updatepassword(int profileid, string encryptedpassword);       
-        bool addnewopenidforprofile(int profileid, string openidIdentifer, string openidProvidername); 
+        bool updatepassword(ProfileModel model, string encryptedpassword);       
+        bool addnewopenidforprofile(ProfileModel model, string openidIdentifer, string openidProvidername); 
        //check if profile is activated 
-        bool checkifprofileisactivated(int strProfileID);   
+        bool checkifprofileisactivated(ProfileModel model);   
        //check if mailbox folder exist
-        bool checkifmailboxfoldersarecreated(int strProfileID);     
+        bool checkifmailboxfoldersarecreated(ProfileModel model);     
 
       //DateTimeFUcntiosn for longin etc "
        //********************************************
        // Description:	Updates the users logout time
        // added 1/18/2010 ola lawal
-        bool updateuserlogouttime(int profileid, string sessionID);
+        bool updateuserlogouttime(ProfileModel model);
        //get the last time the user logged in from profile
-        Nullable<DateTime> getmemberlastlogintime(int profileid);
+        Nullable<DateTime> getmemberlastlogintime(ProfileModel model);
       
        //updates all the areas  that handle when a user logs in 
        // added 1/18/2010 ola lawal
        //also updates the last log in and profile data
-        bool updateuserlogintime(string username, string sessionID);       
-        bool updateuserlogintimebyprofileid(int profileid, string sessionID);
+        bool updateuserlogintime(ProfileModel model);       
+        bool updateuserlogintimebyprofileid(ProfileModel model);
        
        //date time functions '
        //***********************************************************
@@ -71,46 +71,46 @@ namespace Shell.MVC2.Interfaces
        //Ola Lawal 7/10/2009 feel free to drill down even to the day
         string getlastloggedinstring(DateTime LoginDate); 
        //returns true if somone logged on
-        bool getuseronlinestatus(int profileid);
+        bool getuseronlinestatus(ProfileModel model);
        
        //other standard verifcation methods added here
        /// <summary>
        /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
        /// 5/5/2012 als added check that the screen name withoute spaces does not match an existing one with no spaces either
        /// </summary>       
-        bool checkifscreennamealreadyexists(string strScreenName);
-        bool checkifusernamealreadyexists(string strusername);  
+        bool checkifscreennamealreadyexists(ProfileModel model);
+        bool checkifusernamealreadyexists(ProfileModel model);  
        //5-20-2012 added to check if a user email is registered       
-       // bool checkifusernamealreadyexists(int profileid);     
-        string validatesecurityansweriscorrect(int strProfileID, int SecurityQuestionID, string strSecurityAnswer);  
-        int? getprofileidbyusername(string strusername);
-        int? getprofileidbyscreenname(string strscreenname);
-        int? getprofileidbyssessionid(string sessionid);
-        string getusernamebyprofileid(int profileid);       
-        string getscreennamebyprofileid(int profileid);  
-        string getscreennamebyusername(string username);      
-        bool checkifemailalreadyexists(string strEmail);
+       // bool checkifusernamealreadyexists(ProfileModel model);     
+        string validatesecurityansweriscorrect(ProfileModel model);  
+        int? getprofileidbyusername(ProfileModel model);
+        int? getprofileidbyscreenname(ProfileModel model);
+        int? getprofileidbyssessionid(ProfileModel model);
+        string getusernamebyprofileid(ProfileModel model);       
+        string getscreennamebyprofileid(ProfileModel model);  
+        string getscreennamebyusername(ProfileModel model);      
+        bool checkifemailalreadyexists(ProfileModel model);
        // added by Deshola on 5/17/2011       
      //   byte[] GetGalleryPhotobyPhotoID(Guid strPhotoID);   
-     //   byte[] GetGalleryPhotobyProfileID(int strProfileID); 
-    //    byte[] GetGalleryPhotobyScreenName(string strScreenName);
-    //    byte[] GetGalleryImagebyNormalizedScreenName(string strScreenName);   
+     //   byte[] GetGalleryPhotobyProfileID(ProfileModel model); 
+    //    byte[] GetGalleryPhotobyScreenName(ProfileModel model);
+    //    byte[] GetGalleryImagebyNormalizedScreenName(ProfileModel model);   
        // bool InsertPhotoCustom(Shell.MVC2.Domain.Entities.Anewluv.photo newphoto);
-       // bool CheckIfPhotoCaptionAlreadyExists(int strProfileID, string strPhotoCaption);  
+       // bool CheckIfPhotoCaptionAlreadyExists(ProfileModel model, string strPhotoCaption);  
        /// <summary>
        /// Determines wethare an activation code matches the value in the database for a given profileID
        /// </summary>
-        bool checkifactivationcodeisvalid(int strProfileID, string strActivationCode);      
-      //  bool CheckForGalleryPhotobyProfileID(int strProfileID);
-      //  bool CheckForUploadedPhotobyProfileID(int strProfileID);
+        bool checkifactivationcodeisvalid(ProfileModel model);      
+      //  bool CheckForGalleryPhotobyProfileID(ProfileModel model);
+      //  bool CheckForUploadedPhotobyProfileID(ProfileModel model);
 
 
        //Hereis where the members Repository stuff that was in the MVC project starts at
        //************************************************************************************
 
-        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyprofileid(int profileid);         
-        bool deactivateprofile(int profileid);
-        visiblitysetting getprofilevisibilitysettingsbyprofileid(int profileid);          
+        Shell.MVC2.Domain.Entities.Anewluv.profile getprofilebyprofileid(ProfileModel model);         
+        bool deactivateprofile(ProfileModel model);
+        visiblitysetting getprofilevisibilitysettingsbyprofileid(ProfileModel model);          
      
      
       

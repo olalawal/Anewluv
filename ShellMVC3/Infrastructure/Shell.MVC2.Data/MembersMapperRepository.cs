@@ -53,13 +53,13 @@ namespace Shell.MVC2.Data
                {
 
                    profiledata viewerprofile = new profiledata();
-                   if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid(viewerprofileid.GetValueOrDefault());
+                   if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid(new ProfileModel { profileid = viewerprofileid.GetValueOrDefault() });
 
                    MemberSearchViewModel model = modeltomap;
                    //TO DO change to use Ninject maybe
                    // DatingService db = new DatingService();
                    //  MembersRepository membersrepo=  new MembersRepository();
-                   profile profile = membersrepository.getprofilebyprofileid(modeltomap.id); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
+                   profile profile = membersrepository.getprofilebyprofileid(new ProfileModel { profileid = modeltomap.id }); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
                    //  membereditRepository membereditRepository = new membereditRepository();
 
                    //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
@@ -94,7 +94,7 @@ namespace Shell.MVC2.Data
                    model.lastloggedonstring = membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
                    model.mycatchyintroline = profile.profiledata.mycatchyintroLine;
                    model.aboutme = profile.profiledata.aboutme;
-                   model.online = membersrepository.getuseronlinestatus(profile.id);
+                   model.online = membersrepository.getuseronlinestatus(new ProfileModel { profileid = profile.id });
                    model.perfectmatchsettings = profile.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault();
                    // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
                    //DistanceFromMe = 0  get distance from somwhere else
@@ -291,7 +291,7 @@ namespace Shell.MVC2.Data
                 //TO DO change to use Ninject maybe
                 // DatingService db = new DatingService();
                 //  MembersRepository membersrepo=  new MembersRepository();
-                profilemetadata metadata = membersrepository.getprofilebyprofileid(profileId).profilemetadata;
+                profilemetadata metadata = membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileId }).profilemetadata;
 
 
                 //load postaldata context
@@ -865,7 +865,7 @@ namespace Shell.MVC2.Data
             // var perfectmatchsearchsettings = membersrepository.GetPerFectMatchSearchSettingsByProfileID(ProfileID);
             // model.Profile = myProfile;
             //Profile data will be on the include
-            profile = membersrepository.getprofilebyprofileid(Convert.ToInt16(ProfileID));
+            profile = membersrepository.getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt16(ProfileID) });
             //TO DO this should be a try cacth with exception handling
 
             try
@@ -950,7 +950,7 @@ namespace Shell.MVC2.Data
                 //check if the user has a profile search settings value in stored DB if not add one and save it
                 if (profile.profilemetadata.searchsettings.Count == 0)
                 {
-                    membersrepository.createmyperfectmatchsearchsettingsbyprofileid(profile.id);
+                    membersrepository.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = profile.id });
                     //update the profile data with the updated value
                     //TO DO stop storing profiledata
                    // model.profiledata = membersrepository.getprofiledatabyprofileid(profile.id);
@@ -1191,7 +1191,7 @@ namespace Shell.MVC2.Data
             {
 
                 profile profile = new profile();
-                profile = membersrepository.getprofilebyprofileid(Convert.ToInt16(model.profile_id));
+                profile = membersrepository.getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt16(model.profile_id) });
 
                 model.profile = profile;
 

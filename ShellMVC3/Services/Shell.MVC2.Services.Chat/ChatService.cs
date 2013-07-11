@@ -10,6 +10,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels ;
 using Shell.MVC2.Interfaces;
 using System.ServiceModel.Activation;
 using System.Text.RegularExpressions;
+using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 
 
 namespace Shell.MVC2.Services.Chat
@@ -61,7 +62,7 @@ namespace Shell.MVC2.Services.Chat
 
             //get the gender if we are not disconnected 
 #if !DISCONECTED
-            gender = _membersrepository.getgenderbyscreenname(ScreenName);
+            gender = _membersrepository.getgenderbyscreenname(new ProfileModel { screenname = ScreenName });
 #endif
 
             // This method is used in the auth workflow. If the username is taken it will add a number
@@ -111,7 +112,7 @@ namespace Shell.MVC2.Services.Chat
 
             //get the gender if we are not disconnected 
 #if !DISCONECTED
-            gender = _membersrepository.getgenderbyscreenname(ScreenName);
+            gender = _membersrepository.getgenderbyscreenname(new ProfileModel { screenname = ScreenName });
 #endif
 
             //3-30-2012 updated code to allow for adding stuff from the repository

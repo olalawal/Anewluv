@@ -85,6 +85,7 @@
     <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
     <Compile Include="Anewluv\photo_securitylevel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\AnewLuvMessages.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\ExternalLogin.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\BasicSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\AppearanceSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\CharacterSettingsModel.cs" />
@@ -137,10 +138,9 @@
     <Compile Include="Anewluv\Lookups\lu_defaultmailboxfolder.cs" />
     <Compile Include="Anewluv\SharedModels\generatedlists.cs" />
     <Compile Include="Anewluv\SharedModels\sharedmodels.cs" />
-    <Compile Include="Anewluv\ViewModels\Account\UserProfile.cs" />
     <Compile Include="Anewluv\ViewModels\Account\LocalPasswordModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\RegisterExternalLoginModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Account\ExternalLogin.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\ProfilesearchModel.cs" />
     <Compile Include="Anewluv\ViewModels\Email\EmailEnums\subjecttype.cs" />
     <Compile Include="Anewluv\ViewModels\Email\EmailViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Email\EmailModel.cs" />

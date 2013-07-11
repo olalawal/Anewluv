@@ -996,7 +996,7 @@ namespace Shell.MVC2.Data
                 interest interest = new interest();
                 foreach (string value in screennames)
                 {
-                    int? interestprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    int? interestprofile_id = _membersrepository.getprofileidbyscreenname(new ProfileModel { screenname = value });
                     interest = this._datingcontext.interests.Where(p => p.profile_id == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                     interest.deletedbymemberdate = DateTime.Now;
                     interest.modificationdate = DateTime.Now;
@@ -1033,7 +1033,7 @@ namespace Shell.MVC2.Data
                 interest interest = new interest();
                 foreach (string value in screennames)
                 {
-                    int? interestprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    int? interestprofile_id = _membersrepository.getprofileidbyscreenname(new ProfileModel { screenname = value });
                     interest = this._datingcontext.interests.Where(p => p.profile_id == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
 
                     interest.deletedbymemberdate = null;
@@ -1665,7 +1665,7 @@ namespace Shell.MVC2.Data
                 peek peek = new peek();
                 foreach (string value in screennames)
                 {
-                   int? peekprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    int? peekprofile_id = _membersrepository.getprofileidbyscreenname(new ProfileModel { screenname = value });
                     peek = this._datingcontext.peeks.Where(p => p.profile_id == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
                     peek.deletedbymemberdate = DateTime.Now;
                     peek.modificationdate = DateTime.Now;
@@ -1702,7 +1702,7 @@ namespace Shell.MVC2.Data
                 peek peek = new peek();
                 foreach (string value in screennames)
                 {
-                   int? peekprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                   int? peekprofile_id =_membersrepository.getprofileidbyscreenname(new ProfileModel { screenname = value });
                     peek = this._datingcontext.peeks.Where(p => p.profile_id == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
 
                     peek.deletedbymemberdate = null;
@@ -2133,7 +2133,7 @@ namespace Shell.MVC2.Data
                 block block = new block();
                 foreach (string value in screennames)
                 {
-                    int? blockprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    int? blockprofile_id =_membersrepository.getprofileidbyscreenname(new ProfileModel { screenname = value });
                     block = this._datingcontext.blocks.Where(p => p.profile_id == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
 
                     block.removedate  = DateTime.Now;
@@ -2175,7 +2175,7 @@ namespace Shell.MVC2.Data
                 block block = new block();
                 foreach (string value in screennames)
                 {
-                    int? blockprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    int? blockprofile_id =_membersrepository.getprofileidbyscreenname(new ProfileModel { screenname = value });
                     block = this._datingcontext.blocks.Where(p => p.profile_id == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
 
                     block.removedate  = null;
@@ -2858,7 +2858,7 @@ namespace Shell.MVC2.Data
                 like like = new like();
                 foreach (string value in screennames)
                 {
-                    int? likeprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    int? likeprofile_id =_membersrepository.getprofileidbyscreenname(new ProfileModel { screenname = value });
                     like = this._datingcontext.likes.Where(p => p.profile_id == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
                     like.deletedbymemberdate = DateTime.Now;
                     like.modificationdate = DateTime.Now;
@@ -2896,7 +2896,7 @@ namespace Shell.MVC2.Data
                 like like = new like();
                 foreach (string value in screennames)
                 {
-                    int? likeprofile_id = _membersrepository.getprofileidbyscreenname(value);
+                    int? likeprofile_id =_membersrepository.getprofileidbyscreenname(new ProfileModel { screenname = value });
                     like = this._datingcontext.likes.Where(p => p.profile_id == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
 
                     like.deletedbymemberdate = null;

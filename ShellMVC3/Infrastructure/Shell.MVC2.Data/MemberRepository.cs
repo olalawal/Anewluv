@@ -38,9 +38,9 @@ namespace Shell.MVC2.Data
        //2-13-2013 olawal
        //new stuff to get a users roles 
 
-       public  membersinrole   getmemberrolebyprofileid(int profileid)
+       public  membersinrole   getmemberrolebyprofileid(ProfileModel model)
        {
-           return this._datingcontext.membersinroles.Where(p => p.profile_id == profileid).FirstOrDefault();
+           return this._datingcontext.membersinroles.Where(p => p.profile_id == model.profileid).FirstOrDefault();
        }
 
 
@@ -56,14 +56,14 @@ namespace Shell.MVC2.Data
              //get full profile stuff
             //4-28-2012 added profile visibility settings
             
-             public profiledata getprofiledatabyprofileid(int profileid)
+             public profiledata getprofiledatabyprofileid(ProfileModel model)
              {
 
                  try
                  {
                      ////attempt to load the search settings as well
                      //var items = from i in this._datingcontext.profiledata.Include("searchsettings").Include("Profile")
-                     //            where (i.ProfileID == profileid) && (i.searchsettings.Any(t => t.myperfectmatch == true))     
+                     //            where (i.ProfileID == model.profileid) && (i.searchsettings.Any(t => t.myperfectmatch == true))     
                      //   select i;
 
                      //var PerfectMatchsearchsettings = GetPerFectMatchsearchsettingsByProfileID(profileid);
@@ -75,13 +75,13 @@ namespace Shell.MVC2.Data
                      //else
                      //{
                      //  items = from i in this._datingcontext.profiledata
-                     //            where (i.ProfileID == profileid)         
+                     //            where (i.ProfileID == model.profileid)         
                      //  select i;
                      //  return items.FirstOrDefault();
                      //}
 
                      var items = from i in this._datingcontext.profiledata
-                                 where (i.profile_id == profileid)
+                                 where (i.profile_id == model.profileid)
                                  select i;
 
 
@@ -93,7 +93,7 @@ namespace Shell.MVC2.Data
                      {
 
 
-                         items.FirstOrDefault().profile.profilemetadata.searchsettings.Add(this.getperfectmatchsearchsettingsbyprofileid(profileid));
+                         items.FirstOrDefault().profile.profilemetadata.searchsettings.Add(this.getperfectmatchsearchsettingsbyprofileid(model));
 
                          return items.FirstOrDefault();
 
@@ -107,7 +107,7 @@ namespace Shell.MVC2.Data
                  {
                      //instantiate logger here so it does not break anything else.
                      logger = new ErroLogging(applicationEnum.MemberService);
-                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
                      //log error mesasge
                      //handle logging here
                      var message = ex.Message;
@@ -117,7 +117,7 @@ namespace Shell.MVC2.Data
 
              }
 
-             public searchsetting  getperfectmatchsearchsettingsbyprofileid(int profileid)
+             public searchsetting  getperfectmatchsearchsettingsbyprofileid(ProfileModel model)
              {
                  try
                  {
@@ -154,7 +154,7 @@ namespace Shell.MVC2.Data
                          //   .Include("searchsettings_SortByType")
                          //  .Include("searchsettings_WantKids")
                          //  .Include("searchsettings_Tribe")
-                     .Where(p => p.profile_id == profileid && p.myperfectmatch == true);
+                     .Where(p => p.profile_id == model.profileid && p.myperfectmatch == true);
 
                      //End If
                      if (tmpsearchsettings.Count() > 0)
@@ -168,7 +168,7 @@ namespace Shell.MVC2.Data
                          searchsetting Newsearchsettings = new searchsetting();
 
                          Newsearchsettings = new searchsetting();
-                         Newsearchsettings.profile_id = profileid;
+                         Newsearchsettings.profile_id = model.profileid.GetValueOrDefault();
                          Newsearchsettings.myperfectmatch = true;
                          Newsearchsettings.searchname = "myperfectmatch";
                          //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
@@ -185,7 +185,7 @@ namespace Shell.MVC2.Data
                  {
                      //instantiate logger here so it does not break anything else.
                      logger = new ErroLogging(applicationEnum.MemberService);
-                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
                      //log error mesasge
                      //handle logging here
                      var message = ex.Message;
@@ -193,7 +193,7 @@ namespace Shell.MVC2.Data
                  }
              }
 
-             public searchsetting createmyperfectmatchsearchsettingsbyprofileid(int profileid)
+             public searchsetting createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model)
              {
 
 
@@ -204,7 +204,7 @@ namespace Shell.MVC2.Data
                      searchsetting Newsearchsettings = new searchsetting();
 
                      Newsearchsettings = new searchsetting();
-                     Newsearchsettings.profile_id = profileid;
+                     Newsearchsettings.profile_id = model.profileid.GetValueOrDefault();
                      Newsearchsettings.myperfectmatch = true;
                      Newsearchsettings.searchname = "myperfectmatch";
                      //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
@@ -219,7 +219,7 @@ namespace Shell.MVC2.Data
                  {
                      //instantiate logger here so it does not break anything else.
                      logger = new ErroLogging(applicationEnum.MemberService);
-                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model. profileid , null);
                      //log error mesasge
                      //handle logging here
                      var message = ex.Message;
@@ -233,14 +233,14 @@ namespace Shell.MVC2.Data
              //get full profile stuff
             //*****************************************************
             
-             public string getgenderbyphotoid(Guid guid)
+             public string getgenderbyphotoid(ProfileModel model)
              {
                  try
                  {
                      lu_gender _gender = new lu_gender();
 
 
-                     _gender = (from x in (_datingcontext.photos.Where(f => f.id == guid))
+                     _gender = (from x in (_datingcontext.photos.Where(f => f.id == model.photoid))
                                 join f in _datingcontext.profiledata on x.profile_id equals f.profile_id
                                 select f.gender).FirstOrDefault();
 
@@ -264,7 +264,7 @@ namespace Shell.MVC2.Data
        //***********************************************************************
              // Description:	Updates the users logout time
              // added 1/18/2010 ola lawal
-             public bool checkifquoutareachedandupdate(int profileid)
+             public bool checkifquoutareachedandupdate(ProfileModel model)
              {
 
                  //get the profile
@@ -274,12 +274,12 @@ namespace Shell.MVC2.Data
                bool QuotaHit = false ;
 
                  //get the profileid from userID
-                 //int profileid = GetProfileIdbyusername(username);
+                 //ProfileModel model = GetProfileIdbyusername(username);
 
                  try
                  {
                   //get the profile
-                     myProfile = this._datingcontext.profiles.Where(p => p.id  == profileid).FirstOrDefault();
+                     myProfile = this._datingcontext.profiles.Where(p => p.id  == model.profileid).FirstOrDefault();
 
                      //update all other sessions that were not properly logged out
                     // myProfile = ;
@@ -308,7 +308,7 @@ namespace Shell.MVC2.Data
                  {
                      //instantiate logger here so it does not break anything else.
                      logger = new ErroLogging(applicationEnum.MemberService);
-                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model. profileid, null);
                      //log error mesasge
                      //handle logging here
                      var message = ex.Message;
@@ -321,7 +321,7 @@ namespace Shell.MVC2.Data
            // "Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
        //*************************************************************************************************
              //update the database i.e create folders and change profile status from guest to active ?!
-                public bool createmailboxfolders(int intprofileid)
+                public bool createmailboxfolders(ProfileModel model)
                 {
                    
                     int max = 5;
@@ -333,8 +333,7 @@ namespace Shell.MVC2.Data
                     for(i = 1; i < max;i++){
                    mailboxfolder    p = new mailboxfolder();
                     p.foldertype.id   = i;
-                    p.profiled_id  = intprofileid;
-                    p.active   = 1;
+                    p.profiled_id = model.profileid.GetValueOrDefault();
                           //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
                       switch(i)       
                       {         
@@ -366,7 +365,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -376,7 +375,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
 
-                public bool activateprofile(int intprofileid)
+                public bool activateprofile(ProfileModel model)
                 {
                     //get the profile
                     //profile myProfile;
@@ -384,7 +383,7 @@ namespace Shell.MVC2.Data
 
                     try
                     {
-                        myProfile  = this._datingcontext.profiles.Where(p => p.id  == intprofileid).FirstOrDefault();
+                        myProfile  = this._datingcontext.profiles.Where(p => p.id  == model.profileid).FirstOrDefault();
                         //update the profile status to 2
                         myProfile.status.id  = (int)profilestatusEnum.Activated;
                         //handele the update using EF
@@ -396,7 +395,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -406,7 +405,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
 
-                public bool deactivateprofile(int intprofileid)
+                public bool deactivateprofile(ProfileModel model)
                 {
                     //get the profile
                     //profile myProfile;
@@ -414,7 +413,7 @@ namespace Shell.MVC2.Data
 
                     try
                     {
-                        myProfile = this._datingcontext.profiles.Where(p => p.id == intprofileid).FirstOrDefault();
+                        myProfile = this._datingcontext.profiles.Where(p => p.id == model.profileid).FirstOrDefault();
                         //update the profile status to 2
                         myProfile.status.id  = (int)profilestatusEnum.Inactive ;
                         //handele the update using EF
@@ -426,7 +425,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -436,7 +435,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
                 //updates the profile with a password that is presumed to be already encyrpted
-                public bool updatepassword(int profileid, string encryptedpassword)
+                public bool updatepassword(ProfileModel model, string encryptedpassword)
                 {
 
                     //get the profile
@@ -445,7 +444,7 @@ namespace Shell.MVC2.Data
 
                     try
                     {
-                        myProfile = this._datingcontext.profiles.Where(p => p.id == profileid).FirstOrDefault();
+                        myProfile = this._datingcontext.profiles.Where(p => p.id == model.profileid).FirstOrDefault();
                         //update the profile status to 2
                         myProfile.password  = encryptedpassword;
                         myProfile.modificationdate  = DateTime.Now;
@@ -460,7 +459,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -470,7 +469,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
 
-                public bool addnewopenidforprofile(int profileid,string openidIdentifer, string openidProvidername)
+                public bool addnewopenidforprofile(ProfileModel model,string openidIdentifer, string openidProvidername)
                 {
 
                   
@@ -480,7 +479,7 @@ namespace Shell.MVC2.Data
                      {
                            active = true,
                           creationdate  = DateTime.UtcNow ,
-                           profile_id   = profileid,
+                           profile_id = model.profileid.GetValueOrDefault(),
                          openidprovider    = _datingcontext.lu_openidprovider.Where(p=> (p.description ).ToUpper() == openidProvidername.ToUpper ()).FirstOrDefault(),
                            openididentifier   = openidIdentifer
                         };
@@ -492,7 +491,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -503,12 +502,12 @@ namespace Shell.MVC2.Data
                 }
 
                 //check if profile is activated 
-                public bool checkifprofileisactivated(int intprofileid)
+                public bool checkifprofileisactivated(ProfileModel model)
                 {
                     try
                     {
                         IQueryable<profile> myQuery = default(IQueryable<profile>);
-                        myQuery = this._datingcontext.profiles.Where(p => p.id == intprofileid & p.status.id != 1);
+                        myQuery = this._datingcontext.profiles.Where(p => p.id == model.profileid & p.status.id != 1);
 
 
                         if (myQuery.Count() > 0)
@@ -526,7 +525,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -535,13 +534,13 @@ namespace Shell.MVC2.Data
                 }
 
                 //check if mailbox folder exist
-                public bool checkifmailboxfoldersarecreated(int intprofileid)
+                public bool checkifmailboxfoldersarecreated(ProfileModel model)
                 {
                     try
                     {
 
                         mailboxfolder myQuery;
-                        myQuery = this._datingcontext.mailboxfolders.Where(p => p.profiled_id == intprofileid).FirstOrDefault();
+                        myQuery = this._datingcontext.mailboxfolders.Where(p => p.profiled_id == model.profileid).FirstOrDefault();
 
 
                         if (myQuery != null)
@@ -557,7 +556,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -571,7 +570,7 @@ namespace Shell.MVC2.Data
        //**********************************************************
                 // Description:	Updates the users logout time
                 // added 1/18/2010 ola lawal
-  public bool updateuserlogouttime(int profileid, string sessionID)
+                public bool updateuserlogouttime(ProfileModel model)
                 {
 
                     //get the profile
@@ -580,12 +579,12 @@ namespace Shell.MVC2.Data
                     DateTime currenttime = DateTime.Now;
 
                     //get the profileid from userID
-                    //int profileid = GetProfileIdbyusername(username);
+                    //ProfileModel model = GetProfileIdbyusername(username);
 
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id == profileid && p.offline == true && p.sessionid  == sessionID);
+                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id == model.profileid && p.offline == true && p.sessionid  == model.sessionid);
 
                         foreach (userlogtime p in myQuery)
                         {
@@ -598,7 +597,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -609,7 +608,7 @@ namespace Shell.MVC2.Data
 
 
                 //get the last time the user logged in from profile
-  public Nullable<DateTime> getmemberlastlogintime(int profileid)
+  public Nullable<DateTime> getmemberlastlogintime(ProfileModel model)
                 {
 
                     //get the profile
@@ -619,7 +618,7 @@ namespace Shell.MVC2.Data
                     try
                     {
 
-                        myQuery = this._datingcontext.profiles.Where(p => p.id  == profileid);
+                        myQuery = this._datingcontext.profiles.Where(p => p.id  == model.profileid);
                         if (myQuery.Count() > 0)
                         {
                             return myQuery.FirstOrDefault().logindate ;
@@ -633,7 +632,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid, null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -647,7 +646,7 @@ namespace Shell.MVC2.Data
                 //updates all the areas  that handle when a user logs in 
                 // added 1/18/2010 ola lawal
                 //also updates the last log in and profile data
-   public bool updateuserlogintime(string username, string sessionID)
+                public bool updateuserlogintime(ProfileModel model)
                 {
 
                     //get the profile
@@ -658,11 +657,11 @@ namespace Shell.MVC2.Data
                     DateTime currenttime = DateTime.Now;
 
                     //get the profileid from userID
-                    int? profileid = getprofileidbyusername(username);
+                    int? profileid = getprofileidbyusername(model);
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id  == profileid && p.offline  == false );
+                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id  == model.profileid && p.offline  == false );
 
                         foreach (userlogtime p in myQuery)
                         {
@@ -671,14 +670,14 @@ namespace Shell.MVC2.Data
                         }
 
                         //aloso update the profile table with current login date
-                        myProfile = this._datingcontext.profiles.Where(p => p.id == profileid).FirstOrDefault();
+                        myProfile = this._datingcontext.profiles.Where(p => p.id == model.profileid).FirstOrDefault();
                         //update the profile status to 2
                         myProfile.logindate  = currenttime;
 
 
                         //noew aslo update the logtime and then 
                         myLogtime.profile_id  = profileid.GetValueOrDefault();
-                        myLogtime.sessionid  = sessionID;
+                        myLogtime.sessionid  = model.sessionid;
                         myLogtime.logintime  = currenttime;
                         this._datingcontext.userlogtimes.Add(myLogtime);
                         //save all changes bro
@@ -699,7 +698,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
 
-    public bool updateuserlogintimebyprofileid(int intprofileid, string sessionID)
+                public bool updateuserlogintimebyprofileid(ProfileModel model)
                 {
 
                     //get the profile
@@ -710,11 +709,11 @@ namespace Shell.MVC2.Data
                     DateTime currenttime = DateTime.Now;
 
                     //get the profileid from userID
-                    int profileid = intprofileid;//GetProfileIdbyusername(username);
+                   // ProfileModel model = model;//GetProfileIdbyusername(username);
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id  == profileid && p.offline  == false );
+                        myQuery = this._datingcontext.userlogtimes.Where(p => p.profile_id  == model.profileid && p.offline  == false );
 
                         foreach (userlogtime p in myQuery)
                         {
@@ -723,14 +722,14 @@ namespace Shell.MVC2.Data
                         }
 
                         //aloso update the profile table with current login date
-                        myProfile = this._datingcontext.profiles.Where(p => p.id == profileid).FirstOrDefault();
+                        myProfile = this._datingcontext.profiles.Where(p => p.id == model.profileid).FirstOrDefault();
                         //update the profile status to 2
                         myProfile.logindate = currenttime;
 
 
                         //noew aslo update the logtime and then 
-                        myLogtime.profile_id  = profileid;
-                        myLogtime.sessionid  = sessionID;
+                        myLogtime.profile_id = model.profileid.GetValueOrDefault();
+                        myLogtime.sessionid  = model.sessionid ;
                         myLogtime.logintime = currenttime;
                         this._datingcontext.userlogtimes.Add(myLogtime);
                         //save all changes bro
@@ -741,7 +740,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -836,7 +835,7 @@ namespace Shell.MVC2.Data
                 }
 
                 //returns true if somone logged on
-     public bool getuseronlinestatus(int profileid)
+     public bool getuseronlinestatus(ProfileModel model)
                 {
                     try
                     {
@@ -844,7 +843,7 @@ namespace Shell.MVC2.Data
                         //profile myProfile;
                         IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
 
-                        myQuery = _datingcontext.userlogtimes.Where(p => p.profile_id == profileid && p.offline == false).Distinct().OrderBy(n => n.logintime);
+                        myQuery = _datingcontext.userlogtimes.Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime);
 
                         //            var queryB =
                         //                (from o in db.Orders
@@ -860,7 +859,7 @@ namespace Shell.MVC2.Data
                     {
                         //instantiate logger here so it does not break anything else.
                         logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -877,12 +876,12 @@ namespace Shell.MVC2.Data
         /// 5/5/2012 als added check that the screen name withoute spaces does not match an existing one with no spaces either
         /// </summary>
    
-   public bool checkifscreennamealreadyexists(string strscreenname)
+   public bool checkifscreennamealreadyexists(ProfileModel model)
         {
             try
             {
                 IQueryable<profile> myQuery = default(IQueryable<profile>);
-                myQuery = this._datingcontext.profiles.Where(p => p.screenname == strscreenname | p.screenname.Replace(" ", "") == strscreenname.Replace(" ", "") | p.screenname.Replace(" ", "") == strscreenname);
+                myQuery = this._datingcontext.profiles.Where(p => p.screenname == model.screenname  | p.screenname.Replace(" ", "") == model.screenname.Replace(" ", "") | p.screenname.Replace(" ", "") == model.screenname );
 
 
                 if (myQuery.Count() > 0)
@@ -909,13 +908,13 @@ namespace Shell.MVC2.Data
 
    //5-20-2012 added to check if a user email is registered
   
-   //public bool checkifusernamealreadyexists(int profileid)
+   //public bool checkifusernamealreadyexists(ProfileModel model)
    //{
 
    //    try
    //    {
    //        IQueryable<profile> myQuery = default(IQueryable<profile>);
-   //        myQuery = this._datingcontext.profiles.Where(p => p.id == profileid);
+   //        myQuery = this._datingcontext.profiles.Where(p => p.id == model.profileid);
 
 
    //        if (myQuery.Count() > 0)
@@ -932,7 +931,7 @@ namespace Shell.MVC2.Data
    //    {
    //        //instantiate logger here so it does not break anything else.
    //        logger = new ErroLogging(applicationEnum.MemberService);
-   //        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+   //        logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
    //        //log error mesasge
    //        //handle logging here
    //        var message = ex.Message;
@@ -940,12 +939,12 @@ namespace Shell.MVC2.Data
    //    }
    //}
     
-     public bool checkifusernamealreadyexists(string strusername)
+     public bool checkifusernamealreadyexists(ProfileModel model)
     {
         try
         {
             IQueryable<profile> myQuery = default(IQueryable<profile>);
-            myQuery = this._datingcontext.profiles.Where(p => p.username == strusername);
+            myQuery = this._datingcontext.profiles.Where(p => p.username == model.username);
 
             if (myQuery.Count() > 0)
             {
@@ -968,12 +967,12 @@ namespace Shell.MVC2.Data
         }
     }
           
-    public string validatesecurityansweriscorrect(int intprofileid ,int SecurityQuestionID,string strSecurityAnswer )
+    public string validatesecurityansweriscorrect(ProfileModel model )
     {
         try
         {
             IQueryable<profile> myQuery = default(IQueryable<profile>);
-            myQuery = this._datingcontext.profiles.Where(p => p.id == intprofileid && p.securityanswer == strSecurityAnswer && p.securityquestion.id == SecurityQuestionID);
+            myQuery = this._datingcontext.profiles.Where(p => p.id == model.profileid && p.securityanswer == model.securityanswer && p.securityquestion.description  == model.securityquestion);
 
             if (myQuery.Count() > 0)
             {
@@ -989,7 +988,7 @@ namespace Shell.MVC2.Data
         {
             //instantiate logger here so it does not break anything else.
             logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1000,14 +999,14 @@ namespace Shell.MVC2.Data
     /// <summary>
     /// Determines wethare an activation code matches the value in the database for a given profileid
     /// </summary>
-    public bool checkifactivationcodeisvalid(int intprofileid, string strActivationCode)
+    public bool checkifactivationcodeisvalid(ProfileModel model)
     {
 
         IQueryable<profile> myQuery = default(IQueryable<profile>);
         try
         {
             //Dim ctx As New Entities()
-            myQuery = this._datingcontext.profiles.Where(p => p.activationcode == strActivationCode & p.id == intprofileid);
+            myQuery = this._datingcontext.profiles.Where(p => p.activationcode == model.activationcode & p.id == model.profileid);
 
             //End If
             if (myQuery.Count() > 0)
@@ -1024,7 +1023,7 @@ namespace Shell.MVC2.Data
         {
             //instantiate logger here so it does not break anything else.
             logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, intprofileid , null);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1034,7 +1033,7 @@ namespace Shell.MVC2.Data
     }
        
                   
-    public profile getprofilebyusername(string username)
+    public profile getprofilebyusername(ProfileModel model)
     {
 
 
@@ -1043,7 +1042,7 @@ namespace Shell.MVC2.Data
         try
         {
             tmpprofile = this._datingcontext.profiles.Include("profiledata")
-                .Where(p => p.username == username);
+                .Where(p => p.username == model. username);
             //End If
             if (tmpprofile.Count() > 0)
             {
@@ -1068,7 +1067,7 @@ namespace Shell.MVC2.Data
     }
 
 
-    public profile getprofilebyscreenname(string username)
+    public profile getprofilebyscreenname(ProfileModel model)
     {
 
 
@@ -1078,7 +1077,7 @@ namespace Shell.MVC2.Data
         try
         {
             tmpprofile = this._datingcontext.profiles.Include("profiledata")
-            .Where(p => p.username == username);
+            .Where(p => p.username == model.username);
             //End If
             if (tmpprofile.Count() > 0)
             {
@@ -1102,12 +1101,12 @@ namespace Shell.MVC2.Data
         }
     }
 
-    public int getProfileIdbyusername(string User)
+    public int getProfileIdbyusername(ProfileModel model)
     {
         try
         {
             return (from p in _datingcontext.profiles
-                    where p.username == User
+                    where p.username == model.username
                     select p.id).FirstOrDefault();
         }
         catch (Exception ex)
@@ -1123,12 +1122,12 @@ namespace Shell.MVC2.Data
     }
 
 
-    public profile getprofilebyprofileid(int profileid)
+    public profile getprofilebyprofileid(ProfileModel model)
     {
         try
         {
             return (from p in _datingcontext.profiles
-                    where p.id == profileid
+                    where p.id == model.profileid
                     select p).FirstOrDefault();
         }
         catch (Exception ex)
@@ -1143,12 +1142,12 @@ namespace Shell.MVC2.Data
         }
     }
 
-    public profile getprofilebyemailaddress(string email)
+    public profile getprofilebyemailaddress(ProfileModel model)
     {
         try
         {
             return (from p in _datingcontext.profiles
-                    where p.emailaddress  == email
+                    where p.emailaddress  == model.email
                     select p).FirstOrDefault();
         }
         catch (Exception ex)
@@ -1168,13 +1167,13 @@ namespace Shell.MVC2.Data
        /// </summary>
        /// <param name="strusername"></param>
        /// <returns></returns>
-    public int? getprofileidbyusername(string strusername)
+    public int? getprofileidbyusername(ProfileModel model)
     {
         try
         {
             //IQueryable<profile> myQuery = default(IQueryable<profile>);
             //return this._datingcontext.profiles.Where(p => p.username  == strusername ).FirstOrDefault().id;
-            return CachingFactory.getprofileidbyusername(strusername, this._datingcontext);
+            return CachingFactory.getprofileidbyusername(model.username, this._datingcontext);
             //if (myQuery.Count() > 0)
             //{
             //    return myQuery.FirstOrDefault().id.ToString();
@@ -1196,11 +1195,11 @@ namespace Shell.MVC2.Data
         }
     }
                  
-    public int? getprofileidbyscreenname(string screenname)
+    public int? getprofileidbyscreenname(ProfileModel model)
     {
         try
         {
-            return CachingFactory.getprofileidbyscreenname(screenname, this._datingcontext);
+            return CachingFactory.getprofileidbyscreenname(model.screenname, this._datingcontext);
         }
         catch (Exception ex)
         {
@@ -1214,11 +1213,11 @@ namespace Shell.MVC2.Data
         }
     }
 
-    public int? getprofileidbyssessionid(string strsessionid)
+    public int? getprofileidbyssessionid(ProfileModel model)
     {
         try
         {
-            return CachingFactory.getprofileidbysessionid(strsessionid);
+            return CachingFactory.getprofileidbysessionid(model.sessionid);
         }
         catch (Exception ex)
         {
@@ -1232,12 +1231,12 @@ namespace Shell.MVC2.Data
         }
     }
    
-    public string getusernamebyprofileid(int profileid)
+    public string getusernamebyprofileid(ProfileModel model)
     {
         try
         {
             IQueryable<profile> myQuery = default(IQueryable<profile>);
-            myQuery = this._datingcontext.profiles.Where(p => p.id == profileid);
+            myQuery = this._datingcontext.profiles.Where(p => p.id == model.profileid);
 
             if (myQuery.Count() > 0)
             {
@@ -1260,12 +1259,12 @@ namespace Shell.MVC2.Data
         }
     }
    
-    public string getscreennamebyprofileid(int profileid)
+    public string getscreennamebyprofileid(ProfileModel model)
     {
         try
         {
             IQueryable<profile> myQuery = default(IQueryable<profile>);
-            myQuery = this._datingcontext.profiles.Where(p => p.id == profileid);
+            myQuery = this._datingcontext.profiles.Where(p => p.id == model.profileid);
 
             if (myQuery.Count() > 0)
             {
@@ -1280,7 +1279,7 @@ namespace Shell.MVC2.Data
         {
             //instantiate logger here so it does not break anything else.
             logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1288,12 +1287,12 @@ namespace Shell.MVC2.Data
         }
     }
  
-    public string getscreennamebyusername(string username)
+    public string getscreennamebyusername(ProfileModel model)
     {
         try
         {
             IQueryable<profile> myQuery = default(IQueryable<profile>);
-            myQuery = this._datingcontext.profiles.Where(p => p.username == username);
+            myQuery = this._datingcontext.profiles.Where(p => p.username == model.username);
 
             if (myQuery.Count() > 0)
             {
@@ -1316,7 +1315,7 @@ namespace Shell.MVC2.Data
         }
     }
 
-     public bool checkifemailalreadyexists(string strEmail)
+     public bool checkifemailalreadyexists(ProfileModel model)
     {
 
         try
@@ -1325,7 +1324,7 @@ namespace Shell.MVC2.Data
             //Dim ctx As New Entities()
 
 
-            myQuery = this._datingcontext.profiles.Where(p => p.emailaddress == strEmail);
+            myQuery = this._datingcontext.profiles.Where(p => p.emailaddress == model.email);
 
             if (myQuery.Count() > 0)
             {
@@ -1355,15 +1354,15 @@ namespace Shell.MVC2.Data
    
           
          
-        public string getgenderbyscreenname(string screenname)
+        public string getgenderbyscreenname(ProfileModel model)
         {
 
             try
             {
-                if (screenname == null) return null;
+                if (model.screenname == null) return null;
 
                 var profile = (from p in _datingcontext.profiles
-                               where p.screenname == screenname
+                               where p.screenname == model.screenname
                                join f in _datingcontext.profiledata on p.id equals f.profile_id
                                select f.gender).FirstOrDefault();
 
@@ -1382,19 +1381,19 @@ namespace Shell.MVC2.Data
 
         }
        
-        public visiblitysetting getprofilevisibilitysettingsbyprofileid(int profileid)
+        public visiblitysetting getprofilevisibilitysettingsbyprofileid(ProfileModel model)
         {
             try
             {
                 return (from p in _datingcontext.visibilitysettings
-                        where p.profile_id == profileid
+                        where p.profile_id == model.profileid
                         select p).FirstOrDefault();
             }
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
                 logger = new ErroLogging(applicationEnum.MemberService);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid , null);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;

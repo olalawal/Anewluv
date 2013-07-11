@@ -132,8 +132,9 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //check if decrypted string macthed username to upper  + secret
                 if (actualpasswordstring == decryptedPassword)
                 {
-                    //log the user logtime here so it is common to silverlight and MVC
-                    _memberepository.updateuserlogintime(username, HttpContext.Current.Session.SessionID);
+                    //log the user logtime here so it is common to silverlight and MVC                  
+                  
+                    _memberepository.updateuserlogintime(new ProfileModel { username  =  username , sessionid =HttpContext.Current.Session.SessionID  } );
                     //also update the profiledata for the last login date
                     return true;
                 }
@@ -188,7 +189,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 if (myQuery.Count() > 0)
                 {
                     //log the user logtime here so it is common to silverlight and MVC
-                    _memberepository.updateuserlogintime(username, HttpContext.Current.Session.SessionID);
+               _memberepository.updateuserlogintime(new ProfileModel { username  =  username , sessionid =HttpContext.Current.Session.SessionID  } );
 
                     return true;
                 }
@@ -235,7 +236,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 if (myopenIDstore == null && myprofile != null)
                 //add the openID provider if its a new one
                 {
-                    _memberepository.addnewopenidforprofile(myprofile.id, openidIdentifer, openidProvidername);
+                    _memberepository.addnewopenidforprofile(new ProfileModel { profileid = myprofile.id  }, openidIdentifer, openidProvidername);
                 }
 
                 //first you have to get the encrypted sctring by email address and username 
@@ -250,7 +251,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 // myQuery = datingcontext.profiles.Where(p => p.ProfileID == VerifedEmail && p.ProfileStatusID == 2);
                 if (myprofile != null)
                 {
-                    _memberepository.updateuserlogintimebyprofileid(myprofile.id, HttpContext.Current.Session.SessionID);
+                    _memberepository.updateuserlogintimebyprofileid(new ProfileModel { profileid = myprofile.id , sessionid =  HttpContext.Current.Session.SessionID });
                     return true;
                 }
                 else
@@ -349,12 +350,12 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
                //4/12/2013 OLAWAL  added code to make sure that dupe email,username is not allowed is now allowed
                   
-                    if (_memberepository.checkifemailalreadyexists(email) == true)
+                    if (_memberepository.checkifemailalreadyexists(new ProfileModel { email = email }) == true)
                     {
                         status = MembershipCreateStatus.DuplicateEmail  ;
                         return membershipprovider;
                     }
-                    if (_memberepository.checkifusernamealreadyexists(username ) == true)
+                    if (_memberepository.checkifusernamealreadyexists(new ProfileModel { username = username }) == true)
                     {
                         status = MembershipCreateStatus.DuplicateUserName ;
                         return membershipprovider;
@@ -443,7 +444,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 }
 
                 //populate the object to send back so we do not have to requery from athe service side
-                Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberepository.getprofilebyusername(username);
+                Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberepository.getprofilebyusername(new ProfileModel { username = username });
                 membershipprovider.profileid = profile.id;
                 membershipprovider.Email = email;
 
@@ -499,14 +500,14 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //  if (securityquestionID == null) return "";
 
                 // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
-                var username = _memberepository.getusernamebyprofileid(Convert.ToInt16(profileid));
+                var username = _memberepository.getusernamebyprofileid(new ProfileModel { profileid = Convert.ToInt16(profileid) });
                 var generatedpassword = "";
                 if (username != "")
                 {
                     //we have the generated password now update the user's account with new password
 
                     generatedpassword = GeneratePassword();
-                    _memberepository.updatepassword(Convert.ToInt16(profileid), Encryption.encryptString(generatedpassword));
+                    _memberepository.updatepassword(new ProfileModel { profileid = Convert.ToInt16(profileid) }, Encryption.encryptString(generatedpassword));
 
 
                     //'reset the password 
@@ -675,7 +676,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
             //}
 
-            u = _memberepository.getprofilebyusername (username);
+            u = _memberepository.getprofilebyusername(new ProfileModel { username = username });
 
 
             if(u == null)
@@ -771,12 +772,12 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             //also create a members view model to store pertinent data i.e persist photos profile ID etc
             var membersmodel = new MembersViewModel();
             //get the macthcing member data using the profile ID/email entered
-             profile = _memberepository.getprofilebyemailaddress   ( model.emailaddress);
+            profile = _memberepository.getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
            //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
 
             //verify that user entered correct email before doing anything
             //TO DO add these error messages to resource files
-             if (profile == null | _memberepository.checkifemailalreadyexists(profile.emailaddress) == false)
+            if (profile == null | _memberepository.checkifemailalreadyexists(new ProfileModel { email = profile.emailaddress }) == false)
             {
                 messages.errormessages.Add("There is no registered account with the email address: " +  model.emailaddress  + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
                 //hide the photo view in thsi case

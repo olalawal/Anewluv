@@ -561,7 +561,7 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile model = _membersrepository.getprofilebyprofileid(profileid);
+              profile model = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileid });
 
               EmailViewModel returnmodel = new EmailViewModel();
 
@@ -596,7 +596,7 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile model = _membersrepository.getprofilebyprofileid(profileid);
+              profile model =_membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileid });
 
               EmailViewModel returnmodel = new EmailViewModel();
 
@@ -846,7 +846,7 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile recipient = _membersrepository.getprofilebyprofileid(profileid);
+              profile recipient =_membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileid });
               profile admin = _membersrepository.getprofilebyprofileid(adminprofileid);
               //get rejecttion reason
               string reasondesc = _datingcontext.lu_photorejectionreason.Where(p => p.id == (int)reason).FirstOrDefault().description;
@@ -878,7 +878,7 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile recipient = _membersrepository.getprofilebyprofileid(profileid);
+              profile recipient =_membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileid });
               // profile admin = _membersrepository.getprofilebyprofileid(adminprofileid);
               //get rejecttion reason
               // string reasondesc = _datingcontext.lu_photorejectionreason.Where(p => p.id == (int)reason).FirstOrDefault().description;

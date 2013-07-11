@@ -42,32 +42,32 @@ namespace Shell.MVC2.Services.Dating
         //get full profile stuff
         //4-28-2012 added profile visibility settings
 
-        public profiledata getprofiledatabyprofileid(string profileid)
+        public profiledata getprofiledatabyprofileid(ProfileModel model)
         {
 
-            return _memberrepository.getprofiledatabyprofileid(Convert.ToInt32(profileid));
+            return _memberrepository.getprofiledatabyprofileid(model);
 
         }
 
-        public searchsetting getperfectmatchsearchsettingsbyprofileid(string profileid)
+        public searchsetting getperfectmatchsearchsettingsbyprofileid(ProfileModel model)
         {
 
-            return _memberrepository.getperfectmatchsearchsettingsbyprofileid(Convert.ToInt32(profileid));
+            return _memberrepository.getperfectmatchsearchsettingsbyprofileid(model);
         }
 
-        public searchsetting createmyperfectmatchsearchsettingsbyprofileid(string profileid)
+        public searchsetting createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model)
         {
 
-            return _memberrepository.createmyperfectmatchsearchsettingsbyprofileid(Convert.ToInt32(profileid));
+            return _memberrepository.createmyperfectmatchsearchsettingsbyprofileid(model);
 
         }
 
         //get full profile stuff
         //*****************************************************
 
-        public string getgenderbyphotoid(string guid)
+        public string getgenderbyphotoid(ProfileModel model)
         {
-            return _memberrepository.getgenderbyphotoid( Guid.Parse(guid));
+            return _memberrepository.getgenderbyphotoid(model);
         }
 
         //TO DO this needs to be  linked to roles
@@ -75,56 +75,56 @@ namespace Shell.MVC2.Services.Dating
         //***********************************************************************
         // Description:	Updates the users logout time
         // added 1/18/2010 ola lawal
-        public bool checkifquoutareachedandupdate(string profileid)
+        public bool checkifquoutareachedandupdate(ProfileModel model)
         {
-            return _memberrepository.checkifquoutareachedandupdate(Convert.ToInt32(profileid));
+            return _memberrepository.checkifquoutareachedandupdate(model);
         }
 
         // "Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
         //*************************************************************************************************
         //update the database i.e create folders and change profile status from guest to active ?!
-        public bool createmailboxfolders(string profileid)
+        public bool createmailboxfolders(ProfileModel model)
         {
-            return _memberrepository.createmailboxfolders(Convert.ToInt32(profileid));
+            return _memberrepository.createmailboxfolders(model);
 
         }
 
-        public bool activateprofile(string profileid)
+        public bool activateprofile(ProfileModel model)
         {
-            return _memberrepository.activateprofile(Convert.ToInt32(profileid));
+            return _memberrepository.activateprofile(model);
         }
 
-        public bool deactivateprofile(string profileid)
+        public bool deactivateprofile(ProfileModel model)
         {
-            return _memberrepository.deactivateprofile(Convert.ToInt32(profileid));
+            return _memberrepository.deactivateprofile(model);
         }
         //updates the profile with a password that is presumed to be already encyrpted
-        public bool updatepassword(string profileid, string encryptedpassword)
+        public bool updatepassword(ProfileModel model, string encryptedpassword)
         {
-            return _memberrepository.updatepassword( Convert.ToInt32(profileid), encryptedpassword);
+            return _memberrepository.updatepassword( model, encryptedpassword);
 
         }
 
-        public bool addnewopenidforprofile(string profileid, string openidIdentifer, string openidProvidername)
+        public bool addnewopenidforprofile(ProfileModel model, string openidIdentifer, string openidProvidername)
         {
 
-            return _memberrepository.addnewopenidforprofile(Convert.ToInt32(profileid), openidIdentifer, openidProvidername);
+            return _memberrepository.addnewopenidforprofile(model, openidIdentifer, openidProvidername);
 
         }
 
         //check if profile is activated 
-        public bool checkifprofileisactivated(string profileid)
+        public bool checkifprofileisactivated(ProfileModel model)
         {
 
-            return _memberrepository.checkifprofileisactivated(Convert.ToInt32(profileid));
+            return _memberrepository.checkifprofileisactivated(model);
 
         }
 
         //check if mailbox folder exist
-        public bool checkifmailboxfoldersarecreated(string profileid)
+        public bool checkifmailboxfoldersarecreated(ProfileModel model)
         {
 
-            return _memberrepository.checkifmailboxfoldersarecreated(Convert.ToInt32(profileid));
+            return _memberrepository.checkifmailboxfoldersarecreated(model);
 
         }
 
@@ -133,18 +133,18 @@ namespace Shell.MVC2.Services.Dating
         //**********************************************************
         // Description:	Updates the users logout time
         // added 1/18/2010 ola lawal
-        public bool updateuserlogouttime(string profileid, string sessionID)
+        public bool updateuserlogouttime(ProfileModel model, string sessionID)
         {
-            return _memberrepository.updateuserlogouttime(Convert.ToInt32(profileid), sessionID);
+            return _memberrepository.updateuserlogouttime(model);
 
         }
 
 
         //get the last time the user logged in from profile
-        public Nullable<DateTime> getmemberlastlogintime(string profileid)
+        public Nullable<DateTime> getmemberlastlogintime(ProfileModel model)
         {
 
-            return _memberrepository.getmemberlastlogintime(Convert.ToInt32(profileid));
+            return _memberrepository.getmemberlastlogintime(model);
 
         }
 
@@ -152,15 +152,15 @@ namespace Shell.MVC2.Services.Dating
         //updates all the areas  that handle when a user logs in 
         // added 1/18/2010 ola lawal
         //also updates the last log in and profile data
-        public bool updateuserlogintime(string username, string sessionID)
+        public bool updateuserlogintime(ProfileModel model)
         {
 
-            return _memberrepository.updateuserlogintime(username, sessionID);
+            return _memberrepository.updateuserlogintime(model);
         }
 
-        public bool updateuserlogintimebyprofileid(string profileid, string sessionID)
+        public bool updateuserlogintimebyprofileid(ProfileModel model)
         {
-            return _memberrepository.updateuserlogintimebyprofileid(Convert.ToInt32(profileid), sessionID);
+            return _memberrepository.updateuserlogintimebyprofileid(model);
         }
 
         //date time functions '
@@ -177,9 +177,9 @@ namespace Shell.MVC2.Services.Dating
         }
 
         //returns true if somone logged on
-        public bool getuseronlinestatus(string profileid)
+        public bool getuseronlinestatus(ProfileModel model)
         {
-            return _memberrepository.getuseronlinestatus(Convert.ToInt32(profileid));
+            return _memberrepository.getuseronlinestatus(model);
         }
 
 
@@ -191,43 +191,43 @@ namespace Shell.MVC2.Services.Dating
         /// 5/5/2012 als added check that the screen name withoute spaces does not match an existing one with no spaces either
         /// </summary>
 
-        public bool checkifscreennamealreadyexists(string strscreenname)
+        public bool checkifscreennamealreadyexists(ProfileModel model)
         {
-            return _memberrepository.checkifscreennamealreadyexists(strscreenname);
+            return _memberrepository.checkifscreennamealreadyexists(model);
 
         }
 
         //5-20-2012 added to check if a user email is registered
 
-        //public bool checkifusernamealreadyexists(string profileid)
+        //public bool checkifusernamealreadyexists(ProfileModel model)
         //{
-        //    return _memberrepository.checkifusernamealreadyexists(Convert.ToInt32(profileid));
+        //    return _memberrepository.checkifusernamealreadyexists(model);
 
         //}
 
-        public bool checkifusernamealreadyexists(string username)
+        public bool checkifusernamealreadyexists(ProfileModel model)
         {
-            return _memberrepository.checkifusernamealreadyexists(username);
+            return _memberrepository.checkifusernamealreadyexists(model);
         }
 
-        public string validatesecurityansweriscorrect(string profileid, string SecurityQuestionID, string strSecurityAnswer)
+        public string validatesecurityansweriscorrect(ProfileModel model)
         {
-            return _memberrepository.validatesecurityansweriscorrect(Convert.ToInt32(profileid), Convert.ToInt32(SecurityQuestionID), strSecurityAnswer);
+            return _memberrepository.validatesecurityansweriscorrect(model);
         }
 
         /// <summary>
         /// Determines wethare an activation code matches the value in the database for a given profileid
         /// </summary>
-        public bool checkifactivationcodeisvalid(string profileid, string strActivationCode)
+        public bool checkifactivationcodeisvalid(ProfileModel model)
         {
-            return _memberrepository.checkifactivationcodeisvalid(Convert.ToInt32(profileid), strActivationCode);
+            return _memberrepository.checkifactivationcodeisvalid(model);
         }
 
 
-        public profile getprofilebyusername(string username)
+        public profile getprofilebyusername(ProfileModel model)
         {
 
-            return _memberrepository.getprofilebyusername(username);
+            return _memberrepository.getprofilebyusername(model);
         }
 
 
@@ -238,15 +238,15 @@ namespace Shell.MVC2.Services.Dating
         //}
 
 
-        public profile getprofilebyprofileid(string profileid)
+        public profile getprofilebyprofileid(ProfileModel model)
         {
-            return _memberrepository.getprofilebyprofileid(Convert.ToInt32(profileid));
+            return _memberrepository.getprofilebyprofileid(model);
 
         }
 
-       public profile getprofilebyemailaddress(string email)
+       public profile getprofilebyemailaddress(ProfileModel model)
        {
-           return _memberrepository.getprofilebyemailaddress(email);
+           return _memberrepository.getprofilebyemailaddress(model);
        }
 
 
@@ -255,40 +255,40 @@ namespace Shell.MVC2.Services.Dating
         /// </summary>
         /// <param name="strusername"></param>
         /// <returns></returns>
-        public int? getprofileidbyusername(string strusername)
+       public int? getprofileidbyusername(ProfileModel model)
         {
-            return _memberrepository.getprofileidbyusername(strusername);
+            return _memberrepository.getprofileidbyusername(model);
         }
 
-        public int? getprofileidbyscreenname(string screenname)
+       public int? getprofileidbyscreenname(ProfileModel model)
         {
-            return _memberrepository.getprofileidbyscreenname(screenname);
+            return _memberrepository.getprofileidbyscreenname(model);
         }
 
-        public int? getprofileidbyssessionid(string strsessionid)
+       public int? getprofileidbyssessionid(ProfileModel model)
         {
-            return _memberrepository.getprofileidbyssessionid(strsessionid);
+            return _memberrepository.getprofileidbyssessionid(model);
         }
 
-        public string getusernamebyprofileid(string profileid)
+        public string getusernamebyprofileid(ProfileModel model)
         {
-            return _memberrepository.getusernamebyprofileid(Convert.ToInt32(profileid));
+            return _memberrepository.getusernamebyprofileid(model);
         }
 
-        public string getscreennamebyprofileid(string profileid)
+        public string getscreennamebyprofileid(ProfileModel model)
         {
-            return _memberrepository.getscreennamebyprofileid(Convert.ToInt32(profileid));
+            return _memberrepository.getscreennamebyprofileid(model);
         }
 
-        public string getscreennamebyusername(string username)
+        public string getscreennamebyusername(ProfileModel model)
         {
-            return _memberrepository.getscreennamebyusername(username);
+            return _memberrepository.getscreennamebyusername(model);
         
         }
 
-        public bool checkifemailalreadyexists(string strEmail)
+        public bool checkifemailalreadyexists(ProfileModel model)
         {
-            return _memberrepository.checkifemailalreadyexists(strEmail);
+            return _memberrepository.checkifemailalreadyexists(model);
         }
 
 
@@ -299,17 +299,17 @@ namespace Shell.MVC2.Services.Dating
 
 
 
-        public string getgenderbyscreenname(string screenname)
+        public string getgenderbyscreenname(ProfileModel model)
         {
-            return _memberrepository.getgenderbyscreenname(screenname);
+            return _memberrepository.getgenderbyscreenname(model);
         }
 
 
 
 
-        public visiblitysetting getprofilevisibilitysettingsbyprofileid(string profileid)
+        public visiblitysetting getprofilevisibilitysettingsbyprofileid(ProfileModel model)
         {
-            return _memberrepository.getprofilevisibilitysettingsbyprofileid(Convert.ToInt32(profileid));
+            return _memberrepository.getprofilevisibilitysettingsbyprofileid(model);
 
         }
 
