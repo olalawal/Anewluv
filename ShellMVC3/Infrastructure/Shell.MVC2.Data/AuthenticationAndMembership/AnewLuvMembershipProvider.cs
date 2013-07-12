@@ -134,7 +134,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 {
                     //log the user logtime here so it is common to silverlight and MVC                  
                   
-                    _memberepository.updateuserlogintime(new ProfileModel { username  =  username , sessionid =HttpContext.Current.Session.SessionID  } );
+                    _memberepository.updateuserlogintimebyprofileidandsessionid (new ProfileModel { username  =  username , sessionid =HttpContext.Current.Session.SessionID  } );
                     //also update the profiledata for the last login date
                     return true;
                 }
@@ -189,8 +189,15 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 if (myQuery.Count() > 0)
                 {
                     //log the user logtime here so it is common to silverlight and MVC
-               _memberepository.updateuserlogintime(new ProfileModel { username  =  username , sessionid =HttpContext.Current.Session.SessionID  } );
-
+                    if (HttpContext.Current != null)
+                    {
+                        _memberepository.updateuserlogintimebyprofileidandsessionid(new ProfileModel { username = username, sessionid = HttpContext.Current.Session.SessionID });
+                    }
+                    else
+                    {
+                        _memberepository.updateuserlogintimebyprofileid (new ProfileModel { username = username });
+                  
+                    }
                     return true;
                 }
                 else
@@ -236,7 +243,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 if (myopenIDstore == null && myprofile != null)
                 //add the openID provider if its a new one
                 {
-                    _memberepository.addnewopenidforprofile(new ProfileModel { profileid = myprofile.id  }, openidIdentifer, openidProvidername);
+                    _memberepository.addnewopenidforprofile(new ProfileModel { profileid = myprofile.id  });
                 }
 
                 //first you have to get the encrypted sctring by email address and username 
@@ -843,9 +850,9 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 return messages ;
                 
             }
-           
 
-                if (_memberepository.checkifprofileisactivated( profile.id) == true)
+
+            if (_memberepository.checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true)
                 {
                     messages.errormessages.Add ("Your Profile has already been activated");
                     //hide the photo view in thsi case
@@ -856,11 +863,11 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //activaate profile here
                 else
                 {
-                    _memberepository.activateprofile( profile.id );
+                    _memberepository.activateprofile(new ProfileModel { profileid = profile.id });
                 }
 
                 //check if mailbox folders exist, if they dont create em , don't add any error status
-                if (_memberepository.checkifmailboxfoldersarecreated( profile.id) == true)
+                if (_memberepository.checkifmailboxfoldersarecreated(new ProfileModel { profileid = profile.id }) == true)
                 {
                     //ModelState.AddModelError("", "Your Profile has already been activated");
                     //hide the photo view in thsi case                  
@@ -868,7 +875,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //create the mailbox folders if they do not exist
                 else
                 {
-                    _memberepository.createmailboxfolders( profile.id);
+                    _memberepository.createmailboxfolders(new ProfileModel { profileid = profile.id });
                 }
 
                 messages.message = "Activation Sucssesful";
@@ -907,19 +914,19 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 //also create a members view model to store pertinent data i.e persist photos profile ID etc
                 var membersmodel = new MembersViewModel();
                 //get the macthcing member data using the profile ID/email entered
-                profile = _memberepository.getprofilebyemailaddress (model.emailaddress );
+                profile = _memberepository.getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
                 //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
 
                 //verify that user entered correct email before doing anything
                 //TO DO add these error messages to resource files
-                if (profile == null | _memberepository.checkifemailalreadyexists(profile.emailaddress) == false)
+                if (profile == null | _memberepository.checkifemailalreadyexists(new ProfileModel { email = profile.emailaddress }) == false)
                 {
                     messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress +" on AnewLuv.com, please either register for a new account or use the contact us link to get help");
                     //hide the photo view in thsi case
                     model.photostatus = true;
                     return messages;
                 }
-                else if (_memberepository.checkifprofileisactivated(profile.id) == true)
+                else if (_memberepository.checkifprofileisactivated (new ProfileModel { profileid = profile.id }) == true)
                 {
                     messages.errormessages.Add("Your Profile has already been activated");
                     //hide the photo view in thsi case

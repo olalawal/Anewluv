@@ -193,7 +193,7 @@ namespace Shell.MVC2.Data
                 if (fldId == 0)
                 {
                     //TO do move this to a mail repop
-                    membersrepository.createmailboxfolders(profileId);
+                    membersrepository.createmailboxfolders(new ProfileModel { profileid = profileId });
                     return newmailboxmessagefolderobject(mailboxFolderTypeName, profileId);
                 }
 

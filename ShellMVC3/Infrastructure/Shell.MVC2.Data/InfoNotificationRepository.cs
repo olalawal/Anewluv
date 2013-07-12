@@ -632,8 +632,8 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile recipient = _membersrepository.getprofilebyprofileid(recipientprofileid);
-              profile sender = _membersrepository.getprofilebyprofileid(senderprofileid);
+              profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
+              profile sender = _membersrepository.getprofilebyprofileid(  new ProfileModel { profileid = senderprofileid } );
 
               EmailViewModel returnmodel = new EmailViewModel();
 
@@ -669,8 +669,8 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile recipient = _membersrepository.getprofilebyprofileid(recipientprofileid);
-              profile sender = _membersrepository.getprofilebyprofileid(senderprofileid);
+              profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
+              profile sender =_membersrepository.getprofilebyprofileid(  new ProfileModel { profileid = senderprofileid } );
 
               EmailViewModel returnmodel = new EmailViewModel();
 
@@ -706,8 +706,8 @@ namespace Shell.MVC2.Data
            try
           {
               //get the profile info
-              profile recipient = _membersrepository.getprofilebyprofileid(recipientprofileid);
-              profile sender = _membersrepository.getprofilebyprofileid(senderprofileid);
+              profile recipient = _membersrepository.getprofilebyprofileid( new ProfileModel { profileid =  recipientprofileid} );
+              profile sender = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = senderprofileid });
 
               EmailViewModel returnmodel = new EmailViewModel();
 
@@ -744,8 +744,8 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile recipient = _membersrepository.getprofilebyprofileid(recipientprofileid);
-              profile sender = _membersrepository.getprofilebyprofileid(senderprofileid);
+              profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
+              profile sender =_membersrepository.getprofilebyprofileid(  new ProfileModel { profileid = senderprofileid } );
 
               EmailViewModel returnmodel = new EmailViewModel();
 
@@ -780,8 +780,8 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile recipient = _membersrepository.getprofilebyprofileid(recipientprofileid);
-              profile sender = _membersrepository.getprofilebyprofileid(senderprofileid);
+              profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
+              profile sender =_membersrepository.getprofilebyprofileid(  new ProfileModel { profileid = senderprofileid } );
               EmailViewModel returnmodel = new EmailViewModel();
               returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedChatRequestMemberNotification);
               returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedChatRequestAdminNotification);
@@ -815,8 +815,8 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile recipient = _membersrepository.getprofilebyprofileid(recipientprofileid);
-              profile sender = _membersrepository.getprofilebyprofileid(senderprofileid);
+              profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = recipientprofileid });
+              profile sender =_membersrepository.getprofilebyprofileid(  new ProfileModel { profileid = senderprofileid } );
               EmailViewModel returnmodel = new EmailViewModel();
               returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedOfflineChatMessageMemberNotification);
               returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberRecivedOfflineChatMessageAdminNotification);
@@ -847,7 +847,7 @@ namespace Shell.MVC2.Data
           {
               //get the profile info
               profile recipient =_membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileid });
-              profile admin = _membersrepository.getprofilebyprofileid(adminprofileid);
+              profile admin = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = adminprofileid });
               //get rejecttion reason
               string reasondesc = _datingcontext.lu_photorejectionreason.Where(p => p.id == (int)reason).FirstOrDefault().description;
               EmailViewModel returnmodel = new EmailViewModel();
@@ -879,7 +879,7 @@ namespace Shell.MVC2.Data
           {
               //get the profile info
               profile recipient =_membersrepository.getprofilebyprofileid(new ProfileModel { profileid = profileid });
-              // profile admin = _membersrepository.getprofilebyprofileid(adminprofileid);
+              // profile admin = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = adminprofileid });
               //get rejecttion reason
               // string reasondesc = _datingcontext.lu_photorejectionreason.Where(p => p.id == (int)reason).FirstOrDefault().description;
               EmailViewModel returnmodel = new EmailViewModel();
@@ -910,8 +910,8 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile recipient = _membersrepository.getprofilebyprofileid(blockedprofileid);
-              // profile admin = _membersrepository.getprofilebyprofileid(adminprofileid);
+              profile recipient = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = blockedprofileid });
+              // profile admin = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = adminprofileid });
               //get rejecttion reason
               // string reasondesc = _datingcontext.lu_photorejectionreason.Where(p => p.id == (int)reason).FirstOrDefault().description;
 
@@ -945,7 +945,7 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile blocked = _membersrepository.getprofilebyprofileid(spamblockedprofileid);
+              profile blocked = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = spamblockedprofileid });
               EmailViewModel returnmodel = new EmailViewModel();
               returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberSpamBlockedAdminNotification);
               //fill in the rest of the email model values i.e format the subject and body
@@ -972,8 +972,8 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile blocked = _membersrepository.getprofilebyprofileid(blockedprofileid);
-              profile blocker = _membersrepository.getprofilebyprofileid(blockerprofileid);
+              profile blocked = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = blockedprofileid });
+              profile blocker = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = blockerprofileid });
 
               //get the notes since the block was created first before email was sent
               var blockreason = _datingcontext.blocks.Where(p => p.blockprofile_id == blockedprofileid && p.id == blockedprofileid).FirstOrDefault();
@@ -1002,8 +1002,8 @@ namespace Shell.MVC2.Data
           try
           {
               //get the profile info
-              profile profile = _membersrepository.getprofilebyprofileid(approvedprofileid);
-              profile admin = _membersrepository.getprofilebyprofileid(adminprofileid);
+              profile profile = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = approvedprofileid });
+              profile admin = _membersrepository.getprofilebyprofileid(new ProfileModel { profileid = adminprofileid });
               EmailViewModel returnmodel = new EmailViewModel();
               returnmodel.adminEmailViewModel = getemailbytemplateid(templateenum.MemberPhotoApprovedAdminNotification);
               //fill in the rest of the email model values i.e format the subject and body

@@ -44,7 +44,7 @@ namespace Shell.MVC2.Interfaces
      
        //updates the profile with a password that is presumed to be already encyrpted
         bool updatepassword(ProfileModel model, string encryptedpassword);       
-        bool addnewopenidforprofile(ProfileModel model, string openidIdentifer, string openidProvidername); 
+        bool addnewopenidforprofile(ProfileModel model); 
        //check if profile is activated 
         bool checkifprofileisactivated(ProfileModel model);   
        //check if mailbox folder exist
@@ -54,14 +54,14 @@ namespace Shell.MVC2.Interfaces
        //********************************************
        // Description:	Updates the users logout time
        // added 1/18/2010 ola lawal
-        bool updateuserlogouttime(ProfileModel model);
+        bool updateuserlogouttimebyprofileid(ProfileModel model);
        //get the last time the user logged in from profile
-        Nullable<DateTime> getmemberlastlogintime(ProfileModel model);
+        Nullable<DateTime> getmemberlastlogintimebyprofileid(ProfileModel model);
       
        //updates all the areas  that handle when a user logs in 
        // added 1/18/2010 ola lawal
        //also updates the last log in and profile data
-        bool updateuserlogintime(ProfileModel model);       
+        bool updateuserlogintimebyprofileidandsessionid(ProfileModel model);       
         bool updateuserlogintimebyprofileid(ProfileModel model);
        
        //date time functions '

@@ -11,6 +11,7 @@ using Shell.MVC2.Data.Infrastructure;
 //using Shell.MVC2.Services.Logging;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 using Shell.MVC2.Services.Contracts;
+using System.ServiceModel;
 
 
 
@@ -29,8 +30,8 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 
             Kernel.Bind<IErrorLoggingRepository>().ToConstructor(
              ctorArg => new ErrorLoggingRepository(ctorArg.Inject<CustomErrorLogContext>()));
-          
-            Kernel.Bind<IErrorLoggingService>().ToSelf();
+
+            Kernel.Bind<IErrorLoggingService>().ToSelf().InScope(c => OperationContext.Current); 
 
 
         }

@@ -53,13 +53,13 @@ namespace Shell.MVC2.Data
                {
 
                    profiledata viewerprofile = new profiledata();
-                   if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid(new ProfileModel { profileid = viewerprofileid.GetValueOrDefault() });
+                   if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid (new ProfileModel { profileid = viewerprofileid.GetValueOrDefault() });
 
                    MemberSearchViewModel model = modeltomap;
                    //TO DO change to use Ninject maybe
                    // DatingService db = new DatingService();
                    //  MembersRepository membersrepo=  new MembersRepository();
-                   profile profile = membersrepository.getprofilebyprofileid(new ProfileModel { profileid = modeltomap.id }); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
+                   profile profile = membersrepository.getprofilebyprofileid (new ProfileModel { profileid = modeltomap.id }); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
                    //  membereditRepository membereditRepository = new membereditRepository();
 
                    //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
@@ -137,7 +137,7 @@ namespace Shell.MVC2.Data
             try
             {
                 //profiledata viewerprofile = new profiledata();
-               // if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledatabyprofileid(viewerprofileid.GetValueOrDefault());
+               // if (viewerprofileid != null) viewerprofile = membersrepository.getprofiledata(viewerprofileid.GetValueOrDefault());
 
                 List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
                 foreach (var item in modelstomap)
@@ -950,10 +950,10 @@ namespace Shell.MVC2.Data
                 //check if the user has a profile search settings value in stored DB if not add one and save it
                 if (profile.profilemetadata.searchsettings.Count == 0)
                 {
-                    membersrepository.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = profile.id });
+                    membersrepository.createmyperfectmatchsearchsettingsbyprofileid (new ProfileModel { profileid = profile.id });
                     //update the profile data with the updated value
                     //TO DO stop storing profiledata
-                   // model.profiledata = membersrepository.getprofiledatabyprofileid(profile.id);
+                   // model.profiledata = membersrepository.getprofiledata(profile.id);
 
                 }
 

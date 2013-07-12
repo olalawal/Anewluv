@@ -469,7 +469,7 @@ namespace Shell.MVC2.Data
                     return true;
                 }
 
-                public bool addnewopenidforprofile(ProfileModel model,string openidIdentifer, string openidProvidername)
+                public bool addnewopenidforprofile(ProfileModel model)
                 {
 
                   
@@ -480,8 +480,8 @@ namespace Shell.MVC2.Data
                            active = true,
                           creationdate  = DateTime.UtcNow ,
                            profile_id = model.profileid.GetValueOrDefault(),
-                         openidprovider    = _datingcontext.lu_openidprovider.Where(p=> (p.description ).ToUpper() == openidProvidername.ToUpper ()).FirstOrDefault(),
-                           openididentifier   = openidIdentifer
+                         openidprovider    = _datingcontext.lu_openidprovider.Where(p=> (p.description ).ToUpper() == model.openidprovider .ToUpper ()).FirstOrDefault(),
+                           openididentifier   = model.openididentifier
                         };
                      this._datingcontext.opendIds.Add (profileOpenIDStore);
                      this._datingcontext.SaveChanges();
@@ -570,7 +570,7 @@ namespace Shell.MVC2.Data
        //**********************************************************
                 // Description:	Updates the users logout time
                 // added 1/18/2010 ola lawal
-                public bool updateuserlogouttime(ProfileModel model)
+                public bool updateuserlogouttimebyprofileid(ProfileModel model)
                 {
 
                     //get the profile
@@ -608,7 +608,7 @@ namespace Shell.MVC2.Data
 
 
                 //get the last time the user logged in from profile
-  public Nullable<DateTime> getmemberlastlogintime(ProfileModel model)
+  public Nullable<DateTime> getmemberlastlogintimebyprofileid(ProfileModel model)
                 {
 
                     //get the profile
@@ -646,7 +646,7 @@ namespace Shell.MVC2.Data
                 //updates all the areas  that handle when a user logs in 
                 // added 1/18/2010 ola lawal
                 //also updates the last log in and profile data
-                public bool updateuserlogintime(ProfileModel model)
+                public bool updateuserlogintimebyprofileidandsessionid(ProfileModel model)
                 {
 
                     //get the profile

@@ -105,10 +105,10 @@ namespace Shell.MVC2.Services.Dating
 
         }
 
-        public bool addnewopenidforprofile(ProfileModel model, string openidIdentifer, string openidProvidername)
+        public bool addnewopenidforprofile(ProfileModel model)
         {
 
-            return _memberrepository.addnewopenidforprofile(model, openidIdentifer, openidProvidername);
+            return _memberrepository.addnewopenidforprofile(model);
 
         }
 
@@ -129,33 +129,36 @@ namespace Shell.MVC2.Services.Dating
         }
 
 
-        //"DateTimeFUcntiosn for longin etc "
-        //**********************************************************
-        // Description:	Updates the users logout time
-        // added 1/18/2010 ola lawal
-        public bool updateuserlogouttime(ProfileModel model, string sessionID)
-        {
-            return _memberrepository.updateuserlogouttime(model);
-
-        }
-
+   
+      
 
         //get the last time the user logged in from profile
-        public Nullable<DateTime> getmemberlastlogintime(ProfileModel model)
+        public Nullable<DateTime> getmemberlastlogintimebyprofileid(ProfileModel model)
         {
 
-            return _memberrepository.getmemberlastlogintime(model);
+            return _memberrepository.getmemberlastlogintimebyprofileid(model);
 
         }
-
 
         //updates all the areas  that handle when a user logs in 
         // added 1/18/2010 ola lawal
         //also updates the last log in and profile data
-        public bool updateuserlogintime(ProfileModel model)
+        public bool updateuserlogintimebyprofileidandsessionid(ProfileModel model)
+        {
+            return _memberrepository.updateuserlogintimebyprofileidandsessionid(model);
+
+        }
+
+
+        //"DateTimeFUcntiosn for longin etc "
+        //**********************************************************
+        // Description:	Updates the users logout time
+        // added 1/18/2010 ola lawal
+
+        public bool updateuserlogouttimebyprofileid(ProfileModel model)
         {
 
-            return _memberrepository.updateuserlogintime(model);
+            return _memberrepository.updateuserlogouttimebyprofileid (model);
         }
 
         public bool updateuserlogintimebyprofileid(ProfileModel model)
@@ -212,7 +215,7 @@ namespace Shell.MVC2.Services.Dating
 
         public string validatesecurityansweriscorrect(ProfileModel model)
         {
-            return _memberrepository.validatesecurityansweriscorrect(model);
+            return _memberrepository.validatesecurityansweriscorrect((model));
         }
 
         /// <summary>

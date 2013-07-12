@@ -28,6 +28,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public string securityquestion { get; set; }
         [DataMember]
         public string activationcode { get; set; }
-
+        [DataMember]
+        public string openididentifier { get; set; }
+        [DataMember]
+        public string openidprovider { get; set; }
     }
 }
