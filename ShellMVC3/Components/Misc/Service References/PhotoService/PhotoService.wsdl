@@ -1,67 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PhotoService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PhotoService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/" />
       <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" />
-      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" />
+      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" />
+      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" />
+      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Services.Contracts.ServiceResponse" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IPhotoService_getallphotosbyusername_InputMessage">
-    <wsdl:part name="parameters" element="tns:getallphotosbyusername" />
+  <wsdl:message name="IPhotoService_getphotomodelbyphotoid_InputMessage">
+    <wsdl:part name="parameters" element="tns:getphotomodelbyphotoid" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getallphotosbyusername_OutputMessage">
-    <wsdl:part name="parameters" element="tns:getallphotosbyusernameResponse" />
+  <wsdl:message name="IPhotoService_getphotomodelbyphotoid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getphotomodelbyphotoidResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getallphotosbyusername_ServiceFaultFault_FaultMessage">
+  <wsdl:message name="IPhotoService_getphotomodelbyphotoid_ServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/" name="detail" element="q1:ServiceFault" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getphotosbyprofileidandstatus_InputMessage">
-    <wsdl:part name="parameters" element="tns:getphotosbyprofileidandstatus" />
+  <wsdl:message name="IPhotoService_getphotomodelbyprofileid_InputMessage">
+    <wsdl:part name="parameters" element="tns:getphotomodelbyprofileid" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getphotosbyprofileidandstatus_OutputMessage">
-    <wsdl:part name="parameters" element="tns:getphotosbyprofileidandstatusResponse" />
+  <wsdl:message name="IPhotoService_getphotomodelbyprofileid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getphotomodelbyprofileidResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getphotosbyprofileidandstatus_ServiceFaultFault_FaultMessage">
+  <wsdl:message name="IPhotoService_getphotomodelbyprofileid_ServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/" name="detail" element="q2:ServiceFault" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getpagedphotosbyprofileidstatus_InputMessage">
-    <wsdl:part name="parameters" element="tns:getpagedphotosbyprofileidstatus" />
+  <wsdl:message name="IPhotoService_getphotomodelsbyprofileidandstatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:getphotomodelsbyprofileidandstatus" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getpagedphotosbyprofileidstatus_OutputMessage">
-    <wsdl:part name="parameters" element="tns:getpagedphotosbyprofileidstatusResponse" />
+  <wsdl:message name="IPhotoService_getphotomodelsbyprofileidandstatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getphotomodelsbyprofileidandstatusResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getpagedphotosbyprofileidstatus_ServiceFaultFault_FaultMessage">
+  <wsdl:message name="IPhotoService_getphotomodelsbyprofileidandstatus_ServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/" name="detail" element="q3:ServiceFault" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getsingleprofilephotobyphotoid_InputMessage">
-    <wsdl:part name="parameters" element="tns:getsingleprofilephotobyphotoid" />
+  <wsdl:message name="IPhotoService_getpagedphotomodelbyprofileidandstatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:getpagedphotomodelbyprofileidandstatus" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getsingleprofilephotobyphotoid_OutputMessage">
-    <wsdl:part name="parameters" element="tns:getsingleprofilephotobyphotoidResponse" />
+  <wsdl:message name="IPhotoService_getpagedphotomodelbyprofileidandstatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getpagedphotomodelbyprofileidandstatusResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getsingleprofilephotobyphotoid_ServiceFaultFault_FaultMessage">
+  <wsdl:message name="IPhotoService_getpagedphotomodelbyprofileidandstatus_ServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/" name="detail" element="q4:ServiceFault" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getpagededitphotoviewmodelbyprofileid_InputMessage">
-    <wsdl:part name="parameters" element="tns:getpagededitphotoviewmodelbyprofileid" />
+  <wsdl:message name="IPhotoService_getpagedphotoviewmodelbyprofileid_InputMessage">
+    <wsdl:part name="parameters" element="tns:getpagedphotoviewmodelbyprofileid" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getpagededitphotoviewmodelbyprofileid_OutputMessage">
-    <wsdl:part name="parameters" element="tns:getpagededitphotoviewmodelbyprofileidResponse" />
+  <wsdl:message name="IPhotoService_getpagedphotoviewmodelbyprofileid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getpagedphotoviewmodelbyprofileidResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_getpagededitphotoviewmodelbyprofileid_ServiceFaultFault_FaultMessage">
+  <wsdl:message name="IPhotoService_getpagedphotoviewmodelbyprofileid_ServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/" name="detail" element="q5:ServiceFault" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_deleteduserphoto_InputMessage">
-    <wsdl:part name="parameters" element="tns:deleteduserphoto" />
+  <wsdl:message name="IPhotoService_getphotoeditmodelbyphotoid_InputMessage">
+    <wsdl:part name="parameters" element="tns:getphotoeditmodelbyphotoid" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_deleteduserphoto_OutputMessage">
-    <wsdl:part name="parameters" element="tns:deleteduserphotoResponse" />
+  <wsdl:message name="IPhotoService_getphotoeditmodelbyphotoid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getphotoeditmodelbyphotoidResponse" />
   </wsdl:message>
-  <wsdl:message name="IPhotoService_deleteduserphoto_ServiceFaultFault_FaultMessage">
+  <wsdl:message name="IPhotoService_getphotoeditmodelbyphotoid_ServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/" name="detail" element="q6:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getphotoeditmodelsbyprofileidandstatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:getphotoeditmodelsbyprofileidandstatus" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getphotoeditmodelsbyprofileidandstatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getphotoeditmodelsbyprofileidandstatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getphotoeditmodelsbyprofileidandstatus_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/" name="detail" element="q7:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagedphotoeditmodelsbyprofileidstatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:getpagedphotoeditmodelsbyprofileidstatus" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagedphotoeditmodelsbyprofileidstatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getpagedphotoeditmodelsbyprofileidstatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagedphotoeditmodelsbyprofileidstatus_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/" name="detail" element="q8:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagededitphotoviewmodelbyprofileidandformat_InputMessage">
+    <wsdl:part name="parameters" element="tns:getpagededitphotoviewmodelbyprofileidandformat" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagededitphotoviewmodelbyprofileidandformat_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getpagededitphotoviewmodelbyprofileidandformatResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_getpagededitphotoviewmodelbyprofileidandformat_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/" name="detail" element="q9:ServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_deleteuserphoto_InputMessage">
+    <wsdl:part name="parameters" element="tns:deleteuserphoto" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_deleteuserphoto_OutputMessage">
+    <wsdl:part name="parameters" element="tns:deleteuserphotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPhotoService_deleteuserphoto_ServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/" name="detail" element="q10:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_makeuserphoto_private_InputMessage">
     <wsdl:part name="parameters" element="tns:makeuserphoto_private" />
@@ -70,7 +108,7 @@
     <wsdl:part name="parameters" element="tns:makeuserphoto_privateResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_makeuserphoto_private_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/" name="detail" element="q7:ServiceFault" />
+    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/" name="detail" element="q11:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_makeuserphoto_public_InputMessage">
     <wsdl:part name="parameters" element="tns:makeuserphoto_public" />
@@ -79,7 +117,7 @@
     <wsdl:part name="parameters" element="tns:makeuserphoto_publicResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_makeuserphoto_public_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/" name="detail" element="q8:ServiceFault" />
+    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/" name="detail" element="q12:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_addphotos_InputMessage">
     <wsdl:part name="parameters" element="tns:addphotos" />
@@ -88,7 +126,7 @@
     <wsdl:part name="parameters" element="tns:addphotosResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_addphotos_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/" name="detail" element="q9:ServiceFault" />
+    <wsdl:part xmlns:q13="http://schemas.datacontract.org/2004/07/" name="detail" element="q13:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_addsinglephoto_InputMessage">
     <wsdl:part name="parameters" element="tns:addsinglephoto" />
@@ -97,7 +135,7 @@
     <wsdl:part name="parameters" element="tns:addsinglephotoResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_addsinglephoto_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/" name="detail" element="q10:ServiceFault" />
+    <wsdl:part xmlns:q14="http://schemas.datacontract.org/2004/07/" name="detail" element="q14:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_checkvalidjpggif_InputMessage">
     <wsdl:part name="parameters" element="tns:checkvalidjpggif" />
@@ -106,7 +144,7 @@
     <wsdl:part name="parameters" element="tns:checkvalidjpggifResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_checkvalidjpggif_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/" name="detail" element="q11:ServiceFault" />
+    <wsdl:part xmlns:q15="http://schemas.datacontract.org/2004/07/" name="detail" element="q15:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_getgalleryphotobyscreenname_InputMessage">
     <wsdl:part name="parameters" element="tns:getgalleryphotobyscreenname" />
@@ -115,7 +153,7 @@
     <wsdl:part name="parameters" element="tns:getgalleryphotobyscreennameResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_getgalleryphotobyscreenname_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/" name="detail" element="q12:ServiceFault" />
+    <wsdl:part xmlns:q16="http://schemas.datacontract.org/2004/07/" name="detail" element="q16:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_getgalleryimagebyphotoid_InputMessage">
     <wsdl:part name="parameters" element="tns:getgalleryimagebyphotoid" />
@@ -124,7 +162,7 @@
     <wsdl:part name="parameters" element="tns:getgalleryimagebyphotoidResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_getgalleryimagebyphotoid_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q13="http://schemas.datacontract.org/2004/07/" name="detail" element="q13:ServiceFault" />
+    <wsdl:part xmlns:q17="http://schemas.datacontract.org/2004/07/" name="detail" element="q17:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_getgalleryphotobyprofileid_InputMessage">
     <wsdl:part name="parameters" element="tns:getgalleryphotobyprofileid" />
@@ -133,7 +171,7 @@
     <wsdl:part name="parameters" element="tns:getgalleryphotobyprofileidResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_getgalleryphotobyprofileid_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q14="http://schemas.datacontract.org/2004/07/" name="detail" element="q14:ServiceFault" />
+    <wsdl:part xmlns:q18="http://schemas.datacontract.org/2004/07/" name="detail" element="q18:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_getgalleryimagebynormalizedscreenname_InputMessage">
     <wsdl:part name="parameters" element="tns:getgalleryimagebynormalizedscreenname" />
@@ -142,7 +180,7 @@
     <wsdl:part name="parameters" element="tns:getgalleryimagebynormalizedscreennameResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_getgalleryimagebynormalizedscreenname_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q15="http://schemas.datacontract.org/2004/07/" name="detail" element="q15:ServiceFault" />
+    <wsdl:part xmlns:q19="http://schemas.datacontract.org/2004/07/" name="detail" element="q19:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_checkifphotocaptionalreadyexists_InputMessage">
     <wsdl:part name="parameters" element="tns:checkifphotocaptionalreadyexists" />
@@ -151,7 +189,7 @@
     <wsdl:part name="parameters" element="tns:checkifphotocaptionalreadyexistsResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_checkifphotocaptionalreadyexists_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q16="http://schemas.datacontract.org/2004/07/" name="detail" element="q16:ServiceFault" />
+    <wsdl:part xmlns:q20="http://schemas.datacontract.org/2004/07/" name="detail" element="q20:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_checkforgalleryphotobyprofileid_InputMessage">
     <wsdl:part name="parameters" element="tns:checkforgalleryphotobyprofileid" />
@@ -160,7 +198,7 @@
     <wsdl:part name="parameters" element="tns:checkforgalleryphotobyprofileidResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_checkforgalleryphotobyprofileid_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q17="http://schemas.datacontract.org/2004/07/" name="detail" element="q17:ServiceFault" />
+    <wsdl:part xmlns:q21="http://schemas.datacontract.org/2004/07/" name="detail" element="q21:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_checkforuploadedphotobyprofileid_InputMessage">
     <wsdl:part name="parameters" element="tns:checkforuploadedphotobyprofileid" />
@@ -169,7 +207,7 @@
     <wsdl:part name="parameters" element="tns:checkforuploadedphotobyprofileidResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_checkforuploadedphotobyprofileid_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q18="http://schemas.datacontract.org/2004/07/" name="detail" element="q18:ServiceFault" />
+    <wsdl:part xmlns:q22="http://schemas.datacontract.org/2004/07/" name="detail" element="q22:ServiceFault" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_getimagebytesfromurl_InputMessage">
     <wsdl:part name="parameters" element="tns:getimagebytesfromurl" />
@@ -178,38 +216,58 @@
     <wsdl:part name="parameters" element="tns:getimagebytesfromurlResponse" />
   </wsdl:message>
   <wsdl:message name="IPhotoService_getimagebytesfromurl_ServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q19="http://schemas.datacontract.org/2004/07/" name="detail" element="q19:ServiceFault" />
+    <wsdl:part xmlns:q23="http://schemas.datacontract.org/2004/07/" name="detail" element="q23:ServiceFault" />
   </wsdl:message>
   <wsdl:portType name="IPhotoService">
-    <wsdl:operation name="getallphotosbyusername">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getallphotosbyusername" message="tns:IPhotoService_getallphotosbyusername_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getallphotosbyusernameResponse" message="tns:IPhotoService_getallphotosbyusername_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getallphotosbyusername_ServiceFaultFault_FaultMessage" />
+    <wsdl:operation name="getphotomodelbyphotoid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getphotomodelbyphotoid" message="tns:IPhotoService_getphotomodelbyphotoid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getphotomodelbyphotoidResponse" message="tns:IPhotoService_getphotomodelbyphotoid_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getphotomodelbyphotoid_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="getphotosbyprofileidandstatus">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getphotosbyprofileidandstatus" message="tns:IPhotoService_getphotosbyprofileidandstatus_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getphotosbyprofileidandstatusResponse" message="tns:IPhotoService_getphotosbyprofileidandstatus_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getphotosbyprofileidandstatus_ServiceFaultFault_FaultMessage" />
+    <wsdl:operation name="getphotomodelbyprofileid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getphotomodelbyprofileid" message="tns:IPhotoService_getphotomodelbyprofileid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getphotomodelbyprofileidResponse" message="tns:IPhotoService_getphotomodelbyprofileid_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getphotomodelbyprofileid_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="getpagedphotosbyprofileidstatus">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getpagedphotosbyprofileidstatus" message="tns:IPhotoService_getpagedphotosbyprofileidstatus_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getpagedphotosbyprofileidstatusResponse" message="tns:IPhotoService_getpagedphotosbyprofileidstatus_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getpagedphotosbyprofileidstatus_ServiceFaultFault_FaultMessage" />
+    <wsdl:operation name="getphotomodelsbyprofileidandstatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getphotomodelsbyprofileidandstatus" message="tns:IPhotoService_getphotomodelsbyprofileidandstatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getphotomodelsbyprofileidandstatusResponse" message="tns:IPhotoService_getphotomodelsbyprofileidandstatus_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getphotomodelsbyprofileidandstatus_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="getsingleprofilephotobyphotoid">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getsingleprofilephotobyphotoid" message="tns:IPhotoService_getsingleprofilephotobyphotoid_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getsingleprofilephotobyphotoidResponse" message="tns:IPhotoService_getsingleprofilephotobyphotoid_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getsingleprofilephotobyphotoid_ServiceFaultFault_FaultMessage" />
+    <wsdl:operation name="getpagedphotomodelbyprofileidandstatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getpagedphotomodelbyprofileidandstatus" message="tns:IPhotoService_getpagedphotomodelbyprofileidandstatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getpagedphotomodelbyprofileidandstatusResponse" message="tns:IPhotoService_getpagedphotomodelbyprofileidandstatus_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getpagedphotomodelbyprofileidandstatus_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="getpagededitphotoviewmodelbyprofileid">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileid" message="tns:IPhotoService_getpagededitphotoviewmodelbyprofileid_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileidResponse" message="tns:IPhotoService_getpagededitphotoviewmodelbyprofileid_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getpagededitphotoviewmodelbyprofileid_ServiceFaultFault_FaultMessage" />
+    <wsdl:operation name="getpagedphotoviewmodelbyprofileid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getpagedphotoviewmodelbyprofileid" message="tns:IPhotoService_getpagedphotoviewmodelbyprofileid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getpagedphotoviewmodelbyprofileidResponse" message="tns:IPhotoService_getpagedphotoviewmodelbyprofileid_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getpagedphotoviewmodelbyprofileid_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="deleteduserphoto">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/deleteduserphoto" message="tns:IPhotoService_deleteduserphoto_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/deleteduserphotoResponse" message="tns:IPhotoService_deleteduserphoto_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_deleteduserphoto_ServiceFaultFault_FaultMessage" />
+    <wsdl:operation name="getphotoeditmodelbyphotoid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getphotoeditmodelbyphotoid" message="tns:IPhotoService_getphotoeditmodelbyphotoid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getphotoeditmodelbyphotoidResponse" message="tns:IPhotoService_getphotoeditmodelbyphotoid_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getphotoeditmodelbyphotoid_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getphotoeditmodelsbyprofileidandstatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getphotoeditmodelsbyprofileidandstatus" message="tns:IPhotoService_getphotoeditmodelsbyprofileidandstatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getphotoeditmodelsbyprofileidandstatusResponse" message="tns:IPhotoService_getphotoeditmodelsbyprofileidandstatus_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getphotoeditmodelsbyprofileidandstatus_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getpagedphotoeditmodelsbyprofileidstatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getpagedphotoeditmodelsbyprofileidstatus" message="tns:IPhotoService_getpagedphotoeditmodelsbyprofileidstatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getpagedphotoeditmodelsbyprofileidstatusResponse" message="tns:IPhotoService_getpagedphotoeditmodelsbyprofileidstatus_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getpagedphotoeditmodelsbyprofileidstatus_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getpagededitphotoviewmodelbyprofileidandformat">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileidandformat" message="tns:IPhotoService_getpagededitphotoviewmodelbyprofileidandformat_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileidandformatResponse" message="tns:IPhotoService_getpagededitphotoviewmodelbyprofileidandformat_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_getpagededitphotoviewmodelbyprofileidandformat_ServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteuserphoto">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/deleteuserphoto" message="tns:IPhotoService_deleteuserphoto_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPhotoService/deleteuserphotoResponse" message="tns:IPhotoService_deleteuserphoto_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://Schemas.Testws.Medtox.com" name="ServiceFaultFault" message="tns:IPhotoService_deleteuserphoto_ServiceFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="makeuserphoto_private">
       <wsdl:input wsaw:Action="http://tempuri.org/IPhotoService/makeuserphoto_private" message="tns:IPhotoService_makeuserphoto_private_InputMessage" />
@@ -279,8 +337,8 @@
   </wsdl:portType>
   <wsdl:binding name="soap" type="tns:IPhotoService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="getallphotosbyusername">
-      <soap:operation soapAction="http://tempuri.org/IPhotoService/getallphotosbyusername" style="document" />
+    <wsdl:operation name="getphotomodelbyphotoid">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getphotomodelbyphotoid" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -291,8 +349,8 @@
         <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="getphotosbyprofileidandstatus">
-      <soap:operation soapAction="http://tempuri.org/IPhotoService/getphotosbyprofileidandstatus" style="document" />
+    <wsdl:operation name="getphotomodelbyprofileid">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getphotomodelbyprofileid" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -303,8 +361,8 @@
         <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="getpagedphotosbyprofileidstatus">
-      <soap:operation soapAction="http://tempuri.org/IPhotoService/getpagedphotosbyprofileidstatus" style="document" />
+    <wsdl:operation name="getphotomodelsbyprofileidandstatus">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getphotomodelsbyprofileidandstatus" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -315,8 +373,8 @@
         <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="getsingleprofilephotobyphotoid">
-      <soap:operation soapAction="http://tempuri.org/IPhotoService/getsingleprofilephotobyphotoid" style="document" />
+    <wsdl:operation name="getpagedphotomodelbyprofileidandstatus">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getpagedphotomodelbyprofileidandstatus" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -327,8 +385,8 @@
         <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="getpagededitphotoviewmodelbyprofileid">
-      <soap:operation soapAction="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileid" style="document" />
+    <wsdl:operation name="getpagedphotoviewmodelbyprofileid">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getpagedphotoviewmodelbyprofileid" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -339,8 +397,56 @@
         <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="deleteduserphoto">
-      <soap:operation soapAction="http://tempuri.org/IPhotoService/deleteduserphoto" style="document" />
+    <wsdl:operation name="getphotoeditmodelbyphotoid">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getphotoeditmodelbyphotoid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getphotoeditmodelsbyprofileidandstatus">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getphotoeditmodelsbyprofileidandstatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getpagedphotoeditmodelsbyprofileidstatus">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getpagedphotoeditmodelsbyprofileidstatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getpagededitphotoviewmodelbyprofileidandformat">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/getpagededitphotoviewmodelbyprofileidandformat" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ServiceFaultFault">
+        <soap:fault use="literal" name="ServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteuserphoto">
+      <soap:operation soapAction="http://tempuri.org/IPhotoService/deleteuserphoto" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

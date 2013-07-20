@@ -35,6 +35,9 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
 
        [DataMember]
        public int?  rejectionreasonid { get; set; }
+
+       [DataMember]
+       public int? legacysize { get; set; }
         
     }  
 }

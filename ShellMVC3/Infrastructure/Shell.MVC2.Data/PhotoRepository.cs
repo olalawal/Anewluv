@@ -131,36 +131,65 @@ namespace Shell.MVC2.Data
                         {
                             using (var inStream = new MemoryStream(byteArray))
                             {
-                                //var settings1 = new ResizeSettings("maxwidth=200&maxheight=200");
-                                var settings = new ResizeSettings(currentformat.imageresizerformat.description);
-                                ImageResizer.ImageBuilder.Current.Build(inStream, outStream, settings);
-                                var outBytes = outStream.ToArray();
-                                //double check that there is no conversion with matching size and the name
-                               // var test = _datingcontext.photoconversions.Where(p => p.photo.profile_id == photo.profile_id).Any(p => p.size == photo.size);
-
-                                convertedphotos.Add(new photoconversion
+                                try
                                 {
-                                    creationdate = DateTime.Now,
-                                    description = currentformat.description,
-                                    formattype = currentformat,
-                                    image = outBytes,
-                                    size = outBytes.Length,
-                                    photo_id = photo.id
-                                });
+                                    //var settings1 = new ResizeSettings("maxwidth=200&maxheight=200");
+                                    var settings = new ResizeSettings(currentformat.imageresizerformat.description);
+                                    ImageResizer.ImageBuilder.Current.Build(inStream, outStream, settings);
+                                    var outBytes = outStream.ToArray();
+                                    //double check that there is no conversion with matching size and the name
+                                    // var test = _datingcontext.photoconversions.Where(p => p.photo.profile_id == photo.profile_id).Any(p => p.size == photo.size);
 
+                                    convertedphotos.Add(new photoconversion
+                                    {
+                                        creationdate = DateTime.Now,
+                                        description = currentformat.description,
+                                        formattype = currentformat,
+                                        image = outBytes,
+                                        size = outBytes.Length,
+                                        photo_id = photo.id
+                                    });
 
-
+                                }                               
+                                catch (ImageResizer.ImageMissingException missing)
+                                {
+                                    Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename, missing.Message, missing );
+                                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
+                                    //domt throw just log and move on
+                                }
+                                catch (ImageResizer.ImageCorruptedException cr)
+                                {
+                                    Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename , cr.Message, cr);
+                                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
+                                   //domt throw just log and move on
+                                }
+                                catch (ImageResizer.ImageProcessingException ex)
+                                {
+                                    Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename, ex.Message, ex);
+                                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
+                                    //domt throw just log and move on
+                                }
+                                catch (Exception ex)
+                                {
+                                    Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename, ex.Message, ex);
+                                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
+                                    //domt throw just log and move on
+                                }
                             }
                         }
                     }
                 }
+                   
+
+
                 catch (Exception ex)
                 {
-
-                    Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
-                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                    //logg this from the caller ? so we dont log twice
+                    Exception convertedexcption = new CustomExceptionTypes.MediaException  ( photo.profile_id.ToString(),"" , ex.Message, ex.InnerException);
+                    //new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                     throw convertedexcption;
                 }
+                
             }
             return convertedphotos;
 
@@ -707,7 +736,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                Exception convertedexcption = new CustomExceptionTypes.MediaException("", photoid.ToString(), ex.Message, ex.InnerException);
                 new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
@@ -743,7 +772,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                Exception convertedexcption = new CustomExceptionTypes.MediaException("", PhotoID.ToString(), ex.Message, ex.InnerException);
                 new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
@@ -765,7 +794,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                Exception convertedexcption = new CustomExceptionTypes.MediaException  ("" ,PhotoID.ToString() , ex.Message, ex.InnerException);
                 new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                 throw convertedexcption;
             }
@@ -858,7 +887,7 @@ namespace Shell.MVC2.Data
                 catch (Exception ex)
                 {
 
-                    Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
+                    Exception convertedexcption = new CustomExceptionTypes.MediaException  (model.profileid.ToString() ,"" , ex.Message, ex.InnerException);
                     new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
                     throw convertedexcption;
                 }
@@ -897,7 +926,7 @@ namespace Shell.MVC2.Data
                     NewPhoto.creationdate = newphoto.creationdate;
                     NewPhoto.imagecaption = newphoto.caption;
                     NewPhoto.imagename = newphoto.imagename; //11-26-2012 olawal added the name for comparisons 
-                   // NewPhoto.size = newphoto.size.GetValueOrDefault();
+                    NewPhoto.size = newphoto.legacysize.GetValueOrDefault();
                     //set the rest of the information as needed i.e approval status refecttion etc
                     NewPhoto.imagetype = (newphoto.imagetypeid != null) ? _datingcontext.lu_photoimagetype.Where(p => p.id == newphoto.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
                     NewPhoto.approvalstatus = (newphoto.approvalstatusid != null) ? _datingcontext.lu_photoapprovalstatus.Where(p => p.id == newphoto.approvalstatusid).FirstOrDefault() : null;
@@ -951,8 +980,8 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
 
-                Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
-                new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                Exception convertedexcption = new CustomExceptionTypes.MediaException  (profileid.ToString(),"" , ex.Message, ex.InnerException);
+                new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, profileid, null);
                 throw convertedexcption;
             }
 

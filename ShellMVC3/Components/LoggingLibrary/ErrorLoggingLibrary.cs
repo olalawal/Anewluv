@@ -184,7 +184,8 @@ namespace LoggingLibrary
                 //build the error stuff
                 try
                 {
-                    StackTrace stackTrace = new StackTrace(referedexception, true);
+                   
+                     StackTrace stackTrace = referedexception.StackTrace == null ? new StackTrace(referedexception.InnerException, true) :new StackTrace(referedexception , true) ;
                     StackFrame stackFrame = stackTrace.GetFrame(0);
                     MethodBase methodBase = stackFrame.GetMethod();
 
@@ -198,9 +199,6 @@ namespace LoggingLibrary
                     //     Get the line number from the stack frame 
                     //  var line = frame.GetFileLineNumber();
 
-
-
-
                     var messagetemp = referedexception.Message.ToString();
                     var Source = referedexception.Source;
                     var TargetSite = referedexception.TargetSite;
@@ -209,9 +207,9 @@ namespace LoggingLibrary
                     
                     if (referedexception != null && stackTrace != null)
                     {
-                        oLogEntry.message = referedexception.ToString();
-                        oLogEntry.stacktrace = stackTrace.ToString();
-                        oLogEntry.linenumbers = stackFrame.GetFileLineNumber();
+                        oLogEntry.message = referedexception.Message.ToString();
+                        oLogEntry.stacktrace = stackTrace != null ? stackTrace.ToString() : "";
+                        oLogEntry.linenumbers = stackFrame != null ?  stackFrame.GetFileLineNumber() :0;
                         oLogEntry.methodname = methodBase.Name; ;
                         oLogEntry.assemblyname = GetAssemblyNameFromMethodBase(methodBase);
                         oLogEntry.parentmethodname = WhoCalledMe(referedexception);
@@ -240,11 +238,11 @@ namespace LoggingLibrary
                         oLogEntry.profileid = Convert.ToString(profileid);
                     }
             }
-                catch
+                catch (Exception ex)
             {
 
-                
-    }
+                var message = ex.Message;
+            }
             return oLogEntry;
           }
 

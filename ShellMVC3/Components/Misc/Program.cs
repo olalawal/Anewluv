@@ -15,12 +15,12 @@ namespace Misc
 
           //var ddd =   ImageUtils.SmallImageTestdata();
           MisFunctions.StartDebuggingTest();
-         //  MisFunctions.ConvertFlatProfileandprofiledata();
-         //  MisFunctions.ConvertProfileCollections();
-        // MisFunctions.ConvertProfileMetaDataBasicCollections();
-         //  MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
+         // MisFunctions.ConvertFlatProfileandprofiledata();
+        //  MisFunctions.ConvertProfileCollections();
+         // MisFunctions.ConvertProfileMetaDataBasicCollections();
+          MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
         //  MisFunctions.ConvertProfileSearchSettingsCollections();
-          //  MisFunctions.FixBadUserGeoData();
+        //  MisFunctions.FixBadUserGeoData();
           //  FixBadUserGeoData();
         }
     }

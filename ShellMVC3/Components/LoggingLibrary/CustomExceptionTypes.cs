@@ -164,6 +164,74 @@ namespace LoggingLibrary
             }
         }
 
+        [Serializable]
+        public class MediaException : Exception, ISerializable
+        {
+
+           
+            private string _profileid;
+            private string _photoid;
+            public string profileid { get { return _profileid; } }
+            public string  photoid { get { return _photoid; } }
+
+
+            //public override string Message
+            //{
+            //    get
+            //    {
+            //        return string.Format("The following error generated for profileid : {0} and photoId {1} :", profileid, photoid) + base.Message;
+            //    }
+            //}
+
+
+            private MediaException()
+            {
+
+            }
+
+            public MediaException(string profileid,string photoid)
+                : base()
+            {
+                
+                _profileid = profileid;
+                _photoid = photoid;
+            }
+
+            public MediaException(string profileid,string photoid, string message)
+                : base(message)
+            {
+                
+                _profileid = profileid;
+                _photoid = photoid;
+            }
+
+            public MediaException(string profileid, string photoid, string message, Exception inner)
+                : base(message, inner)
+            {
+                
+                _profileid = profileid;
+                _photoid = photoid;
+            }
+
+            protected MediaException(SerializationInfo info, StreamingContext context)
+            {
+                if (info == null)
+                    throw new System.ArgumentNullException("info");
+
+                
+                _profileid = (string)info.GetValue(_profileid, typeof(string));
+                _photoid =  (string)info.GetValue(_profileid, typeof(string));
+                // Model = (MembersViewModel)info.GetValue("Model", typeof(MembersViewModel));
+            }
+
+            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+            void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                if (info == null)
+                    throw new System.ArgumentNullException("info"); info.AddValue("profileid", _profileid, typeof(string));
+            }
+        }
+
 
         //#region "Sample exceptions"
         //[Serializable]

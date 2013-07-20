@@ -1,274 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" />
-  <xs:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" />
-  <xs:element name="getallphotosbyusername">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getallphotosbyusernameResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" minOccurs="0" name="getallphotosbyusernameResult" nillable="true" type="q1:ArrayOfphoto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getphotosbyprofileidandstatus">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" minOccurs="0" name="status" type="q2:photoapprovalstatusEnum" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getphotosbyprofileidandstatusResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" minOccurs="0" name="getphotosbyprofileidandstatusResult" nillable="true" type="q3:ArrayOfPhotoEditModel" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getpagedphotosbyprofileidstatus">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" minOccurs="0" name="status" type="q4:photoapprovalstatusEnum" />
-        <xs:element minOccurs="0" name="page" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="pagesize" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getpagedphotosbyprofileidstatusResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" minOccurs="0" name="getpagedphotosbyprofileidstatusResult" nillable="true" type="q5:ArrayOfPhotoEditModel" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getsingleprofilephotobyphotoid">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="photoid" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getsingleprofilephotobyphotoidResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" minOccurs="0" name="getsingleprofilephotobyphotoidResult" nillable="true" type="q6:photoeditmodel" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getpagededitphotoviewmodelbyprofileid">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="page" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="pagesize" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getpagededitphotoviewmodelbyprofileidResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" minOccurs="0" name="getpagededitphotoviewmodelbyprofileidResult" nillable="true" type="q7:PhotoEditViewModel" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="deleteduserphoto">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="photoid" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="deleteduserphotoResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="makeuserphoto_private">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="photoid" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="makeuserphoto_privateResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="makeuserphoto_public">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="photoid" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="makeuserphoto_publicResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="addphotos">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" minOccurs="0" name="model" nillable="true" type="q8:PhotoUploadViewModel" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="addphotosResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="addphotosResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="addsinglephoto">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" minOccurs="0" name="newphoto" nillable="true" type="q9:PhotoUploadModel" />
-        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="addsinglephotoResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="addsinglephotoResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="checkvalidjpggif">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="image" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="checkvalidjpggifResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="checkvalidjpggifResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getgalleryphotobyscreenname">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getgalleryphotobyscreennameResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="getgalleryphotobyscreennameResult" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getgalleryimagebyphotoid">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="photoid" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getgalleryimagebyphotoidResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="getgalleryimagebyphotoidResult" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getgalleryphotobyprofileid">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getgalleryphotobyprofileidResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="getgalleryphotobyprofileidResult" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getgalleryimagebynormalizedscreenname">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getgalleryimagebynormalizedscreennameResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="getgalleryimagebynormalizedscreennameResult" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="checkifphotocaptionalreadyexists">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="photocaption" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="checkifphotocaptionalreadyexistsResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="checkifphotocaptionalreadyexistsResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="checkforgalleryphotobyprofileid">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="checkforgalleryphotobyprofileidResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="checkforgalleryphotobyprofileidResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="checkforuploadedphotobyprofileid">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="checkforuploadedphotobyprofileidResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="checkforuploadedphotobyprofileidResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getimagebytesfromurl">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="imageUrl" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="source" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="getimagebytesfromurlResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="getimagebytesfromurlResult" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv.ViewModels" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" />
+  <xs:import schemaLocation="http://localhost/Shell.MVC2.Web.MediaService/PhotoService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System" />
+  <xs:complexType name="PhotoModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="convertedsize" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="imagecaption" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="imagename" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="orginalsize" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="photo" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="photoid" type="ser:guid" />
+      <xs:element minOccurs="0" name="profileid" type="xs:int" />
+      <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PhotoModel" nillable="true" type="tns:PhotoModel" />
+  <xs:complexType name="ArrayOfPhotoModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PhotoModel" nillable="true" type="tns:PhotoModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPhotoModel" nillable="true" type="tns:ArrayOfPhotoModel" />
+  <xs:complexType name="PhotoViewModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ProfilePhotosApproved" nillable="true" type="tns:ArrayOfPhotoModel" />
+      <xs:element minOccurs="0" name="ProfilePhotosNotApproved" nillable="true" type="tns:ArrayOfPhotoModel" />
+      <xs:element minOccurs="0" name="ProfilePhotosPrivate" nillable="true" type="tns:ArrayOfPhotoModel" />
+      <xs:element minOccurs="0" name="SingleProfilePhoto" nillable="true" type="tns:PhotoModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PhotoViewModel" nillable="true" type="tns:PhotoViewModel" />
+  <xs:complexType name="photoeditmodel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="approved" type="xs:boolean" />
+      <xs:element minOccurs="0" name="checkedphoto" type="xs:boolean" />
+      <xs:element minOccurs="0" name="checkedprimary" type="xs:boolean" />
+      <xs:element minOccurs="0" name="convertedsize" type="xs:int" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="description" type="xs:boolean" />
+      <xs:element minOccurs="0" name="imagecaption" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="imagename" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="orginalsize" type="xs:long" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Shell.MVC2.Domain.Entities.Anewluv" minOccurs="0" name="photoformat" nillable="true" type="q1:lu_photoformat" />
+      <xs:element minOccurs="0" name="photoid" type="ser:guid" />
+      <xs:element minOccurs="0" name="photostatusid" type="xs:int" />
+      <xs:element minOccurs="0" name="profileid" type="xs:int" />
+      <xs:element minOccurs="0" name="profileimagetype" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="photoeditmodel" nillable="true" type="tns:photoeditmodel" />
+  <xs:complexType name="ArrayOfphotoeditmodel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="photoeditmodel" nillable="true" type="tns:photoeditmodel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfphotoeditmodel" nillable="true" type="tns:ArrayOfphotoeditmodel" />
+  <xs:complexType name="PhotoEditViewModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsUploading" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PhotosUploading" nillable="true" type="tns:PhotoUploadViewModel" />
+      <xs:element minOccurs="0" name="ProfilePhotosApproved" nillable="true" type="tns:ArrayOfphotoeditmodel" />
+      <xs:element minOccurs="0" name="ProfilePhotosNotApproved" nillable="true" type="tns:ArrayOfphotoeditmodel" />
+      <xs:element minOccurs="0" name="ProfilePhotosPrivate" nillable="true" type="tns:ArrayOfphotoeditmodel" />
+      <xs:element minOccurs="0" name="SingleProfilePhoto" nillable="true" type="tns:photoeditmodel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PhotoEditViewModel" nillable="true" type="tns:PhotoEditViewModel" />
+  <xs:complexType name="PhotoUploadViewModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="autoupload" type="xs:boolean" />
+      <xs:element minOccurs="0" name="multiple" type="xs:boolean" />
+      <xs:element minOccurs="0" name="photosuploaded" nillable="true" type="tns:ArrayOfPhotoUploadModel" />
+      <xs:element minOccurs="0" name="profileid" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PhotoUploadViewModel" nillable="true" type="tns:PhotoUploadViewModel" />
+  <xs:complexType name="ArrayOfPhotoUploadModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PhotoUploadModel" nillable="true" type="tns:PhotoUploadModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPhotoUploadModel" nillable="true" type="tns:ArrayOfPhotoUploadModel" />
+  <xs:complexType name="PhotoUploadModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="approvalstatusid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="caption" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="imageb64string" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="imagebytes" nillable="true" type="q2:ArrayOfNullableOfunsignedByte" />
+      <xs:element minOccurs="0" name="imagename" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="imagetypeid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="photostatusid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="rejectionreasonid" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PhotoUploadModel" nillable="true" type="tns:PhotoUploadModel" />
 </xs:schema>

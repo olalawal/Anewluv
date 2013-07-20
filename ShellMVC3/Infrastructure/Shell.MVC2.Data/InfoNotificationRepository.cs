@@ -110,9 +110,10 @@ namespace Shell.MVC2.Data
             }
             catch (Exception ex)
             {
+                //TO DO log this
                 string ErrorMessage = ex.Message;
                 isEmailSendSuccessfully = false;
-
+                throw;
             }
 
             return isEmailSendSuccessfully;

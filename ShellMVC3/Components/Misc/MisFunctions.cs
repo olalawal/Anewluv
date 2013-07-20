@@ -66,109 +66,115 @@ namespace Misc
                 //build the related  profilemetadata noew
                 var myprofilemetadata = new Shell.MVC2.Domain.Entities.Anewluv.profilemetadata();
 
-                try
+                if (context.profiles.Any(p => p.emailaddress == item.ProfileID))
                 {
-                    Console.WriteLine("attempting to assign old profile with email  :" + item.ProfileID + "to the new database with id: " + newprofileid);
-
-                    myprofile.id = newprofileid;
-                    myprofile.username = item.UserName;
-                    myprofile.emailaddress = item.ProfileID;
-                    myprofile.screenname = item.ScreenName;
-                    myprofile.activationcode = item.ActivationCode;
-                    myprofile.dailsentmessagequota = item.DailSentMessageQuota;
-                    myprofile.dailysentemailquota = item.DailySentEmailQuota;
-                    myprofile.forwardmessages = item.ForwardMessages;
-                    myprofile.logindate = item.LoginDate;
-                    myprofile.modificationdate = item.ModificationDate;
-                    myprofile.creationdate = item.CreationDate;
-                    myprofile.failedpasswordchangedate = null;
-                    myprofile.passwordChangeddate = item.PasswordChangedDate;
-                    myprofile.readprivacystatement = item.ReadPrivacyStatement;
-                    myprofile.readtemsofuse = item.ReadTemsOfUse;
-                    myprofile.password = item.Password;
-                    myprofile.passwordchangecount = item.PasswordChangedCount;
-                    myprofile.failedpasswordchangeattemptcount = item.PasswordChangeAttempts;
-                    myprofile.salt = item.salt;
-                    myprofile.status = context.lu_profilestatus.Where(z => z.id == item.ProfileStatusID).FirstOrDefault();
-                    myprofile.securityquestion = context.lu_securityquestion.Where(z => z.id == item.SecurityQuestionID).FirstOrDefault();
-                    myprofile.securityanswer = item.SecurityAnswer;
-                    myprofile.sentemailquotahitcount = item.SentEmailQuotaHitCount;
-                    myprofile.sentmessagequotahitcount = item.SentMessageQuotaHitCount;
-
-
-                    context.profiles.AddOrUpdate(myprofile);
-                    context.SaveChanges();
-                    var newprofilecreated = context.profiles.Where(p => p.emailaddress == item.ProfileID).First();
-
-
-                    //query the profile data
-                    var matchedprofiledata = olddb.ProfileDatas.Where(p => p.ProfileID == item.ProfileID);
-                    // Metadata classes are not meant to be instantiated.
-                    myprofiledata.profile_id = newprofilecreated.id; //newprofileid;
-                    myprofiledata.age = matchedprofiledata.FirstOrDefault().Age;
-                    myprofiledata.birthdate = matchedprofiledata.FirstOrDefault().Birthdate;
-                    myprofiledata.city = matchedprofiledata.FirstOrDefault().City;
-                    myprofiledata.countryregion = matchedprofiledata.FirstOrDefault().Country_Region;
-                    myprofiledata.stateprovince = matchedprofiledata.FirstOrDefault().State_Province;
-                    myprofiledata.countryid = matchedprofiledata.FirstOrDefault().CountryID;
-                    myprofiledata.longitude = matchedprofiledata.FirstOrDefault().Longitude;
-                    myprofiledata.latitude = matchedprofiledata.FirstOrDefault().Latitude;
-                    myprofiledata.aboutme = matchedprofiledata.FirstOrDefault().AboutMe;
-                    myprofiledata.height = (long)matchedprofiledata.FirstOrDefault().Height.GetValueOrDefault();
-                    myprofiledata.mycatchyintroLine = matchedprofiledata.FirstOrDefault().MyCatchyIntroLine;
-                    myprofiledata.phone = matchedprofiledata.FirstOrDefault().Phone;
-                    myprofiledata.postalcode = matchedprofiledata.FirstOrDefault().PostalCode;
-                    //myprofiledata.profile = context.profiles.Where(z => z.id == myprofiledata.id).FirstOrDefault();
-                    //add in lookup feilds 
-                    //lookups for personal profile details 
-                    myprofiledata.gender = context.lu_gender.Where(p => p.id == item.ProfileData.GenderID).FirstOrDefault();
-                    myprofiledata.bodytype = context.lu_bodytype.Where(p => p.id == item.ProfileData.BodyTypeID).FirstOrDefault();
-                    myprofiledata.eyecolor = context.lu_eyecolor.Where(p => p.id == item.ProfileData.EyeColorID).FirstOrDefault();
-                    myprofiledata.haircolor = context.lu_haircolor.Where(p => p.id == item.ProfileData.HairColorID).FirstOrDefault();
-                    myprofiledata.diet = context.lu_diet.Where(p => p.id == item.ProfileData.DietID).FirstOrDefault();
-                    myprofiledata.drinking = context.lu_drinks.Where(p => p.id == item.ProfileData.DrinksID).FirstOrDefault();
-                    myprofiledata.exercise = context.lu_exercise.Where(p => p.id == item.ProfileData.ExerciseID).FirstOrDefault();
-                    myprofiledata.humor = context.lu_humor.Where(p => p.id == item.ProfileData.HumorID).FirstOrDefault();
-                    myprofiledata.politicalview = context.lu_politicalview.Where(p => p.id == item.ProfileData.PoliticalViewID).FirstOrDefault();
-                    myprofiledata.religion = context.lu_religion.Where(p => p.id == item.ProfileData.ReligionID).FirstOrDefault();
-                    myprofiledata.religiousattendance = context.lu_religiousattendance.Where(p => p.id == item.ProfileData.ReligiousAttendanceID).FirstOrDefault();
-                    myprofiledata.sign = context.lu_sign.Where(p => p.id == item.ProfileData.SignID).FirstOrDefault();
-                    myprofiledata.smoking = context.lu_smokes.Where(p => p.id == item.ProfileData.SmokesID).FirstOrDefault();
-                    myprofiledata.educationlevel = context.lu_educationlevel.Where(p => p.id == item.ProfileData.EducationLevelID).FirstOrDefault();
-                    myprofiledata.employmentstatus = context.lu_employmentstatus.Where(p => p.id == item.ProfileData.EmploymentSatusID).FirstOrDefault();
-                    myprofiledata.kidstatus = context.lu_havekids.Where(p => p.id == item.ProfileData.HaveKidsId).FirstOrDefault();
-                    myprofiledata.incomelevel = context.lu_incomelevel.Where(p => p.id == item.ProfileData.IncomeLevelID).FirstOrDefault();
-                    myprofiledata.livingsituation = context.lu_livingsituation.Where(p => p.id == item.ProfileData.LivingSituationID).FirstOrDefault();
-                    myprofiledata.maritalstatus = context.lu_maritalstatus.Where(p => p.id == item.ProfileData.MaritalStatusID).FirstOrDefault();
-                    myprofiledata.profession = context.lu_profession.Where(p => p.id == item.ProfileData.ProfessionID).FirstOrDefault();
-                    myprofiledata.wantsKidstatus = context.lu_wantskids.Where(p => p.id == item.ProfileData.WantsKidsID).FirstOrDefault();
-                    //visiblity settings was never implemented anyways.
-                    // myprofiledata.visibilitysettings=  context.visibilitysettings.Where(p => p.id   == item.Prof).FirstOrDefault();     
-
-
-
-                    myprofilemetadata.profile_id = newprofilecreated.id;
-
-                    //add the two new objects to profile
-                    //********************************
-                    myprofile.profiledata = myprofiledata;
-                    myprofile.profilemetadata = myprofilemetadata;
-
-                    context.profiles.AddOrUpdate(myprofile);
-
-                    //iccrement new ID
-                    newprofileid = newprofileid + 1;
+                    Console.WriteLine("skipping profile with email  :" + item.ProfileID +"it alaready exists   ");
                 }
-
-
-
-
-                catch (Exception ex)
+                else
                 {
+                    try
+                    {
+                        Console.WriteLine("attempting to assign old profile with email  :" + item.ProfileID + "to the new database with id: " + newprofileid);
 
-                    var dd = ex.ToString();
+                        myprofile.id = newprofileid;
+                        myprofile.username = item.UserName;
+                        myprofile.emailaddress = item.ProfileID;
+                        myprofile.screenname = item.ScreenName;
+                        myprofile.activationcode = item.ActivationCode;
+                        myprofile.dailsentmessagequota = item.DailSentMessageQuota;
+                        myprofile.dailysentemailquota = item.DailySentEmailQuota;
+                        myprofile.forwardmessages = item.ForwardMessages;
+                        myprofile.logindate = item.LoginDate;
+                        myprofile.modificationdate = item.ModificationDate;
+                        myprofile.creationdate = item.CreationDate;
+                        myprofile.failedpasswordchangedate = null;
+                        myprofile.passwordChangeddate = item.PasswordChangedDate;
+                        myprofile.readprivacystatement = item.ReadPrivacyStatement;
+                        myprofile.readtemsofuse = item.ReadTemsOfUse;
+                        myprofile.password = item.Password;
+                        myprofile.passwordchangecount = item.PasswordChangedCount;
+                        myprofile.failedpasswordchangeattemptcount = item.PasswordChangeAttempts;
+                        myprofile.salt = item.salt;
+                        myprofile.status = context.lu_profilestatus.Where(z => z.id == item.ProfileStatusID).FirstOrDefault();
+                        myprofile.securityquestion = context.lu_securityquestion.Where(z => z.id == item.SecurityQuestionID).FirstOrDefault();
+                        myprofile.securityanswer = item.SecurityAnswer;
+                        myprofile.sentemailquotahitcount = item.SentEmailQuotaHitCount;
+                        myprofile.sentmessagequotahitcount = item.SentMessageQuotaHitCount;
+
+
+                        context.profiles.AddOrUpdate(myprofile);
+                        context.SaveChanges();
+                        var newprofilecreated = context.profiles.Where(p => p.emailaddress == item.ProfileID).First();
+
+
+                        //query the profile data
+                        var matchedprofiledata = olddb.ProfileDatas.Where(p => p.ProfileID == item.ProfileID);
+                        // Metadata classes are not meant to be instantiated.
+                        myprofiledata.profile_id = newprofilecreated.id; //newprofileid;
+                        myprofiledata.age = matchedprofiledata.FirstOrDefault().Age;
+                        myprofiledata.birthdate = matchedprofiledata.FirstOrDefault().Birthdate;
+                        myprofiledata.city = matchedprofiledata.FirstOrDefault().City;
+                        myprofiledata.countryregion = matchedprofiledata.FirstOrDefault().Country_Region;
+                        myprofiledata.stateprovince = matchedprofiledata.FirstOrDefault().State_Province;
+                        myprofiledata.countryid = matchedprofiledata.FirstOrDefault().CountryID;
+                        myprofiledata.longitude = matchedprofiledata.FirstOrDefault().Longitude;
+                        myprofiledata.latitude = matchedprofiledata.FirstOrDefault().Latitude;
+                        myprofiledata.aboutme = matchedprofiledata.FirstOrDefault().AboutMe;
+                        myprofiledata.height = (long)matchedprofiledata.FirstOrDefault().Height.GetValueOrDefault();
+                        myprofiledata.mycatchyintroLine = matchedprofiledata.FirstOrDefault().MyCatchyIntroLine;
+                        myprofiledata.phone = matchedprofiledata.FirstOrDefault().Phone;
+                        myprofiledata.postalcode = matchedprofiledata.FirstOrDefault().PostalCode;
+                        //myprofiledata.profile = context.profiles.Where(z => z.id == myprofiledata.id).FirstOrDefault();
+                        //add in lookup feilds 
+                        //lookups for personal profile details 
+                        myprofiledata.gender = context.lu_gender.Where(p => p.id == item.ProfileData.GenderID).FirstOrDefault();
+                        myprofiledata.bodytype = context.lu_bodytype.Where(p => p.id == item.ProfileData.BodyTypeID).FirstOrDefault();
+                        myprofiledata.eyecolor = context.lu_eyecolor.Where(p => p.id == item.ProfileData.EyeColorID).FirstOrDefault();
+                        myprofiledata.haircolor = context.lu_haircolor.Where(p => p.id == item.ProfileData.HairColorID).FirstOrDefault();
+                        myprofiledata.diet = context.lu_diet.Where(p => p.id == item.ProfileData.DietID).FirstOrDefault();
+                        myprofiledata.drinking = context.lu_drinks.Where(p => p.id == item.ProfileData.DrinksID).FirstOrDefault();
+                        myprofiledata.exercise = context.lu_exercise.Where(p => p.id == item.ProfileData.ExerciseID).FirstOrDefault();
+                        myprofiledata.humor = context.lu_humor.Where(p => p.id == item.ProfileData.HumorID).FirstOrDefault();
+                        myprofiledata.politicalview = context.lu_politicalview.Where(p => p.id == item.ProfileData.PoliticalViewID).FirstOrDefault();
+                        myprofiledata.religion = context.lu_religion.Where(p => p.id == item.ProfileData.ReligionID).FirstOrDefault();
+                        myprofiledata.religiousattendance = context.lu_religiousattendance.Where(p => p.id == item.ProfileData.ReligiousAttendanceID).FirstOrDefault();
+                        myprofiledata.sign = context.lu_sign.Where(p => p.id == item.ProfileData.SignID).FirstOrDefault();
+                        myprofiledata.smoking = context.lu_smokes.Where(p => p.id == item.ProfileData.SmokesID).FirstOrDefault();
+                        myprofiledata.educationlevel = context.lu_educationlevel.Where(p => p.id == item.ProfileData.EducationLevelID).FirstOrDefault();
+                        myprofiledata.employmentstatus = context.lu_employmentstatus.Where(p => p.id == item.ProfileData.EmploymentSatusID).FirstOrDefault();
+                        myprofiledata.kidstatus = context.lu_havekids.Where(p => p.id == item.ProfileData.HaveKidsId).FirstOrDefault();
+                        myprofiledata.incomelevel = context.lu_incomelevel.Where(p => p.id == item.ProfileData.IncomeLevelID).FirstOrDefault();
+                        myprofiledata.livingsituation = context.lu_livingsituation.Where(p => p.id == item.ProfileData.LivingSituationID).FirstOrDefault();
+                        myprofiledata.maritalstatus = context.lu_maritalstatus.Where(p => p.id == item.ProfileData.MaritalStatusID).FirstOrDefault();
+                        myprofiledata.profession = context.lu_profession.Where(p => p.id == item.ProfileData.ProfessionID).FirstOrDefault();
+                        myprofiledata.wantsKidstatus = context.lu_wantskids.Where(p => p.id == item.ProfileData.WantsKidsID).FirstOrDefault();
+                        //visiblity settings was never implemented anyways.
+                        // myprofiledata.visibilitysettings=  context.visibilitysettings.Where(p => p.id   == item.Prof).FirstOrDefault();     
+
+
+
+                        myprofilemetadata.profile_id = newprofilecreated.id;
+
+                        //add the two new objects to profile
+                        //********************************
+                        myprofile.profiledata = myprofiledata;
+                        myprofile.profilemetadata = myprofilemetadata;
+
+                        context.profiles.AddOrUpdate(myprofile);
+
+                        //iccrement new ID
+                        newprofileid = newprofileid + 1;
+                    }
+
+
+
+
+                    catch (Exception ex)
+                    {
+
+                        var dd = ex.ToString();
+                    }
                 }
-
 
             }
 
@@ -720,12 +726,16 @@ namespace Misc
                         //get the list of all this user's photos , we are not re-adding duplicate photos
                         var alloldphotos = olddb.photos.Where(p => p.ProfileID == newprofile.emailaddress);
                         //now  before adding check the size and approved status
-                        var test = context.photos.Any(z => z.size == photositem.PhotoSize & z.imagename == photositem.ImageCaption);
+                        var test = context.photos.Any(z => z.size == photositem.PhotoSize & z.imagename == photositem.ImageCaption )  ;
+
+
                         if (!test)
                         {
 
-                            PhotoUploadModel uploadmodel = new PhotoUploadModel();
+                            
+PhotoUploadModel uploadmodel = new PhotoUploadModel();
                             uploadmodel.caption = photositem.ImageCaption;
+                            uploadmodel.legacysize = photositem.PhotoSize;
                             uploadmodel.creationdate = photositem.PhotoDate.GetValueOrDefault();
                             uploadmodel.imageb64string = Convert.ToBase64String(photositem.ProfileImage); 
                            // uploadmodel.size = photositem.PhotoSize;

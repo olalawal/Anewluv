@@ -48,10 +48,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv
         NativeAmerican,
         [Description("Pacific Islander")]
         [EnumMember]
-        PacificIslander,
-        [Description("A few extra pounds")]
-        [EnumMember]
-        Afewextrapounds,
+        PacificIslander,      
         [Description("East Indian")]
         [EnumMember]
         EastIndian        
