@@ -408,6 +408,62 @@ namespace Shell.MVC2.AppFabric
         }
 
         //TO do dpreciate this and test using the Session ID as in below
+        public static int? getprofileidbyopenid(ProfileModel model, AnewluvContext _datingcontext)
+        {
+
+            try
+            {
+                //handle case of null screenname
+                if (model.email == null || model.email == "") return null;
+
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
+                //create the guests region if it does not exists
+
+
+                int? _profileid = null;
+                try { if (dataCache != null)  _profileid = Convert.ToInt16(dataCache.Get("ProfileID" + model.email + model.openidprovider)); }
+                catch (DataCacheException ex)
+                {
+                    throw new InvalidOperationException();
+                }
+                if (_profileid == null | _profileid == 0)
+                {
+                    //MembersRepository membersrepository = new MembersRepository();
+                    //get the correct value from DB
+                    var profile = _datingcontext.profiles.Where(p => p.emailaddress  == model.email).FirstOrDefault();
+                    _profileid = (profile != null) ? profile.id : 0;
+
+                    //if we have an active cache we store the current value 
+                    if (dataCache != null && _profileid != 0)
+                    {
+                        //store it in the database
+                        if (_profileid != null) dataCache.Put("ProfileID" + model.email + model.openidprovider, _profileid);
+                    }
+                    //   else if (_profileid != 0  )
+                    // {  //just return the value if no cahce
+                    //       return _profileid;
+                    //
+                    //   }
+
+
+                }
+                //value came from cahce return it
+                return _profileid != 0 ? _profileid : null;
+            }
+            catch (DataCacheException ex)
+            {
+                throw new InvalidOperationException();
+
+            }
+            catch (Exception ex)
+            {
+                //put cleanup code here
+                throw;
+            }
+        }
+        //TO do dpreciate this and test using the Session ID as in below
         public static int? getprofileidbysessionid(string sessionid)
         {
             try

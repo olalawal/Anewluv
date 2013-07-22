@@ -1213,6 +1213,24 @@ namespace Shell.MVC2.Data
         }
     }
 
+    public int? getprofileidbyopenid(ProfileModel model)
+    {
+        try
+        {
+            return CachingFactory.getprofileidbyopenid(model, this._datingcontext);
+        }
+        catch (Exception ex)
+        {
+            //instantiate logger here so it does not break anything else.
+            logger = new ErroLogging(applicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            //log error mesasge
+            //handle logging here
+            var message = ex.Message;
+            throw;
+        }
+    }
+
     public int? getprofileidbyssessionid(ProfileModel model)
     {
         try

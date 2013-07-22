@@ -15,6 +15,8 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public string username { get; set; }
         [DataMember]
+        public string password { get; set; }
+        [DataMember]
         public int? profileid { get; set; }
         [DataMember]
         public string screenname { get; set; }
@@ -32,5 +34,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         public string openididentifier { get; set; }
         [DataMember]
         public string openidprovider { get; set; }
+        [DataMember]
+        public string Country { get; set; }
     }
 }

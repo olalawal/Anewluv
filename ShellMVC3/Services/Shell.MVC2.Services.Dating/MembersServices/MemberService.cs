@@ -263,6 +263,12 @@ namespace Shell.MVC2.Services.Dating
             return _memberrepository.getprofileidbyusername(model);
         }
 
+        public int?  getprofileidbyopenid(ProfileModel model)
+        {
+            return _memberrepository.getprofileidbyopenid(model);
+        }
+      
+
        public int? getprofileidbyscreenname(ProfileModel model)
         {
             return _memberrepository.getprofileidbyscreenname(model);

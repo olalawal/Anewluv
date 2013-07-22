@@ -158,7 +158,7 @@ namespace Shell.MVC2.Data
                 throw;
             }
 
-            return null;
+            //return null;
         }
         public MemberSearchViewModel getmembersearchviewmodel(int? viewerprofileid,int profileId,bool allphotos)
         {
@@ -188,7 +188,7 @@ namespace Shell.MVC2.Data
                 var message = ex.Message;
                 throw;
             }
-            return null;
+          //  return null;
         }
         public List<MemberSearchViewModel> getmembersearchviewmodels(int? viewerprofileid, List<int> profileIds, bool allphotos)
         {
@@ -217,7 +217,7 @@ namespace Shell.MVC2.Data
                 throw;
             }
 
-            return null;
+          //  return null;
         }
         public ProfileBrowseModel getprofilebrowsemodel(int viewerprofileId, int profileId, bool allphotos)
         {
@@ -575,11 +575,13 @@ namespace Shell.MVC2.Data
         //gets search settings
         //TO DO this function is just setting temp values for now
         //9 -21- 2011 added code to get age at least from search settings , more values to follow
-        public MembersViewModel getdefaultquicksearchsettingsmembers(MembersViewModel model)
+        public MembersViewModel getdefaultquicksearchsettingsmembers(ProfileModel profilemodel)
         {
             try
             {
                 quicksearchmodel quicksearchmodel = new quicksearchmodel();
+
+                MembersViewModel model = getmemberdata((int)profilemodel.profileid);
                 // PostalDataService postaldataservicecontext = new PostalDataService().Initialize();
                 //set deafult paging or pull from DB
                 //quicksearchmodel.myse = 4;
@@ -612,7 +614,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profile_id , null);
+                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex,profilemodel.profileid , null);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
@@ -620,11 +622,20 @@ namespace Shell.MVC2.Data
                 throw;
             }
         }
+        
+        //TO DO use some info passwed from geo data gathered
         //populate search settings for guests 
-        public MembersViewModel getdefaultsearchsettingsguest(MembersViewModel model)
+        public MembersViewModel getdefaultsearchsettingsguest(ProfileModel profilemodel)
         {
             try
             {
+                MembersViewModel model = new MembersViewModel();
+                //check if the country is in our database
+                
+
+             
+
+
                 //set defualt values for guests
                 //model.myquicksearch.mySelectedPageSize = 4;
                 model.myquicksearch.myselectedcurrentpage = 1;
@@ -636,8 +647,15 @@ namespace Shell.MVC2.Data
                 model.myquicksearch.myselectediamgenderid = 1;
                 model.myquicksearch.myselectedcitystateprovince = "ALL";
                 model.myquicksearch.myselectedseekinggenderid = Extensions.GetLookingForGenderID(1);
-                model.myquicksearch.myselectedcountryname = "United States"; //use same country for now
 
+                if (profilemodel.Country != "")
+                {                     
+                    model.myquicksearch.myselectedcountryname =  georepository.getcountryidbycountryname(profilemodel.Country) == 0 ? "United States" : profilemodel.Country; //use same country for now
+                }
+                else
+                {
+                    model.myquicksearch.myselectedcountryname = "United States";
+                }
                 model.myquicksearch.myselectedphotostatus = true;
 
                 return model;
@@ -645,7 +663,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profile_id , null);
+                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profilemodel.profileid, null);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
@@ -979,7 +997,7 @@ namespace Shell.MVC2.Data
             }
 
 
-            return null;
+          //  return null;
 
 
         }
@@ -1021,13 +1039,18 @@ namespace Shell.MVC2.Data
         //matches and other things mapped to lists
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public List<MemberSearchViewModel> getquickmatches(MembersViewModel model)
+        public List<MemberSearchViewModel> getquickmatches(ProfileModel profilemodel)
         {
             try
             {
 
+               
+
                 //get search sttings from DB
-                searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
+                searchsetting perfectmatchsearchsettings = membersrepository.getperfectmatchsearchsettingsbyprofileid(profilemodel);   //model.profile.profilemetadata.searchsettings.FirstOrDefault();
+
+                MembersViewModel model = mapmember((int)profilemodel.profileid);
+
                 //set default perfect match distance as 100 for now later as we get more members lower
                 //TO DO move this to a db setting or resourcer file
                 if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
@@ -1164,14 +1187,14 @@ namespace Shell.MVC2.Data
                 //TO DO find another way to do this maybe check and see if parsed values are empty or something or return a cached list?
                 //11/20/2011 handle case where  no profiles were found
                 if (Profiles.Count() == 0)
-                    return getquickmatcheswhenquickmatchesempty(model);
+                    return getquickmatcheswhenquickmatchesempty(new ProfileModel { profileid = profilemodel.profileid });
 
-                return Profiles.ToList();
+                return Profiles.Take(50).ToList();
             }
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profile_id , null);
+                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profilemodel.profileid  , null);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
@@ -1182,7 +1205,7 @@ namespace Shell.MVC2.Data
         }
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public List<MemberSearchViewModel> getemailmatches(MembersViewModel model)
+        public List<MemberSearchViewModel> getemailmatches(ProfileModel profilemodel)
         {
 
 
@@ -1191,7 +1214,9 @@ namespace Shell.MVC2.Data
             {
 
                 profile profile = new profile();
-                profile = membersrepository.getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt16(model.profile_id) });
+                profile = membersrepository.getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt16(profilemodel.profileid) });
+                MembersViewModel model = mapmember((int)profilemodel.profileid);
+
 
                 model.profile = profile;
 
@@ -1328,31 +1353,33 @@ namespace Shell.MVC2.Data
                 //TO DO find another way to do this maybe check and see if parsed values are empty or something or return a cached list?
                 //11/20/2011 handle case where  no profiles were found
                 if (Profiles.Count() == 0)
-                    return getquickmatcheswhenquickmatchesempty(model).Take(4).ToList();
+                    return getquickmatcheswhenquickmatchesempty(profilemodel).Take(4).ToList();
 
                 return Profiles.ToList();
             }
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profile_id , null);
+                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profilemodel.profileid , null);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
                 throw;
             }
-            return null;
+            //return null;
         }
-        public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model)
+        public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(ProfileModel profilemodel)
         {
             try
             {
 
                 //get search sttings from DB
-                searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
+                searchsetting perfectmatchsearchsettings = membersrepository.getperfectmatchsearchsettingsbyprofileid(profilemodel);  //model.profile.profilemetadata.searchsettings.FirstOrDefault();
                 //set default perfect match distance as 100 for now later as we get more members lower
                 //TO DO move this to a _datingcontext setting or resourcer file
+                MembersViewModel model = getmemberdata((int)profilemodel.profileid);
+
                 if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
                     model.maxdistancefromme = 5000;
 
@@ -1444,7 +1471,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profile_id, null);
+                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex,profilemodel.profileid, null);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
                 //log error mesasge
                 //handle logging here

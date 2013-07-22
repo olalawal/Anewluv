@@ -81,12 +81,12 @@ namespace Shell.MVC2.Services.Dating
         //gets search settings
         //TO DO this function is just setting temp values for now
         //9 -21- 2011 added code to get age at least from search settings , more values to follow
-        public MembersViewModel getdefaultquicksearchsettingsmembers(MembersViewModel Model)
+        public MembersViewModel getdefaultquicksearchsettingsmembers(ProfileModel Model)
         {
             return _mapmembermapperrepo.getdefaultquicksearchsettingsmembers(Model);
         }
         //populate search settings for guests 
-        public MembersViewModel getdefaultsearchsettingsguest(MembersViewModel Model)
+        public MembersViewModel getdefaultsearchsettingsguest(ProfileModel Model)
         {
             return _mapmembermapperrepo.getdefaultsearchsettingsguest(Model);
         }
@@ -149,7 +149,7 @@ namespace Shell.MVC2.Services.Dating
 
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public List<MemberSearchViewModel> getquickmatches(MembersViewModel model)
+        public List<MemberSearchViewModel> getquickmatches(ProfileModel model)
         {
 
 
@@ -162,7 +162,7 @@ namespace Shell.MVC2.Services.Dating
 
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public List<MemberSearchViewModel> getemailmatches(MembersViewModel model)
+        public List<MemberSearchViewModel> getemailmatches(ProfileModel model)
         {
 
 
@@ -172,7 +172,7 @@ namespace Shell.MVC2.Services.Dating
 
 
         }
-        public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model)
+        public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(ProfileModel model)
         {
 
             return _mapmembermapperrepo.getquickmatcheswhenquickmatchesempty(model);

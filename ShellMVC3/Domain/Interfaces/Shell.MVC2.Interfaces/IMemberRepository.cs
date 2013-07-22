@@ -84,6 +84,7 @@ namespace Shell.MVC2.Interfaces
        // bool checkifusernamealreadyexists(ProfileModel model);     
         string validatesecurityansweriscorrect(ProfileModel model);  
         int? getprofileidbyusername(ProfileModel model);
+        int? getprofileidbyopenid(ProfileModel model);
         int? getprofileidbyscreenname(ProfileModel model);
         int? getprofileidbyssessionid(ProfileModel model);
         string getusernamebyprofileid(ProfileModel model);       

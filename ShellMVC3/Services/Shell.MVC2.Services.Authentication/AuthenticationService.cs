@@ -28,25 +28,25 @@ namespace Shell.MVC2.Services.Authentication
             _anewluvmembershipprovider = anewluvmembershipprovider;
          //   _memberservice = memberservice;
         }
-        
-            public bool validateuser(string username, string password)
+
+            public bool validateuserbyusernamepassword(ProfileModel profile)
             {
-               return  _anewluvmembershipprovider.ValidateUser(username, password);
+               return  _anewluvmembershipprovider.ValidateUser(profile.username, profile.password);
             }
 
             //5-82012 updated to only valudate username
             //overide for validate user that uses just the username, this can be used for pass through auth where a user was already prevalidated via another method
 
-         
-            public bool validateuser(string username)
+
+            public bool validateuserbyusername(ProfileModel profile)
             {
-                return _anewluvmembershipprovider.ValidateUser(username);
+                return _anewluvmembershipprovider.ValidateUser(profile.username );
             }
 
-           
-            public bool validateuser(string verifedemail, string openididentifer, string openidprovidername)
+
+            public bool validateuserbyopenid(ProfileModel profile)
             {
-                return _anewluvmembershipprovider.ValidateUser(verifedemail, openididentifer, openidprovidername);
+                return _anewluvmembershipprovider.ValidateUser(profile.email , profile.openididentifier, profile.openidprovider);
             }          
             
             public  string applicationname()

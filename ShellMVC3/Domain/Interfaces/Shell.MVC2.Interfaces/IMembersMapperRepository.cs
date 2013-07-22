@@ -19,9 +19,9 @@ namespace Shell.MVC2.Interfaces
        List<ProfileBrowseModel> getprofilebrowsemodels(int viewerprofileId, List<int> profileIds, bool allphotos);   
         ProfileCriteriaModel getprofilecriteriamodel(int profileid);       //overload for above
         ProfileCriteriaModel getprofilecriteriamodel();
-         MembersViewModel getdefaultquicksearchsettingsmembers(MembersViewModel Model);     
+        MembersViewModel getdefaultquicksearchsettingsmembers(ProfileModel Model);     
         //populate search settings for guests 
-         MembersViewModel getdefaultsearchsettingsguest(MembersViewModel Model);
+         MembersViewModel getdefaultsearchsettingsguest(ProfileModel Model);
         
        
        
@@ -53,11 +53,11 @@ namespace Shell.MVC2.Interfaces
         //***********************************************************************************************
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        List<MemberSearchViewModel> getquickmatches(MembersViewModel model);
+        List<MemberSearchViewModel> getquickmatches(ProfileModel model);
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        List<MemberSearchViewModel> getemailmatches(MembersViewModel model);
-        List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(MembersViewModel model);
+        List<MemberSearchViewModel> getemailmatches(ProfileModel model);
+        List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(ProfileModel model);
 
     }
 }

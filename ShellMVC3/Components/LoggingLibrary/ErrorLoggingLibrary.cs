@@ -349,6 +349,7 @@ namespace LoggingLibrary
             }
             catch (Exception ex)
             {
+
                 return "Failed to serialize object.";
             }
         }

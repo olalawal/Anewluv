@@ -366,7 +366,7 @@ namespace Shell.MVC2.Data
             {
                 MembersViewModel model = _membersmapperrepository.getmemberdata(profileid);
                 EmailViewModel returnmodel = new EmailViewModel();
-                returnmodel.EmailMatches = _membersmapperrepository.getemailmatches(model);
+                returnmodel.EmailMatches = _membersmapperrepository.getemailmatches(new ProfileModel { profileid = profileid });
                 //get featured member
                 returnmodel.FeaturedMember = _membersmapperrepository.getmembersearchviewmodel(profileid, featuredmemberid,false );
                 returnmodel.memberEmailViewModel = getemailbytemplateid(templateenum.MemberMatchesSentMemberNotification);
