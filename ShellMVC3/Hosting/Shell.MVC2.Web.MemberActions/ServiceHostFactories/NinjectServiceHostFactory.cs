@@ -20,6 +20,7 @@ namespace Shell.MVC2.Web.MembersActionsService.ServiceHostFactories
             container.Load<NinjectModules.AnewLuvContextModule>();
             container.Load<NinjectModules.PostalDataContextModule>();
             //loading membership module first since they both share IMEMberepo, and mappers module server items from membership module
+            container.Load<NinjectModules.MembersModule>();
             container.Load<NinjectModules.MembershipModule>();
             container.Load<NinjectModules.MembersMapperModule  >();
             container.Load<NinjectModules.MemberActionsModule>();

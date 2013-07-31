@@ -197,7 +197,7 @@ namespace Shell.MVC2.Data
                 var request = (HttpRequestMessageProperty)message.Properties[HttpRequestMessageProperty.Name];
                 string authorization = request.Headers[HttpRequestHeader.Authorization];
                 if ( authorization !=null && authorization  != "" ) 
-                return Encryption.DecodeBasicAuthenticationString(authorization);
+                return Encryption.DecodeBasicAuthenticationString(authorization.Replace("Basic","").Trim());
                 
                 return  null;
 

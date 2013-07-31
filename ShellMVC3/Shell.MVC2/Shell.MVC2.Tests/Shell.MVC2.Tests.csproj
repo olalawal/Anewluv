@@ -181,12 +181,6 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shell.MVC2\Shell.MVC2.csproj">
-      <Project>{2863742A-2B2C-4633-8200-06BE71DE8095}</Project>
-      <Name>Shell.MVC2</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="OtherTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

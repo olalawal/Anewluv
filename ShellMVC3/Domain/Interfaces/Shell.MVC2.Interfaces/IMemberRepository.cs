@@ -63,6 +63,8 @@ namespace Shell.MVC2.Interfaces
        //also updates the last log in and profile data
         bool updateuserlogintimebyprofileidandsessionid(ProfileModel model);       
         bool updateuserlogintimebyprofileid(ProfileModel model);
+       //7-30-2013 olawal to update the profile activity times
+        bool updateprofileactivity(profileactivity model);
        
        //date time functions '
        //***********************************************************

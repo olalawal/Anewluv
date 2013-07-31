@@ -75,7 +75,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
         public override bool ValidateUser(string username, string password)
         {
 
-            IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile> myQuery = default(IQueryable<Shell.MVC2.Domain.Entities.Anewluv.profile>);
+            Shell.MVC2.Domain.Entities.Anewluv.profile myQuery = null;
 
             try
             {
@@ -91,16 +91,16 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
                 //Dim ctx As New Entities()
                 //added profile status ID validation as well i.e 2 for activated and is not banned 
-                myQuery = _datingcontext.profiles.Where(p => p.username == username && p.status.id == 2);
+                myQuery = _datingcontext.profiles.Where(p => p.username == username && p.status.id == 2).FirstOrDefault();
 
 
 
-                if (myQuery.Count() > 0)
+                if (myQuery != null)
                 {
                     //retirve encypted password
-                    encryptedPassword = myQuery.FirstOrDefault().password;
-                    creationdate = myQuery.FirstOrDefault().creationdate.GetValueOrDefault();
-                    passwordchangedate = myQuery.FirstOrDefault().passwordChangeddate;
+                    encryptedPassword = myQuery.password;
+                    creationdate = myQuery.creationdate.GetValueOrDefault();
+                    passwordchangedate = myQuery.passwordChangeddate;
                 }
                 else
                 {
@@ -133,8 +133,23 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
                 if (actualpasswordstring == decryptedPassword)
                 {
                     //log the user logtime here so it is common to silverlight and MVC                  
-                  
-                    _memberepository.updateuserlogintimebyprofileidandsessionid (new ProfileModel { username  =  username , sessionid =HttpContext.Current.Session.SessionID  } );
+                    if (HttpContext.Current != null)
+                    {
+                        _memberepository.updateuserlogintimebyprofileidandsessionid(new ProfileModel {  profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID });
+
+                    }
+                    else
+                    {
+                        _memberepository.updateuserlogintimebyprofileid(new ProfileModel { profileid  = myQuery.id });
+                    }
+
+                    //TO DO get geodata from IP address down the line
+                    //also update profile activity
+                    _memberepository.updateprofileactivity(
+                        new profileactivity {  activitytype = _datingcontext.lu_activitytype.Where(p=>p.id== (int)activitytypeEnum.login).FirstOrDefault()
+                        , creationdate = DateTime.Now, profile_id = myQuery.id, ipaddress = HttpContext.Current.Request.UserHostAddress , routeurl =  HttpContext.Current.Request.RawUrl  ,
+                         sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID :null});
+
                     //also update the profiledata for the last login date
                     return true;
                 }
@@ -147,7 +162,7 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
             {
                 //instantiate logger here so it does not break anything else.
                 logger = new ErroLogging(applicationEnum.UserAuthorizationService);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, myQuery !=null? myQuery.FirstOrDefault().id:0, null);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, myQuery !=null? myQuery.id:0, null);
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;

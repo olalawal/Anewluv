@@ -657,7 +657,7 @@ namespace Shell.MVC2.Data
                     DateTime currenttime = DateTime.Now;
 
                     //get the profileid from userID
-                    int? profileid = getprofileidbyusername(model);
+                   // int? profileid = getprofileidbyusername(model);
                     try
                     {
                         //update all other sessions that were not properly logged out
@@ -676,8 +676,8 @@ namespace Shell.MVC2.Data
 
 
                         //noew aslo update the logtime and then 
-                        myLogtime.profile_id  = profileid.GetValueOrDefault();
-                        myLogtime.sessionid  = model.sessionid;
+                        myLogtime.profile_id = model.profileid.GetValueOrDefault();
+                        myLogtime.sessionid  = model.sessionid ;
                         myLogtime.logintime  = currenttime;
                         this._datingcontext.userlogtimes.Add(myLogtime);
                         //save all changes bro
@@ -726,13 +726,14 @@ namespace Shell.MVC2.Data
                         //update the profile status to 2
                         myProfile.logindate = currenttime;
 
-
+                        //TO DO list wwhat are where they logged in from in that one table
                         //noew aslo update the logtime and then 
                         myLogtime.profile_id = model.profileid.GetValueOrDefault();
-                        myLogtime.sessionid  = model.sessionid ;
+                       // myLogtime.sessionid  = model.sessionid ;
                         myLogtime.logintime = currenttime;
                         this._datingcontext.userlogtimes.Add(myLogtime);
                         //save all changes bro
+
                         this._datingcontext.SaveChanges();
 
                     }
@@ -748,6 +749,37 @@ namespace Shell.MVC2.Data
                     }
                     return true;
                 }
+
+       //TO DO needs implemenation work for now not working
+                public bool updateprofileactivity(profileactivity  model)
+                {
+                    try
+                    {
+                        //In this code we will use the IP address to get the geo coding info and them check to see if it is amatch to another
+                        // if not add a new one 
+
+
+                        return true;
+
+                        this._datingcontext.profileactivity.Add(model);
+                        //save all changes bro
+                        this._datingcontext.SaveChanges();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profile_id, null);
+                        //log error mesasge
+                        //handle logging here
+                        var message = ex.Message;
+                        throw;
+                    }
+                    return true;
+
+                }
+
 
     //date time functions '
    //***********************************************************

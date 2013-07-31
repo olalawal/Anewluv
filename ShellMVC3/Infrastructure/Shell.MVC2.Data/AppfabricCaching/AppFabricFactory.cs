@@ -603,7 +603,7 @@ namespace Shell.MVC2.AppFabric
                                                 model.register = membersmapperepository.getregistermodeltest();
                                                //model.Register = Mapper.MapRegistration();
 #else
-                        model.Register = Mapper.MapRegistration(model);
+                        model = membersmapperepository.mapmember (model.profile_id);
 #endif
 
                         if (dataCache != null)
