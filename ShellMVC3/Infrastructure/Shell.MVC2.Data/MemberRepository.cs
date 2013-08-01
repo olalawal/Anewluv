@@ -866,6 +866,7 @@ namespace Shell.MVC2.Data
 
                 }
 
+       //TO DO we-write to work with activaity page
                 //returns true if somone logged on
      public bool getuseronlinestatus(ProfileModel model)
                 {

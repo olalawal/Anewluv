@@ -15,7 +15,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
         [DataMember]
         public Guid photoid { get; set; }
          [DataMember]
-        public byte[] photo { get; set; }
+        public string photo { get; set; }
         [DataMember]
         public string screenname { get; set; }
         [DataMember]

@@ -21,6 +21,7 @@ using ImageResizer;
 using LoggingLibrary;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 
+using Shell.MVC2.Infrastructure.Helpers;
 
 namespace Shell.MVC2.Data
 {
@@ -126,7 +127,7 @@ namespace Shell.MVC2.Data
                     {
 
 
-                        byte[] byteArray = System.Convert.FromBase64String(photouploaded.imageb64string);  //tempImageUpload.TempImageData; 
+                        byte[] byteArray = b64Converters.b64stringtoByteArray(photouploaded.imageb64string);  //tempImageUpload.TempImageData; 
                         using (var outStream = new MemoryStream())
                         {
                             using (var inStream = new MemoryStream(byteArray))
@@ -201,20 +202,36 @@ namespace Shell.MVC2.Data
 
         public PhotoModel getphotomodelbyphotoid(Guid photoid,photoformatEnum format)
         {
-            PhotoModel model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && ( a.photo.id == photoid))
-                                    select new PhotoModel
+            PhotoModel model = (from p in                                     
+                                   ( from r in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && ( a.photo.id == photoid))
+                                   select new
                                     {
-                                        photoid = p.photo.id,
-                                        profileid = p.photo.profile_id,
-                                        screenname = p.photo.profilemetadata.profile.screenname,
-                                        photo = p.image,
-                                        photoformat = p.formattype,
-                                        convertedsize = p.size,
-                                        orginalsize = p.photo.size,
-                                        imagecaption = p.photo.imagecaption,
-                                        creationdate = p.photo.creationdate,
+                                        photoid = r.photo.id,
+                                        profileid = r.photo.profile_id,
+                                        screenname = r.photo.profilemetadata.profile.screenname,
+                                        photo = r.image,
+                                        photoformat = r.formattype,
+                                        convertedsize = r.size,
+                                        orginalsize = r.photo.size,
+                                        imagecaption = r.photo.imagecaption,
+                                        creationdate = r.photo.creationdate,
                                         
+                                    }).ToList()
+                                     select new PhotoModel 
+                                    {
+                                        photoid = p.photoid ,
+                                        profileid = p.profileid ,
+                                        screenname = p.screenname ,
+                                        photo = b64Converters.ByteArraytob64string(p.photo) ,
+                                        photoformat =p.photoformat ,
+                                        convertedsize = p.convertedsize ,
+                                        orginalsize = p.orginalsize,
+                                        imagecaption = p.imagecaption,
+                                        creationdate = p.creationdate,
+
                                     }).FirstOrDefault();
+
+           
 
             // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
 
@@ -229,20 +246,34 @@ namespace Shell.MVC2.Data
 
         public PhotoModel getphotomodelbyprofileid(int profileid, photoformatEnum format)
         {
-            PhotoModel model = (from p in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && (a.photo.profile_id == profileid))
-                                select new PhotoModel
-                                {
-                                    photoid = p.photo.id,
-                                    profileid = p.photo.profile_id,
-                                    screenname = p.photo.profilemetadata.profile.screenname,
-                                    photo = p.image,
-                                    photoformat = p.formattype,
-                                    convertedsize = p.size,
-                                    orginalsize = p.photo.size,
-                                    imagecaption = p.photo.imagecaption,
-                                    creationdate = p.photo.creationdate,
+            PhotoModel model = (from p in
+                                    (from r in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && (a.photo.profile_id == profileid))                               
+                               select new
+                                    {
+                                        photoid = r.photo.id,
+                                        profileid = r.photo.profile_id,
+                                        screenname = r.photo.profilemetadata.profile.screenname,
+                                        photo = r.image,
+                                        photoformat = r.formattype,
+                                        convertedsize = r.size,
+                                        orginalsize = r.photo.size,
+                                        imagecaption = r.photo.imagecaption,
+                                        creationdate = r.photo.creationdate,
+                                        
+                                    }).ToList()
+                                     select new PhotoModel 
+                                    {
+                                        photoid = p.photoid ,
+                                        profileid = p.profileid ,
+                                        screenname = p.screenname ,
+                                        photo = b64Converters.ByteArraytob64string(p.photo) ,
+                                        photoformat =p.photoformat ,
+                                        convertedsize = p.convertedsize ,
+                                        orginalsize = p.orginalsize,
+                                        imagecaption = p.imagecaption,
+                                        creationdate = p.creationdate,
 
-                                }).FirstOrDefault();
+                                    }).FirstOrDefault();
 
             // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
 
@@ -270,7 +301,7 @@ namespace Shell.MVC2.Data
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
                              screenname = p.photo.profilemetadata.profile.screenname,
-                             photo = p.image,
+                             photo =  b64Converters.ByteArraytob64string(p.image),
                              photoformat = p.formattype,
                              convertedsize = p.size,
                              orginalsize = p.photo.size,
@@ -307,7 +338,7 @@ namespace Shell.MVC2.Data
                                  photoid = p.photo.id,
                                  profileid = p.photo.profile_id,
                                  screenname = p.photo.profilemetadata.profile.screenname,
-                                 photo = p.image,
+                                 photo = b64Converters.ByteArraytob64string(p.image),
                                  photoformat = p.formattype ,
                                  convertedsize = p.size,
                                  orginalsize = p.photo.size,

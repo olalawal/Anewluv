@@ -14,13 +14,20 @@ using Shell.MVC2.Interfaces;
 using Shell.MVC2.AppFabric;
 using LoggingLibrary;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Shell.MVC2.Infrastructure.Helpers;
 
 
 
 namespace Shell.MVC2.Data
 {
+   
+
     public class MembersMapperRepository : MemberRepositoryBase, IMembersMapperRepository
     {
+
+        private int maxwebmatches = 24;
+        private int maxemailmatches = 4;
+        private int maxsearchresults = 348;
         //TO DO do this a different way I think
         private IGeoRepository georepository;
         private IPhotoRepository photorepository;
@@ -1034,7 +1041,10 @@ namespace Shell.MVC2.Data
             // return model;
         }
 
+
+
         //TO DO move these to a comprehensive search repo
+        #region "Matches"
 
         //matches and other things mapped to lists
         //quick search for members in the same country for now, no more filters yet
@@ -1044,7 +1054,7 @@ namespace Shell.MVC2.Data
             try
             {
 
-               
+
 
                 //get search sttings from DB
                 searchsetting perfectmatchsearchsettings = membersrepository.getperfectmatchsearchsettingsbyprofileid(profilemodel);   //model.profile.profilemetadata.searchsettings.FirstOrDefault();
@@ -1077,7 +1087,7 @@ namespace Shell.MVC2.Data
 
 
                 //set variables
-                List<MemberSearchViewModel> MemberSearchViewmodels;
+               // List<MemberSearchViewModel> MemberSearchViewmodels;
                 DateTime today = DateTime.Today;
                 DateTime max = today.AddYears(-(intAgeFrom + 1));
                 DateTime min = today.AddYears(-intAgeTo);
@@ -1122,79 +1132,89 @@ namespace Shell.MVC2.Data
 
                 //****** end of visiblity test settings *****************************************
 
-                MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
+                var MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p => p.birthdate > min && p.birthdate <= max &&
+                      p.profile.profilemetadata.photos.Any(z => z.photostatus.id == (int)photostatusEnum.Gallery))
 
-                                   //** visiblity settings still needs testing           
-                                              //5-8-2012 add profile visiblity code here
-                                              // .Where(x => x.profile.username == "case")
-                                              //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.ProfileVisiblity == true)
-                                              //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.agemaxVisibility != null && model.profile.profiledata.birthdate > today.AddYears(-(x.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault() + 1)))
-                                              //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.agemaxVisibility != null && model.profile.profiledata.birthdate < today.AddYears(-x.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault()))
-                                              // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.countryid != null && x.ProfileVisiblitySetting.countryid == model.profile.profiledata.countryid  )
-                                              // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.GenderID != null && x.ProfileVisiblitySetting.GenderID ==  model.profile.profiledata.GenderID )
-                                              //** end of visiblity settings ***
+                                    //** visiblity settings still needs testing           
+                                                  //5-8-2012 add profile visiblity code here
+                                                  // .Where(x => x.profile.username == "case")
+                                                  //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.ProfileVisiblity == true)
+                                                  //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.agemaxVisibility != null && model.profile.profiledata.birthdate > today.AddYears(-(x.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault() + 1)))
+                                                  //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.agemaxVisibility != null && model.profile.profiledata.birthdate < today.AddYears(-x.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault()))
+                                                  // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.countryid != null && x.ProfileVisiblitySetting.countryid == model.profile.profiledata.countryid  )
+                                                  // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.GenderID != null && x.ProfileVisiblitySetting.GenderID ==  model.profile.profiledata.GenderID )
+                                                  //** end of visiblity settings ***
+                                 .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)) //using whereIF predicate function 
+                                 .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id)) //  == model.lookingforgenderid)    
+                                                  //TO DO add the rest of the filitering here 
+                                                  //Appearance filtering                         
+                                 .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax) //Only evealuate if the user searching actually has height values they look for                         
+                                              join f in _datingcontext.profiles on x.profile_id equals f.id
+                                              select new MemberSearchViewModel
+                                              {
+                                                  // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                                  id = x.profile_id,
+                                                  stateprovince = x.stateprovince,
+                                                  postalcode = x.postalcode,
+                                                  countryid = x.countryid,
+                                                  genderid = x.gender.id,
+                                                  birthdate = x.birthdate,
+                                                  //profile = f,
+                                                  screenname = f.screenname,
+                                                  longitude = x.longitude ?? 0,
+                                                  latitude = x.latitude ?? 0,
+                                                  hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                                  creationdate = f.creationdate,
+                                                  // city = db.fnTruncateString(x.city, 11),
+                                                  // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
+                                                  lastlogindate = f.logindate,
+                                                  //Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
+                                                  //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                                              });
 
-                                .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)) //using whereIF predicate function 
-                                .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id)) //  == model.lookingforgenderid)    
-                                              //TO DO add the rest of the filitering here 
-                                              //Appearance filtering                         
-                                .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax) //Only evealuate if the user searching actually has height values they look for                         
-                                          join f in _datingcontext.profiles on x.profile_id equals f.id
-                                          select new MemberSearchViewModel
-                                          {
-                                              // MyCatchyIntroLineQuickSearch = x.AboutMe,
-                                              id = x.profile_id,
-                                              stateprovince = x.stateprovince,
-                                              postalcode = x.postalcode,
-                                              countryid = x.countryid,
-                                              genderid = x.gender.id,
-                                              birthdate = x.birthdate,
-                                              profile = f,
-                                              screenname = f.screenname,
-                                              longitude = (double)x.longitude,
-                                              latitude = (double)x.latitude,
-                                              // hasgalleryphoto  = (_datingcontext.photos.Where(i => i.profile_id  == f.id && i.photostatus.id  == (int)photostatusEnum.Gallery ).FirstOrDefault().id  != null )? true : false ,
-                                              // galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.photo.photostatus.id == (int)photostatusEnum.Gallery && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
-                                              hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
-                                              //galleryphoto =  new PhotoModel { 
+                //do any conversions and calcs here
+                var profiles = MemberSearchViewmodels.ToList().
+                Select(x => new MemberSearchViewModel
+                {
+                    // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                    id = x.id,
+                    stateprovince = x.stateprovince,
+                    postalcode = x.postalcode,
+                    countryid = x.countryid,
+                    genderid = x.genderid,
+                    birthdate = x.birthdate,
+                    profile = x.profile,
+                    screenname = x.screenname,
+                    longitude = x.longitude ?? 0,
+                    latitude = x.latitude ?? 0,
+                    hasgalleryphoto = x.hasgalleryphoto,
+                    creationdate = x.creationdate,
+                    // city = db.fnTruncateString(x.city, 11),
+                    lastloggedonstring = membersrepository.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
+                    lastlogindate = x.lastlogindate,
+                    distancefromme = georepository.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles"),
+                    galleryphoto = photorepository.getphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail)
 
-                                              //    photo = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image),
-                                              //    //approvalstatus = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.approvalstatus),
-                                              //    imagecaption = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.imagecaption),
-                                              //    convertedsize = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().size),
-                                              //    orginalsize = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.size)
-                                              //},
-                                              creationdate = f.creationdate,
-                                              //city = _datingcontext.(x.city, 11),
-                                              // lastloggedonstring   = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
-                                              lastlogindate = f.logindate,
-                                              //online  = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
-                                              // distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles") 
-                                          }).ToList();
+                });
 
+             
 
-                //  var temp = MemberSearchViewmodels;
-                //these could be added to where if as well, also limits values if they did selected all
-                var Profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.maxdistancefromme) select q) : MemberSearchViewmodels.Take(500);
-                //     Profiles; ; 
-                // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
-                //               Profiles;
-                //do the stuff for the user defined functions here
-                //TO DO switch this to most active postible and then filter by last logged in date instead .ThenByDescending(p => p.lastlogindate)
-                //final ordering 
-                Profiles = Profiles.OrderByDescending(p => p.hasgalleryphoto == true).ThenByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);
-
-                //TO DO find another way to do this maybe check and see if parsed values are empty or something or return a cached list?
                 //11/20/2011 handle case where  no profiles were found
-                if (Profiles.Count() == 0)
-                    return getquickmatcheswhenquickmatchesempty(new ProfileModel { profileid = profilemodel.profileid });
+                if (profiles.Count() == 0)
+                    return getquickmatcheswhenquickmatchesempty(new ProfileModel { profileid = profilemodel.profileid }).Take(maxwebmatches).ToList();
 
-                return Profiles.Take(50).ToList();
+                //these could be added to where if as well, also limits values if they did selected all
+                profiles = (model.maxdistancefromme > 0) ? (from q in profiles
+                         .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
+                                                            select q).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme.GetValueOrDefault()).Take(maxsearchresults) :
+                         MemberSearchViewmodels.OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme.GetValueOrDefault()).Take(maxsearchresults);
+
+                return profiles.Take(maxwebmatches).ToList();
             }
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profilemodel.profileid  , null);
+                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profilemodel.profileid, null);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
@@ -1282,85 +1302,88 @@ namespace Shell.MVC2.Data
 
                 //add more values as we get more members 
                 //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
-                var models = (from x in _datingcontext.profiles.Where(p => p.profiledata.birthdate > min && p.profiledata.birthdate <= max &&
-                    (p.profilemetadata.photos.Any(z => z.photostatus.id == (int)photostatusEnum.Gallery)))
-                                .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.profiledata.gender.id)) //using whereIF predicate function 
-                                .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.profiledata.gender.id))
+                var MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p => p.birthdate > min && p.birthdate <= max &&
+                      p.profile.profilemetadata.photos.Any(z => z.photostatus.id == (int)photostatusEnum.Gallery))
+                                .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)) //using whereIF predicate function 
+                                .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id))
                                   //Appearance filtering not implemented yet                        
-                                .WhereIf(blEvaluateHeights, z => z.profiledata.height > intheightmin && z.profiledata.height <= intheightmax) //Only evealuate if the user searching actually has height values they look for 
+                                .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax) //Only evealuate if the user searching actually has height values they look for 
                               //we have to filter on the back end now since we cant use UDFs
                               // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
-                              join f in _datingcontext.profiles on x.profiledata.profile_id equals f.id
-                              select x.id 
-                    //{
-                    //    // MyCatchyIntroLineQuickSearch = x.AboutMe,
-                    //    id = x.profile_id,
-                    //    stateprovince = x.stateprovince,
-                    //    postalcode = x.postalcode,
-                    //    countryid = x.countryid,
-                    //    genderid = x.gender.id,
-                    //    birthdate = x.birthdate,
-                    //    //profile = f,
-                    //    screenname = f.screenname,
-                    //    longitude = x.longitude ?? 0,
-                    //    latitude = x.latitude ?? 0,
-                    //    //TO restore this when DB is fixed
-                    //    //hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
-                    //    // galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.photo.photostatus.id == (int)photostatusEnum.Gallery && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
-
-                                          //    creationdate = f.creationdate,
-                    //    hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
-                    //    //galleryphoto = new PhotoModel
-                    //    //{
-                    //    //    photo = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image),
-                    //    //    approvalstatus = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.approvalstatus),
-                    //    //    imagecaption = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.imagecaption),
-                    //    //    convertedsize  = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().size),
-                    //    //    orginalsize   = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.size )
-
-                                          //    //},
-
-                                          //    // city = db.fnTruncateString(x.city, 11),
-                    //    //lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
-                    //    lastlogindate = f.logindate,
-                    //    //  Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
-                    //    //distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                              join f in _datingcontext.profiles on x.profile_id equals f.id
+                              select new MemberSearchViewModel
+                              {
+                                  // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                  id = x.profile_id,
+                                  stateprovince = x.stateprovince,
+                                  postalcode = x.postalcode,
+                                  countryid = x.countryid,
+                                  genderid = x.gender.id,
+                                  birthdate = x.birthdate,
+                                  //profile = f,
+                                  screenname = f.screenname,
+                                  longitude = x.longitude ?? 0,
+                                  latitude = x.latitude ?? 0,
+                                  hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                  creationdate = f.creationdate,
+                                  // city = db.fnTruncateString(x.city, 11),
+                                  // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
+                                  lastlogindate = f.logindate,
+                                  //Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
+                                  //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                              });
 
 
-                                          ).ToList();
 
+                //do any conversions and calcs here
+                var profiles = MemberSearchViewmodels.ToList().
+                Select(x => new MemberSearchViewModel
+                {
+                    // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                    id = x.id,
+                    stateprovince = x.stateprovince,
+                    postalcode = x.postalcode,
+                    countryid = x.countryid,
+                    genderid = x.genderid,
+                    birthdate = x.birthdate,
+                    profile = x.profile,
+                    screenname = x.screenname,
+                    longitude = x.longitude ?? 0,
+                    latitude = x.latitude ?? 0,
+                    hasgalleryphoto = x.hasgalleryphoto,
+                    creationdate = x.creationdate,
+                    // city = db.fnTruncateString(x.city, 11),
+                    lastloggedonstring = membersrepository.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
+                    lastlogindate = x.lastlogindate,
+                    distancefromme = georepository.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles"),
+                    galleryphoto = photorepository.getphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail)
 
+                });
 
                 //these could be added to where if as well, also limits values if they did selected all
-                // var Profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.maxdistancefromme) select q) : MemberSearchViewmodels;
-                //     Profiles; ; 
-                // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
-                //               Profiles;
-
-                //TO DO switch this to most active postible and then filter by last logged in date instead .ThenByDescending(p => p.lastlogindate)
-                //final ordering 
-                //var Profiles = MemberSearchViewmodels.OrderByDescending(p => p.hasgalleryphoto == true).ThenByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).Take(4);
-
-                //bind the models to the memberserch view model
-
-                var searchmodels = this.getmembersearchviewmodels(model.profile.id, models,false );
-
-                var Profiles = searchmodels.Where(p => p.hasgalleryphoto == true).OrderBy(p => p.creationdate).ThenByDescending(p => p.distancefromme).Take(4);
-
+                profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels
+                    .Where(a => a.distancefromme <= model.maxdistancefromme)
+                                                            select q).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).Take(500) :
+                    MemberSearchViewmodels.Take(500).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);
 
 
 
                 //TO DO find another way to do this maybe check and see if parsed values are empty or something or return a cached list?
                 //11/20/2011 handle case where  no profiles were found
-                if (Profiles.Count() == 0)
-                    return getquickmatcheswhenquickmatchesempty(profilemodel).Take(4).ToList();
+                if (profiles.Count() == 0)
+                    return getquickmatcheswhenquickmatchesempty(profilemodel).Take(maxemailmatches).ToList();
 
-                return Profiles.ToList();
+                profiles = (model.maxdistancefromme > 0) ? (from q in profiles
+                     .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
+                                                            select q).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme.GetValueOrDefault()).Take(maxsearchresults) :
+                     MemberSearchViewmodels.OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme.GetValueOrDefault()).Take(maxsearchresults);
+
+                return profiles.Take(maxemailmatches).ToList();
             }
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profilemodel.profileid , null);
+                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profilemodel.profileid, null);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
@@ -1395,7 +1418,7 @@ namespace Shell.MVC2.Data
                 int intAgeFrom = perfectmatchsearchsettings.agemin != null ? perfectmatchsearchsettings.agemin.GetValueOrDefault() : 18;
 
                 //set variables
-                List<MemberSearchViewModel> MemberSearchViewmodels;
+                //List<MemberSearchViewModel> MemberSearchViewmodels;
                 DateTime today = DateTime.Today;
                 DateTime max = today.AddYears(-(intAgeFrom + 1));
                 DateTime min = today.AddYears(-intAgeTo);
@@ -1413,65 +1436,86 @@ namespace Shell.MVC2.Data
 
                 //  where (LookingForGenderValues.Count !=null || LookingForGenderValues.Contains(x.GenderID)) 
                 //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
-                MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p => p.birthdate > min && p.birthdate <= max)
+                var MemberSearchViewmodels = (from x in _datingcontext.profiledata.Where(p => p.birthdate > min && p.birthdate <= max &&
+                    p.profile.profilemetadata.photos.Any(z => z.photostatus.id == (int)photostatusEnum.Gallery))
                                 .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)) //using whereIF predicate function 
                                 .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id))
 
-                                          join f in _datingcontext.profiles on x.profile_id equals f.id
-                                          select new MemberSearchViewModel
-                                          {
-                                              // MyCatchyIntroLineQuickSearch = x.AboutMe,
-                                              id = x.profile_id,
-                                              stateprovince = x.stateprovince,
-                                              postalcode = x.postalcode,
-                                              countryid = x.countryid,
-                                              genderid = x.gender.id,
-                                              birthdate = x.birthdate,
-                                              profile = f,
-                                              screenname = f.screenname,
-                                              longitude = x.longitude ?? 0,
-                                              latitude = x.latitude ?? 0,
-                                              //   hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
-                                              //  galleryphoto = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.photo.photostatus.id == (int)photostatusEnum.Gallery && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault()),
-                                              hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
-                                              //galleryphoto = new PhotoModel
-                                              //{
-                                              //    photo = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().image),
-                                              //    approvalstatus = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.approvalstatus),
-                                              //    imagecaption = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.imagecaption),
-                                              //    convertedsize = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().size),
-                                              //    orginalsize = (_datingcontext.photoconversions.Where(i => i.photo.profile_id == x.profile_id && i.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault().photo.size)
-                                              //},
+                                              join f in _datingcontext.profiles on x.profile_id equals f.id
+                                              select new MemberSearchViewModel
+                                              {
+                                                  // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                                  id = x.profile_id,
+                                                  stateprovince = x.stateprovince,
+                                                  postalcode = x.postalcode,
+                                                  countryid = x.countryid,
+                                                  genderid = x.gender.id,
+                                                  birthdate = x.birthdate,
+                                                  profile = f,
+                                                  screenname = f.screenname,
+                                                  longitude = x.longitude ?? 0,
+                                                  latitude = x.latitude ?? 0,
+                                                  hasgalleryphoto = true,  //set inthe above query 
+                                                  creationdate = f.creationdate,
+                                                  // city = db.fnTruncateString(x.city, 11),
+                                                  // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
+                                                  lastlogindate = f.logindate,
+                                                  //Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
+                                                  //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                                           //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
+//lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
+                                                //  online = membersrepository.getuseronlinestatus(new ProfileModel {  profileid = x.profile_id })
 
-                                              creationdate = f.creationdate,
-                                              // city = db.fnTruncateString(x.city, 11),
-                                              // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
-                                              lastlogindate = f.logindate,
-                                              //Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
-                                              //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                                              });
 
-                                          }).ToList();
+               
 
+                //do any conversions and calcs here
+                var profiles = MemberSearchViewmodels.ToList().
+                Select(x => new MemberSearchViewModel
+                {
+                    // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                    id = x.id,
+                    stateprovince = x.stateprovince,
+                    postalcode = x.postalcode,
+                    countryid = x.countryid,
+                    genderid = x.genderid,
+                    birthdate = x.birthdate,
+                    profile = x.profile,
+                    screenname = x.screenname,
+                    longitude = x.longitude ?? 0,
+                    latitude = x.latitude ?? 0,
+                    hasgalleryphoto = x.hasgalleryphoto,
+                    creationdate = x.creationdate,
+                    // city = db.fnTruncateString(x.city, 11),
+                    lastloggedonstring = membersrepository.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
+                    lastlogindate = x.lastlogindate,
+                    distancefromme = georepository.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles"),
+                    galleryphoto = photorepository.getphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail),
+                    lookingforagefrom = x.lookingforagefrom ,
+                    lookingForageto = x.lookingForageto,
+                    online = membersrepository.getuseronlinestatus(new ProfileModel { profileid = x.id })
+                });
 
                 //these could be added to where if as well, also limits values if they did selected all
-                // var Profiles = (model.maxdistancefromme  > 0) ? (from q in MemberSearchViewmodels.Where(a => a.distancefromme <= model.maxdistancefromme ) select q) : MemberSearchViewmodels.Take(500);
+                profiles = (model.maxdistancefromme > 0) ? (from q in profiles
+                    .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
+                                                            select q).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme.GetValueOrDefault()).Take(maxsearchresults ) :
+                    MemberSearchViewmodels.OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme.GetValueOrDefault()).Take(maxsearchresults );
 
-                var Profiles = MemberSearchViewmodels.Take(500);
-                //     Profiles; ; 
-                // Profiles = (intSelectedCountryId  != null) ? (from q in Profiles.Where(a => a.countryid  == intSelectedCountryId) select q) :
-                //               Profiles;
+
 
                 //TO DO switch this to most active postible and then filter by last logged in date instead .ThenByDescending(p => p.lastlogindate)
                 //final ordering 
-                Profiles = Profiles.OrderByDescending(p => p.hasgalleryphoto == true).ThenByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);
+                // profiles = profiles.OrderByDescending(p => p.hasgalleryphoto == true).ThenByDescending(p => p.creationdate)
 
 
-                return Profiles.ToList();
+                return profiles.Take(2).ToList();
             }
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex,profilemodel.profileid, null);
+                new ErroLogging(applicationEnum.MemberMapperService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profilemodel.profileid, null);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
@@ -1480,6 +1524,9 @@ namespace Shell.MVC2.Data
             }
 
         }
+        #endregion
+
+
 
     
     }

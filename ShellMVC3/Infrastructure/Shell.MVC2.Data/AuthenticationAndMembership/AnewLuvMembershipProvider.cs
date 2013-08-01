@@ -128,7 +128,8 @@ namespace Shell.MVC2.Data.AuthenticationAndMembership
 
 
 
-
+                //TO DO change this to use activity not log time since its a better measure for the data we need 
+                //FIX the logtime code
                 //check if decrypted string macthed username to upper  + secret
                 if (actualpasswordstring == decryptedPassword)
                 {

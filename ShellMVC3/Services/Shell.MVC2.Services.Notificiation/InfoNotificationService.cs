@@ -22,7 +22,7 @@ using System.ServiceModel;
 namespace Shell.MVC2.Services.Notification
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
    public  class InfoNotificationService  : IInfoNotificationService 
     {
        private IInfoNotificationRepository _InfoNotificationRepository ;

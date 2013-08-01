@@ -23,7 +23,7 @@ namespace Shell.MVC2.Services.Dating
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
  
         [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
-        [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]  
+        [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]  
         public class GeoService :  IGeoService
         {
             private IGeoRepository _georepository;
