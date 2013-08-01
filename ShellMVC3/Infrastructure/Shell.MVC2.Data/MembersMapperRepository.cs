@@ -1193,7 +1193,10 @@ namespace Shell.MVC2.Data
                     lastloggedonstring = membersrepository.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                     lastlogindate = x.lastlogindate,
                     distancefromme = georepository.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles"),
-                    galleryphoto = photorepository.getphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail)
+                    galleryphoto = photorepository.getphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail),
+                    lookingforagefrom = x.lookingforagefrom,
+                    lookingForageto = x.lookingForageto,
+                    online = membersrepository.getuseronlinestatus(new ProfileModel { profileid = x.id })
 
                 });
 
@@ -1324,7 +1327,7 @@ namespace Shell.MVC2.Data
                                   screenname = f.screenname,
                                   longitude = x.longitude ?? 0,
                                   latitude = x.latitude ?? 0,
-                                  hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                 // hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
                                   creationdate = f.creationdate,
                                   // city = db.fnTruncateString(x.city, 11),
                                   // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
@@ -1356,7 +1359,10 @@ namespace Shell.MVC2.Data
                     lastloggedonstring = membersrepository.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                     lastlogindate = x.lastlogindate,
                     distancefromme = georepository.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles"),
-                    galleryphoto = photorepository.getphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail)
+                    galleryphoto = photorepository.getphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail),
+                    lookingforagefrom = x.lookingforagefrom,
+                    lookingForageto = x.lookingForageto,
+                    online = membersrepository.getuseronlinestatus(new ProfileModel { profileid = x.id })
 
                 });
 
@@ -1460,11 +1466,12 @@ namespace Shell.MVC2.Data
                                                   // city = db.fnTruncateString(x.city, 11),
                                                   // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                                   lastlogindate = f.logindate,
-                                                  //Online = _datingcontext.fnGetUserOlineStatus(x.ProfileID),
+                                                 
+                                                  //TO DO look at this and explore
                                                   //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
                                            //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
 //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
-                                                //  online = membersrepository.getuseronlinestatus(new ProfileModel {  profileid = x.profile_id })
+                                               
 
                                               });
 
@@ -1510,7 +1517,7 @@ namespace Shell.MVC2.Data
                 // profiles = profiles.OrderByDescending(p => p.hasgalleryphoto == true).ThenByDescending(p => p.creationdate)
 
 
-                return profiles.Take(2).ToList();
+                return profiles.ToList();
             }
             catch (Exception ex)
             {
