@@ -16,7 +16,8 @@ using Shell.MVC2.Interfaces;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Dating.Server.Data.Models;
 using Shell.MVC2.Infastructure;
-
+using LoggingLibrary;
+using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 
 //code sample of header and how to get it from this code
 
@@ -97,81 +98,137 @@ namespace Shell.MVC2.Data
         //2-15-2013 olawal validate username password for some URI's
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
-            bool validrequest = false;
+            string[] authinfo;
 
 
-            //for now while testing ignore api key
-            //Inject this somewhere or add to API key repo
-            List<string> nonauthenticatedservices = new List<string>();
-            List<string> nonauthenticatedURLS = new List<string>();
-
-            //TO DO this list needs to be more broken down
-            nonauthenticatedservices.Add("Shell.MVC2.Web.NotificationService");
-            nonauthenticatedservices.Add("Shell.MVC2.Web.AuthenticationService");
-            nonauthenticatedservices.Add("Shell.MVC2.Web.Common");
-            nonauthenticatedservices.Add("Shell.MVC2.Web.GeoService");
-            nonauthenticatedservices.Add("Shell.MVC2.Web.MediaService");
-            //TO DO add code to  call membership service and make sure the requestor has rights to view the data they are requesting
-            //TO DO List the Service URLS that and handle differing security for each 
-
-            string[] urisegments = OperationContext.Current.IncomingMessageHeaders.To.Segments;
-            string helpsegment = "help"; //this is the thing we are checking   
-            string restsegment = "rest"; //this is the thing we are checking 
-           
-            //allow access to help page, even if they added help to a wrong URL they could not get in
-            //if last segment is rest no operation is getting activated so ok to display help service page
-            //if we have help in the url dont do api key verifcation
-            if (urisegments.Last().Replace("/", ""  ).ToLower() == restsegment ||
-                urisegments[4].Replace("/", ""  ) == helpsegment 
-                )
-            return true;
-            
-            //check if we are looking at the URLS or specific methods that allow Anonymoys access
-            if (nonauthenticatedservices.Contains(urisegments[1].ToString().Replace("/", ""  ))) return true;
-            //look at the urls for specicif URLS that allow anonymous
-            if (nonauthenticatedURLS.Contains(urisegments[2].ToString())) return true;
-
-
-              //allows service to be discovereable with no api key
-              if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/","") != "$metadata") 
-              {
-                  string key = GetAPIKey(operationContext);
-
-                  validrequest = true;
-                  //TO DO re-implect api key
-                  //if (_apikeyrepository.IsValidAPIKey(key))
-                  //{
-                  //    validrequest = true;
-                  //}
-                  //else
-                  //{
-                  //    // Send back an HTML reply
-                  //    CreateErrorReply(operationContext, key);
-                  //    validrequest = false;
-                  //}
-              }
-              else
-              {
-                  validrequest = true;
-              }
-           
-           
-             //get username and password from request stuff if API key was valid
-            if (validrequest == true)
+            try
             {
-                var authinfo = GetUserNamePassword(operationContext);
-                if (authinfo != null)
+                bool validrequest = false;
+
+                //if its preflight allow all
+                //if (OperationContext.Current.RequestContext  == "OPTIONS")
+
+                if (OperationContext.Current != null)
                 {
-                    return _membmbershipprovider.ValidateUser(authinfo[0], authinfo[1]);
+                    const String HttpRequestKey = "httpRequest";
+                    const String MethodName = "OPTIONS";
+
+                    MessageProperties messageProperties = OperationContext.Current.IncomingMessageProperties;
+
+
+                    // get http request
+                    var httpRequest = (HttpRequestMessageProperty)OperationContext.Current.IncomingMessageProperties[HttpRequestKey];
+
+                    // extract credentials
+                    // var username =  
+                    if (httpRequest.Method.Contains(MethodName))
+                    {
+                        PreflightRequestAproval(operationContext);
+                        return true;
+                    }
+                    // [MethodName];
+
+
+                    //   using (Message reply = Message.CreateMessage(MessageVersion.None, null, ""))
+                    // {
+                    //  HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.Accepted , StatusDescription = String.Format("Preflight Request Allowed") };
+                    //  responseProp.Headers[HttpResponseHeader.ContentType] = "text/html";
+                    //  reply.Properties[HttpResponseMessageProperty.Name] = responseProp;
+                    //  operationContext.RequestContext.Reply(reply);
+                    //  // set the request context to null to terminate processing of this request
+                    //  operationContext.RequestContext = null;
+                    //}
+                    //   validrequest = true;
+                    //   return validrequest;
+                }
+
+
+                //for now while testing ignore api key
+                //Inject this somewhere or add to API key repo
+                List<string> nonauthenticatedservices = new List<string>();
+                List<string> nonauthenticatedURLS = new List<string>();
+
+                //TO DO this list needs to be more broken down
+                nonauthenticatedservices.Add("Shell.MVC2.Web.NotificationService");
+                nonauthenticatedservices.Add("Shell.MVC2.Web.AuthenticationService");
+                nonauthenticatedservices.Add("Shell.MVC2.Web.Common");
+                nonauthenticatedservices.Add("Shell.MVC2.Web.GeoService");
+                nonauthenticatedservices.Add("Shell.MVC2.Web.MediaService");
+                //TO DO add code to  call membership service and make sure the requestor has rights to view the data they are requesting
+                //TO DO List the Service URLS that and handle differing security for each 
+
+                string[] urisegments = OperationContext.Current.IncomingMessageHeaders.To.Segments;
+                string helpsegment = "help"; //this is the thing we are checking   
+                string restsegment = "rest"; //this is the thing we are checking 
+
+                //allow access to help page, even if they added help to a wrong URL they could not get in
+                //if last segment is rest no operation is getting activated so ok to display help service page
+                //if we have help in the url dont do api key verifcation
+                if (urisegments.Last().Replace("/", "").ToLower() == restsegment ||
+                    urisegments[4].Replace("/", "") == helpsegment
+                    )
+                    return true;
+
+                //check if we are looking at the URLS or specific methods that allow Anonymoys access
+                if (nonauthenticatedservices.Contains(urisegments[1].ToString().Replace("/", ""))) return true;
+                //look at the urls for specicif URLS that allow anonymous
+                if (nonauthenticatedURLS.Contains(urisegments[2].ToString())) return true;
+
+
+                //allows service to be discovereable with no api key
+                if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/", "") != "$metadata")
+                {
+                    string key = GetAPIKey(operationContext);
+
+                    validrequest = true;
+                    //TO DO re-implect api key
+                    //if (_apikeyrepository.IsValidAPIKey(key))
+                    //{
+                    //    validrequest = true;
+                    //}
+                    //else
+                    //{
+                    //    // Send back an HTML reply
+                    //    CreateErrorReply(operationContext, key);
+                    //    validrequest = false;
+                    //}
                 }
                 else
                 {
-                    CreateUserNamePasswordErrorReply(operationContext);
+                    validrequest = true;
                 }
+
+
+                //get username and password from request stuff if API key was valid
+                if (validrequest == true)
+                {
+                     authinfo = GetUserNamePassword(operationContext);
+                    if (authinfo != null)
+                    {
+                        return _membmbershipprovider.ValidateUser(authinfo[0], authinfo[1]);
+                    }
+                    else
+                    {
+                        CreateUserNamePasswordErrorReply(operationContext);
+                    }
+                }
+
+                return validrequest;
             }
-              
-             return validrequest;
+            catch (Exception ex)
+            {
+               // var profileinfo = authinfo[0] ?? "";
+                //instantiate logger here so it does not break anything else.
+                new ErroLogging(applicationEnum.UserAuthorizationService ).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+
+            }
         }
+
 
         public string GetAPIKey(OperationContext operationContext)
         {
@@ -240,7 +297,7 @@ namespace Shell.MVC2.Data
                 XElement response = XElement.Load(sr);
                 using (Message reply = Message.CreateMessage(MessageVersion.None, null, response))
                 {
-                    HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.Unauthorized, StatusDescription = String.Format("Username and password is invlaid") };
+                    HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.Unauthorized, StatusDescription = String.Format("AnewLuv Says :Username and password is invalid") };
                     responseProp.Headers[HttpResponseHeader.ContentType] = "text/html";
                     reply.Properties[HttpResponseMessageProperty.Name] = responseProp;
                     operationContext.RequestContext.Reply(reply);
@@ -249,6 +306,50 @@ namespace Shell.MVC2.Data
                 }
             }
         }
+
+
+        private static void PreflightRequestAproval(OperationContext operationContext)
+        {
+            // The error message is padded so that IE shows the response by default
+            using (var sr = new StringReader("<?xml version=\"1.0\" encoding=\"utf-8\"?>" + PreflightRequestApprovalHTML))
+            {
+                XElement response = XElement.Load(sr);
+                using (Message reply = Message.CreateMessage(MessageVersion.None, null, response))
+                {
+                    HttpResponseMessageProperty responseProp = new HttpResponseMessageProperty() { StatusCode = HttpStatusCode.OK , StatusDescription = String.Format("AnewLuv Says :Preflightrequest allowed") };
+                    responseProp.Headers[HttpResponseHeader.ContentType] = "text/html";
+                    reply.Properties[HttpResponseMessageProperty.Name] = responseProp;
+                    operationContext.RequestContext.Reply(reply);
+                    // set the request context to null to terminate processing of this request
+                    operationContext.RequestContext = null;
+                }
+            }
+        }
+
+
+        const string PreflightRequestApprovalHTML = @"
+<html>
+<head>
+    <title>PreflightRequest Approval </title>
+    <style type=""text/css"">
+        body
+        {
+            font-family: Verdana;
+            font-size: large;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        Request Approved
+    </h1>
+    <p>
+        Cross server request approved 
+    </p>
+</body>
+</html>
+";
+
 
         const string APIKEY = "APIKey";
         const string APIErrorHTML = @"
@@ -273,6 +374,8 @@ namespace Shell.MVC2.Data
 </body>
 </html>
 ";
+
+
 
         const string UserNameAndPassword = "UserNamePassword";
         const string UserNamePasswordErrorHTML = @"
