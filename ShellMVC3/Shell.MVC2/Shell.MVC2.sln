@@ -54,7 +54,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Authent
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.GeoService", "..\Hosting\Shell.MVC2.Web.GeoService\Shell.MVC2.Web.GeoService.csproj", "{1530C1C1-0559-487E-9582-DEC5889FD8D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.AuthenticationService", "..\Hosting\Shell.MVC2.Web.AuthenticationService\Shell.MVC2.Web.AuthenticationService.csproj", "{30A884DD-6557-4F8E-9B57-EA774D129FA7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationService.Web", "..\Hosting\Shell.MVC2.Web.AuthenticationService\AuthenticationService.Web.csproj", "{30A884DD-6557-4F8E-9B57-EA774D129FA7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.MemberActionsService", "..\Hosting\Shell.MVC2.Web.MemberActions\Shell.MVC2.Web.MemberActionsService.csproj", "{425B82F1-8CD4-4F2B-8D44-B68BD5A4A0B0}"
 EndProject
@@ -107,7 +107,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Common"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.EditService", "..\Hosting\Shell.MVC2.Web.EditService\Shell.MVC2.Web.EditService.csproj", "{93270B63-9F27-460D-920E-FFC023CF8E0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.Common", "..\Hosting\Shell.MVC2.Web.Common\Shell.MVC2.Web.Common.csproj", "{7754292E-2DA9-4F70-A06B-1078BD8D9507}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.CommonService", "..\Hosting\Shell.MVC2.Web.Common\Web.CommonService.csproj", "{7754292E-2DA9-4F70-A06B-1078BD8D9507}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Chat", "..\Services\Shell.MVC2.Services.Chat\Shell.MVC2.Services.Chat.csproj", "{6AF3685D-3C0F-4CC8-B0EE-1960462C6DE9}"
 EndProject

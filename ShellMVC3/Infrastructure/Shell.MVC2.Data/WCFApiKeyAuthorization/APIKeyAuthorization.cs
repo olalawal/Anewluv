@@ -149,11 +149,11 @@ namespace Shell.MVC2.Data
                 List<string> nonauthenticatedURLS = new List<string>();
 
                 //TO DO this list needs to be more broken down
-                nonauthenticatedservices.Add("Shell.MVC2.Web.NotificationService");
-                nonauthenticatedservices.Add("Shell.MVC2.Web.AuthenticationService");
-                nonauthenticatedservices.Add("Shell.MVC2.Web.Common");
-                nonauthenticatedservices.Add("Shell.MVC2.Web.GeoService");
-                nonauthenticatedservices.Add("Shell.MVC2.Web.MediaService");
+                nonauthenticatedservices.Add("NotificationService");
+                nonauthenticatedservices.Add("AuthenticationService");
+                nonauthenticatedservices.Add("Common");
+                nonauthenticatedservices.Add("GeoService");
+                nonauthenticatedservices.Add("MediaService");
                 //TO DO add code to  call membership service and make sure the requestor has rights to view the data they are requesting
                 //TO DO List the Service URLS that and handle differing security for each 
 
@@ -219,7 +219,7 @@ namespace Shell.MVC2.Data
             {
                // var profileinfo = authinfo[0] ?? "";
                 //instantiate logger here so it does not break anything else.
-                new ErroLogging(applicationEnum.UserAuthorizationService ).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                new ErroLogging(applicationEnum.UserAuthorizationService ).WriteSingleEntry(logseverityEnum.CriticalError, ex,1, null);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
                 //log error mesasge
                 //handle logging here

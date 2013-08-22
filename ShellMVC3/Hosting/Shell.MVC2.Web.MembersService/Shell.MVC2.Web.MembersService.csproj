@@ -133,9 +133,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>53383</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Shell.MVC2.Web.MembersService</IISUrl>
+          <IISUrl>http://localhost/MembersService</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/Shell.MVC2.Web.MembersService</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost/MembersService</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
