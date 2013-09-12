@@ -16,7 +16,7 @@ using Shell.MVC2.SignalR.Hubs;
 
 
 
-namespace Shell.MVC2.Web.Chat
+namespace Anewluv.Web.Chat
 {
     public class Global : System.Web.HttpApplication
     {

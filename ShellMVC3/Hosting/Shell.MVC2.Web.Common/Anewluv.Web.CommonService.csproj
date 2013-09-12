@@ -6,12 +6,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DB0FA820-3005-4F43-9B4D-506BCDE882E0}</ProjectGuid>
+    <ProjectGuid>{7754292E-2DA9-4F70-A06B-1078BD8D9507}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Shell.MVC2.Web.UpdateService</RootNamespace>
-    <AssemblyName>Shell.MVC2.Web.UpdateService</AssemblyName>
+    <RootNamespace>Anewluv.Web.CommonService</RootNamespace>
+    <AssemblyName>Anewluv.Web.CommonService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
@@ -32,14 +32,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoCacheDebug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonInstanceFactory">
       <HintPath>..\..\Shell.MVC2\packages\CommonInstanceFactory.1.0.0.0\lib\net40\CommonInstanceFactory.dll</HintPath>
@@ -53,8 +45,20 @@
     <Reference Include="CommonInstanceFactory.Extensions.Wcf.Ninject">
       <HintPath>..\..\Shell.MVC2\packages\CommonInstanceFactory.Extensions.Wcf.Ninject.1.0.0.0\lib\net40\CommonInstanceFactory.Extensions.Wcf.Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\NotInSourceControl\ShellMVC3 8-26-2012\Shell.MVC2\Shell.MVC2\bin\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\NotInSourceControl\ShellMVC3 8-26-2012\Shell.MVC2\Shell.MVC2\bin\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.WindowsFabric.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\NotInSourceControl\ShellMVC3 8-26-2012\Shell.MVC2\Shell.MVC2\bin\Microsoft.WindowsFabric.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsFabric.Data.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\NotInSourceControl\ShellMVC3 8-26-2012\Shell.MVC2\Shell.MVC2\bin\Microsoft.WindowsFabric.Data.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
       <HintPath>..\..\Shell.MVC2\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel.Activation" />
@@ -77,8 +81,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="UserRepairService.svc" />
-    <Content Include="Web.config" />
+    <Content Include="CommonService.svc" />
+    <Content Include="LookupService.svc" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -91,6 +98,9 @@
     <Compile Include="ServiceHostFactories\NinjectServiceHostFactory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -98,9 +108,9 @@
       <Project>{0145184E-916D-4DB2-BB19-E069DF0F1F36}</Project>
       <Name>Shell.MVC2.DependencyResolution.Ninject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\Shell.MVC2.Services.Logging\Shell.MVC2.Services.Logging.csproj">
-      <Project>{912E15F8-12EA-4C72-9003-EC537246C344}</Project>
-      <Name>Shell.MVC2.Services.Logging</Name>
+    <ProjectReference Include="..\..\Services\Shell.MVC2.Services.Common\Shell.MVC2.Services.Common.csproj">
+      <Project>{7C23C034-12AE-4697-BBF2-8A45F3EFAB73}</Project>
+      <Name>Shell.MVC2.Services.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -111,9 +121,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>63080</DevelopmentServerPort>
+          <DevelopmentServerPort>59362</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Shell.MVC2.Web.UpdateService</IISUrl>
+          <IISUrl>http://localhost/Anewluv.Web.CommonService</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

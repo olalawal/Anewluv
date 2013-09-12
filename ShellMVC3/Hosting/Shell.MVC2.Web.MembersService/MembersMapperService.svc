@@ -1,2 +1,2 @@
-﻿<%@ ServiceHost Factory="Shell.MVC2.Web.MembersService.ServiceHostFactories.NinjectServiceHostFactory"  Service="Shell.MVC2.Services.Dating.MembersMapperService"  %>
+﻿<%@ ServiceHost Factory="Anewluv.Web.MembersService.ServiceHostFactories.NinjectServiceHostFactory"  Service="Shell.MVC2.Services.Dating.MembersMapperService"  %>
 

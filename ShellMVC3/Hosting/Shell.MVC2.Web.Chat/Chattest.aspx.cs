@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Shell.MVC2.Web.Chat
+namespace Anewluv.Web.Chat
 {
     public partial class ChatTest : System.Web.UI.Page
     {

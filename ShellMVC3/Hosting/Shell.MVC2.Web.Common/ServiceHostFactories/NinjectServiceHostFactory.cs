@@ -9,7 +9,7 @@ using Ninject;
 using NinjectModules = Shell.MVC2.DependencyResolution.Ninject.Modules;
 
 
-namespace Web.CommonService.ServiceHostFactories
+namespace Anewluv.Web.CommonService.ServiceHostFactories
 {
     public class NinjectServiceHostFactory : InjectedServiceHostFactory<IKernel>
     {

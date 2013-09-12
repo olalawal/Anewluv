@@ -35,7 +35,7 @@
             //    });
             //   });
 
-            var cn = $.hubConnection("http://localhost/Shell.MVC2.Web.Chat/signalR");
+            var cn = $.hubConnection("http://localhost/Anewluv.Web.Chat/signalR");
 
             //test internal proxy first
             var internal = cn.createHubProxy('Chat');

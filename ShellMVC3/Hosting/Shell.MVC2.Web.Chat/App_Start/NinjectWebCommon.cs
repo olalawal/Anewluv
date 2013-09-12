@@ -1,10 +1,10 @@
 using NinjectModules = Shell.MVC2.DependencyResolution.Ninject.Modules;
 
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(Shell.MVC2.Web.Chat.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Shell.MVC2.Web.Chat.App_Start.NinjectWebCommon), "Stop")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(Anewluv.Web.Chat.App_Start.NinjectWebCommon), "Start")]
+[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Anewluv.Web.Chat.App_Start.NinjectWebCommon), "Stop")]
 
-namespace Shell.MVC2.Web.Chat.App_Start
+namespace Anewluv.Web.Chat.App_Start
 {
     using System;
     using System.Web;

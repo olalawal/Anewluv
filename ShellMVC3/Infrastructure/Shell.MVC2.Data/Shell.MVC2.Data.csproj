@@ -146,6 +146,7 @@
     <Compile Include="APIkeyRepository.cs" />
     <Compile Include="ChatRepository.cs" />
     <Compile Include="CommonRepository.cs" />
+    <Compile Include="SearchRepository.cs" />
     <Compile Include="MemberEditRepository.cs" />
     <Compile Include="ImageResizer\ImageResizerUtils.cs" />
     <Compile Include="LookupRepository.cs" />

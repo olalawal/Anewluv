@@ -10,7 +10,7 @@ using NinjectModules = Shell.MVC2.DependencyResolution.Ninject.Modules;
 
 
 
-namespace Shell.MVC2.Web.LoggingService.ServiceHostFactories
+namespace Anewluv.Web.LoggingService.ServiceHostFactories
 {
     public class NinjectServiceHostFactory : InjectedServiceHostFactory<IKernel>
     {

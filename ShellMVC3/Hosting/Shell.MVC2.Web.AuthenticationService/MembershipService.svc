@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost  Factory="Web.AuthenticationService.ServiceHostFactories.NinjectServiceHostFactory"  Service="Shell.MVC2.Services.Authentication.MembershipService"  %>
+﻿<%@ ServiceHost  Factory="Anewluv.Web.AuthenticationService.ServiceHostFactories.NinjectServiceHostFactory"  Service="Shell.MVC2.Services.Authentication.MembershipService"  %>

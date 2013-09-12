@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile publishUrl="C:\Projects\publish\Anewluv\Services\Anewluv.Web.NotificationService" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="bin/Shell.MVC2.Data.pdb" publishTime="09/11/2013 18:58:40" />
+    <file relUrl="bin/Shell.MVC2.Infrastructure.Entities.dll" publishTime="09/11/2013 18:58:32" />
+    <file relUrl="bin/CommonInstanceFactory.Adapters.Ninject.xml" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/EntityFramework.xml" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/Shell.MVC2.Infrastructure.Interfaces.pdb" publishTime="09/11/2013 18:58:34" />
+    <file relUrl="bin/EntityFramework.dll" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/Shell.MVC2.Domain.Entities.dll" publishTime="09/11/2013 18:58:33" />
+    <file relUrl="bin/LoggingLibrary.pdb" publishTime="09/11/2013 18:58:34" />
+    <file relUrl="ErrorNotificationService.svc" publishTime="09/11/2013 18:08:43" />
+    <file relUrl="bin/CommonInstanceFactory.Extensions.Wcf.Ninject.dll" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/CommonInstanceFactory.Extensions.Wcf.xml" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/Shell.MVC2.Services.Chat.dll" publishTime="09/11/2013 18:58:38" />
+    <file relUrl="bin/Shell.MVC2.Domain.Entities.pdb" publishTime="09/11/2013 18:58:33" />
+    <file relUrl="bin/Shell.MVC2.Infrastructure.Interfaces.dll" publishTime="09/11/2013 18:58:34" />
+    <file relUrl="bin/Shell.MVC2.Infrastructure.Entities.pdb" publishTime="09/11/2013 18:58:32" />
+    <file relUrl="bin/Shell.MVC2.Services.Notification.dll" publishTime="09/11/2013 18:58:34" />
+    <file relUrl="bin/LoggingLibrary.dll" publishTime="09/11/2013 18:58:34" />
+    <file relUrl="bin/Newtonsoft.Json.xml" publishTime="07/18/2013 01:57:47" />
+    <file relUrl="bin/RazorEngine.pdb" publishTime="07/30/2013 18:51:20" />
+    <file relUrl="bin/Microsoft.WindowsFabric.Common.dll" publishTime="07/18/2013 01:57:48" />
+    <file relUrl="bin/Microsoft.ApplicationServer.Caching.Client.dll" publishTime="07/18/2013 01:57:48" />
+    <file relUrl="bin/Dating.Server.Data.Web.pdb" publishTime="09/11/2013 18:58:31" />
+    <file relUrl="bin/RazorEngine.dll" publishTime="07/30/2013 18:51:20" />
+    <file relUrl="bin/CommonInstanceFactory.Extensions.Wcf.dll" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/CommonInstanceFactory.Adapters.Ninject.dll" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/Shell.MVC2.Infrastructure.pdb" publishTime="09/11/2013 18:58:28" />
+    <file relUrl="bin/Dating.Server.Data.Web.dll" publishTime="09/11/2013 18:58:31" />
+    <file relUrl="packages.config" publishTime="07/18/2013 01:57:44" />
+    <file relUrl="bin/Microsoft.ApplicationServer.Caching.Core.dll" publishTime="07/18/2013 01:57:48" />
+    <file relUrl="bin/Microsoft.WindowsFabric.Data.Common.dll" publishTime="07/18/2013 01:57:48" />
+    <file relUrl="bin/Shell.MVC2.DependencyResolution.Ninject.dll" publishTime="09/11/2013 18:58:43" />
+    <file relUrl="bin/ImageResizer.xml" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/Shell.MVC2.Infrastructure.dll" publishTime="09/11/2013 18:58:28" />
+    <file relUrl="bin/Newtonsoft.Json.dll" publishTime="07/18/2013 01:57:47" />
+    <file relUrl="bin/Shell.MVC2.Services.Chat.pdb" publishTime="09/11/2013 18:58:38" />
+    <file relUrl="bin/Shell.MVC2.Services.Contracts.dll" publishTime="09/11/2013 18:58:33" />
+    <file relUrl="bin/CommonInstanceFactory.dll" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/Omu.Awesome.Core.dll" publishTime="07/30/2013 18:51:35" />
+    <file relUrl="bin/Shell.MVC2.Services.Contracts.pdb" publishTime="09/11/2013 18:58:33" />
+    <file relUrl="bin/Shell.MVC2.Services.Notification.pdb" publishTime="09/11/2013 18:58:34" />
+    <file relUrl="bin/Microsoft.AspNet.SignalR.Core.dll" publishTime="07/18/2013 01:57:47" />
+    <file relUrl="bin/CommonInstanceFactory.xml" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/Shell.MVC2.Interfaces.dll" publishTime="09/11/2013 18:58:34" />
+    <file relUrl="bin/RazorEngine.xml" publishTime="07/30/2013 18:51:20" />
+    <file relUrl="bin/Ninject.xml" publishTime="07/18/2013 01:57:48" />
+    <file relUrl="bin/Microsoft.AspNet.SignalR.Core.xml" publishTime="07/18/2013 01:57:47" />
+    <file relUrl="bin/Anewluv.Web.NotificationService.dll" publishTime="09/11/2013 19:32:47" />
+    <file relUrl="Web.config" publishTime="09/11/2013 19:32:48" />
+    <file relUrl="InfoNotificationService.svc" publishTime="09/11/2013 18:08:43" />
+    <file relUrl="bin/Ninject.dll" publishTime="07/18/2013 01:57:48" />
+    <file relUrl="bin/ImageResizer.dll" publishTime="07/18/2013 01:57:46" />
+    <file relUrl="bin/Anewluv.Web.NotificationService.pdb" publishTime="09/11/2013 19:32:47" />
+    <file relUrl="bin/Shell.MVC2.DependencyResolution.Ninject.pdb" publishTime="09/11/2013 18:58:43" />
+    <file relUrl="bin/Shell.MVC2.Interfaces.pdb" publishTime="09/11/2013 18:58:34" />
+    <file relUrl="bin/Shell.MVC2.Data.dll" publishTime="09/11/2013 18:58:41" />
+  </publishProfile>
+</publishData>

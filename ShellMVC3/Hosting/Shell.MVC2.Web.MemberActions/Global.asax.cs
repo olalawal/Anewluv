@@ -7,7 +7,7 @@ using System.Web.SessionState;
 using System.Net;
 using System.ServiceModel.Web;
 
-namespace Shell.MVC2.Web.MemberActions
+namespace Anewluv.Web.MemberActions
 {
     public class Global : System.Web.HttpApplication
     {

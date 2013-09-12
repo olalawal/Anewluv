@@ -1,6 +1,6 @@
-[assembly: WebActivator.PreApplicationStartMethod(typeof(Shell.MVC2.Web.Chat.App_Start.NinjectWeb), "Start")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(Anewluv.Web.Chat.App_Start.NinjectWeb), "Start")]
 
-namespace Shell.MVC2.Web.Chat.App_Start
+namespace Anewluv.Web.Chat.App_Start
 {
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 

@@ -42,9 +42,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosting", "Hosting", "{CCD9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Dating", "..\Services\Shell.MVC2.Services.Dating\Shell.MVC2.Services.Dating.csproj", "{69220675-84B3-4042-8552-72636B2CC918}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.MembersService", "..\Hosting\Shell.MVC2.Web.MembersService\Shell.MVC2.Web.MembersService.csproj", "{4FC2FB15-CE76-44CF-B344-484E99E2C29C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.MembersService", "..\Hosting\Shell.MVC2.Web.MembersService\Anewluv.Web.MembersService.csproj", "{4FC2FB15-CE76-44CF-B344-484E99E2C29C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.MediaService", "..\Hosting\Shell.MVC2.Web.MediaService\Shell.MVC2.Web.MediaService.csproj", "{0F7347CA-C2A4-413D-B3F5-EEB9F1196480}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.MediaService", "..\Hosting\Shell.MVC2.Web.MediaService\Anewluv.Web.MediaService.csproj", "{0F7347CA-C2A4-413D-B3F5-EEB9F1196480}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ninject", "Ninject", "{67E3B374-2093-4D3D-B3CB-FEFB266DF3C4}"
 EndProject
@@ -52,11 +52,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SimpleInjector", "SimpleInj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Authentication", "..\Services\Shell.MVC2.Services.Authentication\Shell.MVC2.Services.Authentication.csproj", "{071D6DB4-A733-43AD-8FCA-2A73F7FE0DF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.GeoService", "..\Hosting\Shell.MVC2.Web.GeoService\Shell.MVC2.Web.GeoService.csproj", "{1530C1C1-0559-487E-9582-DEC5889FD8D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.GeoService", "..\Hosting\Shell.MVC2.Web.GeoService\Anewluv.Web.GeoService.csproj", "{1530C1C1-0559-487E-9582-DEC5889FD8D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationService.Web", "..\Hosting\Shell.MVC2.Web.AuthenticationService\AuthenticationService.Web.csproj", "{30A884DD-6557-4F8E-9B57-EA774D129FA7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.AuthenticationService", "..\Hosting\Shell.MVC2.Web.AuthenticationService\Anewluv.Web.AuthenticationService.csproj", "{30A884DD-6557-4F8E-9B57-EA774D129FA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.MemberActionsService", "..\Hosting\Shell.MVC2.Web.MemberActions\Shell.MVC2.Web.MemberActionsService.csproj", "{425B82F1-8CD4-4F2B-8D44-B68BD5A4A0B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.MemberActionsService", "..\Hosting\Shell.MVC2.Web.MemberActions\Anewluv.Web.MemberActionsService.csproj", "{425B82F1-8CD4-4F2B-8D44-B68BD5A4A0B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interfaces", "Interfaces", "{C131338F-F0A8-4E36-A73F-8689C82A1638}"
 EndProject
@@ -89,11 +89,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Logging
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Notification", "..\Services\Shell.MVC2.Services.Notificiation\Shell.MVC2.Services.Notification.csproj", "{B3A94055-CA5D-42E8-B309-24024AD99083}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.NotificationService", "..\Hosting\Shell.MVC2.Web.NotificationService\Shell.MVC2.Web.NotificationService.csproj", "{20CD2A99-58C4-47E7-8C84-18F5A89FDE82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.NotificationService", "..\Hosting\Shell.MVC2.Web.NotificationService\Anewluv.Web.NotificationService.csproj", "{20CD2A99-58C4-47E7-8C84-18F5A89FDE82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.LoggingService", "..\Hosting\Shell.MVC2.Web.LoggingService\Shell.MVC2.Web.LoggingService.csproj", "{B78053E2-2E80-463B-B8AA-27149FD744F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.LoggingService", "..\Hosting\Shell.MVC2.Web.LoggingService\Anewluv.Web.LoggingService.csproj", "{B78053E2-2E80-463B-B8AA-27149FD744F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.UpdateService", "..\Hosting\Shell.MVC2.Web.UpdateService\Shell.MVC2.Web.UpdateService.csproj", "{DB0FA820-3005-4F43-9B4D-506BCDE882E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.UpdateService", "..\Hosting\Shell.MVC2.Web.UpdateService\Anewluv.Web.UpdateService.csproj", "{DB0FA820-3005-4F43-9B4D-506BCDE882E0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{3B51546A-7009-4C5C-A447-4EDD062178D9}"
 EndProject
@@ -105,13 +105,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Edit", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Common", "..\Services\Shell.MVC2.Services.Common\Shell.MVC2.Services.Common.csproj", "{7C23C034-12AE-4697-BBF2-8A45F3EFAB73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.EditService", "..\Hosting\Shell.MVC2.Web.EditService\Shell.MVC2.Web.EditService.csproj", "{93270B63-9F27-460D-920E-FFC023CF8E0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.EditService", "..\Hosting\Shell.MVC2.Web.EditService\Anewluv.Web.EditService.csproj", "{93270B63-9F27-460D-920E-FFC023CF8E0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.CommonService", "..\Hosting\Shell.MVC2.Web.Common\Web.CommonService.csproj", "{7754292E-2DA9-4F70-A06B-1078BD8D9507}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.CommonService", "..\Hosting\Shell.MVC2.Web.Common\Anewluv.Web.CommonService.csproj", "{7754292E-2DA9-4F70-A06B-1078BD8D9507}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Services.Chat", "..\Services\Shell.MVC2.Services.Chat\Shell.MVC2.Services.Chat.csproj", "{6AF3685D-3C0F-4CC8-B0EE-1960462C6DE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell.MVC2.Web.Chat", "..\Hosting\Shell.MVC2.Web.Chat\Shell.MVC2.Web.Chat.csproj", "{D893FEDC-830F-4AEC-9C10-FDB41EAE263C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anewluv.Web.Chat", "..\Hosting\Shell.MVC2.Web.Chat\Anewluv.Web.Chat.csproj", "{D893FEDC-830F-4AEC-9C10-FDB41EAE263C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hubs", "Hubs", "{506C116E-76E3-4CF5-989A-4FE2BB8193CF}"
 EndProject

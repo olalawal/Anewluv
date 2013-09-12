@@ -1,0 +1,9 @@
+http://localhost/Anewluv.Web.GeoService
+http://localhost/Anewluv.Web.MediaService
+http://localhost/Anewluv.Web.LoggingService
+http://localhost/Anewluv.Web.CommonService
+http://localhost/Anewluv.Web.MembersService
+http://localhost/Anewluv.Web.NotificationService
+http://localhost/Anewluv.Web.AuthenticationService
+Anewluv.Web.MemberActionsService
+Anewluv.Web.EditService
