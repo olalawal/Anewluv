@@ -21,6 +21,7 @@ using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Infrastructure.Interfaces;
 using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
 using Dating.Server.Data.Models;
+using Ninject.Web.Common;
 
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
@@ -34,12 +35,12 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
             //TO DO should be a separate service or something
 
             // this.Bind<ApiKeyContext>().ToConstructor(x => new ApiKeyContext());
-            Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));
+            Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>())).InRequestScope();
             if (!Kernel.HasModule("Shell.MVC2.DependencyResolution.Ninject.Modules.MembersModule")) //only load if not already loaded into kernel
-           Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>())); 
+                Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>())).InRequestScope(); 
             //Kernel.Bind<IGeoRepository>().ToConstructor(ctorArg => new GeoRepository(ctorArg.Inject<PostalData2Entities>()));
           //  Kernel.Bind<IPhotoRepository>().ToConstructor(ctorArg => new PhotoRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
-            Kernel.Bind<IMailRepository>().ToConstructor(ctorArg => new MailRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
+            Kernel.Bind<IMailRepository>().ToConstructor(ctorArg => new MailRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>())).InRequestScope();
            // Kernel.Bind<IMemberActionsRepository>().ToConstructor(ctorArg => new MemberActionsRepository(ctorArg.Inject<AnewluvContext>(), ctorArg.Inject<IMemberRepository>()));
 
             Kernel.Bind<IMembersMapperRepository>().ToConstructor(
@@ -48,10 +49,10 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
                  ctorArg.Inject<IPhotoRepository>(),
                  ctorArg.Inject<IMemberRepository>(),                
                   ctorArg.Inject<IMailRepository>(),
-                 ctorArg.Inject<AnewluvContext>()));
+                 ctorArg.Inject<AnewluvContext>())).InRequestScope();
 
 			//services
-            Kernel.Bind<IMembersMapperService>().ToSelf();
+            Kernel.Bind<IMembersMapperService>().ToSelf().InRequestScope();
          
 
 

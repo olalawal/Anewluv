@@ -149,11 +149,12 @@ namespace Shell.MVC2.Data
                 List<string> nonauthenticatedURLS = new List<string>();
 
                 //TO DO this list needs to be more broken down
-                nonauthenticatedservices.Add("NotificationService");
-                nonauthenticatedservices.Add("AuthenticationService");
-                nonauthenticatedservices.Add("Common");
-                nonauthenticatedservices.Add("GeoService");
-                nonauthenticatedservices.Add("MediaService");
+                nonauthenticatedservices.Add("Anewluv.Web.LoggingService");
+                nonauthenticatedservices.Add("Anewluv.Web.NotificationService");
+                nonauthenticatedservices.Add("Anewluv.Web.AuthenticationService");
+                 nonauthenticatedservices.Add("Anewluv.Web.CommonService");
+                nonauthenticatedservices.Add("Anewluv.Web.GeoService");
+                nonauthenticatedservices.Add("Anewluv.Web.MediaService");
                 //TO DO add code to  call membership service and make sure the requestor has rights to view the data they are requesting
                 //TO DO List the Service URLS that and handle differing security for each 
 

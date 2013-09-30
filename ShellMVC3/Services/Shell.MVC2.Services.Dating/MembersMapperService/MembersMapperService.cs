@@ -172,12 +172,12 @@ namespace Shell.MVC2.Services.Dating
 
 
         }
-        public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(ProfileModel model)
-        {
+        //public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(ProfileModel model)
+        //{
 
-            return _mapmembermapperrepo.getquickmatcheswhenquickmatchesempty(model);
+        //    return _mapmembermapperrepo.getquickmatcheswhenquickmatchesempty(model);
 
-        }
+        //}
 
     }
 }

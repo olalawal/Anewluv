@@ -19,7 +19,7 @@ namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
     }
 
         // properties
-
+        //normaly gallery photo
         [DataMember]
         public PhotoModel SingleProfilePhoto { get; set; }
 

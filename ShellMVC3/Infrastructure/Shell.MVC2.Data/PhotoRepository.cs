@@ -202,88 +202,111 @@ namespace Shell.MVC2.Data
 
         public PhotoModel getphotomodelbyphotoid(Guid photoid,photoformatEnum format)
         {
-            PhotoModel model = (from p in                                     
-                                   ( from r in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && ( a.photo.id == photoid))
-                                   select new
-                                    {
-                                        photoid = r.photo.id,
-                                        profileid = r.photo.profile_id,
-                                        screenname = r.photo.profilemetadata.profile.screenname,
-                                        photo = r.image,
-                                        photoformat = r.formattype,
-                                        convertedsize = r.size,
-                                        orginalsize = r.photo.size,
-                                        imagecaption = r.photo.imagecaption,
-                                        creationdate = r.photo.creationdate,
-                                        
-                                    }).ToList()
-                                     select new PhotoModel 
-                                    {
-                                        photoid = p.photoid ,
-                                        profileid = p.profileid ,
-                                        screenname = p.screenname ,
-                                        photo = b64Converters.ByteArraytob64string(p.photo) ,
-                                        photoformat =p.photoformat ,
-                                        convertedsize = p.convertedsize ,
-                                        orginalsize = p.orginalsize,
-                                        imagecaption = p.imagecaption,
-                                        creationdate = p.creationdate,
+            try
+            {
+                PhotoModel model = (from p in
+                                        (from r in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && (a.photo.id == photoid))
+                                         select new
+                                          {
+                                              photoid = r.photo.id,
+                                              profileid = r.photo.profile_id,
+                                              screenname = r.photo.profilemetadata.profile.screenname,
+                                              photo = r.image,
+                                              photoformat = r.formattype,
+                                              convertedsize = r.size,
+                                              orginalsize = r.photo.size,
+                                              imagecaption = r.photo.imagecaption,
+                                              creationdate = r.photo.creationdate,
 
-                                    }).FirstOrDefault();
+                                          }).ToList()
+                                    select new PhotoModel
+                                   {
+                                       photoid = p.photoid,
+                                       profileid = p.profileid,
+                                       screenname = p.screenname,
+                                       photo = b64Converters.ByteArraytob64string(p.photo),
+                                       photoformat = p.photoformat,
+                                       convertedsize = p.convertedsize,
+                                       orginalsize = p.orginalsize,
+                                       imagecaption = p.imagecaption,
+                                       creationdate = p.creationdate,
 
-           
-
-            // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
-
-            //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
+                                   }).FirstOrDefault();
 
 
 
-            return (model);
+                // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
+
+                //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
 
 
+
+                return (model);
+
+            }
+            catch (Exception ex)
+            {
+                //logg this from the caller ? so we dont log twice
+                Exception convertedexcption = new CustomExceptionTypes.MediaException(null, photoid.ToString() , ex.Message, ex.InnerException);
+                //new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                throw convertedexcption;
+            }
         }
 
-        public PhotoModel getphotomodelbyprofileid(int profileid, photoformatEnum format)
+        public PhotoModel getgalleryphotomodelbyprofileid(int profileid, photoformatEnum format)
         {
-            PhotoModel model = (from p in
-                                    (from r in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && (a.photo.profile_id == profileid))                               
-                               select new
-                                    {
-                                        photoid = r.photo.id,
-                                        profileid = r.photo.profile_id,
-                                        screenname = r.photo.profilemetadata.profile.screenname,
-                                        photo = r.image,
-                                        photoformat = r.formattype,
-                                        convertedsize = r.size,
-                                        orginalsize = r.photo.size,
-                                        imagecaption = r.photo.imagecaption,
-                                        creationdate = r.photo.creationdate,
-                                        
-                                    }).ToList()
-                                     select new PhotoModel 
-                                    {
-                                        photoid = p.photoid ,
-                                        profileid = p.profileid ,
-                                        screenname = p.screenname ,
-                                        photo = b64Converters.ByteArraytob64string(p.photo) ,
-                                        photoformat =p.photoformat ,
-                                        convertedsize = p.convertedsize ,
-                                        orginalsize = p.orginalsize,
-                                        imagecaption = p.imagecaption,
-                                        creationdate = p.creationdate,
 
-                                    }).FirstOrDefault();
+            try
+            {
+                PhotoModel model = (from p in
+                                        (from r in _datingcontext.photoconversions.Where(a => a.formattype.id == (int)format && (a.photo.profile_id == profileid & a.photo.photostatus.id == (int)photostatusEnum.Gallery))
+                                         select new
+                                              {
+                                                  photoid = r.photo.id,
+                                                  profileid = r.photo.profile_id,
+                                                  screenname = r.photo.profilemetadata.profile.screenname,
+                                                  photo = r.image,
+                                                  photoformat = r.formattype,
+                                                  convertedsize = r.size,
+                                                  orginalsize = r.photo.size,
+                                                  imagecaption = r.photo.imagecaption,
+                                                  creationdate = r.photo.creationdate,
 
-            // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
+                                              }).ToList()
+                                    select new PhotoModel
+                                   {
+                                       photoid = p.photoid,
+                                       profileid = p.profileid,
+                                       screenname = p.screenname,
+                                       photo = b64Converters.ByteArraytob64string(p.photo),
+                                       photoformat = p.photoformat,
+                                       convertedsize = p.convertedsize,
+                                       orginalsize = p.orginalsize,
+                                       imagecaption = p.imagecaption,
+                                       creationdate = p.creationdate,
 
-            //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
+                                   }).FirstOrDefault();
+
+                // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
+
+                //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
 
 
 
-            return (model);
+                return (model);
 
-
+            }
+            catch (Exception ex)
+            {
+                //logg this from the caller ? so we dont log twice
+                Exception convertedexcption = new CustomExceptionTypes.MediaException(profileid.ToString(),"", ex.Message, ex.InnerException);
+                //new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                throw convertedexcption;
+            }
+            finally
+            {
+              
+            }
         }
 
         public List<PhotoModel> getphotomodelsbyprofileidandstatus(int profile_id, photoapprovalstatusEnum status,photoformatEnum format)
@@ -984,6 +1007,7 @@ namespace Shell.MVC2.Data
                         var newphotothumbnailconversion = temp.Where(p => p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
                         if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
                             return new AnewluvMessages { message = "This photo has already been uploaded", };
+                       
                        
                         //allow saving of new photo 
                         _datingcontext.photos.Add(NewPhoto);

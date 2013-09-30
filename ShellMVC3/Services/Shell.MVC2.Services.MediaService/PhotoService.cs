@@ -51,9 +51,9 @@ namespace Shell.MVC2.Services.Media
             return _photorepo.getphotomodelbyphotoid(Guid.Parse(photoid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
         }
 
-        public PhotoModel getphotomodelbyprofileid(string profileid, string format)
+        public PhotoModel getgalleryphotomodelbyprofileid(string profileid, string format)
         {
-            return _photorepo.getphotomodelbyphotoid(Guid.Parse(profileid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));      
+            return _photorepo.getgalleryphotomodelbyprofileid(int.Parse(profileid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));      
 
         }
 
@@ -250,7 +250,22 @@ namespace Shell.MVC2.Services.Media
         public bool checkvalidjpggif(byte[] image)
         {
 
-            return _photorepo.checkvalidjpggif(image);
+           
+
+            try
+            {
+
+                return _photorepo.checkvalidjpggif(image);
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+
         }
         
         //Stuff pulled from dating service regular
@@ -258,44 +273,163 @@ namespace Shell.MVC2.Services.Media
 
          public string getgalleryphotobyscreenname(string strScreenName,string format)
         {
-            return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName, ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
+
+            try
+            {
+
+
+                return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName, ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
          public string getgalleryimagebyphotoid(string photoid, string format)
         {
-            return _photorepo.getgalleryimagebyphotoid(Guid.Parse(photoid),(photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
+          
+            try
+            {
+                return _photorepo.getgalleryimagebyphotoid(Guid.Parse(photoid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
         //TO DO normalize name
          public string getgalleryphotobyprofileid(string profileid, string format)
         {
-            return _photorepo.getgalleryphotobyprofileid(Convert.ToInt32(profileid), ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
+           
+
+            try
+            {
+
+                return _photorepo.getgalleryphotobyprofileid(Convert.ToInt32(profileid), ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
          public string getgalleryimagebynormalizedscreenname(string strScreenName, string format)
         {
-            return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName, (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
+         
+
+            try
+            {
+
+                return _photorepo.getgalleryimagebynormalizedscreenname(strScreenName, (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         public bool checkifphotocaptionalreadyexists(string profileid, string strPhotoCaption)
         {
-            return _photorepo.checkifphotocaptionalreadyexists(Convert.ToInt32(profileid), strPhotoCaption);
+        
+            try
+            {
+                return _photorepo.checkifphotocaptionalreadyexists(Convert.ToInt32(profileid), strPhotoCaption);
+
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         public bool checkforgalleryphotobyprofileid(string profileid)
         {
-            return _photorepo.checkforgalleryphotobyprofileid(Convert.ToInt32(profileid));
+         
+            try
+            {
+
+                return _photorepo.checkforgalleryphotobyprofileid(Convert.ToInt32(profileid));
+
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
         public bool checkforuploadedphotobyprofileid(string profileid)
         {
-            return _photorepo.checkforuploadedphotobyprofileid(Convert.ToInt32(profileid));
+            
+
+            try
+            {
+                return _photorepo.checkforuploadedphotobyprofileid(Convert.ToInt32(profileid));
+
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
         }
 
 
             public string getimagebytesfromurl(string _imageUrl, string source)
         {
 
-            return _photorepo.getimageb64stringfromurl(_imageUrl, source);
+          
+            try
+            {
+
+                return _photorepo.getimageb64stringfromurl(_imageUrl, source);
+
+
+            }
+            catch (Exception ex)
+            {
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in photo service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
 
         }
 

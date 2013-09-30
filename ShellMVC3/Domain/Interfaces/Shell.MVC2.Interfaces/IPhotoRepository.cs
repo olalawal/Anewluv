@@ -17,7 +17,7 @@ namespace Shell.MVC2.Interfaces
 
         PhotoModel getphotomodelbyphotoid(Guid photoid, photoformatEnum format);
 
-        PhotoModel getphotomodelbyprofileid(int profileid, photoformatEnum format);
+        PhotoModel getgalleryphotomodelbyprofileid(int profileid, photoformatEnum format);
       
         List<PhotoModel> getphotomodelsbyprofileidandstatus(int profile_id, photoapprovalstatusEnum status, photoformatEnum format);
 

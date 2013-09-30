@@ -111,7 +111,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>63080</DevelopmentServerPort>
+          <DevelopmentServerPort>13364</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/Shell.MVC2.Web.UpdateService</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

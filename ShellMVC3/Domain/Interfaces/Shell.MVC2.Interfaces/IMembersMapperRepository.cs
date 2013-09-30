@@ -57,7 +57,7 @@ namespace Shell.MVC2.Interfaces
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
         List<MemberSearchViewModel> getemailmatches(ProfileModel model);
-        List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(ProfileModel model);
+        //List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(ProfileModel model);
 
     }
 }

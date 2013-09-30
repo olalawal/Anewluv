@@ -121,7 +121,7 @@ namespace Shell.MVC2.Data
                    }// approvedphotos = photorepository.
                    else
                    {
-                       model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
+                       model.profilephotos.SingleProfilePhoto = photorepository.getgalleryphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
                    }
                    return model;
                }
@@ -1193,7 +1193,7 @@ namespace Shell.MVC2.Data
                     lastloggedonstring = membersrepository.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                     lastlogindate = x.lastlogindate,
                     distancefromme = georepository.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles"),
-                    galleryphoto = photorepository.getphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail),
+                    galleryphoto = photorepository.getgalleryphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail),
                     lookingforagefrom = x.lookingforagefrom,
                     lookingForageto = x.lookingForageto,
                     online = membersrepository.getuseronlinestatus(new ProfileModel { profileid = x.id })
@@ -1359,7 +1359,7 @@ namespace Shell.MVC2.Data
                     lastloggedonstring = membersrepository.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                     lastlogindate = x.lastlogindate,
                     distancefromme = georepository.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles"),
-                    galleryphoto = photorepository.getphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail),
+                    galleryphoto = photorepository.getgalleryphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail),
                     lookingforagefrom = x.lookingforagefrom,
                     lookingForageto = x.lookingForageto,
                     online = membersrepository.getuseronlinestatus(new ProfileModel { profileid = x.id })
@@ -1498,7 +1498,7 @@ namespace Shell.MVC2.Data
                     lastloggedonstring = membersrepository.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                     lastlogindate = x.lastlogindate,
                     distancefromme = georepository.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles"),
-                    galleryphoto = photorepository.getphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail),
+                    galleryphoto = photorepository.getgalleryphotomodelbyprofileid(x.id, photoformatEnum.Thumbnail),
                     lookingforagefrom = x.lookingforagefrom ,
                     lookingForageto = x.lookingForageto,
                     online = membersrepository.getuseronlinestatus(new ProfileModel { profileid = x.id })

@@ -15,7 +15,8 @@ using Shell.MVC2.Domain.Entities;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv;
 
-using Misc.PhotoService;
+using Shell.MVC2.Services.Contracts;
+using System.ServiceModel.Web;
 
 namespace Misc
 {
@@ -705,13 +706,13 @@ namespace Misc
             var postaldb = new PostalData2Entities();
             var context = new AnewluvContext();
 
-            PhotoUploadModel uploadmodelfailed = new PhotoUploadModel();
+          PhotoUploadModel uploadmodelfailed = new PhotoUploadModel();
 
             //global try for the rest of objects that are tied to profile
             try
             {
                 //create refereerence to photo service
-                var PhotoService = new PhotoServiceClient();
+               // var PhotoService = new PhotoServiceClient();
                 // PhotoService.ChannelFactory.CreateChannel();
 
 
@@ -737,11 +738,12 @@ namespace Misc
                         {
 
                             
-PhotoUploadModel uploadmodel = new PhotoUploadModel();
+  PhotoUploadModel uploadmodel = new PhotoUploadModel();
                             uploadmodel.caption = photositem.ImageCaption;
                             uploadmodel.legacysize = photositem.PhotoSize;
                             uploadmodel.creationdate = photositem.PhotoDate.GetValueOrDefault();
                             uploadmodel.imageb64string = Convert.ToBase64String(photositem.ProfileImage); 
+
                            // uploadmodel.size = photositem.PhotoSize;
                             uploadmodel.imagename = photositem.ImageCaption; //added name to help compare
 
@@ -761,14 +763,14 @@ PhotoUploadModel uploadmodel = new PhotoUploadModel();
                             }
 
 
-                            if (photositem.PhotoType != null)
-                            {
-                                uploadmodel.imagetypeid = context.lu_photoimagetype.Where(z => z.description == photositem.PhotoType.PhotoTypeDescription).FirstOrDefault().id;
-                            }
-                            else
-                            {
-                                uploadmodel.imagetypeid = null;
-                            }
+                            //if (photositem. != null)
+                            //{
+                            //    uploadmodel.imagetypeid = context.lu_photoimagetype.Where(z => z.description == photositem.PhotoType.PhotoTypeDescription).FirstOrDefault().id;
+                            //}
+                            //else
+                            //{
+                            //    uploadmodel.imagetypeid = null;
+                            //}
 
 
                             //handle rejection reaseaon
@@ -784,7 +786,7 @@ PhotoUploadModel uploadmodel = new PhotoUploadModel();
 
 
                             //handle image type
-
+                                                                
                             if (photositem.ProfileImageType == "Gallery" && photositem.PhotoStatusID != 4)
                             {
                                 uploadmodel.photostatusid = context.lu_photostatus.Where(z => z.id == (int)(photostatusEnum.Gallery)).FirstOrDefault().id;
@@ -808,7 +810,10 @@ PhotoUploadModel uploadmodel = new PhotoUploadModel();
 
                             uploadmodelfailed = uploadmodel; //backup model so we can see which one failed
 
-                            PhotoService.addsinglephoto(uploadmodel, newprofile.id.ToString());
+                            WebChannelFactory<IPhotoService> cf = new WebChannelFactory<IPhotoService>("*");
+                            IPhotoService channel = cf.CreateChannel();
+                           // suggestions = channel.getactivesurfs();
+                            channel.addsinglephoto(uploadmodel, newprofile.id.ToString());
                             // photoadded = true;
                             Console.WriteLine("single photo and its conversions have been added for old profileID   :" + photositem.ProfileID);
                         }

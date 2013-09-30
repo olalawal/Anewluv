@@ -426,8 +426,13 @@ namespace Shell.MVC2.Data
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
-              throw;
+                throw;
             }
+            finally
+            {
+                if (_datingcontext != null) _datingcontext.Dispose();
+            }
+
 
             
         }
@@ -481,6 +486,10 @@ namespace Shell.MVC2.Data
                 var message = ex.Message;
                 throw;
             }
+            finally
+            {
+                if (_datingcontext != null) _datingcontext.Dispose();
+            }
            
         }
 
@@ -531,7 +540,10 @@ namespace Shell.MVC2.Data
                 var message = ex.Message;
                 throw;
             }
-
+            finally
+            {
+                if (_datingcontext != null) _datingcontext.Dispose();
+            }
            
         }
 
@@ -573,12 +585,12 @@ namespace Shell.MVC2.Data
              var pageData = Page.GetValueOrDefault() > 1 & allowpaging  ? 
                  new PaginatedList<MemberSearchViewModel>().GetCurrentPages(interests, Page ?? 1, NumberPerPage ?? 4) : interests.Take(NumberPerPage.GetValueOrDefault());
              //this.AddRange(pageData.ToList());
-            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
              //return interests.ToList();
-             return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+             return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
-               // return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
+               // return data2.OrderByDescending(f => f.interestdate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();;
 //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
 
          }
@@ -632,10 +644,10 @@ namespace Shell.MVC2.Data
                  var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
                      new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinme, Page ?? 1, NumberPerPage ?? 4) : whoisinterestedinme.Take(NumberPerPage.GetValueOrDefault());
                  //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                  //return interests.ToList();
-                 return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
 
 
@@ -692,10 +704,10 @@ namespace Shell.MVC2.Data
                  var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinmenew, Page ?? 1, NumberPerPage ?? 4) : whoisinterestedinmenew.Take(NumberPerPage.GetValueOrDefault());
                  //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                  //return interests.ToList();
-                 return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.interestdate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
 
 
@@ -1119,20 +1131,36 @@ namespace Shell.MVC2.Data
             int? count = null;
             int defaultvalue = 0;
 
-            count = (
-               from f in _datingcontext.peeks
-               where (f.profile_id == profileid && f.deletedbymemberdate == null)
-               select f).Count();
+            try
+            {
+                count = (
+                   from f in _datingcontext.peeks
+                   where (f.profile_id == profileid && f.deletedbymemberdate == null)
+                   select f).Count();
 
-            // ?? operator example.
-
-
-            // y = x, unless x is null, in which case y = -1.
-            defaultvalue = count ?? 0;
+                // ?? operator example.
 
 
+                // y = x, unless x is null, in which case y = -1.
+                defaultvalue = count ?? 0;
 
-            return defaultvalue;
+
+
+                return defaultvalue;
+            }
+            catch (Exception ex)
+            {
+                logger = new ErroLogging(applicationEnum.MemberActionsService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+            finally
+            {
+                if (_datingcontext != null) _datingcontext.Dispose();
+            }
         }
 
         //count methods first
@@ -1144,27 +1172,43 @@ namespace Shell.MVC2.Data
             int? count = null;
             int defaultvalue = 0;
 
-            //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
-                                 select new
-                                 {
-                                     ProfilesBlockedId = c.blockprofile_id
-                                 };
+            try
+            {
+                //filter out blocked profiles 
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
 
-            count = (
-               from p in _datingcontext.peeks
-               where (p.peekprofile_id == profileid)
-               join f in _datingcontext.profiles on p.profile_id equals f.id
-               where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-               select f).Count();
+                count = (
+                   from p in _datingcontext.peeks
+                   where (p.peekprofile_id == profileid)
+                   join f in _datingcontext.profiles on p.profile_id equals f.id
+                   where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                   select f).Count();
 
-            // ?? operator example.
+                // ?? operator example.
 
 
-            // y = x, unless x is null, in which case y = -1.
-            defaultvalue = count ?? 0;
+                // y = x, unless x is null, in which case y = -1.
+                defaultvalue = count ?? 0;
 
-            return defaultvalue;
+                return defaultvalue;
+            }
+            catch (Exception ex)
+            {
+                logger = new ErroLogging(applicationEnum.MemberActionsService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+            finally
+            {
+                if (_datingcontext != null) _datingcontext.Dispose();
+            }
         }
 
         //count methods first
@@ -1176,27 +1220,43 @@ namespace Shell.MVC2.Data
             int? count = null;
             int defaultvalue = 0;
 
-            //filter out blocked profiles 
-            var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
-                                 select new
-                                 {
-                                     ProfilesBlockedId = c.blockprofile_id
-                                 };
+            try
+            {
+                //filter out blocked profiles 
+                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate != null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
 
-            count = (
-               from p in _datingcontext.peeks
-               where (p.peekprofile_id == profileid && p.viewdate == null)
-               join f in _datingcontext.profiles on p.profile_id equals f.id
-               where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-               select f).Count();
+                count = (
+                   from p in _datingcontext.peeks
+                   where (p.peekprofile_id == profileid && p.viewdate == null)
+                   join f in _datingcontext.profiles on p.profile_id equals f.id
+                   where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                   select f).Count();
 
-            // ?? operator example.
+                // ?? operator example.
 
 
-            // y = x, unless x is null, in which case y = -1.
-            defaultvalue = count ?? 0;
+                // y = x, unless x is null, in which case y = -1.
+                defaultvalue = count ?? 0;
 
-            return defaultvalue;
+                return defaultvalue;
+            }
+            catch (Exception ex)
+            {
+                logger = new ErroLogging(applicationEnum.MemberActionsService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                throw;
+            }
+            finally
+            {
+                if (_datingcontext != null) _datingcontext.Dispose();
+            }
         }
 
         #endregion
@@ -1208,8 +1268,8 @@ namespace Shell.MVC2.Data
         /// </summary 
         public List<MemberSearchViewModel> getwhoipeekedat(int profileid, int? Page, int? NumberPerPage)
         {
-      
-    
+
+
             try
             {
                 var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
@@ -1236,10 +1296,10 @@ namespace Shell.MVC2.Data
                 var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeks, Page ?? 1, NumberPerPage ?? 4) : peeks.Take(NumberPerPage.GetValueOrDefault());
                 //this.AddRange(pageData.ToList());
-                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                 //return interests.ToList();
-                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
 
             }
@@ -1251,8 +1311,13 @@ namespace Shell.MVC2.Data
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
-              throw;
+                throw;
             }
+            finally
+            {
+                if (_datingcontext != null) _datingcontext.Dispose();
+            }
+
 
 
         }
@@ -1295,10 +1360,10 @@ namespace Shell.MVC2.Data
                 var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(WhoPeekedAtMe, Page ?? 1, NumberPerPage ?? 4) : WhoPeekedAtMe.Take(NumberPerPage.GetValueOrDefault());
                 //this.AddRange(pageData.ToList());
-                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                 //return interests.ToList();
-                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
 
 
@@ -1356,10 +1421,10 @@ namespace Shell.MVC2.Data
                 var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeknew, Page ?? 1, NumberPerPage ?? 4) : peeknew.Take(NumberPerPage.GetValueOrDefault());
                 //this.AddRange(pageData.ToList());
-                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                 //return interests.ToList();
-                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.peekdate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
 
 
@@ -1780,7 +1845,7 @@ namespace Shell.MVC2.Data
        
         public int getwhoiblockedcount(int profileid)
         {
-          
+
 
             try
             {
@@ -1815,6 +1880,10 @@ namespace Shell.MVC2.Data
                 //handle logging here
                 var message = ex.Message;
                 throw;
+            }
+            finally
+            {
+                if (_datingcontext != null) _datingcontext.Dispose();
             }
         }
 
@@ -1856,10 +1925,10 @@ namespace Shell.MVC2.Data
               var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
                   new PaginatedList<MemberSearchViewModel>().GetCurrentPages(blocknew, Page ?? 1, NumberPerPage ?? 4) : blocknew.Take(NumberPerPage.GetValueOrDefault());
               //this.AddRange(pageData.ToList());
-              // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+              // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
               //return interests.ToList();
-              return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+              return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.blockdate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
 
 
@@ -1906,10 +1975,10 @@ namespace Shell.MVC2.Data
               var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
                   new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoblockedme, Page ?? 1, NumberPerPage ?? 4) : whoblockedme.Take(NumberPerPage.GetValueOrDefault());
               //this.AddRange(pageData.ToList());
-              // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+              // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
               //return interests.ToList();
-              return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+              return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.blockdate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
 
 
@@ -2286,7 +2355,12 @@ namespace Shell.MVC2.Data
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
+                
                 throw;
+            }       
+            finally
+            {
+                if (_datingcontext != null) _datingcontext.Dispose();
             }
         }
 
@@ -2324,9 +2398,7 @@ namespace Shell.MVC2.Data
 
                 // y = x, unless x is null, in which case y = -1.
                 defaultvalue = count ?? 0;
-
                 return defaultvalue;
-
 
             }
             catch (Exception ex)
@@ -2338,6 +2410,11 @@ namespace Shell.MVC2.Data
                 //handle logging here
                 var message = ex.Message;
                 throw;
+            }
+          
+            finally
+            {
+                if (_datingcontext != null) _datingcontext.Dispose();
             }
         }
 
@@ -2390,6 +2467,8 @@ namespace Shell.MVC2.Data
                 var message = ex.Message;
                 throw;
             }
+            finally { if (_datingcontext != null) _datingcontext.Dispose(); _membermapperrepository = null; }
+            
         }
 
         #endregion
@@ -2409,16 +2488,16 @@ namespace Shell.MVC2.Data
 
 
 
-                var MyActiveblocks = from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
+                var MyActiveblocks = (from c in _datingcontext.blocks.Where(p => p.profile_id == profileid && p.removedate == null)
                                      select new
                                      {
                                          ProfilesBlockedId = c.blockprofile_id
-                                     };
+                                     }).ToList();
 
                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                 //rematerialize on the back end.
                 //final query to send back only the profile datatas of the interests we want
-                var likenew = (from p in _datingcontext.likes.Where(p => p.likeprofile_id == profileid && p.viewdate == null)
+                var likenew = (from p in _datingcontext.likes.Where(p => p.likeprofile_id == profileid && p.viewdate == null).ToList()
                                join f in _datingcontext.profiledata on p.profile_id equals f.profile_id
                                join z in _datingcontext.profiles on p.profile_id equals z.id
                                where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
@@ -2434,12 +2513,12 @@ namespace Shell.MVC2.Data
                 var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(likenew, Page ?? 1, NumberPerPage ?? 4) : likenew.Take(NumberPerPage.GetValueOrDefault());
                 //this.AddRange(pageData.ToList());
-                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                 //return interests.ToList();
-                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                var test = _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
-
+                return test;
 
 
             }
@@ -2453,6 +2532,7 @@ namespace Shell.MVC2.Data
                 var message = ex.Message;
                 throw;
             }
+            finally { if (_datingcontext != null) _datingcontext.Dispose();  }
 
         }
 
@@ -2493,10 +2573,10 @@ namespace Shell.MVC2.Data
                 var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(wholikesme, Page ?? 1, NumberPerPage ?? 4) : wholikesme.Take(NumberPerPage.GetValueOrDefault());
                 //this.AddRange(pageData.ToList());
-                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                 //return interests.ToList();
-                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
 
 
@@ -2553,10 +2633,10 @@ namespace Shell.MVC2.Data
                 var pageData = Page.GetValueOrDefault() > 1 & allowpaging ?
                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoilike, Page ?? 1, NumberPerPage ?? 4) : whoilike.Take(NumberPerPage.GetValueOrDefault());
                 //this.AddRange(pageData.ToList());
-                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                // var pagedinterests = interests.OrderByDescending(f => f.interestdate.GetValueOrDefault()).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                 //return interests.ToList();
-                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                return _membermapperrepository.mapmembersearchviewmodels(profileid, pageData.ToList(), false).OrderByDescending(f => f.likedate.GetValueOrDefault()).ThenByDescending(f => f.lastlogindate.GetValueOrDefault()).ToList();
 
 
 
@@ -3040,7 +3120,7 @@ namespace Shell.MVC2.Data
         //                                  lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.LoginDate),
         //                                  lastlogindate = f.LoginDate,
         //                                  Online = _datingcontext.fnGetUserOlineStatus(x.profileid),
-        //                                  DistanceFromMe = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude, model.MyQuickSearch.MySelectedlattitude.Value, model.MyQuickSearch.MySelectedLongitude.Value, "Miles"),
+        //                                  DistanceFromMe = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude, model.MyQuickSearch.MySelectedlattitude.GetValueOrDefault(), model.MyQuickSearch.MySelectedLongitude.GetValueOrDefault(), "Miles"),
         //                                  ProfileVisibility = x.ProfileVisiblitySetting.ProfileVisiblity
 
         //                              }).ToList();

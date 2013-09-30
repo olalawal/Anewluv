@@ -1211,7 +1211,9 @@ namespace Shell.MVC2.Services.Actions
 
             try
             {
-                return _memberactionsrepository.getwholikesmenew(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+                var dd = _memberactionsrepository.getwholikesmenew(Convert.ToInt32(profileid), Convert.ToInt32(page), Convert.ToInt32(numberperpage));
+                return dd;
+
 
             }
             catch (Exception ex)

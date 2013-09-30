@@ -93,6 +93,7 @@
     <Compile Include="Anewluv\ViewModels\Editprofile\EditProfileViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Search\ProfilesearchModel.cs" />
     <Compile Include="Anewluv\visiblitysettings_countries.cs" />
     <Compile Include="Anewluv\visiblitysettings_gender.cs" />
     <Compile Include="Anewluv\LookupsCriteria\Enums\politicalview.cs" />
@@ -341,9 +342,7 @@
   <ItemGroup>
     <Content Include="Documentation\Migration Instructions.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Anewluv\ViewModels\Search\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>

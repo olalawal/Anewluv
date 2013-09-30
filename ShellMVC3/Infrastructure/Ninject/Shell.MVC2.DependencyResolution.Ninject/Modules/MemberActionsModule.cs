@@ -18,6 +18,8 @@ using Dating.Server.Data.Models ;
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
 using Shell.MVC2.Domain.Entities.Anewluv;
+using Ninject.Web.Common;
+
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
 	public class MemberActionsModule : NinjectModule
@@ -29,11 +31,11 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
            //     Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>()));
             Kernel.Bind<IMemberActionsRepository>().ToConstructor(
              ctorArg => new MemberActionsRepository(ctorArg.Inject<AnewluvContext>(),
-                 ctorArg.Inject<IMemberRepository >(),ctorArg.Inject<IMembersMapperRepository>()));
+                 ctorArg.Inject<IMemberRepository>(), ctorArg.Inject<IMembersMapperRepository>())).InRequestScope();
 
 
 			//services
-            Kernel.Bind<IMemberActionsService>().ToSelf();
+            Kernel.Bind<IMemberActionsService>().ToSelf().InRequestScope();
          
       }
 	}

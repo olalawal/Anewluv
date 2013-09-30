@@ -163,10 +163,13 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.DomainServices.EntityFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.ServiceModel.DomainServices.Server, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -178,20 +181,10 @@
     <Compile Include="OutputTypes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\ErrorLoggingService\Reference.cs">
+    <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="Service References\InfoNotificationService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="Service References\PhotoService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Testlist.cs" />
   </ItemGroup>
@@ -210,71 +203,16 @@
     <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoEditViewModel.datasource" />
     <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoModel.datasource" />
     <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoViewModel.datasource" />
-    <None Include="Service References\ErrorLoggingService\ErrorLoggingService.wsdl" />
-    <None Include="Service References\ErrorLoggingService\ErrorLoggingService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ErrorLoggingService\ErrorLoggingService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ErrorLoggingService\ErrorLoggingService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\InfoNotificationService\InfoNotificationService.wsdl" />
-    <None Include="Service References\InfoNotificationService\InfoNotificationService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\InfoNotificationService\InfoNotificationService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\InfoNotificationService\InfoNotificationService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\InfoNotificationService\InfoNotificationService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\InfoNotificationService\InfoNotificationService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\InfoNotificationService\InfoNotificationService5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\InfoNotificationService\InfoNotificationService6.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\InfoNotificationService\InfoNotificationService7.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\InfoNotificationService\InfoNotificationService8.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PhotoService\Misc.PhotoService.AnewluvResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\PhotoService\PhotoService.wsdl" />
-    <None Include="Service References\PhotoService\PhotoService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PhotoService\PhotoService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PhotoService\PhotoService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PhotoService\PhotoService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PhotoService\PhotoService4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PhotoService\PhotoService5.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PhotoService\PhotoService6.xsd">
-      <SubType>Designer</SubType>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Shell.MVC2.Services.Contracts\Shell.MVC2.Services.Contracts.csproj">
+      <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
+      <Name>Shell.MVC2.Services.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
       <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
       <Name>Dating.Server.Data.Web</Name>
@@ -311,57 +249,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\ErrorLoggingService\" />
-    <WCFMetadataStorage Include="Service References\InfoNotificationService\" />
-    <WCFMetadataStorage Include="Service References\PhotoService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\InfoNotificationService\InfoNotificationService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\InfoNotificationService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\InfoNotificationService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\InfoNotificationService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\ErrorLoggingService\ErrorLoggingService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\ErrorLoggingService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\ErrorLoggingService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\ErrorLoggingService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
     <Content Include="Scripts\jquery.signalR-1.0.0.js" />
     <Content Include="Scripts\jquery.signalR-1.0.0.min.js" />
-    <None Include="Service References\PhotoService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Service References\PhotoService\configuration.svcinfo" />
-    <None Include="Service References\PhotoService\configuration91.svcinfo" />
-    <None Include="Service References\PhotoService\PhotoService.disco" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
