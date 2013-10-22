@@ -986,17 +986,7 @@ namespace Shell.MVC2.Data
                     NewPhoto.approvalstatus = (newphoto.approvalstatusid != null) ? _datingcontext.lu_photoapprovalstatus.Where(p => p.id == newphoto.approvalstatusid).FirstOrDefault() : null;
                     NewPhoto.rejectionreason = (newphoto.rejectionreasonid != null) ? _datingcontext.lu_photorejectionreason.Where(p => p.id == newphoto.rejectionreasonid).FirstOrDefault() : null;
                     NewPhoto.photostatus = (newphoto.photostatusid != null) ? _datingcontext.lu_photostatus.Where(p => p.id == newphoto.photostatusid).FirstOrDefault() : null;
-                       
-
-                    //TO DO move this out of RIA services to rest service
-
-                    //get the existing photos for a user to compare the size so we do not import dupes
-                    // existing
-                    //_datingcontext.photos.Add(NewPhoto);
-                    //save the  photo here since we are somewhat checking before we try to crreate the conversions in the surrounding if
-                    //olawal 12-26-2012
-                  //  _datingcontext.SaveChanges();
-
+                   
 
                     var temp = addphotoconverionsb64string(NewPhoto, newphoto);
                     if (temp.Count > 0)
@@ -1006,14 +996,11 @@ namespace Shell.MVC2.Data
                         var existingthumbnailconversion = _datingcontext.photoconversions.Where(z => z.photo.profile_id == profileid & z.formattype.id == (int)photoformatEnum.Thumbnail);
                         var newphotothumbnailconversion = temp.Where(p => p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
                         if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
-                            return new AnewluvMessages { message = "This photo has already been uploaded", };
-                       
+                            return new AnewluvMessages { message = "This photo has already been uploaded", };                       
                        
                         //allow saving of new photo 
                         _datingcontext.photos.Add(NewPhoto);
                         _datingcontext.SaveChanges();
-
-
 
                         foreach (photoconversion convertedphoto in temp)
                         {
@@ -1364,9 +1351,7 @@ namespace Shell.MVC2.Data
                 imageResponse.Close();
 
                 return Convert.ToBase64String(imageBytes);
-                //photo.imagecaption = caption;
-                //photo.ImageUploaded = file;
-                // photo.ProfileImage = imageBytes;
+             
             }
             catch (WebException webEx)
             {

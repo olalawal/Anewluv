@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A0B04284-784B-4322-A213-DB178716EFC1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Anewluv.Domain</RootNamespace>
+    <AssemblyName>Anewluv.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\Shell.MVC2\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\Shell.MVC2\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Anewluv.Chat\Context\Chat.Context.cs" />
+    <Compile Include="Anewluv.Chat\Context\Chat.Context.Lookups.cs" />
+    <Compile Include="Anewluv.Chat\Context\ChatModelbuilder.cs" />
+    <Compile Include="Anewluv.Chat\Context\SeedingConversions.cs" />
+    <Compile Include="Anewluv.Chat\Context\SeedMethods.cs" />
+    <Compile Include="Anewluv\Context\Anewluv.Context.Application.cs" />
+    <Compile Include="Anewluv\Context\Anewluv.Context.cs" />
+    <Compile Include="Anewluv\Context\Anewluv.Context.Lookups.cs" />
+    <Compile Include="Anewluv\Context\Anewluv.Context.LookupsCriteria.cs" />
+    <Compile Include="Anewluv\Context\Anewluv.Context.Search.cs" />
+    <Compile Include="Anewluv\Context\Anewluv.Modelbuilder.Application.cs" />
+    <Compile Include="Anewluv\Context\AnewluvModelbuilder.cs" />
+    <Compile Include="Anewluv\Context\SeedingConversions.cs" />
+    <Compile Include="Anewluv\Context\SeedMethods.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Documentation\Migration Instructions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
+      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
+      <Name>Shell.MVC2.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
+      <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
+      <Name>Dating.Server.Data.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Anewluv.DataAccess\Anewluv.DataAccess.csproj">
+      <Project>{C4C10E84-8C87-43D3-AEF3-9C0A03A2F7DB}</Project>
+      <Name>Anewluv.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Interfaces\Anewluv.DataAccess.Interfaces\Anewluv.DataAccess.Interfaces.csproj">
+      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
+      <Name>Anewluv.DataAccess.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
+      <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Anewluv.Chat\Interfaces\" />
+    <Folder Include="Anewluv.Chat\Modelbuilder\" />
+    <Folder Include="Anewluv.Chat\ModelConfigurations\" />
+    <Folder Include="Anewluv\Interfaces\" />
+    <Folder Include="Anewluv\Modelbuilder\" />
+    <Folder Include="Anewluv\ModelConfigurations\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

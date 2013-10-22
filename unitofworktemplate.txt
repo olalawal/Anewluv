@@ -1,0 +1,39 @@
+interest[Methods].citystateprovince
+interest[Methods].lookingforagerange
+interest[Methods].lastloggedonstring
+
+
+
+http://173.160.122.195/Anewluv.Web.MembersService/MembersService.svc/Rest/addinterest
+
+
+
+http://173.160.122.195/Anewluv.Web.MemberActionsService/MemberActionService.svc/Rest/help
+
+http://173.160.122.195/Anewluv.Web.MemberActionsService/MemberActionsService.svc/Rest
+
+var GalleryPhoto = db.GetRepository<photo>().Find()
+
+Convert.ToInt32(profileid)
+
+
+
+
+      //update method code
+          using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+
+  /query method code
+
+
+    _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
