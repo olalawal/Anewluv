@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email
+namespace Anewluv.Domain.Data.ViewModels.Email
 {
 
 

@@ -32,10 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\..\Shell.MVC2\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\Shell.MVC2\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\..\Shell.MVC2\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\Shell.MVC2\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -51,7 +51,9 @@
     <Compile Include="Implemenation\EFRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Interfaces\Anewluv.DataAccess.Interfaces\Anewluv.DataAccess.Interfaces.csproj">
       <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
@@ -61,6 +63,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AppfabricCaching\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

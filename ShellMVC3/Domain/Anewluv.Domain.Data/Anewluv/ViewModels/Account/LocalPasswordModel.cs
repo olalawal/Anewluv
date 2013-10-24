@@ -7,7 +7,7 @@ using System.Globalization;
 //using System.Web.Mvc;
 using System.Web.Security;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
     public class LocalPasswordModel
     {

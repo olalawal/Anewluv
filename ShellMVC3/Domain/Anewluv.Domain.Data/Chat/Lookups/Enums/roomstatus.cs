@@ -5,7 +5,7 @@ using System.Web;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
+namespace Anewluv.Domain.Data.Chat
 {
      /// <summary>
     /// This is an enumeration type for the log severity types we track

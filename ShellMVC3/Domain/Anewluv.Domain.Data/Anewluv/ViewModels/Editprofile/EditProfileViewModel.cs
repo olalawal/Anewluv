@@ -10,7 +10,7 @@ using System.Collections;
 using System.Runtime.Serialization;
 
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
         //constants for page indexes
     

@@ -11,9 +11,10 @@ using Anewluv.DataAccess;
 using System.Data.Common;
 using System.Data;
 using System.Data.Entity.Validation;
+using Anewluv.Domain.Data.Chat;
 
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
+namespace Anewluv.Domain.Chat
 {
     public partial class ChatContext : DbContext, IUnitOfWork
     {

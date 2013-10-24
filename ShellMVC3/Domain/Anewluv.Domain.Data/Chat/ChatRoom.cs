@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
+namespace Anewluv.Domain.Data.Chat
 {
     //TO do get rid of this topic crap and use what is in user list, match up user's on UI side
     [DataContract]

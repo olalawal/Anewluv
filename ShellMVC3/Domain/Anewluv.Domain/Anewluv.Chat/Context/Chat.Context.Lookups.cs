@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.Entity;
+using Anewluv.Domain.Data.Chat;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
+namespace Anewluv.Domain.Chat
 {
     public partial  class ChatContext : DbContext
     {

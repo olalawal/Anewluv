@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv
+namespace Anewluv.Domain.Data
 {
     //Gallery, Detail,larger, Full <- might do away with full to save memory or 
     //at least compress and rescan it

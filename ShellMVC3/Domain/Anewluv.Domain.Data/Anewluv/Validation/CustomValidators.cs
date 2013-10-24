@@ -9,10 +9,10 @@ using System.Text.RegularExpressions;
 using System.ComponentModel;
 
 using System.Web.Security;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels ;
+using Anewluv.Domain.Data.ViewModels ;
 
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.Validation
+namespace Anewluv.Domain.Data.Validation
 {
 
      public class CustomAnotations

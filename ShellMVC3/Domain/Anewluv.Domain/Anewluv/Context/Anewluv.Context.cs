@@ -11,9 +11,10 @@ using Anewluv.DataAccess;
 using System.Data.Common;
 using System.Data;
 using System.Data.Entity.Validation;
+using Anewluv.Domain.Data;
 
 
-namespace Shell.MVC2.Domain.Entities.Anewluv
+namespace Anewluv.Domain
 {
     public partial class AnewluvContext : DbContext, IUnitOfWork
     {

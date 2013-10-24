@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5130AC6C-76E9-4471-96D9-D5C8DCABA093}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Anewluv.Services.Spatial</RootNamespace>
+    <AssemblyName>Anewluv.Services.Spatial</AssemblyName>
+    <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GeoService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Shell.MVC2.Services.Contracts\Shell.MVC2.Services.Contracts.csproj">
+      <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
+      <Name>Shell.MVC2.Services.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
+      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
+      <Name>Shell.MVC2.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Components\LoggingLibrary\LoggingLibrary.csproj">
+      <Project>{FF7B929D-6086-4509-9095-396845569906}</Project>
+      <Name>LoggingLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
+      <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
+      <Name>Dating.Server.Data.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
+      <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Entities\Shell.MVC.Infrastructure.Entities\Shell.MVC2.Infrastructure.Entities.csproj">
+      <Project>{92B7DBBB-2313-4C2E-88AB-970751B229F1}</Project>
+      <Name>Shell.MVC2.Infrastructure.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Interfaces\Anewluv.DataAccess.Interfaces\Anewluv.DataAccess.Interfaces.csproj">
+      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
+      <Name>Anewluv.DataAccess.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{3D9AD99F-2412-4246-B90B-4EAA41C64699}">
+        <WcfProjectProperties>
+          <AutoStart>True</AutoStart>
+        </WcfProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

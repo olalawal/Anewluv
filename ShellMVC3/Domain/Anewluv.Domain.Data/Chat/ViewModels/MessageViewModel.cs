@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels
+namespace Anewluv.Domain.Data.Chat.ViewModels
 {
     public class MessageViewModel
     {

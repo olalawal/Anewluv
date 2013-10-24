@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 //using Shell.MVC2.Infastructure.Chat;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
+namespace Anewluv.Domain.Data.Chat
 {
   
     [DataContract]

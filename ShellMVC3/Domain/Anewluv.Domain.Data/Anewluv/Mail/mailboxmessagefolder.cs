@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;using System.ComponentModel.DataAnnotations;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv
+namespace Anewluv.Domain.Data
 {
     /// <summary>
     /// custom join table so we define it ourslefs

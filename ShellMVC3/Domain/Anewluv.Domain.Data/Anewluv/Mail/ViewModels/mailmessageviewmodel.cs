@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
     //10-5-2012 looks similar toe mailboxmessage model in DB 
    public class mailmessageviewmodel

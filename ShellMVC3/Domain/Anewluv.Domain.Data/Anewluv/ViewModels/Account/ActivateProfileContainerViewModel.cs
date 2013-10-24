@@ -5,7 +5,7 @@ using System.Web;
 using System.Runtime.Serialization;
 
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
     //TO DO drepreciate this code in Account controller :  public virtual ActionResult ActivateProfile(string ProfileID, string ActivationCode, bool? PhotoStatus)
        

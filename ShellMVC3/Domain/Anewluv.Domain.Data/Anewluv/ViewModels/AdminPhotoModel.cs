@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using Shell.MVC2.Domain.Entities;
-
 
 
 //for RIA services contrib

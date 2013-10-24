@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.Entity;
+using Anewluv.Domain.Data;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv
+namespace Anewluv.Domain
 {
     public partial class AnewluvContext : DbContext
     {

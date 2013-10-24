@@ -6,11 +6,11 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
-using Shell.MVC2.Domain.Entities.Anewluv;
+using Anewluv.Domain.Data;
 using System.Collections;
 using System.Runtime.Serialization;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
            
 

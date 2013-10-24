@@ -1,21 +1,21 @@
-namespace Shell.MVC2.Domain.Entities.Migrations
+namespace Anewluv.Domain.Migrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
-    using Shell.MVC2.Domain.Entities.Anewluv;
+    using Anewluv.Domain;
     using Shell.MVC2.Infrastructure;
 
-    internal sealed class ConfigurationAnewluv : DbMigrationsConfiguration<Shell.MVC2.Domain.Entities.Anewluv.AnewluvContext>
+    internal sealed class ConfigurationAnewluv : DbMigrationsConfiguration<Anewluv.Domain.AnewluvContext>
     {
         public ConfigurationAnewluv()
         {
             AutomaticMigrationsEnabled = true;
-            MigrationsNamespace = "Shell.MVC2.Domain.Entities.Anewluv";
+            MigrationsNamespace = "Anewluv.Domain";
         }
 
-        protected override void Seed(Shell.MVC2.Domain.Entities.Anewluv.AnewluvContext context)
+        protected override void Seed(Anewluv.Domain.AnewluvContext context)
         {
             //  This method will be called after migrating to the latest version.
 
@@ -40,15 +40,15 @@ namespace Shell.MVC2.Domain.Entities.Migrations
 
     }
 
-    internal sealed class ConfigurationChat : DbMigrationsConfiguration<Shell.MVC2.Domain.Entities.Anewluv.Chat.ChatContext >
+    internal sealed class ConfigurationChat : DbMigrationsConfiguration<Anewluv.Domain.Chat.ChatContext >
     {
         public ConfigurationChat()
         {
             AutomaticMigrationsEnabled = true;
-            MigrationsNamespace = "Shell.MVC2.Domain.Entities.Anewluv.Chat";
+            MigrationsNamespace = "Anewluv.Domain.Chat";
         }
 
-        protected override void Seed(Shell.MVC2.Domain.Entities.Anewluv.Chat.ChatContext  context)
+        protected override void Seed(Anewluv.Domain.Chat.ChatContext  context)
         {
             ChatSeedMethods.seedgenerallookups(context);
             // SeedMethodsApiKeyModel.seedcascadeddata(context);

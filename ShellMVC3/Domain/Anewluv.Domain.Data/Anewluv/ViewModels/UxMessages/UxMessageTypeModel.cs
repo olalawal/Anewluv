@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 
-using Shell.MVC2.Domain.Entities.Anewluv;
+using Anewluv.Domain.Data;
 
 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using Shell.MVC2.Domain.Entities.Anewluv;
+using Anewluv.Domain.Data;
 
 
 //using System.Data.Objects.DataClasses;
@@ -11,7 +11,7 @@ using System.Runtime.Serialization;
 
 
 //TO DO we should use the Editprofile model to map this I think
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
       [Serializable]
 

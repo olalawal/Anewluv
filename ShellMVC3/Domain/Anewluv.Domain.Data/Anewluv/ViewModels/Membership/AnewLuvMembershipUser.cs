@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Web.Security;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv
+namespace Anewluv.Domain.Data
 {
 
 

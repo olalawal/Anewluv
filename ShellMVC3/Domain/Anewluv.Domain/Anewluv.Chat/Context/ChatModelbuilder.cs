@@ -5,8 +5,9 @@ using System.Text;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Anewluv.Domain.Data.Chat;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
+namespace Anewluv.Domain.Chat
 {
 
     public  class chatmodelbuilder

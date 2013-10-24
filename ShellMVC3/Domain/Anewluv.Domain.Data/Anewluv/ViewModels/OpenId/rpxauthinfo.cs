@@ -13,7 +13,7 @@ using System.Linq;
 using System.Web;
 
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
     /// <summary>
     /// RPX Authentication Info

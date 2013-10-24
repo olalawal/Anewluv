@@ -4,10 +4,11 @@ using System.Data.Entity.Migrations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Shell.MVC2.Domain.Entities.Anewluv;
+using Anewluv.Domain;
 using Shell.MVC2.Infrastructure;
+using Anewluv.Domain.Data;
 
-namespace Shell.MVC2.Domain.Entities.Migrations
+namespace Anewluv.Domain.Migrations
 {
     public class SeedMethods
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Account
+namespace Anewluv.Domain.Data.ViewModels.Account
 {
     public class RegisterExternalLoginModel
     {

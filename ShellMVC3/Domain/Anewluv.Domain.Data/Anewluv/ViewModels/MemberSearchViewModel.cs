@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-using Shell.MVC2.Domain.Entities.Anewluv;
+using Anewluv.Domain.Data;
 
 using Shell.MVC2.Infrastructure;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
 
     [Serializable]

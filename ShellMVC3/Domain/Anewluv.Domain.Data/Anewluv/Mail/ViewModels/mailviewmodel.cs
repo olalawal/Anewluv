@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Shell.MVC2.Infrastructure;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
     public class mailviewmodel
     {

@@ -12,10 +12,10 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 
 
-using Shell.MVC2.Domain.Entities.Anewluv.Validation ;
+using Anewluv.Domain.Data.Validation ;
 using System;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
 
 

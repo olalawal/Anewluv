@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\Shell.MVC2\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\..\Shell.MVC2\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
@@ -81,7 +84,7 @@
       <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
       <Name>Dating.Server.Data.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Anewluv.DataAccess\Anewluv.DataAccess.csproj">
+    <ProjectReference Include="..\..\Infrastructure\Implementation\Anewluv.DataAccess\Anewluv.DataAccess.csproj">
       <Project>{C4C10E84-8C87-43D3-AEF3-9C0A03A2F7DB}</Project>
       <Name>Anewluv.DataAccess</Name>
     </ProjectReference>

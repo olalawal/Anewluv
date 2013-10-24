@@ -5,7 +5,7 @@ using System.Text;using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 
-namespace Shell.MVC2.Domain.Entities.Anewluv
+namespace Anewluv.Domain.Data
 {
     [DataContract] 
     public class profile

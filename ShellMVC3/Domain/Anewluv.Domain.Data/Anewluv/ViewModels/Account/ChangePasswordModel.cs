@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Shell.MVC2.Domain.Entities.Anewluv.Validation;
+using Anewluv.Domain.Data.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
     [Serializable]
     [DataContract]

@@ -4,11 +4,11 @@ using System.Data.Entity.Migrations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Shell.MVC2.Domain.Entities.Anewluv;
+using Anewluv.Domain;
 using Shell.MVC2.Infrastructure;
 using Dating.Server.Data.Models;
 
-namespace Shell.MVC2.Domain.Entities.Migrations
+namespace Anewluv.Domain.Migrations
 {
     class SeedingConversions
     {

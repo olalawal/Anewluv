@@ -7,7 +7,6 @@ using System.Linq;
 using System.Web;
 
 
-using Shell.MVC2.Domain.Entities;
 
 //add ref to postal data
 
@@ -23,7 +22,7 @@ using System.Runtime.Serialization;
 
 
 
-namespace Shell.MVC2.Domain.Entities.Anewluv
+namespace Anewluv.Domain.Data
 {
 
 

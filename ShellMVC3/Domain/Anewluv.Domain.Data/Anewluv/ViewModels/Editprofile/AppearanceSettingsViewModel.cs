@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 //i.e appearancesearchsettings  , and appearancesettings  combine into viewmodel
 //the search peice will be udpated via searchrepostiory as a separate call maybe since even the matches 
 //settings which we are updating is actually just a search
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
     [DataContract]
     public class AppearanceSettingsViewModel

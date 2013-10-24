@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv
+namespace Anewluv.Domain.Data
 {
     //modified to use block notes to handle reviewing as well since you need to profile Id to review anyways
     [DataContract(IsReference = true)]

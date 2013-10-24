@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
-using Shell.MVC2.Domain.Entities.Anewluv;
+using Anewluv.Domain.Data;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv.ViewModels
+namespace Anewluv.Domain.Data.ViewModels
 {
     //10-29-2011 moved the  edit photo stuff here but it is not edit only, probably should be in photomodel
     //9-20-2012 olawal created a specific model for just uploading photos since photo model is just a pointer now

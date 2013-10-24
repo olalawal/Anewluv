@@ -8,8 +8,8 @@ using Shell.MVC2.Services.Contracts;
 using System.Web;
 using System.Net;
 using Shell.MVC2.Interfaces;
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using Anewluv.Domain.Data;
+using Anewluv.Domain.Data.ViewModels;
 using System.ServiceModel.Activation;
 using Anewluv.DataAccess.Interfaces;
 using LoggingLibrary;
@@ -21,6 +21,7 @@ using System.IO;
 using ImageResizer;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 using System.Drawing;
+using Anewluv.DataExtentionMethods;
 
 namespace Shell.MVC2.Services.Media
 {
@@ -76,7 +77,8 @@ namespace Shell.MVC2.Services.Media
 
         #region "private Data Context methods that are not to be serialzied"
 
- 
+       
+        //TO DO move to extention methods 
         /// <summary>
         /// No using on this one since it is called internally
         /// </summary>
@@ -174,22 +176,60 @@ namespace Shell.MVC2.Services.Media
 
 
         #region "View Photo models"
-
-
+        
 
 
         public PhotoModel getphotomodelbyphotoid(string photoid, string format)
         {
-                _unitOfWork.DisableProxyCreation = true;
-                using (var db = _unitOfWork)
-                {
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                
                     try
                     {
+                        PhotoModel model = (from p in
+                                                (from r in db.GetRepository<photoconversion>().Find().Where(a => a.formattype.id == Convert.ToInt16(format) && (a.photo.id == Guid.Parse(photoid))).ToList()
+                                                 select new
+                                                  {
+                                                      photoid = r.photo.id,
+                                                      profileid = r.photo.profile_id,
+                                                      screenname = r.photo.profilemetadata.profile.screenname,
+                                                      photo = r.image,
+                                                      photoformat = r.formattype,
+                                                      convertedsize = r.size,
+                                                      orginalsize = r.photo.size,
+                                                      imagecaption = r.photo.imagecaption,
+                                                      creationdate = r.photo.creationdate,
+
+                                                  }).ToList()
+                                            select new PhotoModel
+                                           {
+                                               photoid = p.photoid,
+                                               profileid = p.profileid,
+                                               screenname = p.screenname,
+                                               photo = b64Converters.ByteArraytob64string(p.photo),
+                                               photoformat = p.photoformat,
+                                               convertedsize = p.convertedsize,
+                                               orginalsize = p.orginalsize,
+                                               imagecaption = p.imagecaption,
+                                               creationdate = p.creationdate,
+
+                                           }).FirstOrDefault();
+
+
+
+                        // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
+
+                        //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
+
+
+
+                        return (model);
                     }
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MediaService);                      
+                        logger = new ErroLogging(applicationEnum.MediaService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in photo service");
@@ -199,8 +239,10 @@ namespace Shell.MVC2.Services.Media
                     }
                 }
 
-            return _photorepo.getphotomodelbyphotoid(Guid.Parse(photoid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
+            
         }
+
+
 
         public PhotoModel getgalleryphotomodelbyprofileid(string profileid, string format)
         {
@@ -210,6 +252,43 @@ namespace Shell.MVC2.Services.Media
             {
                 try
                 {
+
+                    PhotoModel model = (from p in
+                                            (from r in db.GetRepository<photoconversion>().Find().Where(a => a.formattype.id == Convert.ToInt16(format) && (a.photo.profile_id == Convert.ToInt32(profileid) & a.photo.photostatus.id == (int)photostatusEnum.Gallery)).ToList()
+                                             select new
+                                             {
+                                                 photoid = r.photo.id,
+                                                 profileid = r.photo.profile_id,
+                                                 screenname = r.photo.profilemetadata.profile.screenname,
+                                                 photo = r.image,
+                                                 photoformat = r.formattype,
+                                                 convertedsize = r.size,
+                                                 orginalsize = r.photo.size,
+                                                 imagecaption = r.photo.imagecaption,
+                                                 creationdate = r.photo.creationdate,
+
+                                             }).ToList()
+                                        select new PhotoModel
+                                        {
+                                            photoid = p.photoid,
+                                            profileid = p.profileid,
+                                            screenname = p.screenname,
+                                            photo = b64Converters.ByteArraytob64string(p.photo),
+                                            photoformat = p.photoformat,
+                                            convertedsize = p.convertedsize,
+                                            orginalsize = p.orginalsize,
+                                            imagecaption = p.imagecaption,
+                                            creationdate = p.creationdate,
+
+                                        }).FirstOrDefault();
+
+                    // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
+
+                    //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
+
+
+
+                    return (model);
                 }
                 catch (Exception ex)
                 {
@@ -223,11 +302,9 @@ namespace Shell.MVC2.Services.Media
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            return _photorepo.getgalleryphotomodelbyprofileid(int.Parse(profileid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));      
-
+          
         }
-
-        public List<PhotoModel> getphotomodelsbyprofileidandstatus(string profile_id, string status, string format)
+        public List<PhotoModel> getphotomodelsbyprofileidandstatus(string profileid, string status, string format)
         {
 
             _unitOfWork.DisableProxyCreation = true;
@@ -235,6 +312,32 @@ namespace Shell.MVC2.Services.Media
             {
                 try
                 {
+                    // Retrieve All User's Photos that are not approved.
+                    //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
+
+                    // Retrieve All User's Approved Photo's that are not Private and approved.
+                    //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
+
+                    var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype.id == Convert.ToInt16(format) && a.photo.profile_id == Convert.ToInt32(profileid) &&
+                        ((a.photo.approvalstatus != null && a.photo.approvalstatus.id == Convert.ToInt16(status)))).ToList()
+                                 select new PhotoModel
+                                 {
+                                     photoid = p.photo.id,
+                                     profileid = p.photo.profile_id,
+                                     screenname = p.photo.profilemetadata.profile.screenname,
+                                     photo = b64Converters.ByteArraytob64string(p.image),
+                                     photoformat = p.formattype,
+                                     convertedsize = p.size,
+                                     orginalsize = p.photo.size,
+                                     imagecaption = p.photo.imagecaption,
+                                     creationdate = p.photo.creationdate,
+                                 });
+
+
+
+
+
+                    return (model.OrderByDescending(u => u.creationdate).ToList());
                 }
                 catch (Exception ex)
                 {
@@ -249,12 +352,9 @@ namespace Shell.MVC2.Services.Media
                 }
             }
 
-            return _photorepo.getphotomodelsbyprofileidandstatus(Convert.ToInt32(profile_id),
-                      ((photoapprovalstatusEnum)Enum.Parse(typeof(photoapprovalstatusEnum), status)) ,
-                       ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
+           
         }
-
-        public List<PhotoModel> getpagedphotomodelbyprofileidandstatus(string profile_id, string status, string format, string page, string pagesize)
+        public List<PhotoModel> getpagedphotomodelbyprofileidandstatus(string profileid, string status, string format, string page, string pagesize)
         {
 
             _unitOfWork.DisableProxyCreation = true;
@@ -262,6 +362,26 @@ namespace Shell.MVC2.Services.Media
             {
                 try
                 {
+
+                    var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype.id ==  Convert.ToInt16(format) && a.photo.profile_id ==  Convert.ToInt16(profileid) && a.photo.profile_id ==  Convert.ToInt32(profileid) && (
+                                                     a.photo.approvalstatus != null && a.photo.approvalstatus.id == Convert.ToInt16(status))).ToList()
+                                 select new PhotoModel
+                                 {
+                                     photoid = p.photo.id,
+                                     profileid = p.photo.profile_id,
+                                     screenname = p.photo.profilemetadata.profile.screenname,
+                                     photo = b64Converters.ByteArraytob64string(p.image),
+                                     photoformat = p.formattype,
+                                     convertedsize = p.size,
+                                     orginalsize = p.photo.size,
+                                     imagecaption = p.photo.imagecaption,
+                                     creationdate = p.photo.creationdate,
+                                 });
+
+                    if (model.Count() > Convert.ToInt32(pagesize)) { pagesize = model.Count().ToString(); }
+
+                    return (model.OrderByDescending(u => u.creationdate).Skip((Convert.ToInt16(page) - 1) * Convert.ToInt16(pagesize)).Take(Convert.ToInt16(pagesize))).ToList();
+       
                 }
                 catch (Exception ex)
                 {
@@ -275,13 +395,12 @@ namespace Shell.MVC2.Services.Media
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            return _photorepo.getpagedphotomodelbyprofileidandstatus(Convert.ToInt32(profile_id),
-                      ((photoapprovalstatusEnum)Enum.Parse(typeof(photoapprovalstatusEnum), status)),
-                       ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)), Convert.ToInt32(page), Convert.ToInt32(pagesize));
+       
 
         }
 
         //TO DO get photo albums as well ?
+        //TO DO not implemented
         public PhotoViewModel getpagedphotoviewmodelbyprofileid(string profileid, string format, string page, string pagesize)
         {
             _unitOfWork.DisableProxyCreation = true;
@@ -289,6 +408,7 @@ namespace Shell.MVC2.Services.Media
             {
                 try
                 {
+                    return null;
                 }
                 catch (Exception ex)
                 {
@@ -302,8 +422,7 @@ namespace Shell.MVC2.Services.Media
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            return _photorepo.getpagedphotoviewmodelbyprofileid(Convert.ToInt32(profileid),
-                        ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)), Convert.ToInt32(page), Convert.ToInt32(pagesize));
+      
         }
 
 
@@ -319,6 +438,27 @@ namespace Shell.MVC2.Services.Media
             {
                 try
                 {
+                    photoeditmodel model = (from p in db.GetRepository<photoconversion>().Find().Where(p => p.formattype.id == Convert.ToInt16(format) && p.photo.id == Guid.Parse(photoid)).ToList()
+                                            select new photoeditmodel
+                                            {
+                                                photoid = p.photo.id,
+                                                profileid = p.photo.profile_id,
+                                                screenname = p.photo.profilemetadata.profile.screenname,
+                                                approved = (p.photo.approvalstatus != null && p.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                                                profileimagetype = p.photo.imagetype.description,
+                                                imagecaption = p.photo.imagecaption,
+                                                creationdate = p.photo.creationdate,
+                                                photostatusid = p.photo.photostatus.id,
+                                                checkedprimary = (p.photo.photostatus.id == (int)photostatusEnum.Gallery)
+                                            }).Single();
+
+                    // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
+
+                    //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
+
+
+
+                    return (model);
                 }
                 catch (Exception ex)
                 {
@@ -332,8 +472,7 @@ namespace Shell.MVC2.Services.Media
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            return _photorepo.getphotoeditmodelbyphotoid(Guid.Parse(photoid), (photoformatEnum)Enum.Parse(typeof(photoformatEnum), format));
-        }
+       }
 
         public List<photoeditmodel> getphotoeditmodelsbyprofileidandstatus(string profile_id, string status, string format)
         {
@@ -342,6 +481,28 @@ namespace Shell.MVC2.Services.Media
             {
                 try
                 {
+
+                    var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype.id == Convert.ToInt16( format)
+                        && a.photo.approvalstatus != null && a.photo.approvalstatus.id ==  Convert.ToInt16(status)).ToList()
+                                 select new photoeditmodel
+                                 {
+                                     photoid = p.photo.id,
+                                     profileid = p.photo.profile_id,
+                                     screenname = p.photo.profilemetadata.profile.screenname,
+                                     approved = (p.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                                     profileimagetype = p.photo.imagetype.description,
+                                     imagecaption = p.photo.imagecaption,
+                                     creationdate = p.photo.creationdate,
+                                     photostatusid = p.photo.photostatus.id,
+                                     checkedprimary = (p.photo.photostatus.id == (int)photostatusEnum.Gallery)
+                                 });
+
+
+
+
+
+                    return (model.OrderByDescending(u => u.creationdate).ToList());
+
                 }
                 catch (Exception ex)
                 {
@@ -355,20 +516,45 @@ namespace Shell.MVC2.Services.Media
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            return _photorepo.getphotoeditmodelsbyprofileidandstatus(Convert.ToInt32(profile_id),
-                   ((photoapprovalstatusEnum)Enum.Parse(typeof(photoapprovalstatusEnum), status)),
-                    ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)));
+           
 
         }
 
         public List<photoeditmodel> getpagedphotoeditmodelsbyprofileidstatus(string profile_id, string status, string format,
                                                               string page, string pagesize)
         {
+
+
             _unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
             {
                 try
                 {
+                    // Retrieve All User's Photos that are not approved.
+                    //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
+
+                    // Retrieve All User's Approved Photo's that are not Private and approved.
+                    //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
+
+                    var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype.id == Convert.ToInt16(format) && a.photo.approvalstatus != null
+                        && a.photo.approvalstatus.id == Convert.ToInt16(status)).ToList()
+                                 select new photoeditmodel
+                                 {
+                                     photoid = p.photo.id,
+                                     profileid = p.photo.profile_id,
+                                     screenname = p.photo.profilemetadata.profile.screenname,
+                                     approved = (p.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                                     profileimagetype = p.photo.imagetype.description,
+                                     imagecaption = p.photo.imagecaption,
+                                     creationdate = p.photo.creationdate,
+                                     photostatusid = p.photo.photostatus.id,
+                                     checkedprimary = (p.photo.photostatus.id == (int)photostatusEnum.Gallery)
+                                 });
+
+
+                    if (model.Count() > Convert.ToInt32(pagesize)) {pagesize = model.Count().ToString(); }
+
+                    return (model.OrderByDescending(u => u.creationdate).Skip((Convert.ToInt16(page) - 1) * Convert.ToInt16(pagesize)).Take(Convert.ToInt16(pagesize))).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -382,9 +568,7 @@ namespace Shell.MVC2.Services.Media
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            return _photorepo.getpagedphotoeditmodelsbyprofileidstatus(Convert.ToInt32(profile_id),
-                    ((photoapprovalstatusEnum)Enum.Parse(typeof(photoapprovalstatusEnum), status)),
-                     ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)), Convert.ToInt32(page), Convert.ToInt32(pagesize));
+ 
         }
 
         //12-10-2012 this also filters the format
@@ -395,6 +579,17 @@ namespace Shell.MVC2.Services.Media
             {
                 try
                 {
+                    var myPhotos = db.GetRepository<photoconversion>().Find().Where(z => z.formattype.id == Convert.ToInt16(format) && z.photo.profile_id == Convert.ToInt32(profileid)).ToList();
+                    var ApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, Convert.ToInt16(page), Convert.ToInt16(pagesize)).ToList();
+                    var NotApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, Convert.ToInt16(page), Convert.ToInt16(pagesize));
+                    //TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
+                    //since this is edit mode that is fine
+                    var PrivatePhotos = mediaextentionmethods.filterphotosbysecuitylevel(myPhotos, securityleveltypeEnum.Private, Convert.ToInt16(page), Convert.ToInt16(pagesize));
+                    var model = mediaextentionmethods.getphotoeditviewmodel(ApprovedPhotos, NotApprovedPhotos, PrivatePhotos, myPhotos);
+
+                    return (model);
+
+
                 }
                 catch (Exception ex)
                 {
@@ -408,8 +603,7 @@ namespace Shell.MVC2.Services.Media
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
-            return _photorepo.getpagededitphotoviewmodelbyprofileidandformat(Convert.ToInt32(profileid),
-                          ((photoformatEnum)Enum.Parse(typeof(photoformatEnum), format)), Convert.ToInt32(page), Convert.ToInt32(pagesize));
+ 
         }
 
 
@@ -417,273 +611,345 @@ namespace Shell.MVC2.Services.Media
         #endregion
 
 
-        public AnewluvResponse deleteuserphoto(string photoid)
+        public AnewluvMessages deleteuserphoto(string photoid)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
-            {
-                try
-                {
-                }
-                catch (Exception ex)
-                {
-                    //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MediaService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in photo service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-            }
-
-            try
-            {
-               
-               var message = _photorepo.deleteuserphoto(Guid.Parse(photoid));
-                AnewluvResponse response = new AnewluvResponse();
-                ResponseMessage responsemessage = new ResponseMessage();
-                responsemessage = new ResponseMessage("", message.message , "");
-                response.ResponseMessages.Add(responsemessage);
-                return response;         
-            }
-            catch (Exception ex)
-            {
-                //can parse the error to build a more custom error mssage and populate fualt faultreason
-                FaultReason faultreason = new FaultReason("Error in photo service");
-                string ErrorMessage = "";
-                string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-            }
-
-        }
-        public AnewluvResponse makeuserphoto_private(string photoid)
-        {
-
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-                }
-                catch (Exception ex)
-                {
-                    //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MediaService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in photo service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-            }
-
-            try
-            {
-
-                var message =  _photorepo.makeuserphoto_private(Guid.Parse(photoid));
-                AnewluvResponse response = new AnewluvResponse();
-                ResponseMessage responsemessage = new ResponseMessage();
-                responsemessage = new ResponseMessage("", message.message ,"");
-                response.ResponseMessages.Add(responsemessage);
-                return response;
-            }
-            catch (Exception ex)
-            {
-                //can parse the error to build a more custom error mssage and populate fualt faultreason
-                FaultReason faultreason = new FaultReason("Error in photo service");
-                string ErrorMessage = "";
-                string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-            }
-        }
-        public AnewluvResponse makeuserphoto_public(string photoid)
-        {
-
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-                }
-                catch (Exception ex)
-                {
-                    //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MediaService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in photo service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-            }
-          
-            try
-            {
-
-              var message =   _photorepo.makeuserphoto_private(Guid.Parse(photoid));
-
-                AnewluvResponse response = new AnewluvResponse();
-                ResponseMessage responsemessage = new ResponseMessage();
-                responsemessage = new ResponseMessage("", message.message , "");
-                response.ResponseMessages.Add(responsemessage);
-                return response;
-            }
-            catch (Exception ex)
-            {
-                //can parse the error to build a more custom error mssage and populate fualt faultreason
-                FaultReason faultreason = new FaultReason("Error in photo service");
-                string ErrorMessage = "";
-                string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-            }
-        }
-
-        //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
-        //since photo is only a row no big deal if duplicates but since conversion is required we must roll back if the photo already exists
-        public AnewluvResponse addphotos(PhotoUploadViewModel model)
-        {
-
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-                }
-                catch (Exception ex)
-                {
-                    //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MediaService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in photo service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-            }
-
-            try
-            {
-
-               var message =    _photorepo.addphotos(model);
-                AnewluvResponse response = new AnewluvResponse();
-                ResponseMessage responsemessage = new ResponseMessage();
-                responsemessage = new ResponseMessage("", message.message , "");
-                response.ResponseMessages.Add(responsemessage);
-                return response;
-            }
-            catch (Exception ex)
-            {
-                //can parse the error to build a more custom error mssage and populate fualt faultreason
-                FaultReason faultreason = new FaultReason("Error in photo service");
-                string ErrorMessage = "";
-                string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-            }
-        }
-
-        /// <summary>
-        /// for adding as single photo withoute VM 
-        /// replaces InseartPhotoCustom , maybe add the profileID but i dont want to
-        /// </summary>
-        /// <param name="newphoto"></param>
-        /// <returns></returns>
-        public AnewluvResponse addsinglephoto(PhotoUploadModel newphoto, string profileid)
-        {
-
-            //update method code
-          using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
-                    AnewluvResponse response = new AnewluvResponse();
-                    AnewluvMessages message = new AnewluvMessages();
-                    ResponseMessage responsemessage = new ResponseMessage();
-
-                    photo NewPhoto = new photo();
-                    Guid identifier = Guid.NewGuid();
-                    NewPhoto.id = identifier;
-                    NewPhoto.profile_id = Convert.ToInt32( profileid); //model.ProfileImage.Length;
-                    // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
-                    NewPhoto.creationdate = newphoto.creationdate;
-                    NewPhoto.imagecaption = newphoto.caption;
-                    NewPhoto.imagename = newphoto.imagename; //11-26-2012 olawal added the name for comparisons 
-                    NewPhoto.size = newphoto.legacysize.GetValueOrDefault();
-                    //set the rest of the information as needed i.e approval status refecttion etc
-                    NewPhoto.imagetype = (newphoto.imagetypeid != null) ? db.GetRepository<lu_photoimagetype>().Find().Where(p => p.id == newphoto.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
-                    NewPhoto.approvalstatus = (newphoto.approvalstatusid != null) ? db.GetRepository<lu_photoapprovalstatus>().Find().Where(p => p.id == newphoto.approvalstatusid).FirstOrDefault() : null;
-                    NewPhoto.rejectionreason = (newphoto.rejectionreasonid != null) ? db.GetRepository<lu_photorejectionreason>().Find().Where(p => p.id == newphoto.rejectionreasonid).FirstOrDefault() : null;
-                    NewPhoto.photostatus = (newphoto.photostatusid != null) ? db.GetRepository<lu_photostatus>().Find().Where(p => p.id == newphoto.photostatusid).FirstOrDefault() : null;
-
-                    var temp = addphotoconverionsb64string(NewPhoto, newphoto);
-                    if (temp.Count > 0)
+                        // Retrieve single value from photos table
+                        photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id == Guid.Parse(photoid));
+                        PhotoModify.photostatus.id = (int)photostatusEnum.deletedbyuser;
+                        db.Update(PhotoModify);
+                        // Update database
+                        // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                        int i = db.Commit();
+                        transaction.Commit();
+                        return new AnewluvMessages { message = "photo deleted successfully" };
+                    }
+                    catch (Exception ex)
                     {
-
-                        //existing conversions to compare with new one : 
-                        var existingthumbnailconversion = db.GetRepository<photoconversion>().Find().Where(z => z.photo.profile_id == Convert.ToInt32(profileid) & z.formattype.id == (int)photoformatEnum.Thumbnail);
-                        var newphotothumbnailconversion = temp.Where(p => p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
-                        if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
-                        {
-
-                            message.message = "This photo has already been uploaded";
-                        }
-                        else
-                        {
-
-                            //allow saving of new photo 
-                            db.Add(NewPhoto);
-                            int i2 = db.Commit();
-
-                           // _datingcontext.SaveChanges();
-
-                            foreach (photoconversion convertedphoto in temp)
-                            {
-                                //if this does not recognise the photo object we might need to save that and delete it later
-                                db.Add(convertedphoto);
-                            }
-                          
-                            int i = db.Commit();
-                            transaction.Commit();
-                            
-                            
-                        }
-
-                         message.message  = "photo added succesfully " ;
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                     }
 
-                   //return the response
-                    responsemessage = new ResponseMessage("", message.message, "");
-                    response.ResponseMessages.Add(responsemessage);
-                    return response;
-
-                }
-                catch (Exception ex)
-                {
-                    //TO DO track the transaction types only rollback on DB connections
-                    //rollback transaction
-                    transaction.Rollback();
-                    //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MediaService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in photo service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
             }
 
-         
+        }
+        public AnewluvMessages makeuserphoto_private(string photoid)
+        {
 
+
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                        // Retrieve single value from photos table
+                        photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id == Guid.Parse(photoid));
+                        PhotoModify.photostatus.id = 1; //public values:1 or 2 are public values
+
+                        if (PhotoModify.photosecuritylevels.Any(z => z.id != (int)securityleveltypeEnum.Private))
+                        {
+                            PhotoModify.photosecuritylevels.Add(new photo_securitylevel
+                            {
+                                photo_id = Guid.Parse(photoid),
+                                securityleveltype = db.GetRepository<lu_securityleveltype>().FindSingle(p => p.id == (int)securityleveltypeEnum.Private)
+                            });
+                            // newsecurity.id = (int)securityleveltypeEnum.Private;
+                        }
+
+                        db.Update(PhotoModify);
+                        // Update database
+                        // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                        int i = db.Commit();
+                        transaction.Commit();
+                        return new AnewluvMessages { message = "photo privacy added" };
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+        }
+        public AnewluvMessages makeuserphoto_public(string photoid)
+        {
+
+
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                        // Retrieve single value from photos table
+                        photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id ==  Guid.Parse(photoid));
+                        PhotoModify.photostatus.id = 1; //public values:1 or 2 are public values
+                        db.Update(PhotoModify);
+                        // Update database
+                        // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                        int i = db.Commit();
+                        transaction.Commit();
+                        return new AnewluvMessages { message = "photo privacy removed" };
+                    }
+                          catch (Exception ex)
+                        {
+                            //TO DO track the transaction types only rollback on DB connections
+                            //rollback transaction
+                            transaction.Rollback();
+                            //instantiate logger here so it does not break anything else.
+                            logger = new ErroLogging(applicationEnum.MediaService);
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
+                            //can parse the error to build a more custom error mssage and populate fualt faultreason
+                            FaultReason faultreason = new FaultReason("Error in photo service");
+                            string ErrorMessage = "";
+                            string ErrorDetail = "ErrorMessage: " + ex.Message;
+                            throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                        }
+
+                }
+            }
+
+
+         
           
+        }
+
+        //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
+        //since photo is only a row no big deal if duplicates but since conversion is required we must roll back if the photo already exists
+        public AnewluvMessages addphotos(PhotoUploadViewModel model)
+        {
+
+            AnewluvResponse response = new AnewluvResponse();
+            AnewluvMessages AnewluvMessage = new AnewluvMessages();
+            var errormessages = new List<string>();
+            ResponseMessage responsemessage = new ResponseMessage();
+
+            //update method code
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+
+                    foreach (PhotoUploadModel item in model.photosuploaded)
+                    {
+                        try
+                        {
+
+                            photo NewPhoto = new photo();
+                            Guid identifier = Guid.NewGuid();
+                            NewPhoto.id = identifier;
+                            NewPhoto.profile_id = model.profileid; //model.ProfileImage.Length;
+                            // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
+                            NewPhoto.creationdate = item.creationdate;
+                            NewPhoto.imagecaption = item.caption;
+                            NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
+                            // NewPhoto.size = item.size.GetValueOrDefault();                        
+                            //set the rest of the information as needed i.e approval status refecttion etc
+                            NewPhoto.imagetype = (item.imagetypeid != null) ? db.GetRepository<lu_photoimagetype>().Find().ToList().Where(p => p.id == item.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
+                            NewPhoto.approvalstatus = (item.approvalstatusid != null) ? db.GetRepository<lu_photoapprovalstatus>().Find().ToList().Where(p => p.id == item.approvalstatusid).FirstOrDefault() : null;
+                            NewPhoto.rejectionreason = (item.rejectionreasonid != null) ? db.GetRepository<lu_photorejectionreason>().Find().ToList().Where(p => p.id == item.rejectionreasonid).FirstOrDefault() : null;
+                            NewPhoto.photostatus = (item.photostatusid != null) ? db.GetRepository<lu_photostatus>().Find().ToList().Where(p => p.id == item.photostatusid).FirstOrDefault() : null;
+
+                            var temp = addphotoconverionsb64string(NewPhoto, item);
+                            if (temp.Count > 0)
+                            {
+
+                                //existing conversions to compare with new one : 
+                                var existingthumbnailconversion = db.GetRepository<photoconversion>().Find().Where(z => z.photo.profile_id == model.profileid & z.formattype.id == (int)photoformatEnum.Thumbnail).ToList();
+                                var newphotothumbnailconversion = temp.Where(p => p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
+                                if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
+                                {
+                                    AnewluvMessage.message =    AnewluvMessage.message + "<br/>" + "This photo has already been uploaded" ;
+                                }
+                                else
+                                {
+                                        AnewluvMessage.message =    AnewluvMessage.message + "<br/>" + "photo with name " + NewPhoto.imagecaption + "Has been uploaded" ;
+                                    //allow saving of new photo 
+                                    db.Add(NewPhoto);
+                                    int i2 = db.Commit();
+
+                                    foreach (photoconversion convertedphoto in temp)
+                                    {
+                                        //if this does not recognise the photo object we might need to save that and delete it later
+                                        db.Add(convertedphoto);
+                                    }
+
+                                }
+                            }
+                        }
+                        catch (Exception ex)  //internal excetion for the indivual item
+                        { 
+                         
+                            //add the error to message object
+                            AnewluvMessage.errormessages.Add(ex.Message );
+                            //just log and continue
+                            //instantiate logger here so it does not break anything else.
+                            logger = new ErroLogging(applicationEnum.MediaService);
+                            logger.WriteSingleEntry(logseverityEnum.Warning, ex);
+                          //no need to throw heer wince we build the eror thing for them
+                        }
+
+                        //commit if no errors 
+                        try
+                        {
+                            int i = db.Commit();
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            //TO DO track the transaction types only rollback on DB connections
+                            //rollback transaction
+                            transaction.Rollback();
+                            //instantiate logger here so it does not break anything else.
+                            logger = new ErroLogging(applicationEnum.MediaService);
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
+                            //can parse the error to build a more custom error mssage and populate fualt faultreason
+                            FaultReason faultreason = new FaultReason("Error in photo service");
+                            string ErrorMessage = "";
+                            string ErrorDetail = "ErrorMessage: " + ex.Message;
+                            throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                        }
+                    }
+
+
+
+                }
+            }
+
+           // responsemessage = new ResponseMessage("", message.message, "");
+           // response.ResponseMessages.Add(responsemessage);
+            return AnewluvMessage;
+        
+        }
+        /// <summary>
+        /// for adding as single photo withoute VM 
+        /// replaces InseartPhotoCustom , maybe add the profileID but i dont want to
+        /// </summary>
+        /// <param name="newphoto"></param>
+        /// <returns></returns>
+        public AnewluvMessages addsinglephoto(PhotoUploadModel newphoto, string profileid)
+        {
+
+            //update method code
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                        AnewluvResponse response = new AnewluvResponse();
+                        AnewluvMessages message = new AnewluvMessages();
+                        ResponseMessage responsemessage = new ResponseMessage();
+
+                        photo NewPhoto = new photo();
+                        Guid identifier = Guid.NewGuid();
+                        NewPhoto.id = identifier;
+                        NewPhoto.profile_id = Convert.ToInt32(profileid); //model.ProfileImage.Length;
+                        // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
+                        NewPhoto.creationdate = newphoto.creationdate;
+                        NewPhoto.imagecaption = newphoto.caption;
+                        NewPhoto.imagename = newphoto.imagename; //11-26-2012 olawal added the name for comparisons 
+                        NewPhoto.size = newphoto.legacysize.GetValueOrDefault();
+                        //set the rest of the information as needed i.e approval status refecttion etc
+                        NewPhoto.imagetype = (newphoto.imagetypeid != null) ? db.GetRepository<lu_photoimagetype>().Find().ToList().Where(p => p.id == newphoto.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
+                        NewPhoto.approvalstatus = (newphoto.approvalstatusid != null) ? db.GetRepository<lu_photoapprovalstatus>().Find().ToList().Where(p => p.id == newphoto.approvalstatusid).FirstOrDefault() : null;
+                        NewPhoto.rejectionreason = (newphoto.rejectionreasonid != null) ? db.GetRepository<lu_photorejectionreason>().Find().ToList().Where(p => p.id == newphoto.rejectionreasonid).FirstOrDefault() : null;
+                        NewPhoto.photostatus = (newphoto.photostatusid != null) ? db.GetRepository<lu_photostatus>().Find().ToList().Where (p => p.id == newphoto.photostatusid).FirstOrDefault() : null;
+
+                        var temp = addphotoconverionsb64string(NewPhoto, newphoto);
+                        if (temp.Count > 0)
+                        {
+
+                            //existing conversions to compare with new one : 
+                            var existingthumbnailconversion = db.GetRepository<photoconversion>().Find().Where(z => z.photo.profile_id == Convert.ToInt32(profileid) & z.formattype.id == (int)photoformatEnum.Thumbnail).ToList();
+                            var newphotothumbnailconversion = temp.Where(p => p.formattype.id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
+                            if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
+                            {
+
+                                message.message = "This photo has already been uploaded";
+                            }
+                            else
+                            {
+
+                                //allow saving of new photo 
+                                db.Add(NewPhoto);
+                                int i2 = db.Commit();
+
+                                // _datingcontext.SaveChanges();
+
+                                foreach (photoconversion convertedphoto in temp)
+                                {
+                                    //if this does not recognise the photo object we might need to save that and delete it later
+                                    db.Add(convertedphoto);
+                                }
+
+                                int i = db.Commit();
+                                transaction.Commit();
+
+
+                            }
+
+                            message.message = "photo added succesfully ";
+                        }
+
+                        //return the response
+                      //  responsemessage = new ResponseMessage("", message.message, "");
+                       // response.ResponseMessages.Add(responsemessage);
+                        return message;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+                }
+
+
+
+            }
         }
 
         //http://stackoverflow.com/questions/10484295/image-resizing-from-sql-database-on-the-fly-with-mvc2
@@ -732,7 +998,7 @@ namespace Shell.MVC2.Services.Media
             {
                 try
                 {
-                    var GalleryPhoto = (from p in db.GetRepository<profile>().Find().Where(p => p.screenname == strscreenname)
+                    var GalleryPhoto = (from p in db.GetRepository<profile>().Find().Where(p => p.screenname == strscreenname).ToList()
                                         join f in db.GetRepository<photoconversion>().Find() on p.id equals f.photo.profile_id
                                         where (f.formattype.id == (int)Convert.ToInt16(format) && f.photo.approvalstatus != null &&
                                         f.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved &&
@@ -772,7 +1038,7 @@ namespace Shell.MVC2.Services.Media
             var GalleryPhoto = (from f in db.GetRepository<photoconversion>().Find().Where(f => f.photo.id == (Guid.Parse(photoid)) &&
              f.formattype.id == (int) Convert.ToInt16(format) && f.photo.approvalstatus != null &&
              f.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved &&
-             f.photo.imagetype.id == (int)photostatusEnum.Gallery)
+             f.photo.imagetype.id == (int)photostatusEnum.Gallery).ToList()
                                         select f).FirstOrDefault();
 
                     //new code to only get the gallery conversion copy
@@ -805,7 +1071,7 @@ namespace Shell.MVC2.Services.Media
                 try
                 {
 
-                    var GalleryPhoto = (from p in db.GetRepository<profile>().Find().Where(p => p.id == Convert.ToInt32(profileid))
+                    var GalleryPhoto = (from p in db.GetRepository<profile>().Find().Where(p => p.id == Convert.ToInt32(profileid)).ToList()
                                         join f in db.GetRepository<photoconversion>().Find() on p.id equals f.photo.profile_id
                                         where (f.formattype.id == (int)Convert.ToInt32(format) && f.photo.approvalstatus != null &&
                                         f.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved &&
@@ -909,7 +1175,7 @@ namespace Shell.MVC2.Services.Media
                 }
             }
         
-            return _photorepo.checkifphotocaptionalreadyexists(Convert.ToInt32(profileid), strPhotoCaption);
+          //  return _photorepo.checkifphotocaptionalreadyexists(Convert.ToInt32(profileid), strPhotoCaption);
 
 
            

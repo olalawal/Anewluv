@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shell.MVC2.Domain.Entities.Anewluv
+namespace Anewluv.Domain.Data
 {
     /// <summary>
     /// similar to photo conversion for icons and applications
