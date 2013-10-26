@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MembersMapperService\MembersMapperService.cs" />
-    <Compile Include="MembersServices\MemberService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeoService\GeoService.cs" />
   </ItemGroup>
@@ -90,6 +89,9 @@
       <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
       <Name>Shell.MVC2.Interfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MembersServices\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

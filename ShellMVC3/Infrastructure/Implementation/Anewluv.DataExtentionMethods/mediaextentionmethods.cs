@@ -5,6 +5,7 @@ using System.Text;
 using Anewluv.Domain.Data;
 using Anewluv.DataAccess.Interfaces;
 using Anewluv.Domain.Data.ViewModels;
+using Shell.MVC2.Infrastructure.Helpers;
 
 namespace Anewluv.DataExtentionMethods
 {
@@ -17,6 +18,108 @@ namespace Anewluv.DataExtentionMethods
                                     && o.photostatus.id != 4 && o.photostatus.id != 5).ToList();
 
         }
+
+        public static photo getphotobyphotoid(this IRepository<photo> repo, ProfileModel model)
+        {
+            return repo.Find().OfType<photo>().Single(o => o.id == model.photoid.GetValueOrDefault());
+                                    
+
+            //If above does not work
+        //   _gender = (from x in (_datingcontext.photos.Where(f => f.id == model.photoid))
+          //             join f in _datingcontext.profiledata on x.profile_id equals f.profile_id
+           //            select f.gender).FirstOrDefault();
+
+        }
+
+
+        public static PhotoModel getgalleryphotomodelbyprofileid(this IRepository<photoconversion> repo,string profileid, string format)
+        {
+
+           
+            
+                try
+                {
+
+                  return  (from p in
+                                            (from r in repo.Find().Where(a => a.formattype.id == Convert.ToInt16(format) && (a.photo.profile_id == Convert.ToInt32(profileid) & a.photo.photostatus.id == (int)photostatusEnum.Gallery)).ToList()
+                                             select new
+                                             {
+                                                 photoid = r.photo.id,
+                                                 profileid = r.photo.profile_id,
+                                                 screenname = r.photo.profilemetadata.profile.screenname,
+                                                 photo = r.image,
+                                                 photoformat = r.formattype,
+                                                 convertedsize = r.size,
+                                                 orginalsize = r.photo.size,
+                                                 imagecaption = r.photo.imagecaption,
+                                                 creationdate = r.photo.creationdate,
+
+                                             }).ToList()
+                                        select new PhotoModel
+                                        {
+                                            photoid = p.photoid,
+                                            profileid = p.profileid,
+                                            screenname = p.screenname,
+                                            photo = b64Converters.ByteArraytob64string(p.photo),
+                                            photoformat = p.photoformat,
+                                            convertedsize = p.convertedsize,
+                                            orginalsize = p.orginalsize,
+                                            imagecaption = p.imagecaption,
+                                            creationdate = p.creationdate,
+
+                                        }).FirstOrDefault();
+
+                    // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
+
+                    //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
+
+
+
+                    //return (model);
+                }
+                catch (Exception ex)
+                {
+            
+                throw ex;
+                
+                }
+            
+
+        }
+
+
+        public static List<PhotoModel> getpagedphotomodelbyprofileidandstatus(this IRepository<photoconversion> repo, string profileid, string status, string format, string page, string pagesize)
+        {
+        
+            try
+            {
+             var model = (from p in repo.Find().Where(a => a.formattype.id ==  Convert.ToInt16(format) && a.photo.profile_id ==  Convert.ToInt16(profileid) && a.photo.profile_id ==  Convert.ToInt32(profileid) && (
+                                                     a.photo.approvalstatus != null && a.photo.approvalstatus.id == Convert.ToInt16(status))).ToList()
+                                 select new PhotoModel
+                                 {
+                                     photoid = p.photo.id,
+                                     profileid = p.photo.profile_id,
+                                     screenname = p.photo.profilemetadata.profile.screenname,
+                                     photo = b64Converters.ByteArraytob64string(p.image),
+                                     photoformat = p.formattype,
+                                     convertedsize = p.size,
+                                     orginalsize = p.photo.size,
+                                     imagecaption = p.photo.imagecaption,
+                                     creationdate = p.photo.creationdate,
+                                 });
+
+                    if (model.Count() > Convert.ToInt32(pagesize)) { pagesize = model.Count().ToString(); }
+
+                    return (model.OrderByDescending(u => u.creationdate).Skip((Convert.ToInt16(page) - 1) * Convert.ToInt16(pagesize)).Take(Convert.ToInt16(pagesize))).ToList();
+            }
+             catch (Exception ex)
+            {
+            
+            }
+
+            return null;
+        }
+
 
         //Private filtering methods :
         public static PhotoViewModel getphotoviewmodel(IEnumerable<PhotoModel> Approved,

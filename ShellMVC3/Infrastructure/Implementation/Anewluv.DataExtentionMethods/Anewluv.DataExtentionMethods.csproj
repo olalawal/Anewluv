@@ -43,8 +43,13 @@
     <Compile Include="mediaextentionmethods.cs" />
     <Compile Include="profileextentionmethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="spatialextentions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\NET\Shared\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
+      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
+      <Name>Shell.MVC2.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Domain\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
       <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
       <Name>Anewluv.Domain.Data</Name>

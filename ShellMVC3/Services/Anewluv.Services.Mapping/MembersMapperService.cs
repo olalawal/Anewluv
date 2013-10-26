@@ -9,13 +9,17 @@ using System.Web;
 using System.Net;
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Infrastructure;
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+
+
 using System.ServiceModel.Activation;
 using Anewluv.DataAccess.Interfaces;
 using LoggingLibrary;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 using Anewluv.DataAccess.ExtentionMethods;
+using Anewluv.Domain.Data.ViewModels;
+using Anewluv.Domain.Data;
+using Anewluv.Lib;
+using Anewluv.DataExtentionMethods;
 
 namespace Shell.MVC2.Services.Actions
 {
@@ -25,6 +29,9 @@ namespace Shell.MVC2.Services.Actions
     public class MembersMapperService : IMembersMapperService
     {
 
+        private int maxwebmatches = 24;
+        private int maxemailmatches = 4;
+        private int maxsearchresults = 348;
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
@@ -56,24 +63,12 @@ namespace Shell.MVC2.Services.Actions
 
         }
 
-        //BEfore unit of work contrcutor
-        //public MemberActionsService(IMemberActionsRepository memberactionsrepository)
-        //    {
-        //        _memberactionsrepository = memberactionsrepository;
-        //       // _apikey  = HttpContext.Current.Request.QueryString["apikey"];
-        //      //  throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
-
-        //    }
-
-
-        // constructor
+    
 
         public MemberSearchViewModel  mapmembersearchviewmodel(string viewerprofileid, MemberSearchViewModel modeltomap, string allphotos)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
+                var db = _unitOfWork;
                 try
                 {
 
@@ -95,8 +90,8 @@ namespace Shell.MVC2.Services.Actions
                         if (viewerprofile.latitude != null &&
                             viewerprofile.longitude != null &&
                             profile.profiledata.longitude != null &&
-                             profile.profiledata.latitude != null)
-                            model.distancefromme = georepository.getdistancebetweenmembers(
+                             profile.profiledata.latitude != null)  //TO DO determine countries that use Mile or KM
+                            model.distancefromme = spatialextentions.getdistancebetweenmembers(
                                 viewerprofile.latitude.GetValueOrDefault(),
                                 viewerprofile.longitude.GetValueOrDefault(),
                                  profile.profiledata.latitude.GetValueOrDefault(),
@@ -125,7 +120,7 @@ namespace Shell.MVC2.Services.Actions
                             //   membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
                         model.mycatchyintroline = profile.profiledata.mycatchyintroLine;
                         model.aboutme = profile.profiledata.aboutme;
-                        model.online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = profile.id });
+                        model.online = db.GetRepository<userlogtime>().getuseronlinestatus(new ProfileModel { profileid = profile.id });
                         model.perfectmatchsettings = profile.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault();
                         // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
                         //DistanceFromMe = 0  get distance from somwhere else
@@ -141,15 +136,24 @@ namespace Shell.MVC2.Services.Actions
                         model.profilephotos = new PhotoViewModel();
                         if (allphotos == "true")
                         {
-                            model.profilephotos.ProfilePhotosApproved = photorepository.getpagedphotomodelbyprofileidandstatus(profile.id, photoapprovalstatusEnum.Approved, photoformatEnum.Thumbnail, page, ps);   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                            model.profilephotos.ProfilePhotosApproved =db.GetRepository<photoconversion>().getpagedphotomodelbyprofileidandstatus(              
+                                profile.id.ToString(),
+                                photoapprovalstatusEnum.Approved.ToString(), photoformatEnum.Thumbnail.ToString(), page.ToString(), ps.ToString());   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
                         }// approvedphotos = photorepository.
                         else
                         {
                             // model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
-                            model.galleryphoto = photorepository.getgalleryphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
+                            model.galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id.ToString(), photoformatEnum.Thumbnail.ToString());
                         }
+
+                       // Api.DisposeGeoService();
+
                         return model;
+
+
                     }
+
+
                     return null;
 
                 }
@@ -160,154 +164,1824 @@ namespace Shell.MVC2.Services.Actions
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    //FaultReason faultreason = new FaultReason("Error in member mapper service");
+                   // string ErrorMessage = "";
+                  //  string ErrorDetail = "ErrorMessage: " + ex.Message;
+                   // throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    throw;
+                }
+
+              
+        }
+        public List<MemberSearchViewModel> mapmembersearchviewmodels(string viewerprofileid, List<MemberSearchViewModel> modelstomap, string allphotos)
+        {
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+
+                    List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+                    foreach (var item in modelstomap)
+                    {
+                        models.Add(mapmembersearchviewmodel(viewerprofileid, item, allphotos));
+
+                    }
+                    return models;
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
                 }
+
             }
 
-            return _mapmembermapperrepo.mapmembersearchviewmodel(Convert.ToInt32(viewerprofileid), modeltomap, Convert.ToBoolean(allphotos));
-        }
-
-       public List<MemberSearchViewModel> mapmembersearchviewmodels(string viewerprofileid, List<MemberSearchViewModel> modelstomap, string allphotos)
-        {
-
-            return _mapmembermapperrepo.mapmembersearchviewmodels(Convert.ToInt32(viewerprofileid), modelstomap, Convert.ToBoolean(allphotos));
-        }
-
+         }
         public MemberSearchViewModel getmembersearchviewmodel(string viewerprofileid,string profileid,string allphotos)
         {
-            return _mapmembermapperrepo.getmembersearchviewmodel(Convert.ToInt32(profileid), Convert.ToInt32(profileid), Convert.ToBoolean(allphotos));
-        }
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    if (profileid != null)
+                    {
+
+
+                        // List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+                        MemberSearchViewModel modeltomap = new MemberSearchViewModel();
+                        modeltomap.id = Convert.ToInt32(profileid);
+                        return (mapmembersearchviewmodel(viewerprofileid, modeltomap, allphotos));
+
+
+
+                    }
+                    return null;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+        }     
         public List<MemberSearchViewModel> getmembersearchviewmodels(string viewerprofileid, List<int> profileIds, string allphotos)
         {
-            return _mapmembermapperrepo.getmembersearchviewmodels(Convert.ToInt32(viewerprofileid), profileIds, Convert.ToBoolean(allphotos));
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+                    MemberSearchViewModel modeltomap = new MemberSearchViewModel();
+                    foreach (var item in profileIds)
+                    {
+                        modeltomap = null;
+                        modeltomap.id = item;
+                        models.Add(mapmembersearchviewmodel(viewerprofileid, modeltomap, allphotos));
+
+                    }
+                    return models;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
         }
-        public ProfileBrowseModel getprofilebrowsemodel(string viewerprofileId, string profileid, string allphotos)
+        public ProfileBrowseModel getprofilebrowsemodel(string viewerprofileid, string profileid, string allphotos)
         {
-            return _mapmembermapperrepo.getprofilebrowsemodel(Convert.ToInt32(viewerprofileId), Convert.ToInt32(profileid), Convert.ToBoolean(allphotos));
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    var NewProfileBrowseModel = new ProfileBrowseModel
+                    {
+                        //TO Do user a mapper instead of a contructur and map it from the service
+                        //Move all this to a service
+                        ViewerProfileDetails = getmembersearchviewmodel(null, viewerprofileid, allphotos),
+                        ProfileDetails = getmembersearchviewmodel(null, profileid, allphotos)
+                    };
+
+                    //add in the ProfileCritera
+                    NewProfileBrowseModel.ViewerProfileCriteria = getprofilecriteriamodel(viewerprofileid);
+                    NewProfileBrowseModel.ProfileCriteria = getprofilecriteriamodel(profileid);
+
+
+                    return NewProfileBrowseModel;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
         }
         //returns a list of profile browsemodles for a given user
-        public List<ProfileBrowseModel> getprofilebrowsemodels(string viewerprofileId, List<int> profileIds, string allphotos)
+        public List<ProfileBrowseModel> getprofilebrowsemodels(string viewerprofileid, List<int> profileids, string allphotos)
         {
-            return _mapmembermapperrepo.getprofilebrowsemodels(Convert.ToInt32(viewerprofileId), profileIds, Convert.ToBoolean(allphotos));
+            
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    List<ProfileBrowseModel> BrowseModels = new List<ProfileBrowseModel>();
+           
+                    foreach (var item in profileids)
+                    {
+                        var NewProfileBrowseModel = new ProfileBrowseModel
+                        {
+                            //TO Do user a mapper instead of a contructur and map it from the service
+                            //Move all this to a service
+                            ViewerProfileDetails = getmembersearchviewmodel(null, viewerprofileid, allphotos),
+                            ProfileDetails = getmembersearchviewmodel(null, item.ToString(), allphotos)
+
+
+
+                        };
+
+                        //add in the ProfileCritera
+                        NewProfileBrowseModel.ViewerProfileCriteria = getprofilecriteriamodel(viewerprofileid);
+                        NewProfileBrowseModel.ProfileCriteria = getprofilecriteriamodel(item.ToString());
+
+
+                        BrowseModels.Add(NewProfileBrowseModel);
+                    }
+
+                    return BrowseModels;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
         }
         // constructor
         //4-12-2012 added screen name
         //4-18-2012 added search settings
         public ProfileCriteriaModel getprofilecriteriamodel(string profileid)
         {
-            return _mapmembermapperrepo.getprofilecriteriamodel(Convert.ToInt32(profileid));          
 
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    MemberSearchViewModel model = new MemberSearchViewModel();
+                    //TO DO change to use Ninject maybe
+                    // DatingService db = new DatingService();
+                    //  MembersRepository membersrepo=  new MembersRepository();
+                    profilemetadata metadata =  db.GetRepository<profilemetadata>().getprofilemetadatabyprofileid (new ProfileModel { profileid = Convert.ToInt32(profileid) });
+
+
+                    //load postaldata context
+                    ProfileCriteriaModel CriteriaModel = new ProfileCriteriaModel();
+                    if (profileid != null)
+                    {
+
+                        // IKernel kernel = new StandardKernel();
+
+                        //load the geo service for quic user
+                        // IGeoRepository georepository = kernel.Get<IGeoRepository>();
+
+
+
+
+
+                        //instantiate models
+                        CriteriaModel.BasicSearchSettings = new BasicSearchSettingsModel();
+                        CriteriaModel.AppearanceSearchSettings = new AppearanceSearchSettingsModel();
+                        CriteriaModel.LifeStyleSearchSettings = new LifeStyleSearchSettingsModel();
+                        CriteriaModel.CharacterSearchSettings = new CharacterSearchSettingsModel();
+                        // IKernel kernel = new StandardKernel();
+                        //Get these initalized
+                        //  MembersRepository membersrepo = kernel.Get<MembersRepository>(); 
+
+                        //TO DO populate these values corrrectly
+                        //run a query h ere to populate these values 
+                        //Ethnicity =      metadata.profile.profiledata_Ethnicity.Where(
+                        //find a way to populate hoby, looking for and ethnicuty from the profiledata_Ethncity and etc
+
+                        CriteriaModel.ScreenName = (metadata.profile.screenname == null) ? Extensions.ReduceStringLength(metadata.profile.screenname, 10) : Extensions.ReduceStringLength(metadata.profile.screenname, 10);
+                        CriteriaModel.AboutMe = (metadata.profile.profiledata.aboutme == null || metadata.profile.profiledata.aboutme == "Hello") ? "This is the description of the type of person I am looking for.. comming soon. For Now Email Me to find out more about me" : metadata.profile.profiledata.aboutme;
+                        //  MyCatchyIntroLine = metadata.prMyCatchyIntroLine == null ? "Hi There!" : metadata.MyCatchyIntroLine;
+                        CriteriaModel.BodyType = (metadata.profile.profiledata.bodytype == null | metadata.profile.profiledata.bodytype.id == null) ? "Ask Me" : metadata.profile.profiledata.bodytype.description;
+                        CriteriaModel.EyeColor = (metadata.profile.profiledata.eyecolor == null | metadata.profile.profiledata.eyecolor.id == null) ? "Ask Me" : metadata.profile.profiledata.eyecolor.description;
+                        // Ethnicity = metadata.CriteriaAppearance_Ethnicity == null ? "Ask Me" : metadata.CriteriaAppearance_Ethnicity.EthnicityName;
+                        CriteriaModel.HairColor = (metadata.profile.profiledata.haircolor == null | metadata.profile.profiledata.haircolor.id == null) ? "Ask Me" : metadata.profile.profiledata.haircolor.description;
+                        //TO DO determine weather metic or us sustem user //added 11-17-2011
+                        CriteriaModel.HeightByCulture = (metadata.profile.profiledata.height == null | metadata.profile.profiledata.height == 0) ? "Ask Me" : Extensions.ToFeetInches((double)metadata.profile.profiledata.height);
+
+                        CriteriaModel.Exercise = (metadata.profile.profiledata.exercise == null | metadata.profile.profiledata.exercise.id == null) ? "Ask Me" : metadata.profile.profiledata.exercise.description;
+                        CriteriaModel.Religion = (metadata.profile.profiledata.religion == null | metadata.profile.profiledata.religion.id == null) ? "Ask Me" : metadata.profile.profiledata.religion.description;
+                        CriteriaModel.ReligiousAttendance = (metadata.profile.profiledata.religiousattendance == null | metadata.profile.profiledata.religiousattendance.id == null) ? "Ask Me" : metadata.profile.profiledata.religiousattendance.description;
+                        CriteriaModel.Drinks = (metadata.profile.profiledata.drinking == null | metadata.profile.profiledata.drinking.id == null) ? "Ask Me" : metadata.profile.profiledata.drinking.description;
+                        CriteriaModel.Smokes = (metadata.profile.profiledata.smoking == null | metadata.profile.profiledata.smoking.id == null) ? "Ask Me" : metadata.profile.profiledata.smoking.description;
+                        CriteriaModel.Humor = (metadata.profile.profiledata.humor == null | metadata.profile.profiledata.humor.id == null) ? "Ask Me" : metadata.profile.profiledata.humor.description;
+                        // HotFeature = metadata.profile.profiledata.CriteriaCharacter_HotFeature == null ? "Ask Me" : metadata.profile.profiledata.CriteriaCharacter_HotFeature.HotFeatureName; 
+                        //   Hobby =  metadata.profile.profiledata.CriteriaCharacter_Hobby == null ? "Ask Me" : metadata.profile.profiledata.CriteriaCharacter_Hobby.HobbyName;
+                        CriteriaModel.PoliticalView = (metadata.profile.profiledata.politicalview == null | metadata.profile.profiledata.politicalview == null) ? "Ask Me" : metadata.profile.profiledata.politicalview.description;
+                        CriteriaModel.Diet = (metadata.profile.profiledata.diet == null | metadata.profile.profiledata.diet.id == null) ? "Ask Me" : metadata.profile.profiledata.diet.description;
+                        //TO DO calculate this by bdate
+                        CriteriaModel.Sign = (metadata.profile.profiledata.sign == null | metadata.profile.profiledata.sign.id == null) ? "Ask Me" : metadata.profile.profiledata.sign.description;
+                        CriteriaModel.IncomeLevel = (metadata.profile.profiledata.incomelevel == null | metadata.profile.profiledata.incomelevel == null) ? "Ask Me" : metadata.profile.profiledata.incomelevel.description;
+                        CriteriaModel.HaveKids = (metadata.profile.profiledata.kidstatus == null | metadata.profile.profiledata.kidstatus.id == null) ? "Ask Me" : metadata.profile.profiledata.kidstatus.description;
+                        CriteriaModel.WantsKids = (metadata.profile.profiledata.wantsKidstatus == null | metadata.profile.profiledata.wantsKidstatus.id == null) ? "Ask Me" : metadata.profile.profiledata.wantsKidstatus.description;
+                        CriteriaModel.EmploymentSatus = (metadata.profile.profiledata.employmentstatus == null | metadata.profile.profiledata.employmentstatus.id == null) ? "Ask Me" : metadata.profile.profiledata.employmentstatus.description;
+                        CriteriaModel.EducationLevel = (metadata.profile.profiledata.educationlevel == null | metadata.profile.profiledata.educationlevel.id == null) ? "Ask Me" : metadata.profile.profiledata.educationlevel.description;
+                        CriteriaModel.Profession = (metadata.profile.profiledata.profession == null | metadata.profile.profiledata.profession.id == null) ? "Ask Me" : metadata.profile.profiledata.profession.description;
+                        CriteriaModel.MaritalStatus = (metadata.profile.profiledata.maritalstatus == null | metadata.profile.profiledata.maritalstatus.id == null) ? "Single" : metadata.profile.profiledata.maritalstatus.description;
+                        CriteriaModel.LivingSituation = (metadata.profile.profiledata.livingsituation == null | metadata.profile.profiledata.livingsituation.id == null) ? "Ask Me" : metadata.profile.profiledata.livingsituation.description;
+                        //special case for ethnicty since they can have mutiples ?
+                        //loop though ethnicty thing I guess ?  
+                        //8/11/2011 have to loop though since these somehow get detached sometimes
+                        //Ethnicity = metadata.profile.profiledata.profiledata_Ethnicity;
+
+                        foreach (var item in metadata.ethnicities)
+                        {
+                            CriteriaModel.Ethnicity.Add(item.ethnicty.description);
+                        }
+
+                        foreach (var item in metadata.hobbies)
+                        {
+                            CriteriaModel.Hobbies.Add(item.hobby.description);
+                        }
+
+                        foreach (var item in metadata.lookingfor)
+                        {
+                            CriteriaModel.LookingFor.Add(item.lookingfor.description);
+                        }
+
+                        foreach (var item in metadata.hotfeatures)
+                        {
+                            CriteriaModel.HotFeature.Add(item.hotfeature.description);
+                        }
+
+                        //handle perfect match settings here .
+                        // first load perfect match settings for this user from database
+                        //set defaults if no values are available
+                        var PerfectMatchSettings = metadata.searchsettings.First();
+
+
+                        //basic search settings here
+                        CriteriaModel.BasicSearchSettings.distancefromme = (PerfectMatchSettings == null || PerfectMatchSettings.distancefromme == null) ? 500 : PerfectMatchSettings.distancefromme;
+                        CriteriaModel.BasicSearchSettings.agemin = (PerfectMatchSettings == null || PerfectMatchSettings.agemin == null) ? 18 : PerfectMatchSettings.agemin;
+                        CriteriaModel.BasicSearchSettings.agemax = (PerfectMatchSettings == null || PerfectMatchSettings.agemax == null) ? 99 : PerfectMatchSettings.agemax;
+
+                        //TO DO add this to search settings for now use what is in profiledata
+                        //These will come from search settings table in the future at some point
+                        //  CriteriaModel.BasicSearchSettings. = georepository.getcountrynamebycountryid((byte)metadata.profile.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
+                        CriteriaModel.BasicSearchSettings.locationlist = PerfectMatchSettings.locations.ToList();
+                        //  CriteriaModel.BasicSearchSettings.postalcode  = metadata.profile.profiledata.postalcode;  //this could be for countries withoute p codes
+
+                        //populate list values
+                        foreach (var item in PerfectMatchSettings.genders)
+                        {
+                            CriteriaModel.BasicSearchSettings.genderlist.Add(item.gender);
+                        }
+                        //appearance search settings here
+                        CriteriaModel.AppearanceSearchSettings.heightmax = (PerfectMatchSettings == null || PerfectMatchSettings.heightmax == null) ? Extensions.ToFeetInches(48) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmax);
+                        CriteriaModel.AppearanceSearchSettings.heightmin = (PerfectMatchSettings == null || PerfectMatchSettings.heightmin == null) ? Extensions.ToFeetInches(89) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmin);
+
+                        foreach (var item in PerfectMatchSettings.ethnicities)
+                        {
+                            CriteriaModel.AppearanceSearchSettings.ethnicitylist.Add(item.ethnicity);
+                        }
+
+                        foreach (var item in PerfectMatchSettings.bodytypes)
+                        {
+                            CriteriaModel.AppearanceSearchSettings.bodytypeslist.Add(item.bodytype);
+                        }
+
+                        foreach (var item in PerfectMatchSettings.eyecolors)
+                        {
+                            CriteriaModel.AppearanceSearchSettings.eyecolorlist.Add(item.eyecolor);
+                        }
+
+                        foreach (var item in PerfectMatchSettings.haircolors)
+                        {
+                            CriteriaModel.AppearanceSearchSettings.haircolorlist.Add(item.haircolor);
+                        }
+
+
+                        foreach (var item in PerfectMatchSettings.hotfeatures)
+                        {
+                            CriteriaModel.AppearanceSearchSettings.hotfeaturelist.Add(item.hotfeature);
+                        }
+
+                        //populate lifestyle values here
+
+                        foreach (var item in PerfectMatchSettings.educationlevels)
+                        { CriteriaModel.LifeStyleSearchSettings.educationlevellist.Add(item.educationlevel); }
+
+                        foreach (var item in PerfectMatchSettings.lookingfor)
+                        { CriteriaModel.LifeStyleSearchSettings.lookingforlist.Add(item.lookingfor); }
+
+                        foreach (var item in PerfectMatchSettings.employmentstatus)
+                        { CriteriaModel.LifeStyleSearchSettings.employmentstatuslist.Add(item.employmentstatus); }
+
+                        foreach (var item in PerfectMatchSettings.havekids)
+                        { CriteriaModel.LifeStyleSearchSettings.havekidslist.Add(item.havekids); }
+
+                        foreach (var item in PerfectMatchSettings.livingstituations)
+                        { CriteriaModel.LifeStyleSearchSettings.livingsituationlist.Add(item.livingsituation); }
+
+                        foreach (var item in PerfectMatchSettings.maritalstatuses)
+                        { CriteriaModel.LifeStyleSearchSettings.maritalstatuslist.Add(item.maritalstatus); }
+
+                        foreach (var item in PerfectMatchSettings.wantkids)
+                        { CriteriaModel.LifeStyleSearchSettings.wantskidslist.Add(item.wantskids); }
+
+                        foreach (var item in PerfectMatchSettings.professions)
+                        { CriteriaModel.LifeStyleSearchSettings.professionlist.Add(item.profession); }
+
+                        foreach (var item in PerfectMatchSettings.incomelevels)
+                        { CriteriaModel.LifeStyleSearchSettings.incomelevellist.Add(item.incomelevel); }
+
+                        //Character settings for search here
+                        foreach (var item in PerfectMatchSettings.diets)
+                        { CriteriaModel.CharacterSearchSettings.dietlist.Add(item.diet); }
+
+                        foreach (var item in PerfectMatchSettings.humors)
+                        { CriteriaModel.CharacterSearchSettings.humorlist.Add(item.humor); }
+
+                        foreach (var item in PerfectMatchSettings.hobbies)
+                        { CriteriaModel.CharacterSearchSettings.hobbylist.Add(item.hobby); }
+
+                        foreach (var item in PerfectMatchSettings.drinks)
+                        { CriteriaModel.CharacterSearchSettings.drinkslist.Add(item.drink); }
+
+                        //FIX after database update
+                        foreach (var item in PerfectMatchSettings.exercises)
+                        { CriteriaModel.CharacterSearchSettings.exerciselist.Add(item.exercise); }
+
+                        foreach (var item in PerfectMatchSettings.smokes)
+                        { CriteriaModel.CharacterSearchSettings.smokeslist.Add(item.smoke); }
+
+                        foreach (var item in PerfectMatchSettings.signs)
+                        { CriteriaModel.CharacterSearchSettings.signlist.Add(item.sign); }
+
+                        foreach (var item in PerfectMatchSettings.politicalviews)
+                        { CriteriaModel.CharacterSearchSettings.politicalviewlist.Add(item.politicalview); }
+
+                        foreach (var item in PerfectMatchSettings.religions)
+                        { CriteriaModel.CharacterSearchSettings.religionlist.Add(item.religion); }
+
+                        foreach (var item in PerfectMatchSettings.religiousattendances)
+                        { CriteriaModel.CharacterSearchSettings.religiousattendancelist.Add(item.religiousattendance); }
+
+
+                        return CriteriaModel;
+
+                    }
+                    else
+                    {
+                        CriteriaModel.BodyType = "NA";
+                        CriteriaModel.EyeColor = "NA";
+                        CriteriaModel.Ethnicity = null;
+                        CriteriaModel.HairColor = "NA";
+                        CriteriaModel.Exercise = "NA";
+                        CriteriaModel.Religion = "NA";
+                        CriteriaModel.ReligiousAttendance = "NA";
+                        CriteriaModel.Drinks = "NA";
+                        CriteriaModel.Smokes = "NA";
+                        CriteriaModel.Humor = "NA";
+                        // HotFeature = "NA";
+                        //Hobby = "NA";
+                        CriteriaModel.PoliticalView = "NA";
+                        CriteriaModel.Diet = "NA";
+                        CriteriaModel.Sign =
+                        CriteriaModel.IncomeLevel = "NA";
+                        CriteriaModel.HaveKids = "NA";
+                        CriteriaModel.WantsKids = "NA";
+                        CriteriaModel.EmploymentSatus = "NA";
+                        CriteriaModel.EducationLevel = "NA";
+                        CriteriaModel.Profession = "NA";
+                        CriteriaModel.MaritalStatus = "Single";
+                        CriteriaModel.LivingSituation = "NA";
+
+                        return CriteriaModel;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+       
         }
         //use an overload to return values if a user is not logged in i.e
         //no current profiledata exists to retrive
         public ProfileCriteriaModel getprofilecriteriamodel()
         {
+ 
+            _unitOfWork.Dispose();
+           
+                try
+                {
+                    //build defualt empties for list values
+                    //  List<profiledata_Ethnicity> EmptyEthnicty = new List<profiledata_Ethnicity>();
+                    // Ethnicity.Add(new profiledata_Ethnicity Temp)
+                    // EmptyEthnicty.EthnicityID = 1;
+                    ProfileCriteriaModel CriteriaModel = new ProfileCriteriaModel();
 
-            return _mapmembermapperrepo.getprofilecriteriamodel();
+                    CriteriaModel.BodyType = "NA";
+                    CriteriaModel.EyeColor = "NA";
+                    CriteriaModel.Ethnicity = null;
+                    CriteriaModel.HairColor = "NA";
+                    CriteriaModel.Exercise = "NA";
+                    CriteriaModel.Religion = "NA";
+                    CriteriaModel.ReligiousAttendance = "NA";
+                    CriteriaModel.Drinks = "NA";
+                    CriteriaModel.Smokes = "NA";
+                    CriteriaModel.Humor = "NA";
+                    // HotFeature = "NA";
+                    //Hobby = "NA";
+                    CriteriaModel.PoliticalView = "NA";
+                    CriteriaModel.Diet = "NA";
+                    CriteriaModel.Sign =
+                    CriteriaModel.IncomeLevel = "NA";
+                    CriteriaModel.HaveKids = "NA";
+                    CriteriaModel.WantsKids = "NA";
+                    CriteriaModel.EmploymentSatus = "NA";
+                    CriteriaModel.EducationLevel = "NA";
+                    CriteriaModel.Profession = "NA";
+                    CriteriaModel.MaritalStatus = "Single";
+                    CriteriaModel.LivingSituation = "NA";
+
+                    return CriteriaModel;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            
+       
         }
         //gets search settings
         //TO DO this function is just setting temp values for now
         //9 -21- 2011 added code to get age at least from search settings , more values to follow
         public MembersViewModel getdefaultquicksearchsettingsmembers(ProfileModel Model)
         {
-            return _mapmembermapperrepo.getdefaultquicksearchsettingsmembers(Model);
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    quicksearchmodel quicksearchmodel = new quicksearchmodel();
+                    MembersViewModel model = this.getmemberdata(Model.profileid.ToString());
+                    // PostalDataService postaldataservicecontext = new PostalDataService().Initialize();
+                    //set deafult paging or pull from DB
+                    //quicksearchmodel.myse = 4;
+                    quicksearchmodel.myselectedcurrentpage = 1;
+                    //added state province with comma 
+
+                    quicksearchmodel.myselectedcity = model.profile.profiledata.city;
+                    quicksearchmodel.myselectedmaxdistancefromme = model.profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme != null ? model.maxdistancefromme : 1000;
+
+                    quicksearchmodel.myselectedfromage = model.profile.profilemetadata.searchsettings.FirstOrDefault().agemin != null ? model.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.GetValueOrDefault() : 18;
+                    quicksearchmodel.myselectedtoage = model.profile.profilemetadata.searchsettings.FirstOrDefault().agemax != null ? model.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.GetValueOrDefault() : 99; ;
+
+
+                    quicksearchmodel.myselectediamgenderid = model.profile.profiledata.gender.id;
+                    quicksearchmodel.myselectedcitystateprovince = model.profile.profiledata.city + "," + model.profile.profiledata.stateprovince; ;
+                    //TO DO convert genders to a list of genders 
+                    quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(model.profile.profiledata.gender.id);
+                    quicksearchmodel.myselectedcountryname = model.mycountryname; //use same country for now
+                    //add the postal code status here as well
+                    quicksearchmodel.myselectedpostalcodestatus = (Api.GeoService.getpostalcodestatusbycountryname(model.mycountryname)) ? true : false;
+
+                    //TO do get this from search settings
+                    //default for has photos only get this from the 
+                    quicksearchmodel.myselectedphotostatus = true;
+
+                    model.myquicksearch = quicksearchmodel;  //save it
+
+                    Api.DisposeGeoService();
+
+                    return model;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(Model.profileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
         }
         //populate search settings for guests 
         public MembersViewModel getdefaultsearchsettingsguest(ProfileModel Model)
         {
-            return _mapmembermapperrepo.getdefaultsearchsettingsguest(Model);
-        }
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                          MembersViewModel model = new MembersViewModel();
+                //check if the country is in our database
+
+                //set defualt values for guests
+                //model.myquicksearch.mySelectedPageSize = 4;
+                model.myquicksearch.myselectedcurrentpage = 1;
+                model.myquicksearch.myselectedcity = "";
+                model.mypostalcodestatus = false;
+                model.myquicksearch.myselectedmaxdistancefromme = 2000;
+                model.myquicksearch.myselectedfromage = 18;
+                model.myquicksearch.myselectedtoage = 99;
+                model.myquicksearch.myselectediamgenderid = 1;
+                model.myquicksearch.myselectedcitystateprovince = "ALL";
+                model.myquicksearch.myselectedseekinggenderid = Extensions.GetLookingForGenderID(1);
+
+                if (Model.Country != "")
+                {                     
+                    model.myquicksearch.myselectedcountryname =  Api.GeoService.getcountryidbycountryname(Model.Country) == 0 ? "United States" : Model.Country; //use same country for now
+                }
+                else
+                {
+                    model.myquicksearch.myselectedcountryname = "United States";
+                }
+                model.myquicksearch.myselectedphotostatus = true;
+
+                Api.DisposeGeoService();
+
+                return model;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(Model.profileid ));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+
+       }
 
         //registration model update and mapping
         public registermodel getregistermodel(MembersViewModel membersmodel)
         {
-            return _mapmembermapperrepo.getregistermodel(membersmodel);          
+
+              _unitOfWork.DisableProxyCreation = true;
+              _unitOfWork.Dispose();
+                try
+                {
+                    registermodel model = new registermodel();
+                    //quicksearchmodel quicksearchmodel = new quicksearchmodel();
+                    // IEnumerable<CityStateProvince> CityStateProvince ;
+                    model.city = membersmodel.myquicksearch.myselectedcity;
+                    model.country = membersmodel.myquicksearch.myselectedcountryname;
+                    model.longitude = membersmodel.myquicksearch.myselectedlongitude;
+                    model.lattitude = membersmodel.myquicksearch.myselectedlongitude;
+                    model.postalcodestatus = membersmodel.myquicksearch.myselectedpostalcodestatus;
+
+                    // model.SecurityAnswer = "moma";
+                    //5/8/2011  set other defualt values here
+                    //model.RegistrationPhotos.PhotoStatus = "";
+                    // model.PostalCodeStatus = false;
+                    return model;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(membersmodel.profile_id));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            
+
         }
+      
         public registermodel getregistermodelopenid(MembersViewModel membersmodel)
         {
-            return _mapmembermapperrepo.getregistermodelopenid(membersmodel);
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    registermodel model = new registermodel();
+                    //quicksearchmodel quicksearchmodel = new quicksearchmodel();
+                    // IEnumerable<CityStateProvince> CityStateProvince ;
+                    model.openididentifer = membersmodel.rpxmodel.identifier;
+                    model.openidprovider = membersmodel.rpxmodel.providername;
+
+
+                    //model.Ages = sharedrepository.AgesSelectList();
+                    // model.Genders = sharedrepository.GendersSelectList();
+                    // model.Countries = sharedrepository.CountrySelectList();
+                    // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
+                    //test values
+                    model.birthdate = DateTime.Parse(membersmodel.rpxmodel.birthday);
+
+                    model.emailaddress = membersmodel.rpxmodel.verifiedemail;
+                    model.confirmemailaddress = membersmodel.rpxmodel.verifiedemail;
+                    model.gender = Extensions.ConvertGenderName(membersmodel.rpxmodel.gender).ToString();
+
+
+                    // model.Password = "kayode02";
+                    //model.ConfirmPassword = "kayode02";
+                    model.screenname = membersmodel.rpxmodel.displayname;
+                    model.username = membersmodel.rpxmodel.preferredusername;
+                    model.city = membersmodel.mycitystateprovince;
+
+
+                    model.country = membersmodel.mycountryname;
+                    model.longitude = Convert.ToDouble(membersmodel.mylongitude);
+                    model.lattitude = Convert.ToDouble(membersmodel.mylatitude);
+                    model.postalcodestatus = membersmodel.mypostalcodestatus;
+                    model.ziporpostalcode = membersmodel.mypostalcode;
+
+
+                    //added passwords temporary hack
+                    model.password = "ssoUser";
+
+                    //5/29/2012
+
+                    //get the photo info
+                    // model.SecurityAnswer = "moma";
+                    //5/8/2011  set other defualt values here
+                    //model.RegistrationPhotos.PhotoStatus = "";
+                    // model.PostalCodeStatus = false;
+                    PhotoUploadViewModel photouploadvm = new PhotoUploadViewModel();
+                    //initlaize PhotoUploadViewModel object          
+                    photouploadvm.profileid = membersmodel.profile.id; //set the profileID  
+                    photouploadvm.photosuploaded = new List<PhotoUploadModel>();
+                    PhotoUploadModel photobeinguploaded = new PhotoUploadModel();
+
+                    //right now we are only uploading one photo 
+                    //for now we are using URL from each, we can hanlde mutiple provider formats that might return a byte using the source paremater
+                    //or the openID provider name to customize
+                    if (membersmodel.rpxmodel.photo != "")
+                    {   //build the photobeinguploaded object
+                        photobeinguploaded.imageb64string = Api.PhotoService.getimageb64stringfromurl(membersmodel.rpxmodel.photo, "");
+                        photobeinguploaded.imagetypeid = db.GetRepository<lu_photoimagetype>().Find().Where(p => p.id == (int)photoimagetypeEnum.Jpeg).FirstOrDefault().id;
+                        photobeinguploaded.creationdate = DateTime.Now;
+                        photobeinguploaded.caption = membersmodel.rpxmodel.preferredusername;
+                        //TO DO rename this to upload image from URL ?
+
+                        //add to repository
+                        Api.PhotoService.addphotos(photouploadvm);
+                    }
+                    //make sure photos is not empty
+                    //  if (membersmodel.MyPhotos == null)
+                    // { //add new photo model to members model
+                    //    var photolist = new List<Photo>();
+                    //    membersmodel.MyPhotos = photolist;
+                    // }
+                    //don't pass back photos for now
+                    Api.DisposePhotoService();
+
+
+                    return model;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(membersmodel.profile_id));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+                finally
+                {
+                    Api.DisposePhotoService(); ;
+                }
+
+            }
+
+
         }
+
+
         public registermodel getregistermodeltest()
         {
-            return _mapmembermapperrepo.getregistermodeltest();
+
+
+            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.Dispose();
+                try
+                {
+                    registermodel model = new registermodel();
+                    //quicksearchmodel quicksearchmodel = new quicksearchmodel();
+                    // IEnumerable<CityStateProvince> CityStateProvince ;
+
+
+
+                    //model.Ages = sharedrepository.AgesSelectList();
+                    // model.Genders = sharedrepository.GendersSelectList();
+                    // model.Countries = sharedrepository.CountrySelectList();
+                    // model.SecurityQuestions = sharedrepository.SecurityQuestionSelectList();
+                    //test values
+                    model.birthdate = DateTime.Parse("1/1/1983");
+
+                    model.emailaddress = "ola_lawal@lyahoo.com";
+                    model.confirmemailaddress = "ola_lawal@lyahoo.com";
+                    // model.Gender = "Male";
+                    model.password = "kayode02";
+                    model.confirmpassword = "kayode02";
+                    model.screenname = "test1";
+                    model.username = "olalaw";
+
+                    // model.SecurityAnswer = "moma";
+
+                    //5/8/2011  set other defualt values here
+                    //model.RegistrationPhotos.PhotoStatus = "";
+
+                    // model.PostalCodeStatus = false;
+
+
+                    return model;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            
         }
 
         //TOD modifiy client to not bind from this model but load values asycnh
         //other member viewmodl methods
+        //TO DO put in cache
         public MembersViewModel updatememberdata(MembersViewModel model)
         {
-            return _mapmembermapperrepo.updatememberdata(model);
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    //return CachingFactory.MembersViewModelHelper.updatememberdata(model, this);
+                    //remap the user data if cache is empty
+                    //var mm = new ViewModelMapper();
+                    return this.mapmember(model.profile_id.ToString());
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(model.profile_id));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
         }
+
         public MembersViewModel updatememberdatabyprofileid(string profileid)
         {
-            return _mapmembermapperrepo.updatememberdatabyprofileid(Convert.ToInt32(profileid));
-        }
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                 //   return CachingFactory.MembersViewModelHelper.updatememberprofiledatabyprofile(profileid, this);
+      
+                   var model = mapmember(profileid);
+                    model.profiledata = model.profile.profiledata;
+                    return model;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid.ToString()));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+       
+       }
+
         public bool updateguestdata(MembersViewModel model)
         {
-            return _mapmembermapperrepo.updateguestdata(model);
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                   // return CachingFactory.MembersViewModelHelper.updateguestdata(model, this);
+                    // return this.mapguest();
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(model.profile_id));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+
         }
+    
         public bool removeguestdata(string sessionid)
         {
-            return _mapmembermapperrepo.removeguestdata(sessionid);
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                   // return CachingFactory.MembersViewModelHelper.removeguestdata(sessionid);
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex,null);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+
         }
         //cacheing of search stuff
         public MembersViewModel getguestdata(string sessionid)
         {
-            return _mapmembermapperrepo.getguestdata(sessionid);
-        }
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                   // return CachingFactory.MembersViewModelHelper.getguestdata(sessionid, this);
+                     return this.mapguest();
+                
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+
+       }
+      
         public MembersViewModel getmemberdata(string profileid)
         {
-            return _mapmembermapperrepo.getmemberdata(Convert.ToInt32(profileid));
-        }
+
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                //    return CachingFactory.MembersViewModelHelper.getmemberdata(profileid, this);
+     
+                    return this.mapmember(profileid);
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid.ToString()));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+
+       }
 
         //functions not exposed via WCF or otherwise
         public MembersViewModel mapmember(string profileid)
         {
-            return _mapmembermapperrepo.mapmember(Convert.ToInt32(profileid));
-           
+
+             _unitOfWork.DisableProxyCreation = true;
+            var db= _unitOfWork;
+            
+
+            MembersViewModel model = new MembersViewModel();
+            profile profile = new profile();
+
+            // IEnumerable<CityStateProvince> CityStateProvince ;
+            // MailModelRepository mailrepository = new MailModelRepository();
+            //var myProfile = membersrepository.GetprofiledataByProfileID(ProfileID).profile;
+            // var perfectmatchsearchsettings = membersrepository.GetPerFectMatchSearchSettingsByProfileID(ProfileID);
+            // model.Profile = myProfile;
+            //Profile data will be on the include
+            profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt32(profileid) });
+            //TO DO this should be a try cacth with exception handling
+
+            try
+            {
+                //TO DO do away with this since we already have the profile via include from the profile DATA
+                // model.Profile = model.profile;
+                model.profile_id = profile.id;
+                //   model.profile.profiledata.SearchSettings(perfectmatchsearchsettings);
+                //4-28-2012 added mapping for profile visiblity
+                model.profilevisiblity = profile.profiledata.visibilitysettings;
+
+                //on first load this should always be false
+                //to DO   DO  we still need this
+                model.profilestatusmessageshown = false;
+                model.mygenderid = profile.profiledata.gender.id;
+                //this should come from search settings eventually on the full blown model of this.
+                //create hase list of genders they are looking for, if it is null add the default
+                //TO DO change this to use membererepo
+                model.lookingforgendersid = (profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?
+                new HashSet<int>(profile.profilemetadata.searchsettings.FirstOrDefault().genders.Select(c => c.id.GetValueOrDefault())) : null;
+                if (model.lookingforgendersid != null)
+                {
+                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(profile.profiledata.gender.id));
+                }
+
+                //set selected value
+                //model.Countries. =model.profile.profiledata.CountryID;
+                //geographical data poulated here 
+                //this is disabled when disconected ok
+#if DISCONECTED
+
+                model.mycountryname = "United States";// georepository.getcountrynamebycountryid(profile.profiledata.countryid);
+#else
+                //TO DO get this from appfabric ( get this list from there and use it from there)
+                model.mycountryname = Api.GeoService.getcountrynamebycountryid(profile.profiledata.countryid.GetValueOrDefault().ToString());
+#endif
+
+                model.mycountryid = profile.profiledata.countryid.GetValueOrDefault();
+                model.mycity = profile.profiledata.city;
+                //TO DO items need to be populated with real values, in this case change model to double for latt
+                model.mylatitude = profile.profiledata.latitude.ToString(); //model.Lattitude
+                model.mylongitude = profile.profiledata.longitude.ToString();
+                //update 9-21-2011 get fro search settings
+                model.maxdistancefromme = profile.profilemetadata.searchsettings.FirstOrDefault() != null ? profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
+
+                //11-29-2012 olawl move this chunk to ajax calls 
+                //mail counters
+                //model.mymailcount = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Sent, model.profile.id).ToString();
+                //model.whomailedme = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
+                //model.whomailedmenewcount = mailrepository.getnewmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
+
+                //model.WhoMailedMeNewCount =  
+                //interests
+                //TO DO move all these to ajax calls on client
+                //model.myintrestcount = memberactionsrepository.getwhoiaminterestedincount(model.profile.id).ToString();
+                //model.whoisinterestedinmecount = memberactionsrepository.getwhoisinterestedinmecount(model.profile.id).ToString();
+                //model.whoisinterestedinmenewcount = memberactionsrepository.getwhoisinterestedinmenewcount(model.profile.id).ToString();
+                ////peeks
+                //model.mypeekscount = memberactionsrepository.getwhoipeekedatcount(model.profile.id).ToString();
+                //model.whopeekededatmecount = memberactionsrepository.getwhopeekedatmecount(model.profile.id).ToString();
+                //model.whopeekedatmenewcount = memberactionsrepository.getwhopeekedatmenewcount(model.profile.id).ToString();
+                ////likes
+                //model.wholikesmenewcount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
+                //model.wholikesmecount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
+                //model.whoilikecount = memberactionsrepository.getwhoilikecount(model.profile.id).ToString();
+
+                //blocks
+                // model.myblockcount = memberactionsrepository.getwhoiblockedcount(model.profile.id).ToString();
+
+                //instantiate models for city state province and quick search
+                // get users search setttings
+                //model.MyQuickSearch = quicksearchmodel;
+
+
+
+                // now instantiate city state province
+                // model.MyQuickSearch.MySelectedCityStateProvince = CityStateProvince();
+                // model = membersrepository.getdefaultquicksearchsettingsmembers(model);
+
+                //added 5-10-2012
+                //we dont want to add search setttings to the members model?
+                //TO do remove profiledata at some point
+                //check if the user has a profile search settings value in stored DB if not add one and save it
+                if (profile.profilemetadata.searchsettings.Count == 0)
+                {
+                    //TO DO put into extention so no need to make new service call
+                    Api.MemberService.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = profile.id });
+                    //update the profile data with the updated value
+                    //TO DO stop storing profiledata
+                    // model.profiledata = membersrepository.getprofiledata(profile.id);
+
+                }
+
+                //*** start binding collections here ******
+                //do this last since we need values populated first
+                // var pp = new PaginatedList<MemberSearchViewModel>();
+                //sets up the inital paging for your matches
+                //  var productPagedList = pp.GetPageableList(model.MyMatches, 1,4);
+                //   MyMatchesPaged.AsPagination(1, 4);
+                // model.MyMatches = productPagedList;  // set quick matches
+
+              
+                return model;
+
+            }
+            catch (Exception ex)
+            {
+
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.MemberService);
+                //int profileid = Convert.ToInt32(viewerprofileid);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid.ToString()));
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member mapper service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                //throw convertedexcption;
+            }
+            finally
+            {
+
+                Api.DisposeGeoService();
+                Api.DisposeIMemberService();
+            }
+
+            
+            
+
+            
 
         }
 
         public MembersViewModel mapguest()
         {
-            return _mapmembermapperrepo.mapguest();
+
+            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.Dispose();
+           
+                try
+                {
+                    MembersViewModel model = new MembersViewModel();
+                    quicksearchmodel quicksearchmodel = new quicksearchmodel();
+                    // IEnumerable<CityStateProvince> CityStateProvince ;
+                     model.myquicksearch = quicksearchmodel;
+
+
+                    return model;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex,null);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            
+
+       
         }
 
 
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public List<MemberSearchViewModel> getquickmatches(ProfileModel model)
+        public List<MemberSearchViewModel> getquickmatches(ProfileModel Model)
         {
 
 
-            return _mapmembermapperrepo.getquickmatches(model);
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    //get search sttings from DB
+                    //TO DO change this to not use API call
+                    searchsetting perfectmatchsearchsettings = Api.MemberService.getperfectmatchsearchsettingsbyprofileid(Model);   //model.profile.profilemetadata.searchsettings.FirstOrDefault();
+
+                    MembersViewModel model = mapmember(Model.profileid.ToString());
+
+                    //set default perfect match distance as 100 for now later as we get more members lower
+                    //TO DO move this to a db setting or resourcer file
+                    if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
+                        model.maxdistancefromme = 500;
+
+                    //TO DO add this code to search after types have been made into doubles
+                    //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
+                    //right now returning all countries as well
+
+                    //** TEST ***
+                    //get the  gender's from search settings
+
+                    // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+                    int intAgeTo = perfectmatchsearchsettings.agemax != null ? perfectmatchsearchsettings.agemax.GetValueOrDefault() : 99;
+                    int intAgeFrom = perfectmatchsearchsettings.agemin != null ? perfectmatchsearchsettings.agemin.GetValueOrDefault() : 18;
+                    //Height
+                    int intheightmin = perfectmatchsearchsettings.heightmin != null ? perfectmatchsearchsettings.heightmin.GetValueOrDefault() : 0;
+                    int intheightmax = perfectmatchsearchsettings.heightmax != null ? perfectmatchsearchsettings.heightmax.GetValueOrDefault() : 100;
+                    bool blEvaluateHeights = intheightmin > 0 ? true : false;
+                    //convert lattitudes from string (needed for JSON) to bool
+                    double? myLongitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
+                    double? myLattitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
+                    //get the rest of the values if they are needed in calculations
+
+
+                    //set variables
+                    // List<MemberSearchViewModel> MemberSearchViewmodels;
+                    DateTime today = DateTime.Today;
+                    DateTime max = today.AddYears(-(intAgeFrom + 1));
+                    DateTime min = today.AddYears(-intAgeTo);
+
+
+
+                    //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
+                    //requery all the has tbls
+                    HashSet<int> LookingForGenderValues = new HashSet<int>();
+                    LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.genders.Select(c => c.id.GetValueOrDefault())) : LookingForGenderValues;
+                    //Appearacnce seache settings values         
+
+                    //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
+
+                    HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
+                    LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id.GetValueOrDefault())) : LookingForBodyTypesValues;
+
+                    HashSet<int> LookingForEthnicityValues = new HashSet<int>();
+                    LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicities.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
+
+                    HashSet<int> LookingForEyeColorValues = new HashSet<int>();
+                    LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.eyecolors.Select(c => c.id.GetValueOrDefault())) : LookingForEyeColorValues;
+
+                    HashSet<int> LookingForHairColorValues = new HashSet<int>();
+                    LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.haircolors.Select(c => c.id.GetValueOrDefault())) : LookingForHairColorValues;
+
+                    HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
+                    LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.hotfeatures.Select(c => c.id.GetValueOrDefault())) : LookingForHotFeatureValues;
+
+
+                    //******** visiblitysettings test code ************************
+
+                    // test all the values you are pulling here
+                    // var TestModel =   (from x in _datingcontext.profiledata.Where(x => x.profile.username  == "case")
+                    //                      select x).FirstOrDefault();
+                    //  var MinVis = today.AddYears(-(TestModel.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault() + 1));
+                    // bool TestgenderMatch = (TestModel.ProfileVisiblitySetting.GenderID  != null || TestModel.ProfileVisiblitySetting.GenderID == model.profile.profiledata.GenderID) ? true : false;
+
+                    //  var testmodel2 = (from x in _datingcontext.profiledata.Where(x => x.profile.username  == "case" &&  db.fnCheckIfBirthDateIsInRange(x.birthdate, 19, 20) == true  )
+                    //                     select x).FirstOrDefault();
+
+
+                    //****** end of visiblity test settings *****************************************
+
+                    var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
+                          p.profile.profilemetadata.photos.Any(z => z.photostatus.id == (int)photostatusEnum.Gallery)).ToList()
+
+                                        //** visiblity settings still needs testing           
+                                                      //5-8-2012 add profile visiblity code here
+                                                      // .Where(x => x.profile.username == "case")
+                                                      //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.ProfileVisiblity == true)
+                                                      //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.agemaxVisibility != null && model.profile.profiledata.birthdate > today.AddYears(-(x.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault() + 1)))
+                                                      //.Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.agemaxVisibility != null && model.profile.profiledata.birthdate < today.AddYears(-x.ProfileVisiblitySetting.agemaxVisibility.GetValueOrDefault()))
+                                                      // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.countryid != null && x.ProfileVisiblitySetting.countryid == model.profile.profiledata.countryid  )
+                                                      // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.GenderID != null && x.ProfileVisiblitySetting.GenderID ==  model.profile.profiledata.GenderID )
+                                                      //** end of visiblity settings ***
+                                     .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)).ToList() //using whereIF predicate function 
+                                     .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id)).ToList() //  == model.lookingforgenderid)    
+                                                      //TO DO add the rest of the filitering here 
+                                                      //Appearance filtering                         
+                                     .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for                         
+                                                  join f in db.GetRepository<profile>().Find() on x.profile_id equals f.id
+                                                  select new MemberSearchViewModel
+                                                  {
+                                                      // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                                      id = x.profile_id,
+                                                      stateprovince = x.stateprovince,
+                                                      postalcode = x.postalcode,
+                                                      countryid = x.countryid,
+                                                      genderid = x.gender.id,
+                                                      birthdate = x.birthdate,
+                                                      //profile = f,
+                                                      screenname = f.screenname,
+                                                      longitude = x.longitude ?? 0,
+                                                      latitude = x.latitude ?? 0,
+                                                      hasgalleryphoto = (db.GetRepository<photo>().Find().Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                                      creationdate = f.creationdate,
+                                                      // city = db.fnTruncateString(x.city, 11),
+                                                      // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
+                                                      lastlogindate = f.logindate,
+                                                      distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
+                                                      //TO DO look at this and explore
+                                                      //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                                                      //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
+                                                      //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
+
+
+                                                  }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
 
 
 
-        }
+
+                    //11/20/2011 handle case where  no profiles were found
+                    if (MemberSearchViewmodels.Count() == 0)
+                        return this.getquickmatcheswhenquickmatchesempty(new ProfileModel { profileid = Model.profileid }).Take(maxwebmatches).ToList();
+
+
+                    //filter our the ones in the right distance and reutnr the top webmacthes
+                    var profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels
+                        .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
+                                                                    select q).Take(maxwebmatches)
+                                                                :
+                        MemberSearchViewmodels.Take(maxwebmatches);
+
+                    //do any conversions and calcs here
+                    return profiles.
+                    Select(x => new MemberSearchViewModel
+                    {
+                        // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                        id = x.id,
+                        stateprovince = x.stateprovince,
+                        postalcode = x.postalcode,
+                        countryid = x.countryid,
+                        genderid = x.genderid,
+                        birthdate = x.birthdate,
+                        profile = x.profile,
+                        screenname = x.screenname,
+                        longitude = x.longitude ?? 0,
+                        latitude = x.latitude ?? 0,
+                        hasgalleryphoto = x.hasgalleryphoto,
+                        creationdate = x.creationdate,
+                        // city = db.fnTruncateString(x.city, 11),
+                        lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
+                        lastlogindate = x.lastlogindate,
+                        distancefromme = x.distancefromme,
+                        galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), photoformatEnum.Thumbnail.ToString()),
+                        lookingforagefrom = x.lookingforagefrom,
+                        lookingForageto = x.lookingForageto,
+                        online = db.GetRepository<userlogtime>().getuseronlinestatus(new ProfileModel { profileid = x.id })
+                    }).ToList();
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(Model.profileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+                finally
+                {
+                  //  Api.DisposeGeoService();
+                    Api.DisposeIMemberService();
+               //   Api.DisposePhotoService();
+
+                }
+
+            }
+
+         }
 
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public List<MemberSearchViewModel> getemailmatches(ProfileModel model)
+        public List<MemberSearchViewModel> getemailmatches(ProfileModel Model)
         {
 
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    profile profile = new profile();
+                    profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (Model.profileid) });
+                    MembersViewModel model = mapmember(Model.profileid.ToString());
 
 
-            return _mapmembermapperrepo.getemailmatches(model);
+                    model.profile = profile;
+
+                    //get search sttings from DB
+                    searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
+                    //set default perfect match distance as 100 for now later as we get more members lower
+                    //TO DO move this to a _datingcontext setting or resourcer file
+                    if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
+                        model.maxdistancefromme = 500;
+
+                    //TO DO add this code to search after types have been made into doubles
+                    //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
+                    //right now returning all countries as well
+
+                    //** TEST ***
+                    //get the  gender's from search settings
+
+                    // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+                    int intAgeTo = perfectmatchsearchsettings.agemax != null ? perfectmatchsearchsettings.agemax.GetValueOrDefault() : 99;
+                    int intAgeFrom = perfectmatchsearchsettings.agemin != null ? perfectmatchsearchsettings.agemin.GetValueOrDefault() : 18;
+                    //Height
+                    int intheightmin = perfectmatchsearchsettings.heightmin != null ? perfectmatchsearchsettings.heightmin.GetValueOrDefault() : 0;
+                    int intheightmax = perfectmatchsearchsettings.heightmax != null ? perfectmatchsearchsettings.heightmax.GetValueOrDefault() : 100;
+                    bool blEvaluateHeights = intheightmin > 0 ? true : false;
+                    //get the rest of the values if they are needed in calculations
+                    //convert lattitudes from string (needed for JSON) to bool           
+                    double? myLongitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
+                    double? myLattitude = (model.mylatitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
+
+
+                    //set variables
+                    //  List<MemberSearchViewModel> MemberSearchViewmodels;
+                    DateTime today = DateTime.Today;
+                    DateTime max = today.AddYears(-(intAgeFrom + 1));
+                    DateTime min = today.AddYears(-intAgeTo);
+
+
+
+                    //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
+                    //requery all the has tbls
+                    HashSet<int> LookingForGenderValues = new HashSet<int>();
+                    LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.genders.Select(c => c.id.GetValueOrDefault())) : LookingForGenderValues;
+                    //Appearacnce seache settings values         
+
+                    //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
+
+                    HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
+                    LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id.GetValueOrDefault())) : LookingForBodyTypesValues;
+
+                    HashSet<int> LookingForEthnicityValues = new HashSet<int>();
+                    LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicities.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
+
+                    HashSet<int> LookingForEyeColorValues = new HashSet<int>();
+                    LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.eyecolors.Select(c => c.id.GetValueOrDefault())) : LookingForEyeColorValues;
+
+                    HashSet<int> LookingForHairColorValues = new HashSet<int>();
+                    LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.haircolors.Select(c => c.id.GetValueOrDefault())) : LookingForHairColorValues;
+
+                    HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
+                    LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.hotfeatures.Select(c => c.id.GetValueOrDefault())) : LookingForHotFeatureValues;
+
+                   // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
+
+                    //add more values as we get more members 
+                    //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
+                    var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
+                          p.profile.profilemetadata.photos.Any(z => z.photostatus.id == (int)photostatusEnum.Gallery)).ToList()
+                                    .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)).ToList() //using whereIF predicate function 
+                                    .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id)).ToList()
+                                                      //Appearance filtering not implemented yet                        
+                                    .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for 
+                                                  //we have to filter on the back end now since we cant use UDFs
+                                                  // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
+                                                  join f in db.GetRepository<profile>().Find() on x.profile_id equals f.id
+                                                  select new MemberSearchViewModel
+                                                  {
+                                                      // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                                      id = x.profile_id,
+                                                      stateprovince = x.stateprovince,
+                                                      postalcode = x.postalcode,
+                                                      countryid = x.countryid,
+                                                      genderid = x.gender.id,
+                                                      birthdate = x.birthdate,
+                                                      //profile = f,
+                                                      screenname = f.screenname,
+                                                      longitude = x.longitude ?? 0,
+                                                      latitude = x.latitude ?? 0,
+                                                      // hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                                      creationdate = f.creationdate,
+                                                      // city = db.fnTruncateString(x.city, 11),
+                                                      // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
+                                                      lastlogindate = f.logindate,
+                                                      distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
+                                                      //TO DO look at this and explore
+                                                      //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                                                      //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
+                                                      //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
+
+
+                                                  }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
+
+
+
+
+
+                    //11/20/2011 handle case where  no profiles were found
+                    if (MemberSearchViewmodels.Count() == 0)
+                        return getquickmatcheswhenquickmatchesempty(new ProfileModel { profileid = Model.profileid }).Take(maxemailmatches).ToList();
+
+                    //filter our the ones in the right distance and reutnr the top webmacthes
+                    //USes max search results snce this could be called by any other method with a variable set of return macthes or results
+                    var profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels
+                        .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
+                                                                    select q).Take(maxemailmatches)
+                                                                :
+                        MemberSearchViewmodels.Take(maxemailmatches);
+
+                    //do any conversions and calcs here
+                    return profiles.
+                    Select(x => new MemberSearchViewModel
+                    {
+                        // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                        id = x.id,
+                        stateprovince = x.stateprovince,
+                        postalcode = x.postalcode,
+                        countryid = x.countryid,
+                        genderid = x.genderid,
+                        birthdate = x.birthdate,
+                        profile = x.profile,
+                        screenname = x.screenname,
+                        longitude = x.longitude ?? 0,
+                        latitude = x.latitude ?? 0,
+                        hasgalleryphoto = x.hasgalleryphoto,
+                        creationdate = x.creationdate,
+                        // city = db.fnTruncateString(x.city, 11),                       
+                                  lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
+                    lastlogindate = x.lastlogindate,
+                    distancefromme = x.distancefromme,
+                        galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), photoformatEnum.Thumbnail.ToString()),
+                        lookingforagefrom = x.lookingforagefrom,
+                    lookingForageto = x.lookingForageto,
+                    online = db.GetRepository<userlogtime>().getuseronlinestatus(new ProfileModel { profileid = x.id })
+           
+
+                    }).ToList();
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(Model.profileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+                finally
+                {
+                    Api.DisposeGeoService();
+                    Api.DisposeIMemberService();
+                    Api.DisposePhotoService();
+
+                }
+
+            }
+
+
 
 
 
         }
-        //public List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(ProfileModel model)
-        //{
 
-        //    return _mapmembermapperrepo.getquickmatcheswhenquickmatchesempty(model);
+        //TO DO clean up and just use gener and newest
+        internal List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(ProfileModel profilemodel)
+        {
 
-        //}
+            var db = _unitOfWork;
+            _unitOfWork.DisableProxyCreation = true;
+            try
+            {
+
+                //TO DO change to use unit of work in here
+                //get search sttings from DB
+                searchsetting perfectmatchsearchsettings = Api.MemberService.getperfectmatchsearchsettingsbyprofileid(profilemodel);   //model.profile.profilemetadata.searchsettings.FirstOrDefault();
+
+                //set default perfect match distance as 100 for now later as we get more members lower
+                //TO DO move this to a _datingcontext setting or resourcer file
+                MembersViewModel model = this.getmemberdata(profilemodel.profileid.ToString());
+
+                if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
+                    model.maxdistancefromme = 5000;
+
+                //TO DO add this code to search after types have been made into doubles
+                //postaldataservicecontext.GetdistanceByLatLon(p.latitude,p.longitude,UserProfile.Lattitude,UserProfile.longitude,"M") > UserProfile.DiatanceFromMe
+                //right now returning all countries as well
+
+                //** TEST ***
+                //get the  gender's from search settings
+
+                // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+                int intAgeTo = perfectmatchsearchsettings.agemax != null ? perfectmatchsearchsettings.agemax.GetValueOrDefault() : 99;
+                int intAgeFrom = perfectmatchsearchsettings.agemin != null ? perfectmatchsearchsettings.agemin.GetValueOrDefault() : 18;
+
+                //set variables
+                //List<MemberSearchViewModel> MemberSearchViewmodels;
+                DateTime today = DateTime.Today;
+                DateTime max = today.AddYears(-(intAgeFrom + 1));
+                DateTime min = today.AddYears(-intAgeTo);
+                //convert lattitudes from string (needed for JSON) to bool
+                double? myLongitude = (model.mylongitude != "") ? Convert.ToDouble(model.mylongitude) : 0;
+                double? myLattitude = (model.mylatitude != "") ? Convert.ToDouble(model.mylatitude) : 0;
+
+
+
+                //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
+                //requery all the has tbls
+                HashSet<int> LookingForGenderValues = new HashSet<int>();
+                LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.genders.Select(c => c.id.GetValueOrDefault())) : LookingForGenderValues;
+
+
+                //  where (LookingForGenderValues.Count !=null || LookingForGenderValues.Contains(x.GenderID)) 
+                //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
+                var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
+                    p.profile.profilemetadata.photos.Any(z => z.photostatus.id == (int)photostatusEnum.Gallery)).ToList()
+                                .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)).ToList() //using whereIF predicate function 
+                                .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id)).ToList()
+
+                                              join f in db.GetRepository<profile>().Find() on x.profile_id equals f.id
+                                              select new MemberSearchViewModel
+                                              {
+                                                  // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                                  id = x.profile_id,
+                                                  stateprovince = x.stateprovince,
+                                                  postalcode = x.postalcode,
+                                                  countryid = x.countryid,
+                                                  genderid = x.gender.id,
+                                                  birthdate = x.birthdate,
+                                                  profile = f,
+                                                  screenname = f.screenname,
+                                                  longitude = x.longitude ?? 0,
+                                                  latitude = x.latitude ?? 0,
+                                                  hasgalleryphoto = true,  //set inthe above query 
+                                                  creationdate = f.creationdate,
+                                                  // city = db.fnTruncateString(x.city, 11),
+                                                  // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
+                                                  lastlogindate = f.logindate,
+                                                  distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
+                                                  //TO DO look at this and explore
+                                                  //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                                                  //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
+                                                  //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
+
+
+                                              }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
+
+
+                //filter our the ones in the right distance and reutnr the top webmacthes
+                var profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels
+                    .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
+                                                                select q).Take(maxwebmatches)
+                                                            :
+                    MemberSearchViewmodels.Take(maxwebmatches);
+
+                //do any conversions and calcs here
+                return profiles.
+                Select(x => new MemberSearchViewModel
+                {
+                    // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                    id = x.id,
+                    stateprovince = x.stateprovince,
+                    postalcode = x.postalcode,
+                    countryid = x.countryid,
+                    genderid = x.genderid,
+                    birthdate = x.birthdate,
+                    profile = x.profile,
+                    screenname = x.screenname,
+                    longitude = x.longitude ?? 0,
+                    latitude = x.latitude ?? 0,
+                    hasgalleryphoto = x.hasgalleryphoto,
+                    creationdate = x.creationdate,
+                    // city = db.fnTruncateString(x.city, 11),
+                    lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
+                    lastlogindate = x.lastlogindate,
+                    distancefromme = x.distancefromme,
+                    galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(),photoformatEnum.Thumbnail.ToString()),
+                    lookingforagefrom = x.lookingforagefrom,
+                    lookingForageto = x.lookingForageto,
+                    online = db.GetRepository<userlogtime>().getuseronlinestatus(new ProfileModel { profileid = x.id })
+                }).ToList();
+
+
+
+                //TO DO switch this to most active postible and then filter by last logged in date instead .ThenByDescending(p => p.lastlogindate)
+                //final ordering 
+                // profiles = profiles.OrderByDescending(p => p.hasgalleryphoto == true).ThenByDescending(p => p.creationdate)
+
+
+                //  return profiles.ToList();
+            }
+            catch (Exception ex)
+            {
+                //instantiate logger here so it does not break anything else.
+                logger = new ErroLogging(applicationEnum.MemberService);
+                //int profileid = Convert.ToInt32(viewerprofileid);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profilemodel.profileid ));
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                
+
+                throw;
+            }
+            finally
+            {
+               // Api.DisposeGeoService();
+                Api.DisposeIMemberService();
+             //   Api.DisposePhotoService();
+
+            }
+        }
 
     }
 }

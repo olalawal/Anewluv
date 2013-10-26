@@ -22,6 +22,7 @@ using Shell.MVC2.Services.Contracts;
 using LoggingLibrary;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 using Anewluv.Domain.Data.ViewModels;
+using Anewluv.DataExtentionMethods;
 
 
 
@@ -202,7 +203,6 @@ namespace Anewluv.Services.Spatial
                                                      region = s.Country_Region,
                                                      haspostalcode = Convert.ToBoolean(s.PostalCodes)
                                                  }).ToList();
-
 
 
                     }
@@ -1060,7 +1060,27 @@ namespace Anewluv.Services.Spatial
                
              
             }
-     
+
+
+            #region "Spatial Functions"
+
+
+
+
+
+
+            // use this function to get distance at the same time, add it to the model
+            public double? getdistancebetweenmembers(string lat1, string lon1, string lat2, string lon2, string unit)
+            {
+                return spatialextentions.getdistancebetweenmembers(Convert.ToDouble(lat1), Convert.ToDouble(lon1), Convert.ToDouble(lat2), Convert.ToDouble(lon2), unit);
+               
+            }
+
+          
+
+            #endregion
+
+
         }
     }
 

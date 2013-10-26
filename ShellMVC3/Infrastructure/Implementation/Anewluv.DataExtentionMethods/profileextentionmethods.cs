@@ -19,10 +19,96 @@ namespace Anewluv.DataAccess.ExtentionMethods
             return repo.Find().OfType<profiledata>().Where(p => p.profile_id == model.profileid).FirstOrDefault();
         }
 
+        public static profiledata getprofiledatabyscreenname(this IRepository<profiledata> repo, ProfileModel model)
+        {
+            return repo.Find().OfType<profiledata>().Where(p => p.profile.screenname  == model.screenname).FirstOrDefault();
+        }
+
+        public static profilemetadata  getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
+        {
+            return repo.Find().OfType<profilemetadata>().Where(p => p.profile_id  == model.profileid).FirstOrDefault();
+        }
+
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)
         {
             return repo.Find().OfType<profile>().Where(p => p.id == model.profileid).FirstOrDefault();
         }
+
+        public static profile getprofilebyscreenname(this IRepository<profile> repo, ProfileModel model)
+        {
+            return repo.Find().OfType<profile>().Where(p => p.screenname  == model.screenname ).FirstOrDefault();
+        }
+
+        public static profile getprofilebyemailaddress(this IRepository<profile> repo, ProfileModel model)
+        {
+            return repo.Find().OfType<profile>().Where(p => p.emailaddress  == model.email ).FirstOrDefault();
+        }
+
+        public static profile getprofilebyusername(this IRepository<profile> repo, ProfileModel model)
+        {
+            return repo.Find().OfType<profile>().Where(p => p.username == model.username ).FirstOrDefault();
+        }
+
+        public static profile getprofileidbyopenid(this IRepository<profile> repo, ProfileModel model)
+        {
+            //MembersRepository membersrepository = new MembersRepository();
+            //get the correct value from DB
+            var profile = repo.Find().OfType<profile>().Where(p => p.emailaddress == model.email).FirstOrDefault();
+            
+
+            //if we have an active cache we store the current value 
+            if (profile!=null &&  profile.openids.Any(p=>p.openidprovider.description  == model.openidprovider))
+            {
+                return profile;
+            }
+            return null;
+        }
+
+         public static bool checkifemailalreadyexists(this IRepository<profile> repo, ProfileModel model)
+        {
+            //MembersRepository membersrepository = new MembersRepository();
+            //get the correct value from DB
+           return  (repo.Find().OfType<profile>().Where(p => p.emailaddress == model.email).FirstOrDefault() != null);
+            
+
+        }
+
+         public static bool  checkifscreennamealreadyexists(this IRepository<profile> repo, ProfileModel model)
+         {
+             //MembersRepository membersrepository = new MembersRepository();
+             //get the correct value from DB
+             return (repo.Find().OfType<profile>().Where(p => p.screenname  == model.screenname).FirstOrDefault() != null);
+
+         }
+
+         public static bool checkifusernamealreadyexists(this IRepository<profile> repo, ProfileModel model)
+         {
+             return (repo.Find().OfType<profile>().Where(p => p.username  == model.username).FirstOrDefault() != null);
+         }
+
+        //TO DO need enum for stats
+         public static bool checkifprofileisactivated(this IRepository<profile> repo, ProfileModel model)
+         {
+             //MembersRepository membersrepository = new MembersRepository();
+             //get the correct value from DB
+             return (repo.Find().OfType<profile>().Where(p => p.id == model.profileid & p.status.id != 1).FirstOrDefault() != null);
+
+         }
+      
+             //TO DO need enum for stats
+         public static bool checkifactivationcodeisvalid(this IRepository<profile> repo, ProfileModel model)
+         {
+             //MembersRepository membersrepository = new MembersRepository();
+             //get the correct value from DB
+             return (repo.Find().OfType<profile>().Where(p => p.activationcode == model.activationcode & p.id == model.profileid).FirstOrDefault() != null);
+           
+         }
+
+
+         public static visiblitysetting getvisibilitysettingsbyprofileid(this IRepository<visiblitysetting> repo, ProfileModel model)     
+        {
+            return repo.Find().OfType<visiblitysetting>().Where(p => p.profile_id == model.profileid).FirstOrDefault();
+        }     
 
         //TO DO move the generic infratructure extentions
         public static string getlastloggedinstring(DateTime logindate)
@@ -103,7 +189,7 @@ namespace Anewluv.DataAccess.ExtentionMethods
 
         }
 
-        public static bool getuseronlinestatus(this IRepository<profile> repo, ProfileModel model)
+        public static bool getuseronlinestatus(this IRepository<userlogtime> repo, ProfileModel model)
         {
             try
             {
@@ -129,5 +215,7 @@ namespace Anewluv.DataAccess.ExtentionMethods
             }
 
         }
+
+         
     }
 }

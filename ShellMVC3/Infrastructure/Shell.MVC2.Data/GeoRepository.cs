@@ -524,9 +524,7 @@ namespace Shell.MVC2.Data
             }
             return dist;
         }
-
-
-
+        
         private static double deg2rad(double deg)
         {
             return (deg * Math.PI / 180.0);

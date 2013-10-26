@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,6 +53,10 @@
     <ProjectReference Include="..\..\..\..\Common\NET\Shared\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
       <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
       <Name>Shell.MVC2.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Components\Anewluv.Lib\Anewluv.Lib.csproj">
+      <Project>{7AED0F61-0992-42BA-AA92-148C163D7517}</Project>
+      <Name>Anewluv.Lib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Components\LoggingLibrary\LoggingLibrary.csproj">
       <Project>{FF7B929D-6086-4509-9095-396845569906}</Project>

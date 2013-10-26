@@ -11,44 +11,129 @@ using System.ServiceModel.Web;
 
 namespace Anewluv.Lib
 {
-    class api
+    public static class Api
     {
-    
-     public static System.Exception LastException = null;
 
-	public static string ApplicationPath = "";
+        public static System.Exception LastException = null;
 
-	public static bool Debug = false;
-    private static WebChannelFactory<IPhotoService> _photoservice;
+        public static string ApplicationPath = "";
 
-    public static  WebChannelFactory<IPhotoService> PhotoService
-    {
-		get {
-            if (_photoservice == null)            
-            {
-                _photoservice = new WebChannelFactory<IPhotoService>("webHttpBinding_PhotoService");
-              
-			}
-            return _photoservice;
-		}
-	}
-
-    private static WebChannelFactory<IGeoService> _geoservice;
-
-    public static WebChannelFactory<IGeoService> GeoService
-    {
-        get
+        public static bool Debug = false;
+        //   p
+        private static WebChannelFactory<IPhotoService> _photoservice;
+        //do do maybe pass auth header and API key to enure its same user
+        public static IPhotoService PhotoService
         {
-            if (_geoservice == null)
+            get
             {
-                _geoservice = new WebChannelFactory<IGeoService>("geoservice");
+                if (_photoservice == null)
+                {
+                    _photoservice = new WebChannelFactory<IPhotoService>("webHttpBinding_PhotoService");
+                    IPhotoService channel = _photoservice.CreateChannel();
+                    return channel;
+                }
+                else
+                {
+                    //just create a new chanel
+                    IPhotoService channel = _photoservice.CreateChannel();
+                    return channel;
 
+                }
+                // return _photoservice;
             }
-            return _geoservice;
         }
-    }
+        public static bool DisposePhotoService()
+        {
+           
+                if (_photoservice != null)
+                {
+                    _photoservice.Close();
+                    //IPhotoService channel = _geoservice.CreateChannel();
+                    // return channel;
+                    return true;
+                }
+                return false;
+                //return _geoservice;
+            
+        }
+
+        private static WebChannelFactory<IGeoService> _geoservice;
+        public static IGeoService GeoService
+        {
+            get
+            {
+                if (_geoservice == null)
+                {
+                    _geoservice = new WebChannelFactory<IGeoService>("geoservice");
+                    IGeoService channel = _geoservice.CreateChannel();
+                    return channel;
+
+                }
+                else
+                {
+                    IGeoService channel = _geoservice.CreateChannel();
+                    return channel;
 
 
+                }
+                //return _geoservice;
+            }
+        }
+      
+        public static bool DisposeGeoService()
+        {
+         
+                if (_geoservice != null)
+                {
+                    _geoservice.Close();
+                    //IGeoService channel = _geoservice.CreateChannel();
+                    // return channel;
+                    return true;
+                }
+                return false;
+                //return _geoservice;
+            
+        }
+      
+       
 
-    }
+        private static WebChannelFactory<IMemberService> _imemberservice;
+        public static IMemberService MemberService
+        {
+            get
+            {
+                if (_imemberservice == null)
+                {
+                    _imemberservice = new WebChannelFactory<IMemberService>("IMemberService");
+                    IMemberService channel = _imemberservice.CreateChannel();
+                    return channel;
+
+                }
+                else
+                {
+                    IMemberService channel = _imemberservice.CreateChannel();
+                    return channel;
+
+
+                }
+                //return _IMemberService;
+            }
+        }
+        public static bool DisposeIMemberService()
+        {
+            
+                if (_imemberservice != null)
+                {
+                    _imemberservice.Close();
+                    
+                    //IIMemberService channel = _IMemberService.CreateChannel();
+                    // return channel;
+                    return true;
+                }
+                return false;
+                //return _IMemberService;
+            
+        }
+
+    } 
 }
