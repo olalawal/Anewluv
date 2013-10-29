@@ -78,8 +78,7 @@ namespace Anewluv.Lib
                 }
                 //return _geoservice;
             }
-        }
-      
+        }      
         public static bool DisposeGeoService()
         {
          
@@ -95,8 +94,6 @@ namespace Anewluv.Lib
             
         }
       
-       
-
         private static WebChannelFactory<IMemberService> _imemberservice;
         public static IMemberService MemberService
         {
@@ -104,7 +101,7 @@ namespace Anewluv.Lib
             {
                 if (_imemberservice == null)
                 {
-                    _imemberservice = new WebChannelFactory<IMemberService>("IMemberService");
+                    _imemberservice = new WebChannelFactory<IMemberService>("MemberService");
                     IMemberService channel = _imemberservice.CreateChannel();
                     return channel;
 
@@ -119,7 +116,7 @@ namespace Anewluv.Lib
                 //return _IMemberService;
             }
         }
-        public static bool DisposeIMemberService()
+        public static bool DisposeMemberService()
         {
             
                 if (_imemberservice != null)
@@ -135,5 +132,42 @@ namespace Anewluv.Lib
             
         }
 
+        private static WebChannelFactory<IMembersMapperService> _membermapperservice;
+        public static IMembersMapperService MemberMapperService
+        {
+            get
+            {
+                if (_membermapperservice == null)
+                {
+                    _membermapperservice = new WebChannelFactory<IMembersMapperService>("MemberMapperService");
+                    IMembersMapperService channel = _membermapperservice.CreateChannel();
+                    return channel;
+
+                }
+                else
+                {
+                    IMembersMapperService channel = _membermapperservice.CreateChannel();
+                    return channel;
+
+
+                }
+                //return _IMemberService;
+            }
+        }
+        public static bool DisposeMemberMapperService()
+        {
+
+            if (_membermapperservice != null)
+            {
+                _membermapperservice.Close();
+
+                //IIMemberService channel = _IMemberService.CreateChannel();
+                // return channel;
+                return true;
+            }
+            return false;
+            //return _IMemberService;
+
+        }
     } 
 }

@@ -134,10 +134,10 @@ namespace Shell.MVC2.Data
                 throw;
             }
 
+
         }
         private List<MemberSearchViewModel> getunpagedwhoisinterestedinme(int profileid, IQueryable<block> MyActiveblocks)
-        {
-            
+        {            
 
 
             try

@@ -204,13 +204,7 @@
     </Content>
     <Content Include="ApiKeys\APIKeys.xml" />
     <Content Include="ImageResizer\Basic.htm" />
-    <Content Include="css\Jcrop.gif" />
-    <Content Include="css\jquery.Jcrop.css" />
     <Content Include="ImageResizer\fountain-small.jpg" />
-    <Content Include="js\jquery.Jcrop.js" />
-    <Content Include="js\jquery.Jcrop.min.js" />
-    <Content Include="js\jquery.jcrop.preview.js" />
-    <Content Include="js\jquery.min.js" />
     <Content Include="ImageResizer\red-leaf.jpg" />
   </ItemGroup>
   <ItemGroup>

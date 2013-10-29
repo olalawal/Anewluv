@@ -14,7 +14,7 @@ using System.ServiceModel.Activation;
 using Anewluv.DataAccess.Interfaces;
 using LoggingLibrary;
 using Shell.MVC2.Infrastructure.Entities;
-using Anewluv.DataAccess.ExtentionMethods;
+using Anewluv.DataExtentionMethods;
 using Shell.MVC2.Services.Contracts.ServiceResponse;
 using Shell.MVC2.Infrastructure.Helpers;
 using System.IO;
@@ -23,7 +23,7 @@ using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 using System.Drawing;
 using Anewluv.DataExtentionMethods;
 
-namespace Shell.MVC2.Services.Media
+namespace Anewluv.Services.Media
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]

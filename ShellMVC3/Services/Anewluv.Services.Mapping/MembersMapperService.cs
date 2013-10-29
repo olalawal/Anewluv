@@ -15,13 +15,13 @@ using System.ServiceModel.Activation;
 using Anewluv.DataAccess.Interfaces;
 using LoggingLibrary;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
-using Anewluv.DataAccess.ExtentionMethods;
+using Anewluv.DataExtentionMethods;
 using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Domain.Data;
 using Anewluv.Lib;
 using Anewluv.DataExtentionMethods;
 
-namespace Shell.MVC2.Services.Actions
+namespace Anewluv.Services.Mapping
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
@@ -1390,7 +1390,7 @@ namespace Shell.MVC2.Services.Actions
             {
 
                 Api.DisposeGeoService();
-                Api.DisposeIMemberService();
+                Api.DisposeMemberService();
             }
 
             
@@ -1634,7 +1634,7 @@ namespace Shell.MVC2.Services.Actions
                 finally
                 {
                   //  Api.DisposeGeoService();
-                    Api.DisposeIMemberService();
+                    Api.DisposeMemberService();
                //   Api.DisposePhotoService();
 
                 }
@@ -1823,7 +1823,7 @@ namespace Shell.MVC2.Services.Actions
                 finally
                 {
                     Api.DisposeGeoService();
-                    Api.DisposeIMemberService();
+                    Api.DisposeMemberService();
                     Api.DisposePhotoService();
 
                 }
@@ -1977,7 +1977,7 @@ namespace Shell.MVC2.Services.Actions
             finally
             {
                // Api.DisposeGeoService();
-                Api.DisposeIMemberService();
+                Api.DisposeMemberService();
              //   Api.DisposePhotoService();
 
             }

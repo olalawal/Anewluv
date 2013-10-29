@@ -8,7 +8,7 @@ using Anewluv.Domain.Data.ViewModels;
 
 
 
-namespace Anewluv.DataAccess.ExtentionMethods
+namespace Anewluv.DataExtentionMethods
 {
     public static class profileextentionmethods
     {

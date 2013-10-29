@@ -100,9 +100,9 @@
       <Project>{0145184E-916D-4DB2-BB19-E069DF0F1F36}</Project>
       <Name>Shell.MVC2.DependencyResolution.Ninject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\Shell.MVC2.Services.MediaService\Shell.MVC2.Services.Media.csproj">
+    <ProjectReference Include="..\..\Services\Shell.MVC2.Services.MediaService\Anewluv.Services.Media.csproj">
       <Project>{D748E13C-887B-40C9-812C-67210746638B}</Project>
-      <Name>Shell.MVC2.Services.Media</Name>
+      <Name>Anewluv.Services.Media</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
