@@ -9,15 +9,12 @@ using System.Web;
 using System.IO;
 using System.Xml.Linq;
 using System.Net;
-using Shell.MVC2.Infrastructure.Interfaces;
-using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
-using Shell.MVC2.Data.AuthenticationAndMembership;
-using Shell.MVC2.Interfaces;
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Dating.Server.Data.Models;
-using Shell.MVC2.Infastructure;
+
 using LoggingLibrary;
+using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
 using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Anewluv.DataAccess.Interfaces;
+using Ninject;
 
 //code sample of header and how to get it from this code
 
@@ -65,33 +62,53 @@ namespace Shell.MVC2.Data
 {
     public class APIKeyAuthorization : ServiceAuthorizationManager
     {
-        IAPIkeyRepository _apikeyrepository;
-        AnewLuvMembershipProvider _membmbershipprovider;
-        private IGeoRepository _georepository;
-        private IMemberRepository _memberepository;
-        private AnewluvContext _datingcontext;
-        private IPhotoRepository _photorepository;
+       // IAPIkeyRepository _apikeyrepository;
+       //// AnewLuvMembershipProvider _membmbershipprovider;
+       // private IGeoRepository _georepository;
+       // private IMemberRepository _memberepository;
+       // private AnewluvContext _datingcontext;
+       // private IPhotoRepository _photorepository;
+
+        
+        [Inject]
+        public IUnitOfWork _unitOfWork {get;set;}
+        private LoggingLibrary.ErroLogging logger;
+
+        //  private IMemberActionsRepository  _memberactionsrepository;
+        // private string _apikey;
+
+        //had to set up a parameterless contrycture due to WCF restructtions 
+        //its not too bad since this only seems to be called on the first instantiaion
+        public APIKeyAuthorization()
+        {
+
+
+            if (_unitOfWork == null)
+            {
+                throw new ArgumentNullException("unitOfWork", "unitOfWork cannot be null");
+            }
+
+            if (_unitOfWork == null)
+            {
+                throw new ArgumentNullException("dataContext", "dataContext cannot be null");
+            }
+
+            //promotionrepository = _promotionrepository;
+            _unitOfWork = _unitOfWork;
+            //disable proxy stuff by default
+            //_unitOfWork.DisableProxyCreation = true;
+            //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
+            //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+
+        }
+
 
         //public APIKeyAuthorization(IAPIkeyRepository apikeyrepository)
         //{
         //    _apikeyrepository = apikeyrepository;
         //}
-        //had to set up a parameterless contrycture due to WCF restructtions 
-        //its not too bad since this only seems to be called on the first instantiaion
-        public APIKeyAuthorization()
-        {
-             ApiKeyContext context = new ApiKeyContext();
-            _apikeyrepository = new APIkeyRepository(context);
-         //   PostalData2Entities postalcontext = new PostalData2Entities();
-        //   _georepository = new GeoRepository(postalcontext);
-              AnewluvContext  datingcontext = new AnewluvContext();
-              _datingcontext = datingcontext;
-              _memberepository = new MemberRepository(datingcontext);
-             _photorepository = new PhotoRepository(datingcontext, _memberepository);
-
-            _membmbershipprovider = new AnewLuvMembershipProvider(_datingcontext, _georepository, _memberepository, _photorepository);
-
-        }
+      
+    
 
 
         //TO DO re-activate this code when you complete basic testing
