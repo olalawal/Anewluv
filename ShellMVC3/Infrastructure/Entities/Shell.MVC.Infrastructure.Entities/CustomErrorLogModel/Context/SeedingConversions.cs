@@ -8,7 +8,7 @@ using System.Text;
 using Shell.MVC2.Infrastructure;
 
 
-namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
+namespace Nmedia.Infrastructure.Domain.Errorlog
 {
     class SeedingConversions
     {

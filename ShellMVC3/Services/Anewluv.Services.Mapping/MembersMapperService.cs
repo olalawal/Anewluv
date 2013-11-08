@@ -12,9 +12,9 @@ using Shell.MVC2.Infrastructure;
 
 
 using System.ServiceModel.Activation;
-using Anewluv.DataAccess.Interfaces;
+using Nmedia.DataAccess.Interfaces;
 using LoggingLibrary;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 using Anewluv.DataExtentionMethods;
 using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Domain.Data;

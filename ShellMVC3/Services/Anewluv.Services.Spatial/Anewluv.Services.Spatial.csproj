@@ -76,10 +76,6 @@
       <Project>{3CBB8D0A-5EA5-4336-AEAF-6717D2A09A45}</Project>
       <Name>Anewluv.DataExtentionMethods</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Interfaces\Anewluv.DataAccess.Interfaces\Anewluv.DataAccess.Interfaces.csproj">
-      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
-      <Name>Anewluv.DataAccess.Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

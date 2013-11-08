@@ -9,7 +9,7 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
      using Shell.MVC2.Infrastructure.Entities.ApiKeyModel ;
     using Shell.MVC2.Infrastructure.Entities.NotificationModel;
     using Shell.MVC2.Infrastructure.Entities.UserRepairModel;
-    using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+    using Nmedia.Infrastructure.Domain.Errorlog;
     using Shell.MVC2.Infrastructure.Entities;
 
 
@@ -48,15 +48,15 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
        
     }
 
-    internal sealed class ConfigurationCustomerrorLogModel : DbMigrationsConfiguration<CustomErrorLogModel.CustomErrorLogContext>
+    internal sealed class ConfigurationCustomerrorLogModel : DbMigrationsConfiguration<ErrorlogModel.ErrorlogContext>
     {
         public ConfigurationCustomerrorLogModel()
         {
             AutomaticMigrationsEnabled = true;
-            MigrationsNamespace = "Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel";
+            MigrationsNamespace = "Nmedia.Infrastructure.Domain.Errorlog";
         }
 
-        protected override void Seed(CustomErrorLogContext context)
+        protected override void Seed(ErrorlogContext context)
         {
 
             //  This method will be called after migrating to the latest version.
@@ -72,7 +72,7 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
             //    );
             //
 
-            SeedMethodsCustomErrorLogModel.seedgenerallookups(context);
+            SeedMethodsErrorlogModel.seedgenerallookups(context);
         }
 
         

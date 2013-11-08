@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Shell.MVC2.Interfaces;
+using Dating.Server.Data.Models;
 using System.Web.Security;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Services.Contracts;
@@ -10,68 +11,27 @@ using Shell.MVC2.Domain.Entities.Anewluv;
 using System.ServiceModel.Activation;
 using System.ServiceModel;
 using Shell.MVC2.Services.Contracts.ServiceResponse;
-using Anewluv.DataAccess.Interfaces;
-using LoggingLibrary;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
 
 namespace Shell.MVC2.Services.Authentication
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class MembershipService : IAuthenticationService
+    public class MembershipService : MembershipProvider,IAuthenticationService
     {
-        //constant strings for reseting passwords
-        const String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; const String LOWER = "abcdefghijklmnopqrstuvwxyz"; const String NUMBERS = "1234567890"; const String SPECIAL = "*$-+?&=!%/";
-        //AnewluvContext context = new AnewluvContext();
-        // DatingService datingService = new DatingService();
-     
 
-        IUnitOfWork _unitOfWork;
-        private LoggingLibrary.ErroLogging logger;
+        private IAnewLuvMembershipProvider _anewluvmembershipprovider;
+        //private IMemberService _memberservice;
 
-        //  private IMemberActionsRepository  _memberactionsrepository;
-        // private string _apikey;
-
-            public MembershipService(IUnitOfWork unitOfWork)
-            {
-
-                if (unitOfWork == null)
-                {
-                    throw new ArgumentNullException("unitOfWork", "unitOfWork cannot be null");
-                }
-
-                if (unitOfWork == null)
-                {
-                    throw new ArgumentNullException("dataContext", "dataContext cannot be null");
-                }
-
-                //promotionrepository = _promotionrepository;
-                _unitOfWork = unitOfWork;
-                //disable proxy stuff by default
-                //_unitOfWork.DisableProxyCreation = true;
-                //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
-                //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
-
-            }
-
+        public MembershipService(IAnewLuvMembershipProvider anewluvmembershipprovider)
+        {
+            _anewluvmembershipprovider = anewluvmembershipprovider;
+         //   _memberservice = memberservice;
+        }
 
             public bool validateuserbyusernamepassword(ProfileModel profile)
             {
-                try
-                {
-                    return _anewluvmembershipprovider.ValidateUser(profile.username, profile.password);
-                }
-                catch (Exception ex)
-                {
-                    logger = new ErroLogging(applicationEnum.UserAuthorizationService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profile.profileid));
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in Membership service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
+               return  _anewluvmembershipprovider.ValidateUser(profile.username, profile.password);
             }
 
             //5-82012 updated to only valudate username

@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel;
 
-namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
+namespace Nmedia.Infrastructure.Domain.Errorlog
 {
  
 

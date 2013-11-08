@@ -54,10 +54,6 @@
       <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
       <Name>Anewluv.Domain.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Interfaces\Anewluv.DataAccess.Interfaces\Anewluv.DataAccess.Interfaces.csproj">
-      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
-      <Name>Anewluv.DataAccess.Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 
 namespace Shell.MVC2.Infrastructure.Interfaces
 {

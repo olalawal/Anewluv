@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Anewluv.Domain.Data;
-using Anewluv.DataAccess.Interfaces;
+using Nmedia.DataAccess.Interfaces;
 using Anewluv.Domain.Data.ViewModels;
 using Shell.MVC2.Infrastructure.Helpers;
 

@@ -19,7 +19,7 @@ using System.IO;
 using System.Drawing;
 using ImageResizer;
 using LoggingLibrary;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 
 using Shell.MVC2.Infrastructure.Helpers;
 

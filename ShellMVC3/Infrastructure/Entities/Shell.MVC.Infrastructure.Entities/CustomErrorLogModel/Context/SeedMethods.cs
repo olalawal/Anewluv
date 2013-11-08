@@ -7,12 +7,12 @@ using System.Text;
 
 using Shell.MVC2.Infrastructure;
 
-namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
+namespace Nmedia.Infrastructure.Domain.Errorlog
 {
-    public class SeedMethodsCustomErrorLogModel
+    public class SeedMethodsErrorlogModel
     {
 
-        public static void seedgenerallookups(CustomErrorLogContext  context)
+        public static void seedgenerallookups(ErrorlogContext  context)
         {
 
 

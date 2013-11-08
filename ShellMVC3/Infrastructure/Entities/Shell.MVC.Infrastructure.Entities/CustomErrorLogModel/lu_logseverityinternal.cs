@@ -11,9 +11,9 @@ using System.Data;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 
-namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
+namespace Nmedia.Infrastructure.Domain.Errorlog
 {
     [DataContract(Namespace = "")]
     public class lu_logseverityinternal

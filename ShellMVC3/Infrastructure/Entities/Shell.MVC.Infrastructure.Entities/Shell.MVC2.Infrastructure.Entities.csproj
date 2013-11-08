@@ -125,14 +125,6 @@
       <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
       <Name>Shell.MVC2.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Implementation\Anewluv.DataAccess\Anewluv.DataAccess.csproj">
-      <Project>{C4C10E84-8C87-43D3-AEF3-9C0A03A2F7DB}</Project>
-      <Name>Anewluv.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Interfaces\Anewluv.DataAccess.Interfaces\Anewluv.DataAccess.Interfaces.csproj">
-      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
-      <Name>Anewluv.DataAccess.Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

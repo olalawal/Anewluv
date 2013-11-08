@@ -84,14 +84,6 @@
       <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
       <Name>Dating.Server.Data.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Implementation\Anewluv.DataAccess\Anewluv.DataAccess.csproj">
-      <Project>{C4C10E84-8C87-43D3-AEF3-9C0A03A2F7DB}</Project>
-      <Name>Anewluv.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Interfaces\Anewluv.DataAccess.Interfaces\Anewluv.DataAccess.Interfaces.csproj">
-      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
-      <Name>Anewluv.DataAccess.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
       <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
       <Name>Anewluv.Domain.Data</Name>

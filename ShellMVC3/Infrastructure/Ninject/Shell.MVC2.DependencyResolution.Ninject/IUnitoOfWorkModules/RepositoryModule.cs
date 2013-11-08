@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ninject.Modules;
-using Anewluv.DataAccess.Interfaces;
-using Anewluv.DataAccess;
+using Nmedia.DataAccess.Interfaces;
+using Nmedia.DataAccess;
 
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {

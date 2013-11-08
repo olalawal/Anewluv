@@ -1,7 +1,7 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using GeoData.Domain.Models.Mapping;
-using Anewluv.DataAccess.Interfaces;
+using Nmedia.DataAccess.Interfaces;
 using System.Data.Entity.Core.Objects;
 
 using System;
@@ -11,7 +11,7 @@ using System.Text;
 
 using System.ComponentModel.DataAnnotations;
 
-using Anewluv.DataAccess;
+using Nmedia.DataAccess;
 using System.Data.Common;
 using System.Data;
 using System.Data.Entity.Validation;

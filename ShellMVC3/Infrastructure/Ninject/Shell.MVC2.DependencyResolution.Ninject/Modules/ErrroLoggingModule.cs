@@ -9,7 +9,7 @@ using Shell.MVC2.Data;
 using Shell.MVC2.Infrastructure.Interfaces;
 using Shell.MVC2.Data.Infrastructure;
 //using Shell.MVC2.Services.Logging;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 using Shell.MVC2.Services.Contracts;
 using System.ServiceModel;
 
@@ -29,7 +29,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
        
 
             Kernel.Bind<IErrorLoggingRepository>().ToConstructor(
-             ctorArg => new ErrorLoggingRepository(ctorArg.Inject<CustomErrorLogContext>()));
+             ctorArg => new ErrorLoggingRepository(ctorArg.Inject<ErrorlogContext>()));
 
             Kernel.Bind<IErrorLoggingService>().ToSelf().InScope(c => OperationContext.Current); 
 

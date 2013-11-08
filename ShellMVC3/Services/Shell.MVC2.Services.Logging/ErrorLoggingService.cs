@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Shell.MVC2.Infrastructure.Interfaces;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel ;
+using Nmedia.Infrastructure.Domain.Errorlog ;
 using Shell.MVC2.Services.Contracts;
 using System.ServiceModel.Activation;
 using System.ServiceModel;
@@ -16,31 +16,28 @@ namespace Shell.MVC2.Services.Logging
     public class ErrorLoggingService : IErrorLoggingService
     {
 
-        private  IErrorLoggingRepository _errorloggingrepository;
+        private  IErrorLoggingRepository _Errorloggingrepository;
 
-        public ErrorLoggingService(IErrorLoggingRepository errorloggingrepository)
+        public ErrorLoggingService(IErrorLoggingRepository Errorloggingrepository)
         {
-            _errorloggingrepository = errorloggingrepository;
+            _Errorloggingrepository = Errorloggingrepository;
         }
 
         
-        public string GetData(string value)
-        {
-           return _errorloggingrepository.GetData(Convert.ToInt32(value));
-        }
+     
 
 
  
-        public int WriteCompleteLogEntry(errorlog logEntry)
+        public int WriteCompleteLogEntry(Errorlog logEntry)
         {
-            return _errorloggingrepository.WriteCompleteLogEntry(logEntry);
+            return _Errorloggingrepository.WriteCompleteLogEntry(logEntry);
         }
 
 
 
         public int TranslateLogSeverity(logseverityEnum LogSeverityValue)
         {
-            return _errorloggingrepository.TranslateLogSeverity(LogSeverityValue);
+            return _Errorloggingrepository.TranslateLogSeverity(LogSeverityValue);
         }
 
 

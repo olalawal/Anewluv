@@ -13,7 +13,7 @@ using Shell.MVC2.Services.Contracts;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Interfaces;
 using Dating.Server.Data.Models;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
 
 

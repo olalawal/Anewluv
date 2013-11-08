@@ -14,7 +14,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 using System.Configuration;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 using Shell.MVC2.Infrastructure.Entities.NotificationModel;
 using Shell.MVC2.Services.Contracts;
 
@@ -27,7 +27,7 @@ namespace LoggingLibrary
     {
         private int iApplicationID;
         //private int lLogEntryID = 0;
-        private errorlog oLogEntry = null;
+        private Errorlog oLogEntry = null;
         // private List<LogMessage> lstMessages;
         // private List<LogValue> lstValues;
 
@@ -78,7 +78,7 @@ namespace LoggingLibrary
            // InfoNotificationfactory = new ChannelFactory<IInfoNotificationService>("InfoNotificationService.soap");//(mysClient.Endpoint);
            //InfoNotificationServiceProxy =InfoNotificationfactory.CreateChannel();
 
-            oLogEntry = new errorlog();
+            oLogEntry = new Errorlog();
 
 
         }
@@ -172,13 +172,13 @@ namespace LoggingLibrary
 
 
 
-        public errorlog CreateErrorLog(logseverityEnum severityLevelvalue, Exception referedexception, int? profileid = null,
+        public Errorlog CreateErrorLog(logseverityEnum severityLevelvalue, Exception referedexception, int? profileid = null,
                                   HttpContextBase context = null) 
           {
           
 
                 //build the error object
-                oLogEntry = new errorlog();
+                oLogEntry = new Errorlog();
 
 
                 //build the error stuff
@@ -253,10 +253,10 @@ namespace LoggingLibrary
         /// <param name="sessionID">The session ID.</param>
         /// <param name="severityLevel">The severity level.</param>
         /// <returns></returns>
-        private errorlog CreateLogEntryObject(MethodBase method, string sessionID, logseverityEnum severityLevel)
+        private Errorlog CreateLogEntryObject(MethodBase method, string sessionID, logseverityEnum severityLevel)
         {
 
-            errorlog entry = new errorlog();
+            Errorlog entry = new Errorlog();
 
             if (method != null)
             {

@@ -5,15 +5,15 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
+namespace Nmedia.Infrastructure.Domain.Errorlog
 {
 
     [DataContract(Namespace = "")]
-     public class errorlog
+     public class Errorlog
     {
 
 
-         public errorlog() 
+         public Errorlog() 
           {
               logseverity = new lu_logseverity();
               application = new lu_application();
@@ -73,14 +73,14 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
           [DataMember]
           public string request { get; set; }
 
-          public static errorlog Create(Action<errorlog> init)
+          public static Errorlog Create(Action<Errorlog> init)
           {
-              errorlog CustomErrorLog = new errorlog();
-            //  CustomErrorLog.LogSeverity = new lu_logSeverity();
-            //  CustomErrorLog.Application = new lu_application();
+              Errorlog Errorlog = new Errorlog();
+            //  Errorlog.LogSeverity = new lu_logSeverity();
+            //  Errorlog.Application = new lu_application();
 
-              init(CustomErrorLog);
-              return CustomErrorLog;
+              init(Errorlog);
+              return Errorlog;
           }
 
           

@@ -14,9 +14,9 @@ using Shell.MVC2.Interfaces;
 using Anewluv.Domain.Data;
 
 using System.ServiceModel.Activation;
-using Anewluv.DataAccess.Interfaces;
+using Nmedia.DataAccess.Interfaces;
 using LoggingLibrary;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 using Anewluv.Domain.Data.ViewModels;
 using Shell.MVC2.Infrastructure;
 using Anewluv.Lib;

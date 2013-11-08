@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text;
 using System.Data;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 using System.Diagnostics;
 using Shell.MVC2.Infrastructure.Interfaces;
 
@@ -14,9 +14,9 @@ namespace Shell.MVC2.Data
     public class ErrorLoggingRepository : IErrorLoggingRepository 
     {
 
-        private CustomErrorLogContext _context;
+        private ErrorlogContext _context;
 
-        public ErrorLoggingRepository(CustomErrorLogContext context)
+        public ErrorLoggingRepository(ErrorlogContext context)
         {
             _context = context;
         }
@@ -26,11 +26,11 @@ namespace Shell.MVC2.Data
             return string.Format("You entered: {0}", value);
         }
 
-        public int WriteCompleteLogEntry(errorlog logEntry)
+        public int WriteCompleteLogEntry(Errorlog logEntry)
         {
             // logEntry.dtTimeStamp = DateTime.Now;
 
-          //  using (var context = new CustomErrorLogContext())
+          //  using (var context = new ErrorlogContext())
           //  {
             try
             {
@@ -44,7 +44,7 @@ namespace Shell.MVC2.Data
                 logEntry.logseverity = logseverity != null ? logseverity : _context.lu_logseverity.Where(p => p.id ==  (int)logseverityEnum.Warning).FirstOrDefault(); ;
 
                 
-               _context.errorlogs.Add(logEntry);                
+               _context.Errorlogs.Add(logEntry);                
               _context.SaveChanges();
                 
                 return logEntry.id;
@@ -108,7 +108,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        //public int WriteCompleteLogEntry(CustomErrorLog logEntry)
+        //public int WriteCompleteLogEntry(Errorlog logEntry)
         //{
         //    int logEntryID = 0;
 
@@ -141,12 +141,12 @@ namespace Shell.MVC2.Data
         //        return;
         //    }
 
-        //    CustomErrorLog logEntry = new CustomErrorLog();
-        //    logEntry.CustomErrorLogID = logEntryID;
+        //    Errorlog logEntry = new Errorlog();
+        //    logEntry.ErrorlogID = logEntryID;
         //    logEntry.LoggedObject = value.ToString();
 
-        //    using (CustomErrorLogContext context =
-        //    new CustomErrorLogContext())
+        //    using (ErrorlogContext context =
+        //    new ErrorlogContext())
         //    {
         //        try
         //        {
@@ -155,7 +155,7 @@ namespace Shell.MVC2.Data
         //            // The Add method examines the change tracking information 
         //            // contained in the graph of self-tracking entities to infer the set of operations
         //            // that need to be performed to reflect the changes in the database. 
-        //            context.CustomErrorLogs.Add(logEntry);
+        //            context.Errorlogs.Add(logEntry);
         //            context.SaveChanges();
 
         //        }
@@ -181,7 +181,7 @@ namespace Shell.MVC2.Data
         ///// <summary>
         ///// Writes a log value.  Inserts an entry into the LogEntryValues table.
         ///// </summary>
-        ///// <param name="logEntryID">The log entry CustomErrorLogID.</param>
+        ///// <param name="logEntryID">The log entry ErrorlogID.</param>
         ///// <param name="value">The value.</param>       
         //public void WriteLogValue(int logEntryID, LogValue value)
         //{
@@ -190,14 +190,14 @@ namespace Shell.MVC2.Data
         //        return;
         //    }
 
-        //    CustomErrorLog logEntry = new CustomErrorLog();
-        //    logEntry.CustomErrorLogID = logEntryID;
+        //    Errorlog logEntry = new Errorlog();
+        //    logEntry.ErrorlogID = logEntryID;
         //    logEntry.LoggedObject = value.CurrentValue;
         //    logEntry.Type = value.LogValueType;
         //    //need to add a feild for the name of the serilaized object that was in error stack
 
-        //    using (CustomErrorLogContext context =
-        //     new CustomErrorLogContext())
+        //    using (ErrorlogContext context =
+        //     new ErrorlogContext())
         //    {
         //        try
         //        {
@@ -206,7 +206,7 @@ namespace Shell.MVC2.Data
         //            // The Add method examines the change tracking information 
         //            // contained in the graph of self-tracking entities to infer the set of operations
         //            // that need to be performed to reflect the changes in the database. 
-        //            context.CustomErrorLogs.Add(logEntry);
+        //            context.Errorlogs.Add(logEntry);
         //            context.SaveChanges();
 
         //        }
@@ -232,7 +232,7 @@ namespace Shell.MVC2.Data
         ///// <summary>
         ///// Writes multiple values to the LogEntryValues table.
         ///// </summary>
-        ///// <param name="logEntryID">The log entry CustomErrorLogID.</param>
+        ///// <param name="logEntryID">The log entry ErrorlogID.</param>
         ///// <param name="values">The values.</param>       
         //public void WriteLogValues(int logEntryID, LogValue[] values)
         //{
@@ -283,7 +283,7 @@ namespace Shell.MVC2.Data
         ///// <summary>
         ///// Writes a message to the LogEntryMessages table.
         ///// </summary>
-        ///// <param name="logEntryID">The log entry CustomErrorLogID.</param>
+        ///// <param name="logEntryID">The log entry ErrorlogID.</param>
         ///// <param name="message">The message.</param>
         ///// <param name="logLevel">The log level.</param>       
         //public void WriteMessage(int logEntryID, string message)
@@ -293,12 +293,12 @@ namespace Shell.MVC2.Data
         //        return;
         //    }
 
-        //    CustomErrorLog logEntry = new CustomErrorLog();
-        //    logEntry.CustomErrorLogID = logEntryID;
+        //    Errorlog logEntry = new Errorlog();
+        //    logEntry.ErrorlogID = logEntryID;
         //    //logEntry.Message = message;
         //    //logEntry.Type = value.LogValueType;
-        //    using (CustomErrorLogContext context =
-        //    new CustomErrorLogContext())
+        //    using (ErrorlogContext context =
+        //    new ErrorlogContext())
         //    {
         //        try
         //        {
@@ -306,7 +306,7 @@ namespace Shell.MVC2.Data
         //            // The Add method examines the change tracking information 
         //            // contained in the graph of self-tracking entities to infer the set of operations
         //            // that need to be performed to reflect the changes in the database. 
-        //            context.CustomErrorLogs.Add(logEntry);
+        //            context.Errorlogs.Add(logEntry);
         //            context.SaveChanges();
         //        }
         //        catch (System.Data.SqlClient.SqlException ex)
@@ -401,7 +401,7 @@ namespace Shell.MVC2.Data
         ///// <summary>
         ///// Writes a message to the LogEntryMessages table.
         ///// </summary>
-        ///// <param name="logEntryID">The log entry CustomErrorLogID.</param>
+        ///// <param name="logEntryID">The log entry ErrorlogID.</param>
         ///// <param name="message">The message.</param>      
         //public void WriteLogMessage(int logEntryID, LogMessage message)
         //{
@@ -410,8 +410,8 @@ namespace Shell.MVC2.Data
         //        return;
         //    }
 
-        //    CustomErrorLog logEntry = new CustomErrorLog();
-        //    logEntry.CustomErrorLogID = logEntryID;
+        //    Errorlog logEntry = new Errorlog();
+        //    logEntry.ErrorlogID = logEntryID;
         //    // logEntry. = message.Text;
         //    logEntry.AssemblyName = message.AssemblyName;
         //    logEntry.ClassName = message.ClassName;
@@ -420,8 +420,8 @@ namespace Shell.MVC2.Data
 
         //    //logEntry.Type = value.LogValueType;
 
-        //    using (CustomErrorLogContext context =
-        //      new CustomErrorLogContext())
+        //    using (ErrorlogContext context =
+        //      new ErrorlogContext())
         //    {
         //        try
         //        {
@@ -429,7 +429,7 @@ namespace Shell.MVC2.Data
         //            // The Add method examines the change tracking information 
         //            // contained in the graph of self-tracking entities to infer the set of operations
         //            // that need to be performed to reflect the changes in the database. 
-        //            context.CustomErrorLogs.Add(logEntry);
+        //            context.Errorlogs.Add(logEntry);
         //            context.SaveChanges();
 
         //        }

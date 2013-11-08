@@ -10,7 +10,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Infrastructure;
 using System.Data;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 using LoggingLibrary;
 
 namespace Shell.MVC2.Data

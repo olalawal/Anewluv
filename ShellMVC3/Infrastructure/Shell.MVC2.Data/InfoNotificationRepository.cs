@@ -9,7 +9,7 @@ using Shell.MVC2.Infrastructure.Entities.NotificationModel;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 using Shell.MVC2.Interfaces;
 using System.Data;
 using System.Net.Mail;
@@ -124,7 +124,7 @@ namespace Shell.MVC2.Data
 
         #region "error message notifications"
 
-        //public bool senderrormessagetodevelopers(CustomErrorLog customerror)
+        //public bool senderrormessagetodevelopers(Errorlog customerror)
         //{
 
 
@@ -178,7 +178,7 @@ namespace Shell.MVC2.Data
         //        // The Add method examines the change tracking information 
         //        // contained in the graph of self-tracking entities to infer the set of operations
         //        // that need to be performed to reflect the changes in the database. 
-        //        //Dim ddd = New CustomErrorLog()
+        //        //Dim ddd = New Errorlog()
         //        //ddd.Message = errormessage
 
         //        //send the pyysicall email message here
@@ -199,7 +199,7 @@ namespace Shell.MVC2.Data
         #endregion
 
 
-        public   EmailModel senderrormessage(errorlog error,addresstypeenum addresstype)
+        public   EmailModel senderrormessage(Errorlog error,addresstypeenum addresstype)
         {
 
             EmailModel emailmodels = new EmailModel();

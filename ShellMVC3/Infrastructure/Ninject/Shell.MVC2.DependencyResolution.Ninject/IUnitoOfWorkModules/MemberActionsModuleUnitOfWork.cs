@@ -15,7 +15,7 @@ using Shell.MVC2.Services.Contracts;
 //to do do away with this when we go to code first , we would pull this from entities 
 using Dating.Server.Data.Models;
 using Shell.MVC2.Domain.Entities.Anewluv;
-using Anewluv.DataAccess.Interfaces;
+using Nmedia.DataAccess.Interfaces;
 using Ninject.Activation;
 using Ninject.Web.Common;
 using Ninject;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 
 namespace Shell.MVC2.Infrastructure.Interfaces
 {
@@ -16,10 +16,10 @@ namespace Shell.MVC2.Infrastructure.Interfaces
         string GetData(int value);
        
         //[OperationContract]
-        //int WriteLogEntry(CustomErrorLog logEntry);
+        //int WriteLogEntry(Errorlog logEntry);
 
       
-        int WriteCompleteLogEntry(errorlog logEntry);
+        int WriteCompleteLogEntry(Errorlog logEntry);
 
      
         //void WriteValue(int logEntryID, string name, object value);

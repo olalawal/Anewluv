@@ -31,7 +31,7 @@ using Shell.MVC2.Infrastructure;
     using System.Globalization;
 using Shell.MVC2.Interfaces;
 using LoggingLibrary;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 
 
 namespace Shell.MVC2.Data.AuthenticationAndMembership

@@ -22,7 +22,7 @@ namespace Anewluv.Web.NotificationService.ServiceHostFactories
             IKernel container = new StandardKernel();
 
         
-           // container.Load<NinjectModules.CustomErrorLogContextModule>();
+           // container.Load<NinjectModules.ErrorlogContextModule>();
             container.Load<NinjectModules.AnewLuvContextModule>();
             container.Load<NinjectModules.ApiKeyContextModule>();        
             container.Load<NinjectModules.NotificationContextModule >();

@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 
-namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
+namespace Nmedia.Infrastructure.Domain.Errorlog
 {
-    public partial  class CustomErrorLogContext : DbContext 
+    public partial  class ErrorlogContext : DbContext 
     {
        
-        public DbSet<errorlog> errorlogs { get; set; }
+        public DbSet<Errorlog> Errorlogs { get; set; }
        
 
-       public CustomErrorLogContext()
-            : base("name=CustomErrorLogContext")
+       public ErrorlogContext()
+            : base("name=ErrorlogContext")
 
         {
 
@@ -27,14 +27,14 @@ namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
        protected override void OnModelCreating(DbModelBuilder modelBuilder)
        {
 
-           customerrorlogmodelbuilder.buildgeneralmodels(modelBuilder);
+           customErrorlogmodelbuilder.buildgeneralmodels(modelBuilder);
        }
 
       
 
-       public class Initializer : IDatabaseInitializer<CustomErrorLogContext>
+       public class Initializer : IDatabaseInitializer<ErrorlogContext>
        {
-           public void InitializeDatabase(CustomErrorLogContext context)
+           public void InitializeDatabase(ErrorlogContext context)
            {
                if (!context.Database.Exists())
                {

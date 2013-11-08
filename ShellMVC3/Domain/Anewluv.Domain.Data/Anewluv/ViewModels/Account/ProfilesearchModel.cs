@@ -17,8 +17,6 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public string password { get; set; }
         [DataMember]
-        public string encryptedpassword { get; set; }
-        [DataMember]
         public int? profileid { get; set; }
         [DataMember]
         public string screenname { get; set; }
@@ -38,7 +36,5 @@ namespace Anewluv.Domain.Data.ViewModels
         public string openidprovider { get; set; }
         [DataMember]
         public string Country { get; set; }
-       
-
     }
 }

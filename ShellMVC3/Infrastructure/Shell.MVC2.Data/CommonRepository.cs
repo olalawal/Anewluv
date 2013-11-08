@@ -8,7 +8,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Infrastructure;
 using Shell.MVC2.Interfaces;
 using LoggingLibrary;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 
 
 

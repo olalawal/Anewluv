@@ -7,14 +7,14 @@ using Shell.MVC2.Infrastructure.Entities.NotificationModel;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 
 namespace Shell.MVC2.Infrastructure.Interfaces
 {
    public  interface IInfoNotificationRepository
     {
 
-       EmailModel senderrormessage(errorlog error, addresstypeenum addresstype);
+       EmailModel senderrormessage(Errorlog error, addresstypeenum addresstype);
 
        EmailViewModel sendcontactusemail(ContactUsModel model);
         

@@ -43,7 +43,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,7 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAnewLuvMembershipProvider.cs" />
     <Compile Include="IAPIkeyRepository.cs" />
     <Compile Include="IErrorLoggingRepository.cs" />
     <Compile Include="IInfoNotificationRepository.cs" />
@@ -59,10 +57,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Domain\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
-      <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
-      <Name>Anewluv.Domain.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Domain\Entities\Shell.MVC2.Domain.Entities\Shell.MVC2.Domain.Entities.csproj">
       <Project>{3413A2BC-A142-4383-A9BD-72145457C6CB}</Project>
       <Name>Shell.MVC2.Domain.Entities</Name>

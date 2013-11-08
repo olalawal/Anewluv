@@ -153,10 +153,6 @@
       <Project>{92B7DBBB-2313-4C2E-88AB-970751B229F1}</Project>
       <Name>Shell.MVC2.Infrastructure.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Interfaces\Anewluv.DataAccess.Interfaces\Anewluv.DataAccess.Interfaces.csproj">
-      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
-      <Name>Anewluv.DataAccess.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Interfaces\Shell.MVC2.Infrastructure.Interfaces\Shell.MVC2.Infrastructure.Interfaces.csproj">
       <Project>{475514E9-91B6-4CC7-91C8-122BFEFC876C}</Project>
       <Name>Shell.MVC2.Infrastructure.Interfaces</Name>

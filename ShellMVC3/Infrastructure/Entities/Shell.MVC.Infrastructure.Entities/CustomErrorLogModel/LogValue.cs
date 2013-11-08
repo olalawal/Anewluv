@@ -10,7 +10,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
-namespace Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel
+namespace Nmedia.Infrastructure.Domain.Errorlog
 {
   
     public class logvalue

@@ -17,7 +17,7 @@ using Shell.MVC2.Infrastructure;
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.AppFabric ;
 using LoggingLibrary;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 
 
 namespace Shell.MVC2.Data

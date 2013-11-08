@@ -11,7 +11,7 @@ using Shell.MVC2.Interfaces;
 using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
 using System.ServiceModel.Activation;
-using Anewluv.DataAccess.Interfaces;
+using Nmedia.DataAccess.Interfaces;
 using LoggingLibrary;
 using Shell.MVC2.Infrastructure.Entities;
 using Anewluv.DataExtentionMethods;
@@ -19,7 +19,7 @@ using Shell.MVC2.Services.Contracts.ServiceResponse;
 using Shell.MVC2.Infrastructure.Helpers;
 using System.IO;
 using ImageResizer;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 using System.Drawing;
 using Anewluv.DataExtentionMethods;
 

@@ -14,13 +14,13 @@ using System.Net;
 
 
 using System.ServiceModel.Activation;
-using Anewluv.DataAccess.Interfaces;
+using Nmedia.DataAccess.Interfaces;
 using System.Data.SqlClient;
 using GeoData.Domain.Models;
 using GeoData.Domain.Models.ViewModels;
 using Shell.MVC2.Services.Contracts;
 using LoggingLibrary;
-using Shell.MVC2.Infrastructure.Entities.CustomErrorLogModel;
+using Nmedia.Infrastructure.Domain.Errorlog;
 using Anewluv.Domain.Data.ViewModels;
 using Anewluv.DataExtentionMethods;
 
