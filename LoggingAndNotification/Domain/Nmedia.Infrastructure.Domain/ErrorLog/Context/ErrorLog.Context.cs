@@ -37,11 +37,7 @@ namespace Nmedia.Infrastructure.Domain
 
         public DbSet<Errorlog> Errorlogs { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-
-            customErrorlogmodelbuilder.buildgeneralmodels(modelBuilder);
-        }
+     
         public class Initializer : IDatabaseInitializer<ErrorlogContext>
         {
             public void InitializeDatabase(ErrorlogContext context)

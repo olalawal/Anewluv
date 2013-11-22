@@ -30,6 +30,19 @@ namespace Nmedia.Infrastructure.Domain
                  description   = EnumExtensionMethods.ToDescription(kvp)
             }));
 
+            //118-2013
+           
+            //application
+            //filter an enum for not set since that is the zero value i.e  
+            var enviromentqry = from enviromentEnum value in Enum.GetValues(typeof(enviromentEnum))
+                                 orderby value // to sort by value; remove otherwise 
+                                 select value;
+            enviromentqry.ToList().ForEach(kvp => context.lu_enviroment.AddOrUpdate(new lu_enviroment()
+            {
+                id = (int)kvp,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
             //logseveritys
             //filter an enum for not set since that is the zero value i.e  
             var logseverityqry = from logseverityEnum value in Enum.GetValues(typeof(logseverityEnum))

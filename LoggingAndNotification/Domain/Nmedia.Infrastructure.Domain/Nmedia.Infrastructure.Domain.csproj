@@ -50,6 +50,7 @@
     <Compile Include="ApiKey\Context\Apikey.Context.cs" />
     <Compile Include="ApiKey\Context\ApikeyModelbuilder.cs" />
     <Compile Include="ApiKey\Context\SeedMethods.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="ErrorLog\Context\ErrorLog.Context.cs" />
     <Compile Include="ErrorLog\Context\ErrorLog.Context.Lookups.cs" />
     <Compile Include="ErrorLog\Context\ErrorLogModelbuilder.cs" />

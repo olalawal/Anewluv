@@ -23,7 +23,7 @@ namespace Nmedia.Infrastructure.Domain
     // PM> add-migration -startupproject NotificationModel ddsd
     // Update-DataBase -startupproject NotificationModel -verbose
 
-    public class NotificationContext : DbContext
+    public partial class NotificationContext : DbContext, IUnitOfWork
     {
         private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>(); 
 
@@ -51,23 +51,6 @@ namespace Nmedia.Infrastructure.Domain
         }
 
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            // modelBuilder.Entity<message>().ToTable("messages", schemaName: "Logging");
-            //modelBuilder.Entity<address>().ToTable("messageAddresses", schemaName: "Logging");
-            // modelBuilder.Entity<systemAddress>().ToTable("messageSystemAddresses", schemaName: "Logging");
-            // modelBuilder.Entity<lu_template>().ToTable("lu_messageTemplate", schemaName: "Logging");
-            // modelBuilder.Entity<lu_messageType>().ToTable("lu_messageType", schemaName: "Logging");
-            // modelBuilder.Entity<lu_systemAddressType>().ToTable("lu_messageSystemAddressType", schemaName: "Logging");
-
-            // map required relationships abusereport
-            //**************************************
-
-            //comment this out when sharing after generating the database
-            //only share with sql scripts 
-            notificationmodelbuilder.buildgeneralmodels(modelBuilder);
-
-        }
         public class Initializer : IDatabaseInitializer<NotificationContext>
         {
             public void InitializeDatabase(NotificationContext context)

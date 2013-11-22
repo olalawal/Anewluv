@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Factory="Anewluv.Web.LoggingService.ServiceHostFactories.NinjectServiceHostFactory"  Service="Shell.MVC2.Services.Logging.ErrorLoggingService"  %>

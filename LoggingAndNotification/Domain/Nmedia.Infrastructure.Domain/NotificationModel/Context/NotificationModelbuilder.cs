@@ -9,10 +9,10 @@ using Nmedia.Infrastructure.Domain.Data.Notification;
 namespace Nmedia.Infrastructure.Domain
 {
 
-    public  class notificationmodelbuilder
+    public partial class NotificationContext
     {
 
-        public static void buildgeneralmodels(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 
             

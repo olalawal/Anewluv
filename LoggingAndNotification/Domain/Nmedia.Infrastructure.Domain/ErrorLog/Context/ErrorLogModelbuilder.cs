@@ -10,10 +10,10 @@ using Nmedia.Infrastructure.Domain.Data.Errorlog;
 namespace Nmedia.Infrastructure.Domain
 {
 
-    public  class customErrorlogmodelbuilder
+    public partial class ErrorlogContext
     {
 
-        public static void buildgeneralmodels(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 
           //  modelBuilder.Entity<Errorlog>().ToTable("Errorlogs", schemaName: "Logging");
@@ -23,6 +23,7 @@ namespace Nmedia.Infrastructure.Domain
 
             //setup FK relationsships 
             modelBuilder.Entity<Errorlog>().HasRequired(p => p.application).WithMany().WillCascadeOnDelete(false);
+            modelBuilder.Entity<Errorlog>().HasRequired(p => p.enviroment).WithMany().WillCascadeOnDelete(false);
             modelBuilder.Entity<Errorlog>().HasRequired(p => p.logseverity).WithMany().WillCascadeOnDelete(false);
              modelBuilder.Entity<Errorlog>()
             .HasOptional(m => m.logseverityinternal).WithOptionalDependent().WillCascadeOnDelete(false);

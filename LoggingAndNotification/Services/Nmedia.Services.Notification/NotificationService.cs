@@ -73,9 +73,7 @@ namespace Nmedia.Services.Notification
                 {
                     try
                     {
-                        IRepository<lu_application> applicationrepo = db.GetRepository<lu_application>();
-                        IRepository<lu_logseverity> logseverityrepo = db.GetRepository<lu_logseverity>();
-
+                      
                         dynamic systemsenderaddress = (from x in (db.GetRepository<systemaddress>().Find().Where(f => f.id == (int)(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
                         lu_template template = (from x in (db.GetRepository<lu_template>().Find().Where(f => f.id == (int)(templateenum.GenericErrorMessage))) select x).First();
                         lu_messagetype messagetype = (from x in (db.GetRepository<lu_messagetype>().Find().Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).First();
@@ -106,6 +104,10 @@ namespace Nmedia.Services.Notification
                             c.sendingapplication = "NotificationService";
                             c.systemaddress = systemsenderaddress;
                         }));
+
+                        db.Add(message);
+                        int i = db.Commit();
+                        transaction.Commit();
 
                         message.sent = sendemail(message); //attempt to send the message
 

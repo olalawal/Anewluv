@@ -17,6 +17,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Errorlog
           {
               logseverity = new lu_logseverity();
               application = new lu_application();
+              enviroment = new lu_enviroment();
           
           } 
             
@@ -44,6 +45,8 @@ namespace Nmedia.Infrastructure.Domain.Data.Errorlog
             //public int application_id { get; set; }
             [DataMember]
             public lu_application application { get; set; }
+            [DataMember]
+            public lu_enviroment enviroment { get; set; }
             
             public string ipaddress { get; set; }
             [DataMember]

@@ -49,7 +49,9 @@
     <Compile Include="ApiKey\lu_accesslevel.cs" />
     <Compile Include="ApiKey\lu_application_apikey.cs" />
     <Compile Include="ApiKey\user.cs" />
+    <Compile Include="ErrorLog\lu_enviroment.cs" />
     <Compile Include="ErrorLog\Enums\Applications.cs" />
+    <Compile Include="ErrorLog\Enums\Enviroment.cs" />
     <Compile Include="ErrorLog\Enums\LogSeverities.cs" />
     <Compile Include="ErrorLog\Enums\LogSeveritiesInternal.cs" />
     <Compile Include="ErrorLog\errorlog.cs" />

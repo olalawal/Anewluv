@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Factory="Anewluv.Web.NotificationService.ServiceHostFactories.NinjectServiceHostFactory" Service="Shell.MVC2.Services.Notification.ErrorNotificationService"  %>
