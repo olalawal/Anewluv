@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
-using Nemdia.Infrastructure.Domain.Data.ApiKey;
+using Nmedia.Infrastructure.Domain.Data.ApiKey;
 
 namespace Nmedia.Infrastructure.Domain
 {
@@ -15,7 +15,15 @@ namespace Nmedia.Infrastructure.Domain
         public static void buildgeneralmodels(DbModelBuilder modelBuilder)
         {
 
-            
+
+            modelBuilder.Entity<apikey>().ToTable("api_apikeys");
+            modelBuilder.Entity<apicall>().ToTable("api_apicalls");
+            modelBuilder.Entity<user>().ToTable("api_users");
+            modelBuilder.Entity<lu_accesslevel>().ToTable("api_lu_accesslevel");
+            modelBuilder.Entity<lu_application>().ToTable("api_lu_application");
+       
+
+
             // modelBuilder.Entity<message>().ToTable("messages", schemaName: "Logging");
             //modelBuilder.Entity<address>().ToTable("messageAddresses", schemaName: "Logging");
             // modelBuilder.Entity<systemAddress>().ToTable("messageSystemAddresses", schemaName: "Logging");
@@ -52,7 +60,7 @@ namespace Nmedia.Infrastructure.Domain
                 .WithMany(t => t.apikeys )
                 .Map(mc =>
                    {
-                       mc.ToTable("userapikey");
+                       mc.ToTable("api_userapikey");
                        mc.MapLeftKey("apikey_id");
                        mc.MapRightKey("user_id");
 

@@ -5,7 +5,7 @@ using System.Web;
 
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-//using Shell.MVC2.Infastructure.Chat;
+//using Shell.MVC2.Infrastructure.Chat;
 
 namespace Shell.MVC2.Domain.Entities.Anewluv.Chat
 {

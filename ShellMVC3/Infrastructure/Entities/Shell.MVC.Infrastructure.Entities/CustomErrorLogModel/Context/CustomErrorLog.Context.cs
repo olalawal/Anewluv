@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 
-namespace Nmedia.Infrastructure.Domain.Errorlog
+namespace Nmedia.Infrastructure.Domain.errorlog
 {
     public partial  class ErrorlogContext : DbContext 
     {
        
-        public DbSet<Errorlog> Errorlogs { get; set; }
+        public DbSet<errorlog> Errorlogs { get; set; }
        
 
        public ErrorlogContext()

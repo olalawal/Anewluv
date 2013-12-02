@@ -12,7 +12,7 @@ using Shell.MVC2.Infrastructure;
 
 using Shell.MVC2.AppFabric;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Errorlog;
+using Nmedia.Infrastructure.Domain.errorlog;
 
 namespace Shell.MVC2.Data
 {
@@ -106,8 +106,8 @@ namespace Shell.MVC2.Data
                  catch (Exception ex)
                  {
                      //instantiate logger here so it does not break anything else.
-                     logger = new ErroLogging(applicationEnum.MemberService);
-                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+                     logger = new ErroLogging(logapplicationEnum.MemberService);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
                      //log error mesasge
                      //handle logging here
                      var message = ex.Message;
@@ -184,8 +184,8 @@ namespace Shell.MVC2.Data
                  catch (Exception ex)
                  {
                      //instantiate logger here so it does not break anything else.
-                     logger = new ErroLogging(applicationEnum.MemberService);
-                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+                     logger = new ErroLogging(logapplicationEnum.MemberService);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
                      //log error mesasge
                      //handle logging here
                      var message = ex.Message;
@@ -218,8 +218,8 @@ namespace Shell.MVC2.Data
                  catch (Exception ex)
                  {
                      //instantiate logger here so it does not break anything else.
-                     logger = new ErroLogging(applicationEnum.MemberService);
-                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model. profileid , null);
+                     logger = new ErroLogging(logapplicationEnum.MemberService);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model. profileid , null);
                      //log error mesasge
                      //handle logging here
                      var message = ex.Message;
@@ -250,8 +250,8 @@ namespace Shell.MVC2.Data
                  catch (Exception ex)
                  {
                      //instantiate logger here so it does not break anything else.
-                     logger = new ErroLogging(applicationEnum.MemberService);
-                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                     logger = new ErroLogging(logapplicationEnum.MemberService);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                      //log error mesasge
                      //handle logging here
                      var message = ex.Message;
@@ -307,8 +307,8 @@ namespace Shell.MVC2.Data
                  catch (Exception ex)
                  {
                      //instantiate logger here so it does not break anything else.
-                     logger = new ErroLogging(applicationEnum.MemberService);
-                     logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model. profileid, null);
+                     logger = new ErroLogging(logapplicationEnum.MemberService);
+                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model. profileid, null);
                      //log error mesasge
                      //handle logging here
                      var message = ex.Message;
@@ -364,8 +364,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -394,8 +394,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -424,8 +424,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -458,8 +458,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -490,8 +490,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment,ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -524,8 +524,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -555,8 +555,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -596,8 +596,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment,ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -631,8 +631,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid, null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment,ex, model.profileid, null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -687,8 +687,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -740,8 +740,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -769,8 +769,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profile_id, null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profile_id, null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -856,8 +856,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -891,8 +891,8 @@ namespace Shell.MVC2.Data
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment,ex, model.profileid , null);
                         //log error mesasge
                         //handle logging here
                         var message = ex.Message;
@@ -930,8 +930,8 @@ namespace Shell.MVC2.Data
          catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService );
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex,  null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService );
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex,  null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -963,8 +963,8 @@ namespace Shell.MVC2.Data
    //    catch (Exception ex)
    //    {
    //        //instantiate logger here so it does not break anything else.
-   //        logger = new ErroLogging(applicationEnum.MemberService);
-   //        logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
+   //        logger = new ErroLogging(logapplicationEnum.MemberService);
+   //        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment,ex, model.profileid , null);
    //        //log error mesasge
    //        //handle logging here
    //        var message = ex.Message;
@@ -991,8 +991,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null,null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null,null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1020,8 +1020,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1055,8 +1055,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, model.profileid , null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, model.profileid , null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1090,8 +1090,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1125,8 +1125,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1145,8 +1145,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1166,8 +1166,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1186,8 +1186,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1219,8 +1219,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1237,8 +1237,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService );
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex,  null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService );
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex,  null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1255,8 +1255,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1273,8 +1273,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1301,8 +1301,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1329,8 +1329,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment,ex, model.profileid , null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1357,8 +1357,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1393,8 +1393,8 @@ namespace Shell.MVC2.Data
         catch (Exception ex)
         {
             //instantiate logger here so it does not break anything else.
-            logger = new ErroLogging(applicationEnum.MemberService);
-            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+            logger = new ErroLogging(logapplicationEnum.MemberService);
+            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
             //log error mesasge
             //handle logging here
             var message = ex.Message;
@@ -1422,8 +1422,8 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                logger = new ErroLogging(applicationEnum.MemberService);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                logger = new ErroLogging(logapplicationEnum.MemberService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
@@ -1443,8 +1443,8 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                logger = new ErroLogging(applicationEnum.MemberService);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError,ex, model.profileid , null);
+                logger = new ErroLogging(logapplicationEnum.MemberService);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment,ex, model.profileid , null);
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;

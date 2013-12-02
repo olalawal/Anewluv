@@ -78,12 +78,12 @@ I am going through all the new modles and properly naming the lookup tables and 
 
 So I looked into the scheme deal and you can make sure db objects are mapped to a named scheme using this fluent syntax called in the onmodelcreating method
 
-    modelBuilder.Entity(Of Errorlog)().ToTable("Errorlogs", schemaName:="Logging")
+    modelBuilder.Entity(Of errorlog)().ToTable("Errorlogs", schemaName:="Logging")
     modelBuilder.Entity(Of lu_application)().ToTable("lu_application", schemaName:="Logging")
     modelBuilder.Entity(Of lu_logSeverity)().ToTable("lu_logSeverity", schemaName:="Logging")
 
 or you can decorate the entiies as follows 
-   <Table("Errorlog", Schema:="Logging")> _
+   <Table("errorlog", Schema:="Logging")> _
 
 And thwy will be automatically renamed or mapped to the correct schema.
 

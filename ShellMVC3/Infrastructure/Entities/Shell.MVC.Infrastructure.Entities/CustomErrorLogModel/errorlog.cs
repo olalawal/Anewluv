@@ -5,15 +5,15 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
 
-namespace Nmedia.Infrastructure.Domain.Errorlog
+namespace Nmedia.Infrastructure.Domain.errorlog
 {
 
     [DataContract(Namespace = "")]
-     public class Errorlog
+     public class errorlog
     {
 
 
-         public Errorlog() 
+         public errorlog() 
           {
               logseverity = new lu_logseverity();
               application = new lu_application();
@@ -73,14 +73,14 @@ namespace Nmedia.Infrastructure.Domain.Errorlog
           [DataMember]
           public string request { get; set; }
 
-          public static Errorlog Create(Action<Errorlog> init)
+          public static errorlog Create(Action<errorlog> init)
           {
-              Errorlog Errorlog = new Errorlog();
-            //  Errorlog.LogSeverity = new lu_logSeverity();
-            //  Errorlog.Application = new lu_application();
+              errorlog errorlog = new errorlog();
+            //  errorlog.LogSeverity = new lu_logSeverity();
+            //  errorlog.Application = new lu_application();
 
-              init(Errorlog);
-              return Errorlog;
+              init(errorlog);
+              return errorlog;
           }
 
           

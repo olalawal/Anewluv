@@ -15,6 +15,16 @@ namespace Nmedia.Infrastructure.Domain
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 
+            modelBuilder.Entity<address>().ToTable("notification_address");
+            modelBuilder.Entity<systemaddress>().ToTable("notification_systemaddress");
+            modelBuilder.Entity<lu_addresstype>().ToTable("notification_lu_addresstype");
+            modelBuilder.Entity<lu_messagetype>().ToTable("notification_lu_messagetype");
+            modelBuilder.Entity<lu_systemaddresstype>().ToTable("notification_lu_systemaddresstype");
+            modelBuilder.Entity<lu_template>().ToTable("notification_lu_template");
+            modelBuilder.Entity<lu_templatebody>().ToTable("notification_lu_templatebody");
+            modelBuilder.Entity<lu_templatesubject>().ToTable("notification_lu_templatesubject");
+            modelBuilder.Entity<lu_news>().ToTable("notification_lu_news");
+            modelBuilder.Entity<message>().ToTable("notification_message");
             
             // modelBuilder.Entity<message>().ToTable("messages", schemaName: "Logging");
             //modelBuilder.Entity<address>().ToTable("messageAddresses", schemaName: "Logging");

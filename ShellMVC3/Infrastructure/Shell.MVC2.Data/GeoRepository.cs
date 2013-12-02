@@ -15,7 +15,7 @@ using System.Data;
 
 using Shell.MVC2.Data.Infrastructure;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Errorlog;
+using Nmedia.Infrastructure.Domain.errorlog;
 using Shell.MVC2.AppFabric;
 
 namespace Shell.MVC2.Data
@@ -48,7 +48,7 @@ namespace Shell.MVC2.Data
             {
 
                 Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(countryid.ToString(), "", "", ex.Message, ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
         }
@@ -98,7 +98,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException ("","","",ex.Message , ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -127,7 +127,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException ("","","",ex.Message , ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
         }
@@ -162,7 +162,7 @@ namespace Shell.MVC2.Data
             {
 
                 Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
-                new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -188,7 +188,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname,"","",ex.Message , ex.InnerException);
-              new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+              new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
               throw convertedexcption;
             }
         }            
@@ -216,7 +216,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname,"","",ex.Message , ex.InnerException);
-              new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+              new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
               throw convertedexcption;
             }
         }
@@ -235,7 +235,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,"","",ex.Message , ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -258,7 +258,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,postalcode,"",ex.Message , ex.InnerException);
-              new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+              new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -277,7 +277,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname,"","",ex.Message , ex.InnerException);
-              new ErroLogging(applicationEnum.GeoLocationService  ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+              new ErroLogging(logapplicationEnum.GeoLocationService  ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -300,7 +300,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,postalcode,"",ex.Message , ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -321,7 +321,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,city ,"",ex.Message , ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
         }
@@ -342,7 +342,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname ,city ,"",ex.Message , ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -363,7 +363,7 @@ namespace Shell.MVC2.Data
             {
 
                 Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(countryname, city, postalcode, ex.Message, ex.InnerException);
-                new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
               //return false ;
@@ -382,7 +382,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (countryname,lattitude, longitude,ex.Message , ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
         }
@@ -399,7 +399,7 @@ namespace Shell.MVC2.Data
             {
 
                 Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(countryname, city, stateprovince, ex.Message, ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
         }
@@ -421,7 +421,7 @@ namespace Shell.MVC2.Data
             {
 
                 Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", filter, ex.Message, ex.InnerException); 
-               new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -441,7 +441,7 @@ namespace Shell.MVC2.Data
             {
 
               Exception convertedexcption = new CustomExceptionTypes.GeoLocationException (country,city,filter,ex.Message , ex.InnerException);
-               new ErroLogging(applicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+               new ErroLogging(logapplicationEnum.GeoLocationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
         }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
 
-namespace Nmedia.Infrastructure.Domain.Errorlog
+namespace Nmedia.Infrastructure.Domain.errorlog
 {
 
 

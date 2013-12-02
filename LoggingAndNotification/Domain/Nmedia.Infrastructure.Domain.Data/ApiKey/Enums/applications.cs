@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel;
 
-namespace Nemdia.Infrastructure.Domain.Data.ApiKey
+namespace Nmedia.Infrastructure.Domain.Data.ApiKey
 {
     /// <summary>
     /// This is an enumeration type for the log severity types we track

@@ -10,7 +10,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
-namespace Nmedia.Infrastructure.Domain.Data.Errorlog
+namespace Nmedia.Infrastructure.Domain.Data.errorlog
 {
   
     public class logvalue

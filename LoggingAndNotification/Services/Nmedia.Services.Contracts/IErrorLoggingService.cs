@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using System.ServiceModel.Web;
-using Nmedia.Infrastructure.Domain.Data.Errorlog;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
 
 namespace Nmedia.Services.Contracts
 {
@@ -15,13 +15,23 @@ namespace Nmedia.Services.Contracts
 
 
         //[OperationContract]
-        //int WriteLogEntry(Errorlog logEntry);
+        //int WriteLogEntry(errorlog logEntry);
 
 
-        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [ServiceKnownType(typeof(Errorlog))]
+        //[OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        //[ServiceKnownType(typeof(errorlog))]
+        //[WebInvoke(UriTemplate = "/WriteCompleteLogEntry", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        //int WriteCompleteLogEntry(errorlog logEntry);
+
+
+        [OperationContract(AsyncPattern = true), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [ServiceKnownType(typeof(errorlog))]
         [WebInvoke(UriTemplate = "/WriteCompleteLogEntry", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        int WriteCompleteLogEntry(Errorlog logEntry);
+        IAsyncResult BeginWriteCompleteLogEntry(errorlog logEntry,
+                          AsyncCallback callback,
+                          object state);
+
+        int EndWriteCompleteLogEntry(IAsyncResult result);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [ServiceKnownType(typeof(logseverityEnum))]

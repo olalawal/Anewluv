@@ -6,7 +6,7 @@ using System.Web;
 using System.Collections.Concurrent;
 
 
-namespace Shell.MVC2.SignalR.Infastructure
+namespace Shell.MVC2.SignalR.Infrastructure
 {
     public class SafeCollection<T> : ICollection<T>
     {

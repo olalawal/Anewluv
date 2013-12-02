@@ -7,7 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
-namespace Nmedia.Infrastructure.Domain.Errorlog
+namespace Nmedia.Infrastructure.Domain.errorlog
 {
     [DataContract(Namespace = "")]
     public class logmessage

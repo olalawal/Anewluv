@@ -8,6 +8,7 @@ using System.ServiceModel;
 using System.Net;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
+using Nmedia.Services.Contracts;
 
 namespace Anewluv.Lib
 {
@@ -169,5 +170,82 @@ namespace Anewluv.Lib
             //return _IMemberService;
 
         }
+
+        private static WebChannelFactory<IAuthenticationService> _authenticationservice;
+        public static IAuthenticationService AuthenticationService
+        {
+            get
+            {
+                if (_authenticationservice == null)
+                {
+                    _authenticationservice = new WebChannelFactory<IAuthenticationService>("AuthenticationService");
+                    IAuthenticationService channel = _authenticationservice.CreateChannel();
+                    return channel;
+
+                }
+                else
+                {
+                    IAuthenticationService channel = _authenticationservice.CreateChannel();
+                    return channel;
+
+
+                }
+                //return _IMemberService;
+            }
+        }
+        public static bool DisposeAuthenticationService()
+        {
+
+            if (_authenticationservice != null)
+            {
+                _authenticationservice.Close();
+
+                //IIMemberService channel = _IMemberService.CreateChannel();
+                // return channel;
+                return true;
+            }
+            return false;
+            //return _IMemberService;
+
+        }
+
+        private static WebChannelFactory<IApiKeyService> _apikeyservice;
+        public static IApiKeyService ApiKeyService
+        {
+            get
+            {
+                if (_apikeyservice == null)
+                {
+                    _apikeyservice = new WebChannelFactory<IApiKeyService>("ApiKeyService");
+                    IApiKeyService channel = _apikeyservice.CreateChannel();
+                    return channel;
+
+                }
+                else
+                {
+                    IApiKeyService channel = _apikeyservice.CreateChannel();
+                    return channel;
+
+
+                }
+                //return _IMemberService;
+            }
+        }
+        public static bool DisposeApiKeyService()
+        {
+
+            if (_apikeyservice != null)
+            {
+                _apikeyservice.Close();
+
+                //IIMemberService channel = _IMemberService.CreateChannel();
+                // return channel;
+                return true;
+            }
+            return false;
+            //return _IMemberService;
+
+        }
+
     } 
 }

@@ -16,7 +16,7 @@ using Shell.MVC2.Interfaces;
 
 
 using Newtonsoft.Json;
-using Shell.MVC2.SignalR.Infastructure;
+using Shell.MVC2.SignalR.Infrastructure;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 

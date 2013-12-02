@@ -5,12 +5,12 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
 
-namespace Nemdia.Infrastructure.Domain.Data.ApiKey
+namespace Nmedia.Infrastructure.Domain.Data.ApiKey
 {
 
 
     [DataContract(Namespace = "")]
-    public class lu_application_apikey
+    public class lu_application
     {
         //we generate this manually from enums for now
         [Key]

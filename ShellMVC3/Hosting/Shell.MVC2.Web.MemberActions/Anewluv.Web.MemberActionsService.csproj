@@ -136,9 +136,9 @@
       <Project>{0145184E-916D-4DB2-BB19-E069DF0F1F36}</Project>
       <Name>Shell.MVC2.DependencyResolution.Ninject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\Shell.MVC2.Services.MemberActions\Shell.MVC2.Services.MemberActions.csproj">
+    <ProjectReference Include="..\..\Services\Shell.MVC2.Services.MemberActions\Anewluv.Services.MemberActions.csproj">
       <Project>{8B6D2184-CF8B-483C-9896-6C9F5CCB979A}</Project>
-      <Name>Shell.MVC2.Services.MemberActions</Name>
+      <Name>Anewluv.Services.MemberActions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

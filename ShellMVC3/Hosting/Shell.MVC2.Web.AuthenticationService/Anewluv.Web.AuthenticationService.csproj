@@ -113,9 +113,9 @@
       <Project>{0145184E-916D-4DB2-BB19-E069DF0F1F36}</Project>
       <Name>Shell.MVC2.DependencyResolution.Ninject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\Shell.MVC2.Services.Authentication\Shell.MVC2.Services.Authentication.csproj">
+    <ProjectReference Include="..\..\Services\Shell.MVC2.Services.Authentication\Anewluv.Services.Authentication.csproj">
       <Project>{071D6DB4-A733-43AD-8FCA-2A73F7FE0DF5}</Project>
-      <Name>Shell.MVC2.Services.Authentication</Name>
+      <Name>Anewluv.Services.Authentication</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

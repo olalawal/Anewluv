@@ -47,15 +47,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApikeyMigrations\201311220531287_InitialMigrations.cs" />
+    <Compile Include="ApikeyMigrations\201311220531287_InitialMigrations.Designer.cs">
+      <DependentUpon>201311220531287_InitialMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApikeyMigrations\Configuration.cs" />
     <Compile Include="ApiKey\Context\Apikey.Context.cs" />
     <Compile Include="ApiKey\Context\ApikeyModelbuilder.cs" />
     <Compile Include="ApiKey\Context\SeedMethods.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="ErrorlogMigrations\201311220530373_InitialMigrations.cs" />
+    <Compile Include="ErrorlogMigrations\201311220530373_InitialMigrations.Designer.cs">
+      <DependentUpon>201311220530373_InitialMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorlogMigrations\Configuration.cs" />
     <Compile Include="ErrorLog\Context\ErrorLog.Context.cs" />
     <Compile Include="ErrorLog\Context\ErrorLog.Context.Lookups.cs" />
     <Compile Include="ErrorLog\Context\ErrorLogModelbuilder.cs" />
     <Compile Include="ErrorLog\Context\SeedingConversions.cs" />
     <Compile Include="ErrorLog\Context\SeedMethods.cs" />
+    <Compile Include="NotificationMigrations\201311220459306_InitialMigrations.cs" />
+    <Compile Include="NotificationMigrations\201311220459306_InitialMigrations.Designer.cs">
+      <DependentUpon>201311220459306_InitialMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationMigrations\201311220536015_fixedaddressmessages.cs" />
+    <Compile Include="NotificationMigrations\201311220536015_fixedaddressmessages.Designer.cs">
+      <DependentUpon>201311220536015_fixedaddressmessages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationMigrations\Configuration.cs" />
     <Compile Include="NotificationModel\Context\Notification.Context.cs" />
     <Compile Include="NotificationModel\Context\NotificationModelbuilder.cs" />
     <Compile Include="NotificationModel\Context\SeedMethods.cs" />
@@ -68,7 +87,9 @@
     <Content Include="Documentation\Migration Instructions.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +109,20 @@
       <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>
       <Name>Nmedia.Infrastructure.Domain.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ApikeyMigrations\201311220531287_InitialMigrations.resx">
+      <DependentUpon>201311220531287_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ErrorlogMigrations\201311220530373_InitialMigrations.resx">
+      <DependentUpon>201311220530373_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NotificationMigrations\201311220459306_InitialMigrations.resx">
+      <DependentUpon>201311220459306_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NotificationMigrations\201311220536015_fixedaddressmessages.resx">
+      <DependentUpon>201311220536015_fixedaddressmessages.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

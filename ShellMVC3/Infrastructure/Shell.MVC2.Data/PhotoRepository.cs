@@ -19,7 +19,7 @@ using System.IO;
 using System.Drawing;
 using ImageResizer;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Errorlog;
+using Nmedia.Infrastructure.Domain.errorlog;
 
 using Shell.MVC2.Infrastructure.Helpers;
 
@@ -155,25 +155,25 @@ namespace Shell.MVC2.Data
                                 catch (ImageResizer.ImageMissingException missing)
                                 {
                                     Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename, missing.Message, missing );
-                                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
+                                    new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
                                     //domt throw just log and move on
                                 }
                                 catch (ImageResizer.ImageCorruptedException cr)
                                 {
                                     Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename , cr.Message, cr);
-                                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
+                                    new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
                                    //domt throw just log and move on
                                 }
                                 catch (ImageResizer.ImageProcessingException ex)
                                 {
                                     Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename, ex.Message, ex);
-                                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
+                                    new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
                                     //domt throw just log and move on
                                 }
                                 catch (Exception ex)
                                 {
                                     Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename, ex.Message, ex);
-                                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
+                                    new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, convertedexcption, photo.profile_id, null);
                                     //domt throw just log and move on
                                 }
                             }
@@ -187,7 +187,7 @@ namespace Shell.MVC2.Data
                 {
                     //logg this from the caller ? so we dont log twice
                     Exception convertedexcption = new CustomExceptionTypes.MediaException  ( photo.profile_id.ToString(),"" , ex.Message, ex.InnerException);
-                    //new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                    //new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                     throw convertedexcption;
                 }
                 
@@ -248,7 +248,7 @@ namespace Shell.MVC2.Data
             {
                 //logg this from the caller ? so we dont log twice
                 Exception convertedexcption = new CustomExceptionTypes.MediaException(null, photoid.ToString() , ex.Message, ex.InnerException);
-                //new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                //new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
         }
@@ -300,7 +300,7 @@ namespace Shell.MVC2.Data
             {
                 //logg this from the caller ? so we dont log twice
                 Exception convertedexcption = new CustomExceptionTypes.MediaException(profileid.ToString(),"", ex.Message, ex.InnerException);
-                //new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                //new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
             finally
@@ -791,7 +791,7 @@ namespace Shell.MVC2.Data
             {
 
                 Exception convertedexcption = new CustomExceptionTypes.MediaException("", photoid.ToString(), ex.Message, ex.InnerException);
-                new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -827,7 +827,7 @@ namespace Shell.MVC2.Data
             {
 
                 Exception convertedexcption = new CustomExceptionTypes.MediaException("", PhotoID.ToString(), ex.Message, ex.InnerException);
-                new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -849,7 +849,7 @@ namespace Shell.MVC2.Data
             {
 
                 Exception convertedexcption = new CustomExceptionTypes.MediaException  ("" ,PhotoID.ToString() , ex.Message, ex.InnerException);
-                new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                 throw convertedexcption;
             }
 
@@ -942,7 +942,7 @@ namespace Shell.MVC2.Data
                 {
 
                     Exception convertedexcption = new CustomExceptionTypes.MediaException  (model.profileid.ToString() ,"" , ex.Message, ex.InnerException);
-                    new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, null, null);
+                    new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                     throw convertedexcption;
                 }
                 
@@ -1023,7 +1023,7 @@ namespace Shell.MVC2.Data
             {
 
                 Exception convertedexcption = new CustomExceptionTypes.MediaException  (profileid.ToString(),"" , ex.Message, ex.InnerException);
-                new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption, profileid, null);
+                new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, profileid, null);
                 throw convertedexcption;
             }
 

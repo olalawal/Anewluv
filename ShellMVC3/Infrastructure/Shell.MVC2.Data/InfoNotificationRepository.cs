@@ -9,7 +9,7 @@ using Shell.MVC2.Infrastructure.Entities.NotificationModel;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email;
-using Nmedia.Infrastructure.Domain.Errorlog;
+using Nmedia.Infrastructure.Domain.errorlog;
 using Shell.MVC2.Interfaces;
 using System.Data;
 using System.Net.Mail;
@@ -124,7 +124,7 @@ namespace Shell.MVC2.Data
 
         #region "error message notifications"
 
-        //public bool senderrormessagetodevelopers(Errorlog customerror)
+        //public bool senderrormessagetodevelopers(errorlog customerror)
         //{
 
 
@@ -178,7 +178,7 @@ namespace Shell.MVC2.Data
         //        // The Add method examines the change tracking information 
         //        // contained in the graph of self-tracking entities to infer the set of operations
         //        // that need to be performed to reflect the changes in the database. 
-        //        //Dim ddd = New Errorlog()
+        //        //Dim ddd = New errorlog()
         //        //ddd.Message = errormessage
 
         //        //send the pyysicall email message here
@@ -199,7 +199,7 @@ namespace Shell.MVC2.Data
         #endregion
 
 
-        public   EmailModel senderrormessage(Errorlog error,addresstypeenum addresstype)
+        public   EmailModel senderrormessage(errorlog error,addresstypeenum addresstype)
         {
 
             EmailModel emailmodels = new EmailModel();
@@ -247,7 +247,7 @@ namespace Shell.MVC2.Data
               catch (Exception ex)
               {
                   //log error mesasge
-                  new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning , ex, null, null,false);
+                  new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning , ex, null, null,false);
                 throw;
               }
              
@@ -351,7 +351,7 @@ namespace Shell.MVC2.Data
              catch (Exception ex)
              {
                  //log error mesasge
-                 new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+                 new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
                throw;
              }
             // return null;
@@ -451,7 +451,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+                new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
               throw;
             }
           
@@ -482,7 +482,7 @@ namespace Shell.MVC2.Data
              catch (Exception ex)
              {
                  //log error mesasge
-                 new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+                 new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
                throw;
              }
              return null;
@@ -513,7 +513,7 @@ namespace Shell.MVC2.Data
           catch (Exception ex)
           {
               //log error mesasge
-              new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+              new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
             throw;
           }
           return null;
@@ -548,7 +548,7 @@ namespace Shell.MVC2.Data
           catch (Exception ex)
           {
               //log error mesasge
-              new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+              new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
               throw ;
           }
           return null;

@@ -9,7 +9,7 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
      using Shell.MVC2.Infrastructure.Entities.ApiKeyModel ;
     using Shell.MVC2.Infrastructure.Entities.NotificationModel;
     using Shell.MVC2.Infrastructure.Entities.UserRepairModel;
-    using Nmedia.Infrastructure.Domain.Errorlog;
+    using Nmedia.Infrastructure.Domain.errorlog;
     using Shell.MVC2.Infrastructure.Entities;
 
 
@@ -53,7 +53,7 @@ namespace Shell.MVC2.Infrastructure.Entities.Migrations
         public ConfigurationCustomerrorLogModel()
         {
             AutomaticMigrationsEnabled = true;
-            MigrationsNamespace = "Nmedia.Infrastructure.Domain.Errorlog";
+            MigrationsNamespace = "Nmedia.Infrastructure.Domain.errorlog";
         }
 
         protected override void Seed(ErrorlogContext context)

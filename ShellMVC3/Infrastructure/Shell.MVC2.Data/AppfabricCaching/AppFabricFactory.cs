@@ -15,7 +15,7 @@ using LoggingLibrary;
 
 using Shell.MVC2.Interfaces;
 using Dating.Server.Data.Models;
-using Nmedia.Infrastructure.Domain.Errorlog;
+using Nmedia.Infrastructure.Domain.errorlog;
 
 
 
@@ -205,16 +205,16 @@ namespace Shell.MVC2.AppFabric
             catch (DataCacheException ex)
             {
                 //TO DO NOTIFY AND LOG!!!
-                logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                 //log cache error
                 //log the execption message
             //    throw ;
             }
             catch (Exception ex)
             {
-                logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                 //log cache error
                 // log the execption message
              // throw;
@@ -276,8 +276,8 @@ namespace Shell.MVC2.AppFabric
             catch (Exception ex)
             {
 
-                logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                 throw;
             }
 
@@ -336,15 +336,15 @@ namespace Shell.MVC2.AppFabric
             }
            catch (DataCacheException ex)
             {
-                logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);               
+                logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);               
                 throw new InvalidOperationException();
 
             }
             catch (Exception ex)
             {
-                logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);   
+                logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);   
                 //put cleanup code here
                 throw ;
             }
@@ -552,8 +552,8 @@ namespace Shell.MVC2.AppFabric
                 catch (DataCacheException ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching );
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching );
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                    // throw new InvalidOperationException();
                     throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", model);
                    
@@ -561,8 +561,8 @@ namespace Shell.MVC2.AppFabric
                 }
                 catch (Exception ex)
                 {
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     //put cleanup code here
                     throw;
                 }
@@ -619,15 +619,15 @@ namespace Shell.MVC2.AppFabric
 
                catch (DataCacheException ex)
                 {
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", model);
                     //log the datachae type of excpetion here and mark it handled and logged
                 }
                 catch (Exception ex)
                 {
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     var message = String.Format("Something went wrong with the cache method GetGuestData with this sessionid :  {0}", sessionid );
                     throw new LoggingLibrary.CustomExceptionTypes.AccountException(model, message, ex);
  
@@ -715,15 +715,15 @@ namespace Shell.MVC2.AppFabric
                 }
                catch (DataCacheException ex)
                 {
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", p);
                     //log the datachae type of excpetion here and mark it handled and logged
                 }
                 catch (Exception ex)
                 {
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     var message = String.Format("Something went wrong with the cache method UpdateMemberData with this object or user :  {0}", p.profile.id);
                     throw new LoggingLibrary.CustomExceptionTypes.AccountException(p, message, ex);
 
@@ -841,16 +841,16 @@ namespace Shell.MVC2.AppFabric
                 try { dataCache.Remove("membersviewmodel" + sessionid, "Guests"); }
                catch (DataCacheException ex)
                 {
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     throw;
                 }
                 return true;
@@ -876,8 +876,8 @@ namespace Shell.MVC2.AppFabric
                 catch (Exception ex)
                 {
                     //put cleanup code here
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                   throw;
                 }
                 if (model.Count == 0)
@@ -906,15 +906,15 @@ namespace Shell.MVC2.AppFabric
                 try { model = dataCache.Get("profilebrowsemodel" +sessionid, "Guests") as List<ProfileBrowseModel>; }
                catch (DataCacheException ex)
                 {
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     //load from DB or something
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     //put cleanup code here
                   throw;
                 }
@@ -946,15 +946,15 @@ namespace Shell.MVC2.AppFabric
                 {
 
                     //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     //throw new InvalidOperationException();
                     return false;
                 }
                 catch (Exception ex)
                 {
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     //put cleanup code here
                   throw;
                 }
@@ -976,15 +976,15 @@ namespace Shell.MVC2.AppFabric
                     //Log error
                     //throw new InvalidOperationException();
                     //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     return false;
                 }
                 catch (Exception ex)
                 {
                     //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     //put cleanup code here
                   throw;
                 }
@@ -1004,16 +1004,16 @@ namespace Shell.MVC2.AppFabric
                catch (DataCacheException ex)
                 {
                     //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);                   
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);                   
                     throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {
                     //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     //put cleanup code here
                   throw;
                 }
@@ -1032,15 +1032,15 @@ namespace Shell.MVC2.AppFabric
                catch (DataCacheException ex)
                 {
                     //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     throw new InvalidOperationException();
 
                 }
                 catch (Exception ex)
                 {  //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     //put cleanup code here
                   throw;
                 }
@@ -1110,14 +1110,14 @@ namespace Shell.MVC2.AppFabric
                catch (DataCacheException ex)
                 {
                     //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {  //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     //put cleanup code here
                   throw;
                 }
@@ -1167,15 +1167,15 @@ namespace Shell.MVC2.AppFabric
                catch (DataCacheException ex)
                 {
                     //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
                     //Log error
-                    logger = new ErroLogging(applicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     //put cleanup code here
                   throw;
                 }

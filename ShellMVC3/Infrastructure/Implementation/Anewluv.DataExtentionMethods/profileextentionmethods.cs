@@ -179,8 +179,8 @@ namespace Anewluv.DataExtentionMethods
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-               // logger = new ErroLogging(applicationEnum.MemberService);
-               // logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null);
+               // logger = new ErroLogging(logapplicationEnum.MemberService);
+               // logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
@@ -189,15 +189,15 @@ namespace Anewluv.DataExtentionMethods
 
         }
 
-        public static bool getuseronlinestatus(this IRepository<userlogtime> repo, ProfileModel model)
+        public static bool getuseronlinestatus(this IRepository<profile> repo, ProfileModel model)
         {
             try
             {
                 //get the profile
                 //profile myProfile;
-                IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
+               // IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
                
-                myQuery = repo.Find().OfType<userlogtime>().Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime);
+               var  myQuery = repo.Find().OfType<userlogtime>().Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime).ToList();
 
                 //            var queryB =
                 //                (from o in db.Orders

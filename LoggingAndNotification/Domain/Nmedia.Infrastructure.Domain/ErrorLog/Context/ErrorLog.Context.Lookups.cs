@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.Entity;
-using Nmedia.Infrastructure.Domain.Data.Errorlog;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
 
 namespace Nmedia.Infrastructure.Domain
 {

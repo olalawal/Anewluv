@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
 
-namespace Nemdia.Infrastructure.Domain.Data.ApiKey
+namespace Nmedia.Infrastructure.Domain.Data.ApiKey
 {
     [DataContract(Namespace = "")]
      public class apikey
@@ -23,7 +23,7 @@ namespace Nemdia.Infrastructure.Domain.Data.ApiKey
             public int id { get; set; }
             [DataMember]
             public DateTime? timestamp { get; set; }      
-            public virtual lu_application_apikey  application { get; set; }        
+            public virtual lu_application  application { get; set; }        
             public virtual lu_accesslevel  accesslevel { get; set; } 
             public string externalapplicationname { get; set; }
             public virtual ICollection<user> registeredusers { get; set; }

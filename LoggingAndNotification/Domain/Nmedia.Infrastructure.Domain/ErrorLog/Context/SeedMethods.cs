@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 
 using Shell.MVC2.Infrastructure;
-using Nmedia.Infrastructure.Domain.Data.Errorlog;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
 
 namespace Nmedia.Infrastructure.Domain
 {

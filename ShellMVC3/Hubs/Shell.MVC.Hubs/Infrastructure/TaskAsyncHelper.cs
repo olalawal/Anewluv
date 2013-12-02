@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Shell.MVC2.SignalR.Infastructure
+namespace Shell.MVC2.SignalR.Infrastructure
 {
     internal static class TaskAsyncHelper
     {

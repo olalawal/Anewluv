@@ -14,12 +14,13 @@ using Shell.MVC2.Infrastructure;
 using System.ServiceModel.Activation;
 using Nmedia.DataAccess.Interfaces;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Errorlog;
+//using Nmedia.Infrastructure.Domain.errorlog;
 using Anewluv.DataExtentionMethods;
 using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Domain.Data;
 using Anewluv.Lib;
 using Anewluv.DataExtentionMethods;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
 
 namespace Anewluv.Services.Mapping
 {
@@ -36,7 +37,7 @@ namespace Anewluv.Services.Mapping
         //private IPromotionRepository  promotionrepository;
 
         IUnitOfWork _unitOfWork;
-        private LoggingLibrary.ErroLogging logger;
+        private ErroLogging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
@@ -120,7 +121,7 @@ namespace Anewluv.Services.Mapping
                             //   membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
                         model.mycatchyintroline = profile.profiledata.mycatchyintroLine;
                         model.aboutme = profile.profiledata.aboutme;
-                        model.online = db.GetRepository<userlogtime>().getuseronlinestatus(new ProfileModel { profileid = profile.id });
+                        model.online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = profile.id });
                         model.perfectmatchsettings = profile.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault();
                         // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
                         //DistanceFromMe = 0  get distance from somwhere else
@@ -160,9 +161,9 @@ namespace Anewluv.Services.Mapping
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     //FaultReason faultreason = new FaultReason("Error in member mapper service");
                    // string ErrorMessage = "";
@@ -194,9 +195,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -236,9 +237,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -274,9 +275,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -316,9 +317,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -369,9 +370,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(viewerprofileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -635,9 +636,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -696,9 +697,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -760,9 +761,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(Model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(Model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -817,9 +818,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(Model.profileid ));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(Model.profileid ));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -861,9 +862,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(membersmodel.profile_id));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(membersmodel.profile_id));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -965,9 +966,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(membersmodel.profile_id));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(membersmodel.profile_id));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1031,9 +1032,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1068,9 +1069,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(model.profile_id));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profile_id));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1101,9 +1102,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid.ToString()));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid.ToString()));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1134,9 +1135,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(model.profile_id));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profile_id));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1166,9 +1167,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex,null);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex,null);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1198,9 +1199,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, null);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1232,9 +1233,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid.ToString()));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid.ToString()));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1375,9 +1376,9 @@ namespace Anewluv.Services.Mapping
             {
 
                 //instantiate logger here so it does not break anything else.
-                logger = new ErroLogging(applicationEnum.MemberService);
+                logger = new ErroLogging(logapplicationEnum.MemberService);
                 //int profileid = Convert.ToInt32(viewerprofileid);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid.ToString()));
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid.ToString()));
                 //can parse the error to build a more custom error mssage and populate fualt faultreason
                 FaultReason faultreason = new FaultReason("Error in member mapper service");
                 string ErrorMessage = "";
@@ -1421,9 +1422,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex,null);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex,null);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1612,7 +1613,7 @@ namespace Anewluv.Services.Mapping
                         galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), photoformatEnum.Thumbnail.ToString()),
                         lookingforagefrom = x.lookingforagefrom,
                         lookingForageto = x.lookingForageto,
-                        online = db.GetRepository<userlogtime>().getuseronlinestatus(new ProfileModel { profileid = x.id })
+                        online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
                     }).ToList();
 
                 }
@@ -1620,9 +1621,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(Model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(Model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1798,7 +1799,7 @@ namespace Anewluv.Services.Mapping
                         galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), photoformatEnum.Thumbnail.ToString()),
                         lookingforagefrom = x.lookingforagefrom,
                     lookingForageto = x.lookingForageto,
-                    online = db.GetRepository<userlogtime>().getuseronlinestatus(new ProfileModel { profileid = x.id })
+                    online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
            
 
                     }).ToList();
@@ -1809,9 +1810,9 @@ namespace Anewluv.Services.Mapping
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(Model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(Model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1951,7 +1952,7 @@ namespace Anewluv.Services.Mapping
                     galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(),photoformatEnum.Thumbnail.ToString()),
                     lookingforagefrom = x.lookingforagefrom,
                     lookingForageto = x.lookingForageto,
-                    online = db.GetRepository<userlogtime>().getuseronlinestatus(new ProfileModel { profileid = x.id })
+                    online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
                 }).ToList();
 
 
@@ -1966,9 +1967,9 @@ namespace Anewluv.Services.Mapping
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                logger = new ErroLogging(applicationEnum.MemberService);
+                logger = new ErroLogging(logapplicationEnum.MemberService);
                 //int profileid = Convert.ToInt32(viewerprofileid);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profilemodel.profileid ));
+                logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profilemodel.profileid ));
                 //can parse the error to build a more custom error mssage and populate fualt faultreason
                 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.Entity;
-using Nmedia.Infrastructure.Domain.Data.Errorlog;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
 using Nmedia.DataAccess.Interfaces;
 
 using System.Data;
@@ -26,7 +26,7 @@ namespace Nmedia.Infrastructure.Domain
 
 
         public ErrorlogContext()
-            : base("name=ErrorlogContext")
+            : base("name=AnewLuvCommonContext")
         {
             this.Configuration.ValidateOnSaveEnabled = false;
             IsAuditEnabled = true;
@@ -35,7 +35,7 @@ namespace Nmedia.Infrastructure.Domain
                 new DropCreateDatabaseIfModelChanges<ErrorlogContext>());
         }
 
-        public DbSet<Errorlog> Errorlogs { get; set; }
+        public DbSet<errorlog> Errorlogs { get; set; }
 
      
         public class Initializer : IDatabaseInitializer<ErrorlogContext>

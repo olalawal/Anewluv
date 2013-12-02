@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Shell.MVC2.SignalR.Infastructure
+namespace Shell.MVC2.SignalR.Infrastructure
 {
     public static class StringExtensions
     {

@@ -15,9 +15,9 @@ using Shell.MVC2.Data.AuthenticationAndMembership;
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Domain.Entities.Anewluv;
 using Dating.Server.Data.Models;
-using Shell.MVC2.Infastructure;
+using Shell.MVC2.Infrastructure;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Errorlog;
+using Nmedia.Infrastructure.Domain.errorlog;
 
 //code sample of header and how to get it from this code
 
@@ -220,8 +220,8 @@ namespace Shell.MVC2.Data
             {
                // var profileinfo = authinfo[0] ?? "";
                 //instantiate logger here so it does not break anything else.
-                new ErroLogging(applicationEnum.UserAuthorizationService ).WriteSingleEntry(logseverityEnum.CriticalError, ex,1, null);
-                //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                new ErroLogging(logapplicationEnum.UserAuthorizationService ).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex,1, null);
+                //logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;

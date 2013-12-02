@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Linq;
 using System.Web;
 
-namespace Shell.MVC2.SignalR.Infastructure
+namespace Shell.MVC2.SignalR.Infrastructure
 {
     internal static class RandomUtils
     {

@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="INotificationService.cs" />
+    <Compile Include="IAnewluvApikeyAuthService.cs" />
+    <Compile Include="IAnewluvNotificationService.cs" />
     <Compile Include="IErrorLoggingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceResponse\Enums\DocumentTypes.cs" />

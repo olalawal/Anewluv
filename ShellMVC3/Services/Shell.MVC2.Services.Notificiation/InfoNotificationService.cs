@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Nmedia.Infrastructure.Domain.Errorlog;
+using Nmedia.Infrastructure.Domain.errorlog;
 using Shell.MVC2.Infrastructure.Interfaces;
 using Shell.MVC2.Services.Contracts;
 
@@ -40,7 +40,7 @@ namespace Shell.MVC2.Services.Notification
             }
 
 
-       public EmailModel senderrormessage(Errorlog error, string addresstype)
+       public EmailModel senderrormessage(errorlog error, string addresstype)
        {
 
     

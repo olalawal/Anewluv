@@ -5,7 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Shell.MVC2.SignalR.Infastructure
+namespace Shell.MVC2.SignalR.Infrastructure
 {
     public static class Http
     {

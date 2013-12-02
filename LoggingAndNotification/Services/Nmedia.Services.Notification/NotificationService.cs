@@ -10,7 +10,7 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using Nmedia.Services.Contracts;
 using Nmedia.DataAccess.Interfaces;
-using Nmedia.Infrastructure.Domain.Data.Errorlog;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
 using Nmedia.Infrastructure.Domain.Data.ViewModels;
 using Nmedia.Infrastructure.Domain.Data.Notification;
 using Shell.MVC2.Infrastructure;
@@ -58,7 +58,7 @@ namespace Nmedia.Services.Notification
 
 
 
-        public EmailModel senderrormessage(Errorlog error, string addresstype)
+        public EmailModel senderrormessage(errorlog error, string addresstype)
         {
 
 

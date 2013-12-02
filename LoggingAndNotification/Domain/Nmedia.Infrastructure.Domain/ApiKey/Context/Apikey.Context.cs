@@ -13,7 +13,7 @@ using System.Data.Entity.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Core.Objects;
 
-using Nemdia.Infrastructure.Domain.Data.ApiKey;
+using Nmedia.Infrastructure.Domain.Data.ApiKey;
 
 namespace Nmedia.Infrastructure.Domain
 {
@@ -27,7 +27,7 @@ namespace Nmedia.Infrastructure.Domain
         private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
 
         public ApiKeyContext()
-            : base("name=ApiKeyContext")
+            : base("name=AnewLuvCommonContext")
         {
             this.Configuration.ProxyCreationEnabled = true;
             this.Configuration.AutoDetectChangesEnabled = true;
@@ -47,7 +47,7 @@ namespace Nmedia.Infrastructure.Domain
         public DbSet<apicall> apicalls { get; set; }
         public DbSet<user> users { get; set; }
         public DbSet<lu_accesslevel > lu_accesslevels { get; set; }
-        public DbSet<lu_application_apikey > lu_applications { get; set; }
+        public DbSet<lu_application> lu_applications { get; set; }
   
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

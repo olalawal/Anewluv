@@ -6,7 +6,7 @@ using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Nmedia.Infrastructure.Domain.Errorlog
+namespace Nmedia.Infrastructure.Domain.errorlog
 {
 
     public  class customErrorlogmodelbuilder
@@ -15,15 +15,15 @@ namespace Nmedia.Infrastructure.Domain.Errorlog
         public static void buildgeneralmodels(DbModelBuilder modelBuilder)
         {
 
-          //  modelBuilder.Entity<Errorlog>().ToTable("Errorlogs", schemaName: "Logging");
+          //  modelBuilder.Entity<errorlog>().ToTable("Errorlogs", schemaName: "Logging");
            // modelBuilder.Entity<lu_application>().ToTable("lu_application", schemaName: "Logging");
          //   modelBuilder.Entity<lu_logseverity>().ToTable("lu_logseverity", schemaName: "Logging");
           //  modelBuilder.Entity<lu_logseverityinternal>().ToTable("lu_logseverityinternal", schemaName: "Logging");
 
             //setup FK relationsships 
-            modelBuilder.Entity<Errorlog>().HasRequired(p => p.application).WithMany().WillCascadeOnDelete(false);
-            modelBuilder.Entity<Errorlog>().HasRequired(p => p.logseverity).WithMany().WillCascadeOnDelete(false);
-             modelBuilder.Entity<Errorlog>()
+            modelBuilder.Entity<errorlog>().HasRequired(p => p.application).WithMany().WillCascadeOnDelete(false);
+            modelBuilder.Entity<errorlog>().HasRequired(p => p.logseverity).WithMany().WillCascadeOnDelete(false);
+             modelBuilder.Entity<errorlog>()
             .HasOptional(m => m.logseverityinternal).WithOptionalDependent().WillCascadeOnDelete(false);
             
 

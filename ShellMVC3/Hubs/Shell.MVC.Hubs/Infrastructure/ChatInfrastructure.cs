@@ -15,7 +15,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 
-namespace Shell.MVC2.SignalR.Infastructure
+namespace Shell.MVC2.SignalR.Infrastructure
 {
     //TO DO add a room sweeper to kill chat request denined rooms or chatrequest rooms or even chat rooms with no
     //activity over 30 mins , run it on a different timer maybe 

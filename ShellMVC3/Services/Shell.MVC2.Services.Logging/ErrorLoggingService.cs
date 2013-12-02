@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Shell.MVC2.Infrastructure.Interfaces;
-using Nmedia.Infrastructure.Domain.Errorlog ;
+using Nmedia.Infrastructure.Domain.errorlog ;
 using Shell.MVC2.Services.Contracts;
 using System.ServiceModel.Activation;
 using System.ServiceModel;
@@ -28,7 +28,7 @@ namespace Shell.MVC2.Services.Logging
 
 
  
-        public int WriteCompleteLogEntry(Errorlog logEntry)
+        public int WriteCompleteLogEntry(errorlog logEntry)
         {
             return _Errorloggingrepository.WriteCompleteLogEntry(logEntry);
         }

@@ -10,7 +10,7 @@ using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Infrastructure;
 using System.Data;
-using Nmedia.Infrastructure.Domain.Errorlog;
+using Nmedia.Infrastructure.Domain.errorlog;
 using LoggingLibrary;
 
 namespace Shell.MVC2.Data
@@ -67,13 +67,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, id, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, id, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, id, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, id, null, false);
                 throw;
             }
         }
@@ -111,13 +111,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, id, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, id, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, id, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, id, null, false);
                 throw;
             }
         }
@@ -140,13 +140,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, null, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, null, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null, false);
                 throw;
             }
         }
@@ -170,13 +170,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, profileId, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, profileId, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileId, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileId, null, false);
                 throw;
             }
         }
@@ -218,13 +218,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, profileId , null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, profileId , null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileId, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileId, null, false);
                 throw;
             }
         }
@@ -246,13 +246,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, null, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, null, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null, false);
                 throw;
             }
         }
@@ -274,13 +274,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, null, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, null, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null, false);
                 throw;
             }
         }
@@ -309,13 +309,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, null, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, null, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null, false);
                 throw;
             }
         }
@@ -368,13 +368,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, profileid, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, profileid, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null, false);
                 throw;
             }
 
@@ -419,13 +419,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, profileid, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, profileid, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null, false);
                 throw;
             }
 
@@ -483,13 +483,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, profileid, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, profileid, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null, false);
                 throw;
             }
 
@@ -540,13 +540,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, profileid, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, profileid, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null, false);
                 throw;
             }
         }
@@ -599,13 +599,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, profileid, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, profileid, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null, false);
                 throw;
             }
 
@@ -637,13 +637,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, dx, null, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, dx, null, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(applicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, ex, null, null, false);
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null, false);
                 throw;
             }
                            

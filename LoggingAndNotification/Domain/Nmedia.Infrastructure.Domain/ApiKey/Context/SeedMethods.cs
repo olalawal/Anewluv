@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Shell.MVC2.Infrastructure;
-using Nemdia.Infrastructure.Domain.Data.ApiKey;
+using Nmedia.Infrastructure.Domain.Data.ApiKey;
 
 
 namespace Nmedia.Infrastructure.Domain
@@ -23,7 +23,7 @@ namespace Nmedia.Infrastructure.Domain
                                  //   where value != messageapplicationenum.NotSet
                                  orderby value // to sort by value; remove otherwise 
                                  select value;
-            applicationqry.ToList().ForEach(kvp => context.lu_applications.AddOrUpdate(new lu_application_apikey()
+            applicationqry.ToList().ForEach(kvp => context.lu_applications.AddOrUpdate(new lu_application()
             {
                 id = (int)kvp,
                 description = EnumExtensionMethods.ToDescription(kvp)

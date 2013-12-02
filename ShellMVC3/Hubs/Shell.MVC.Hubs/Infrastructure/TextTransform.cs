@@ -7,7 +7,7 @@ using System.Web;
 using Shell.MVC2.Domain.Entities.Anewluv.Chat;
 using Shell.MVC2.Interfaces;
 
-namespace Shell.MVC2.SignalR.Infastructure
+namespace Shell.MVC2.SignalR.Infrastructure
 {
     public class TextTransform
     {

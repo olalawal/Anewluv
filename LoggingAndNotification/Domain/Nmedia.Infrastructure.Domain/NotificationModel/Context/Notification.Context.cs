@@ -41,7 +41,7 @@ namespace Nmedia.Infrastructure.Domain
 
 
         public NotificationContext()
-            : base("name=NotificationContext")
+            : base("name=AnewLuvCommonContext")
         {
             this.Configuration.ValidateOnSaveEnabled = false;
             IsAuditEnabled = true;

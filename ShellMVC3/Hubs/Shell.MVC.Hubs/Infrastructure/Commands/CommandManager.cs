@@ -12,7 +12,7 @@ using Shell.MVC2.Services.Contracts;
 using Shell.MVC2.SignalR.Hubs;
 
 
-namespace Shell.MVC2.SignalR.Infastructure
+namespace Shell.MVC2.SignalR.Infrastructure
 {
     public class CommandManager
     {

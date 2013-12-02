@@ -11,9 +11,9 @@ using System.Data;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
-using Nmedia.Infrastructure.Domain.Data.Errorlog;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
 
-namespace Nmedia.Infrastructure.Domain.Data.Errorlog
+namespace Nmedia.Infrastructure.Domain.Data.errorlog
 {
     [DataContract(Namespace = "")]
     public class lu_logseverityinternal

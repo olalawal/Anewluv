@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text;
 using System.Data;
-using Nmedia.Infrastructure.Domain.Errorlog;
+using Nmedia.Infrastructure.Domain.errorlog;
 using System.Diagnostics;
 using Shell.MVC2.Infrastructure.Interfaces;
 
@@ -26,7 +26,7 @@ namespace Shell.MVC2.Data
             return string.Format("You entered: {0}", value);
         }
 
-        public int WriteCompleteLogEntry(Errorlog logEntry)
+        public int WriteCompleteLogEntry(errorlog logEntry)
         {
             // logEntry.dtTimeStamp = DateTime.Now;
 
@@ -108,7 +108,7 @@ namespace Shell.MVC2.Data
             }
         }
 
-        //public int WriteCompleteLogEntry(Errorlog logEntry)
+        //public int WriteCompleteLogEntry(errorlog logEntry)
         //{
         //    int logEntryID = 0;
 
@@ -141,7 +141,7 @@ namespace Shell.MVC2.Data
         //        return;
         //    }
 
-        //    Errorlog logEntry = new Errorlog();
+        //    errorlog logEntry = new errorlog();
         //    logEntry.ErrorlogID = logEntryID;
         //    logEntry.LoggedObject = value.ToString();
 
@@ -190,7 +190,7 @@ namespace Shell.MVC2.Data
         //        return;
         //    }
 
-        //    Errorlog logEntry = new Errorlog();
+        //    errorlog logEntry = new errorlog();
         //    logEntry.ErrorlogID = logEntryID;
         //    logEntry.LoggedObject = value.CurrentValue;
         //    logEntry.Type = value.LogValueType;
@@ -293,7 +293,7 @@ namespace Shell.MVC2.Data
         //        return;
         //    }
 
-        //    Errorlog logEntry = new Errorlog();
+        //    errorlog logEntry = new errorlog();
         //    logEntry.ErrorlogID = logEntryID;
         //    //logEntry.Message = message;
         //    //logEntry.Type = value.LogValueType;
@@ -410,7 +410,7 @@ namespace Shell.MVC2.Data
         //        return;
         //    }
 
-        //    Errorlog logEntry = new Errorlog();
+        //    errorlog logEntry = new errorlog();
         //    logEntry.ErrorlogID = logEntryID;
         //    // logEntry. = message.Text;
         //    logEntry.AssemblyName = message.AssemblyName;

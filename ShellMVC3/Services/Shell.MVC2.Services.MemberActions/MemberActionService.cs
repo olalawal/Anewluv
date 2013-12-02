@@ -9,20 +9,19 @@ using Shell.MVC2.Services.Contracts;
 using System.Web;
 using System.Net;
 
-using Shell.MVC2.Interfaces;
 
 using Anewluv.Domain.Data;
-
 using System.ServiceModel.Activation;
 using Nmedia.DataAccess.Interfaces;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Errorlog;
+//using Nmedia.Infrastructure.Domain.errorlog;
 using Anewluv.Domain.Data.ViewModels;
 using Shell.MVC2.Infrastructure;
 using Anewluv.Lib;
 using Anewluv.DataExtentionMethods;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
 
-namespace Shell.MVC2.Services.MemberActions
+namespace Anewluv.Services.MemberActions
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
@@ -87,9 +86,11 @@ namespace Shell.MVC2.Services.MemberActions
                 }
                 catch (Exception ex)
                 {
-                    logger = new ErroLogging(applicationEnum.MemberService);
+                    logger = new ErroLogging(logapplicationEnum.MemberActionsService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(profileid)); logger.Dispose();
+                    
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -114,8 +115,8 @@ namespace Shell.MVC2.Services.MemberActions
         //        catch (Exception ex)
         //        {
         //            //instantiate logger here so it does not break anything else.
-        //            new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
-        //            //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+        //            new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null);
+        //            //logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null);
         //            //log error mesasge
         //            //handle logging here
         //            var message = ex.Message;
@@ -151,8 +152,8 @@ namespace Shell.MVC2.Services.MemberActions
         //     catch (Exception ex)
         //     {
 
-        //            logger = new ErroLogging(applicationEnum.MemberService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+        //           new ErroLogging(logapplicationEnum.MemberActionsService);
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -193,8 +194,8 @@ namespace Shell.MVC2.Services.MemberActions
         //     catch (Exception ex)
         //     {
 
-        //            logger = new ErroLogging(applicationEnum.MemberService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+        //           new ErroLogging(logapplicationEnum.MemberActionsService);
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -233,8 +234,8 @@ namespace Shell.MVC2.Services.MemberActions
         //     catch (Exception ex)
         //     {
 
-        //            logger = new ErroLogging(applicationEnum.MemberService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+        //           new ErroLogging(logapplicationEnum.MemberActionsService);
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -276,8 +277,8 @@ namespace Shell.MVC2.Services.MemberActions
         //     catch (Exception ex)
         //     {
 
-        //            logger = new ErroLogging(applicationEnum.MemberService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+        //           new ErroLogging(logapplicationEnum.MemberActionsService);
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -315,8 +316,8 @@ namespace Shell.MVC2.Services.MemberActions
         //     catch (Exception ex)
         //     {
 
-        //            logger = new ErroLogging(applicationEnum.MemberService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+        //           new ErroLogging(logapplicationEnum.MemberActionsService);
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -355,8 +356,8 @@ namespace Shell.MVC2.Services.MemberActions
         //     catch (Exception ex)
         //     {
 
-        //            logger = new ErroLogging(applicationEnum.MemberService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+        //           new ErroLogging(logapplicationEnum.MemberActionsService);
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -397,8 +398,8 @@ namespace Shell.MVC2.Services.MemberActions
         //     catch (Exception ex)
         //     {
 
-        //            logger = new ErroLogging(applicationEnum.MemberService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+        //           new ErroLogging(logapplicationEnum.MemberActionsService);
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -464,8 +465,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -520,8 +521,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -576,8 +577,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -655,8 +656,8 @@ namespace Shell.MVC2.Services.MemberActions
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    new ErroLogging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid), null);
-                    //logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, profileid, null);
+                    new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid), null);
+                    //logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null);
                     //log error mesasge
                     //handle logging here
                     var message = ex.Message;
@@ -731,8 +732,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                 logger = new ErroLogging(applicationEnum.MemberService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                new ErroLogging(logapplicationEnum.MemberActionsService);
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -805,8 +806,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -848,8 +849,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -881,8 +882,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -953,8 +954,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1008,8 +1009,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1059,8 +1060,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1109,8 +1110,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1160,8 +1161,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1217,8 +1218,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1270,8 +1271,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1320,8 +1321,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1377,8 +1378,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -1431,8 +1432,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -1486,8 +1487,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -1557,8 +1558,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                 logger = new ErroLogging(applicationEnum.MemberService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                new ErroLogging(logapplicationEnum.MemberActionsService);
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -1628,8 +1629,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                 logger = new ErroLogging(applicationEnum.MemberService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                new ErroLogging(logapplicationEnum.MemberActionsService);
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -1703,8 +1704,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                 logger = new ErroLogging(applicationEnum.MemberService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                new ErroLogging(logapplicationEnum.MemberActionsService);
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -1749,8 +1750,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -1782,8 +1783,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -1853,8 +1854,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1904,8 +1905,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1955,8 +1956,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2006,8 +2007,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2060,8 +2061,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2114,8 +2115,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2167,8 +2168,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2214,8 +2215,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2275,8 +2276,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -2333,8 +2334,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                 logger = new ErroLogging(applicationEnum.MemberService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                new ErroLogging(logapplicationEnum.MemberActionsService);
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -2397,8 +2398,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                 logger = new ErroLogging(applicationEnum.MemberService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                new ErroLogging(logapplicationEnum.MemberActionsService);
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -2444,8 +2445,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2484,8 +2485,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2557,8 +2558,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2607,8 +2608,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2658,8 +2659,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2713,8 +2714,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2767,8 +2768,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2821,8 +2822,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2876,8 +2877,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -2932,8 +2933,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -2989,8 +2990,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -3061,8 +3062,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                 logger = new ErroLogging(applicationEnum.MemberService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                new ErroLogging(logapplicationEnum.MemberActionsService);
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -3134,8 +3135,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                 logger = new ErroLogging(applicationEnum.MemberService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                new ErroLogging(logapplicationEnum.MemberActionsService);
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -3207,8 +3208,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                 logger = new ErroLogging(applicationEnum.MemberService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                new ErroLogging(logapplicationEnum.MemberActionsService);
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -3250,8 +3251,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -3286,8 +3287,8 @@ namespace Shell.MVC2.Services.MemberActions
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                   new ErroLogging(logapplicationEnum.MemberActionsService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -3358,8 +3359,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3411,8 +3412,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3463,8 +3464,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3515,8 +3516,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3569,8 +3570,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3625,8 +3626,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3680,8 +3681,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3731,8 +3732,8 @@ namespace Shell.MVC2.Services.MemberActions
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        logger = new ErroLogging(applicationEnum.MemberService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                       new ErroLogging(logapplicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";

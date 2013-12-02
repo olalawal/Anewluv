@@ -7,7 +7,7 @@ using System.Text;
 
 using Shell.MVC2.Infrastructure;
 
-namespace Nmedia.Infrastructure.Domain.Errorlog
+namespace Nmedia.Infrastructure.Domain.errorlog
 {
     public class SeedMethodsErrorlogModel
     {

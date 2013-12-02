@@ -4,15 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-
-
-
 using System.Web;
 using System.Net;
-
-
-
-
 using System.ServiceModel.Activation;
 using Nmedia.DataAccess.Interfaces;
 using System.Data.SqlClient;
@@ -20,9 +13,11 @@ using GeoData.Domain.Models;
 using GeoData.Domain.Models.ViewModels;
 using Shell.MVC2.Services.Contracts;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Errorlog;
+
 using Anewluv.Domain.Data.ViewModels;
 using Anewluv.DataExtentionMethods;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Anewluv.Lib;
 
 
 
@@ -39,6 +34,7 @@ namespace Anewluv.Services.Spatial
 
         IUnitOfWork _unitOfWork;
         private LoggingLibrary.ErroLogging logger;
+       // logenviromentEnum currentenviroment = logenviromentEnum.dev;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
@@ -101,7 +97,7 @@ namespace Anewluv.Services.Spatial
                         {
 
                             Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(countryid.ToString(), "", "", ex.Message, ex.InnerException);
-                            new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,  convertedexcption);
+                            new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment,  convertedexcption);
                             //can parse the error to build a more custom error mssage and populate fualt faultreason
                             FaultReason faultreason = new FaultReason("Error in GeoService service");
                             string ErrorMessage = "";
@@ -167,7 +163,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.GeoRegisterModel.country , "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -210,7 +206,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -262,7 +258,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("", "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -301,7 +297,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(countryname.ToString(), "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -345,7 +341,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
-                        new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                        new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -409,7 +405,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -473,7 +469,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country.ToString(), "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -529,7 +525,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country.ToString(), "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -596,7 +592,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -661,7 +657,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country.ToString(), "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -723,7 +719,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country.ToString(), "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -781,7 +777,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country.ToString(), "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -847,7 +843,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -904,7 +900,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -978,7 +974,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
@@ -1046,7 +1042,7 @@ namespace Anewluv.Services.Spatial
                     {
 
                         Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
-                         new ErroLogging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, convertedexcption);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
                         string ErrorMessage = "";
