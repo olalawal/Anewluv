@@ -22,6 +22,7 @@ using Nmedia.Infrastructure.Domain.Data.errorlog;
 //using Nmedia.Infrastructure.Domain.Data.errorlog;
 using Anewluv.DataExtentionMethods;
 using Anewluv.Lib;
+using Shell.MVC2.Infrastructure.WCF;
 
 
 namespace Anewluv.Services.MemberService
@@ -654,7 +655,7 @@ namespace Anewluv.Services.MemberService
         //updates all the areas  that handle when a user logs in 
         // added 1/18/2010 ola lawal
         //also updates the last log in and profile data
-        public bool updateuserlogintimebyprofileidandsessionid(ProfileModel model)
+        public IAsyncResult Beginupdateuserlogintimebyprofileidandsessionid(ProfileModel model, AsyncCallback callback, object asyncState)
         {
 
             //get the profile
@@ -698,7 +699,7 @@ namespace Anewluv.Services.MemberService
                           int i = db.Commit();
                           transaction.Commit();
 
-                          return true;
+                          return new CompletedAsyncResult<bool>(true);
                       }
                       catch (Exception ex)
                       {
@@ -719,6 +720,13 @@ namespace Anewluv.Services.MemberService
             }
 
        }
+
+        public bool Endupdateuserlogintimebyprofileidandsessionid(IAsyncResult r)
+        {
+            CompletedAsyncResult<bool> result = r as CompletedAsyncResult<bool>;
+            //Console.WriteLine("EndServiceAsyncMethod called with: \"{0}\"", result.Data);
+            return result.Data;
+        }
 
 
         //"DateTimeFUcntiosn for longin etc "
@@ -770,7 +778,77 @@ namespace Anewluv.Services.MemberService
 
         }
 
-        public bool addprofileactvity(profileactivity model)
+        //"DateTimeFUcntiosn for longin etc "
+        //**********************************************************
+        // Description:	Updates the users logout time
+        // added 1/18/2010 ola lawal
+        public IAsyncResult Beginupdateuserlogintimebyprofileid(ProfileModel model,AsyncCallback callback, object asyncState)
+        {
+            //_unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                        //update all other sessions that were not properly logged out
+                        var myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+
+                        foreach (userlogtime p in myQuery)
+                        {
+                            p.offline = true;
+                            db.Update(p);
+                        }
+
+
+                        //aloso update the profile table with current login date
+                        var myProfile = db.GetRepository<profile>().getprofilebyprofileid(model);
+                        //update the profile status to 2
+                        myProfile.logindate = DateTime.Now;
+                        db.Update(myProfile);
+
+
+                        //noew aslo update the logtime and then 
+                        userlogtime myLogtime = new userlogtime();
+                        myLogtime.profile_id = model.profileid.GetValueOrDefault();
+                        myLogtime.sessionid = model.sessionid;
+                        myLogtime.logintime = DateTime.Now;
+                        db.Add(myLogtime);
+                        //save all changes bro                         
+                        int i = db.Commit();
+                        transaction.Commit();
+
+                        return new CompletedAsyncResult<bool>(true);
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        //int profileid = Convert.ToInt32(viewerprofileid);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                        //throw convertedexcption;
+                    }
+                }
+            }
+
+        }
+
+        public bool Endupdateuserlogintimebyprofileid(IAsyncResult r)
+        {
+            CompletedAsyncResult<bool> result = r as CompletedAsyncResult<bool>;
+            //Console.WriteLine("EndServiceAsyncMethod called with: \"{0}\"", result.Data);
+            return result.Data;
+        }
+
+        public IAsyncResult Beginaddprofileactvity(profileactivity model,AsyncCallback callback, object asyncState)
         {
             //get the profile
             //profile myProfile;
@@ -799,7 +877,7 @@ namespace Anewluv.Services.MemberService
                          int i = db.Commit();
                          transaction.Commit();
 
-                         return true;
+                        return new CompletedAsyncResult<bool>(true);
 
                     }
                     catch (Exception ex)
@@ -822,7 +900,12 @@ namespace Anewluv.Services.MemberService
 
         }
 
-
+        public bool Endaddprofileactvity(IAsyncResult r)
+        {
+            CompletedAsyncResult<bool> result = r as CompletedAsyncResult<bool>;
+            //Console.WriteLine("EndServiceAsyncMethod called with: \"{0}\"", result.Data);
+            return result.Data;
+        }
 
         //date time functions '
         //***********************************************************

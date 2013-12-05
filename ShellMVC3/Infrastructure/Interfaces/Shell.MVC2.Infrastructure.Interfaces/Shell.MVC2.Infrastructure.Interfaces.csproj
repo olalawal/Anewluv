@@ -51,8 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAPIkeyRepository.cs" />
-    <Compile Include="IErrorLoggingRepository.cs" />
-    <Compile Include="IInfoNotificationRepository.cs" />
     <Compile Include="IUserRepairRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

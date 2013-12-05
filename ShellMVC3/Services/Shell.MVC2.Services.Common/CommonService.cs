@@ -12,8 +12,7 @@ using Shell.MVC2.Interfaces;
 using System.Web;
 using System.Net;
 
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+
 using System.ServiceModel.Activation;
 
 namespace Shell.MVC2.Services.Common

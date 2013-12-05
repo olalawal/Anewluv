@@ -219,17 +219,34 @@ namespace Anewluv.Services.Authentication
                             //log the user logtime here so it is common to silverlight and MVC                  
                             if (HttpContext.Current != null)
                             {
-                               Api.MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID });
+                                //Just for testing that it worked
+                                //TO DO remove when in prod
+                                AsyncCallback callback = result =>
+                                {
+                                    //we dont do anything really with the callback so not needed really
+                                    var value = Api.MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                                };   
+  
+                                Api.MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }, callback, Api.MemberService);
 
                             }
                             else
                             {
-                                 Api.MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id });
+
+                                //Just for testing that it worked
+                                //TO DO remove when in prod, we dont need a result
+                                AsyncCallback callback = result =>
+                                {
+                                    //we dont do anything really with the callback so not needed really
+                                    var value = Api.MemberService.Endupdateuserlogintimebyprofileid(result);                                    
+                                };   
+  
+                                 Api.MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id },callback,Api.MemberService);
                             }
 
                             //TO DO get geodata from IP address down the line
                             //also update profile activity
-                              Api.MemberService.addprofileactvity(
+                              Api.MemberService.Beginaddprofileactvity(
                                 new profileactivity
                                 {
                                     activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
@@ -239,7 +256,7 @@ namespace Anewluv.Services.Authentication
                                     ipaddress = HttpContext.Current.Request.UserHostAddress,
                                     routeurl = HttpContext.Current.Request.RawUrl,
                                     sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
-                                });
+                                },null,Api.MemberService);
 
                             //also update the profiledata for the last login date
                             return true;
@@ -300,15 +317,15 @@ namespace Anewluv.Services.Authentication
                             //log the user logtime here so it is common to silverlight and MVC
                             if (HttpContext.Current != null)
                             {
-                                Api.MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID });
+                                Api.MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID },null,Api.MemberService);
                             }
                             else
                             {
-                                Api.MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id });
+                                Api.MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, null, Api.MemberService);
                             }
                             //TO DO get geodata from IP address down the line
                             //also update profile activity
-                            Api.MemberService.addprofileactvity(
+                            Api.MemberService.Beginaddprofileactvity(
                               new profileactivity
                               {
                                   activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
@@ -318,7 +335,7 @@ namespace Anewluv.Services.Authentication
                                   ipaddress = HttpContext.Current.Request.UserHostAddress,
                                   routeurl = HttpContext.Current.Request.RawUrl,
                                   sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
-                              });
+                              }, null, Api.MemberService);
 
                             //also update the profiledata for the last login date
                             return true;
@@ -389,15 +406,15 @@ namespace Anewluv.Services.Authentication
                               //log the user logtime here so it is common to silverlight and MVC
                               if (HttpContext.Current != null)
                               {
-                                  Api.MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myprofile.id, sessionid = HttpContext.Current.Session.SessionID });
+                                  Api.MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myprofile.id, sessionid = HttpContext.Current.Session.SessionID }, null, Api.MemberService);
                               }
                               else
                               {
-                                  Api.MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myprofile.id });
+                                  Api.MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myprofile.id }, null, Api.MemberService);
                               }
                           //TO DO get geodata from IP address down the line
                           //also update profile activity
-                          Api.MemberService.addprofileactvity(
+                          Api.MemberService.Beginaddprofileactvity(
                             new profileactivity
                             {
                                 activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
@@ -407,7 +424,7 @@ namespace Anewluv.Services.Authentication
                                 ipaddress = HttpContext.Current.Request.UserHostAddress,
                                 routeurl = HttpContext.Current.Request.RawUrl,
                                 sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
-                            });
+                            }, null, Api.MemberService);
 
                           //also update the profiledata for the last login date
                           return true;

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat;
+using Anewluv.Domain.Data.Chat;
+
 
 namespace Shell.MVC2.SignalR.Hubs
 {

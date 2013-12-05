@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+
 
 
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Infrastructure;
 using System.Data;
+using Anewluv.Domain.Data.ViewModels;
+using Anewluv.Domain;
+using Anewluv.Domain.Data;
 
 namespace Shell.MVC2.Data
 {

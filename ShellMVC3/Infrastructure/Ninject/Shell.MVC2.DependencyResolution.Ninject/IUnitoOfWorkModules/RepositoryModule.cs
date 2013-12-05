@@ -12,8 +12,8 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
     {
         public override void Load()
         {
-            Kernel.Bind(typeof(IRepository<>))
-               .To(typeof(EFRepository<>)).InTransientScope();
+           // Kernel.Bind(typeof(IRepository<>))
+         //      .To(typeof(EFRepository<>)).InTransientScope();
             //TO DO for now binding all the repo's when we re-factor to user generics we only want to bind the active repo
             //bind  repositories as needed
             // Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork (ctorArg.Inject<IContext>())).InTransientScope();

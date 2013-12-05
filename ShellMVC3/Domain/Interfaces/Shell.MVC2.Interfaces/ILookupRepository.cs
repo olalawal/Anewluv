@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Shell.MVC2.Domain.Entities.Anewluv;
+using Anewluv.Domain.Data;
+
 
 namespace Shell.MVC2.Interfaces
 {

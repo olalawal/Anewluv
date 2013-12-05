@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Shell.MVC2.Infrastructure;
+using Shell.MVC2.Interfaces;
+using LoggingLibrary;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Anewluv.Lib;
 
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels ;
 
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Infrastructure;
-using System.Data.Objects;
+
 using System.Data.Entity.Infrastructure;
-using System.Data.Objects.DataClasses;
+
+using Anewluv.Domain.Chat;
+using Anewluv.Domain;
+using Anewluv.Domain.Data.Chat;
 
 namespace Shell.MVC2.Data
 {
@@ -42,17 +46,16 @@ namespace Shell.MVC2.Data
 
            public IQueryable<ChatUser> GetOnlineUsersInRoom(ChatRoom room)
            {
-               return _chatcontext.Entry(room)
-                         .Collection(r => r.Users)
-                         .Query().Online();
+               return null;//_chatcontext.Entry(room)
+                        // .Collection(r => r.Users).Query().Online();
                            
            }
 
            public IQueryable<ChatUser> GetOnlineOwnersInRoom(ChatRoom room)
            {
-               return _chatcontext.Entry(room)
-                         .Collection(r => r.Owners)
-                         .Query().Online();
+               return null;//_chatcontext.Entry(room)
+                        // .Collection(r => r.Owners)
+                        // .Query().Online();
 
            }
 
@@ -65,7 +68,7 @@ namespace Shell.MVC2.Data
 
            public IQueryable<ChatUser> GetOnlineUsers()
            {
-               return _chatcontext.ChatUsers.Include("ConnectedClients").Online();
+               return null;//_chatcontext.ChatUsers.Include("ConnectedClients").Online();
            }
 
 
@@ -180,7 +183,7 @@ namespace Shell.MVC2.Data
 
         public IQueryable<ChatUser> SearchUsers(string name)
         {
-            return _chatcontext.ChatUsers.Online().Where(u => u.Name.Contains(name));
+            return null;//_chatcontext.ChatUsers.Online().Where(u => u.Name.Contains(name));
         }
 
         public void Add(ChatClient client)
@@ -242,16 +245,16 @@ namespace Shell.MVC2.Data
        /// <param name="room"></param>
        public void RemoveUserRoom(ChatUser user, ChatRoom room)
            {
-               RunNonLazy(() =>
-               {
+              // RunNonLazy(() =>
+              // {
                    // The hack from hell to attach the user to room.Users so delete is tracked
-                   ObjectContext context = ((IObjectContextAdapter)_chatcontext).ObjectContext;
-                   RelationshipManager manger = context.ObjectStateManager.GetRelationshipManager(room);
-                   IRelatedEnd end = manger.GetRelatedEnd("Shell.MVC2.Domain.Entities.Anewluv.Chat", "ChatRoom_Users_Target");
-                   end.Attach(user);
+                  // ObjectContext context = ((IObjectContextAdapter)_chatcontext).ObjectContext;
+                 //  RelationshipManager manger = context.ObjectStateManager.GetRelationshipManager(room);
+                 //  IRelatedEnd end = manger.GetRelatedEnd("Shell.MVC2.Domain.Entities.Anewluv.Chat", "ChatRoom_Users_Target");
+                //   end.Attach(user);
 
                    room.Users.Remove(user);
-               });
+             //  });
            }
 
         private void RunNonLazy(Action action)

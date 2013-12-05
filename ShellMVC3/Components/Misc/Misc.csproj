@@ -135,12 +135,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\..\Shell.MVC2\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+      <HintPath>..\..\Shell.MVC2\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\Shell.MVC2\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -155,7 +157,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MisFunctions.cs" />
     <Compile Include="OutputTypes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -191,13 +192,29 @@
       <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
       <Name>Shell.MVC2.Services.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
+      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
+      <Name>Nmedia.DataAccess.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
+      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
+      <Name>Shell.MVC2.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
       <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
       <Name>Dating.Server.Data.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Domain\Entities\Shell.MVC2.Domain.Entities\Shell.MVC2.Domain.Entities.csproj">
-      <Project>{3413A2BC-A142-4383-A9BD-72145457C6CB}</Project>
-      <Name>Shell.MVC2.Domain.Entities</Name>
+    <ProjectReference Include="..\..\Domain\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
+      <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Anewluv.Domain\Anewluv.Domain.csproj">
+      <Project>{A0B04284-784B-4322-A213-DB178716EFC1}</Project>
+      <Name>Anewluv.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\GeoData.Domain\GeoData.Domain.csproj">
+      <Project>{01A79DCC-39CA-447E-A668-DD4206A8E5AA}</Project>
+      <Name>GeoData.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tests\Shell.MVC2.Tests.Common\Shell.MVC2.Tests.Common.csproj">
       <Project>{BF35650C-A0C7-47EE-885A-DB2A1A9F5893}</Project>

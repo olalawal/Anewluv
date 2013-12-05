@@ -17,8 +17,8 @@ namespace Nmedia.Infrastructure.Domain
         {
 
             modelBuilder.Entity<errorlog>().ToTable("errorlog_logs");
-            modelBuilder.Entity<lu_enviroment>().ToTable("errorlog_lu_enviroment");
-            modelBuilder.Entity<lu_application>().ToTable("errorlog_lu_application");
+            modelBuilder.Entity<lu_logenviroment>().ToTable("errorlog_lu_enviroment");
+            modelBuilder.Entity<lu_logapplication>().ToTable("errorlog_lu_application");
             modelBuilder.Entity<lu_logseverity>().ToTable("errorlog_lu_logseverity");
             modelBuilder.Entity<lu_logseverityinternal>().ToTable("errorlog_lu_logseverityinternal");
 

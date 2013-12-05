@@ -6,8 +6,7 @@ using Shell.MVC2.Models;
 using Microsoft.ApplicationServer.Caching;
 using System.Collections;
 using System.Threading;
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+
 //link to old postal code model
 using Dating.Server.Data.Services;
 using LoggingLibrary;
@@ -15,7 +14,13 @@ using LoggingLibrary;
 
 using Shell.MVC2.Interfaces;
 using Dating.Server.Data.Models;
-using Nmedia.Infrastructure.Domain.errorlog;
+using Anewluv.Domain.Data.ViewModels;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Anewluv.Lib;
+using Anewluv.Domain.Data;
+using Anewluv.Domain;
+using GeoData.Domain.Models.ViewModels;
+
 
 
 
@@ -509,7 +514,7 @@ namespace Shell.MVC2.AppFabric
         public static class MembersViewModelHelper
         {
 
-            public static MembersViewModel getmemberdata(int profileid,IMembersMapperRepository membersmapperepository)
+            public static MembersViewModel getmemberdata(int profileid)
             {
                 
 
@@ -529,22 +534,22 @@ namespace Shell.MVC2.AppFabric
 
                     //TO do check if the model has changed since the last time it was loaded 
                     //create a method in members repo that checks to see if something has been updated since last activity?
-                    if (model.profile_id  == null | model.profile_id == 0 )
+                    if (model.profile_id == null | model.profile_id == 0)
                     {
                         if (dataCache != null)
                         {
                             //remap the user data if cache is empty
 
-                            model = membersmapperepository.mapmember(profileid);
+                            model = Api.MemberMapperService.mapmember(profileid.ToString());
                             // Datings context = new modelContext();
                             // model = context.models.Single(c => c.Id == id);
-                           dataCache.Put("membersviewmodel" + profileid, model );
+                            dataCache.Put("membersviewmodel" + profileid, model);
                         }
                         else
                         {
                             //TO DO map to gest i think
-                            model = membersmapperepository.mapmember(profileid);
-                            //model =membersmapperepository.mapguest();
+                            model = Api.MemberMapperService.mapmember(profileid.ToString());
+                            //model =Api.MemberMapperService.mapguest();
 
                         }
                     } return model;
@@ -552,24 +557,28 @@ namespace Shell.MVC2.AppFabric
                 catch (DataCacheException ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching );
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
-                   // throw new InvalidOperationException();
-                    throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", model);
-                   
+                    logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                    // throw new InvalidOperationException();
+                    throw new CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", model);
+
 
                 }
                 catch (Exception ex)
                 {
                     logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
                     //put cleanup code here
                     throw;
+                }
+                finally
+                {
+                    Api.DisposeMemberMapperService();
                 }
             }
             //Items for guests are just dumped in the session area not the members region
             //and they are id'd by session ID
-            public static MembersViewModel getguestdata(string sessionid, IMembersMapperRepository membersmapperepository)
+            public static MembersViewModel getguestdata(string sessionid)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -594,16 +603,16 @@ namespace Shell.MVC2.AppFabric
                         //also map the guest members viewmodel
                        // var mm = new ViewModelMapper();
                        
-                        model = membersmapperepository.mapguest();
+                        model = Api.MemberMapperService.mapguest();
 
                         //poulate the model from the view model mapper
                        // ViewModelMapper Mapper = new ViewModelMapper();
 #if DEBUG
                                                 Console.WriteLine("Debug version");
-                                                model.register = membersmapperepository.getregistermodeltest();
+                                                model.register = Api.MemberMapperService.getregistermodeltest();
                                                //model.Register = Mapper.MapRegistration();
 #else
-                        model = membersmapperepository.mapmember (model.profile_id);
+                        model = Api.MemberMapperService.mapmember (model.profile_id);
 #endif
 
                         if (dataCache != null)
@@ -621,7 +630,7 @@ namespace Shell.MVC2.AppFabric
                 {
                     logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
-                    throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", model);
+                    throw new CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", model);
                     //log the datachae type of excpetion here and mark it handled and logged
                 }
                 catch (Exception ex)
@@ -629,7 +638,7 @@ namespace Shell.MVC2.AppFabric
                     logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     var message = String.Format("Something went wrong with the cache method GetGuestData with this sessionid :  {0}", sessionid );
-                    throw new LoggingLibrary.CustomExceptionTypes.AccountException(model, message, ex);
+                    throw new CustomExceptionTypes.AccountException(model, message, ex);
  
                    // throw new Exception(message, ex); 
                    
@@ -670,7 +679,7 @@ namespace Shell.MVC2.AppFabric
 
             //updates the model in session with any new data
             //TO DO verify that the P contians profile ID
-            public static MembersViewModel updatememberdata(MembersViewModel p,IMembersMapperRepository  membersmapperepository)
+            public static MembersViewModel updatememberdata(MembersViewModel p)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -696,7 +705,7 @@ namespace Shell.MVC2.AppFabric
 
                             //remap the user data if cache is empty
                             //var mm = new ViewModelMapper();
-                            p = membersmapperepository.mapmember(p.profile.id);
+                            p = Api.MemberMapperService.mapmember(p.profile.id.ToString());
 
                         }
                         else if (p != null && (p.profile.id != null | p.profile == null ))
@@ -717,7 +726,7 @@ namespace Shell.MVC2.AppFabric
                 {
                     logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
-                    throw new LoggingLibrary.CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", p);
+                    throw new CustomExceptionTypes.CacheingException("A problem occured accessing the Appfabric Cache", p);
                     //log the datachae type of excpetion here and mark it handled and logged
                 }
                 catch (Exception ex)
@@ -725,7 +734,7 @@ namespace Shell.MVC2.AppFabric
                     logger = new ErroLogging(logapplicationEnum.AppfabricCaching);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                     var message = String.Format("Something went wrong with the cache method UpdateMemberData with this object or user :  {0}", p.profile.id);
-                    throw new LoggingLibrary.CustomExceptionTypes.AccountException(p, message, ex);
+                    throw new CustomExceptionTypes.AccountException(p, message, ex);
 
                     // throw new Exception(message, ex); 
 
@@ -740,7 +749,7 @@ namespace Shell.MVC2.AppFabric
 
             //updates the model in catche with any new data i.e after a save
             //TO DO verify that the P contians profile ID
-            public static MembersViewModel updatememberprofiledatabyprofile(int profileid, IMembersMapperRepository  membersmapperepository)
+            public static MembersViewModel updatememberprofiledatabyprofile(int profileid)
             {
                 MembersViewModel model = new MembersViewModel();
                 DataCache dataCache;
@@ -750,7 +759,7 @@ namespace Shell.MVC2.AppFabric
                 //get the current prodile data
 
 
-                model = membersmapperepository.mapmember(profileid);
+                model = Api.MemberMapperService.mapmember(profileid.ToString());
                 model.profiledata = model.profile.profiledata ;
 
                 //  MembersViewModel oldMembersViewModel = new MembersViewModel();
@@ -781,53 +790,62 @@ namespace Shell.MVC2.AppFabric
 
             //updates the model in session with any new data
             //TO DO verify that the P contians profile ID
-            public static bool updateguestdata(MembersViewModel p, IMembersMapperRepository membersmapperrepository)
+            public static bool updateguestdata(MembersViewModel p)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
                 dataCache = GetCache;  // dataCacheFactory.GetDefaultCache();
 
-
-                //MembersViewModel oldMembersViewModel = null;
-                // try { oldMembersViewModel = dataCache.Get("membersviewmodel" + context.Session.SessionID, "Guests") as MembersViewModel; }
-                //catch (DataCacheException)
-                //{
-                //    //Log error
-                //    //throw new InvalidOperationException();
-                //    return null;
-                //}
-                if (p.profile_id  == null | p.profile_id == 0)
+                try
                 {
-                    //remap the user data if cache is empty
-                   // var mm = new ViewModelMapper();
-                    //TO DO update map guest to scrape UI data
-                    //Mapguest will probbaly get geo data like what country city state thier IP matches and any cookie data we can scrap or facebook data
-                    // oldMembersViewModel = mm.MapGuest(); //default values probbaly just for test don't map anything in this case since 
-                    //we do not want to populate data yet
-                    p = membersmapperrepository.mapguest();
+                    //MembersViewModel oldMembersViewModel = null;
+                    // try { oldMembersViewModel = dataCache.Get("membersviewmodel" + context.Session.SessionID, "Guests") as MembersViewModel; }
+                    //catch (DataCacheException)
+                    //{
+                    //    //Log error
+                    //    //throw new InvalidOperationException();
+                    //    return null;
+                    //}
+                    if (p.profile_id == null | p.profile_id == 0)
+                    {
+                        //remap the user data if cache is empty
+                        // var mm = new ViewModelMapper();
+                        //TO DO update map guest to scrape UI data
+                        //Mapguest will probbaly get geo data like what country city state thier IP matches and any cookie data we can scrap or facebook data
+                        // oldMembersViewModel = mm.MapGuest(); //default values probbaly just for test don't map anything in this case since 
+                        //we do not want to populate data yet
+                        p = Api.MemberMapperService.mapguest();
+                    }
+
+                    //now update and save
+
+                    //now data is remapped update it
+                    // p.MyQuickSearch = (p.MyQuickSearch != null) ? p.MyQuickSearch : oldMembersViewModel.MyQuickSearch;
+                    // p.Register = (p.Register != null) ? p.Register : oldMembersViewModel.Register;
+                    //get the profile and profile data and quick matches etc maybe from sproc
+
+                    //oldmodel.Register.RegistrationPhotos = (p.Register.RegistrationPhotos != null) ? p.Register.RegistrationPhotos : oldmodel.Register.RegistrationPhotos;
+                    //now update session  
+                    //update the oldmodel with the values we are keeping
+                    //oldMembersViewModel.MyQuickSearch = p.MyQuickSearch;
+                    //oldMembersViewModel.Register = p.Register;
+
+                    // Datings context = new modelContext();
+                    // model = context.models.Single(c => c.Id == id);
+                    dataCache.Put("membersviewmodel" + p.sessionid, p, "Guests");
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    Api.DisposeMemberMapperService();
                 }
 
-                //now update and save
-
-                //now data is remapped update it
-                // p.MyQuickSearch = (p.MyQuickSearch != null) ? p.MyQuickSearch : oldMembersViewModel.MyQuickSearch;
-                // p.Register = (p.Register != null) ? p.Register : oldMembersViewModel.Register;
-                //get the profile and profile data and quick matches etc maybe from sproc
-
-                //oldmodel.Register.RegistrationPhotos = (p.Register.RegistrationPhotos != null) ? p.Register.RegistrationPhotos : oldmodel.Register.RegistrationPhotos;
-                //now update session  
-                //update the oldmodel with the values we are keeping
-                //oldMembersViewModel.MyQuickSearch = p.MyQuickSearch;
-                //oldMembersViewModel.Register = p.Register;
-
-                // Datings context = new modelContext();
-                // model = context.models.Single(c => c.Id == id);
-                dataCache.Put("membersviewmodel" + p.sessionid , p, "Guests");
-
-                return true;
-
-
-
+                return false;
 
             }
            

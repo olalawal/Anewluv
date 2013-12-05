@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Factory="Anewluv.Web.Services.Spatial.NinjectServiceHostFactory" Service="Anewluv.Web.Spatial.GeoService"  %>

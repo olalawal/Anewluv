@@ -60,7 +60,7 @@ namespace Nmedia.Services.Authorization
         const string APIKEYLIST = "APIKeyList";
 
 
-        public IAsyncResult BeginIsValidAPIKey(string key)
+        public IAsyncResult BeginIsValidAPIKey(string key, AsyncCallback callback, object asyncState)
         {
             // TODO: Implement IsValidAPI Key using your repository
 
@@ -161,7 +161,7 @@ namespace Nmedia.Services.Authorization
         //}
 
         //TO DO use enum maybe
-        public IAsyncResult BegingenerateAPIkey(string service)
+        public IAsyncResult BegingenerateAPIkey(string service, AsyncCallback callback, object asyncState)
         {
            
             _unitOfWork.DisableProxyCreation = true;
@@ -193,7 +193,7 @@ namespace Nmedia.Services.Authorization
 
         }
 
-        public Guid EndIsValidAPIKey(IAsyncResult r)
+        public Guid EndgenerateAPIkey(IAsyncResult r)
         {
             CompletedAsyncResult<Guid> result = r as CompletedAsyncResult<Guid>;
             //Console.WriteLine("EndServiceAsyncMethod called with: \"{0}\"", result.Data);

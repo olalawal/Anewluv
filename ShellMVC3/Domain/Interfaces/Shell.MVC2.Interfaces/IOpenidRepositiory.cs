@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using System.Xml.XPath;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using Anewluv.Domain.Data.ViewModels;
+
 
 namespace Shell.MVC2.Interfaces
 {

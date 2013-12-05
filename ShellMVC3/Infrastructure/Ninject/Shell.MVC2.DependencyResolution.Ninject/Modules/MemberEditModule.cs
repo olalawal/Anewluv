@@ -9,17 +9,18 @@ using Shell.MVC2.Data;
 using Shell.MVC2.Interfaces;
 //using Shell.MVC2.Services.Media;
 //using Shell.MVC2.Services.Dating;
-using Dating.Server.Data.Services;
+//using Dating.Server.Data.Services;
 using Shell.MVC2.Services.Contracts;
 
 //to do do away with this when we go to code first , we would pull this from entities 
-using Dating.Server.Data.Models ;
+//using Dating.Server.Data.Models ;
+using Anewluv.Domain;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Infrastructure.Interfaces;
-using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
+
+
+
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
 	public class MemberEditModule : NinjectModule
@@ -27,7 +28,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 		public override void Load()
 		{
 
-            Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));
+           // Kernel.Bind<IAPIkeyRepository>().ToConstructor(ctorArg => new APIkeyRepository(ctorArg.Inject<ApiKeyContext>()));
             Kernel.Bind<IMemberEditRepository>().ToConstructor(
              ctorArg => new MemberEditRepository(ctorArg.Inject<AnewluvContext>()));
             

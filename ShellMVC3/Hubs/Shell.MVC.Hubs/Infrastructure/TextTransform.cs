@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat;
+
 using Shell.MVC2.Interfaces;
 
 namespace Shell.MVC2.SignalR.Infrastructure

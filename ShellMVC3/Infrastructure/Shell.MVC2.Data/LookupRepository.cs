@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+
 
 //TO DO move these services to a new WCF service for now use it from the domain service
 using Dating.Server.Data.Services;
@@ -17,7 +16,11 @@ using Shell.MVC2.Infrastructure;
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.AppFabric ;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.errorlog;
+using Anewluv.Domain;
+using Anewluv.Domain.Data;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Anewluv.Lib;
+
 
 
 namespace Shell.MVC2.Data
@@ -27,14 +30,14 @@ namespace Shell.MVC2.Data
         // private AnewluvContext _db;
         //TO DO move from ria servives
        // private IGeoRepository _georepository;
-        private IMemberRepository _memberrepository;
+        //private IMemberRepository _memberrepository;
 
 
-        public LookupRepository(AnewluvContext datingcontext, IMemberRepository memberrepository)
+        public LookupRepository(AnewluvContext datingcontext)
             : base(datingcontext)
         {
            // _georepository = georepository;
-            _memberrepository = memberrepository;
+           // _memberrepository = memberrepository;
         }
 
 

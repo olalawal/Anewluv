@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Anewluv.Domain.Chat;
+using Anewluv.Domain;
 //to do do away with this when we go to code first , we would pull this from entities 
-using Shell.MVC2.Domain.Entities.Anewluv.Chat;
-using Shell.MVC2.Domain.Entities.Anewluv;
+
 
 namespace Shell.MVC2.Data
 {

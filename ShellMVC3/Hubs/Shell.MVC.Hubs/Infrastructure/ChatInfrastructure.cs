@@ -10,10 +10,12 @@ using System.Web;
 
 
 using Shell.MVC2.Interfaces;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels;
+
+
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using Anewluv.Domain.Data.Chat;
+using Anewluv.Domain.Data.Chat.ViewModels;
 
 namespace Shell.MVC2.SignalR.Infrastructure
 {

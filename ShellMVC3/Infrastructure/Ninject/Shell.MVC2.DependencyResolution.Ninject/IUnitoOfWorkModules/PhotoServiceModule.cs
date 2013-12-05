@@ -4,18 +4,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ninject.Modules;
 using Shell.MVC2.Data;
 
 
 
-using Dating.Server.Data.Services;
+
 using Shell.MVC2.Services.Contracts;
 
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
-using Ninject.Web.Common;
+
 using Anewluv.Domain;
 using Nmedia.DataAccess.Interfaces;
 using System.Data.Entity;

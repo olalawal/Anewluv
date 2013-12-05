@@ -128,23 +128,23 @@ namespace Anewluv.Lib
                     validrequest = true;
                     //TO DO re-implect api key
 
-                        var result = Api.ApiKeyService.BeginIsValidAPIKey(key);
+                        AsyncCallback callback = result =>
+                        {
+                            var value = Api.ApiKeyService.EndIsValidAPIKey(result);
+                            if (value)
+                            {
+                                validrequest = true;
+                            }
+                            else
+                            {
+                                // Send back an HTML reply
+                                CreateApiKeyErrorReply(operationContext, key);
+                                validrequest = false;
+                            }
+                        };
+                         Api.ApiKeyService.BeginIsValidAPIKey(key,callback,Api.ApiKeyService);
                         // oLogEntry.id = d.Endsenderrormessage(result);
                         //d.senderrormessage(oLogEntry, addresstypeenum.Developer.ToString());
-                        var value = Api.ApiKeyService.EndIsValidAPIKey(result);
-                  
-
-
-                    if (value)
-                    {
-                        validrequest = true;
-                    }
-                    else
-                    {
-                        // Send back an HTML reply
-                        CreateApiKeyErrorReply(operationContext, key);
-                        validrequest = false;
-                    }
                 }
                 else
                 {

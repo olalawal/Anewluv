@@ -5,12 +5,13 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using Shell.MVC2.Services.Contracts;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels ;
+
 using Shell.MVC2.Interfaces;
 using System.ServiceModel.Activation;
 using System.Text.RegularExpressions;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+using Anewluv.Domain.Data.Chat;
+using Anewluv.Domain.Data.ViewModels;
+
 
 
 namespace Shell.MVC2.Services.Chat
@@ -25,15 +26,15 @@ namespace Shell.MVC2.Services.Chat
 
         // private readonly ICryptoService _crypto;
         //private readonly AccountMembershipService _membership;
-        private readonly IMemberRepository  _membersrepository;
+       // private readonly IMemberRepository  _membersrepository;
 
         private const int NoteMaximumLength = 140;
         private const int TopicMaximumLength = 80;
 
-        public ChatService(IChatRepository repository, IMemberRepository membersrepository)
+        public ChatService(IChatRepository repository )
         {
             _repository = repository;
-            _membersrepository = membersrepository;
+          //  _membersrepository = membersrepository;
            // _chathub = chathub;  //just  to see if this resloves
             // _crypto = crypto;
         }
@@ -62,7 +63,7 @@ namespace Shell.MVC2.Services.Chat
 
             //get the gender if we are not disconnected 
 #if !DISCONECTED
-            gender = _membersrepository.getgenderbyscreenname(new ProfileModel { screenname = ScreenName });
+           // gender = _membersrepository.getgenderbyscreenname(new ProfileModel { screenname = ScreenName });
 #endif
 
             // This method is used in the auth workflow. If the username is taken it will add a number
@@ -112,7 +113,7 @@ namespace Shell.MVC2.Services.Chat
 
             //get the gender if we are not disconnected 
 #if !DISCONECTED
-            gender = _membersrepository.getgenderbyscreenname(new ProfileModel { screenname = ScreenName });
+           // gender = _membersrepository.getgenderbyscreenname(new ProfileModel { screenname = ScreenName });
 #endif
 
             //3-30-2012 updated code to allow for adding stuff from the repository

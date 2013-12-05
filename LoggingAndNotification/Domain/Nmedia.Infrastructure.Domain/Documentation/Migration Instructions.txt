@@ -23,11 +23,18 @@ enable-migrations  -ProjectName:DataLayer.CasinoModel  -ContextTypeName  "Notifi
 
 then you want to have EF code first scafolt your up-down changes for the balank database into the current migration file
 
+type 1 - single tentant
 PM>Add-Migration InitialMigrations -f -ConfigurationTypeName "Configuration" -verbose
+type 2 mutiple contexts 
+add-migration InitialMigrations -ProjectName:DataLayer.HotelModel 
+
 
 adding another migration sample after this :
 
 Add-Migration MigrationFromJohn -f -ConfigurationTypeName "Configuration" -verbose
+
+
+
 
 
 

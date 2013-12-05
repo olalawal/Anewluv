@@ -59,25 +59,19 @@
     <Compile Include="IMemberEditRepository.cs" />
     <Compile Include="ISearchEditRepository.cs" />
     <Compile Include="IChatRepository.cs" />
-    <Compile Include="IAnewLuvMembershipProvider.cs" />
-    <Compile Include="IGeoRepository.cs" />
     <Compile Include="ILookupRepository.cs" />
     <Compile Include="IOpenidRepositiory.cs" />
     <Compile Include="IMailRepository.cs" />
-    <Compile Include="IMemberRepository.cs" />
-    <Compile Include="IMembersMapperRepository.cs" />
-    <Compile Include="IMemberActionsRepository.cs" />
-    <Compile Include="IPhotoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
-      <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
-      <Name>Dating.Server.Data.Web</Name>
+    <ProjectReference Include="..\..\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
+      <Name>Anewluv.Domain.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Entities\Shell.MVC2.Domain.Entities\Shell.MVC2.Domain.Entities.csproj">
-      <Project>{3413A2BC-A142-4383-A9BD-72145457C6CB}</Project>
-      <Name>Shell.MVC2.Domain.Entities</Name>
+    <ProjectReference Include="..\..\GeoData.Domain\GeoData.Domain.csproj">
+      <Project>{01A79DCC-39CA-447E-A668-DD4206A8E5AA}</Project>
+      <Name>GeoData.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

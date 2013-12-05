@@ -8,15 +8,17 @@ using System.Data.Entity.Migrations;
 //using DatingModel;
 
 
-using Dating.Server.Data.Models;
-using Shell.MVC2.Domain.Entities;
+
 //using Shell.MVC2.Infrastructure.Entities;
 //using LoggingLibrary;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
-using Shell.MVC2.Domain.Entities.Anewluv;
+
 
 using Shell.MVC2.Services.Contracts;
 using System.ServiceModel.Web;
+using Dating.Server.Data.Models;
+using Anewluv.Domain;
+using Anewluv.Domain.Data;
+using Anewluv.Domain.Data.ViewModels;
 
 namespace Misc
 {
@@ -49,7 +51,7 @@ namespace Misc
             var context = new AnewluvContext();
 
             //code for simple type data swap
-            //olddb.profiles.ToList().ForEach(p => context.profiles.AddOrUpdate(new Shell.MVC2.Domain.Entities.Anewluv.profile()
+            //olddb.profiles.ToList().ForEach(p => context.profiles.AddOrUpdate(new Anewluv.Domain.Data.profile()
             //{
             //})          
             //);
@@ -62,10 +64,10 @@ namespace Misc
             int newprofileid = 1;
             foreach (Dating.Server.Data.Models.profile item in olddb.profiles)
             {
-                var myprofile = new Shell.MVC2.Domain.Entities.Anewluv.profile();
-                var myprofiledata = new Shell.MVC2.Domain.Entities.Anewluv.profiledata();
+                var myprofile = new Anewluv.Domain.Data.profile();
+                var myprofiledata = new Anewluv.Domain.Data.profiledata();
                 //build the related  profilemetadata noew
-                var myprofilemetadata = new Shell.MVC2.Domain.Entities.Anewluv.profilemetadata();
+                var myprofilemetadata = new Anewluv.Domain.Data.profilemetadata();
 
                 if (context.profiles.Any(p => p.emailaddress == item.ProfileID))
                 {
@@ -209,7 +211,7 @@ namespace Misc
                 //build  members in role data if it exists
                 foreach (Dating.Server.Data.Models.MembersInRole membersinroleitem in olddb.MembersInRoles)
                 {
-                    var membersinroleobject = new Shell.MVC2.Domain.Entities.Anewluv.membersinrole();
+                    var membersinroleobject = new Anewluv.Domain.Data.membersinrole();
 
                     Console.WriteLine("attempting to assign a roleld for old profileid of    :" + membersinroleitem.ProfileID);
                     //query the profile data
@@ -243,7 +245,7 @@ namespace Misc
                 //build  activitylog if it exists
                 foreach (Dating.Server.Data.Models.ProfileGeoDataLogger activitylogitem in olddb.ProfileGeoDataLoggers)
                 {
-                    var activitylogobject = new Shell.MVC2.Domain.Entities.Anewluv.profileactivity();
+                    var activitylogobject = new Anewluv.Domain.Data.profileactivity();
 
                     Console.WriteLine("attempting to assign a geo activity log for old profileid of    :" + activitylogitem.ProfileID);
                     // Metadata classes are not meant to be instantiated.
@@ -265,7 +267,7 @@ namespace Misc
                         activitylogobject.profile = matchedprofile; //context.profiles.Where(p => p.emailaddress == activitylogitem.ProfileID).FirstOrDefault();
 
                         //build related geodata  object
-                        var myprofileactivitygeodata = new Shell.MVC2.Domain.Entities.Anewluv.profileactivitygeodata();
+                        var myprofileactivitygeodata = new Anewluv.Domain.Data.profileactivitygeodata();
 
                         myprofileactivitygeodata.city = activitylogitem.City;
                         myprofileactivitygeodata.regionname = activitylogitem.RegionName;
@@ -291,7 +293,7 @@ namespace Misc
 
                 foreach (Dating.Server.Data.Models.profileOpenIDStore openiditem in olddb.profileOpenIDStores)
                 {
-                    var openidobject = new Shell.MVC2.Domain.Entities.Anewluv.openid();
+                    var openidobject = new Anewluv.Domain.Data.openid();
                     Console.WriteLine("attempting to assign  a profile open id store value  for old profileid of    :" + openiditem.ProfileID);
                     //query the profile data
                     var matchedprofile = context.profiles.Where(p => p.emailaddress == openiditem.ProfileID).FirstOrDefault();
@@ -318,7 +320,7 @@ namespace Misc
 
                 foreach (Dating.Server.Data.Models.User_Logtime userlogtimeitem in olddb.User_Logtime)
                 {
-                    var userlogtimeobject = new Shell.MVC2.Domain.Entities.Anewluv.userlogtime();
+                    var userlogtimeobject = new Anewluv.Domain.Data.userlogtime();
                     Console.WriteLine("attempting assign a user logtime for old profileid of    :" + userlogtimeitem.ProfileID);
                     //query the profile data
                     var matchedprofile = context.profiles.Where(p => p.emailaddress == userlogtimeitem.ProfileID).FirstOrDefault();
@@ -370,7 +372,7 @@ namespace Misc
                 //handle favorites
                 foreach (Dating.Server.Data.Models.favorite favoritesitem in olddb.favorites)
                 {
-                    var favoritesobject = new Shell.MVC2.Domain.Entities.Anewluv.favorite();
+                    var favoritesobject = new Anewluv.Domain.Data.favorite();
                     Console.WriteLine("attempting to add a favorite for the old profileid of    :" + favoritesitem.ProfileID);
                     //add the realted proflemetadatas 
                     var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.ProfileID).FirstOrDefault();
@@ -399,7 +401,7 @@ namespace Misc
                 //handle friends
                 foreach (Dating.Server.Data.Models.Friend friendsitem in olddb.Friends)
                 {
-                    var friendsobject = new Shell.MVC2.Domain.Entities.Anewluv.friend();
+                    var friendsobject = new Anewluv.Domain.Data.friend();
                     Console.WriteLine("attempting to assign friend request for the old profileid of    :" + friendsitem.ProfileID);
                     //add the realted proflemetadatas 
                     var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == friendsitem.ProfileID).FirstOrDefault();
@@ -428,7 +430,7 @@ namespace Misc
                 //handle interests
                 foreach (Dating.Server.Data.Models.Interest Interestsitem in olddb.Interests)
                 {
-                    var Interestsobject = new Shell.MVC2.Domain.Entities.Anewluv.interest();
+                    var Interestsobject = new Anewluv.Domain.Data.interest();
                     Console.WriteLine("attempting to assign Interest request for the old profileid of    :" + Interestsitem.ProfileID);
                     //add the realted proflemetadatas 
                     var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == Interestsitem.ProfileID).FirstOrDefault();
@@ -457,7 +459,7 @@ namespace Misc
                 //handle likes
                 foreach (Dating.Server.Data.Models.Like likesitem in olddb.Likes)
                 {
-                    var likesobject = new Shell.MVC2.Domain.Entities.Anewluv.like();
+                    var likesobject = new Anewluv.Domain.Data.like();
                     Console.WriteLine("attempting to assign like request for the old profileid of    :" + likesitem.ProfileID);
                     //add the realted proflemetadatas 
                     var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == likesitem.ProfileID).FirstOrDefault();
@@ -486,7 +488,7 @@ namespace Misc
                 //Peeks is invierse with profileviewer being the opposit of profile
                 foreach (Dating.Server.Data.Models.ProfileView peeksitem in olddb.ProfileViews)
                 {
-                    var peeksobject = new Shell.MVC2.Domain.Entities.Anewluv.peek();
+                    var peeksobject = new Anewluv.Domain.Data.peek();
                     Console.WriteLine("attempting to assign peek request for the old profileid of    :" + peeksitem.ProfileID);
                     //add the realted proflemetadatas 
                     var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == peeksitem.ProfileViewerID).FirstOrDefault();
@@ -516,7 +518,7 @@ namespace Misc
                 //handle hotlists
                 foreach (Dating.Server.Data.Models.Hotlist hotlistsitem in olddb.Hotlists)
                 {
-                    var hotlistsobject = new Shell.MVC2.Domain.Entities.Anewluv.hotlist();
+                    var hotlistsobject = new Anewluv.Domain.Data.hotlist();
                     Console.WriteLine("attempting to assign hotlist request for the old profileid of    :" + hotlistsitem.ProfileID);
                     //add the realted proflemetadatas 
                     var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == hotlistsitem.ProfileID).FirstOrDefault();
@@ -546,7 +548,7 @@ namespace Misc
                 //no block notes for now since thye are optional
                 foreach (Dating.Server.Data.Models.Mailboxblock blocksitem in olddb.Mailboxblocks)
                 {
-                    var blocksobject = new Shell.MVC2.Domain.Entities.Anewluv.block();
+                    var blocksobject = new Anewluv.Domain.Data.block();
 
                     Console.WriteLine("attempting to add a block for the old profileid of    :" + blocksitem.ProfileID);
                     var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == blocksitem.ProfileID).FirstOrDefault();
@@ -577,7 +579,7 @@ namespace Misc
                 //handle ProfileData_Ethnicity
                 foreach (Dating.Server.Data.Models.ProfileData_Ethnicity profiledataethnicityitem in olddb.ProfileData_Ethnicity)
                 {
-                    var profiledataethnicityobject = new Shell.MVC2.Domain.Entities.Anewluv.profiledata_ethnicity();
+                    var profiledataethnicityobject = new Anewluv.Domain.Data.profiledata_ethnicity();
 
                     if (profiledataethnicityitem != null)
                     {
@@ -605,7 +607,7 @@ namespace Misc
                 //handle ProfileData_hobby
                 foreach (Dating.Server.Data.Models.ProfileData_Hobby profiledatahobbyitem in olddb.ProfileData_Hobby)
                 {
-                    var profiledatahobbyobject = new Shell.MVC2.Domain.Entities.Anewluv.profiledata_hobby();
+                    var profiledatahobbyobject = new Anewluv.Domain.Data.profiledata_hobby();
                     if (profiledatahobbyitem != null)
                     {
                         //add the realted proflemetadatas 
@@ -632,7 +634,7 @@ namespace Misc
                 //handle ProfileData_hotfeature
                 foreach (Dating.Server.Data.Models.ProfileData_HotFeature profiledatahotfeatureitem in olddb.ProfileData_HotFeature)
                 {
-                    var profiledatahotfeatureobject = new Shell.MVC2.Domain.Entities.Anewluv.profiledata_hotfeature();
+                    var profiledatahotfeatureobject = new Anewluv.Domain.Data.profiledata_hotfeature();
                     if (profiledatahotfeatureitem != null)
                     {
                         //add the realted proflemetadatas 
@@ -659,7 +661,7 @@ namespace Misc
                 //handle ProfileData_lookingfor
                 foreach (Dating.Server.Data.Models.ProfileData_LookingFor profiledatalookingforitem in olddb.ProfileData_LookingFor)
                 {
-                    var profiledatalookingforobject = new Shell.MVC2.Domain.Entities.Anewluv.profiledata_lookingfor();
+                    var profiledatalookingforobject = new Anewluv.Domain.Data.profiledata_lookingfor();
                     if (profiledatalookingforitem != null)
                     {
 
@@ -720,7 +722,7 @@ namespace Misc
                 //handle favorites
                 foreach (Dating.Server.Data.Models.photo photositem in olddb.photos)
                 {
-                    var photosobject = new Shell.MVC2.Domain.Entities.Anewluv.photo();
+                    var photosobject = new Anewluv.Domain.Data.photo();
 
                     Console.WriteLine("attempting add a photo for the old profileid of    :" + photositem.ProfileID);
                     //get the profileID since that was saved first
@@ -855,7 +857,7 @@ namespace Misc
             var postaldb = new PostalData2Entities();
             var context = new AnewluvContext();
             var counter = 0;
-            var searchsettinggenderobjecttest = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_gender();
+            var searchsettinggenderobjecttest = new Anewluv.Domain.Data.searchsetting_gender();
             //global try for the rest of objects that are tied to profile
             try
             {
@@ -867,7 +869,7 @@ namespace Misc
                 counter = 0;
                 foreach (Dating.Server.Data.Models.SearchSetting searchsettingitem in olddb.SearchSettings)
                 {
-                    var searchsettingobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting();
+                    var searchsettingobject = new Anewluv.Domain.Data.searchsetting();
                     Console.WriteLine("attempting a search setting for the old profileid of    :" + searchsettingitem.ProfileID);
 
                     if (context.searchsetting.Any(p => p.profilemetadata.profile.emailaddress == searchsettingitem.ProfileID))
@@ -915,7 +917,7 @@ namespace Misc
                 foreach (Dating.Server.Data.Models.SearchSettings_BodyTypes searchsettingbodytypeitem in olddb.SearchSettings_BodyTypes)
                 {
                     Console.WriteLine("attempting a search setting bodytype for the old profileid of    :" + searchsettingbodytypeitem.SearchSetting.ProfileID);
-                    var searchsettingbodytypeobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_bodytype();
+                    var searchsettingbodytypeobject = new Anewluv.Domain.Data.searchsetting_bodytype();
 
                     if (context.searchsetting_bodytype.Any(p => p.bodytype.id == searchsettingbodytypeitem.BodyTypesID))
                     {
@@ -943,7 +945,7 @@ namespace Misc
                 foreach (Dating.Server.Data.Models.SearchSettings_Diet searchsettingdietitem in olddb.SearchSettings_Diet)
                 {
                     Console.WriteLine("attempting a search setting diet for the old profileid of    :" + searchsettingdietitem.SearchSetting.ProfileID);
-                    var searchsettingdietobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_diet();
+                    var searchsettingdietobject = new Anewluv.Domain.Data.searchsetting_diet();
 
                     if (context.searchsetting_diet.Any(p => p.diet.id == searchsettingdietitem.DietID ))
                     {
@@ -970,7 +972,7 @@ namespace Misc
                 foreach (Dating.Server.Data.Models.SearchSettings_Drinks searchsettingdrinkitem in olddb.SearchSettings_Drinks)
                 {
                     Console.WriteLine("attempting a search setting drink for the old profileid of    :" + searchsettingdrinkitem.SearchSetting.ProfileID);
-                    var searchsettingdrinkobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_drink();
+                    var searchsettingdrinkobject = new Anewluv.Domain.Data.searchsetting_drink();
 
                     if (context.searchsetting_drink.Any(p => p.drink.id == searchsettingdrinkitem.DrinksID ))
                     {
@@ -999,7 +1001,7 @@ namespace Misc
                 foreach (Dating.Server.Data.Models.SearchSettings_EducationLevel searchsettingeducationlevelitem in olddb.SearchSettings_EducationLevel)
                 {
                     Console.WriteLine("attempting a search setting educationlevel for the old profileid of    :" + searchsettingeducationlevelitem.SearchSetting.ProfileID);
-                    var searchsettingeducationlevelobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_educationlevel();
+                    var searchsettingeducationlevelobject = new Anewluv.Domain.Data.searchsetting_educationlevel();
 
                     if (context.searchsetting_educationlevel.Any(p => p.educationlevel.id == searchsettingeducationlevelitem.EducationLevelID ))
                     {
@@ -1029,7 +1031,7 @@ namespace Misc
                 foreach (Dating.Server.Data.Models.SearchSettings_EmploymentStatus searchsettingemploymentstatusitem in olddb.SearchSettings_EmploymentStatus)
                 {
                     Console.WriteLine("attempting a search setting employmentstatus for the old profileid of    :" + searchsettingemploymentstatusitem.SearchSetting.ProfileID);
-                    var searchsettingemploymentstatusobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_employmentstatus();
+                    var searchsettingemploymentstatusobject = new Anewluv.Domain.Data.searchsetting_employmentstatus();
                   
                     if (context.searchsetting_employmentstatus.Any(p => p.employmentstatus.id == searchsettingemploymentstatusitem.EmploymentStatusID ))
                     {
@@ -1060,7 +1062,7 @@ namespace Misc
                 foreach (Dating.Server.Data.Models.SearchSettings_Ethnicity searchsettingethnicityitem in olddb.SearchSettings_Ethnicity)
                 {
                     Console.WriteLine("attempting a search setting ethnicity for the old profileid of    :" + searchsettingethnicityitem.SearchSetting.ProfileID);
-                    var searchsettingethnicityobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_ethnicity();
+                    var searchsettingethnicityobject = new Anewluv.Domain.Data.searchsetting_ethnicity();
                     if (context.searchsetting_ethnicity.Any(p => p.ethnicity.id == searchsettingethnicityitem.EthicityID ))
                     {
                         Console.WriteLine("skipping profile with email  :" + searchsettingethnicityitem.SearchSetting.ProfileID + "it alaready has search settings ethnicity   ");
@@ -1089,7 +1091,7 @@ namespace Misc
                 foreach (Dating.Server.Data.Models.SearchSettings_Exercise searchsettingexerciseitem in olddb.SearchSettings_Exercise)
                 {
                     Console.WriteLine("attempting a search setting exercise for the old profileid of    :" + searchsettingexerciseitem.SearchSetting.ProfileID);
-                    var searchsettingexerciseobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_exercise();
+                    var searchsettingexerciseobject = new Anewluv.Domain.Data.searchsetting_exercise();
 
                     if (context.searchsetting_exercise.Any(p => p.exercise.id == searchsettingexerciseitem.ExerciseID ))
                     {
@@ -1119,7 +1121,7 @@ namespace Misc
                 foreach (Dating.Server.Data.Models.SearchSettings_EyeColor searchsettingeyecoloritem in olddb.SearchSettings_EyeColor)
                 {
                     Console.WriteLine("attempting a search setting eyecolor for the old profileid of    :" + searchsettingeyecoloritem.SearchSetting.ProfileID);
-                    var searchsettingeyecolorobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_eyecolor();
+                    var searchsettingeyecolorobject = new Anewluv.Domain.Data.searchsetting_eyecolor();
                     if (context.searchsetting_eyecolor.Any(p => p.eyecolor.id == searchsettingeyecoloritem.EyeColorID ))
                     {
                         Console.WriteLine("skipping profile with email  :" + searchsettingeyecoloritem.SearchSetting.ProfileID + "it alaready has search settings eyecolor   ");
@@ -1154,7 +1156,7 @@ namespace Misc
                     if (searchsettinggenderitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting gender for the old profileid of    :" + searchsettinggenderitem.SearchSetting.ProfileID);
-                        var searchsettinggenderobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_gender();
+                        var searchsettinggenderobject = new Anewluv.Domain.Data.searchsetting_gender();
                         if (context.searchsetting_gender.Any(p => p.gender.id == searchsettinggenderitem.GenderID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettinggenderitem.SearchSetting.ProfileID + "it alaready has search settings gender   ");
@@ -1187,7 +1189,7 @@ namespace Misc
                     if (searchsettinghaircoloritem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting haircolor for the old profileid of    :" + searchsettinghaircoloritem.SearchSetting.ProfileID);
-                        var searchsettinghaircolorobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_haircolor();
+                        var searchsettinghaircolorobject = new Anewluv.Domain.Data.searchsetting_haircolor();
                         if (context.searchsetting_haircolor.Any(p => p.haircolor.id == searchsettinghaircoloritem.HairColorID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettinghaircoloritem.SearchSetting.ProfileID + "it alaready has search settings haircolor   ");
@@ -1220,7 +1222,7 @@ namespace Misc
                     if (searchsettinghotfeatureitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting hotfeature for the old profileid of    :" + searchsettinghotfeatureitem.SearchSetting.ProfileID);
-                        var searchsettinghotfeatureobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_hotfeature();
+                        var searchsettinghotfeatureobject = new Anewluv.Domain.Data.searchsetting_hotfeature();
                         if (context.searchsetting_hotfeature.Any(p => p.hotfeature.id == searchsettinghotfeatureitem.HotFeatureID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettinghotfeatureitem.SearchSetting.ProfileID + "it alaready has search settings hotfeature   ");
@@ -1252,7 +1254,7 @@ namespace Misc
                     if (searchsettinghavekidsitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting havekids for the old profileid of    :" + searchsettinghavekidsitem.SearchSetting.ProfileID);
-                        var searchsettinghavekidsobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_havekids();
+                        var searchsettinghavekidsobject = new Anewluv.Domain.Data.searchsetting_havekids();
                         if (context.searchsetting_havekids.Any(p => p.havekids.id == searchsettinghavekidsitem.HaveKidsID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettinghavekidsitem.SearchSetting.ProfileID + "it alaready has search settings havekids   ");
@@ -1284,7 +1286,7 @@ namespace Misc
                     if (searchsettinghobbyitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting hobby for the old profileid of    :" + searchsettinghobbyitem.SearchSetting.ProfileID);
-                        var searchsettinghobbyobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_hobby();
+                        var searchsettinghobbyobject = new Anewluv.Domain.Data.searchsetting_hobby();
                         if (context.searchsetting_hobby.Any(p => p.hobby.id == searchsettinghobbyitem.HobbyID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettinghobbyitem.SearchSetting.ProfileID + "it alaready has search settings hobby   ");
@@ -1316,7 +1318,7 @@ namespace Misc
                     if (searchsettinghumoritem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting humor for the old profileid of    :" + searchsettinghumoritem.SearchSetting.ProfileID);
-                        var searchsettinghumorobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_humor();
+                        var searchsettinghumorobject = new Anewluv.Domain.Data.searchsetting_humor();
                         if (context.searchsetting_humor.Any(p => p.humor.id == searchsettinghumoritem.HumorID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettinghumoritem.SearchSetting.ProfileID + "it alaready has search settings humor   ");
@@ -1348,7 +1350,7 @@ namespace Misc
                     if (searchsettingincomelevelitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting incomelevel for the old profileid of    :" + searchsettingincomelevelitem.SearchSetting.ProfileID);
-                        var searchsettingincomelevelobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_incomelevel();
+                        var searchsettingincomelevelobject = new Anewluv.Domain.Data.searchsetting_incomelevel();
                         if (context.searchsetting_incomelevel.Any(p => p.incomelevel.id == searchsettingincomelevelitem.ImcomeLevelID))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingincomelevelitem.SearchSetting.ProfileID + "it alaready has search settings incomelevel   ");
@@ -1380,7 +1382,7 @@ namespace Misc
                     if (searchsettinglivingstituationitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting livingstituation for the old profileid of    :" + searchsettinglivingstituationitem.SearchSetting.ProfileID);
-                        var searchsettinglivingstituationobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_livingstituation();
+                        var searchsettinglivingstituationobject = new Anewluv.Domain.Data.searchsetting_livingstituation();
                         if (context.searchsetting_livingstituation.Any(p => p.livingsituation .id == searchsettinglivingstituationitem.LivingStituationID))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettinglivingstituationitem.SearchSetting.ProfileID + "it alaready has search settings livingstituation   ");
@@ -1412,7 +1414,7 @@ namespace Misc
                     if (searchsettinglocationitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting location for the old profileid of    :" + searchsettinglocationitem.SearchSetting.ProfileID);
-                        var searchsettinglocationobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_location();
+                        var searchsettinglocationobject = new Anewluv.Domain.Data.searchsetting_location();
                         if (context.searchsetting_location.Any(p => p.countryid == searchsettinglocationitem.CountryID))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettinglocationitem.SearchSetting.ProfileID + "it alaready has search settings location   ");
@@ -1445,7 +1447,7 @@ namespace Misc
                     if (searchsettinglookingforitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting lookingfor for the old profileid of    :" + searchsettinglookingforitem.SearchSetting.ProfileID);
-                        var searchsettinglookingforobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_lookingfor();
+                        var searchsettinglookingforobject = new Anewluv.Domain.Data.searchsetting_lookingfor();
                         if (context.searchsetting_lookingfor .Any(p => p.lookingfor .id == searchsettinglookingforitem.LookingForID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettinglookingforitem.SearchSetting.ProfileID + "it alaready has search settings lookinfor   ");
@@ -1477,7 +1479,7 @@ namespace Misc
                     if (searchsettingmaritalstatusitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting maritalstatus for the old profileid of    :" + searchsettingmaritalstatusitem.SearchSetting.ProfileID);
-                        var searchsettingmaritalstatusobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_maritalstatus();
+                        var searchsettingmaritalstatusobject = new Anewluv.Domain.Data.searchsetting_maritalstatus();
                         if (context.searchsetting_maritalstatus.Any(p => p.maritalstatus.id == searchsettingmaritalstatusitem.MaritalStatusID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingmaritalstatusitem.SearchSetting.ProfileID + "it alaready has search settings maritalstatus   ");
@@ -1509,7 +1511,7 @@ namespace Misc
                     if (searchsettingpoliticalviewitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting politicalview for the old profileid of    :" + searchsettingpoliticalviewitem.SearchSetting.ProfileID);
-                        var searchsettingpoliticalviewobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_politicalview();
+                        var searchsettingpoliticalviewobject = new Anewluv.Domain.Data.searchsetting_politicalview();
                         if (context.searchsetting_politicalview.Any(p => p.politicalview.id == searchsettingpoliticalviewitem.PoliticalViewID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingpoliticalviewitem.SearchSetting.ProfileID + "it alaready has search settings politicalview   ");
@@ -1541,7 +1543,7 @@ namespace Misc
                     if (searchsettingprofesssionitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting professsion for the old profileid of    :" + searchsettingprofesssionitem.SearchSetting.ProfileID);
-                        var searchsettingprofesssionobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_profession();
+                        var searchsettingprofesssionobject = new Anewluv.Domain.Data.searchsetting_profession();
                         if (context.searchsetting_profession.Any(p => p.profession.id == searchsettingprofesssionitem.ProfessionID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingprofesssionitem.SearchSetting.ProfileID + "it alaready has search settings profession   ");
@@ -1573,7 +1575,7 @@ namespace Misc
                     if (searchsettingreligionitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting religion for the old profileid of    :" + searchsettingreligionitem.SearchSetting.ProfileID);
-                        var searchsettingreligionobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_religion();
+                        var searchsettingreligionobject = new Anewluv.Domain.Data.searchsetting_religion();
                         if (context.searchsetting_religion.Any(p => p.religion.id == searchsettingreligionitem.ReligionID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingreligionitem.SearchSetting.ProfileID + "it alaready has search settings religion   ");
@@ -1604,7 +1606,7 @@ namespace Misc
                     if (searchsettingreligiousattendanceitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting religiousattendance for the old profileid of    :" + searchsettingreligiousattendanceitem.SearchSetting.ProfileID);
-                        var searchsettingreligiousattendanceobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_religiousattendance();
+                        var searchsettingreligiousattendanceobject = new Anewluv.Domain.Data.searchsetting_religiousattendance();
                         if (context.searchsetting_religiousattendance.Any(p => p.religiousattendance.id == searchsettingreligiousattendanceitem.ReligiousAttendanceID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingreligiousattendanceitem.SearchSetting.ProfileID + "it alaready has search settings religiousattendance   ");
@@ -1635,7 +1637,7 @@ namespace Misc
                     if (searchsettingshowmeitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting showme for the old profileid of    :" + searchsettingshowmeitem.SearchSetting.ProfileID);
-                        var searchsettingshowmeobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_showme();
+                        var searchsettingshowmeobject = new Anewluv.Domain.Data.searchsetting_showme();
                         if (context.searchsetting_showme.Any(p => p.showme.id == searchsettingshowmeitem.ShowMeID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingshowmeitem.SearchSetting.ProfileID + "it alaready has search settings showme   ");
@@ -1667,7 +1669,7 @@ namespace Misc
                     if (searchsettingsignitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting sign for the old profileid of    :" + searchsettingsignitem.SearchSetting.ProfileID);
-                        var searchsettingsignobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_sign();
+                        var searchsettingsignobject = new Anewluv.Domain.Data.searchsetting_sign();
                         if (context.searchsetting_sign.Any(p => p.sign.id == searchsettingsignitem.SignID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingsignitem.SearchSetting.ProfileID + "it alaready has search settings sign   ");
@@ -1701,7 +1703,7 @@ namespace Misc
                     if (searchsettingsmokesitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting smokes for the old profileid of    :" + searchsettingsmokesitem.SearchSetting.ProfileID);
-                        var searchsettingsmokesobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_smokes();
+                        var searchsettingsmokesobject = new Anewluv.Domain.Data.searchsetting_smokes();
                         if (context.searchsetting_smokes.Any(p => p.smoke.id == searchsettingsmokesitem.SmokesID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingsmokesitem.SearchSetting.ProfileID + "it alaready has search settings smokes   ");
@@ -1733,7 +1735,7 @@ namespace Misc
                     if (searchsettingsortbytypeitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting sortbytype for the old profileid of    :" + searchsettingsortbytypeitem.SearchSetting.ProfileID);
-                        var searchsettingsortbytypeobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_sortbytype();
+                        var searchsettingsortbytypeobject = new Anewluv.Domain.Data.searchsetting_sortbytype();
                         if (context.searchsetting_sortbytype.Any(p => p.sortbytype.id == searchsettingsortbytypeitem.SortByTypeID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingsortbytypeitem.SearchSetting.ProfileID + "it alaready has search settings sortbytype   ");
@@ -1763,7 +1765,7 @@ namespace Misc
                     if (searchsettingwantskidsitem.SearchSetting != null)
                     {
                         Console.WriteLine("attempting a search setting wantskids for the old profileid of    :" + searchsettingwantskidsitem.SearchSetting.ProfileID);
-                        var searchsettingwantskidsobject = new Shell.MVC2.Domain.Entities.Anewluv.searchsetting_wantkids();
+                        var searchsettingwantskidsobject = new Anewluv.Domain.Data.searchsetting_wantkids();
                         if (context.searchsetting_wantkids.Any(p => p.wantskids .id == searchsettingwantskidsitem.WantKidsID ))
                         {
                             Console.WriteLine("skipping profile with email  :" + searchsettingwantskidsitem.SearchSetting.ProfileID + "it alaready has search settings wantskids   ");

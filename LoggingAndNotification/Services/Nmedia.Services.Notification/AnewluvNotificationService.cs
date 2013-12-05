@@ -59,12 +59,9 @@ namespace Nmedia.Services.Notification
         }
 
 
-
-
-        public IAsyncResult Beginsenderrormessage(errorlog error, string addresstype)
+        public IAsyncResult Beginsenderrormessage(errorlog error, string addresstype, AsyncCallback callback, object asyncState)
         {
-
-
+            
 
             EmailModel emailmodels = new EmailModel();
 

@@ -17,12 +17,13 @@ using Shell.MVC2.Interfaces;
 
 using Newtonsoft.Json;
 using Shell.MVC2.SignalR.Infrastructure;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat.ViewModels;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat;
+
 
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR;
 using Shell.MVC2.Services.Contracts;
+using Anewluv.Domain.Data.Chat;
+using Anewluv.Domain.Data.Chat.ViewModels;
 
 
 

@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+
 
 
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Infrastructure;
 using System.Data;
-using Nmedia.Infrastructure.Domain.errorlog;
+
 using LoggingLibrary;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Anewluv.Domain;
+using Anewluv.Domain.Data.ViewModels;
+using Anewluv.Lib;
+using Anewluv.Domain.Data;
 
 namespace Shell.MVC2.Data
 {
@@ -20,17 +24,16 @@ namespace Shell.MVC2.Data
 
 
 
-        private AnewluvContext db; // = new AnewluvContext();
-        private IMemberRepository membersrepository;
+        private AnewluvContext db; // = new AnewluvContext();   
         //private  PostalData2Entities postaldb; //= new PostalData2Entities();
 
 
 
 
-        public MailRepository(AnewluvContext datingcontext, IMemberRepository _membersrepository)
+        public MailRepository(AnewluvContext datingcontext)
             : base(datingcontext)
         {
-            membersrepository = _membersrepository;
+           // membersrepository = _membersrepository;
         }
         // Query Methods
         public List<mailmessageviewmodel> replyemail1(int? id, int mailboxMsgFldId)
@@ -193,7 +196,7 @@ namespace Shell.MVC2.Data
                 if (fldId == 0)
                 {
                     //TO do move this to a mail repop
-                    membersrepository.createmailboxfolders(new ProfileModel { profileid = profileId });
+                    Api.MemberService.createmailboxfolders(new ProfileModel { profileid = profileId });
                     return newmailboxmessagefolderobject(mailboxFolderTypeName, profileId);
                 }
 

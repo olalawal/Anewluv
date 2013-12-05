@@ -3,10 +3,10 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Shell.MVC2.Domain.Entities.Anewluv.Chat;
-using Shell.MVC2.Domain.Entities.Anewluv;
+
 //using Shell.MVC2.Services.Chat; //TO DO convert to WCF
 using Shell.MVC2.Interfaces;
+using Anewluv.Domain.Data.Chat;
 namespace Shell.MVC2.Data
 {
     public static class RepositoryExtensionsOLD

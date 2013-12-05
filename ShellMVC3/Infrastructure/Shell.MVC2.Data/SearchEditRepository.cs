@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+
 
 
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Infrastructure;
 using System.Data;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.errorlog;
+using Anewluv.Domain;
+using Anewluv.Domain.Data;
+using Anewluv.Domain.Data.ViewModels;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
+
 
 namespace Shell.MVC2.Data
 {
@@ -64,7 +67,7 @@ namespace Shell.MVC2.Data
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, profileid, null, false);
+                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, profileid, null, false);
                throw;
             }
             //return null;
@@ -90,13 +93,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, profileid, null, false);
+                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, profileid, null, false);
                 throw ;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, profileid, null, false);
+                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, profileid, null, false);
                throw;
             }
             //return null;
@@ -137,13 +140,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, profileid, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, logenviromentEnum.dev,dx, profileid, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, profileid, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, profileid, null, false);
               throw;
            }
 
@@ -260,13 +263,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
             }
         }       
@@ -363,13 +366,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService ).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService ).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
               throw;
            }
        }
@@ -548,13 +551,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
               throw;
            }
        }       
@@ -729,13 +732,13 @@ namespace Shell.MVC2.Data
                 // return model;
                 //handle logging here
                 var message = dx.Message;
-                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                 throw;
             }
             catch (Exception ex)
             {
                 //log error mesasge
-                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+                new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
             }
 
@@ -852,13 +855,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
               throw;
            }
            return messages;
@@ -958,13 +961,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
               throw;
            }
            return messages;
@@ -1060,13 +1063,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
            return messages;
@@ -1158,13 +1161,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
            return messages;
@@ -1233,13 +1236,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1303,13 +1306,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1370,13 +1373,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1437,13 +1440,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1504,13 +1507,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1571,13 +1574,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1639,13 +1642,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1706,13 +1709,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1773,13 +1776,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1840,13 +1843,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1907,13 +1910,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -1974,13 +1977,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2041,13 +2044,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2108,13 +2111,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2175,13 +2178,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2242,13 +2245,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2309,13 +2312,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2377,13 +2380,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2444,13 +2447,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2511,13 +2514,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2578,13 +2581,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2645,13 +2648,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2712,13 +2715,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2779,13 +2782,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2846,13 +2849,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2914,13 +2917,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -2981,13 +2984,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 
@@ -3049,13 +3052,13 @@ namespace Shell.MVC2.Data
                // return model;
                //handle logging here
                var message = dx.Message;
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, dx, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, dx, null, null, false);
                throw;
            }
            catch (Exception ex)
            {
                //log error mesasge
-               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+               new ErroLogging(logapplicationEnum.EditSearchService).WriteSingleEntry(logseverityEnum.Warning,logenviromentEnum.dev, ex, null, null, false);
                throw;
            }
 

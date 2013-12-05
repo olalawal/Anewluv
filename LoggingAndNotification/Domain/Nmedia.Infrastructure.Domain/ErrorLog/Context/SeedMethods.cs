@@ -21,10 +21,10 @@ namespace Nmedia.Infrastructure.Domain
             //added for profile activity type
             //application
             //filter an enum for not set since that is the zero value i.e  
-            var applicationqry = from applicationEnum value in Enum.GetValues(typeof(applicationEnum))                              
+            var applicationqry = from logapplicationEnum value in Enum.GetValues(typeof(logapplicationEnum))                              
                                orderby value // to sort by value; remove otherwise 
                                select value;
-            applicationqry.ToList().ForEach(kvp => context.lu_application.AddOrUpdate(new lu_application()
+            applicationqry.ToList().ForEach(kvp => context.lu_application.AddOrUpdate(new lu_logapplication()
             {
                 id = (int)kvp,
                  description   = EnumExtensionMethods.ToDescription(kvp)
@@ -34,10 +34,10 @@ namespace Nmedia.Infrastructure.Domain
            
             //application
             //filter an enum for not set since that is the zero value i.e  
-            var enviromentqry = from enviromentEnum value in Enum.GetValues(typeof(enviromentEnum))
+            var enviromentqry = from logenviromentEnum value in Enum.GetValues(typeof(logenviromentEnum))
                                  orderby value // to sort by value; remove otherwise 
                                  select value;
-            enviromentqry.ToList().ForEach(kvp => context.lu_enviroment.AddOrUpdate(new lu_enviroment()
+            enviromentqry.ToList().ForEach(kvp => context.lu_enviroment.AddOrUpdate(new lu_logenviroment()
             {
                 id = (int)kvp,
                 description = EnumExtensionMethods.ToDescription(kvp)

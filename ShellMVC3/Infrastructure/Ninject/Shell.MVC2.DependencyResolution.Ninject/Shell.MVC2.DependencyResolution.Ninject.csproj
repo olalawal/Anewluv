@@ -104,9 +104,8 @@
     <Compile Include="Modules\MemberEditModule.cs" />
     <Compile Include="Modules\SearchEditModule.cs" />
     <Compile Include="Modules\MailModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\PostalDataServiceModule.cs" />
     <Compile Include="IUnitoOfWorkModules\AuthenticationModule.cs" />
-    <Compile Include="Modules\GeoModule.cs" />
+    <Compile Include="IUnitoOfWorkModules\GeoModule.cs" />
     <Compile Include="IUnitoOfWorkModules\MembersMapperModule.cs" />
     <Compile Include="IUnitoOfWorkModules\MembersModule.cs" />
     <Compile Include="IUnitoOfWorkModules\PhotoServiceModule.cs" />
@@ -137,6 +136,10 @@
       <Project>{01A79DCC-39CA-447E-A668-DD4206A8E5AA}</Project>
       <Name>GeoData.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Domain\Interfaces\Shell.MVC2.Interfaces\Shell.MVC2.Interfaces.csproj">
+      <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
+      <Name>Shell.MVC2.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Hubs\Shell.MVC.Hubs\Shell.MVC2.SignalR.Hubs.csproj">
       <Project>{DDE554E0-816F-4C97-B141-C603C4B8B513}</Project>
       <Name>Shell.MVC2.SignalR.Hubs</Name>
@@ -144,6 +147,10 @@
     <ProjectReference Include="..\..\..\Services\Shell.MVC2.Services.Chat\Shell.MVC2.Services.Chat.csproj">
       <Project>{6AF3685D-3C0F-4CC8-B0EE-1960462C6DE9}</Project>
       <Name>Shell.MVC2.Services.Chat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shell.MVC2.Data\Shell.MVC2.Data.csproj">
+      <Project>{69ACF655-FC62-490E-A321-4049873F69DF}</Project>
+      <Name>Shell.MVC2.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

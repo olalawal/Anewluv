@@ -27,9 +27,7 @@ namespace Nmedia.Services.Contracts
         [OperationContract(AsyncPattern = true), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [ServiceKnownType(typeof(errorlog))]
         [WebInvoke(UriTemplate = "/WriteCompleteLogEntry", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        IAsyncResult BeginWriteCompleteLogEntry(errorlog logEntry,
-                          AsyncCallback callback,
-                          object state);
+        IAsyncResult BeginWriteCompleteLogEntry(errorlog logEntry, AsyncCallback callback, object state);
 
         int EndWriteCompleteLogEntry(IAsyncResult result);
 

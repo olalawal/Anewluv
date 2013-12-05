@@ -49,7 +49,7 @@ namespace Nmedia.Services.Logging
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
         }
 
-        public IAsyncResult WriteCompleteLogEntry(errorlog logEntry)
+        public IAsyncResult BeginWriteCompleteLogEntry(errorlog logEntry, AsyncCallback callback, object asyncState)
         {
 
             using (var db = _unitOfWork)
@@ -59,19 +59,19 @@ namespace Nmedia.Services.Logging
                 {
                     try
                     {
-                        IRepository<lu_application> applicationrepo = db.GetRepository<lu_application>();
+                        IRepository<lu_logapplication> applicationrepo = db.GetRepository<lu_logapplication>();
                         IRepository<lu_logseverity> logseverityrepo = db.GetRepository<lu_logseverity>();
-                        IRepository<lu_enviroment> logenviromentrepo = db.GetRepository<lu_enviroment>();
+                        IRepository<lu_logenviroment> logenviromentrepo = db.GetRepository<lu_logenviroment>();
 
                         //make sure we valid desc and log severites so we are not adding new ones
-                        lu_application application = applicationrepo.FindSingle(p => p.id == logEntry.application.id);
+                        lu_logapplication application = applicationrepo.FindSingle(p => p.id == logEntry.application.id);
                         lu_logseverity logseverity = logseverityrepo.FindSingle(p => p.id == logEntry.logseverity.id);
-                        lu_enviroment enviroment = logenviromentrepo.FindSingle(p => p.id == logEntry.enviroment.id);
+                        lu_logenviroment enviroment = logenviromentrepo.FindSingle(p => p.id == logEntry.enviroment.id);
 
                         //set as default error messages if blank
-                        logEntry.application = application != null ? application : applicationrepo.FindSingle(p => p.id == (int)applicationEnum.misc);
+                        logEntry.application = application != null ? application : applicationrepo.FindSingle(p => p.id == (int)logapplicationEnum.GeneralApplicationError);
                         logEntry.logseverity = logseverity != null ? logseverity : logseverityrepo.FindSingle(p => p.id == (int)logseverityEnum.Warning);
-                        logEntry.enviroment = enviroment != null ? enviroment : logenviromentrepo.FindSingle(p => p.id == (int)LogenviromentEnum.dev); 
+                        logEntry.enviroment = enviroment != null ? enviroment : logenviromentrepo.FindSingle(p => p.id == (int)logenviromentEnum.dev); 
 
 
                         db.Add(logEntry);
@@ -102,7 +102,7 @@ namespace Nmedia.Services.Logging
                 }
             }
 
-            return 0;
+            return new CompletedAsyncResult<int>(0);
         }
 
         public int EndWriteCompleteLogEntry(IAsyncResult r)

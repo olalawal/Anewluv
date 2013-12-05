@@ -14,7 +14,7 @@ namespace Misc
         {
 
           //var ddd =   ImageUtils.SmallImageTestdata();
-         MisFunctions.StartDebuggingTest();
+        // MisFunctions.StartDebuggingTest();
        //  MisFunctions.ConvertFlatProfileandprofiledata();
         //  MisFunctions.ConvertProfileCollections();
        //   MisFunctions.ConvertProfileMetaDataBasicCollections();

@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Factory="Anewluv.Web.Services.Members.ServiceHostFactories.NinjectServiceHostFactory" Service="Anewluv.Services.MemberService.MemberService"  %>

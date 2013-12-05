@@ -4,13 +4,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ninject.Modules;
 
+
+using Ninject.Modules;
+using Ninject.Web.Common;
+using Ninject.Activation;
+using Ninject;
+using Nmedia.DataAccess.Interfaces;
 
 
 //to do do away with this when we go to code first , we would pull this from entities 
 
 using Shell.MVC2.Services.Contracts;
+using Anewluv.Domain;
+using System.Data.Entity;
 
 
 //using CommonInstanceFactory.Sample.Interfaces;
@@ -32,17 +39,15 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
             // var webApiEFRepository = kernel.Get<IRepository<Entity>>("WebApiEFRepository");
             //  this.Unbind(typeof(IUnitOfWork));
             //Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
-            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Media.PhotoService"));
+            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.MemberService.MemberService")).InRequestScope();
             // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Media.PhotoService"));
+            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.MemberService.MemberService")).InRequestScope()
+                ;
 
             //the Unit of work module should already be loaded by now
-            this.Bind<IPhotoService>().ToSelf().InRequestScope();
+            this.Bind<IMemberService>().ToSelf().InRequestScope();
 
 
-            Kernel.Bind<IMemberRepository>().ToConstructor(ctorArg => new MemberRepository(ctorArg.Inject<AnewluvContext>( )));
-			//services
-            Kernel.Bind<IMemberService>().ToSelf();
          
       }
 	}

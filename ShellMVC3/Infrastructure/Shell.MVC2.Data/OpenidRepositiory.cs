@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
-
 
 using Shell.MVC2.Interfaces;
 using Shell.MVC2.Infrastructure;
@@ -16,6 +13,8 @@ using System.Web;
 using System.Net;
 using System.IO;
 using System.Web.Script.Serialization;
+using Anewluv.Domain;
+using Anewluv.Domain.Data.ViewModels;
 
 namespace Shell.MVC2.Data
 {
@@ -26,13 +25,13 @@ namespace Shell.MVC2.Data
         private string apiKey;
         private string baseUrl;
         private AnewluvContext db; // = new AnewluvContext();
-        private IMemberRepository membersrepository;
+        //private IMemberRepository membersrepository;
         //private  PostalData2Entities postaldb; //= new PostalData2Entities();
 
-        public JainrainRepository(AnewluvContext datingcontext, IMemberRepository _membersrepository,string _baseUrl,string _apiKey)
+        public JainrainRepository(AnewluvContext datingcontext, string _baseUrl,string _apiKey)
             : base(datingcontext)
         {
-            membersrepository = _membersrepository;
+          //  membersrepository = _membersrepository;
              while (baseUrl.EndsWith("/"))
                 baseUrl = baseUrl.Substring(0, baseUrl.Length - 1);
              apiKey = _apiKey;

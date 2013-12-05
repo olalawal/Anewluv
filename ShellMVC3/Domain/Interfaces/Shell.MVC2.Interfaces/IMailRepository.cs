@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Anewluv.Domain.Data.ViewModels;
+using Anewluv.Domain.Data;
 
-using Shell.MVC2.Domain.Entities.Anewluv;
-using Shell.MVC2.Domain.Entities.Anewluv.ViewModels;
+
 
 
 namespace Shell.MVC2.Interfaces

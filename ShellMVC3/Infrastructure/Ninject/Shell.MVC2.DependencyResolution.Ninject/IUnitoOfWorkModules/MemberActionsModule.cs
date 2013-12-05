@@ -9,7 +9,7 @@ using Shell.MVC2.Data;
 using Shell.MVC2.Interfaces;
 //using Shell.MVC2.Services.Media;
 //using Shell.MVC2.Services.Dating;
-using Dating.Server.Data.Services;
+//using Dating.Server.Data.Services;
 using Shell.MVC2.Services.Contracts;
 
 
