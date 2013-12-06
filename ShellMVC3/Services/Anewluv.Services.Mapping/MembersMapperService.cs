@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 using System.Web;
 using System.Net;
 using Shell.MVC2.Interfaces;
@@ -1499,7 +1499,7 @@ namespace Anewluv.Services.Mapping
                     //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
 
                     HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
-                    LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id.GetValueOrDefault())) : LookingForBodyTypesValues;
+                    LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id)) : LookingForBodyTypesValues;
 
                     HashSet<int> LookingForEthnicityValues = new HashSet<int>();
                     LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicities.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
@@ -1705,7 +1705,7 @@ namespace Anewluv.Services.Mapping
                     //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
 
                     HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
-                    LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id.GetValueOrDefault())) : LookingForBodyTypesValues;
+                    LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id)) : LookingForBodyTypesValues;
 
                     HashSet<int> LookingForEthnicityValues = new HashSet<int>();
                     LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicities.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;

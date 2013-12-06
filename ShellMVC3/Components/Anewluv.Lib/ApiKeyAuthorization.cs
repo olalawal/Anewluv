@@ -91,12 +91,13 @@ namespace Anewluv.Lib
                 List<string> nonauthenticatedURLS = new List<string>();
 
                 //TO DO this list needs to be more broken down
-                nonauthenticatedservices.Add("Anewluv.Web.LoggingService");
-                nonauthenticatedservices.Add("Anewluv.Web.NotificationService");
-                nonauthenticatedservices.Add("Anewluv.Web.AuthenticationService");
-                nonauthenticatedservices.Add("Anewluv.Web.CommonService");
-                nonauthenticatedservices.Add("Anewluv.Web.GeoService");
-                nonauthenticatedservices.Add("Anewluv.Web.MediaService");
+                nonauthenticatedservices.Add("Nmedia.Infrastructure.Web.Services.Logging");
+                nonauthenticatedservices.Add("Nmedia.Infrastructure.Web.Services.Notification");
+                nonauthenticatedservices.Add("Nmedia.Infrastructure.Web.Services.Authorization"); //allow calls to API key auth
+                nonauthenticatedservices.Add("Anewluv.Web.Services.Authentication");
+                nonauthenticatedservices.Add("Anewluv.Web.Services.Common");
+                nonauthenticatedservices.Add("Anewluv.Web.Services.Spatial");
+                nonauthenticatedservices.Add("Anewluv.Web.Services.Media/PhotoService.svc");  //allow all photo uploads
                 //TO DO add code to  call membership service and make sure the requestor has rights to view the data they are requesting
                 //TO DO List the Service URLS that and handle differing security for each 
 

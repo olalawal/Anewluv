@@ -15,7 +15,7 @@ using Ninject.Modules;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 
 
 
@@ -40,7 +40,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 
             // IKernel kernel = new StandardKernel();
 
-            this.Bind<AnewluvContext>().ToSelf().InRequestScope();
+           // this.Bind<AnewluvContext>().ToSelf().InRequestScope();
             //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToConstructor(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope ();
             //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToMethod(ctx => ctx.Kernel.Get<PromotionContext>());//).ToMethod()(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope();
 

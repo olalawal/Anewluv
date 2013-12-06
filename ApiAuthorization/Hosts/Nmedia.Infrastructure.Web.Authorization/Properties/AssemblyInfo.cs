@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Nmedia.Infrastructure.Web.Authorization")]
+[assembly: AssemblyTitle("Nmedia.Infrastructure.Web.Services.Authorization")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Wells Fargo N.A.")]
-[assembly: AssemblyProduct("Nmedia.Infrastructure.Web.Authorization")]
+[assembly: AssemblyProduct("Nmedia.Infrastructure.Web.Services.Authorization")]
 [assembly: AssemblyCopyright("Copyright © Wells Fargo N.A. 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

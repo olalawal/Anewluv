@@ -8,7 +8,7 @@ namespace Anewluv.Domain.Data
     public class searchsetting_bodytype
     {
         [Key]
-        public int? id { get; set; }
+        public int id { get; set; }
         public virtual lu_bodytype  bodytype { get; set; }    
         public virtual searchsetting searchsetting { get; set; }
       

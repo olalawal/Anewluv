@@ -8,7 +8,7 @@ using Ninject.Modules;
 
 //using Shell.MVC2.Services.Authentication; 
 //to do do away with this when we go to code first , we would pull this from entities 
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;

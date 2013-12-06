@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAnewluvApikeyAuthService.cs" />
+    <Compile Include="IApiKeyService.cs" />
     <Compile Include="IAnewluvNotificationService.cs" />
     <Compile Include="IErrorLoggingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

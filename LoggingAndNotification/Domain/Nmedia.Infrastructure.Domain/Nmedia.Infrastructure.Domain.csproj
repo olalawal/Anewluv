@@ -51,14 +51,18 @@
     <Compile Include="ApikeyMigrations\201311220531287_InitialMigrations.Designer.cs">
       <DependentUpon>201311220531287_InitialMigrations.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApikeyMigrations\201312060451182_ffff.cs" />
+    <Compile Include="ApikeyMigrations\201312060451182_ffff.Designer.cs">
+      <DependentUpon>201312060451182_ffff.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApikeyMigrations\Configuration.cs" />
     <Compile Include="ApiKey\Context\Apikey.Context.cs" />
     <Compile Include="ApiKey\Context\ApikeyModelbuilder.cs" />
     <Compile Include="ApiKey\Context\SeedMethods.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="ErrorlogMigrations\201311220530373_InitialMigrations.cs" />
-    <Compile Include="ErrorlogMigrations\201311220530373_InitialMigrations.Designer.cs">
-      <DependentUpon>201311220530373_InitialMigrations.cs</DependentUpon>
+    <Compile Include="ErrorlogMigrations\201312060559516_Initial.cs" />
+    <Compile Include="ErrorlogMigrations\201312060559516_Initial.Designer.cs">
+      <DependentUpon>201312060559516_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="ErrorlogMigrations\Configuration.cs" />
     <Compile Include="ErrorLog\Context\ErrorLog.Context.cs" />
@@ -66,13 +70,9 @@
     <Compile Include="ErrorLog\Context\ErrorLogModelbuilder.cs" />
     <Compile Include="ErrorLog\Context\SeedingConversions.cs" />
     <Compile Include="ErrorLog\Context\SeedMethods.cs" />
-    <Compile Include="NotificationMigrations\201311220459306_InitialMigrations.cs" />
-    <Compile Include="NotificationMigrations\201311220459306_InitialMigrations.Designer.cs">
-      <DependentUpon>201311220459306_InitialMigrations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NotificationMigrations\201311220536015_fixedaddressmessages.cs" />
-    <Compile Include="NotificationMigrations\201311220536015_fixedaddressmessages.Designer.cs">
-      <DependentUpon>201311220536015_fixedaddressmessages.cs</DependentUpon>
+    <Compile Include="NotificationMigrations\201312060606060_Initial.cs" />
+    <Compile Include="NotificationMigrations\201312060606060_Initial.Designer.cs">
+      <DependentUpon>201312060606060_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="NotificationMigrations\Configuration.cs" />
     <Compile Include="NotificationModel\Context\Notification.Context.cs" />
@@ -114,14 +114,14 @@
     <EmbeddedResource Include="ApikeyMigrations\201311220531287_InitialMigrations.resx">
       <DependentUpon>201311220531287_InitialMigrations.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ErrorlogMigrations\201311220530373_InitialMigrations.resx">
-      <DependentUpon>201311220530373_InitialMigrations.cs</DependentUpon>
+    <EmbeddedResource Include="ApikeyMigrations\201312060451182_ffff.resx">
+      <DependentUpon>201312060451182_ffff.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NotificationMigrations\201311220459306_InitialMigrations.resx">
-      <DependentUpon>201311220459306_InitialMigrations.cs</DependentUpon>
+    <EmbeddedResource Include="ErrorlogMigrations\201312060559516_Initial.resx">
+      <DependentUpon>201312060559516_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NotificationMigrations\201311220536015_fixedaddressmessages.resx">
-      <DependentUpon>201311220536015_fixedaddressmessages.cs</DependentUpon>
+    <EmbeddedResource Include="NotificationMigrations\201312060606060_Initial.resx">
+      <DependentUpon>201312060606060_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

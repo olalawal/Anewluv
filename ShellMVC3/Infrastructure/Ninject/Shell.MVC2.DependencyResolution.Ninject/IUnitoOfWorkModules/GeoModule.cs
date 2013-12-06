@@ -11,7 +11,7 @@ using Shell.MVC2.Interfaces;
 //using Dating.Server.Data.Models;
 //using Dating.Server.Data.Services;
 //using Shell.MVC2.Services.Dating;
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;

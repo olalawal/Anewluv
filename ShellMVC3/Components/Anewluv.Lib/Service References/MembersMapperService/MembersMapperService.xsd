@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost/Anewluv.Web.Services.Members/MembersMapperService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://localhost/Anewluv.Web.Services.Members/MembersMapperService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://localhost/Anewluv.Web.Services.Members/MembersMapperService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data" />
+  <xs:import schemaLocation="http://localhost/Anewluv.Web.Services.Members/MembersMapperService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System" />
+  <xs:complexType name="MemberSearchViewModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MyCatchyIntroLineQuickSearch" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProfileVisibility" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="aboutme" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="age" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="birthdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="blockdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="city" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="countryid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="countryname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="distancefromme" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="galleryphoto" nillable="true" type="tns:PhotoModel" />
+      <xs:element minOccurs="0" name="genderid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="hasgalleryphoto" type="xs:boolean" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="interestdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="lastloggedonstring" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="lastlogindate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="latitude" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="likedate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="longitude" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="lookingForageto" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="lookingforagefrom" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="lookingforid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="mycatchyintroline" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="online" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="peekdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="postalcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="postalcodestatus" type="xs:boolean" />
+      <xs:element minOccurs="0" name="profilephotos" nillable="true" type="tns:PhotoViewModel" />
+      <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="stateprovince" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MemberSearchViewModel" nillable="true" type="tns:MemberSearchViewModel" />
+  <xs:complexType name="PhotoModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="convertedsize" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="imagecaption" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="imagename" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="orginalsize" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="photo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="photoid" type="ser:guid" />
+      <xs:element minOccurs="0" name="profileid" type="xs:int" />
+      <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PhotoModel" nillable="true" type="tns:PhotoModel" />
+  <xs:complexType name="PhotoViewModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ProfilePhotosApproved" nillable="true" type="tns:ArrayOfPhotoModel" />
+      <xs:element minOccurs="0" name="ProfilePhotosNotApproved" nillable="true" type="tns:ArrayOfPhotoModel" />
+      <xs:element minOccurs="0" name="ProfilePhotosPrivate" nillable="true" type="tns:ArrayOfPhotoModel" />
+      <xs:element minOccurs="0" name="SingleProfilePhoto" nillable="true" type="tns:PhotoModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PhotoViewModel" nillable="true" type="tns:PhotoViewModel" />
+  <xs:complexType name="ArrayOfPhotoModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PhotoModel" nillable="true" type="tns:PhotoModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPhotoModel" nillable="true" type="tns:ArrayOfPhotoModel" />
+  <xs:complexType name="ArrayOfMemberSearchViewModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MemberSearchViewModel" nillable="true" type="tns:MemberSearchViewModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMemberSearchViewModel" nillable="true" type="tns:ArrayOfMemberSearchViewModel" />
+  <xs:complexType name="ProfileBrowseModel">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:element name="ProfileBrowseModel" nillable="true" type="tns:ProfileBrowseModel" />
+  <xs:complexType name="ArrayOfProfileBrowseModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProfileBrowseModel" nillable="true" type="tns:ProfileBrowseModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProfileBrowseModel" nillable="true" type="tns:ArrayOfProfileBrowseModel" />
+  <xs:complexType name="ProfileCriteriaModel">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Hobbies" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="HotFeature" nillable="true" type="q2:ArrayOfstring" />
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="LookingFor" nillable="true" type="q3:ArrayOfstring" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProfileCriteriaModel" nillable="true" type="tns:ProfileCriteriaModel" />
+  <xs:complexType name="ProfileModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Country" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="activationcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="openididentifier" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="openidprovider" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="photoid" nillable="true" type="ser:guid" />
+      <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="securityanswer" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="securityquestion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="sessionid" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProfileModel" nillable="true" type="tns:ProfileModel" />
+  <xs:complexType name="MembersViewModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="account" nillable="true" type="tns:AccountModel" />
+      <xs:element minOccurs="0" name="lookingforagefrom" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="lookingforageto" nillable="true" type="xs:string" />
+      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="lookingforgendersid" nillable="true" type="q4:ArrayOfint" />
+      <xs:element minOccurs="0" name="maxdistancefromme" type="xs:double" />
+      <xs:element minOccurs="0" name="membersviewmodelid" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="myage" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="myblockcount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mycity" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mycitystateprovince" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mycontinentcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mycountrycode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mycountryid" type="xs:int" />
+      <xs:element minOccurs="0" name="mycountryname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mycurrentsearchlist" nillable="true" type="tns:ArrayOfMemberSearchViewModel" />
+      <xs:element minOccurs="0" name="myeditprofilephotosviewmodel" nillable="true" type="tns:PhotoEditViewModel" />
+      <xs:element minOccurs="0" name="mygenderid" type="xs:int" />
+      <xs:element minOccurs="0" name="myintrestcount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="myipaddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mylatitude" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mylongitude" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mymailcount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mypeekscount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="myphotos" nillable="true" type="tns:ArrayOfPhotoModel" />
+      <xs:element minOccurs="0" name="mypostalcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mypostalcodestatus" type="xs:boolean" />
+      <xs:element minOccurs="0" name="myquicksearch" nillable="true" type="tns:quicksearchmodel" />
+      <xs:element minOccurs="0" name="myregionname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="myuseragent" nillable="true" type="xs:string" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data" minOccurs="0" name="profile" nillable="true" type="q5:profile" />
+      <xs:element minOccurs="0" name="profile_id" type="xs:int" />
+      <xs:element minOccurs="0" name="profilestatusmessageshown" type="xs:boolean" />
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data" minOccurs="0" name="profilevisiblity" nillable="true" type="q6:visiblitysetting" />
+      <xs:element minOccurs="0" name="recentlyuploadedphotos" nillable="true" type="tns:ArrayOfPhotoUploadModel" />
+      <xs:element minOccurs="0" name="register" nillable="true" type="tns:registermodel" />
+      <xs:element minOccurs="0" name="rpxmodel" nillable="true" type="tns:rpxprofile" />
+      <xs:element minOccurs="0" name="sessionid" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="whoilikecount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="whoisinterestedinmecount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="whoisinterestedinmenewcount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="wholikesmecount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="wholikesmenewcount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="whomailedme" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="whomailedmenewcount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="whopeekedatmenewcount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="whopeekededatmecount" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MembersViewModel" nillable="true" type="tns:MembersViewModel" />
+  <xs:complexType name="AccountModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BirthDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="City" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ConfirmPassword" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Country" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Gender" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PostalCodeStatus" type="xs:boolean" />
+      <xs:element minOccurs="0" name="SecurityAnswer" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SecurityQuestion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ZipOrPostalCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountModel" nillable="true" type="tns:AccountModel" />
+  <xs:complexType name="PhotoEditViewModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsUploading" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PhotosUploading" nillable="true" type="tns:PhotoUploadViewModel" />
+      <xs:element minOccurs="0" name="ProfilePhotosApproved" nillable="true" type="tns:ArrayOfphotoeditmodel" />
+      <xs:element minOccurs="0" name="ProfilePhotosNotApproved" nillable="true" type="tns:ArrayOfphotoeditmodel" />
+      <xs:element minOccurs="0" name="ProfilePhotosPrivate" nillable="true" type="tns:ArrayOfphotoeditmodel" />
+      <xs:element minOccurs="0" name="SingleProfilePhoto" nillable="true" type="tns:photoeditmodel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PhotoEditViewModel" nillable="true" type="tns:PhotoEditViewModel" />
+  <xs:complexType name="PhotoUploadViewModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="autoupload" type="xs:boolean" />
+      <xs:element minOccurs="0" name="multiple" type="xs:boolean" />
+      <xs:element minOccurs="0" name="photosuploaded" nillable="true" type="tns:ArrayOfPhotoUploadModel" />
+      <xs:element minOccurs="0" name="profileid" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PhotoUploadViewModel" nillable="true" type="tns:PhotoUploadViewModel" />
+  <xs:complexType name="ArrayOfPhotoUploadModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PhotoUploadModel" nillable="true" type="tns:PhotoUploadModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPhotoUploadModel" nillable="true" type="tns:ArrayOfPhotoUploadModel" />
+  <xs:complexType name="PhotoUploadModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="approvalstatusid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="caption" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="imageb64string" nillable="true" type="xs:string" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="imagebytes" nillable="true" type="q7:ArrayOfNullableOfunsignedByte" />
+      <xs:element minOccurs="0" name="imagename" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="imagetypeid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="legacysize" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="photostatusid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="rejectionreasonid" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PhotoUploadModel" nillable="true" type="tns:PhotoUploadModel" />
+  <xs:complexType name="ArrayOfphotoeditmodel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="photoeditmodel" nillable="true" type="tns:photoeditmodel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfphotoeditmodel" nillable="true" type="tns:ArrayOfphotoeditmodel" />
+  <xs:complexType name="photoeditmodel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="approved" type="xs:boolean" />
+      <xs:element minOccurs="0" name="checkedphoto" type="xs:boolean" />
+      <xs:element minOccurs="0" name="checkedprimary" type="xs:boolean" />
+      <xs:element minOccurs="0" name="convertedsize" type="xs:int" />
+      <xs:element minOccurs="0" name="creationdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="description" type="xs:boolean" />
+      <xs:element minOccurs="0" name="imagecaption" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="imagename" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="orginalsize" type="xs:long" />
+      <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data" minOccurs="0" name="photoformat" nillable="true" type="q8:lu_photoformat" />
+      <xs:element minOccurs="0" name="photoid" type="ser:guid" />
+      <xs:element minOccurs="0" name="photostatusid" type="xs:int" />
+      <xs:element minOccurs="0" name="profileid" type="xs:int" />
+      <xs:element minOccurs="0" name="profileimagetype" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="photoeditmodel" nillable="true" type="tns:photoeditmodel" />
+  <xs:complexType name="quicksearchmodel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="myselectediamgenderid" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="quicksearchmodel" nillable="true" type="tns:quicksearchmodel" />
+  <xs:complexType name="registermodel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="activationcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="birthdate" nillable="true" type="xs:string" />
+      <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="cities" nillable="true" type="q9:ArrayOfstring" />
+      <xs:element minOccurs="0" name="city" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="confirmemailaddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="confirmpassword" nillable="true" type="xs:string" />
+      <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="countries" nillable="true" type="q10:ArrayOfstring" />
+      <xs:element minOccurs="0" name="country" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="emailaddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="gender" nillable="true" type="xs:string" />
+      <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="genders" nillable="true" type="q11:ArrayOfstring" />
+      <xs:element minOccurs="0" name="lattitude" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="longitude" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="openididentifer" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="openidprovider" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="postalcodestatus" type="xs:boolean" />
+      <xs:element minOccurs="0" name="registrationphotos" nillable="true" type="tns:photoeditmodel" />
+      <xs:element minOccurs="0" name="screenname" nillable="true" type="xs:string" />
+      <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="securityquestions" nillable="true" type="q12:ArrayOfstring" />
+      <xs:element minOccurs="0" name="stateprovince" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ziporpostalcode" nillable="true" type="xs:string" />
+      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ziporpostalcodes" nillable="true" type="q13:ArrayOfstring" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="registermodel" nillable="true" type="tns:registermodel" />
+  <xs:complexType name="rpxprofile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="birthday" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="displayname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="gender" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="identifier" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="photo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="preferredusername" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="providername" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="url" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="verifiedemail" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="rpxprofile" nillable="true" type="tns:rpxprofile" />
+</xs:schema>

@@ -10,7 +10,7 @@ using Shell.MVC2.Data;
 //using Shell.MVC2.Services.Logging;
 //using Shell.MVC2.Infrastructure.Entities.UserRepairModel;
 
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 //using Shell.MVC2.Infrastructure.Entities.ApiKeyModel;
 using Shell.MVC2.Interfaces;
 using Anewluv.Domain;

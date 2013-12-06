@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using Anewluv.Domain;
 using Shell.MVC2.Infrastructure;
-using Dating.Server.Data.Models;
+//using Dating.Server.Data.Models;
 
 namespace Anewluv.Domain.Migrations
 {
@@ -18,7 +18,7 @@ namespace Anewluv.Domain.Migrations
         //add the old database model 
         public static void ConvertDatabase()
        {
-           var olddb = new AnewluvFtsEntities();
+          // var olddb = new AnewluvFtsEntities();
            var context = new AnewluvContext();
 
           

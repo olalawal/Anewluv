@@ -15,6 +15,7 @@ namespace Nmedia.Infrastructure.Domain.NotificationMigrations
 
         protected override void Seed(Nmedia.Infrastructure.Domain.NotificationContext context)
         {
+            SeedMethodsNotificationModel.seedgenerallookups(context);
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 

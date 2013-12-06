@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost/Anewluv.Web.Services.Members/MembersMapperService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" />
+  <xs:import schemaLocation="http://localhost/Anewluv.Web.Services.Members/MembersMapperService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="mapmembersearchviewmodel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="viewerprofileid" nillable="true" type="xs:string" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="modeltomap" nillable="true" type="q1:MemberSearchViewModel" />
+        <xs:element minOccurs="0" name="allphotos" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mapmembersearchviewmodelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="mapmembersearchviewmodelResult" nillable="true" type="q2:MemberSearchViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mapmembersearchviewmodels">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="viewerprofileid" nillable="true" type="xs:string" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="modelstomap" nillable="true" type="q3:ArrayOfMemberSearchViewModel" />
+        <xs:element minOccurs="0" name="allphotos" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mapmembersearchviewmodelsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="mapmembersearchviewmodelsResult" nillable="true" type="q4:ArrayOfMemberSearchViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getmembersearchviewmodel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="viewerprofileid" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="allphotos" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getmembersearchviewmodelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getmembersearchviewmodelResult" nillable="true" type="q5:MemberSearchViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getmembersearchviewmodels">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="viewerprofileid" nillable="true" type="xs:string" />
+        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="profileids" nillable="true" type="q6:ArrayOfint" />
+        <xs:element minOccurs="0" name="allphotos" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getmembersearchviewmodelsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getmembersearchviewmodelsResult" nillable="true" type="q7:ArrayOfMemberSearchViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getprofilebrowsemodel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="viewerprofileid" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="allphotos" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getprofilebrowsemodelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getprofilebrowsemodelResult" nillable="true" type="q8:ProfileBrowseModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getprofilebrowsemodels">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="viewerprofileid" nillable="true" type="xs:string" />
+        <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="profileids" nillable="true" type="q9:ArrayOfint" />
+        <xs:element minOccurs="0" name="allphotos" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getprofilebrowsemodelsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getprofilebrowsemodelsResult" nillable="true" type="q10:ArrayOfProfileBrowseModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getprofilecriteriamodel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getprofilecriteriamodelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getprofilecriteriamodelResult" nillable="true" type="q11:ProfileCriteriaModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getprofilecriteriamodelempty">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getprofilecriteriamodelemptyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getprofilecriteriamodelemptyResult" nillable="true" type="q12:ProfileCriteriaModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getdefaultquicksearchsettingsmembers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="Model" nillable="true" type="q13:ProfileModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getdefaultquicksearchsettingsmembersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getdefaultquicksearchsettingsmembersResult" nillable="true" type="q14:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getdefaultsearchsettingsguest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="Model" nillable="true" type="q15:ProfileModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getdefaultsearchsettingsguestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getdefaultsearchsettingsguestResult" nillable="true" type="q16:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getregistermodel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="membersmodel" nillable="true" type="q17:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getregistermodelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getregistermodelResult" nillable="true" type="q18:registermodel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getregistermodelopenid">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="membersmodel" nillable="true" type="q19:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getregistermodelopenidResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getregistermodelopenidResult" nillable="true" type="q20:registermodel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getregistermodeltest">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getregistermodeltestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getregistermodeltestResult" nillable="true" type="q21:registermodel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="updatememberdata">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="model" nillable="true" type="q22:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="updatememberdataResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="updatememberdataResult" nillable="true" type="q23:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="updatememberdatabyprofileid">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="updatememberdatabyprofileidResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="updatememberdatabyprofileidResult" nillable="true" type="q24:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="updateguestdata">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="model" nillable="true" type="q25:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="updateguestdataResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="updateguestdataResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="removeguestdata">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sessionid" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="removeguestdataResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="removeguestdataResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getguestdata">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sessionid" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getguestdataResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getguestdataResult" nillable="true" type="q26:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getmemberdata">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getmemberdataResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getmemberdataResult" nillable="true" type="q27:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mapmember">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="profileid" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mapmemberResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="mapmemberResult" nillable="true" type="q28:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mapguest">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mapguestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="mapguestResult" nillable="true" type="q29:MembersViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getquickmatches">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="model" nillable="true" type="q30:ProfileModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getquickmatchesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getquickmatchesResult" nillable="true" type="q31:ArrayOfMemberSearchViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getemailmatches">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="model" nillable="true" type="q32:ProfileModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getemailmatchesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="getemailmatchesResult" nillable="true" type="q33:ArrayOfMemberSearchViewModel" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR;
 using Shell.MVC2.Interfaces;
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 
 namespace Shell.MVC2.SignalR.Hubs
 {

@@ -10,7 +10,7 @@ using Shell.MVC2.Interfaces;
 //using Shell.MVC2.Services.Media;
 //using Dating.Server.Data.Models;
 //using Dating.Server.Data.Services;
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 using Anewluv.Domain;
 //using Shell.MVC2.Domain.Entities.Anewluv;
 

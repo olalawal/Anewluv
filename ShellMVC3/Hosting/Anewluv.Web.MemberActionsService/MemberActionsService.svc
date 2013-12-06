@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Factory="Anewluv.Web.MembersActionsService.ServiceHostFactories.NinjectServiceHostFactory" Service="Shell.MVC2.Services.Actions.MemberActionsService"  %>

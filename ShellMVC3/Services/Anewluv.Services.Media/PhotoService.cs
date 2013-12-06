@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 using System.Web;
 using System.Net;
 
@@ -13,7 +13,7 @@ using Anewluv.Domain.Data.ViewModels;
 using System.ServiceModel.Activation;
 using LoggingLibrary;
 using Anewluv.DataExtentionMethods;
-using Shell.MVC2.Services.Contracts.ServiceResponse;
+using Anewluv.Services.Contracts.ServiceResponse;
 using Shell.MVC2.Infrastructure.Helpers;
 using System.IO;
 using ImageResizer;

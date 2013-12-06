@@ -10,7 +10,7 @@ using Shell.MVC2.Interfaces;
 //using Shell.MVC2.Services.Media;
 //using Shell.MVC2.Services.Dating;
 //using Dating.Server.Data.Services;
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 using Anewluv.Domain;
 
 //to do do away with this when we go to code first , we would pull this from entities 

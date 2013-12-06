@@ -9,7 +9,7 @@ using Shell.MVC2.Data;
 
 
 
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 
 
 //using CommonInstanceFactory.Sample.Interfaces;

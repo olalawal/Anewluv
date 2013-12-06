@@ -11,7 +11,7 @@ using Nmedia.DataAccess.Interfaces;
 using System.Data.SqlClient;
 using GeoData.Domain.Models;
 using GeoData.Domain.Models.ViewModels;
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 using LoggingLibrary;
 
 using Anewluv.Domain.Data.ViewModels;

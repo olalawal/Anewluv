@@ -18,6 +18,9 @@ namespace Nmedia.Infrastructure.Domain.Data.ApiKey
         anewluv = 1,
         [Description("nigeriaconnections")][EnumMember]
         nigeriaconnections = 2,
+        [Description("anewluvipad")]
+        [EnumMember]
+        anewluvipad = 3,
         
     }
 

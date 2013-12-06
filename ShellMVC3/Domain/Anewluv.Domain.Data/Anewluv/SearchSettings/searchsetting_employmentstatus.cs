@@ -9,8 +9,9 @@ namespace Anewluv.Domain.Data
     {
         public virtual lu_employmentstatus employmentstatus { get; set; }
         [Key]
-        public int? id { get; set; }
-          
+        public int id { get; set; }
+
+        //public int searchsetting_id { get; set; }
         public virtual searchsetting  searchsetting { get; set; } 
     
     

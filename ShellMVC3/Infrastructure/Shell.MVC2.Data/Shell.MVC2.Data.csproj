@@ -156,9 +156,9 @@
     <Compile Include="BaseClasses\MemberRepositoryBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Shell.MVC2.Services.Contracts\Shell.MVC2.Services.Contracts.csproj">
+    <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Shell.MVC2.Services.Contracts\Anewluv.Services.Contracts.csproj">
       <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
-      <Name>Shell.MVC2.Services.Contracts</Name>
+      <Name>Anewluv.Services.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
       <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>

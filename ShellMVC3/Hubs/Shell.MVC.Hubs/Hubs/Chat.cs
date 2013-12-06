@@ -21,7 +21,7 @@ using Shell.MVC2.SignalR.Infrastructure;
 
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR;
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 using Anewluv.Domain.Data.Chat;
 using Anewluv.Domain.Data.Chat.ViewModels;
 

@@ -47,30 +47,10 @@ namespace Nmedia.Infrastructure.Domain
              //save this since the data is needed later for the temp
               EFUtils.SaveChanges(context);
 
-              //use create some users here
-              context.users.AddOrUpdate(h => h.username, new user()
-              {
-                  username = "mohit",
-                  email = "mkumar@yahoo.com",
-                  active = true,
-                  registeringapplication ="testing",
-                  timestamp = DateTime.Now                  
-                   
-     
-              }
-              );
-
-              context.users.AddOrUpdate(h => h.username , new user()
-              {
-                   username = "olawal",
-                  email = "ola_lawal@yahoo.com",
-                  active = true,
-                  registeringapplication = "anewluvcore",
-                  timestamp = DateTime.Now
-              }
-              );
             
-              //add a few keys here     
+            
+              //add a few keys here
+              //super admin anewluv site
               context.apikeys.AddOrUpdate(h => h.key, new apikey()              
               {
                   externalapplicationname = "Anewluvwebsite",
@@ -84,32 +64,88 @@ namespace Nmedia.Infrastructure.Domain
               }
               );
 
+            //read write anewluv site
+              context.apikeys.AddOrUpdate(h => h.key, new apikey()
+              {
+                  active = true,
+                  externalapplicationname = "AnewlvuIpadApplication",
+                  key = Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
+                  timestamp = DateTime.Now,
+                  application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
+                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.readwriteuser).First()
 
+              }
+             );
+
+            //ipdad read write
               context.apikeys.AddOrUpdate(h=>h.key, new apikey()              
               {
                   active =true ,
-                externalapplicationname = "Anewluvwebsite",
+                  externalapplicationname = "AnewlvuIpadApplication",
                   key = Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
                   timestamp = DateTime.Now,                 
-                  application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
+                  application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluvipad).First(),
                   accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.readwriteuser).First()
                     
               }
               );
 
+
+           
+
               EFUtils.SaveChanges(context);
 
-             
-              
-           
+
+
+
+              //use create some users here
+              context.users.AddOrUpdate(h => h.username, new user()
+              {
+                  username = "pavankumar",
+                  email = "pavankumark130@gmail.com",
+                  active = true,
+                  registeringapplication = "web development",
+                  timestamp = DateTime.Now
+
+
+              }
+              );
+
+              context.users.AddOrUpdate(h => h.username, new user()
+              {
+                  username = "ranapaul",
+                  email = "rana.paul130@gmail.com",
+                  active = true,
+                  registeringapplication = "ipad devlopment",
+                  timestamp = DateTime.Now
+
+
+              }
+             );
+
+
+              context.users.AddOrUpdate(h => h.username, new user()
+              {
+                  username = "olawal",
+                  email = "ola_lawal@yahoo.com",
+                  active = true,
+                  registeringapplication = "anewluvcore",
+                  timestamp = DateTime.Now
+              }
+              );
 
             
              //link the user to the correct api key 
+              EFUtils.SaveChanges(context);
+
           
-              user user = context.users.Where(p => p.username == "mohit").FirstOrDefault();
-              apikey apikey = context.apikeys.Where(p => p.accesslevel.id     == (int)accesslevelsenum.readwriteuser).FirstOrDefault();
+              user user = context.users.Where(p => p.username == "pavankumar").FirstOrDefault();
+              apikey apikey =  context.apikeys.Where(p => p.accesslevel.id   == (int)accesslevelsenum.readwriteuser && p.application.id == (int)applicationenum.anewluv).FirstOrDefault();
               user.apikeys.Add(apikey);
-            
+
+              user = context.users.Where(p => p.username == "ranapaul").FirstOrDefault();
+              apikey = context.apikeys.Where(p => p.accesslevel.id == (int)accesslevelsenum.readwriteuser && p.application.id == (int)applicationenum.anewluvipad).FirstOrDefault();
+              user.apikeys.Add(apikey);
 
                user = context.users.Where(p => p.username == "olawal").FirstOrDefault();
                apikey = context.apikeys.Where(p => p.accesslevel.id == (int)accesslevelsenum.superadmin).FirstOrDefault();

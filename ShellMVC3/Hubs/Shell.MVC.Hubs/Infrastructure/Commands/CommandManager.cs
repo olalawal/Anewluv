@@ -8,7 +8,7 @@ using System.Web;
 
 //using Shell.MVC2.Services.Chat;
 using Shell.MVC2.Interfaces;
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 using Shell.MVC2.SignalR.Hubs;
 
 using Anewluv.Domain.Data.Chat;

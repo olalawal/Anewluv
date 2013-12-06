@@ -6,11 +6,11 @@ using System.Text;
 
 using System.Web.Security;
 
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 
 using System.ServiceModel.Activation;
 using System.ServiceModel;
-using Shell.MVC2.Services.Contracts.ServiceResponse;
+using Anewluv.Services.Contracts.ServiceResponse;
 using Nmedia.DataAccess.Interfaces;
 using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;

@@ -15,6 +15,7 @@ namespace Nmedia.Infrastructure.Domain.ErrorlogMigrations
 
         protected override void Seed(Nmedia.Infrastructure.Domain.ErrorlogContext context)
         {
+            SeedMethodsErrorlogModel.seedgenerallookups(context);
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 

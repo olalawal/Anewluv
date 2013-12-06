@@ -15,7 +15,7 @@ using Nmedia.DataAccess.Interfaces;
 
 //to do do away with this when we go to code first , we would pull this from entities 
 
-using Shell.MVC2.Services.Contracts;
+using Anewluv.Services.Contracts;
 using Anewluv.Domain;
 using System.Data.Entity;
 
@@ -30,9 +30,9 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 		public override void Load()
 		{
 
-            // IKernel kernel = new StandardKernel();
-
-            this.Bind<AnewluvContext>().ToSelf().InRequestScope();
+            //  if (!Kernel.HasModule("Shell.MVC2.DependencyResolution.Ninject.Modules.MembersModule")) //only load if not already loaded into kernel
+            //      this.Bind<AnewLuvContextModule>()
+            //this.Bind<AnewluvContext>().ToSelf().InRequestScope();
             //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToConstructor(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope ();
             //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToMethod(ctx => ctx.Kernel.Get<PromotionContext>());//).ToMethod()(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope();
 

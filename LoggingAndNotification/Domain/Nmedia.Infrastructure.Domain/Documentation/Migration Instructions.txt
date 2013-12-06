@@ -25,8 +25,8 @@ then you want to have EF code first scafolt your up-down changes for the balank 
 
 type 1 - single tentant
 PM>Add-Migration InitialMigrations -f -ConfigurationTypeName "Configuration" -verbose
-type 2 mutiple contexts 
-add-migration InitialMigrations -ProjectName:DataLayer.HotelModel 
+type 2 mutiple contexts  use the full namespace of the config
+Add-Migration ffff -ConfigurationTypeName "Nmedia.Infrastructure.Domain.ApikeyMigrations.Configuration" 
 
 
 adding another migration sample after this :
@@ -43,16 +43,18 @@ This snapshot is used to calculate the changes to your model when you scaffold t
 If you make additional changes to your model that you want to include in this migration, then you can re-scaffold it 
 by running 'Add-Migration InitialMigrations' again.
 
-
+1)
 after you make changes to the data model you can update the database using the command :
 PM>  Update-Database -f -verbose -ConfigurationTypeName "Configuration"
 
+2)
 to run a specific migration 
 PM> Update-Database -TargetMigration "201306051636172_InitialMigrations" -ConfigurationTypeName "Configuration"
 or
 Update-Database -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "ConfigurationErrorlog"
 
-
+3) more multi tentant with diff dirs use the fully qualfied namespace
+Update-Database -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.ApikeyMigrations.Configuration" 
 
 if you dont care about datalosss or dropped tables use this command first
 from following blog:

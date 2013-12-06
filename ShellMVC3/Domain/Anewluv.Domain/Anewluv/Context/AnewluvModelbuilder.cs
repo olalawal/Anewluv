@@ -463,13 +463,13 @@ namespace Anewluv.Domain
             modelBuilder.Entity<profilemetadata>().HasMany(p => p.searchsettings )
            .WithRequired(z => z.profilemetadata).HasForeignKey(t => t.profile_id).WillCascadeOnDelete(false);
 
-     //       //bodytype
-     //       //**********************
-     //       //all the other related tables  now          
-     //       modelBuilder.Entity<searchsetting_bodytype>()
-     //      .HasRequired(t => t.bodytype);
-     //       modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes)
-     //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id ).WillCascadeOnDelete(false);
+            //bodytype
+            //**********************
+            //all the other related tables  now          
+           // modelBuilder.Entity<searchsetting_bodytype>()
+           //.HasRequired(t => t.bodytype);
+           // modelBuilder.Entity<searchsetting>().HasMany(p => p.bodytypes);
+           //.WithRequired(z => z.searchsetting).HasForeignKey(t => t.).WillCascadeOnDelete(false);
 
      //       //wantkids
      //       //***********************************
@@ -504,13 +504,13 @@ namespace Anewluv.Domain
      //       modelBuilder.Entity<searchsetting>().HasMany(p => p.educationlevels)
      //      .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
-     //       //employmentstatus
-     //       //***********************************
-     //       //all the other related tables  now          
-     //       modelBuilder.Entity<searchsetting_employmentstatus>()
-     //      .HasRequired(t => t.employmentstatus );
-     //     //  modelBuilder.Entity<searchsetting>().HasMany(p => p.employmentstatus)
-     //    //  .WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
+           // //employmentstatus
+           // //***********************************
+           // //all the other related tables  now          
+           // modelBuilder.Entity<searchsetting_employmentstatus>()
+           //.HasRequired(t => t.employmentstatus);
+           // modelBuilder.Entity<searchsetting>().HasMany(p => p.employmentstatus)
+           //.WithRequired(z => z.searchsetting).HasForeignKey(t => t.searchsetting_id).WillCascadeOnDelete(false);
 
      //       //ethnicity
      //       //***********************************

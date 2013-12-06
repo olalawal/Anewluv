@@ -17,7 +17,7 @@ namespace Ninject.Activation
         /// <returns></returns>
         public static bool IsInjectingToRepositoryDataSourceOfNamespace(this IRequest request, string entityNamespace)
         {
-            if (request.Service.FullName == "WellsFargo.DataAccess.Interfaces.IUnitOfWork" | request.Service.FullName == "")
+            if (request.Service.FullName == "Nmedia.DataAccess.Interfaces.IUnitOfWork" | request.Service.FullName == "")
             {
                 var ns = request.ParentRequest.Service.FullName;
                 return ns == entityNamespace;
