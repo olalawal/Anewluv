@@ -177,7 +177,7 @@ namespace Anewluv.Services.Authentication
 
                         //Dim ctx As New Entities()
                         //added profile status ID validation as well i.e 2 for activated and is not banned 
-                         myQuery =  db.GetRepository<profile>().FindSingle(p => p.username == username && p.status.id == 2);
+                         myQuery =  db.GetRepository<profile>().FindSingle(p => p.username == username && p.status_id == 2);
 
 
 
@@ -249,7 +249,7 @@ namespace Anewluv.Services.Authentication
                               Api.MemberService.Beginaddprofileactvity(
                                 new profileactivity
                                 {
-                                    activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
+                                     lu_activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
                                     ,
                                     creationdate = DateTime.Now,
                                     profile_id = myQuery.id,
@@ -328,7 +328,7 @@ namespace Anewluv.Services.Authentication
                             Api.MemberService.Beginaddprofileactvity(
                               new profileactivity
                               {
-                                  activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
+                                  lu_activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
                                   ,
                                   creationdate = DateTime.Now,
                                   profile_id = myQuery.id,
@@ -375,7 +375,7 @@ namespace Anewluv.Services.Authentication
                       {
                           //open ID members are already verifed but it is posublethat a member who is not activated tries to use open ID
                           //so they could be in order status 1
-                          myprofile = db.GetRepository<profile>().FindSingle(p => p.emailaddress == VerifedEmail && p.status.id <= 2);
+                          myprofile = db.GetRepository<profile>().FindSingle(p => p.emailaddress == VerifedEmail && p.status_id <= 2);
 
                           //get the openid providoer
                           lu_openidprovider provider = db.GetRepository<lu_openidprovider>().FindSingle(p => (p.description).ToUpper() == openidProvidername.ToUpper());
@@ -417,7 +417,7 @@ namespace Anewluv.Services.Authentication
                           Api.MemberService.Beginaddprofileactvity(
                             new profileactivity
                             {
-                                activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
+                                lu_activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
                                 ,
                                 creationdate = DateTime.Now,
                                 profile_id = myprofile.id,
@@ -576,7 +576,7 @@ namespace Anewluv.Services.Authentication
                         ObjProfileEntity.forwardmessages = 1;
                         //  ObjProfileEntity.SecurityQuestionID = 1;                
                         // ObjProfileEntity.SecurityAnswer =  securityAnswer;
-                        ObjProfileEntity.status = (openidIdentifer == "" || openidIdentifer == null) ? db.GetRepository<lu_profilestatus>().FindSingle(p => p.id == 1) : db.GetRepository<lu_profilestatus>().FindSingle(p => p.id == 2);   //auto activate profiles fi we have an openID user since we have verifed thier info
+                        ObjProfileEntity.lu_profilestatus = (openidIdentifer == "" || openidIdentifer == null) ? db.GetRepository<lu_profilestatus>().FindSingle(p => p.id == 1) : db.GetRepository<lu_profilestatus>().FindSingle(p => p.id == 2);   //auto activate profiles fi we have an openID user since we have verifed thier info
 
 
 
@@ -592,7 +592,7 @@ namespace Anewluv.Services.Authentication
 
                         objprofileDataEntity.countryid = countryID;
                         objprofileDataEntity.postalcode = zippostalcode;
-                        objprofileDataEntity.gender = db.GetRepository<lu_gender>().FindSingle(p => p.description == gender);
+                        objprofileDataEntity.lu_gender = db.GetRepository<lu_gender>().FindSingle(p => p.description == gender);
 
 
                         //  =  Int32.Parse(gender): objprofileDataEntity.gender.GenderName  = gender;
@@ -792,7 +792,7 @@ namespace Anewluv.Services.Authentication
 
                             objprofileDateEntity.countryid = countryID;
                             objprofileDateEntity.postalcode = u.ziporpostalcode;
-                            objprofileDateEntity.gender.id = Int32.Parse(u.gender);
+                            objprofileDateEntity.gender_id = Int32.Parse(u.gender);
                             objprofileDateEntity.birthdate = u.birthdate;
                             objprofileDateEntity.phone = "NA";
                             //objprofileDateEntity.AboutMe = "Hello";

@@ -1,38 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-     [DataContract(IsReference = true)]
-    public class interest
+    public partial class interest
     {
-        [Key]
-        [DataMember]
         public int id { get; set; }
-        [DataMember]
         public int profile_id { get; set; }
-       [DataMember]
-       public int interestprofile_id { get; set; }
-        [DataMember]
+        public int interestprofile_id { get; set; }
+        public Nullable<System.DateTime> creationdate { get; set; }
+        public Nullable<System.DateTime> viewdate { get; set; }
+        public Nullable<System.DateTime> modificationdate { get; set; }
+        public Nullable<System.DateTime> deletedbymemberdate { get; set; }
+        public Nullable<System.DateTime> deletedbyinterestdate { get; set; }
+        public Nullable<bool> mutual { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
-       [DataMember]
-       public virtual profilemetadata interestprofilemetadata { get; set; }
-       [DataMember]
-       public DateTime? creationdate { get; set; }
-        [DataMember]
-        public DateTime? viewdate { get; set; }
-        [DataMember]
-        public DateTime? modificationdate { get; set; }
-        [DataMember]
-        public DateTime? deletedbymemberdate { get; set; }
-        [DataMember]
-        public DateTime? deletedbyinterestdate { get; set; }
-        [DataMember]
-        public bool? mutual { get; set; }
-
-      }
-    
+        public virtual profilemetadata profilemetadata1 { get; set; }
+    }
 }

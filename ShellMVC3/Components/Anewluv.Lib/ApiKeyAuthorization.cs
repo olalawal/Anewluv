@@ -124,17 +124,16 @@ namespace Anewluv.Lib
                 {
                     string key = GetAPIKey(operationContext);
 
-                    //TO DO use the api context to validate this
-                  
-                    validrequest = true;
-                    //TO DO re-implect api key
-
+                                 
+                    validrequest = false;
+                    
                         AsyncCallback callback = result =>
                         {
                             var value = Api.ApiKeyService.EndIsValidAPIKey(result);
                             if (value)
                             {
                                 validrequest = true;
+                                
                             }
                             else
                             {
@@ -142,8 +141,19 @@ namespace Anewluv.Lib
                                 CreateApiKeyErrorReply(operationContext, key);
                                 validrequest = false;
                             }
+                            Api.DisposeApiKeyService();
                         };
-                         Api.ApiKeyService.BeginIsValidAPIKey(key,callback,Api.ApiKeyService);
+
+                        if (key != null)
+                        {
+                            Api.ApiKeyService.BeginIsValidAPIKey(key, callback, Api.ApiKeyService);
+                        }
+                        else
+                        {
+                            // Send back an HTML reply
+                            CreateApiKeyErrorReply(operationContext, key);                            
+                            validrequest = false;
+                        }
                         // oLogEntry.id = d.Endsenderrormessage(result);
                         //d.senderrormessage(oLogEntry, addresstypeenum.Developer.ToString());
                 }
@@ -159,6 +169,7 @@ namespace Anewluv.Lib
                     authinfo = GetUserNamePassword(operationContext);
                     if (authinfo != null)
                     {
+                        //TO DO convert to asynch
                         return Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
                     }
                     else
@@ -186,24 +197,42 @@ namespace Anewluv.Lib
             finally
             {
                 Api.DisposeAuthenticationService();
-                Api.DisposeApiKeyService();
+              //   Api.DisposeApiKeyService();
             }
         }
 
 
         public string GetAPIKey(OperationContext operationContext)
         {
+
+
             // Get the request message
             var request = operationContext.RequestContext.RequestMessage;
 
+
             // Get the HTTP Request
             var requestProp = (HttpRequestMessageProperty)request.Properties[HttpRequestMessageProperty.Name];
-
             // Get the query string
-            NameValueCollection queryParams = HttpUtility.ParseQueryString(requestProp.QueryString);
+           // NameValueCollection queryParams = HttpUtility.get(requestProp.Headers);
 
+            var prop = (HttpRequestMessageProperty)request.Properties[HttpRequestMessageProperty.Name];
+
+            return prop.Headers[APIKEY];
+
+            
+
+           //var dd = operationContext.IncomingMessageHeaders.Where(p=>p.Name == APIKEY);
+
+           // if (operationContext.IncomingMessageHeaders.FindHeader(APIKEY, "") != -1)
+           // {
+           //     MessageHeaders headers = operationContext.IncomingMessageHeaders;
+           //     string apikey = headers.GetHeader<string>(APIKEY, "");
+           //     return apikey;
+           // }
+            
+            
             // Return the API key (if present, null if not)
-            return queryParams[APIKEY];
+           // return queryParams[APIKEY];
         }
 
         public string[] GetUserNamePassword(OperationContext operationContext)
@@ -312,7 +341,7 @@ namespace Anewluv.Lib
 ";
 
 
-        const string APIKEY = "APIKey";
+        const string APIKEY = "apikey";
         const string APIErrorHTML = @"
 <html>
 <head>

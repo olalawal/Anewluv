@@ -70,6 +70,7 @@ namespace Anewluv.Services.Mapping
         {
 
                 var db = _unitOfWork;
+                db.DisableProxyCreation = false;
                 try
                 {
 
@@ -107,12 +108,12 @@ namespace Anewluv.Services.Mapping
                         model.stateprovince = profile.profiledata.stateprovince;
                         model.postalcode = profile.profiledata.postalcode;
                         model.countryid = profile.profiledata.countryid;
-                        model.genderid = profile.profiledata.gender.id;
+                        model.genderid = profile.profiledata.gender_id;
                         model.birthdate = profile.profiledata.birthdate;
                         // modelprofile = profile.profile;
                         model.longitude = (double)profile.profiledata.longitude;
                         model.latitude = (double)profile.profiledata.latitude;
-                        model.hasgalleryphoto = profile.profilemetadata.photos.Where(i => i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false;
+                        model.hasgalleryphoto = profile.profilemetadata.photos.Where(i => i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false;
                         model.creationdate = profile.creationdate;
                         model.city = Extensions.ReduceStringLength(profile.profiledata.city, 11);
                         model.lastlogindate = profile.logindate;
@@ -433,56 +434,56 @@ namespace Anewluv.Services.Mapping
                         CriteriaModel.ScreenName = (metadata.profile.screenname == null) ? Extensions.ReduceStringLength(metadata.profile.screenname, 10) : Extensions.ReduceStringLength(metadata.profile.screenname, 10);
                         CriteriaModel.AboutMe = (metadata.profile.profiledata.aboutme == null || metadata.profile.profiledata.aboutme == "Hello") ? "This is the description of the type of person I am looking for.. comming soon. For Now Email Me to find out more about me" : metadata.profile.profiledata.aboutme;
                         //  MyCatchyIntroLine = metadata.prMyCatchyIntroLine == null ? "Hi There!" : metadata.MyCatchyIntroLine;
-                        CriteriaModel.BodyType = (metadata.profile.profiledata.bodytype == null | metadata.profile.profiledata.bodytype.id == null) ? "Ask Me" : metadata.profile.profiledata.bodytype.description;
-                        CriteriaModel.EyeColor = (metadata.profile.profiledata.eyecolor == null | metadata.profile.profiledata.eyecolor.id == null) ? "Ask Me" : metadata.profile.profiledata.eyecolor.description;
+                        CriteriaModel.BodyType = (metadata.profile.profiledata.lu_bodytype == null | metadata.profile.profiledata.bodytype_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_bodytype.description;
+                        CriteriaModel.EyeColor = (metadata.profile.profiledata.lu_eyecolor == null | metadata.profile.profiledata.eyecolor_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_eyecolor.description;
                         // Ethnicity = metadata.CriteriaAppearance_Ethnicity == null ? "Ask Me" : metadata.CriteriaAppearance_Ethnicity.EthnicityName;
-                        CriteriaModel.HairColor = (metadata.profile.profiledata.haircolor == null | metadata.profile.profiledata.haircolor.id == null) ? "Ask Me" : metadata.profile.profiledata.haircolor.description;
+                        CriteriaModel.HairColor = (metadata.profile.profiledata.lu_haircolor == null | metadata.profile.profiledata.haircolor_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_haircolor.description;
                         //TO DO determine weather metic or us sustem user //added 11-17-2011
                         CriteriaModel.HeightByCulture = (metadata.profile.profiledata.height == null | metadata.profile.profiledata.height == 0) ? "Ask Me" : Extensions.ToFeetInches((double)metadata.profile.profiledata.height);
 
-                        CriteriaModel.Exercise = (metadata.profile.profiledata.exercise == null | metadata.profile.profiledata.exercise.id == null) ? "Ask Me" : metadata.profile.profiledata.exercise.description;
-                        CriteriaModel.Religion = (metadata.profile.profiledata.religion == null | metadata.profile.profiledata.religion.id == null) ? "Ask Me" : metadata.profile.profiledata.religion.description;
-                        CriteriaModel.ReligiousAttendance = (metadata.profile.profiledata.religiousattendance == null | metadata.profile.profiledata.religiousattendance.id == null) ? "Ask Me" : metadata.profile.profiledata.religiousattendance.description;
-                        CriteriaModel.Drinks = (metadata.profile.profiledata.drinking == null | metadata.profile.profiledata.drinking.id == null) ? "Ask Me" : metadata.profile.profiledata.drinking.description;
-                        CriteriaModel.Smokes = (metadata.profile.profiledata.smoking == null | metadata.profile.profiledata.smoking.id == null) ? "Ask Me" : metadata.profile.profiledata.smoking.description;
-                        CriteriaModel.Humor = (metadata.profile.profiledata.humor == null | metadata.profile.profiledata.humor.id == null) ? "Ask Me" : metadata.profile.profiledata.humor.description;
+                        CriteriaModel.Exercise = (metadata.profile.profiledata.lu_exercise == null | metadata.profile.profiledata.exercise_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_exercise.description;
+                        CriteriaModel.Religion = (metadata.profile.profiledata.lu_religion == null | metadata.profile.profiledata.religion_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_religion.description;
+                        CriteriaModel.ReligiousAttendance = (metadata.profile.profiledata.lu_religiousattendance == null | metadata.profile.profiledata.religiousattendance_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_religiousattendance.description;
+                        CriteriaModel.Drinks = (metadata.profile.profiledata.lu_drinks == null | metadata.profile.profiledata.drinking_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_drinks.description;
+                        CriteriaModel.Smokes = (metadata.profile.profiledata.lu_smokes == null | metadata.profile.profiledata.smoking_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_smokes.description;
+                        CriteriaModel.Humor = (metadata.profile.profiledata.lu_humor == null | metadata.profile.profiledata.humor_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_humor.description;
                         // HotFeature = metadata.profile.profiledata.CriteriaCharacter_HotFeature == null ? "Ask Me" : metadata.profile.profiledata.CriteriaCharacter_HotFeature.HotFeatureName; 
                         //   Hobby =  metadata.profile.profiledata.CriteriaCharacter_Hobby == null ? "Ask Me" : metadata.profile.profiledata.CriteriaCharacter_Hobby.HobbyName;
-                        CriteriaModel.PoliticalView = (metadata.profile.profiledata.politicalview == null | metadata.profile.profiledata.politicalview == null) ? "Ask Me" : metadata.profile.profiledata.politicalview.description;
-                        CriteriaModel.Diet = (metadata.profile.profiledata.diet == null | metadata.profile.profiledata.diet.id == null) ? "Ask Me" : metadata.profile.profiledata.diet.description;
+                        CriteriaModel.PoliticalView = (metadata.profile.profiledata.lu_politicalview == null | metadata.profile.profiledata.politicalview_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_politicalview.description;
+                        CriteriaModel.Diet = (metadata.profile.profiledata.lu_diet == null | metadata.profile.profiledata.diet_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_diet.description;
                         //TO DO calculate this by bdate
-                        CriteriaModel.Sign = (metadata.profile.profiledata.sign == null | metadata.profile.profiledata.sign.id == null) ? "Ask Me" : metadata.profile.profiledata.sign.description;
-                        CriteriaModel.IncomeLevel = (metadata.profile.profiledata.incomelevel == null | metadata.profile.profiledata.incomelevel == null) ? "Ask Me" : metadata.profile.profiledata.incomelevel.description;
-                        CriteriaModel.HaveKids = (metadata.profile.profiledata.kidstatus == null | metadata.profile.profiledata.kidstatus.id == null) ? "Ask Me" : metadata.profile.profiledata.kidstatus.description;
-                        CriteriaModel.WantsKids = (metadata.profile.profiledata.wantsKidstatus == null | metadata.profile.profiledata.wantsKidstatus.id == null) ? "Ask Me" : metadata.profile.profiledata.wantsKidstatus.description;
-                        CriteriaModel.EmploymentSatus = (metadata.profile.profiledata.employmentstatus == null | metadata.profile.profiledata.employmentstatus.id == null) ? "Ask Me" : metadata.profile.profiledata.employmentstatus.description;
-                        CriteriaModel.EducationLevel = (metadata.profile.profiledata.educationlevel == null | metadata.profile.profiledata.educationlevel.id == null) ? "Ask Me" : metadata.profile.profiledata.educationlevel.description;
-                        CriteriaModel.Profession = (metadata.profile.profiledata.profession == null | metadata.profile.profiledata.profession.id == null) ? "Ask Me" : metadata.profile.profiledata.profession.description;
-                        CriteriaModel.MaritalStatus = (metadata.profile.profiledata.maritalstatus == null | metadata.profile.profiledata.maritalstatus.id == null) ? "Single" : metadata.profile.profiledata.maritalstatus.description;
-                        CriteriaModel.LivingSituation = (metadata.profile.profiledata.livingsituation == null | metadata.profile.profiledata.livingsituation.id == null) ? "Ask Me" : metadata.profile.profiledata.livingsituation.description;
+                        CriteriaModel.Sign = (metadata.profile.profiledata.lu_sign == null | metadata.profile.profiledata.sign_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_sign.description;
+                        CriteriaModel.IncomeLevel = (metadata.profile.profiledata.lu_incomelevel == null | metadata.profile.profiledata.incomelevel_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_incomelevel.description;
+                        CriteriaModel.HaveKids = (metadata.profile.profiledata.lu_havekids == null | metadata.profile.profiledata.kidstatus_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_havekids.description;
+                        CriteriaModel.WantsKids = (metadata.profile.profiledata.lu_wantskids == null | metadata.profile.profiledata.wantsKidstatus_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_wantskids.description;
+                        CriteriaModel.EmploymentSatus = (metadata.profile.profiledata.lu_employmentstatus == null | metadata.profile.profiledata.employmentstatus_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_employmentstatus.description;
+                        CriteriaModel.EducationLevel = (metadata.profile.profiledata.lu_educationlevel == null | metadata.profile.profiledata.educationlevel_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_educationlevel.description;
+                        CriteriaModel.Profession = (metadata.profile.profiledata.lu_profession == null | metadata.profile.profiledata.profession_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_profession.description;
+                        CriteriaModel.MaritalStatus = (metadata.profile.profiledata.lu_maritalstatus == null | metadata.profile.profiledata.maritalstatus_id == null) ? "Single" : metadata.profile.profiledata.lu_maritalstatus.description;
+                        CriteriaModel.LivingSituation = (metadata.profile.profiledata.lu_livingsituation == null | metadata.profile.profiledata.livingsituation_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_livingsituation.description;
                         //special case for ethnicty since they can have mutiples ?
                         //loop though ethnicty thing I guess ?  
                         //8/11/2011 have to loop though since these somehow get detached sometimes
                         //Ethnicity = metadata.profile.profiledata.profiledata_Ethnicity;
 
-                        foreach (var item in metadata.ethnicities)
+                        foreach (var item in metadata.profiledata_ethnicity)
                         {
-                            CriteriaModel.Ethnicity.Add(item.ethnicty.description);
+                            CriteriaModel.Ethnicity.Add(item.lu_ethnicity.description);
                         }
 
-                        foreach (var item in metadata.hobbies)
+                        foreach (var item in metadata.profiledata_hobby)
                         {
-                            CriteriaModel.Hobbies.Add(item.hobby.description);
+                            CriteriaModel.Hobbies.Add(item.lu_hobby.description);
                         }
 
-                        foreach (var item in metadata.lookingfor)
+                        foreach (var item in metadata.profiledata_lookingfor)
                         {
-                            CriteriaModel.LookingFor.Add(item.lookingfor.description);
+                            CriteriaModel.LookingFor.Add(item.lu_lookingfor.description);
                         }
 
-                        foreach (var item in metadata.hotfeatures)
+                        foreach (var item in metadata.profiledata_hotfeature)
                         {
-                            CriteriaModel.HotFeature.Add(item.hotfeature.description);
+                            CriteriaModel.HotFeature.Add(item.lu_hotfeature.description);
                         }
 
                         //handle perfect match settings here .
@@ -499,104 +500,104 @@ namespace Anewluv.Services.Mapping
                         //TO DO add this to search settings for now use what is in profiledata
                         //These will come from search settings table in the future at some point
                         //  CriteriaModel.BasicSearchSettings. = georepository.getcountrynamebycountryid((byte)metadata.profile.profiledata.countryid);  //TO DO allow a range of countries to be selected i.e multi select
-                        CriteriaModel.BasicSearchSettings.locationlist = PerfectMatchSettings.locations.ToList();
+                        CriteriaModel.BasicSearchSettings.locationlist = PerfectMatchSettings.searchsetting_location.ToList();
                         //  CriteriaModel.BasicSearchSettings.postalcode  = metadata.profile.profiledata.postalcode;  //this could be for countries withoute p codes
 
                         //populate list values
-                        foreach (var item in PerfectMatchSettings.genders)
+                        foreach (var item in PerfectMatchSettings.searchsetting_gender)
                         {
-                            CriteriaModel.BasicSearchSettings.genderlist.Add(item.gender);
+                            CriteriaModel.BasicSearchSettings.genderlist.Add(item.lu_gender);
                         }
                         //appearance search settings here
                         CriteriaModel.AppearanceSearchSettings.heightmax = (PerfectMatchSettings == null || PerfectMatchSettings.heightmax == null) ? Extensions.ToFeetInches(48) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmax);
                         CriteriaModel.AppearanceSearchSettings.heightmin = (PerfectMatchSettings == null || PerfectMatchSettings.heightmin == null) ? Extensions.ToFeetInches(89) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmin);
 
-                        foreach (var item in PerfectMatchSettings.ethnicities)
+                        foreach (var item in PerfectMatchSettings.searchsetting_ethnicity)
                         {
-                            CriteriaModel.AppearanceSearchSettings.ethnicitylist.Add(item.ethnicity);
+                            CriteriaModel.AppearanceSearchSettings.ethnicitylist.Add(item.lu_ethnicity);
                         }
 
-                        foreach (var item in PerfectMatchSettings.bodytypes)
+                        foreach (var item in PerfectMatchSettings.searchsetting_bodytype)
                         {
-                            CriteriaModel.AppearanceSearchSettings.bodytypeslist.Add(item.bodytype);
+                            CriteriaModel.AppearanceSearchSettings.bodytypeslist.Add(item.lu_bodytype);
                         }
 
-                        foreach (var item in PerfectMatchSettings.eyecolors)
+                        foreach (var item in PerfectMatchSettings.searchsetting_eyecolor)
                         {
-                            CriteriaModel.AppearanceSearchSettings.eyecolorlist.Add(item.eyecolor);
+                            CriteriaModel.AppearanceSearchSettings.eyecolorlist.Add(item.lu_eyecolor);
                         }
 
-                        foreach (var item in PerfectMatchSettings.haircolors)
+                        foreach (var item in PerfectMatchSettings.searchsetting_haircolor)
                         {
-                            CriteriaModel.AppearanceSearchSettings.haircolorlist.Add(item.haircolor);
+                            CriteriaModel.AppearanceSearchSettings.haircolorlist.Add(item.lu_haircolor);
                         }
 
 
-                        foreach (var item in PerfectMatchSettings.hotfeatures)
+                        foreach (var item in PerfectMatchSettings.searchsetting_hotfeature)
                         {
-                            CriteriaModel.AppearanceSearchSettings.hotfeaturelist.Add(item.hotfeature);
+                            CriteriaModel.AppearanceSearchSettings.hotfeaturelist.Add(item.lu_hotfeature);
                         }
 
                         //populate lifestyle values here
 
-                        foreach (var item in PerfectMatchSettings.educationlevels)
-                        { CriteriaModel.LifeStyleSearchSettings.educationlevellist.Add(item.educationlevel); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_educationlevel)
+                        { CriteriaModel.LifeStyleSearchSettings.educationlevellist.Add(item.lu_educationlevel); }
 
-                        foreach (var item in PerfectMatchSettings.lookingfor)
-                        { CriteriaModel.LifeStyleSearchSettings.lookingforlist.Add(item.lookingfor); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_lookingfor)
+                        { CriteriaModel.LifeStyleSearchSettings.lookingforlist.Add(item.lu_lookingfor); }
 
-                        foreach (var item in PerfectMatchSettings.employmentstatus)
-                        { CriteriaModel.LifeStyleSearchSettings.employmentstatuslist.Add(item.employmentstatus); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_employmentstatus)
+                        { CriteriaModel.LifeStyleSearchSettings.employmentstatuslist.Add(item.lu_employmentstatus); }
 
-                        foreach (var item in PerfectMatchSettings.havekids)
-                        { CriteriaModel.LifeStyleSearchSettings.havekidslist.Add(item.havekids); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_havekids)
+                        { CriteriaModel.LifeStyleSearchSettings.havekidslist.Add(item.lu_havekids); }
 
-                        foreach (var item in PerfectMatchSettings.livingstituations)
-                        { CriteriaModel.LifeStyleSearchSettings.livingsituationlist.Add(item.livingsituation); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_livingstituation)
+                        { CriteriaModel.LifeStyleSearchSettings.livingsituationlist.Add(item.lu_livingsituation); }
 
-                        foreach (var item in PerfectMatchSettings.maritalstatuses)
-                        { CriteriaModel.LifeStyleSearchSettings.maritalstatuslist.Add(item.maritalstatus); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_maritalstatus)
+                        { CriteriaModel.LifeStyleSearchSettings.maritalstatuslist.Add(item.lu_maritalstatus); }
 
-                        foreach (var item in PerfectMatchSettings.wantkids)
-                        { CriteriaModel.LifeStyleSearchSettings.wantskidslist.Add(item.wantskids); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_wantkids)
+                        { CriteriaModel.LifeStyleSearchSettings.wantskidslist.Add(item.lu_wantskids); }
 
-                        foreach (var item in PerfectMatchSettings.professions)
-                        { CriteriaModel.LifeStyleSearchSettings.professionlist.Add(item.profession); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_profession)
+                        { CriteriaModel.LifeStyleSearchSettings.professionlist.Add(item.lu_profession); }
 
-                        foreach (var item in PerfectMatchSettings.incomelevels)
-                        { CriteriaModel.LifeStyleSearchSettings.incomelevellist.Add(item.incomelevel); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_incomelevel)
+                        { CriteriaModel.LifeStyleSearchSettings.incomelevellist.Add(item.lu_incomelevel); }
 
                         //Character settings for search here
-                        foreach (var item in PerfectMatchSettings.diets)
-                        { CriteriaModel.CharacterSearchSettings.dietlist.Add(item.diet); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_diet)
+                        { CriteriaModel.CharacterSearchSettings.dietlist.Add(item.lu_diet); }
 
-                        foreach (var item in PerfectMatchSettings.humors)
-                        { CriteriaModel.CharacterSearchSettings.humorlist.Add(item.humor); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_humor)
+                        { CriteriaModel.CharacterSearchSettings.humorlist.Add(item.lu_humor); }
 
-                        foreach (var item in PerfectMatchSettings.hobbies)
-                        { CriteriaModel.CharacterSearchSettings.hobbylist.Add(item.hobby); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_hobby)
+                        { CriteriaModel.CharacterSearchSettings.hobbylist.Add(item.lu_hobby); }
 
-                        foreach (var item in PerfectMatchSettings.drinks)
-                        { CriteriaModel.CharacterSearchSettings.drinkslist.Add(item.drink); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_drink)
+                        { CriteriaModel.CharacterSearchSettings.drinkslist.Add(item.lu_drinks); }
 
                         //FIX after database update
-                        foreach (var item in PerfectMatchSettings.exercises)
-                        { CriteriaModel.CharacterSearchSettings.exerciselist.Add(item.exercise); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_exercise)
+                        { CriteriaModel.CharacterSearchSettings.exerciselist.Add(item.lu_exercise); }
 
-                        foreach (var item in PerfectMatchSettings.smokes)
-                        { CriteriaModel.CharacterSearchSettings.smokeslist.Add(item.smoke); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_smokes)
+                        { CriteriaModel.CharacterSearchSettings.smokeslist.Add(item.lu_smokes); }
 
-                        foreach (var item in PerfectMatchSettings.signs)
-                        { CriteriaModel.CharacterSearchSettings.signlist.Add(item.sign); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_sign)
+                        { CriteriaModel.CharacterSearchSettings.signlist.Add(item.lu_sign); }
 
-                        foreach (var item in PerfectMatchSettings.politicalviews)
-                        { CriteriaModel.CharacterSearchSettings.politicalviewlist.Add(item.politicalview); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_politicalview)
+                        { CriteriaModel.CharacterSearchSettings.politicalviewlist.Add(item.lu_politicalview); }
 
-                        foreach (var item in PerfectMatchSettings.religions)
-                        { CriteriaModel.CharacterSearchSettings.religionlist.Add(item.religion); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_religion)
+                        { CriteriaModel.CharacterSearchSettings.religionlist.Add(item.lu_religion); }
 
-                        foreach (var item in PerfectMatchSettings.religiousattendances)
-                        { CriteriaModel.CharacterSearchSettings.religiousattendancelist.Add(item.religiousattendance); }
+                        foreach (var item in PerfectMatchSettings.searchsetting_religiousattendance)
+                        { CriteriaModel.CharacterSearchSettings.religiousattendancelist.Add(item.lu_religiousattendance); }
 
 
                         return CriteriaModel;
@@ -738,10 +739,10 @@ namespace Anewluv.Services.Mapping
                     quicksearchmodel.myselectedtoage = model.profile.profilemetadata.searchsettings.FirstOrDefault().agemax != null ? model.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.GetValueOrDefault() : 99; ;
 
 
-                    quicksearchmodel.myselectediamgenderid = model.profile.profiledata.gender.id;
+                    quicksearchmodel.myselectediamgenderid = model.profile.profiledata.gender_id.GetValueOrDefault();
                     quicksearchmodel.myselectedcitystateprovince = model.profile.profiledata.city + "," + model.profile.profiledata.stateprovince; ;
                     //TO DO convert genders to a list of genders 
-                    quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(model.profile.profiledata.gender.id);
+                    quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(model.profile.profiledata.gender_id.GetValueOrDefault());
                     quicksearchmodel.myselectedcountryname = model.mycountryname; //use same country for now
                     //add the postal code status here as well
                     quicksearchmodel.myselectedpostalcodestatus = (Api.GeoService.getpostalcodestatusbycountryname(model.mycountryname)) ? true : false;
@@ -1276,20 +1277,20 @@ namespace Anewluv.Services.Mapping
                 model.profile_id = profile.id;
                 //   model.profile.profiledata.SearchSettings(perfectmatchsearchsettings);
                 //4-28-2012 added mapping for profile visiblity
-                model.profilevisiblity = profile.profiledata.visibilitysettings;
+                model.profilevisiblity = profile.profiledata.visiblitysetting;
 
                 //on first load this should always be false
                 //to DO   DO  we still need this
                 model.profilestatusmessageshown = false;
-                model.mygenderid = profile.profiledata.gender.id;
+                model.mygenderid = profile.profiledata.gender_id.GetValueOrDefault();
                 //this should come from search settings eventually on the full blown model of this.
                 //create hase list of genders they are looking for, if it is null add the default
                 //TO DO change this to use membererepo
                 model.lookingforgendersid = (profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?
-                new HashSet<int>(profile.profilemetadata.searchsettings.FirstOrDefault().genders.Select(c => c.id.GetValueOrDefault())) : null;
+                new HashSet<int>(profile.profilemetadata.searchsettings.FirstOrDefault().searchsetting_gender.Select(c => c.id)) : null;
                 if (model.lookingforgendersid != null)
                 {
-                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(profile.profiledata.gender.id));
+                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(profile.profiledata.gender_id.GetValueOrDefault()));
                 }
 
                 //set selected value
@@ -1493,25 +1494,25 @@ namespace Anewluv.Services.Mapping
                     //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
                     //requery all the has tbls
                     HashSet<int> LookingForGenderValues = new HashSet<int>();
-                    LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.genders.Select(c => c.id.GetValueOrDefault())) : LookingForGenderValues;
+                    LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_gender.Select(c => c.id)) : LookingForGenderValues;
                     //Appearacnce seache settings values         
 
                     //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
 
                     HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
-                    LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id)) : LookingForBodyTypesValues;
+                    LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_bodytype.Select(c => c.id)) : LookingForBodyTypesValues;
 
                     HashSet<int> LookingForEthnicityValues = new HashSet<int>();
-                    LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicities.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
+                    LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_ethnicity.Select(c => c.id)) : LookingForEthnicityValues;
 
                     HashSet<int> LookingForEyeColorValues = new HashSet<int>();
-                    LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.eyecolors.Select(c => c.id.GetValueOrDefault())) : LookingForEyeColorValues;
+                    LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_eyecolor.Select(c => c.id)) : LookingForEyeColorValues;
 
                     HashSet<int> LookingForHairColorValues = new HashSet<int>();
-                    LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.haircolors.Select(c => c.id.GetValueOrDefault())) : LookingForHairColorValues;
+                    LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_haircolor.Select(c => c.id)) : LookingForHairColorValues;
 
                     HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
-                    LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.hotfeatures.Select(c => c.id.GetValueOrDefault())) : LookingForHotFeatureValues;
+                    LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_hotfeature.Select(c => c.id)) : LookingForHotFeatureValues;
 
 
                     //******** visiblitysettings test code ************************
@@ -1529,7 +1530,7 @@ namespace Anewluv.Services.Mapping
                     //****** end of visiblity test settings *****************************************
 
                     var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
-                          p.profile.profilemetadata.photos.Any(z => z.photostatus.id == (int)photostatusEnum.Gallery)).ToList()
+                          p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).ToList()
 
                                         //** visiblity settings still needs testing           
                                                       //5-8-2012 add profile visiblity code here
@@ -1540,8 +1541,8 @@ namespace Anewluv.Services.Mapping
                                                       // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.countryid != null && x.ProfileVisiblitySetting.countryid == model.profile.profiledata.countryid  )
                                                       // .Where(x => x.ProfileVisiblitySetting != null || x.ProfileVisiblitySetting.GenderID != null && x.ProfileVisiblitySetting.GenderID ==  model.profile.profiledata.GenderID )
                                                       //** end of visiblity settings ***
-                                     .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)).ToList() //using whereIF predicate function 
-                                     .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id)).ToList() //  == model.lookingforgenderid)    
+                                     .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender_id.GetValueOrDefault())).ToList() //using whereIF predicate function 
+                                     .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender_id.GetValueOrDefault())).ToList() //  == model.lookingforgenderid)    
                                                       //TO DO add the rest of the filitering here 
                                                       //Appearance filtering                         
                                      .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for                         
@@ -1553,13 +1554,13 @@ namespace Anewluv.Services.Mapping
                                                       stateprovince = x.stateprovince,
                                                       postalcode = x.postalcode,
                                                       countryid = x.countryid,
-                                                      genderid = x.gender.id,
+                                                      genderid = x.gender_id,
                                                       birthdate = x.birthdate,
                                                       //profile = f,
                                                       screenname = f.screenname,
                                                       longitude = x.longitude ?? 0,
                                                       latitude = x.latitude ?? 0,
-                                                      hasgalleryphoto = (db.GetRepository<photo>().Find().Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                                      hasgalleryphoto = (db.GetRepository<photo>().Find().Where(i => i.profile_id == f.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
                                                       creationdate = f.creationdate,
                                                       // city = db.fnTruncateString(x.city, 11),
                                                       // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
@@ -1649,7 +1650,7 @@ namespace Anewluv.Services.Mapping
         public List<MemberSearchViewModel> getemailmatches(ProfileModel Model)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
                 try
@@ -1699,34 +1700,34 @@ namespace Anewluv.Services.Mapping
                     //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
                     //requery all the has tbls
                     HashSet<int> LookingForGenderValues = new HashSet<int>();
-                    LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.genders.Select(c => c.id.GetValueOrDefault())) : LookingForGenderValues;
+                    LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_gender.Select(c => c.id)) : LookingForGenderValues;
                     //Appearacnce seache settings values         
 
                     //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
 
                     HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
-                    LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.bodytypes.Select(c => c.id)) : LookingForBodyTypesValues;
+                    LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_bodytype.Select(c => c.id)) : LookingForBodyTypesValues;
 
                     HashSet<int> LookingForEthnicityValues = new HashSet<int>();
-                    LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.ethnicities.Select(c => c.id.GetValueOrDefault())) : LookingForEthnicityValues;
+                    LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_ethnicity.Select(c => c.id)) : LookingForEthnicityValues;
 
                     HashSet<int> LookingForEyeColorValues = new HashSet<int>();
-                    LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.eyecolors.Select(c => c.id.GetValueOrDefault())) : LookingForEyeColorValues;
+                    LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_eyecolor.Select(c => c.id)) : LookingForEyeColorValues;
 
                     HashSet<int> LookingForHairColorValues = new HashSet<int>();
-                    LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.haircolors.Select(c => c.id.GetValueOrDefault())) : LookingForHairColorValues;
+                    LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_haircolor.Select(c => c.id)) : LookingForHairColorValues;
 
                     HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
-                    LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.hotfeatures.Select(c => c.id.GetValueOrDefault())) : LookingForHotFeatureValues;
+                    LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_hotfeature.Select(c => c.id)) : LookingForHotFeatureValues;
 
                    // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
 
                     //add more values as we get more members 
                     //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
                     var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
-                          p.profile.profilemetadata.photos.Any(z => z.photostatus.id == (int)photostatusEnum.Gallery)).ToList()
-                                    .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)).ToList() //using whereIF predicate function 
-                                    .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id)).ToList()
+                          p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).ToList()
+                                    .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.lu_gender.id)).ToList() //using whereIF predicate function 
+                                    .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.lu_gender.id)).ToList()
                                                       //Appearance filtering not implemented yet                        
                                     .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for 
                                                   //we have to filter on the back end now since we cant use UDFs
@@ -1739,7 +1740,7 @@ namespace Anewluv.Services.Mapping
                                                       stateprovince = x.stateprovince,
                                                       postalcode = x.postalcode,
                                                       countryid = x.countryid,
-                                                      genderid = x.gender.id,
+                                                      genderid = x.gender_id,
                                                       birthdate = x.birthdate,
                                                       //profile = f,
                                                       screenname = f.screenname,
@@ -1842,7 +1843,7 @@ namespace Anewluv.Services.Mapping
         {
 
             var db = _unitOfWork;
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             try
             {
 
@@ -1882,15 +1883,15 @@ namespace Anewluv.Services.Mapping
                 //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
                 //requery all the has tbls
                 HashSet<int> LookingForGenderValues = new HashSet<int>();
-                LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.genders.Select(c => c.id.GetValueOrDefault())) : LookingForGenderValues;
+                LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_gender.Select(c => c.id)) : LookingForGenderValues;
 
 
                 //  where (LookingForGenderValues.Count !=null || LookingForGenderValues.Contains(x.GenderID)) 
                 //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
                 var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
-                    p.profile.profilemetadata.photos.Any(z => z.photostatus.id == (int)photostatusEnum.Gallery)).ToList()
-                                .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender.id)).ToList() //using whereIF predicate function 
-                                .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.gender.id)).ToList()
+                    p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).ToList()
+                                .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender_id.GetValueOrDefault())).ToList() //using whereIF predicate function 
+                                .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.lu_gender.id)).ToList()
 
                                               join f in db.GetRepository<profile>().Find() on x.profile_id equals f.id
                                               select new MemberSearchViewModel
@@ -1900,7 +1901,7 @@ namespace Anewluv.Services.Mapping
                                                   stateprovince = x.stateprovince,
                                                   postalcode = x.postalcode,
                                                   countryid = x.countryid,
-                                                  genderid = x.gender.id,
+                                                  genderid = x.gender_id.GetValueOrDefault(),
                                                   birthdate = x.birthdate,
                                                   profile = f,
                                                   screenname = f.screenname,

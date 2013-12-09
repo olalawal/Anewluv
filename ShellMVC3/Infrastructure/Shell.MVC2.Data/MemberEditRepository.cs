@@ -101,11 +101,11 @@ namespace Shell.MVC2.Data
                     // SharedRepository sharedrepository = new SharedRepository();
                     //Ages = sharedrepository.AgesSelectList;
 
-                       model.birthdate  = p.profiledata.birthdate ; //== null ? null :  p.profiledata.birthdate;
+                       model.birthdate  = p.profiledata.birthdate ; //== null ? null :  p.profiledata.lu_birthdate;
                   //  model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
-                       model.gender   =   p.profiledata.gender  == null ? null : p.profiledata.gender  ;
-                       model.countryid   = p.profiledata.countryid   == null ? null : p.profiledata.countryid   ;
-                       model.city    =p.profiledata.city     ==  null ? null : p.profiledata.city    ;
+                    model.gender = p.profiledata.lu_gender == null ? null : p.profiledata.lu_gender;
+                    model.countryid = p.profiledata.countryid == null ? null : p.profiledata.countryid;
+                    model.city = p.profiledata.city == null ? null : p.profiledata.city;
                        model.postalcode   = p.profiledata.postalcode    == null ? null : p.profiledata.postalcode    ;
                        model.aboutme  = p.profiledata.aboutme    == null ? null : p.profiledata.aboutme    ;                   
                        model.phonenumber   = p.profiledata.phone    == null ? null : p.profiledata.phone    ;
@@ -146,38 +146,24 @@ namespace Shell.MVC2.Data
             AppearanceSettingsModel model = new AppearanceSettingsModel();
 
              model.height   = p.profiledata.height    == null ? null : p.profiledata.height;        
-             model.bodytype = p.profiledata.bodytype  == null ? null : p.profiledata.bodytype;
-             model.haircolor   = p.profiledata.haircolor     == null ? null : p.profiledata.haircolor     ;
-             model.eyecolor = p.profiledata.eyecolor    == null ? null : p.profiledata.eyecolor     ;
+             model.bodytype = p.profiledata.lu_bodytype  == null ? null : p.profiledata.lu_bodytype;
+             model.haircolor   = p.profiledata.lu_haircolor     == null ? null : p.profiledata.lu_haircolor     ;
+             model.eyecolor = p.profiledata.lu_eyecolor    == null ? null : p.profiledata.lu_eyecolor     ;
                    
        
                //pilot how to show the rest of the values 
                //sample of doing string values
               // var allhotfeature = db.lu_hotfeature;
                //model.hotfeaturelist =  p.profilemetadata.hotfeatures.ToList();
-                    var hotfeaturevalues = new HashSet<int>(p.profilemetadata.hotfeatures .Select(c => c.hotfeature.id));
-                    foreach (var _hotfeature in  db.lu_hotfeature)
-                    {
-                        model.hotfeaturelist.Add(new lu_hotfeature
-                        {
-                            id = _hotfeature.id,
-                            description = _hotfeature.description,
-                            selected = hotfeaturevalues.Contains(_hotfeature.id)
-                        });
-                    }
+             foreach (var item in model.hotfeaturelist)
+             {
+                 model.hotfeaturelist.Add(item);
+             }
 
-               //model.ethnicitylist = p.profilemetadata.ethnicities.ToList();
-                    var ethnicityvalues = new HashSet<int>(p.profilemetadata.ethnicities .Select(c => c.ethnicty.id));
-                    foreach (var _ethnicity in  db.lu_ethnicity)
+                    foreach (var item in model.ethnicitylist)
                     {
-                        model.ethnicitylist.Add(new lu_ethnicity
-                        {
-                            id = _ethnicity.id,
-                            description = _ethnicity.description,
-                            selected = ethnicityvalues.Contains(_ethnicity.id)
-                        });
+                        model.ethnicitylist.Add(item);
                     }
-
 
                  return model ;
               
@@ -209,27 +195,21 @@ namespace Shell.MVC2.Data
                 {                              
                     profile p = db.profiles.Where(z => z.id  == intprofileid).FirstOrDefault();
                     LifeStyleSettingsModel model = new LifeStyleSettingsModel();                 
-                      model.educationlevel =p.profiledata.educationlevel ;   
-                      model.employmentstatus =p.profiledata.employmentstatus ;      
-                      model. incomelevel = p.profiledata.incomelevel ;       
-                      
-                    var lookingforvalues = new HashSet<int>(p.profilemetadata.lookingfor.Select(c => c.lookingfor.id));
-                    foreach (var _lookingfor in  db.lu_lookingfor)
-                    {
-                        model.lookingforlist.Add(new lu_lookingfor
-                        {
-                            id = _lookingfor.id,
-                            description = _lookingfor.description,
-                            selected = lookingforvalues.Contains(_lookingfor.id)
-                        });
-                    }
+                      model.educationlevel =p.profiledata.lu_educationlevel ;   
+                      model.employmentstatus =p.profiledata.lu_employmentstatus ;      
+                      model. incomelevel = p.profiledata.lu_incomelevel ;
+
+                      foreach (var item in model.lookingforlist)
+                      {
+                          model.lookingforlist.Add(item);
+                      }
                   
       
-                      model. wantskids = p.profiledata.wantsKidstatus;       
-                      model.profession = p.profiledata.profession ;       
-                      model.maritalstatus = p.profiledata.maritalstatus ;      
-                      model.livingsituation =p.profiledata.livingsituation ;      
-                      model.havekids =  p.profiledata.kidstatus ;
+                      model. wantskids = p.profiledata.lu_wantskids;       
+                      model.profession = p.profiledata.lu_profession ;       
+                      model.maritalstatus = p.profiledata.lu_maritalstatus ;      
+                      model.livingsituation =p.profiledata.lu_livingsituation ;      
+                      model.havekids =  p.profiledata.lu_havekids ;
 
                       return model ;
                 }
@@ -261,28 +241,22 @@ namespace Shell.MVC2.Data
                     profile p = db.profiles.Where(z => z.id  == intprofileid).FirstOrDefault();
                     CharacterSettingsModel model = new CharacterSettingsModel();    
 
-                    model.diet = p.profiledata.diet ;
-                    model.humor = p.profiledata.humor ;
+                    model.diet = p.profiledata.lu_diet ;
+                    model.humor = p.profiledata.lu_humor ;
                   
                     //populiate the hobby list, remeber this comes from the metadata link so you have to drill down
                     //var allhobbies = db.lu_hobby;
-                    var hobbyvalues = new HashSet<int>(p.profilemetadata.hobbies.Select(c => c.hobby.id));
-                    foreach (var _hobby in  db.lu_hobby)
+                    foreach (var item in model.hobbylist)
                     {
-                        model.hobbylist.Add(new lu_hobby
-                        {
-                            id = _hobby.id,
-                            description = _hobby.description,
-                            selected = hobbyvalues.Contains(_hobby.id)
-                        });
+                        model.hobbylist.Add(item);
                     }
                   
-                    model.drinking = p.profiledata.drinking ;
-                    model.excercise = p.profiledata.exercise ;
-                    model.smoking = p.profiledata.smoking ;
-                    model.sign = p.profiledata.sign ;
-                    model.politicalview = p.profiledata.politicalview ;
-                    model.religiousattendance = p.profiledata.religiousattendance ;
+                    model.drinking = p.profiledata.lu_drinks ;
+                    model.excercise = p.profiledata.lu_exercise ;
+                    model.smoking = p.profiledata.lu_smokes ;
+                    model.sign = p.profiledata.lu_sign ;
+                    model.politicalview = p.profiledata.lu_politicalview ;
+                    model.religiousattendance = p.profiledata.lu_religiousattendance ;
 
                     return model;
                 }
@@ -429,13 +403,13 @@ namespace Shell.MVC2.Data
            {
                //profile p = db.profiles.Where(z => z.id == profileid).First();
                //sample code for determining weather to edit an item or not or determin if a value changed'
-               //nothingupdated = (newmodel.height  == p.profiledata.height) ? false : true;
+               //nothingupdated = (newmodel.height  == p.profiledata.lu_height) ? false : true;
 
                //only update items that are not null
                var height = (newmodel.height == p.profiledata.height) ? newmodel.height : null;
-               var bodytype = (newmodel.bodytype == p.profiledata.bodytype) ? newmodel.bodytype : null;
-               var haircolor = (newmodel.haircolor == p.profiledata.haircolor) ? newmodel.haircolor : null;
-               var eyecolor = (newmodel.eyecolor == p.profiledata.eyecolor) ? newmodel.eyecolor : null;
+               var bodytype = (newmodel.bodytype == p.profiledata.lu_bodytype) ? newmodel.bodytype : null;
+               var haircolor = (newmodel.haircolor == p.profiledata.lu_haircolor) ? newmodel.haircolor : null;
+               var eyecolor = (newmodel.eyecolor == p.profiledata.lu_eyecolor) ? newmodel.eyecolor : null;
                //TO DO test if anything changed
                var hotfeatures = newmodel.hotfeaturelist;
                //TO DO test if anything changed
@@ -447,12 +421,12 @@ namespace Shell.MVC2.Data
                //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
 
                if (height.HasValue == true) p.profiledata.height = height;
-               if (bodytype != null) p.profiledata.bodytype = bodytype;
-               if (haircolor != null) p.profiledata.haircolor = haircolor;
-               if (eyecolor != null) p.profiledata.eyecolor = eyecolor;
+               if (bodytype != null) p.profiledata.lu_bodytype = bodytype;
+               if (haircolor != null) p.profiledata.lu_haircolor = haircolor;
+               if (eyecolor != null) p.profiledata.lu_eyecolor = eyecolor;
                if (hotfeatures.Count > 0) p.profiledata.height = height;
                if (height.HasValue == true) p.profiledata.height = height;
-               if (height.HasValue == true) p.profiledata.height = height;
+               //if (height.HasValue == true) p.profiledata.lu_height = height;
 
                if (hotfeatures.Count > 0)
                    updatemembermetatdatahotfeature(hotfeatures, p.profilemetadata);
@@ -531,17 +505,17 @@ namespace Shell.MVC2.Data
            {
               // profile p = db.profiles.Where(z => z.id == profileid).First();
                //sample code for determining weather to edit an item or not or determin if a value changed'
-               //nothingupdated = (newmodel.educationlevel  == p.profiledata.educationlevel) ? false : true;
+               //nothingupdated = (newmodel.educationlevel  == p.profiledata.lu_educationlevel) ? false : true;
 
                //only update items that are not null
-               var educationlevel = (newmodel.educationlevel == p.profiledata.educationlevel) ? newmodel.educationlevel : null;
-               var employmentstatus = (newmodel.employmentstatus == p.profiledata.employmentstatus) ? newmodel.employmentstatus : null;
-               var incomelevel = (newmodel.incomelevel == p.profiledata.incomelevel) ? newmodel.incomelevel : null;
-               var wantskids = (newmodel.wantskids == p.profiledata.wantsKidstatus) ? newmodel.wantskids : null;
-               var profession = (newmodel.profession == p.profiledata.profession) ? newmodel.profession : null;
-               var maritalstatus = (newmodel.maritalstatus == p.profiledata.maritalstatus) ? newmodel.maritalstatus : null;
-               var livingsituation = (newmodel.livingsituation == p.profiledata.livingsituation) ? newmodel.livingsituation : null;
-               var havekids = (newmodel.havekids == p.profiledata.kidstatus) ? newmodel.havekids : null;
+               var educationlevel = (newmodel.educationlevel == p.profiledata.lu_educationlevel) ? newmodel.educationlevel : null;
+               var employmentstatus = (newmodel.employmentstatus == p.profiledata.lu_employmentstatus) ? newmodel.employmentstatus : null;
+               var incomelevel = (newmodel.incomelevel == p.profiledata.lu_incomelevel) ? newmodel.incomelevel : null;
+               var wantskids = (newmodel.wantskids == p.profiledata.lu_wantskids) ? newmodel.wantskids : null;
+               var profession = (newmodel.profession == p.profiledata.lu_profession) ? newmodel.profession : null;
+               var maritalstatus = (newmodel.maritalstatus == p.profiledata.lu_maritalstatus) ? newmodel.maritalstatus : null;
+               var livingsituation = (newmodel.livingsituation == p.profiledata.lu_livingsituation) ? newmodel.livingsituation : null;
+               var havekids = (newmodel.havekids == p.profiledata.lu_havekids) ? newmodel.havekids : null;
                //TO DO test if anything changed
                var lookingfors = newmodel.lookingforlist;
 
@@ -551,14 +525,14 @@ namespace Shell.MVC2.Data
                //update my settings 
                //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
 
-               if (educationlevel != null) p.profiledata.educationlevel = educationlevel;
-               if (employmentstatus != null) p.profiledata.employmentstatus = employmentstatus;
-               if (incomelevel != null) p.profiledata.incomelevel = incomelevel;
-               if (wantskids != null) p.profiledata.wantsKidstatus = wantskids;
-               if (profession != null) p.profiledata.profession = profession;
-               if (maritalstatus != null) p.profiledata.maritalstatus = maritalstatus;
-               if (livingsituation != null) p.profiledata.livingsituation = livingsituation;
-               if (havekids != null) p.profiledata.kidstatus = havekids;
+               if (educationlevel != null) p.profiledata.lu_educationlevel = educationlevel;
+               if (employmentstatus != null) p.profiledata.lu_employmentstatus = employmentstatus;
+               if (incomelevel != null) p.profiledata.lu_incomelevel = incomelevel;
+               if (wantskids != null) p.profiledata.lu_wantskids = wantskids;
+               if (profession != null) p.profiledata.lu_profession = profession;
+               if (maritalstatus != null) p.profiledata.lu_maritalstatus = maritalstatus;
+               if (livingsituation != null) p.profiledata.lu_livingsituation = livingsituation;
+               if (havekids != null) p.profiledata.lu_havekids = havekids;
 
                if (lookingfors.Count > 0)
                    updatemembermetatdatalookingfor(lookingfors, p.profilemetadata);
@@ -637,18 +611,18 @@ namespace Shell.MVC2.Data
            {
               // profile p = db.profiles.Where(z => z.id == profileid).First();
                //sample code for determining weather to edit an item or not or determin if a value changed'
-               //nothingupdated = (newmodel.diet  == p.profiledata.diet) ? false : true;
+               //nothingupdated = (newmodel.diet  == p.profiledata.lu_diet) ? false : true;
 
                //only update items that are not null
-               var diet = (newmodel.diet == p.profiledata.diet) ? newmodel.diet : null;
-               var humor = (newmodel.humor == p.profiledata.humor) ? newmodel.humor : null;
-               var drinking = (newmodel.drinking == p.profiledata.drinking) ? newmodel.drinking : null;
-               var excercise = (newmodel.excercise == p.profiledata.exercise ) ? newmodel.excercise : null;
-               var smoking = (newmodel.smoking == p.profiledata.smoking) ? newmodel.smoking : null;
-               var sign = (newmodel.sign == p.profiledata.sign) ? newmodel.sign : null;
-               var politicalview = (newmodel.politicalview  == p.profiledata.politicalview) ? newmodel.politicalview : null;
-               var religion = (newmodel.religion  == p.profiledata.religion) ? newmodel.religion  : null;
-               var religiousattendance = (newmodel.religiousattendance == p.profiledata.religiousattendance) ? newmodel.religiousattendance : null;
+               var diet = (newmodel.diet == p.profiledata.lu_diet) ? newmodel.diet : null;
+               var humor = (newmodel.humor == p.profiledata.lu_humor) ? newmodel.humor : null;
+               var drinking = (newmodel.drinking == p.profiledata.lu_drinks) ? newmodel.drinking : null;
+               var excercise = (newmodel.excercise == p.profiledata.lu_exercise ) ? newmodel.excercise : null;
+               var smoking = (newmodel.smoking == p.profiledata.lu_smokes) ? newmodel.smoking : null;
+               var sign = (newmodel.sign == p.profiledata.lu_sign) ? newmodel.sign : null;
+               var politicalview = (newmodel.politicalview  == p.profiledata.lu_politicalview) ? newmodel.politicalview : null;
+               var religion = (newmodel.religion  == p.profiledata.lu_religion) ? newmodel.religion  : null;
+               var religiousattendance = (newmodel.religiousattendance == p.profiledata.lu_religiousattendance) ? newmodel.religiousattendance : null;
                //TO DO test if anything changed
                var hobylist  = newmodel.hobbylist;
 
@@ -658,15 +632,15 @@ namespace Shell.MVC2.Data
                //update my settings 
                //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
 
-               if (diet != null) p.profiledata.diet = diet;
-               if (humor != null) p.profiledata.humor = humor;
-               if (drinking != null) p.profiledata.drinking = drinking;
-               if (excercise != null) p.profiledata.exercise  = excercise;
-               if (smoking != null) p.profiledata.smoking = smoking;
-               if (sign != null) p.profiledata.sign = sign;
-               if (politicalview != null) p.profiledata.politicalview  = politicalview ;
-               if (religion != null) p.profiledata.religion = religion;
-               if (religiousattendance != null) p.profiledata.religiousattendance = religiousattendance;
+               if (diet != null) p.profiledata.lu_diet = diet;
+               if (humor != null) p.profiledata.lu_humor = humor;
+               if (drinking != null) p.profiledata.lu_drinks = drinking;
+               if (excercise != null) p.profiledata.lu_exercise  = excercise;
+               if (smoking != null) p.profiledata.lu_smokes = smoking;
+               if (sign != null) p.profiledata.lu_sign = sign;
+               if (politicalview != null) p.profiledata.lu_politicalview  = politicalview ;
+               if (religion != null) p.profiledata.lu_religion = religion;
+               if (religiousattendance != null) p.profiledata.lu_religiousattendance = religiousattendance;
                if (hobylist.Count > 0)
                    updatemembermetatdatahobby(hobylist, p.profilemetadata);
 
@@ -738,22 +712,22 @@ namespace Shell.MVC2.Data
            foreach (var ethnicity in ethnicities)
            {
                //new logic : if this item was selected and is not already in the search settings gender values add it 
-               if ((ethnicity.selected == true && !currentprofilemetadata.ethnicities.Where(z => z.ethnicty.id == ethnicity.id).Any()))
+               if ((!currentprofilemetadata.profiledata_ethnicity.Where(z => z.ethnicty_id == ethnicity.id).Any()))
                {
                    //SearchSettings_showme.showmeID = showme.showmeID;
                    var temp = new profiledata_ethnicity();
                    temp.id = ethnicity.id;
                    temp.profile_id = currentprofilemetadata.profile_id;
-                   db.ethnicities.Add(temp);
+                   db.profiledata_ethnicity.Add(temp);
 
                }
                else
                {
                    //we have an existing value and we want to remove it in this case since selected was false for sure
                    //we will be doing a remove either way
-                   var temp = db.ethnicities.Where(p => p.profile_id == currentprofilemetadata.profile_id && p.ethnicty.id == ethnicity.id).First();
+                   var temp = db.profiledata_ethnicity.Where(p => p.profile_id == currentprofilemetadata.profile_id && p.ethnicty_id == ethnicity.id).First();
                    if (temp != null)
-                       db.ethnicities.Remove(temp);
+                       db.profiledata_ethnicity.Remove(temp);
                }
            }
 
@@ -806,23 +780,23 @@ namespace Shell.MVC2.Data
                if (selectedhotfeature.Contains(hotfeature))
                {
                    //does not exist so we will add it
-                   if (!currentprofilemetadata.ethnicities.Any(p => p.id == hotfeature.id))
+                   if (!currentprofilemetadata.profiledata_hotfeature.Any(p => p.id == hotfeature.id))
                    {
 
                        //SearchSettings_showme.showmeID = showme.showmeID;
                        var temp = new profiledata_hotfeature();
                        temp.id = hotfeature.id;
                        temp.profile_id =currentprofilemetadata.profile_id;
-                       db.hotfeatures.Add(temp);
+                       db.profiledata_hotfeature.Add(temp);
 
                    }
                }
                else
                { //exists means we want to remove it
-                   if (currentprofilemetadata.hotfeatures.Any(p => p.id == hotfeature.id))
+                   if (currentprofilemetadata.profiledata_hotfeature.Any(p => p.id == hotfeature.id))
                    {
-                       var temp = db.hotfeatures.Where(p => p.profile_id == currentprofilemetadata.profile_id  && p.hotfeature.id == hotfeature.id).First();
-                       db.hotfeatures.Remove(temp);
+                       var temp = db.profiledata_hotfeature.Where(p => p.profile_id == currentprofilemetadata.profile_id  && p.hotfeature_id == hotfeature.id).First();
+                       db.profiledata_hotfeature.Remove(temp);
 
                    }
                }
@@ -849,23 +823,23 @@ namespace Shell.MVC2.Data
                if (selectedhobby.Contains(hobby))
                {
                    //does not exist so we will add it
-                   if (!currentprofilemetadata.ethnicities.Any(p => p.id == hobby.id))
+                   if (!currentprofilemetadata.profiledata_hobby.Any(p => p.id == hobby.id))
                    {
 
                        //SearchSettings_showme.showmeID = showme.showmeID;
                        var temp = new profiledata_hobby();
                        temp.id = hobby.id;
                        temp.profile_id =currentprofilemetadata.profile_id;
-                       db.hobbies .Add(temp);
+                       db.profiledata_hobby.Add(temp);
 
                    }
                }
                else
                { //exists means we want to remove it
-                   if (currentprofilemetadata.hobbies.Any(p => p.id == hobby.id))
+                   if (currentprofilemetadata.profiledata_hobby.Any(p => p.id == hobby.id))
                    {
-                       var temp = db.hobbies.Where(p => p.profile_id ==currentprofilemetadata.profile_id && p.hobby.id == hobby.id).First();
-                       db.hobbies.Remove(temp);
+                       var temp = db.profiledata_hobby.Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hobby_id == hobby.id).First();
+                       db.profiledata_hobby.Remove(temp);
 
                    }
                }
@@ -892,23 +866,23 @@ namespace Shell.MVC2.Data
                if (selectedlookingfor.Contains(lookingfor))
                {
                    //does not exist so we will add it
-                   if (!currentprofilemetadata.ethnicities.Any(p => p.id == lookingfor.id))
+                   if (!currentprofilemetadata.profiledata_lookingfor.Any(p => p.id == lookingfor.id))
                    {
 
                        //SearchSettings_showme.showmeID = showme.showmeID;
                        var temp = new profiledata_lookingfor();
                        temp.id = lookingfor.id;
                        temp.profile_id =currentprofilemetadata.profile_id;
-                       db.lookingfor.Add(temp);
+                       db.profiledata_lookingfor.Add(temp);
 
                    }
                }
                else
                { //exists means we want to remove it
-                   if (currentprofilemetadata.lookingfor.Any(p => p.id == lookingfor.id))
+                   if (currentprofilemetadata.profiledata_lookingfor.Any(p => p.id == lookingfor.id))
                    {
-                       var temp = db.lookingfor.Where(p => p.profile_id ==currentprofilemetadata.profile_id && p.lookingfor.id == lookingfor.id).First();
-                       db.lookingfor.Remove(temp);
+                       var temp = db.profiledata_lookingfor.Where(p => p.profile_id == currentprofilemetadata.profile_id && p.lookingfor_id == lookingfor.id).First();
+                       db.profiledata_lookingfor.Remove(temp);
 
                    }
                }

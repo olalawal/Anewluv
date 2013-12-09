@@ -1,97 +1,57 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-
 
 namespace Anewluv.Domain.Data
 {
-    [DataContract] 
-    public class profile
+    public partial class profile
     {
-     
-        public virtual profiledata profiledata { get; set; }
-
-        public virtual profilemetadata profilemetadata { get; set; }
-
-           [DataMember]
-        public int id { get; set; }
-       [DataMember]
-        public string username { get; set; }
-           [DataMember]
-        public string emailaddress { get; set; }
-           [DataMember]          
-        public string screenname { get; set; }
-           [DataMember]
-        public string activationcode { get; set; }
-        [DataMember]
-        public int? dailsentmessagequota { get; set; }
-           [DataMember]
-        public int? dailysentemailquota { get; set; }
-           [DataMember]
-        public byte? forwardmessages { get; set; }
-           [DataMember]
-        public DateTime? logindate { get; set; }
-           [DataMember]
-        public DateTime? modificationdate { get; set; }
-         
-        [IgnoreDataMember]
-        public DateTime? creationdate { get; set; }
-
-          //[NotMapped]
-        [DataMember(Name = "creationdate")]
-        public string formattedcreationdate
+        public profile()
         {
-            get { return string.Format("{0:yyyy-MM-ddTHH:mm:ss.fffZ}", creationdate.Value ); }
-            set { ;}
+            this.applicationitems = new List<applicationitem>();
+            this.applicationitems1 = new List<applicationitem>();
+            this.applicationitems2 = new List<applicationitem>();
+            this.applicationitems3 = new List<applicationitem>();
+            this.membersinroles = new List<membersinrole>();
+            this.openids = new List<openid>();
+            this.profileactivities = new List<profileactivity>();
+            this.userlogtimes = new List<userlogtime>();
         }
 
-  
-        public virtual lu_profilestatus status { get; set; }
-           [DataMember]        
-        public bool? readprivacystatement { get; set; }
-           [DataMember]
-        public bool? readtemsofuse { get; set; }
-          [DataMember]
+        public int id { get; set; }
+        public string username { get; set; }
+        public string emailaddress { get; set; }
+        public string screenname { get; set; }
+        public string activationcode { get; set; }
+        public Nullable<int> dailsentmessagequota { get; set; }
+        public Nullable<int> dailysentemailquota { get; set; }
+        public Nullable<byte> forwardmessages { get; set; }
+        public Nullable<System.DateTime> logindate { get; set; }
+        public Nullable<System.DateTime> modificationdate { get; set; }
+        public Nullable<System.DateTime> creationdate { get; set; }
+        public Nullable<bool> readprivacystatement { get; set; }
+        public Nullable<bool> readtemsofuse { get; set; }
         public string password { get; set; }
-           [DataMember]
-        public DateTime? passwordChangeddate { get; set; }
-           [DataMember]
-        public int? passwordchangecount { get; set; }
-           [DataMember]
-        public DateTime? failedpasswordchangedate { get; set; }
-           [DataMember]
-        public int? failedpasswordchangeattemptcount { get; set; }
-               [DataMember]
+        public Nullable<System.DateTime> passwordChangeddate { get; set; }
+        public Nullable<int> passwordchangecount { get; set; }
+        public Nullable<System.DateTime> failedpasswordchangedate { get; set; }
+        public Nullable<int> failedpasswordchangeattemptcount { get; set; }
         public string salt { get; set; }
-              [DataMember]
         public string securityanswer { get; set; }
-
-        [DataMember]
-        public virtual lu_securityquestion securityquestion { get; set; } 
-        //Anti spam stuff might do away with
-          [DataMember]
-        public int? sentemailquotahitcount { get; set; }
-            [DataMember]
-        public int? sentmessagequotahitcount { get; set; }
-      
-        //linked collections
-    
-        public virtual ICollection<membersinrole > memberroles { get; set; }
-     
-        public virtual ICollection<profileactivity> profileactivity { get; set; }
-
+        public Nullable<int> sentemailquotahitcount { get; set; }
+        public Nullable<int> sentmessagequotahitcount { get; set; }
+        public Nullable<int> status_id { get; set; }
+        public Nullable<int> securityquestion_id { get; set; }
+        public virtual ICollection<applicationitem> applicationitems { get; set; }
+        public virtual ICollection<applicationitem> applicationitems1 { get; set; }
+        public virtual ICollection<applicationitem> applicationitems2 { get; set; }
+        public virtual ICollection<applicationitem> applicationitems3 { get; set; }
+        public virtual lu_profilestatus lu_profilestatus { get; set; }
+        public virtual lu_securityquestion lu_securityquestion { get; set; }
+        public virtual ICollection<membersinrole> membersinroles { get; set; }
         public virtual ICollection<openid> openids { get; set; }
-  
-        public virtual ICollection<userlogtime> logontimes { get; set; }
-
-        //2-9-2013 olawal added collection of applications  items
-
-        public virtual ICollection<applicationitem> purchasedapplicationitems { get; set; }
-
-        public virtual ICollection<applicationitem> transferedapplicationitems { get; set; }
-
-
+        public virtual ICollection<profileactivity> profileactivities { get; set; }
+        public virtual profiledata profiledata { get; set; }
+        public virtual profilemetadata profilemetadata { get; set; }
+        public virtual ICollection<userlogtime> userlogtimes { get; set; }
     }
 }

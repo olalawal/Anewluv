@@ -1,24 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    [DataContract ]
-    public class photo_securitylevel
+    public partial class photo_securitylevel
     {
-
-        [Key]
-        [DataMember ]
         public int id { get; set; }
-        [DataMember]
-        public lu_securityleveltype securityleveltype { get; set; }      
-        [DataMember]
-        public Guid photo_id { get; set; }
-        [DataMember]
+        public System.Guid photo_id { get; set; }
+        public Nullable<int> securityleveltype_id { get; set; }
+        public virtual lu_securityleveltype lu_securityleveltype { get; set; }
         public virtual photo photo { get; set; }
-        
     }
 }

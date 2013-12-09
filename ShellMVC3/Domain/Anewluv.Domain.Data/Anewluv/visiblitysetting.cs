@@ -1,59 +1,39 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-     [DataContract(IsReference = true)]
-    [Serializable ]
-    public class visiblitysetting
+    public partial class visiblitysetting
     {
-        [Key]
-        [DataMember]
-        public int id { get; set; }
-          [DataMember]
-        public int profile_id { get; set; }
-        public virtual profiledata profiledata { get; set; }
-          [DataMember]
-        public int? agemaxvisibility { get; set; }
-          [DataMember]
-        public int? ageminvisibility { get; set; }
-          [DataMember]        
-        public bool? chatvisiblitytointerests { get; set; }
-          [DataMember]
-        public bool? chatvisiblitytolikes { get; set; }
-          [DataMember]
-        public bool? chatvisiblitytomatches { get; set; }
-          [DataMember]
-        public bool? chatvisiblitytopeeks { get; set; }
-          [DataMember]
-        public bool? chatvisiblitytosearch { get; set; }
-          [DataMember]
-        public virtual  ICollection<visiblitysettings_country> countries { get; set; }
-        [DataMember ]
-        public virtual  ICollection<visiblitysettings_gender>  genders{ get; set; }
-          [DataMember]
-        public DateTime? lastupdatedate { get; set; }
-          [DataMember]
-        public bool? mailchatrequest { get; set; }
-          [DataMember]
-        public bool? mailintrests { get; set; }
-          [DataMember]
-        public bool? maillikes { get; set; }
-          [DataMember]
-        public bool? mailmatches { get; set; }
-          [DataMember]
-        public bool? mailnews { get; set; }
-          [DataMember]
-        public bool? mailpeeks { get; set; }
-          [DataMember]
-        public bool? profilevisiblity { get; set; }
-          [DataMember]
-        public bool? saveofflinechat { get; set; }
-          [DataMember]
-        public bool? steathpeeks { get; set; }
+        public visiblitysetting()
+        {
+            this.profiledatas = new List<profiledata>();
+            this.visiblitysettings_country = new List<visiblitysettings_country>();
+            this.visiblitysettings_gender = new List<visiblitysettings_gender>();
+        }
 
+        public int id { get; set; }
+        public int profile_id { get; set; }
+        public Nullable<int> agemaxvisibility { get; set; }
+        public Nullable<int> ageminvisibility { get; set; }
+        public Nullable<bool> chatvisiblitytointerests { get; set; }
+        public Nullable<bool> chatvisiblitytolikes { get; set; }
+        public Nullable<bool> chatvisiblitytomatches { get; set; }
+        public Nullable<bool> chatvisiblitytopeeks { get; set; }
+        public Nullable<bool> chatvisiblitytosearch { get; set; }
+        public Nullable<System.DateTime> lastupdatedate { get; set; }
+        public Nullable<bool> mailchatrequest { get; set; }
+        public Nullable<bool> mailintrests { get; set; }
+        public Nullable<bool> maillikes { get; set; }
+        public Nullable<bool> mailmatches { get; set; }
+        public Nullable<bool> mailnews { get; set; }
+        public Nullable<bool> mailpeeks { get; set; }
+        public Nullable<bool> profilevisiblity { get; set; }
+        public Nullable<bool> saveofflinechat { get; set; }
+        public Nullable<bool> steathpeeks { get; set; }
+        public virtual ICollection<profiledata> profiledatas { get; set; }
+        public virtual profiledata profiledata { get; set; }
+        public virtual ICollection<visiblitysettings_country> visiblitysettings_country { get; set; }
+        public virtual ICollection<visiblitysettings_gender> visiblitysettings_gender { get; set; }
     }
 }

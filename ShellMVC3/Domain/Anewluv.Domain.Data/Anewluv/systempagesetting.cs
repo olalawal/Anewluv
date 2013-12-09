@@ -1,27 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-       [DataContract(IsReference = true)]
-    public class systempagesetting
+    public partial class systempagesetting
     {
-        [Key]
-      [DataMember]  public int id { get; set; }
-        [DataMember]
+        public int id { get; set; }
         public string bodycssstylename { get; set; }
-        [DataMember]
         public string description { get; set; }
-        [DataMember]
-        public int? hitCount { get; set; }
-        [DataMember]
-        public bool? ismasterpage { get; set; }
-        [DataMember]
+        public Nullable<int> hitCount { get; set; }
+        public Nullable<bool> ismasterpage { get; set; }
         public string path { get; set; }
-        [DataMember]
         public string title { get; set; }
     }
 }

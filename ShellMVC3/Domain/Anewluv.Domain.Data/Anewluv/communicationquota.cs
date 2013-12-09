@@ -1,32 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-      [DataContract(IsReference = true)]
-   public class communicationquota
+    public partial class communicationquota
     {
-       [Key]
-       [DataMember]
-       public int id { get; set; }
-       [DataMember]
-       public bool? active { get; set; }
-       [DataMember]
-       public string quotadescription { get; set; }
-       [DataMember]
-       public string quotaname { get; set; }
-       [DataMember]
-       public int? quotaroleid { get; set; }
-       [DataMember]
-       public int? quotavalue { get; set; }
-       [DataMember]
-       public string updaterprofile_id { get; set; }
-       [DataMember]
-       public virtual profiledata updaterprofiledata { get; set; }
-       [DataMember]
-       public DateTime? updatedate { get; set; }
+        public int id { get; set; }
+        public Nullable<bool> active { get; set; }
+        public string quotadescription { get; set; }
+        public string quotaname { get; set; }
+        public Nullable<int> quotaroleid { get; set; }
+        public Nullable<int> quotavalue { get; set; }
+        public string updaterprofile_id { get; set; }
+        public Nullable<System.DateTime> updatedate { get; set; }
+        public int updaterprofiledata_profile_id { get; set; }
+        public virtual profiledata profiledata { get; set; }
     }
 }

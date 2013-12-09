@@ -344,7 +344,7 @@ namespace Anewluv.Services.MemberActions
         //         return (from p in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == id && p.deletedbylikedate == null)
         //                 join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
         //                 join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-        //                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+        //                 where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
         //                 orderby (p.creationdate) descending
         //                 select new MemberSearchViewModel
         //                 {
@@ -385,7 +385,7 @@ namespace Anewluv.Services.MemberActions
         //         return (from p in  db.GetRepository<like>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
         //                 join f in  db.GetRepository<profiledata>().Find() on p.likeprofile_id equals f.profile_id
         //                 join z in  db.GetRepository<profile>().Find() on p.likeprofile_id equals z.id
-        //                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
+        //                 where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
         //                 orderby (p.creationdate) descending
         //                 select new MemberSearchViewModel
         //                 {
@@ -506,7 +506,7 @@ namespace Anewluv.Services.MemberActions
                     from p in  db.GetRepository<interest>().Find()
                     where (p.interestprofile_id == id)
                     join f in  db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                     select f).Count();
 
                  // ?? operator example.
@@ -562,7 +562,7 @@ namespace Anewluv.Services.MemberActions
                     from p in  db.GetRepository<interest>().Find()
                     where (p.interestprofile_id == id && p.viewdate == null)
                     join f in  db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                     select f).Count();
 
                  // ?? operator example.
@@ -627,7 +627,7 @@ namespace Anewluv.Services.MemberActions
                     var interests = (from p in db.GetRepository<interest>().Find().OfType<interest>().Where(p => p.profile_id == id && p.deletedbymemberdate == null)                              
                                      join f in  db.GetRepository<profiledata>().Find() on p.interestprofile_id equals f.profile_id
                                      join z in  db.GetRepository<profile>().Find() on p.interestprofile_id equals z.id
-                                     where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                     where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                                      select new MemberSearchViewModel
                                      {
                                          interestdate = p.creationdate,
@@ -707,7 +707,7 @@ namespace Anewluv.Services.MemberActions
                  var whoisinterestedinme = (from p in db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == id && p.deletedbymemberdate == null)
                                             join f in db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
                                             join z in db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                            where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                            where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                                             select new MemberSearchViewModel
                                             {
                                                 interestdate = p.creationdate,
@@ -779,7 +779,7 @@ namespace Anewluv.Services.MemberActions
                  var whoisinterestedinmenew = (from p in  db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == id && p.viewdate == null)
                                                join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
                                                join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                               where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                               where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
 
                                                select new MemberSearchViewModel
                                                {
@@ -1418,7 +1418,7 @@ namespace Anewluv.Services.MemberActions
                     from p in db.GetRepository<peek>().Find()
                     where (p.peekprofile_id == id)
                     join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                     select f).Count();
 
                  // ?? operator example.
@@ -1473,7 +1473,7 @@ namespace Anewluv.Services.MemberActions
                     from p in db.GetRepository<peek>().Find()
                     where (p.peekprofile_id == id && p.viewdate == null)
                     join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                     select f).Count();
 
                  // ?? operator example.
@@ -1533,7 +1533,7 @@ namespace Anewluv.Services.MemberActions
                  var peeks = (from p in  db.GetRepository<peek>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
                               join f in  db.GetRepository<profiledata>().Find() on p.peekprofile_id equals f.profile_id
                               join z in  db.GetRepository<profile>().Find() on p.peekprofile_id equals z.id
-                              where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                              where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                               select new MemberSearchViewModel
                               {
                                   peekdate = p.creationdate,
@@ -1604,7 +1604,7 @@ namespace Anewluv.Services.MemberActions
                  var WhoPeekedAtMe = (from p in  db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == id && p.deletedbymemberdate == null)
                                       join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
                                       join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                      where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                      where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                                       select new MemberSearchViewModel
                                       {
                                           peekdate = p.creationdate,
@@ -1679,7 +1679,7 @@ namespace Anewluv.Services.MemberActions
                  var peeknew = (from p in  db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == id && p.viewdate == null)
                                 join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
                                 join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                                 select new MemberSearchViewModel
                                 {
                                     peekdate = p.creationdate,
@@ -2308,7 +2308,7 @@ namespace Anewluv.Services.MemberActions
                  var blocknew = (from p in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
                                  join f in  db.GetRepository<profiledata>().Find() on p.blockprofile_id equals f.profile_id
                                  join z in  db.GetRepository<profile>().Find() on p.blockprofile_id equals z.id
-                                 where (f.profile.status.id < 3)
+                                 where (f.profile.status_id < 3)
                                  orderby (p.creationdate) descending
                                  select new MemberSearchViewModel
                                  {
@@ -2372,7 +2372,7 @@ namespace Anewluv.Services.MemberActions
                  var whoblockedme = (from p in  db.GetRepository<block>().Find().Where(p => p.blockprofile_id == id && p.removedate == null)
                                      join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
                                      join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                     where (f.profile.status.id < 3)
+                                     where (f.profile.status_id < 3)
                                      orderby (p.creationdate) descending
                                      select new MemberSearchViewModel
                                      {
@@ -2918,7 +2918,7 @@ namespace Anewluv.Services.MemberActions
                     from p in db.GetRepository<like>().Find()
                     where (p.likeprofile_id == id)
                     join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                     select f).Count();
 
                  // ?? operator example.
@@ -2974,7 +2974,7 @@ namespace Anewluv.Services.MemberActions
                     from p in db.GetRepository<like>().Find()
                     where (p.likeprofile_id == id && p.viewdate == null)
                     join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
                     select f).Count();
 
                  // ?? operator example.
@@ -3035,7 +3035,7 @@ namespace Anewluv.Services.MemberActions
                  var likenew = (from p in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == id && p.viewdate == null).ToList()
                                 join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
                                 join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                                 orderby (p.creationdate) descending
                                 select new MemberSearchViewModel
                                 {
@@ -3109,7 +3109,7 @@ namespace Anewluv.Services.MemberActions
                  var wholikesme = (from p in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == id && p.deletedbylikedate == null)
                                    join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
                                    join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                   where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                   where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                                    orderby (p.creationdate) descending
                                    select new MemberSearchViewModel
                                    {
@@ -3182,7 +3182,7 @@ namespace Anewluv.Services.MemberActions
                  var whoilike = (from p in  db.GetRepository<like>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
                                  join f in  db.GetRepository<profiledata>().Find() on p.likeprofile_id equals f.profile_id
                                  join z in  db.GetRepository<profile>().Find() on p.likeprofile_id equals z.id
-                                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                                 where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
                                  orderby (p.creationdate) descending
                                  select new MemberSearchViewModel
                                  {

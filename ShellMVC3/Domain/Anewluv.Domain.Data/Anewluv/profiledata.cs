@@ -1,96 +1,80 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    [DataContract]
-    [Serializable]
-    public class profiledata
+    public partial class profiledata
     {
-            // Metadata classes are not meant to be instantiated.
+        public profiledata()
+        {
+            this.communicationquotas = new List<communicationquota>();
+            this.photoreviews = new List<photoreview>();
+            this.visiblitysettings = new List<visiblitysetting>();
+        }
 
-          [DataMember]
-          public int profile_id { get; set; }      
-            [DataMember]
-            public int? age { get; set; }
-            [DataMember] 
-            public DateTime? birthdate { get; set; }
-         [DataMember]        
-            public string city { get; set; }
-         [DataMember]    
+        public int profile_id { get; set; }
+        public Nullable<int> age { get; set; }
+        public Nullable<System.DateTime> birthdate { get; set; }
+        public string city { get; set; }
         public string countryregion { get; set; }
-         [DataMember]    
         public string stateprovince { get; set; }
-         [DataMember]    
-        public int? countryid { get; set; }
-         [DataMember]    
+        public Nullable<int> countryid { get; set; }
         public Nullable<double> longitude { get; set; }
-         [DataMember]    
         public Nullable<double> latitude { get; set; }
-         [DataMember]    
         public string aboutme { get; set; }
-         [DataMember]    
-        public long? height { get; set; }
-         [DataMember]    
+        public Nullable<long> height { get; set; }
         public string mycatchyintroLine { get; set; }
-        [DataMember]    
         public string phone { get; set; }
-        [DataMember]    
-        public string postalcode { get; set; }           
-        [DataMember] 
-        public virtual profile profile { get; set; }
-        [DataMember]        
+        public string postalcode { get; set; }
+        public Nullable<int> profilemetadata_profile_id { get; set; }
+        public Nullable<int> visibilitysettings_id { get; set; }
+        public Nullable<int> gender_id { get; set; }
+        public Nullable<int> bodytype_id { get; set; }
+        public Nullable<int> eyecolor_id { get; set; }
+        public Nullable<int> haircolor_id { get; set; }
+        public Nullable<int> diet_id { get; set; }
+        public Nullable<int> drinking_id { get; set; }
+        public Nullable<int> exercise_id { get; set; }
+        public Nullable<int> humor_id { get; set; }
+        public Nullable<int> politicalview_id { get; set; }
+        public Nullable<int> religion_id { get; set; }
+        public Nullable<int> religiousattendance_id { get; set; }
+        public Nullable<int> sign_id { get; set; }
+        public Nullable<int> smoking_id { get; set; }
+        public Nullable<int> educationlevel_id { get; set; }
+        public Nullable<int> employmentstatus_id { get; set; }
+        public Nullable<int> kidstatus_id { get; set; }
+        public Nullable<int> incomelevel_id { get; set; }
+        public Nullable<int> livingsituation_id { get; set; }
+        public Nullable<int> maritalstatus_id { get; set; }
+        public Nullable<int> profession_id { get; set; }
+        public Nullable<int> wantsKidstatus_id { get; set; }
+        public virtual ICollection<communicationquota> communicationquotas { get; set; }
+        public virtual lu_bodytype lu_bodytype { get; set; }
+        public virtual lu_diet lu_diet { get; set; }
+        public virtual lu_drinks lu_drinks { get; set; }
+        public virtual lu_educationlevel lu_educationlevel { get; set; }
+        public virtual lu_employmentstatus lu_employmentstatus { get; set; }
+        public virtual lu_exercise lu_exercise { get; set; }
+        public virtual lu_eyecolor lu_eyecolor { get; set; }
+        public virtual lu_gender lu_gender { get; set; }
+        public virtual lu_haircolor lu_haircolor { get; set; }
+        public virtual lu_havekids lu_havekids { get; set; }
+        public virtual lu_humor lu_humor { get; set; }
+        public virtual lu_incomelevel lu_incomelevel { get; set; }
+        public virtual lu_livingsituation lu_livingsituation { get; set; }
+        public virtual lu_maritalstatus lu_maritalstatus { get; set; }
+        public virtual lu_politicalview lu_politicalview { get; set; }
+        public virtual lu_profession lu_profession { get; set; }
+        public virtual lu_religion lu_religion { get; set; }
+        public virtual lu_religiousattendance lu_religiousattendance { get; set; }
+        public virtual lu_sign lu_sign { get; set; }
+        public virtual lu_smokes lu_smokes { get; set; }
+        public virtual lu_wantskids lu_wantskids { get; set; }
+        public virtual ICollection<photoreview> photoreviews { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
-        [DataMember]        
-        public virtual visiblitysetting visibilitysettings { get; set; }   
-
-
-            //lookups for personal profile details 
-         [DataMember]    
-            public virtual lu_gender gender { get; set; }
-         [DataMember]    
-            public virtual lu_bodytype bodytype { get; set; }
-         [DataMember]    
-            public virtual lu_eyecolor eyecolor { get; set; }
-         [DataMember]    
-            public virtual lu_haircolor haircolor { get; set; }
-         [DataMember]    
-            public virtual lu_diet diet { get; set; }
-         [DataMember]    
-            public virtual lu_drinks drinking { get; set; }
-         [DataMember]    
-            public virtual lu_exercise exercise { get; set; }
-         [DataMember]    
-            public virtual lu_humor humor { get; set; }
-         [DataMember]    
-            public virtual lu_politicalview politicalview { get; set; }
-         [DataMember]    
-            public virtual lu_religion religion { get; set; }
-         [DataMember]    
-            public virtual lu_religiousattendance religiousattendance { get; set; }
-         [DataMember]    
-            public virtual lu_sign sign { get; set; }
-         [DataMember]    
-            public virtual lu_smokes smoking { get; set; }
-         [DataMember]    
-            public virtual lu_educationlevel educationlevel { get; set; }
-         [DataMember]    
-            public virtual lu_employmentstatus employmentstatus { get; set; }
-         [DataMember]    
-            public virtual lu_havekids kidstatus { get; set; }
-         [DataMember]    
-            public virtual lu_incomelevel incomelevel { get; set; }
-         [DataMember]    
-            public virtual lu_livingsituation livingsituation { get; set; }
-         [DataMember]    
-            public virtual lu_maritalstatus maritalstatus { get; set; }
-         [DataMember]    
-            public virtual lu_profession profession { get; set; }
-         [DataMember]    
-            public virtual lu_wantskids wantsKidstatus { get; set; }
-          
+        public virtual profile profile { get; set; }
+        public virtual visiblitysetting visiblitysetting { get; set; }
+        public virtual ICollection<visiblitysetting> visiblitysettings { get; set; }
     }
 }

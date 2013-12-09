@@ -1,25 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-     [DataContract(IsReference = true)]
-    public class rating
+    public partial class rating
     {
-        [Key]
-         [DataMember]
-         public int id { get; set; }
-       // public virtual ICollection<ratingvalue> ratingvalues { get; set; }       
-        [DataMember]
+        public rating()
+        {
+            this.ratingvalues = new List<ratingvalue>();
+        }
+
+        public int id { get; set; }
         public string description { get; set; }
-        [DataMember]
-        public int? ratingmaxvalue { get; set; }
-        [DataMember]
-        public int? ratingweight { get; set; }
-        [DataMember]
-        public long? increment { get; set; }
+        public Nullable<int> ratingmaxvalue { get; set; }
+        public Nullable<int> ratingweight { get; set; }
+        public Nullable<long> increment { get; set; }
+        public virtual ICollection<ratingvalue> ratingvalues { get; set; }
     }
 }

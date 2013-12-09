@@ -1,22 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-     [DataContract(IsReference = true)]
-    public class profiledata_hobby
+    public partial class profiledata_hobby
     {
-        [Key]
-       [DataMember]  public int id { get; set; }
-        [DataMember]
-        public virtual lu_hobby hobby { get; set; }
-        [DataMember]
+        public int id { get; set; }
         public int profile_id { get; set; }
-        [DataMember]
+        public Nullable<int> hobby_id { get; set; }
+        public virtual lu_hobby lu_hobby { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
-       
     }
 }

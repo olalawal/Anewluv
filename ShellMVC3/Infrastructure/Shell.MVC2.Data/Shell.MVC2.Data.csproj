@@ -142,18 +142,17 @@
     <Compile Include="BaseClasses\GeoRepositoryBase.cs" />
     <Compile Include="ChatRepository.cs" />
     <Compile Include="CommonRepository.cs" />
-    <Compile Include="SearchRepository.cs" />
     <Compile Include="MemberEditRepository.cs" />
     <Compile Include="ImageResizer\ImageResizerUtils.cs" />
     <Compile Include="LookupRepository.cs" />
     <Compile Include="RepositoryExtentions\ChatRepositoryExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SearchEditRepository.cs" />
     <Compile Include="OpenidRepositiory.cs" />
     <Compile Include="MailRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseClasses\MemberRepositoryBase.cs" />
+    <Compile Include="SearchEditRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Shell.MVC2.Services.Contracts\Anewluv.Services.Contracts.csproj">

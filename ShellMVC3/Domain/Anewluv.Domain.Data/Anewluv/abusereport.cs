@@ -1,36 +1,23 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-        [DataContract(IsReference = true)]
-    public class abusereport
+    public partial class abusereport
     {
-        [Key]
-        [DataMember]
+        public abusereport()
+        {
+            this.abusereportnotes = new List<abusereportnote>();
+        }
+
         public int id { get; set; }
-        [DataMember]
-        public virtual lu_abusetype abusetype { get; set; }
-        [DataMember]
         public int abusereporter_id { get; set; }
-        [DataMember]
         public int abuser_id { get; set; }
-        [DataMember]
-        public virtual profilemetadata abuser { get; set; }
-        [DataMember]
-        public virtual profilemetadata abusereporter { get; set; }
-        [DataMember]
-        public DateTime? creationdate { get; set; }
-        [DataMember]
-        public virtual  ICollection<abusereportnotes> notes { get; set; }
-
-
-
+        public Nullable<System.DateTime> creationdate { get; set; }
+        public int abusetype_id { get; set; }
+        public virtual ICollection<abusereportnote> abusereportnotes { get; set; }
+        public virtual lu_abusetype lu_abusetype { get; set; }
+        public virtual profilemetadata profilemetadata { get; set; }
+        public virtual profilemetadata profilemetadata1 { get; set; }
     }
 }
-
-      

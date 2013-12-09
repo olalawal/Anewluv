@@ -130,7 +130,7 @@ namespace Shell.MVC2.Data
             {
                 return (from p in db.mailboxmessagefolders
                         where p.mailboxmessage.id == mailboxMsgId
-                        && p.mailboxfolder.foldertype.defaultfolder.id == (int)defaultmailboxfoldertypeEnum.Inbox
+                        && p.mailboxfolder.mailboxfoldertype.defaultfolder_id == (int)defaultmailboxfoldertypeEnum.Inbox
                         select p.mailboxfolder_id).FirstOrDefault();
 
 
@@ -161,7 +161,7 @@ namespace Shell.MVC2.Data
             try
             {
                 return (from i in db.mailboxfolders
-                        where i.foldertype.name == mailboxFolderTypeName && i.profiled_id == profileId
+                        where i.mailboxfoldertype.name == mailboxFolderTypeName && i.profiled_id == profileId
                         select i.id).FirstOrDefault();
 
             }
@@ -351,12 +351,12 @@ namespace Shell.MVC2.Data
                               recipient_id = m.recipient_id,
                               mailboxmessagefolder_id = f.mailboxfolder_id,
                               mailboxfolder_id = f.mailboxfolder.id,
-                              senderstatus_id = m.sender.profile.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                              recipientstatus_id = m.recipeint.profile.status.id,
+                              senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                              recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
                               blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
                               creationdate = m.creationdate,
-                              senderscreenname = m.sender.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                              recipientscreenname = m.recipeint.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+                              senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                              recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
 
                           });
                 return filtermailmodels(models).Count();
@@ -402,12 +402,12 @@ namespace Shell.MVC2.Data
                               recipient_id = m.recipient_id,
                               mailboxmessagefolder_id = f.mailboxfolder_id,
                               mailboxfolder_id = f.mailboxfolder.id,
-                              senderstatus_id = m.sender.profile.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                              recipientstatus_id = m.recipeint.profile.status.id,
+                              senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                              recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
                               blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
                               creationdate = m.creationdate,
-                              senderscreenname = m.sender.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                              recipientscreenname = m.recipeint.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+                              senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                              recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
 
                           });
 
@@ -448,30 +448,30 @@ namespace Shell.MVC2.Data
 
                 models = (from m in db.mailboxmessages
                           join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
-                              && u.mailboxfolder.foldertype.name == foldertypename && u.mailboxfolder.profiled_id == profileid)
+                              && u.mailboxfolder.mailboxfoldertype.name == foldertypename && u.mailboxfolder.profiled_id == profileid)
                            on m.id equals f.mailboxmessage_id
                           orderby m.creationdate descending
                           select new mailviewmodel
                           {
 
-                              mailboxfoldername = f.mailboxfolder.foldertype.name,
+                              mailboxfoldername = f.mailboxfolder.mailboxfoldertype.name,
                               mailboxmessageid = m.id,
                               sender_id = m.sender_id,
                               body = m.body,
                               subject = m.subject,
                               mailboxfolder_id = f.mailboxfolder.id,
-                              age = m.sender.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
-                              city = m.sender.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
-                              state = m.sender.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
+                              age = m.profilemetadata.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
+                              city = m.profilemetadata.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
+                              state = m.profilemetadata.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
                               creationdate = m.creationdate,
                               recipient_id = m.recipient_id,
                               readdate = f.readdate,
                               replieddate = f.replieddate,
-                              senderstatus_id = m.sender.profile.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                              recipientstatus_id = m.recipeint.profile.status.id,
+                              senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                              recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
                               blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
-                              senderscreenname = m.sender.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                              recipientscreenname = m.recipeint.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+                              senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                              recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
 
                           });
 
@@ -511,24 +511,25 @@ namespace Shell.MVC2.Data
                               select new mailviewmodel
                               {
 
-                                  mailboxfoldername = f.mailboxfolder.foldertype.name,
+
+                                  mailboxfoldername = f.mailboxfolder.mailboxfoldertype.name,
                                   mailboxmessageid = m.id,
                                   sender_id = m.sender_id,
                                   body = m.body,
                                   subject = m.subject,
                                   mailboxfolder_id = f.mailboxfolder.id,
-                                  age = m.sender.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
-                                  city = m.sender.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
-                                  state = m.sender.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
+                                  age = m.profilemetadata.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
+                                  city = m.profilemetadata.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
+                                  state = m.profilemetadata.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
                                   creationdate = m.creationdate,
                                   recipient_id = m.recipient_id,
                                   readdate = f.readdate,
                                   replieddate = f.replieddate,
-                                  senderstatus_id = m.sender.profile.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                                  recipientstatus_id = m.recipeint.profile.status.id,
+                                  senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                                  recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
                                   blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
-                                  senderscreenname = m.sender.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                                  recipientscreenname = m.recipeint.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+                                  senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                                  recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
 
                               });
 
@@ -565,31 +566,32 @@ namespace Shell.MVC2.Data
                 IEnumerable<mailviewmodel> model = null;
 
                 model = (from m in db.mailboxmessages.Where(x => x.uniqueid == uniqueId)
-                         join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder.foldertype.name != "Deleted"
+                         join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder.mailboxfoldertype.name != "Deleted"
                          && u.mailboxfolder.profiled_id == profileid)
                            on m.id equals f.mailboxmessage_id
                          orderby m.creationdate ascending
                          select new mailviewmodel
                          {
 
-                             mailboxfoldername = f.mailboxfolder.foldertype.name,
+
+                             mailboxfoldername = f.mailboxfolder.mailboxfoldertype.name,
                              mailboxmessageid = m.id,
                              sender_id = m.sender_id,
                              body = m.body,
                              subject = m.subject,
                              mailboxfolder_id = f.mailboxfolder.id,
-                             age = m.sender.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
-                             city = m.sender.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
-                             state = m.sender.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
+                             age = m.profilemetadata.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
+                             city = m.profilemetadata.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
+                             state = m.profilemetadata.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
                              creationdate = m.creationdate,
                              recipient_id = m.recipient_id,
                              readdate = f.readdate,
                              replieddate = f.replieddate,
-                             senderstatus_id = m.sender.profile.status.id, //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                             recipientstatus_id = m.recipeint.profile.status.id,
+                             senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                             recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
                              blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
-                             senderscreenname = m.sender.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                             recipientscreenname = m.recipeint.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+                             senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                             recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
                          });
                 return filtermailmodels(model);
 

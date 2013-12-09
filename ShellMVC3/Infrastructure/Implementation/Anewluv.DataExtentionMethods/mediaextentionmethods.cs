@@ -14,8 +14,9 @@ namespace Anewluv.DataExtentionMethods
 
         public static List<photo> getallphotosbyusername(this IRepository<photo> repo, ProfileModel model)
         {
-            return repo.Find().OfType<photo>().Where(o => o.profilemetadata.profile.username == model.username 
-                                    && o.photostatus.id != 4 && o.photostatus.id != 5).ToList();
+            return repo.Find().OfType<photo>().Where(o => o.profilemetadata.profile.username == model.username
+                                    && o.lu_photoapprovalstatus.id != (int)photoapprovalstatusEnum.Rejected && o.lu_photoapprovalstatus.id
+                                    != (int)photoapprovalstatusEnum.RequiresFurtherInformation).ToList();
 
         }
 
@@ -41,14 +42,14 @@ namespace Anewluv.DataExtentionMethods
                 {
 
                   return  (from p in
-                                            (from r in repo.Find().Where(a => a.formattype.id == Convert.ToInt16(format) && (a.photo.profile_id == Convert.ToInt32(profileid) & a.photo.photostatus.id == (int)photostatusEnum.Gallery)).ToList()
+                                            (from r in repo.Find().Where(a => a.lu_photoformat.id == Convert.ToInt16(format) && (a.photo.profile_id == Convert.ToInt32(profileid) & a.photo.lu_photostatus.id == (int)photostatusEnum.Gallery)).ToList()
                                              select new
                                              {
                                                  photoid = r.photo.id,
                                                  profileid = r.photo.profile_id,
                                                  screenname = r.photo.profilemetadata.profile.screenname,
                                                  photo = r.image,
-                                                 photoformat = r.formattype,
+                                                 photoformat = r.lu_photoformat,
                                                  convertedsize = r.size,
                                                  orginalsize = r.photo.size,
                                                  imagecaption = r.photo.imagecaption,
@@ -93,15 +94,15 @@ namespace Anewluv.DataExtentionMethods
         
             try
             {
-             var model = (from p in repo.Find().Where(a => a.formattype.id ==  Convert.ToInt16(format) && a.photo.profile_id ==  Convert.ToInt16(profileid) && a.photo.profile_id ==  Convert.ToInt32(profileid) && (
-                                                     a.photo.approvalstatus != null && a.photo.approvalstatus.id == Convert.ToInt16(status))).ToList()
+             var model = (from p in repo.Find().Where(a => a.formattype_id ==  Convert.ToInt16(format) && a.photo.profile_id ==  Convert.ToInt16(profileid) && a.photo.profile_id ==  Convert.ToInt32(profileid) && (
+                                                     a.photo.photostatus_id  != null && a.photo.photostatus_id == Convert.ToInt16(status))).ToList()
                                  select new PhotoModel
                                  {
                                      photoid = p.photo.id,
                                      profileid = p.photo.profile_id,
                                      screenname = p.photo.profilemetadata.profile.screenname,
                                      photo = b64Converters.ByteArraytob64string(p.image),
-                                     photoformat = p.formattype,
+                                     photoformat = p.lu_photoformat,
                                      convertedsize = p.size,
                                      orginalsize = p.photo.size,
                                      imagecaption = p.photo.imagecaption,
@@ -139,7 +140,7 @@ namespace Anewluv.DataExtentionMethods
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,
                            screenname = p.photo.profilemetadata.profile.screenname,
-                           photoformat = p.formattype,
+                           photoformat = p.lu_photoformat,
                            convertedsize = p.size,
                            //   approved = (p.approvalstatus != null && p.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
                            //   profileimagetype = p.imagetype.description,
@@ -205,7 +206,7 @@ namespace Anewluv.DataExtentionMethods
                                                                int page, int pagesize)
         {
             // Retrieve All User's Photos that are not approved.
-            var photos = MyPhotos.Where(a => a.photo.approvalstatus != null && a.photo.approvalstatus.id == (int)approvalstatus);
+            var photos = MyPhotos.Where(a => a.photo.approvalstatus_id != null && a.photo.approvalstatus_id == (int)approvalstatus);
 
             // Retrieve All User's Approved Photo's that are not Private and approved.
             //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
@@ -216,12 +217,12 @@ namespace Anewluv.DataExtentionMethods
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
                              screenname = p.photo.profilemetadata.profile.screenname,
-                             approved = (p.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
-                             profileimagetype = p.photo.imagetype.description,
+                             approved = (p.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             profileimagetype = p.lu_photoformat.description,
                              imagecaption = p.photo.imagecaption,
                              creationdate = p.photo.creationdate,
-                             photostatusid = p.photo.photostatus.id,
-                             checkedprimary = (p.photo.photostatus.id == (int)photostatusEnum.Gallery)
+                             photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
+                             checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
                          });
 
 
@@ -251,12 +252,12 @@ namespace Anewluv.DataExtentionMethods
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,
                            screenname = p.photo.profilemetadata.profile.screenname,
-                           approved = (p.photo.approvalstatus != null && p.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
-                           profileimagetype = p.photo.imagetype.description,
+                           approved = (p.photo.photostatus_id != null && p.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                           profileimagetype = p.lu_photoformat.description,
                            imagecaption = p.photo.imagecaption,
                            creationdate = p.photo.creationdate,
-                           photostatusid = p.photo.photostatus.id,
-                           checkedprimary = (p.photo.photostatus.id == (int)photostatusEnum.Gallery)
+                           photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
+                           checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
                        })
                              .OrderBy(o => o.profileimagetype).ThenByDescending(o => o.creationdate)
                              .FirstOrDefault();
@@ -269,12 +270,11 @@ namespace Anewluv.DataExtentionMethods
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,
                            screenname = p.photo.profilemetadata.profile.screenname,
-                           approved = (p.photo.approvalstatus != null && p.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
-                           profileimagetype = p.photo.imagetype.description,
+                           approved = (p.photo.photostatus_id != null && p.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved) ? true : false,
                            imagecaption = p.photo.imagecaption,
                            creationdate = p.photo.creationdate,
-                           photostatusid = p.photo.photostatus.id,
-                           checkedprimary = (p.photo.photostatus.id == (int)photostatusEnum.Gallery)
+                           photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
+                           checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
                        })
                                .OrderByDescending(o => o.creationdate)
                                .FirstOrDefault();
@@ -305,13 +305,13 @@ namespace Anewluv.DataExtentionMethods
                                                             int page, int pagesize)
         {
             // Retrieve All User's Photos that are not approved.
-            var photos = MyPhotos.Where(a => a.photo.photostatus.id == (int)status);
+            var photos = MyPhotos.Where(a => a.photo.photostatus_id == (int)status);
 
             // Retrieve All User's Approved Photo's that are not Private and approved.
             //TO DO modifiy this code to filter out the private photos and photos that are part of private albums 
             if (status == photoapprovalstatusEnum.Approved)
             {
-                photos = photos.Where(a => a.photo.imagetype.id != (int)photostatusEnum.Gallery);
+                photos = photos.Where(a => a.photo.imagetype_id != (int)photostatusEnum.Gallery);
             }
 
             var model = (from p in photos
@@ -320,12 +320,12 @@ namespace Anewluv.DataExtentionMethods
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
                              screenname = p.photo.profilemetadata.profile.screenname,
-                             approved = (p.photo.approvalstatus != null && p.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
-                             profileimagetype = p.photo.imagetype.description,
+                             approved = (p.photo.photostatus_id != null && p.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             profileimagetype = p.lu_photoformat.description,
                              imagecaption = p.photo.imagecaption,
                              creationdate = p.photo.creationdate,
-                             photostatusid = p.photo.photostatus.id,
-                             checkedprimary = (p.photo.photostatus.id == (int)photostatusEnum.Gallery)
+                             photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
+                             checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
                          });
 
 
@@ -338,18 +338,18 @@ namespace Anewluv.DataExtentionMethods
         public static IEnumerable<photoeditmodel> filterphotosbysecuitylevel(List<photoconversion> MyPhotos, securityleveltypeEnum status,
                                                                         int page, int pagesize)
         {
-            var model = (from p in MyPhotos.Where(a => a.photo.photosecuritylevels.Any(d => d.securityleveltype.id == (int)status))
+            var model = (from p in MyPhotos.Where(a => a.photo.photo_securitylevel.Any(d => d.securityleveltype_id == (int)status))
                          select new photoeditmodel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
                              screenname = p.photo.profilemetadata.profile.screenname,
-                             approved = (p.photo.approvalstatus != null && p.photo.approvalstatus.id == (int)photoapprovalstatusEnum.Approved) ? true : false,
-                             profileimagetype = p.photo.imagetype.description,
+                             approved = (p.photo.photostatus_id != null && p.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             profileimagetype = p.lu_photoformat.description,
                              imagecaption = p.photo.imagecaption,
                              creationdate = p.photo.creationdate,
-                             photostatusid = p.photo.photostatus.id,
-                             checkedprimary = (p.photo.photostatus.id == (int)photostatusEnum.Gallery)
+                             photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
+                             checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
                          });
 
 

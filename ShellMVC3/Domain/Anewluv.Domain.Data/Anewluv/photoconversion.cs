@@ -1,36 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    //make sure this code handles the adding of multiple image types i,e
-  
-
-    public class photoconversion
+    public partial class photoconversion
     {
-
-        [Key]
-        [DataMember]
         public int id { get; set; }
-        [DataMember]
-        public Guid photo_id { get; set; }
-        [DataMember]
-        public virtual photo photo { get; set; }
-        [DataMember]
-        public virtual lu_photoformat formattype { get; set; }
-        [DataMember]
-        public DateTime? creationdate { get; set; }
-        [DataMember]
-        public string description { get; set; } 
-        //actual image data
-        [DataMember]
+        public System.Guid photo_id { get; set; }
+        public Nullable<System.DateTime> creationdate { get; set; }
+        public string description { get; set; }
         public byte[] image { get; set; }
-        [DataMember]
-        public long size { get; set; }  
-
-        
+        public long size { get; set; }
+        public int formattype_id { get; set; }
+        public virtual lu_photoformat lu_photoformat { get; set; }
+        public virtual photo photo { get; set; }
     }
 }

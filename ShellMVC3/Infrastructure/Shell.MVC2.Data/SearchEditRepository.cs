@@ -46,8 +46,8 @@ namespace Shell.MVC2.Data
             try
             {
             //use the filter to search for items 
-            // var searchesttings =    _datingcontext.searchsetting.Where(p => p.profile_id == profileid || searchname =="")  ;
-            var searchesttings = (from x in _datingcontext.searchsetting.Where(p => p.profile_id == profileid)
+            // var searchesttings =    _datingcontext.searchsettings.Where(p => p.profile_id == profileid || searchname =="")  ;
+            var searchesttings = (from x in _datingcontext.searchsettings.Where(p => p.profile_id == profileid)
                                     .WhereIf(searchname != "", z => z.searchname == searchname)
                                     .WhereIf(searchrank != null, z => z.searchrank == searchrank.GetValueOrDefault())
                                   select x).FirstOrDefault();
@@ -80,8 +80,8 @@ namespace Shell.MVC2.Data
             try
             {
                 //use the filter to search for items 
-                // var searchesttings =    _datingcontext.searchsetting.Where(p => p.profile_id == profileid || searchname =="")  ;
-                var searchesttings = (from x in _datingcontext.searchsetting.Where(p => p.profile_id == profileid)
+                // var searchesttings =    _datingcontext.searchsettings.Where(p => p.profile_id == profileid || searchname =="")  ;
+                var searchesttings = (from x in _datingcontext.searchsettings.Where(p => p.profile_id == profileid)
                                       select x);
 
                 return searchesttings.ToList();
@@ -111,7 +111,7 @@ namespace Shell.MVC2.Data
            try
            {
            //use the filter to search for items 
-              // var searchesttings =    _datingcontext.searchsetting.Where(p => p.profile_id == profileid || searchname =="")  ;
+              // var searchesttings =    _datingcontext.searchsettings.Where(p => p.profile_id == profileid || searchname =="")  ;
                var searchesttings = getsearchsetting(profileid, searchname, searchrank.GetValueOrDefault());
                SearchSettingsViewModel returnmodel = new SearchSettingsViewModel();
                if (searchesttings != null)
@@ -166,7 +166,7 @@ namespace Shell.MVC2.Data
             {
 
 
-                searchsetting p = db.searchsetting.Where(z => z.id  == searchid).FirstOrDefault();
+                searchsetting p = db.searchsettings.Where(z => z.id  == searchid).FirstOrDefault();
                 BasicSearchSettingsModel model = new BasicSearchSettingsModel();
 
                 //populate values here ok ?
@@ -185,70 +185,83 @@ namespace Shell.MVC2.Data
                   model.myperfectmatch = p.myperfectmatch == null ? false : p.myperfectmatch.Value;
                   model.systemmatch = p.systemmatch == null ? false : p.systemmatch.Value;
                   model.savedsearch = p.savedsearch == null ? false : p.savedsearch.Value;
+                
 
-                  var showmevalues = new HashSet<int>(p.showme.Select(c => c.showme.id));
-                  foreach (var _showme in db.lu_showme)
+                 // var showmevalues = new HashSet<int>(p.searchsetting_showme.Select(c => c.showme_id.GetValueOrDefault()));
+                  foreach (var _showme in db.lu_showme)                 
                   {
+
+                    if( p.searchsetting_showme.Any(z=>z.showme_id  == _showme.id))
+                    {
                       model.showmelist.Add(new lu_showme
                       {
                           id = _showme.id,
-                          description = _showme.description,
-                          selected = showmevalues.Contains(_showme.id)
+                          description = _showme.description//,
+                          //selected = showmevalues.Contains(_showme.id)
                       });
                   }
-
+                  }
                  
 
-                  var sortbyvalues = new HashSet<int>(p.sortbytypes.Select(c => c.sortbytype.id));
+               //   var sortbyvalues = new HashSet<int>(p.sortbytypes.Select(c => c.sortbytype.id));
                   foreach (var _sortby in db.lu_sortbytype)
                   {
-                      model.sortbylist.Add(new lu_sortbytype 
+                      if (p.searchsetting_sortbytype.Any(z => z.sortbytype_id == _sortby.id))
                       {
-                          id = _sortby.id,
-                          description = _sortby.description,
-                          selected = sortbyvalues.Contains(_sortby.id)
-                      });
+                          model.sortbylist.Add(new lu_sortbytype
+                          {
+                              id = _sortby.id,
+                              description = _sortby.description//,
+                              //selected = sortbyvalues.Contains(_sortby.id)
+                          });
+                      }
                   }
 
                 //Different since theer is not a lookup for these.
-                  var locationvalues = new HashSet<int>(p.locations .Select(c => c.id));
-                  foreach (var _location in db.searchsetting_location )
-                  {
-                      model.locationlist.Add(new searchsetting_location 
-                      {
-                          id = _location.id,
-                           city  = _location.city,
-                            countryid = _location.countryid ,
-                             postalcode = _location.postalcode ,
-                          selected = locationvalues.Contains(_location.id)
-                      });
-                  }
+                  //var locationvalues = new HashSet<int>(p.locations .Select(c => c.id));
+                  //foreach (var _location in db.searchsetting_location )
+                  //{
+                  //    if (p.searchsetting_location.Any(z => z.countryid ==  _location.countryid &&  z.postalcode))
+                  //    {
+                  //        model.locationlist.Add(new searchsetting_location
+                  //        {
+                  //            id = _location.id,
+                  //            city = _location.city,
+                  //            countryid = _location.countryid,
+                  //            postalcode = _location.postalcode//,
+                  //            //selected = locationvalues.Contains(_location.id)
+                  //        });
+                  //    }
+                  //}
 
 
-                 var gendervalues = new HashSet<int>(p.genders.Select(c => c.gender.id));
+               //  var gendervalues = new HashSet<int>(p.genders.Select(c => c.gender.id));
                 //set default if non selected
                 // logic is if its a female then show them the male checked and vice versa
-                if (gendervalues.Count  == 0)
-                {
-                    if (p.profilemetadata.profile.profiledata.gender.id == 1)
-                    {
-                        gendervalues.Add(2);
-                    }
-                    else
-                    {
-                        gendervalues.Add(1);
-                    }
-                }
+                //if (gendervalues.Count  == 0)
+                //{
+                //    if (p.profilemetadata.profile.profiledata.gender.id == 1)
+                //    {
+                //        gendervalues.Add(2);
+                //    }
+                //    else
+                //    {
+                //        gendervalues.Add(1);
+                //    }
+                //}
 
                 //now populate the checkboxes               
                 foreach (var _genders in db.lu_gender)
                 {
-                    model.genderlist.Add(new lu_gender
+                    if (p.searchsetting_gender.Any(z => z.gender_id == _genders.id))
                     {
-                        id = _genders.id,
-                        description = _genders.description,
-                        selected = gendervalues.Contains(_genders.id)
-                    });
+                        model.genderlist.Add(new lu_gender
+                        {
+                            id = _genders.id,
+                            description = _genders.description//,
+                          //  selected = gendervalues.Contains(_genders.id)
+                        });
+                    }
                 }
 
 
@@ -281,7 +294,7 @@ namespace Shell.MVC2.Data
            try
            {
 
-               searchsetting p = db.searchsetting.Where(z => z.id == searchid).FirstOrDefault();
+               searchsetting p = db.searchsettings.Where(z => z.id == searchid).FirstOrDefault();
                AppearanceSearchSettingsModel model = new AppearanceSearchSettingsModel();
 
                //TO DO determine the users metric type here and get the min height in thier locale
@@ -295,63 +308,78 @@ namespace Shell.MVC2.Data
                //pilot how to show the rest of the values 
                //sample of doing string values
 
-               var ethncityvalues = new HashSet<int>(p.ethnicities.Select(c => c.ethnicity.id));
+             //  var ethncityvalues = new HashSet<int>(p.ethnicities.Select(c => c.ethnicity.id));
                foreach (var _ethnicity in db.lu_ethnicity)
                {
-                   model.ethnicitylist.Add(new lu_ethnicity
+                   if (p.searchsetting_ethnicity.Any(z => z.ethnicity_id == _ethnicity.id))
                    {
-                       id = _ethnicity.id,
-                       description = _ethnicity.description,
-                       selected = ethncityvalues.Contains(_ethnicity.id)
-                   });
+                       model.ethnicitylist.Add(new lu_ethnicity
+                       {
+                           id = _ethnicity.id,
+                           description = _ethnicity.description//,
+                           //selected = ethncityvalues.Contains(_ethnicity.id)
+                       });
+                   }
                }
 
 
-               var bodytypesvalues = new HashSet<int>(p.bodytypes.Select(c => c.bodytype.id));
+             //  var bodytypesvalues = new HashSet<int>(p.bodytypes.Select(c => c.bodytype.id));
                foreach (var _bodytypes in db.lu_bodytype)
                {
-                   model.bodytypeslist.Add(new lu_bodytype
+                   if (p.searchsetting_bodytype.Any(z => z.bodytype_id == _bodytypes.id))
                    {
-                       id = _bodytypes.id,
-                       description = _bodytypes.description,
-                       selected = bodytypesvalues.Contains(_bodytypes.id)
-                   });
+                       model.bodytypeslist.Add(new lu_bodytype
+                       {
+                           id = _bodytypes.id,
+                           description = _bodytypes.description//,
+                           // selected = bodytypesvalues.Contains(_bodytypes.id)
+                       });
+                   }
                }
 
 
-               var eyecolorvalues = new HashSet<int>(p.eyecolors.Select(c => c.eyecolor.id));
+             //  var eyecolorvalues = new HashSet<int>(p.eyecolors.Select(c => c.eyecolor.id));
                foreach (var _eyecolor in db.lu_eyecolor)
                {
-                   model.eyecolorlist.Add(new lu_eyecolor
+                   if (p.searchsetting_eyecolor.Any(z => z.eyecolor_id == _eyecolor.id))
                    {
-                       id = _eyecolor.id,
-                       description = _eyecolor.description,
-                       selected = eyecolorvalues.Contains(_eyecolor.id)
-                   });
+                       model.eyecolorlist.Add(new lu_eyecolor
+                       {
+                           id = _eyecolor.id,
+                           description = _eyecolor.description//,
+                           //selected = eyecolorvalues.Contains(_eyecolor.id)
+                       });
+                   }
                }
 
 
-               var haircolorvalues = new HashSet<int>(p.haircolors.Select(c => c.haircolor.id));
+              // var haircolorvalues = new HashSet<int>(p.haircolors.Select(c => c.haircolor.id));
                foreach (var _haircolor in db.lu_haircolor)
                {
-                   model.haircolorlist.Add(new lu_haircolor
+                   if (p.searchsetting_haircolor.Any(z => z.haircolor_id == _haircolor.id))
                    {
-                       id = _haircolor.id,
-                       description = _haircolor.description,
-                       selected = haircolorvalues.Contains(_haircolor.id)
-                   });
+                       model.haircolorlist.Add(new lu_haircolor
+                       {
+                           id = _haircolor.id,
+                           description = _haircolor.description//,
+                         //  selected = haircolorvalues.Contains(_haircolor.id)
+                       });
+                   }
                }
 
 
-               var hotfeaturevalues = new HashSet<int>(p.hotfeatures.Select(c => c.hotfeature.id));
+               //var hotfeaturevalues = new HashSet<int>(p.hotfeatures.Select(c => c.hotfeature.id));
                foreach (var _hotfeature in db.lu_hotfeature)
                {
-                   model.hotfeaturelist.Add(new lu_hotfeature
+                   if (p.searchsetting_hotfeature.Any(z => z.hotfeature_id == _hotfeature.id))
                    {
-                       id = _hotfeature.id,
-                       description = _hotfeature.description,
-                       selected = hotfeaturevalues.Contains(_hotfeature.id)
-                   });
+                       model.hotfeaturelist.Add(new lu_hotfeature
+                       {
+                           id = _hotfeature.id,
+                           description = _hotfeature.description//,
+                           //selected = hotfeaturevalues.Contains(_hotfeature.id)
+                       });
+                   }
                }
 
 
@@ -384,52 +412,43 @@ namespace Shell.MVC2.Data
 
            try
            {
-               searchsetting p = db.searchsetting.Where(z => z.id == searchid).FirstOrDefault();
+               searchsetting p = db.searchsettings.Where(z => z.id == searchid).FirstOrDefault();
                CharacterSearchSettingsModel model = new CharacterSearchSettingsModel();
-            
+
+               //TO DO use this code block in stead
+              
+
+
+
                #region "Diet"
                //Diet checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var dietvalues = new HashSet<int>(p.diets.Select(c => c.diet.id));
-               foreach (var _diet in db.lu_diet)
+              // var dietvalues = new HashSet<int>(p.diets.Select(c => c.diet.id));
+               foreach (var item in p.searchsetting_diet)
                {
-                   model.dietlist.Add(new lu_diet
-                   {
-                       id = _diet.id,
-                       description = _diet.description,
-                       selected = dietvalues.Contains(_diet.id)
-                   });
+                   model.dietlist.Add(item.lu_diet);
                }
                #endregion
                #region "Humor"
                //Humor checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var humorvalues = new HashSet<int>(p.humors.Select(c => c.humor.id));
-               foreach (var _humor in db.lu_humor)
+              // var humorvalues = new HashSet<int>(p.humors.Select(c => c.humor.id));
+
+               foreach (var item in p.searchsetting_humor)
                {
-                   model.humorlist.Add(new lu_humor
-                   {
-                       id = _humor.id,
-                       description = _humor.description,
-                       selected = humorvalues.Contains(_humor.id)
-                   });
+                   model.humorlist.Add(item.lu_humor);
                }
                #endregion
                #region "Hobby"
                //Hobby checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var hobbyvalues = new HashSet<int>(p.hobbies .Select(c => c.hobby.id));
-               foreach (var _hobby in db.lu_hobby)
+              // var hobbyvalues = new HashSet<int>(p.hobbies .Select(c => c.hobby.id));
+               foreach (var item in p.searchsetting_humor)
                {
-                   model.hobbylist.Add(new lu_hobby
-                   {
-                       id = _hobby.id,
-                       description = _hobby.description,
-                       selected = hobbyvalues.Contains(_hobby.id)
-                   });
+                   model.humorlist.Add(item.lu_humor);
                }
                #endregion
                #region "Drinks"
@@ -440,105 +459,73 @@ namespace Shell.MVC2.Data
                //{
                //    (item.drinks.drinksName);
                //}
-               var drinksvalues = new HashSet<int>(p.drinks.Select(c => c.drink.id));
-               foreach (var _drinks in db.lu_drinks)
+              // var drinksvalues = new HashSet<int>(p.drinks.Select(c => c.drink.id));
+               foreach (var item in p.searchsetting_drink)
                {
-                   model.drinkslist.Add(new lu_drinks
-                   {
-                       id = _drinks.id,
-                       description = _drinks.description,
-                       selected = drinksvalues.Contains(_drinks.id)
-                   });
+                   model.drinkslist.Add(item.lu_drinks);
                }
+
+
+
                #endregion
                #region "Exercise"
                //Exercise checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var exercisevalues = new HashSet<int>(p.exercises.Select(c => c.exercise.id));
-               foreach (var _exercise in db.lu_exercise)
+              // var exercisevalues = new HashSet<int>(p.exercises.Select(c => c.exercise.id));
+               foreach (var item in p.searchsetting_exercise)
                {
-                   model.exerciselist.Add(new lu_exercise
-                   {
-                       id = _exercise.id,
-                       description = _exercise.description,
-                       selected = exercisevalues.Contains(_exercise.id)
-                   });
+                   model.exerciselist.Add(item.lu_exercise);
                }
                #endregion
                #region "Smokes"
                //Smokes checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var smokesvalues = new HashSet<int>(p.smokes.Select(c => c.smoke.id));
-               foreach (var _smokes in db.lu_smokes)
+              // var smokesvalues = new HashSet<int>(p.smokes.Select(c => c.smoke.id));
+               foreach (var item in p.searchsetting_diet)
                {
-                   model.smokeslist.Add(new lu_smokes
-                   {
-                       id = _smokes.id,
-                       description = _smokes.description,
-                       selected = smokesvalues.Contains(_smokes.id)
-                   });
+                   model.dietlist.Add(item.lu_diet);
                }
                #endregion
                #region "Sign"
                //Sign checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var signvalues = new HashSet<int>(p.signs.Select(c => c.sign.id));
-               foreach (var _sign in db.lu_sign)
+              // var signvalues = new HashSet<int>(p.signs.Select(c => c.sign.id));
+               foreach (var item in p.searchsetting_sign)
                {
-                   model.signlist.Add(new lu_sign
-                   {
-                       id = _sign.id,
-                       description = _sign.description,
-                       selected = signvalues.Contains(_sign.id)
-                   });
+                   model.signlist.Add(item.lu_sign);
                }
                #endregion
                #region "PoliticalView"
                //PoliticalView checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var politicalviewvalues = new HashSet<int>(p.politicalviews.Select(c => c.politicalview.id));
-               foreach (var _politicalview in db.lu_politicalview)
+              // var politicalviewvalues = new HashSet<int>(p.politicalviews.Select(c => c.politicalview.id));
+               foreach (var item in p.searchsetting_politicalview)
                {
-                   model.politicalviewlist.Add(new lu_politicalview
-                   {
-                       id = _politicalview.id,
-                       description = _politicalview.description,
-                       selected = politicalviewvalues.Contains(_politicalview.id)
-                   });
+                   model.politicalviewlist.Add(item.lu_politicalview);
                }
                #endregion
                #region "Religion"
                //Religion checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var religionvalues = new HashSet<int>(p.religions.Select(c => c.religion.id));
-               foreach (var _religion in db.lu_religion)
+               //var religionvalues = new HashSet<int>(p.religions.Select(c => c.religion.id));
+               foreach (var item in p.searchsetting_religion)
                {
-                   model.religionlist.Add(new lu_religion
-                   {
-                       id = _religion.id,
-                       description = _religion.description,
-                       selected = religionvalues.Contains(_religion.id)
-                   });
+                   model.religionlist.Add(item.lu_religion);
                }
                #endregion
                #region "ReligiousAttendance"
                //ReligiousAttendance checkbox values populated here
                //pilot how to show the rest of the values 
                //sample of doing string values
-               var religiousattendancevalues = new HashSet<int>(p.religiousattendances.Select(c => c.religiousattendance.id));
-               foreach (var _religiousattendance in db.lu_religiousattendance)
+               //var religiousattendancevalues = new HashSet<int>(p.religiousattendances.Select(c => c.religiousattendance.id));
+               foreach (var item in p.searchsetting_religiousattendance)
                {
-                   model.religiousattendancelist.Add(new lu_religiousattendance
-                   {
-                       id = _religiousattendance.id,
-                       description = _religiousattendance.description,
-                       selected = religiousattendancevalues.Contains(_religiousattendance.id)
-                   });
+                   model.religiousattendancelist.Add(item.lu_religiousattendance);
                }
                #endregion
 
@@ -568,22 +555,17 @@ namespace Shell.MVC2.Data
 
             try
             {
-                searchsetting p = db.searchsetting.Where(z => z.id == searchid).FirstOrDefault();
+                searchsetting p = db.searchsettings.Where(z => z.id == searchid).FirstOrDefault();
                 LifeStyleSearchSettingsModel model = new LifeStyleSearchSettingsModel();
 
                 #region "EducationLevel"
                 //EducationLevel checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var educationlevelvalues = new HashSet<int>(p.educationlevels.Select(c => c.educationlevel.id));
-                foreach (var _educationlevel in db.lu_educationlevel)
+              //  var educationlevelvalues = new HashSet<int>(p.educationlevels.Select(c => c.educationlevel.id));
+                foreach (var item in p.searchsetting_educationlevel)
                 {
-                    model.educationlevellist.Add(new lu_educationlevel
-                    {
-                        id = _educationlevel.id,
-                        description = _educationlevel.description,
-                        selected = educationlevelvalues.Contains(_educationlevel.id)
-                    });
+                    model.educationlevellist.Add(item.lu_educationlevel);
                 }
 
                 #endregion
@@ -591,15 +573,10 @@ namespace Shell.MVC2.Data
                 //EmploymentStatus checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var employmentstatusvalues = new HashSet<int>(p.employmentstatus.Select(c => c.employmentstatus.id));
-                foreach (var _employmentstatus in db.lu_employmentstatus)
+                //var employmentstatusvalues = new HashSet<int>(p.employmentstatus.Select(c => c.employmentstatus.id));
+                foreach (var item in p.searchsetting_employmentstatus)
                 {
-                    model.employmentstatuslist.Add(new lu_employmentstatus
-                    {
-                        id = _employmentstatus.id,
-                        description = _employmentstatus.description,
-                        selected = employmentstatusvalues.Contains(_employmentstatus.id)
-                    });
+                    model.employmentstatuslist.Add(item.lu_employmentstatus);
                 }
 
                 #endregion
@@ -607,15 +584,10 @@ namespace Shell.MVC2.Data
                 //IncomeLevel checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var incomelevelvalues = new HashSet<int>(p.incomelevels.Select(c => c.incomelevel.id));
-                foreach (var _incomelevel in db.lu_incomelevel)
+                //var incomelevelvalues = new HashSet<int>(p.incomelevels.Select(c => c.incomelevel.id));
+                foreach (var item in p.searchsetting_incomelevel)
                 {
-                    model.incomelevellist.Add(new lu_incomelevel
-                    {
-                        id = _incomelevel.id,
-                        description = _incomelevel.description,
-                        selected = incomelevelvalues.Contains(_incomelevel.id)
-                    });
+                    model.incomelevellist.Add(item.lu_incomelevel);
                 }
 
                 #endregion
@@ -623,15 +595,10 @@ namespace Shell.MVC2.Data
                 //LookingFor checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var lookingforvalues = new HashSet<int>(p.lookingfor.Select(c => c.lookingfor.id));
-                foreach (var _lookingfor in db.lu_lookingfor)
+               // var lookingforvalues = new HashSet<int>(p.lookingfor.Select(c => c.lookingfor.id));
+                foreach (var item in p.searchsetting_lookingfor)
                 {
-                    model.lookingforlist.Add(new lu_lookingfor
-                    {
-                        id = _lookingfor.id,
-                        description = _lookingfor.description,
-                        selected = lookingforvalues.Contains(_lookingfor.id)
-                    });
+                    model.lookingforlist.Add(item.lu_lookingfor);
                 }
 
                 #endregion
@@ -640,15 +607,10 @@ namespace Shell.MVC2.Data
                 //WantsKids checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var wantskidsvalues = new HashSet<int>(p.wantkids.Select(c => c.wantskids.id));
-                foreach (var _wantskids in db.lu_wantskids)
+               // var wantskidsvalues = new HashSet<int>(p.wantkids.Select(c => c.wantskids.id));
+                foreach (var item in p.searchsetting_wantkids)
                 {
-                    model.wantskidslist.Add(new lu_wantskids
-                    {
-                        id = _wantskids.id,
-                        description = _wantskids.description,
-                        selected = wantskidsvalues.Contains(_wantskids.id)
-                    });
+                    model.wantskidslist.Add(item.lu_wantskids);
                 }
 
                 #endregion
@@ -657,32 +619,20 @@ namespace Shell.MVC2.Data
                 //Profession checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var professionvalues = new HashSet<int>(p.professions.Select(c => c.profession.id));
-                foreach (var _profession in db.lu_profession)
+                //var professionvalues = new HashSet<int>(p.professions.Select(c => c.profession.id));
+                foreach (var item in p.searchsetting_profession)
                 {
-                    model.professionlist.Add(new lu_profession
-                    {
-                        id = _profession.id,
-                        description = _profession.description,
-                        selected = professionvalues.Contains(_profession.id)
-                    });
+                    model.professionlist.Add(item.lu_profession);
                 }
-
                 #endregion
                 #region "Marital STatus"
 
                 //MaritalStatus checkbox values populated here
                 //pilot how to show the rest of the values 
-                //sample of doing string values
-                var maritalstatusvalues = new HashSet<int>(p.maritalstatuses.Select(c => c.maritalstatus.id));
-                foreach (var _maritalstatus in db.lu_maritalstatus)
+               // var maritalstatusvalues = new HashSet<int>(p.maritalstatuses.Select(c => c.maritalstatus.id));
+                foreach (var item in p.searchsetting_maritalstatus)
                 {
-                    model.maritalstatuslist.Add(new lu_maritalstatus
-                    {
-                        id = _maritalstatus.id,
-                        description = _maritalstatus.description,
-                        selected = maritalstatusvalues.Contains(_maritalstatus.id)
-                    });
+                    model.maritalstatuslist.Add(item.lu_maritalstatus);
                 }
 
                 #endregion
@@ -691,15 +641,10 @@ namespace Shell.MVC2.Data
                 //LivingSituation checkbox values populated here
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var livingsituationvalues = new HashSet<int>(p.livingstituations.Select(c => c.livingsituation.id));
-                foreach (var _livingsituation in db.lu_livingsituation)
+                //var livingsituationvalues = new HashSet<int>(p.livingstituations.Select(c => c.livingsituation.id));
+                foreach (var item in p.searchsetting_livingstituation)
                 {
-                    model.livingsituationlist.Add(new lu_livingsituation
-                    {
-                        id = _livingsituation.id,
-                        description = _livingsituation.description,
-                        selected = livingsituationvalues.Contains(_livingsituation.id)
-                    });
+                    model.livingsituationlist.Add(item.lu_livingsituation);
                 }
 
                 #endregion
@@ -708,15 +653,10 @@ namespace Shell.MVC2.Data
 
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                var havekidsvalues = new HashSet<int>(p.havekids.Select(c => c.havekids.id));
-                foreach (var _havekids in db.lu_havekids)
+                //var havekidsvalues = new HashSet<int>(p.havekids.Select(c => c.havekids.id));
+                foreach (var item in p.searchsetting_havekids)
                 {
-                    model.havekidslist.Add(new lu_havekids
-                    {
-                        id = _havekids.id,
-                        description = _havekids.description,
-                        selected = havekidsvalues.Contains(_havekids.id)
-                    });
+                    model.havekidslist.Add(item.lu_havekids);
                 }
 
 
@@ -757,7 +697,7 @@ namespace Shell.MVC2.Data
            AnewluvMessages messages = new AnewluvMessages();
 
            //get the searchsettings
-           searchsetting search = db.searchsetting.Where(d => d.id == searchid).First();
+           searchsetting search = db.searchsettings.Where(d => d.id == searchid).First();
 
            messages = (updatebasicsearchsettings(newmodel, search, messages));
     
@@ -898,7 +838,7 @@ namespace Shell.MVC2.Data
 
            try
            {
-               searchsetting searchsettingstoupdate = db.searchsetting.Where(d => d.id == searchid).First();
+               searchsetting searchsettingstoupdate = db.searchsettings.Where(d => d.id == searchid).First();
 
                //TO DO determine the users metric type here and get the min height in thier locale
                var usheightmin = "48";
@@ -1005,7 +945,7 @@ namespace Shell.MVC2.Data
            try
            {
 
-               searchsetting searchsettingstoupdate = db.searchsetting.Where(d => d.id == searchid).First();
+               searchsetting searchsettingstoupdate = db.searchsettings.Where(d => d.id == searchid).First();
 
                // profile p = db.profiles.Where(z => z.id == profileid).First();
                //sample code for determining weather to edit an item or not or determin if a value changed'
@@ -1103,7 +1043,7 @@ namespace Shell.MVC2.Data
 
            try
            {
-               searchsetting searchsettingstoupdate = db.searchsetting.Where(d => d.id == searchid).First();
+               searchsetting searchsettingstoupdate = db.searchsettings.Where(d => d.id == searchid).First();
 
 
 
@@ -1207,7 +1147,7 @@ namespace Shell.MVC2.Data
                foreach (var gender in genders)
                {
                    //new logic : if this item was selected and is not already in the search settings gender values add it 
-                   if ((gender.selected == true && !currentsearchsetting.genders.Where(z => z.gender.id == gender.id).Any()))
+                   if ((currentsearchsetting.searchsetting_gender.Where(z => z.gender_id == gender.id).Any()))
                    {
                        //SearchSettings_Genders.GendersID = Genders.GendersID;
                        var temp = new searchsetting_gender();
@@ -1274,7 +1214,7 @@ namespace Shell.MVC2.Data
                    if (selectedshowme.Contains(showme))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.showme.Any(p => p.id == showme.id))
+                       if (!currentsearchsetting.searchsetting_showme.Any(p => p.id == showme.id))
                        {
 
                            //SearchSettings_showme.showmeID = showme.showmeID;
@@ -1287,7 +1227,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.showme.Any(p => p.id == showme.id))
+                       if (currentsearchsetting.searchsetting_showme.Any(p => p.id == showme.id))
                        {
                            var temp = db.searchsetting_showme.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == showme.id).First();
                            db.searchsetting_showme.Remove(temp);
@@ -1341,7 +1281,7 @@ namespace Shell.MVC2.Data
                    if (selectedsortbytype.Contains(sortbytype))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.sortbytypes.Any(p => p.id == sortbytype.id))
+                       if (!currentsearchsetting.searchsetting_sortbytype.Any(p => p.id == sortbytype.id))
                        {
 
                            //SearchSettings_sortbytype.sortbytypeID = sortbytype.sortbytypeID;
@@ -1354,7 +1294,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.sortbytypes.Any(p => p.id == sortbytype.id))
+                       if (currentsearchsetting.searchsetting_sortbytype.Any(p => p.id == sortbytype.id))
                        {
                            var temp = db.searchsetting_sortbytype.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == sortbytype.id).First();
                            db.searchsetting_sortbytype.Remove(temp);
@@ -1409,7 +1349,7 @@ namespace Shell.MVC2.Data
                    if (selectedbodytype.Contains(bodytype))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.bodytypes.Any(p => p.id == bodytype.id))
+                       if (!currentsearchsetting.searchsetting_bodytype.Any(p => p.id == bodytype.id))
                        {
 
                            //SearchSettings_bodytype.bodytypeID = bodytype.bodytypeID;
@@ -1422,7 +1362,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.bodytypes.Any(p => p.id == bodytype.id))
+                       if (currentsearchsetting.searchsetting_bodytype.Any(p => p.id == bodytype.id))
                        {
                            var temp = db.searchsetting_bodytype.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == bodytype.id).First();
                            db.searchsetting_bodytype.Remove(temp);
@@ -1475,7 +1415,7 @@ namespace Shell.MVC2.Data
                    if (selectedethnicity.Contains(ethnicity))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.ethnicities.Any(p => p.id == ethnicity.id))
+                       if (!currentsearchsetting.searchsetting_ethnicity.Any(p => p.id == ethnicity.id))
                        {
 
                            //SearchSettings_ethnicity.ethnicityID = ethnicity.ethnicityID;
@@ -1488,7 +1428,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.ethnicities.Any(p => p.id == ethnicity.id))
+                       if (currentsearchsetting.searchsetting_ethnicity.Any(p => p.id == ethnicity.id))
                        {
                            var temp = db.searchsetting_ethnicity.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == ethnicity.id).First();
                            db.searchsetting_ethnicity.Remove(temp);
@@ -1543,7 +1483,7 @@ namespace Shell.MVC2.Data
                    if (selectedhaircolor.Contains(haircolor))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.haircolors.Any(p => p.id == haircolor.id))
+                       if (!currentsearchsetting.searchsetting_haircolor.Any(p => p.id == haircolor.id))
                        {
 
                            //SearchSettings_haircolor.haircolorID = haircolor.haircolorID;
@@ -1556,7 +1496,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.haircolors.Any(p => p.id == haircolor.id))
+                       if (currentsearchsetting.searchsetting_haircolor.Any(p => p.id == haircolor.id))
                        {
                            var temp = db.searchsetting_haircolor.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == haircolor.id).First();
                            db.searchsetting_haircolor.Remove(temp);
@@ -1611,7 +1551,7 @@ namespace Shell.MVC2.Data
                    if (selectedeyecolor.Contains(eyecolor))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.eyecolors.Any(p => p.id == eyecolor.id))
+                       if (!currentsearchsetting.searchsetting_eyecolor.Any(p => p.id == eyecolor.id))
                        {
 
                            //SearchSettings_eyecolor.eyecolorID = eyecolor.eyecolorID;
@@ -1624,7 +1564,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.eyecolors.Any(p => p.id == eyecolor.id))
+                       if (currentsearchsetting.searchsetting_eyecolor.Any(p => p.id == eyecolor.id))
                        {
                            var temp = db.searchsetting_eyecolor.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == eyecolor.id).First();
                            db.searchsetting_eyecolor.Remove(temp);
@@ -1678,7 +1618,7 @@ namespace Shell.MVC2.Data
                    if (selectedhotfeature.Contains(hotfeature))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.hotfeatures.Any(p => p.id == hotfeature.id))
+                       if (!currentsearchsetting.searchsetting_hotfeature.Any(p => p.id == hotfeature.id))
                        {
 
                            //SearchSettings_hotfeature.hotfeatureID = hotfeature.hotfeatureID;
@@ -1691,7 +1631,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.hotfeatures.Any(p => p.id == hotfeature.id))
+                       if (currentsearchsetting.searchsetting_hotfeature.Any(p => p.id == hotfeature.id))
                        {
                            var temp = db.searchsetting_hotfeature.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == hotfeature.id).First();
                            db.searchsetting_hotfeature.Remove(temp);
@@ -1745,7 +1685,7 @@ namespace Shell.MVC2.Data
                    if (selecteddiet.Contains(diet))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.diets.Any(p => p.id == diet.id))
+                       if (!currentsearchsetting.searchsetting_diet.Any(p => p.id == diet.id))
                        {
 
                            //SearchSettings_diet.dietID = diet.dietID;
@@ -1758,7 +1698,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.diets.Any(p => p.id == diet.id))
+                       if (currentsearchsetting.searchsetting_diet.Any(p => p.id == diet.id))
                        {
                            var temp = db.searchsetting_diet.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == diet.id).First();
                            db.searchsetting_diet.Remove(temp);
@@ -1812,7 +1752,7 @@ namespace Shell.MVC2.Data
                    if (selecteddrinks.Contains(drinks))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.drinks.Any(p => p.id == drinks.id))
+                       if (!currentsearchsetting.searchsetting_drink.Any(p => p.id == drinks.id))
                        {
 
                            //SearchSettings_drinks.drinksID = drinks.drinksID;
@@ -1825,7 +1765,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.drinks.Any(p => p.id == drinks.id))
+                       if (currentsearchsetting.searchsetting_drink.Any(p => p.id == drinks.id))
                        {
                            var temp = db.searchsetting_drink.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == drinks.id).First();
                            db.searchsetting_drink.Remove(temp);
@@ -1878,7 +1818,7 @@ namespace Shell.MVC2.Data
                    if (selectedexercise.Contains(exercise))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.exercises.Any(p => p.id == exercise.id))
+                       if (!currentsearchsetting.searchsetting_exercise.Any(p => p.id == exercise.id))
                        {
 
                            //SearchSettings_exercise.exerciseID = exercise.exerciseID;
@@ -1891,7 +1831,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.exercises.Any(p => p.id == exercise.id))
+                       if (currentsearchsetting.searchsetting_exercise.Any(p => p.id == exercise.id))
                        {
                            var temp = db.searchsetting_exercise.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == exercise.id).First();
                            db.searchsetting_exercise.Remove(temp);
@@ -1947,7 +1887,7 @@ namespace Shell.MVC2.Data
                    if (selectedhobby.Contains(hobby))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.hobbies.Any(p => p.id == hobby.id))
+                       if (!currentsearchsetting.searchsetting_hobby.Any(p => p.id == hobby.id))
                        {
 
                            //SearchSettings_hobby.hobbyID = hobby.hobbyID;
@@ -1960,7 +1900,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.hobbies.Any(p => p.id == hobby.id))
+                       if (currentsearchsetting.searchsetting_hobby.Any(p => p.id == hobby.id))
                        {
                            var temp = db.searchsetting_hobby.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == hobby.id).First();
                            db.searchsetting_hobby.Remove(temp);
@@ -2012,7 +1952,7 @@ namespace Shell.MVC2.Data
                    if (selectedhumor.Contains(humor))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.humors.Any(p => p.id == humor.id))
+                       if (!currentsearchsetting.searchsetting_humor.Any(p => p.id == humor.id))
                        {
 
                            //SearchSettings_humor.humorID = humor.humorID;
@@ -2025,7 +1965,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.humors.Any(p => p.id == humor.id))
+                       if (currentsearchsetting.searchsetting_humor.Any(p => p.id == humor.id))
                        {
                            var temp = db.searchsetting_humor.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == humor.id).First();
                            db.searchsetting_humor.Remove(temp);
@@ -2080,7 +2020,7 @@ namespace Shell.MVC2.Data
                    if (selectedpoliticalview.Contains(politicalview))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.politicalviews.Any(p => p.id == politicalview.id))
+                       if (!currentsearchsetting.searchsetting_politicalview.Any(p => p.id == politicalview.id))
                        {
 
                            //SearchSettings_politicalview.politicalviewID = politicalview.politicalviewID;
@@ -2093,7 +2033,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.politicalviews.Any(p => p.id == politicalview.id))
+                       if (currentsearchsetting.searchsetting_politicalview.Any(p => p.id == politicalview.id))
                        {
                            var temp = db.searchsetting_politicalview.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == politicalview.id).First();
                            db.searchsetting_politicalview.Remove(temp);
@@ -2147,7 +2087,7 @@ namespace Shell.MVC2.Data
                    if (selectedreligion.Contains(religion))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.religions.Any(p => p.id == religion.id))
+                       if (!currentsearchsetting.searchsetting_religion.Any(p => p.id == religion.id))
                        {
 
                            //SearchSettings_religion.religionID = religion.religionID;
@@ -2160,7 +2100,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.religions.Any(p => p.id == religion.id))
+                       if (currentsearchsetting.searchsetting_religion.Any(p => p.id == religion.id))
                        {
                            var temp = db.searchsetting_religion.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == religion.id).First();
                            db.searchsetting_religion.Remove(temp);
@@ -2215,7 +2155,7 @@ namespace Shell.MVC2.Data
                    if (selectedreligiousattendance.Contains(religiousattendance))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.religiousattendances.Any(p => p.id == religiousattendance.id))
+                       if (!currentsearchsetting.searchsetting_religiousattendance.Any(p => p.id == religiousattendance.id))
                        {
 
                            //SearchSettings_religiousattendance.religiousattendanceID = religiousattendance.religiousattendanceID;
@@ -2228,7 +2168,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.religiousattendances.Any(p => p.id == religiousattendance.id))
+                       if (currentsearchsetting.searchsetting_religiousattendance.Any(p => p.id == religiousattendance.id))
                        {
                            var temp = db.searchsetting_religiousattendance.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == religiousattendance.id).First();
                            db.searchsetting_religiousattendance.Remove(temp);
@@ -2281,7 +2221,7 @@ namespace Shell.MVC2.Data
                    if (selectedsign.Contains(sign))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.signs.Any(p => p.id == sign.id))
+                       if (!currentsearchsetting.searchsetting_sign.Any(p => p.id == sign.id))
                        {
 
                            //SearchSettings_sign.signID = sign.signID;
@@ -2294,7 +2234,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.signs.Any(p => p.id == sign.id))
+                       if (currentsearchsetting.searchsetting_sign.Any(p => p.id == sign.id))
                        {
                            var temp = db.searchsetting_sign.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == sign.id).First();
                            db.searchsetting_sign.Remove(temp);
@@ -2349,7 +2289,7 @@ namespace Shell.MVC2.Data
                    if (selectedsmokes.Contains(smokes))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.smokes.Any(p => p.id == smokes.id))
+                       if (!currentsearchsetting.searchsetting_smokes.Any(p => p.id == smokes.id))
                        {
 
                            //SearchSettings_smokes.smokesID = smokes.smokesID;
@@ -2362,7 +2302,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.smokes.Any(p => p.id == smokes.id))
+                       if (currentsearchsetting.searchsetting_smokes.Any(p => p.id == smokes.id))
                        {
                            var temp = db.searchsetting_smokes.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == smokes.id).First();
                            db.searchsetting_smokes.Remove(temp);
@@ -2416,7 +2356,7 @@ namespace Shell.MVC2.Data
                    if (selectededucationlevel.Contains(educationlevel))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.educationlevels.Any(p => p.id == educationlevel.id))
+                       if (!currentsearchsetting.searchsetting_educationlevel.Any(p => p.id == educationlevel.id))
                        {
 
                            //SearchSettings_educationlevel.educationlevelID = educationlevel.educationlevelID;
@@ -2429,7 +2369,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.educationlevels.Any(p => p.id == educationlevel.id))
+                       if (currentsearchsetting.searchsetting_educationlevel.Any(p => p.id == educationlevel.id))
                        {
                            var temp = db.searchsetting_educationlevel.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == educationlevel.id).First();
                            db.searchsetting_educationlevel.Remove(temp);
@@ -2483,7 +2423,7 @@ namespace Shell.MVC2.Data
                    if (selectedemploymentstatus.Contains(employmentstatus))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.employmentstatus.Any(p => p.id == employmentstatus.id))
+                       if (!currentsearchsetting.searchsetting_employmentstatus.Any(p => p.id == employmentstatus.id))
                        {
 
                            //SearchSettings_employmentstatus.employmentstatusID = employmentstatus.employmentstatusID;
@@ -2496,7 +2436,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.employmentstatus.Any(p => p.id == employmentstatus.id))
+                       if (currentsearchsetting.searchsetting_employmentstatus.Any(p => p.id == employmentstatus.id))
                        {
                            var temp = db.searchsetting_employmentstatus.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == employmentstatus.id).First();
                            db.searchsetting_employmentstatus.Remove(temp);
@@ -2550,7 +2490,7 @@ namespace Shell.MVC2.Data
                    if (selectedhavekids.Contains(havekids))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.havekids.Any(p => p.id == havekids.id))
+                       if (!currentsearchsetting.searchsetting_havekids.Any(p => p.id == havekids.id))
                        {
 
                            //SearchSettings_havekids.havekidsID = havekids.havekidsID;
@@ -2563,7 +2503,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.havekids.Any(p => p.id == havekids.id))
+                       if (currentsearchsetting.searchsetting_havekids.Any(p => p.id == havekids.id))
                        {
                            var temp = db.searchsetting_havekids.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == havekids.id).First();
                            db.searchsetting_havekids.Remove(temp);
@@ -2618,7 +2558,7 @@ namespace Shell.MVC2.Data
                    if (selectedincomelevel.Contains(incomelevel))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.incomelevels.Any(p => p.id == incomelevel.id))
+                       if (!currentsearchsetting.searchsetting_incomelevel.Any(p => p.id == incomelevel.id))
                        {
 
                            //SearchSettings_incomelevel.incomelevelID = incomelevel.incomelevelID;
@@ -2631,7 +2571,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.incomelevels.Any(p => p.id == incomelevel.id))
+                       if (currentsearchsetting.searchsetting_incomelevel.Any(p => p.id == incomelevel.id))
                        {
                            var temp = db.searchsetting_incomelevel.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == incomelevel.id).First();
                            db.searchsetting_incomelevel.Remove(temp);
@@ -2684,7 +2624,7 @@ namespace Shell.MVC2.Data
                    if (selectedlivingsituation.Contains(livingsituation))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.livingstituations.Any(p => p.id == livingsituation.id))
+                       if (!currentsearchsetting.searchsetting_livingstituation.Any(p => p.id == livingsituation.id))
                        {
 
                            //SearchSettings_livingsituation.livingsituationID = livingsituation.livingsituationID;
@@ -2697,7 +2637,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.livingstituations.Any(p => p.id == livingsituation.id))
+                       if (currentsearchsetting.searchsetting_livingstituation.Any(p => p.id == livingsituation.id))
                        {
                            var temp = db.searchsetting_livingstituation.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == livingsituation.id).First();
                            db.searchsetting_livingstituation.Remove(temp);
@@ -2750,7 +2690,7 @@ namespace Shell.MVC2.Data
                    if (selectedlookingfor.Contains(lookingfor))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.lookingfor.Any(p => p.id == lookingfor.id))
+                       if (!currentsearchsetting.searchsetting_lookingfor.Any(p => p.id == lookingfor.id))
                        {
 
                            //SearchSettings_lookingfor.lookingforID = lookingfor.lookingforID;
@@ -2763,7 +2703,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.lookingfor.Any(p => p.id == lookingfor.id))
+                       if (currentsearchsetting.searchsetting_lookingfor.Any(p => p.id == lookingfor.id))
                        {
                            var temp = db.searchsetting_lookingfor.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == lookingfor.id).First();
                            db.searchsetting_lookingfor.Remove(temp);
@@ -2817,7 +2757,7 @@ namespace Shell.MVC2.Data
                    if (selectedmaritalstatus.Contains(maritalstatus))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.maritalstatuses.Any(p => p.id == maritalstatus.id))
+                       if (!currentsearchsetting.searchsetting_maritalstatus.Any(p => p.id == maritalstatus.id))
                        {
 
                            //SearchSettings_maritalstatus.maritalstatusID = maritalstatus.maritalstatusID;
@@ -2830,7 +2770,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.maritalstatuses.Any(p => p.id == maritalstatus.id))
+                       if (currentsearchsetting.searchsetting_maritalstatus.Any(p => p.id == maritalstatus.id))
                        {
                            var temp = db.searchsetting_maritalstatus.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == maritalstatus.id).First();
                            db.searchsetting_maritalstatus.Remove(temp);
@@ -2886,7 +2826,7 @@ namespace Shell.MVC2.Data
                    if (selectedprofession.Contains(profession))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.professions.Any(p => p.id == profession.id))
+                       if (!currentsearchsetting.searchsetting_profession.Any(p => p.id == profession.id))
                        {
 
                            //SearchSettings_profession.professionID = profession.professionID;
@@ -2899,7 +2839,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.professions.Any(p => p.id == profession.id))
+                       if (currentsearchsetting.searchsetting_profession.Any(p => p.id == profession.id))
                        {
                            var temp = db.searchsetting_profession.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == profession.id).First();
                            db.searchsetting_profession.Remove(temp);
@@ -2953,7 +2893,7 @@ namespace Shell.MVC2.Data
                    if (selectedwantskids.Contains(wantskids))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.wantkids.Any(p => p.id == wantskids.id))
+                       if (!currentsearchsetting.searchsetting_wantkids.Any(p => p.id == wantskids.id))
                        {
 
                            //SearchSettings_wantskids.wantskidsID = wantskids.wantskidsID;
@@ -2966,7 +2906,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.wantkids.Any(p => p.id == wantskids.id))
+                       if (currentsearchsetting.searchsetting_wantkids.Any(p => p.id == wantskids.id))
                        {
                            var temp = db.searchsetting_wantkids.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == wantskids.id).First();
                            db.searchsetting_wantkids.Remove(temp);
@@ -3022,7 +2962,7 @@ namespace Shell.MVC2.Data
                    if (locations.Contains(location))
                    {
                        //does not exist so we will add it
-                       if (!currentsearchsetting.locations.Any(p => p.id == location.id))
+                       if (!currentsearchsetting.searchsetting_location.Any(p => p.id == location.id))
                        {
 
                            //SearchSettings_location.locationID = location.locationID;
@@ -3035,7 +2975,7 @@ namespace Shell.MVC2.Data
                    }
                    else
                    { //exists means we want to remove it
-                       if (currentsearchsetting.locations.Any(p => p.id == location.id))
+                       if (currentsearchsetting.searchsetting_location.Any(p => p.id == location.id))
                        {
                            var temp = db.searchsetting_location.Where(p => p.searchsetting.id == currentsearchsetting.id && p.id == location.id).First();
                            db.searchsetting_location.Remove(temp);

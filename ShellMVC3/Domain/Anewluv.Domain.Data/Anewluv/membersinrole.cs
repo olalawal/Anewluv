@@ -1,30 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-     [DataContract(IsReference = true)]
-    public class membersinrole
+    public partial class membersinrole
     {
-        [Key]
-        [DataMember]
         public int id { get; set; }
-        [DataMember]
-        public bool? active { get; set; }
-        [DataMember]
+        public Nullable<bool> active { get; set; }
         public int profile_id { get; set; }
-        [DataMember]
+        public Nullable<System.DateTime> roleexpiredate { get; set; }
+        public Nullable<System.DateTime> rolestartdate { get; set; }
+        public int role_id { get; set; }
+        public virtual lu_role lu_role { get; set; }
         public virtual profile profile { get; set; }
-        [DataMember]
-        public virtual lu_role role { get; set; }
-        [DataMember]
-        public DateTime? roleexpiredate { get; set; }
-        //public int? roleID { get; set; }
-        [DataMember]
-        public DateTime? rolestartdate { get; set; }
-       
     }
 }

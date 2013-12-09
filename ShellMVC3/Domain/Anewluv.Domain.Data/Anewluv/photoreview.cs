@@ -1,29 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    public class photoreview
+    public partial class photoreview
     {
-        [Key]
-        [DataMember]
         public int id { get; set; }
-        //public string photoreviewtype_id { get; set; }
-        //public lu_photoreviewtype photoreviewtype  { get; set; }
-        [DataMember]
         public string notes { get; set; }
-        [DataMember]
-        public DateTime? creationdate { get; set; }
-        [DataMember]
+        public Nullable<System.DateTime> creationdate { get; set; }
         public int reviewerprofile_id { get; set; }
-        [DataMember]
-        public virtual profiledata reviewerprofiledata { get; set; }
-        [DataMember]
-        public Guid photo_id { get; set; }
-        [DataMember]
+        public System.Guid photo_id { get; set; }
         public virtual photo photo { get; set; }
+        public virtual profiledata profiledata { get; set; }
     }
 }

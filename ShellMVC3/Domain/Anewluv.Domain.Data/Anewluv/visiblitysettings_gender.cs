@@ -1,24 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-     [DataContract(IsReference = true)]
-    public class visiblitysettings_gender
+    public partial class visiblitysettings_gender
     {
-
-          [DataMember]
-        public virtual lu_gender gender { get; set; }
-        [Key]
-        [DataMember]
         public int id { get; set; }
-          [DataMember]
         public int visiblitysetting_id { get; set; }
-          [DataMember]
-       public virtual visiblitysetting  visiblitysetting { get; set; }
-        
+        public Nullable<int> gender_id { get; set; }
+        public virtual lu_gender lu_gender { get; set; }
+        public virtual visiblitysetting visiblitysetting { get; set; }
     }
 }

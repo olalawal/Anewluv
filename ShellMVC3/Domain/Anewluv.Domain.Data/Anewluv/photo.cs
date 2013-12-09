@@ -1,60 +1,37 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    //make sure this code handles the adding of multiple image types i,e
-    //Photo does not hold the photo data anymore
-   [DataContract]
-    public class photo
+    public partial class photo
     {
+        public photo()
+        {
+            this.photo_securitylevel = new List<photo_securitylevel>();
+            this.photoconversions = new List<photoconversion>();
+            this.photoreviews = new List<photoreview>();
+            this.photoalbums = new List<photoalbum>();
+        }
 
-        [Key]
-        [DataMember]
-        public Guid id { get; set; }
-        [DataMember]
+        public System.Guid id { get; set; }
         public long size { get; set; }
-        [DataMember]
-        public virtual ICollection<photoalbum> albums { get; set; }
-        [DataMember]
-        public virtual lu_photorejectionreason rejectionreason { get; set; }
-        [DataMember]
-        public virtual lu_photostatus photostatus { get; set; }
-        [DataMember]
-        public virtual lu_photoapprovalstatus approvalstatus { get; set; }
-        [DataMember]
-        public virtual lu_photoimagetype imagetype { get; set; }
-        [DataMember]
         public int profile_id { get; set; }
-        //[DataMember]
-        [IgnoreDataMember  ]
-        public virtual profilemetadata profilemetadata { get; set; }      
-        //lazy load these for now and check perforamce
-       [DataMember]
-        public virtual ICollection<photoreview> reviews { get; set; }
-       [DataMember]
-        public virtual ICollection<photoconversion> conversions { get; set; }  
-        //private public secuity is done at photo level , overides album secuity
-        [DataMember]
-        public virtual ICollection<photo_securitylevel> photosecuritylevels { get; set; }
-
-        [DataMember]
-        public DateTime? creationdate { get; set; } 
-        //not sure what this is for need to rember
-        //public Nullable<Guid> photoUniqueID { get; set; }            
-        //actual image data
-         //public byte[] image { get; set; }
-         // public int? size { get; set; }
-        [DataMember]
+        public Nullable<System.DateTime> creationdate { get; set; }
         public string imagecaption { get; set; }
-        [DataMember]
         public string imagename { get; set; }
-        [DataMember]
-        public string providername { get; set; } 
-                      
+        public string providername { get; set; }
+        public Nullable<int> rejectionreason_id { get; set; }
+        public Nullable<int> photostatus_id { get; set; }
+        public Nullable<int> approvalstatus_id { get; set; }
+        public Nullable<int> imagetype_id { get; set; }
+        public virtual lu_photoapprovalstatus lu_photoapprovalstatus { get; set; }
+        public virtual lu_photoimagetype lu_photoimagetype { get; set; }
+        public virtual lu_photorejectionreason lu_photorejectionreason { get; set; }
+        public virtual lu_photostatus lu_photostatus { get; set; }
+        public virtual ICollection<photo_securitylevel> photo_securitylevel { get; set; }
+        public virtual ICollection<photoconversion> photoconversions { get; set; }
+        public virtual ICollection<photoreview> photoreviews { get; set; }
+        public virtual profilemetadata profilemetadata { get; set; }
+        public virtual ICollection<photoalbum> photoalbums { get; set; }
     }
 }
-

@@ -29,7 +29,7 @@ namespace Anewluv.Lib
             {
                 if (_photoservice == null)
                 {
-                    _photoservice = new WebChannelFactory<IPhotoService>("webHttpBinding_PhotoService");
+                    _photoservice = new WebChannelFactory<IPhotoService>("webHttpBinding_IPhotoService");
                     IPhotoService channel = _photoservice.CreateChannel();
                     return channel;
                 }
@@ -65,7 +65,7 @@ namespace Anewluv.Lib
             {
                 if (_geoservice == null)
                 {
-                    _geoservice = new WebChannelFactory<IGeoService>("geoservice");
+                    _geoservice = new WebChannelFactory<IGeoService>("webHttpBinding_IGeoService");
                     IGeoService channel = _geoservice.CreateChannel();
                     return channel;
 
@@ -102,7 +102,7 @@ namespace Anewluv.Lib
             {
                 if (_imemberservice == null)
                 {
-                    _imemberservice = new WebChannelFactory<IMemberService>("MemberService");
+                    _imemberservice = new WebChannelFactory<IMemberService>("webHttpBinding_IMemberService");
                     IMemberService channel = _imemberservice.CreateChannel();
                     return channel;
 
@@ -140,7 +140,7 @@ namespace Anewluv.Lib
             {
                 if (_membermapperservice == null)
                 {
-                    _membermapperservice = new WebChannelFactory<IMembersMapperService>("MemberMapperService");
+                    _membermapperservice = new WebChannelFactory<IMembersMapperService>("webHttpBinding_IMembersMapperService");
                     IMembersMapperService channel = _membermapperservice.CreateChannel();
                     return channel;
 
@@ -178,7 +178,7 @@ namespace Anewluv.Lib
             {
                 if (_authenticationservice == null)
                 {
-                    _authenticationservice = new WebChannelFactory<IAuthenticationService>("AuthenticationService");
+                    _authenticationservice = new WebChannelFactory<IAuthenticationService>("webHttpBinding_IAuthenticationService");
                     IAuthenticationService channel = _authenticationservice.CreateChannel();
                     return channel;
 
@@ -216,7 +216,7 @@ namespace Anewluv.Lib
             {
                 if (_apikeyservice == null)
                 {
-                    _apikeyservice = new WebChannelFactory<IApiKeyService>("ApiKeyService");
+                    _apikeyservice = new WebChannelFactory<IApiKeyService>("webHttpBinding_IApiKeyService");
                     IApiKeyService channel = _apikeyservice.CreateChannel();
                     return channel;
 

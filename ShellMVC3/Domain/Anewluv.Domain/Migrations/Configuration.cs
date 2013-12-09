@@ -3,19 +3,18 @@ namespace Anewluv.Domain.Migrations
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
-    using Anewluv.Domain;
+    using System.Linq;   
     using Shell.MVC2.Infrastructure;
 
-    internal sealed class ConfigurationAnewluv : DbMigrationsConfiguration<Anewluv.Domain.AnewluvContext>
+    internal sealed class ConfigurationAnewluv : DbMigrationsConfiguration<AnewluvContext>
     {
         public ConfigurationAnewluv()
         {
-            AutomaticMigrationsEnabled = true;
-            MigrationsNamespace = "Anewluv.Domain";
+            AutomaticMigrationsEnabled = false;
+           // MigrationsNamespace = "Anewluv.Domain";
         }
 
-        protected override void Seed(Anewluv.Domain.AnewluvContext context)
+        protected override void Seed(AnewluvContext context)
         {
             //  This method will be called after migrating to the latest version.
 
@@ -40,21 +39,21 @@ namespace Anewluv.Domain.Migrations
 
     }
 
-    internal sealed class ConfigurationChat : DbMigrationsConfiguration<Anewluv.Domain.Chat.ChatContext >
-    {
-        public ConfigurationChat()
-        {
-            AutomaticMigrationsEnabled = true;
-            MigrationsNamespace = "Anewluv.Domain.Chat";
-        }
+    //internal sealed class ConfigurationChat : DbMigrationsConfiguration<Chat.ChatContext >
+    //{
+    //    public ConfigurationChat()
+    //    {
+    //        AutomaticMigrationsEnabled = true;
+    //        MigrationsNamespace = "Anewluv.Domain.Chat";
+    //    }
 
-        protected override void Seed(Anewluv.Domain.Chat.ChatContext  context)
-        {
-            ChatSeedMethods.seedgenerallookups(context);
-            // SeedMethodsApiKeyModel.seedcascadeddata(context);
+    //    protected override void Seed(Anewluv.Domain.Chat.ChatContext  context)
+    //    {
+    //        ChatSeedMethods.seedgenerallookups(context);
+    //        // SeedMethodsApiKeyModel.seedcascadeddata(context);
 
-        }
+    //    }
 
 
-    }
+    //}
 }

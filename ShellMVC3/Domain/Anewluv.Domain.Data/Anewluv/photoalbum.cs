@@ -1,29 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-      [DataContract(IsReference = true)]
-    public class photoalbum
+    public partial class photoalbum
     {
-      
-        [Key]
-        [DataMember]
-        public int id { get; set; }
-        [DataMember]
-        public virtual ICollection<photo> photos { get; set; }
-        [DataMember]
-        public string description { get; set; }
-        [DataMember]
-        public virtual ICollection<photoalbum_securitylevel> albumsecuritylevels { get; set; }
-        [DataMember]
-        public int profile_id { get; set; }
-        [DataMember]
-        public profilemetadata profilemetadata { get; set; }
-        
+        public photoalbum()
+        {
+            this.photoalbum_securitylevel = new List<photoalbum_securitylevel>();
+            this.photos = new List<photo>();
+        }
 
+        public int id { get; set; }
+        public string description { get; set; }
+        public int profile_id { get; set; }
+        public virtual ICollection<photoalbum_securitylevel> photoalbum_securitylevel { get; set; }
+        public virtual profilemetadata profilemetadata { get; set; }
+        public virtual ICollection<photo> photos { get; set; }
     }
 }

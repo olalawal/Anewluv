@@ -1,36 +1,24 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    //modified to use block notes to handle reviewing as well since you need to profile Id to review anyways
-    [DataContract(IsReference = true)]
-    public class block
+    public partial class block
     {
-        [Key]
-        [DataMember]
+        public block()
+        {
+            this.blocknotes = new List<blocknote>();
+        }
+
         public int id { get; set; }
-        [DataMember]
         public int profile_id { get; set; }
-        [DataMember]
         public int blockprofile_id { get; set; }
-        [DataMember]
+        public Nullable<System.DateTime> creationdate { get; set; }
+        public Nullable<System.DateTime> modificationdate { get; set; }
+        public Nullable<System.DateTime> removedate { get; set; }
+        public Nullable<int> mutual { get; set; }
+        public virtual ICollection<blocknote> blocknotes { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
-        [DataMember]
-        public virtual profilemetadata blockedprofilemetadata { get; set; }
-        [DataMember]
-        public virtual ICollection<blocknotes> notes { get; set; }
-        [DataMember]
-        public DateTime? creationdate { get; set; }
-        [DataMember]
-        public DateTime? modificationdate { get; set; }
-        [DataMember]
-        public DateTime? removedate { get; set; }
-        [DataMember]
-        public int? mutual { get; set; }
-     
+        public virtual profilemetadata profilemetadata1 { get; set; }
     }
 }

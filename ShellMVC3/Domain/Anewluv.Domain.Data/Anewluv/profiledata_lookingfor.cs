@@ -1,25 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-     [DataContract(IsReference = true)]
-    public class profiledata_lookingfor
+    public partial class profiledata_lookingfor
     {
-
-
-         [DataMember]
-         public virtual lu_lookingfor lookingfor { get; set; }
-        [Key]
-         [DataMember]
-         public int id { get; set; }
-        [DataMember]
+        public int id { get; set; }
         public int profile_id { get; set; }
-        [DataMember]
+        public Nullable<int> lookingfor_id { get; set; }
+        public virtual lu_lookingfor lu_lookingfor { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
-       
     }
 }

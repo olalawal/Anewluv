@@ -214,7 +214,7 @@ namespace Anewluv.Services.MemberService
                 try
                 {
 
-                 return  db.GetRepository<profiledata>().Find().Single(p=>p.profilemetadata.photos.ToList().Any(z=>z.id == model.photoid)).gender.description;
+                 return  db.GetRepository<profiledata>().Find().Single(p=>p.profilemetadata.photos.ToList().Any(z=>z.id == model.photoid)).lu_gender.description;
                    
                 }
                 catch (Exception ex)
@@ -309,7 +309,7 @@ namespace Anewluv.Services.MemberService
         //update the database i.e create folders and change profile status from guest to active ?!
         public bool createmailboxfolders(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
                   db.IsAuditEnabled = false; //do not audit on adds
@@ -324,25 +324,25 @@ namespace Anewluv.Services.MemberService
                           for (i = 1; i < max; i++)
                           {
                               mailboxfolder p = new mailboxfolder();
-                              p.foldertype.id = i;
+                              p.foldertype_id = i;
                               p.profiled_id = model.profileid.GetValueOrDefault();
                               //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
                               switch (i)
                               {
                                   case 1:
-                                      p.foldertype.defaultfolder.description = "Inbox";
+                                      p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Inbox";
                                       break;
                                   case 2:
-                                      p.foldertype.defaultfolder.description = "Sent";
+                                      p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Sent";
                                       break;
                                   case 3:
-                                      p.foldertype.defaultfolder.description = "Drafts";
+                                      p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Drafts";
                                       break;
                                   case 4:
-                                      p.foldertype.defaultfolder.description = "Trash";
+                                      p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Trash";
                                       break;
                                   case 5:
-                                      p.foldertype.defaultfolder.description = "Deleted";
+                                      p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Deleted";
                                       break;
                               }
                                db.Add(p);
@@ -377,7 +377,7 @@ namespace Anewluv.Services.MemberService
       
         public bool activateprofile(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
                   db.IsAuditEnabled = false; //do not audit on adds
@@ -389,7 +389,7 @@ namespace Anewluv.Services.MemberService
                           var myProfile =  db.GetRepository<profile>().getprofilebyprofileid(model);
                          // if( myProfile == null ) return null;
                           //update the profile status to 2
-                          myProfile.status.id = (int)profilestatusEnum.Activated;
+                          myProfile.status_id = (int)profilestatusEnum.Activated;
                           //handele the update using EF
                           //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                           db.Update(myProfile);
@@ -430,7 +430,7 @@ namespace Anewluv.Services.MemberService
                       {
                           var myProfile = db.GetRepository<profile>().getprofilebyprofileid(model); 
                           //update the profile status to 2
-                          myProfile.status.id = (int)profilestatusEnum.Inactive;
+                          myProfile.status_id = (int)profilestatusEnum.Inactive;
                           //handele the update using EF
                           //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                           db.Update(myProfile);
@@ -521,7 +521,7 @@ namespace Anewluv.Services.MemberService
                               active = true,
                               creationdate = DateTime.UtcNow,
                               profile_id = model.profileid.GetValueOrDefault(),
-                              openidprovider = db.GetRepository<lu_openidprovider>().Find().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
+                               lu_openidprovider = db.GetRepository<lu_openidprovider>().Find().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
                               openididentifier = model.openididentifier
                           };
                            db.Add(profileOpenIDStore);
@@ -1059,7 +1059,7 @@ namespace Anewluv.Services.MemberService
                 try
                 {
                     IQueryable<profile> myQuery = default(IQueryable<profile>);
-                    myQuery =  db.GetRepository<profile>().Find().Where(p => p.id == model.profileid && p.securityanswer == model.securityanswer && p.securityquestion.description == model.securityquestion);
+                    myQuery =  db.GetRepository<profile>().Find().Where(p => p.id == model.profileid && p.securityanswer == model.securityanswer && p.lu_securityquestion.description == model.securityquestion);
 
                     if (myQuery.Count() > 0)
                     {
@@ -1474,12 +1474,12 @@ namespace Anewluv.Services.MemberService
         
         public string getgenderbyscreenname(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
                 try
                 {
-                    return db.GetRepository<profiledata>().getprofiledatabyscreenname(model).gender.description;
+                    return db.GetRepository<profiledata>().getprofiledatabyscreenname(model).lu_gender.description;
                 }
                 catch (Exception ex)
                 {

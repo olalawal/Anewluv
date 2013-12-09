@@ -1,24 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-     [DataContract(IsReference = true)]
-    public class profiledata_hotfeature
+    public partial class profiledata_hotfeature
     {
-
-          [DataMember]
-        public virtual lu_hotfeature hotfeature { get; set; }
-        [Key ]
-        [DataMember]
         public int id { get; set; }
-           [DataMember]
         public int profile_id { get; set; }
-           [DataMember]
+        public Nullable<int> hotfeature_id { get; set; }
+        public virtual lu_hotfeature lu_hotfeature { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
-       
     }
 }

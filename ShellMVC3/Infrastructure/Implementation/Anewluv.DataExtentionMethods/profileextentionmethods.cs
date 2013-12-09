@@ -57,7 +57,7 @@ namespace Anewluv.DataExtentionMethods
             
 
             //if we have an active cache we store the current value 
-            if (profile!=null &&  profile.openids.Any(p=>p.openidprovider.description  == model.openidprovider))
+            if (profile!=null &&  profile.openids.Any(p=>p.lu_openidprovider.description  == model.openidprovider))
             {
                 return profile;
             }
@@ -91,7 +91,7 @@ namespace Anewluv.DataExtentionMethods
          {
              //MembersRepository membersrepository = new MembersRepository();
              //get the correct value from DB
-             return (repo.Find().OfType<profile>().Where(p => p.id == model.profileid & p.status.id != 1).FirstOrDefault() != null);
+             return (repo.Find().OfType<profile>().Where(p => p.id == model.profileid & p.status_id != 1).FirstOrDefault() != null);
 
          }
       
