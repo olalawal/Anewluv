@@ -122,31 +122,59 @@ namespace Anewluv.Lib
                 //allows service to be discovereable with no api key
                 if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/", "") != "$metadata")
                 {
-                    string key = GetAPIKey(operationContext);
-
-                                 
-                    validrequest = false;
+                    string key = GetAPIKey(operationContext);                                 
+                 
                     
-                        AsyncCallback callback = result =>
+                        //AsyncCallback callback = result =>
+                        //{
+                        //    var value = Api.ApiKeyService.EndIsValidAPIKey(result);
+                        //    Api.DisposeApiKeyService(); //clean up
+                        //    if (value)
+                        //    {
+
+                        //        //now validate the username password info if required 
+                        //        //TO DO determine which URLS need validation of this i.e personal data only
+                        //        if (ValidateUser(operationContext)) validrequest = true;
+                        //        else 
+                        //        {
+                        //              validrequest= false;
+                        //              CreateUserNamePasswordErrorReply(operationContext);
+                        //              return true ;
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        // Send back an HTML reply
+                        //          validrequest = false;
+                        //        CreateApiKeyErrorReply(operationContext, key);
+                              
+                        //    }
+                        //    Api.DisposeApiKeyService();
+                            
+                        //};
+
+                        if (key != null)
                         {
-                            var value = Api.ApiKeyService.EndIsValidAPIKey(result);
-                            if (value)
-                            {
-                                validrequest = true;
-                                
+                           if ( Api.ApiKeyService.NonAysncIsValidAPIKey(key))
+                           {
+
+                                //now validate the username password info if required 
+                                //TO DO determine which URLS need validation of this i.e personal data only
+                                if (ValidateUser(operationContext)) validrequest = true;
+                                else 
+                                {
+                                      validrequest= false;
+                                      CreateUserNamePasswordErrorReply(operationContext);                                     
+                                }
                             }
                             else
                             {
                                 // Send back an HTML reply
-                                CreateApiKeyErrorReply(operationContext, key);
-                                validrequest = false;
+                                  validrequest = false;
+                                  CreateApiKeyErrorReply(operationContext, key);                                  
                             }
                             Api.DisposeApiKeyService();
-                        };
-
-                        if (key != null)
-                        {
-                            Api.ApiKeyService.BeginIsValidAPIKey(key, callback, Api.ApiKeyService);
+                            return validrequest;
                         }
                         else
                         {
@@ -162,21 +190,7 @@ namespace Anewluv.Lib
                     validrequest = true;
                 }
 
-
-                //get username and password from request stuff if API key was valid
-                if (validrequest == true)
-                {
-                    authinfo = GetUserNamePassword(operationContext);
-                    if (authinfo != null)
-                    {
-                        //TO DO convert to asynch
-                        return Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
-                    }
-                    else
-                    {
-                        CreateUserNamePasswordErrorReply(operationContext);
-                    }
-                }
+                              
 
                 return validrequest;
             }
@@ -196,11 +210,25 @@ namespace Anewluv.Lib
             }
             finally
             {
-                Api.DisposeAuthenticationService();
+              // Api.DisposeAuthenticationService();
               //   Api.DisposeApiKeyService();
             }
         }
 
+
+        public bool ValidateUser(OperationContext operationContext)
+        {
+            var authinfo = GetUserNamePassword(operationContext);
+            if (authinfo != null)
+            {
+                //TO DO convert to asynch
+                var result = Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
+                Api.DisposeAuthenticationService();
+                return result;
+            }
+            return false;
+
+        }
 
         public string GetAPIKey(OperationContext operationContext)
         {

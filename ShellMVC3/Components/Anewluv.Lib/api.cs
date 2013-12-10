@@ -23,21 +23,22 @@ namespace Anewluv.Lib
         //   p
         private static WebChannelFactory<IPhotoService> _photoservice;
         //do do maybe pass auth header and API key to enure its same user
+        private static IPhotoService _photoservicechannel = null;
         public static IPhotoService PhotoService
         {
             get
             {
-                if (_photoservice == null)
+                if (_photoservice == null & _photoservicechannel == null)
                 {
                     _photoservice = new WebChannelFactory<IPhotoService>("webHttpBinding_IPhotoService");
-                    IPhotoService channel = _photoservice.CreateChannel();
-                    return channel;
+                   _photoservicechannel = _photoservice.CreateChannel();
+                    return _photoservicechannel;
                 }
                 else
                 {
                     //just create a new chanel
-                    IPhotoService channel = _photoservice.CreateChannel();
-                    return channel;
+                   // IPhotoService channel = _photoservice.CreateChannel();
+                    return _photoservicechannel;
 
                 }
                 // return _photoservice;
@@ -59,6 +60,7 @@ namespace Anewluv.Lib
         }
 
         private static WebChannelFactory<IGeoService> _geoservice;
+        private static IGeoService _geoservicechannel = null;
         public static IGeoService GeoService
         {
             get
@@ -66,14 +68,14 @@ namespace Anewluv.Lib
                 if (_geoservice == null)
                 {
                     _geoservice = new WebChannelFactory<IGeoService>("webHttpBinding_IGeoService");
-                    IGeoService channel = _geoservice.CreateChannel();
-                    return channel;
+                    _geoservicechannel = _geoservice.CreateChannel();
+                    return _geoservicechannel;
 
                 }
                 else
                 {
-                    IGeoService channel = _geoservice.CreateChannel();
-                    return channel;
+                    //IGeoService channel = _geoservice.CreateChannel();
+                    return _geoservicechannel;
 
 
                 }
@@ -96,21 +98,22 @@ namespace Anewluv.Lib
         }
       
         private static WebChannelFactory<IMemberService> _imemberservice;
+        private static IMemberService _memberservicechannel = null;
         public static IMemberService MemberService
         {
             get
             {
-                if (_imemberservice == null)
+                if (_imemberservice == null & _memberservicechannel == null)
                 {
                     _imemberservice = new WebChannelFactory<IMemberService>("webHttpBinding_IMemberService");
-                    IMemberService channel = _imemberservice.CreateChannel();
-                    return channel;
+                    _memberservicechannel = _imemberservice.CreateChannel();
+                    return _memberservicechannel;
 
                 }
                 else
                 {
-                    IMemberService channel = _imemberservice.CreateChannel();
-                    return channel;
+                   // IMemberService channel = _imemberservice.CreateChannel();
+                    return _memberservicechannel;
 
 
                 }
@@ -134,6 +137,7 @@ namespace Anewluv.Lib
         }
 
         private static WebChannelFactory<IMembersMapperService> _membermapperservice;
+        private static IMembersMapperService _membermapperservicehannel = null;
         public static IMembersMapperService MemberMapperService
         {
             get
@@ -141,14 +145,14 @@ namespace Anewluv.Lib
                 if (_membermapperservice == null)
                 {
                     _membermapperservice = new WebChannelFactory<IMembersMapperService>("webHttpBinding_IMembersMapperService");
-                    IMembersMapperService channel = _membermapperservice.CreateChannel();
-                    return channel;
+                    _membermapperservicehannel = _membermapperservice.CreateChannel();
+                    return _membermapperservicehannel;
 
                 }
                 else
                 {
-                    IMembersMapperService channel = _membermapperservice.CreateChannel();
-                    return channel;
+                    //IMembersMapperService channel = _membermapperservice.CreateChannel();
+                    return _membermapperservicehannel;
 
 
                 }
@@ -172,21 +176,22 @@ namespace Anewluv.Lib
         }
 
         private static WebChannelFactory<IAuthenticationService> _authenticationservice;
+        private static IAuthenticationService _authenticationchannel = null;
         public static IAuthenticationService AuthenticationService
         {
             get
             {
-                if (_authenticationservice == null)
+                if (_authenticationservice == null & _authenticationchannel ==null)
                 {
                     _authenticationservice = new WebChannelFactory<IAuthenticationService>("webHttpBinding_IAuthenticationService");
-                    IAuthenticationService channel = _authenticationservice.CreateChannel();
-                    return channel;
+                    _authenticationchannel = _authenticationservice.CreateChannel();
+                    return _authenticationchannel;
 
                 }
                 else
                 {
-                    IAuthenticationService channel = _authenticationservice.CreateChannel();
-                    return channel;
+                    //IAuthenticationService channel = _authenticationservice.CreateChannel();
+                    return _authenticationchannel;
 
 
                 }
@@ -199,6 +204,7 @@ namespace Anewluv.Lib
             if (_authenticationservice != null)
             {
                 _authenticationservice.Close();
+               
 
                 //IIMemberService channel = _IMemberService.CreateChannel();
                 // return channel;
@@ -210,21 +216,22 @@ namespace Anewluv.Lib
         }
 
         private static WebChannelFactory<IApiKeyService> _apikeyservice;
+        private static IApiKeyService _apikeychannel=null;
         public static IApiKeyService ApiKeyService
         {
             get
             {
-                if (_apikeyservice == null)
+                if (_apikeyservice == null & _apikeychannel ==null)
                 {
                     _apikeyservice = new WebChannelFactory<IApiKeyService>("webHttpBinding_IApiKeyService");
-                    IApiKeyService channel = _apikeyservice.CreateChannel();
-                    return channel;
+                    _apikeychannel = _apikeyservice.CreateChannel();
+                    return _apikeychannel;
 
                 }
                 else
                 {
-                    IApiKeyService channel = _apikeyservice.CreateChannel();
-                    return channel;
+                   // IApiKeyService channel = _apikeyservice.CreateChannel();
+                    return _apikeychannel;
 
 
                 }

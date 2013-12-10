@@ -59,6 +59,51 @@ namespace Nmedia.Services.Authorization
 
         const string APIKEYLIST = "APIKeyList";
 
+        public bool NonAysncIsValidAPIKey(string key)
+        {
+            // TODO: Implement IsValidAPI Key using your repository
+
+            Guid apiKey;
+
+            // _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+
+                    //Convert the string into a Guid and validate it
+                    // not validating against a list anymore
+                    if (Guid.TryParse(key, out apiKey) && db.GetRepository<apikey>().Find().Any(p => p.key == apiKey))     //APIKeys.Contains(apiKey))
+                    {
+                        //  return true;
+                        return true;
+                    }
+                    else
+                    {
+                        //  return false;
+                        return false;
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member Apikey service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+        }
 
         public IAsyncResult BeginIsValidAPIKey(string key, AsyncCallback callback, object asyncState)
         {
