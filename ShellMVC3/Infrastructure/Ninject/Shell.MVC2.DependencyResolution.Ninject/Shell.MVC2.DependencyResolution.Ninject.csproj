@@ -64,6 +64,9 @@
     <Reference Include="Ninject">
       <HintPath>..\..\..\Shell.MVC2\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject.Extensions.Wcf">
+      <HintPath>..\..\..\Shell.MVC2\packages\Ninject.Extensions.Wcf.3.0.0.5\lib\net40-full\Ninject.Extensions.Wcf.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject.Web.Common">
       <HintPath>..\..\..\Shell.MVC2\packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
@@ -77,9 +80,12 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Services" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.DomainServices.EntityFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.ServiceModel.DomainServices.Server, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -143,6 +149,14 @@
     <ProjectReference Include="..\..\..\Hubs\Shell.MVC.Hubs\Shell.MVC2.SignalR.Hubs.csproj">
       <Project>{DDE554E0-816F-4C97-B141-C603C4B8B513}</Project>
       <Name>Shell.MVC2.SignalR.Hubs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Services\Anewluv.Services.MemberService\Anewluv.Services.MemberService.csproj">
+      <Project>{312D9224-C41B-437D-B4ED-A22A74FF9EA9}</Project>
+      <Name>Anewluv.Services.MemberService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Services\Shell.MVC2.Services.Authentication\Anewluv.Services.Authentication.csproj">
+      <Project>{071D6DB4-A733-43AD-8FCA-2A73F7FE0DF5}</Project>
+      <Name>Anewluv.Services.Authentication</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Services\Shell.MVC2.Services.Chat\Shell.MVC2.Services.Chat.csproj">
       <Project>{6AF3685D-3C0F-4CC8-B0EE-1960462C6DE9}</Project>

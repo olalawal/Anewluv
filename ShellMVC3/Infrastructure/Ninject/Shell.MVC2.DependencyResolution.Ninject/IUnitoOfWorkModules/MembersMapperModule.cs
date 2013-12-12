@@ -47,12 +47,13 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
             // var webApiEFRepository = kernel.Get<IRepository<Entity>>("WebApiEFRepository");
             //  this.Unbind(typeof(IUnitOfWork));
             //Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
-            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Mapping.MembersMapperService"));
+            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Mapping.MembersMapperService")).InRequestScope(); ;
             // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Mapping.MembersMapperService"));
+            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Mapping.MembersMapperService")).InRequestScope(); ;
 
          
             this.Bind<IMembersMapperService>().ToSelf().InRequestScope();
+
          
 
 

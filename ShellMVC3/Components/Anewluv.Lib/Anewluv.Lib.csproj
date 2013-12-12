@@ -46,6 +46,9 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivator">
+      <HintPath>..\..\Shell.MVC2\packages\WebActivator.1.0.0.0\lib\WebActivator.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api.cs" />
@@ -61,6 +64,7 @@
   <ItemGroup>
     <None Include="app.config.bad" />
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\DataSources\Anewluv.Domain.Data.ViewModels.MemberSearchViewModel.datasource" />
     <None Include="Properties\DataSources\Anewluv.Domain.Data.ViewModels.MembersViewModel.datasource" />
     <None Include="Properties\DataSources\Anewluv.Domain.Data.ViewModels.ProfileBrowseModel.datasource" />

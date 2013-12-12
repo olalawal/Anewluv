@@ -40,12 +40,12 @@ namespace Anewluv.Lib
         //2-15-2013 olawal validate username password for some URI's
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
-            string[] authinfo;
+           // string[] authinfo;
 
 
             try
             {
-                bool validrequest = false;
+                bool validrequest = true;
 
                 //if its preflight allow all
                 //if (OperationContext.Current.RequestContext  == "OPTIONS")
@@ -97,7 +97,10 @@ namespace Anewluv.Lib
                 nonauthenticatedservices.Add("Anewluv.Web.Services.Authentication");
                 nonauthenticatedservices.Add("Anewluv.Web.Services.Common");
                 nonauthenticatedservices.Add("Anewluv.Web.Services.Spatial");
-                nonauthenticatedservices.Add("Anewluv.Web.Services.Media/PhotoService.svc");  //allow all photo uploads
+                nonauthenticatedservices.Add("Anewluv.Web.Services.Media/PhotoService.svc");
+                nonauthenticatedservices.Add("updateuserlogintimebyprofileidandsessionid");
+                
+                //allow all photo uploads
                 //TO DO add code to  call membership service and make sure the requestor has rights to view the data they are requesting
                 //TO DO List the Service URLS that and handle differing security for each 
 
@@ -153,35 +156,35 @@ namespace Anewluv.Lib
                             
                         //};
 
-                        if (key != null)
-                        {
-                           if ( Api.ApiKeyService.NonAysncIsValidAPIKey(key))
-                           {
+                    if (key != null)
+                    {
 
-                                //now validate the username password info if required 
-                                //TO DO determine which URLS need validation of this i.e personal data only
-                                if (ValidateUser(operationContext)) validrequest = true;
-                                else 
-                                {
-                                      validrequest= false;
-                                      CreateUserNamePasswordErrorReply(operationContext);                                     
-                                }
+
+                        if (Api.ApiKeyService.NonAysncIsValidAPIKey(key))
+                        {
+
+                            //now validate the username password info if required 
+                            //TO DO determine which URLS need validation of this i.e personal data only
+                            if (ValidateUser(operationContext))
+                            {
+                                validrequest = true;
                             }
                             else
                             {
-                                // Send back an HTML reply
-                                  validrequest = false;
-                                  CreateApiKeyErrorReply(operationContext, key);                                  
+                                validrequest = false;
+                                CreateUserNamePasswordErrorReply(operationContext);
                             }
-                            Api.DisposeApiKeyService();
+
+                           // Api.DisposeApiKeyService();
                             return validrequest;
                         }
-                        else
-                        {
-                            // Send back an HTML reply
-                            CreateApiKeyErrorReply(operationContext, key);                            
-                            validrequest = false;
-                        }
+                    }
+                    else
+                    {
+                        // Send back an HTML reply
+                        CreateApiKeyErrorReply(operationContext, key);
+                        validrequest = false;
+                    }
                         // oLogEntry.id = d.Endsenderrormessage(result);
                         //d.senderrormessage(oLogEntry, addresstypeenum.Developer.ToString());
                 }
@@ -223,7 +226,7 @@ namespace Anewluv.Lib
             {
                 //TO DO convert to asynch
                 var result = Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
-                Api.DisposeAuthenticationService();
+               //.0 Api.DisposeAuthenticationService();
                 return result;
             }
             return false;

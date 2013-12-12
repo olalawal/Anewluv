@@ -19,6 +19,8 @@ using Ninject;
 using Anewluv.Domain;
 using Nmedia.DataAccess.Interfaces;
 using System.Data.Entity;
+using System.ServiceModel;
+using Anewluv.Services.Authentication;
 
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 {
@@ -29,14 +31,14 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 
             // IKernel kernel = new StandardKernel();
 
-            this.Bind<AnewluvContext>().ToSelf().InRequestScope();
-              this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Authentication.AuthenticationService"));
+            this.Bind<AnewluvContext>().ToConstructor(x => new AnewluvContext()).InScope(c => OperationContext.Current); 
+            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Authentication.AuthenticationService")).InScope(c => OperationContext.Current); 
             // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Authentication.AuthenticationService"));
+            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Authentication.AuthenticationService")).InScope(c => OperationContext.Current); 
 
             //the Unit of work module should already be loaded by now
-            this.Bind<IAuthenticationService>().ToSelf().InRequestScope();
-
+            this.Bind<IAuthenticationService>().ToSelf().InScope(c => OperationContext.Current);
+            Bind<IAuthenticationService, AuthenticationService>().To<AuthenticationService>().InRequestScope();
             
          
          

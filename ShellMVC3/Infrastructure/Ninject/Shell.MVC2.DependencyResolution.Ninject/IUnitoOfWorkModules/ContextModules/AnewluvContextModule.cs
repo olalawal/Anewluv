@@ -7,6 +7,8 @@ using System.Linq;
 using Ninject.Modules;
 using Anewluv.Domain;
 using Ninject.Web.Common;
+using System.ServiceModel;
+using Ninject.Extensions.Wcf;
 
 
 namespace Shell.MVC2.DependencyResolution.Ninject.Modules
@@ -17,7 +19,7 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
 		{
             //TO DO should be a separate service or something
             //bind the dbset context
-            this.Bind<AnewluvContext>().ToConstructor(x => new AnewluvContext()).InRequestScope();
+            this.Bind<AnewluvContext>().ToConstructor(x => new AnewluvContext()).InScope(c => OperationContext.Current); 
                       
 		}
 	}

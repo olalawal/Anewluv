@@ -103,7 +103,7 @@ namespace Anewluv.Lib
         {
             get
             {
-                if (_imemberservice == null & _memberservicechannel == null)
+                if (_imemberservice == null || _imemberservice.State == CommunicationState.Closed || _memberservicechannel == null)
                 {
                     _imemberservice = new WebChannelFactory<IMemberService>("webHttpBinding_IMemberService");
                     _memberservicechannel = _imemberservice.CreateChannel();
@@ -181,7 +181,7 @@ namespace Anewluv.Lib
         {
             get
             {
-                if (_authenticationservice == null & _authenticationchannel ==null)
+                if (_authenticationservice == null || _authenticationservice.State == CommunicationState.Closed || _authenticationchannel == null)
                 {
                     _authenticationservice = new WebChannelFactory<IAuthenticationService>("webHttpBinding_IAuthenticationService");
                     _authenticationchannel = _authenticationservice.CreateChannel();
@@ -221,7 +221,7 @@ namespace Anewluv.Lib
         {
             get
             {
-                if (_apikeyservice == null & _apikeychannel ==null)
+                if (_apikeyservice ==null || _apikeyservice.State ==  CommunicationState.Closed || _apikeychannel == null)
                 {
                     _apikeyservice = new WebChannelFactory<IApiKeyService>("webHttpBinding_IApiKeyService");
                     _apikeychannel = _apikeyservice.CreateChannel();
