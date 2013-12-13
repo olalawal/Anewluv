@@ -3,18 +3,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{312D9224-C41B-437D-B4ED-A22A74FF9EA9}</ProjectGuid>
+    <ProjectGuid>{1E78FD8F-5A46-4894-B7E9-9E572D558562}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Anewluv.Services.MemberService</RootNamespace>
-    <AssemblyName>Anewluv.Services.MemberService</AssemblyName>
-    <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
+    <RootNamespace>Anewluv.Api</RootNamespace>
+    <AssemblyName>Anewluv.Api</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,18 +31,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\Domain\Anewluv.Domain\bin\Debug\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MemberService.cs" />
+    <Compile Include="Api.cs" />
+    <Compile Include="ApiKeyAuthorization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,41 +64,51 @@
       <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
+      <Project>{C4C10E84-8C87-43D3-AEF3-9C0A03A2F7DB}</Project>
+      <Name>Nmedia.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Common\NET\Shared\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
       <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
       <Name>Shell.MVC2.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\ApiAuthorization\Nmedia.Services.Authorization\Nmedia.Services.Authorization.csproj">
+      <Project>{086CE7EC-C6BF-49D0-88BD-F5C86624C289}</Project>
+      <Name>Nmedia.Services.Authorization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\LoggingAndNotification\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
       <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>
       <Name>Nmedia.Infrastructure.Domain.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\LoggingAndNotification\Domain\Nmedia.Infrastructure.Domain\Nmedia.Infrastructure.Domain.csproj">
+      <Project>{E2AF89FA-EAE4-4980-A9C5-149DACEDA4AB}</Project>
+      <Name>Nmedia.Infrastructure.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\LoggingAndNotification\LoggingLibrary\LoggingLibrary.csproj">
       <Project>{FF7B929D-6086-4509-9095-396845569906}</Project>
       <Name>LoggingLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Components\Anewluv.Lib\Anewluv.Lib.csproj">
-      <Project>{7AED0F61-0992-42BA-AA92-148C163D7517}</Project>
-      <Name>Anewluv.Lib</Name>
+    <ProjectReference Include="..\..\..\LoggingAndNotification\Services\Nmedia.Services.Contracts\Nmedia.Services.Contracts.csproj">
+      <Project>{2322C931-607A-46D5-BC71-BE6B25288B14}</Project>
+      <Name>Nmedia.Services.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Domain\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
       <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
       <Name>Anewluv.Domain.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Implementation\Anewluv.DataExtentionMethods\Anewluv.DataExtentionMethods.csproj">
-      <Project>{3CBB8D0A-5EA5-4336-AEAF-6717D2A09A45}</Project>
-      <Name>Anewluv.DataExtentionMethods</Name>
+    <ProjectReference Include="..\..\Domain\Anewluv.Domain\Anewluv.Domain.csproj">
+      <Project>{A0B04284-784B-4322-A213-DB178716EFC1}</Project>
+      <Name>Anewluv.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Anewluv.Lib\Anewluv.Lib.csproj">
+      <Project>{7AED0F61-0992-42BA-AA92-148C163D7517}</Project>
+      <Name>Anewluv.Lib</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{3D9AD99F-2412-4246-B90B-4EAA41C64699}">
-        <WcfProjectProperties>
-          <AutoStart>False</AutoStart>
-        </WcfProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

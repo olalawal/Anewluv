@@ -122,9 +122,9 @@
       <Project>{A1725D8E-483A-4356-9F76-1CEB600B72D0}</Project>
       <Name>Anewluv.Services.Mapping</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\Anewluv.Services.MemberService\Anewluv.Services.MemberService.csproj">
+    <ProjectReference Include="..\..\Services\Anewluv.Services.MemberService\Anewluv.Services.Members.csproj">
       <Project>{312D9224-C41B-437D-B4ED-A22A74FF9EA9}</Project>
-      <Name>Anewluv.Services.MemberService</Name>
+      <Name>Anewluv.Services.Members</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

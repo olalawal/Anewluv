@@ -368,21 +368,7 @@ namespace Anewluv.Lib
 
     }
 
-    public class globals
-    {
-
-        public static logenviromentEnum getenviroment 
-        {
-            get
-            {
-                //logenviromentEnum currentenviroment = logenviromentEnum.dev;
-                return logenviromentEnum.dev;
-            }
-        }
-            
-            
-            
-    }
+    
 
 
 

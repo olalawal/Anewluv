@@ -17,15 +17,22 @@ using Anewluv.Domain.Data.ViewModels;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data.errorlog;
 using Anewluv.DataExtentionMethods;
-using Anewluv.Lib;
+
 using System.Web;
 using GeoData.Domain.Models.ViewModels;
+
+using Anewluv.Lib;
+using Anewluv.Services.Members;
+using Anewluv.Domain;
+using Anewluv.Services.Spatial;
+using GeoData.Domain.Models;
+using Anewluv.Services.Media;
 
 
 namespace Anewluv.Services.Authentication
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    //[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class AuthenticationService : MembershipProvider, IAuthenticationService
     {
@@ -221,31 +228,46 @@ namespace Anewluv.Services.Authentication
                         {
                             //Just for testing that it worked
                             //TO DO remove when in prod
-                            //AsyncCallback callback = result =>                            {
-                            //    //we dont do anything really with the callback so not needed really
-                            // //  Api.MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
-                            //};
-
-                            //Api.MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }, callback, Api.MemberService);
-
+                            AsyncCallback callback = result =>
+                            {
+                                //we dont do anything really with the callback so not needed really
+                                //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                            };
+                            
+                            
+                            AnewluvContext AnewluvContext  = new AnewluvContext();                            
+                            using (var tempdb = AnewluvContext)
+                            {
+                                MemberService MemberService = new MemberService(tempdb);
+                                MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }, callback, MemberService);
+                            }
                         }
                         else
                         {
 
-                            //Just for testing that it worked
-                            //TO DO remove when in prod, we dont need a result
-                            //AsyncCallback callback = result =>
-                            //{
-                            //    //we dont do anything really with the callback so not needed really
-                            //    var value = Api.MemberService.Endupdateuserlogintimebyprofileid(result);
-                            //};
 
-                         //   Api.MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, Api.MemberService);
+                            //Just for testing that it worked
+                            //TO DO remove when in prod
+                            AsyncCallback callback = result =>
+                            {
+                                //we dont do anything really with the callback so not needed really
+                                //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                            };
+
+                            //use anew  the same DB context
+                            AnewluvContext AnewluvContext  = new AnewluvContext();
+                            using (var tempdb = AnewluvContext)
+                            {
+                               MemberService MemberService = new MemberService(tempdb);
+                               MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
+                           //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
+                             }
                         }
+
 
                         //TO DO get geodata from IP address down the line
                         //also update profile activity
-                        //Api.MemberService.Beginaddprofileactvity(
+                        //MemberService.Beginaddprofileactvity(
                         //  new profileactivity
                         //  {
                         //      lu_activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
@@ -255,7 +277,7 @@ namespace Anewluv.Services.Authentication
                         //      ipaddress = HttpContext.Current.Request.UserHostAddress,
                         //      routeurl = HttpContext.Current.Request.RawUrl,
                         //      sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
-                        //  }, null, Api.MemberService);
+                        //  }, null, MemberService);
 
                         //also update the profiledata for the last login date
                         return true;
@@ -316,25 +338,56 @@ namespace Anewluv.Services.Authentication
                         //log the user logtime here so it is common to silverlight and MVC
                         if (HttpContext.Current != null)
                         {
-                            Api.MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }, null, Api.MemberService);
+                            //Just for testing that it worked
+                            //TO DO remove when in prod
+                            AsyncCallback callback = result =>
+                            {
+                                //we dont do anything really with the callback so not needed really
+                                //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                            };
+                            
+                            
+                            AnewluvContext AnewluvContext  = new AnewluvContext();                            
+                            using (var tempdb = AnewluvContext)
+                            {
+                                MemberService MemberService = new MemberService(tempdb);
+                                MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }, callback, MemberService);
+                            }
                         }
                         else
                         {
-                            Api.MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, null, Api.MemberService);
+
+
+                            //Just for testing that it worked
+                            //TO DO remove when in prod
+                            AsyncCallback callback = result =>
+                            {
+                                //we dont do anything really with the callback so not needed really
+                                //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                            };
+
+                            //use anew  the same DB context
+                            AnewluvContext AnewluvContext  = new AnewluvContext();
+                            using (var tempdb = AnewluvContext)
+                            {
+                               MemberService MemberService = new MemberService(tempdb);
+                               MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
+                           //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
+                             }
                         }
                         //TO DO get geodata from IP address down the line
                         //also update profile activity
-                        Api.MemberService.Beginaddprofileactvity(
-                          new profileactivity
-                          {
-                              lu_activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
-                              ,
-                              creationdate = DateTime.Now,
-                              profile_id = myQuery.id,
-                              ipaddress = HttpContext.Current.Request.UserHostAddress,
-                              routeurl = HttpContext.Current.Request.RawUrl,
-                              sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
-                          }, null, Api.MemberService);
+                        //MemberService.Beginaddprofileactvity(
+                        //  new profileactivity
+                        //  {
+                        //      lu_activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
+                        //      ,
+                        //      creationdate = DateTime.Now,
+                        //      profile_id = myQuery.id,
+                        //      ipaddress = HttpContext.Current.Request.UserHostAddress,
+                        //      routeurl = HttpContext.Current.Request.RawUrl,
+                        //      sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
+                        //  }, null, MemberService);
 
                         //also update the profiledata for the last login date
                         return true;
@@ -358,7 +411,7 @@ namespace Anewluv.Services.Authentication
                 }
                 finally
                 {
-                    Api.DisposeMemberService();
+                   // Api.DisposeMemberService();
                 }
             }
         }
@@ -388,7 +441,14 @@ namespace Anewluv.Services.Authentication
                     if (myopenIDstore == null && myprofile != null)
                     //add the openID provider if its a new one
                     {
-                        Api.MemberService.addnewopenidforprofile(new ProfileModel { profileid = myprofile.id });
+
+                        AnewluvContext AnewluvContext = new AnewluvContext();
+                        using (var tempdb = AnewluvContext)
+                        {
+                            MemberService MemberService = new MemberService(tempdb);
+                            MemberService.addnewopenidforprofile(new ProfileModel { profileid = myprofile.id });
+                        }
+                        //MemberService.addnewopenidforprofile(new ProfileModel { profileid = myprofile.id });
                     }
 
                     //first you have to get the encrypted sctring by email address and username 
@@ -404,26 +464,56 @@ namespace Anewluv.Services.Authentication
                     if (myprofile != null)
                         //log the user logtime here so it is common to silverlight and MVC
                         if (HttpContext.Current != null)
-                        {
-                            Api.MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myprofile.id, sessionid = HttpContext.Current.Session.SessionID }, null, Api.MemberService);
+                                {
+                            //Just for testing that it worked
+                            //TO DO remove when in prod
+                            AsyncCallback callback = result =>
+                            {
+                                //we dont do anything really with the callback so not needed really
+                                //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                            };
+                            
+                            
+                            AnewluvContext AnewluvContext  = new AnewluvContext();                            
+                            using (var tempdb = AnewluvContext)
+                            {
+                                MemberService MemberService = new MemberService(tempdb);
+                                MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myprofile.id, sessionid = HttpContext.Current.Session.SessionID }, null, MemberService); }
                         }
                         else
                         {
-                            Api.MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myprofile.id }, null, Api.MemberService);
+
+
+                            //Just for testing that it worked
+                            //TO DO remove when in prod
+                            AsyncCallback callback = result =>
+                            {
+                                //we dont do anything really with the callback so not needed really
+                                //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                            };
+
+                            //use anew  the same DB context
+                            AnewluvContext AnewluvContext  = new AnewluvContext();
+                            using (var tempdb = AnewluvContext)
+                            {
+                               MemberService MemberService = new MemberService(tempdb);
+                               MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myprofile.id }, null, MemberService);
+                                //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
+                             }
                         }
                     //TO DO get geodata from IP address down the line
                     //also update profile activity
-                    Api.MemberService.Beginaddprofileactvity(
-                      new profileactivity
-                      {
-                          lu_activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
-                          ,
-                          creationdate = DateTime.Now,
-                          profile_id = myprofile.id,
-                          ipaddress = HttpContext.Current.Request.UserHostAddress,
-                          routeurl = HttpContext.Current.Request.RawUrl,
-                          sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
-                      }, null, Api.MemberService);
+                    //MemberService.Beginaddprofileactvity(
+                    //  new profileactivity
+                    //  {
+                    //      lu_activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
+                    //      ,
+                    //      creationdate = DateTime.Now,
+                    //      profile_id = myprofile.id,
+                    //      ipaddress = HttpContext.Current.Request.UserHostAddress,
+                    //      routeurl = HttpContext.Current.Request.RawUrl,
+                    //      sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
+                    //  }, null, MemberService);
 
                     //also update the profiledata for the last login date
                     return true;
@@ -449,10 +539,10 @@ namespace Anewluv.Services.Authentication
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
-                finally
-                {
-                    Api.DisposeMemberService();
-                }
+                //finally
+                //{
+                //    Api.DisposeMemberService();
+                //}
             }
 
 
@@ -551,8 +641,13 @@ namespace Anewluv.Services.Authentication
                         // These properties affect the conversion.
                         //provider.PositiveSign = "pos";
 
-
-                        countryID = Api.GeoService.getcountryidbycountryname(country);
+                        PostalData2Context GeoContext = new PostalData2Context();
+                        using (var tempdb = GeoContext)
+                        {
+                            GeoService GeoService = new GeoService(tempdb);
+                          countryID=   GeoService.getcountryidbycountryname(country);    
+                        }
+                       // countryID = Api.GeoService.getcountryidbycountryname(country);
 
 
                         //split up the city from state province
@@ -636,7 +731,7 @@ namespace Anewluv.Services.Authentication
                     }
                     finally
                     {
-                        Api.DisposeGeoService();
+                      //  Api.DisposeGeoService();
                     }
                 }
             }
@@ -698,8 +793,12 @@ namespace Anewluv.Services.Authentication
                             //we have the generated password now update the user's account with new password
 
                             generatedpassword = GeneratePassword();
-                            Api.MemberService.updatepassword(new ProfileModel { profileid = Convert.ToInt16(profileid) }, Encryption.encryptString(generatedpassword));
-
+                            AnewluvContext AnewluvContext  = new AnewluvContext();
+                            using (var tempdb = AnewluvContext)
+                            {
+                                MemberService MemberService = new MemberService(tempdb);
+                                MemberService.updatepassword(new ProfileModel { profileid = Convert.ToInt16(profileid) }, Encryption.encryptString(generatedpassword));
+                            }
 
                             //'reset the password 
                             return generatedpassword;
@@ -722,7 +821,7 @@ namespace Anewluv.Services.Authentication
                     }
                     finally
                     {
-                        Api.DisposeMemberService();
+                       // Api.DisposeMemberService();
                     }
                 }
             }
@@ -762,14 +861,27 @@ namespace Anewluv.Services.Authentication
                         //NumberFormatInfo provider = new NumberFormatInfo();
                         // These properties affect the conversion.
                         //provider.PositiveSign = "pos";
-
+                        gpsdata _GpsData = null;
+                        int? countryID = null;
 
                         //conver the unquiqe coountry Name to an ID
                         //store country ID for use later 
-                        int countryID = Api.GeoService.getcountryidbycountryname(u.country);
+                        PostalData2Context GeoContext = new PostalData2Context();
+                        using (var tempdb = GeoContext)
+                        {
+                            GeoService GeoService = new GeoService(tempdb);
+                          //  countryID = GeoService.getcountryidbycountryname(country);
+
+                            GeoService.getcountryidbycountryname(u.country);
+
+                            //get the longidtue and latttude 
+                            GeoService.getgpsdatabycitycountrypostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
+                        }
+
+                      //  int countryID = Api.GeoService.getcountryidbycountryname(u.country);
 
                         //get the longidtue and latttude 
-                        gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
+                     //   gpsdata _GpsData = Api.GeoService.getgpsdatabycitycountrypostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
 
 
 
@@ -851,7 +963,7 @@ namespace Anewluv.Services.Authentication
                     }
                     finally
                     {
-                        Api.DisposeGeoService();
+                        //Api.DisposeGeoService();
                     }
                 }
             }
@@ -1034,13 +1146,17 @@ namespace Anewluv.Services.Authentication
                             //  return messages;
                         }
 
+                        //separate context for each call
+                        AnewluvContext AnewluvContext = new AnewluvContext();
+                        using (var tempdb = AnewluvContext)
+                        {
+                            PhotoService PhotoService = new PhotoService(tempdb);
 
-
-                        //11-1-2011
-                        //store the valid profileID in appfarbic cache
-                        // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
-                        model.photostatus = Api.PhotoService.checkforuploadedphotobyprofileid((profile.id.ToString()));
-
+                            //11-1-2011
+                            //store the valid profileID in appfarbic cache
+                            // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
+                            model.photostatus = PhotoService.checkforuploadedphotobyprofileid((profile.id.ToString()));
+                        }
 
                         //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
                         // photoeditmodel photoviewmodel = new photoeditmodel();
@@ -1077,7 +1193,20 @@ namespace Anewluv.Services.Authentication
                         //Need to me made to run asynch
                         if (model.photouploadviewmodel.photosuploaded.Count() > 0)
                         {
-                            Api.PhotoService.addphotos(model.photouploadviewmodel);
+                            //TO DO convert to Asynch call
+                            AnewluvContext = new AnewluvContext();
+                            using (var tempdb = AnewluvContext)
+                            {
+                                PhotoService PhotoService = new PhotoService(tempdb);
+
+                                //11-1-2011
+                                //store the valid profileID in appfarbic cache
+                                // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
+                                //model.photostatus = PhotoService.checkforuploadedphotobyprofileid((profile.id.ToString()));
+                                PhotoService.addphotos(model.photouploadviewmodel);
+                            }
+
+                           // Api.PhotoService.addphotos(model.photouploadviewmodel);
                         }
 
 
@@ -1094,6 +1223,8 @@ namespace Anewluv.Services.Authentication
                         }
 
 
+
+
                         if (db.GetRepository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true)
                         {
                             messages.errormessages.Add("Your Profile has already been activated");
@@ -1105,11 +1236,26 @@ namespace Anewluv.Services.Authentication
                         //activaate profile here
                         else
                         {
-                            Api.MemberService.activateprofile(new ProfileModel { profileid = profile.id });
+                            //TO DO convert to Asynch call
+                            AnewluvContext = new AnewluvContext();
+                            using (var tempdb = AnewluvContext)
+                            {
+                                MemberService MemberService = new MemberService(tempdb);
+                                MemberService.activateprofile(new ProfileModel { profileid = profile.id });
+                            }
                         }
 
                         //check if mailbox folders exist, if they dont create em , don't add any error status
-                        if (Api.MemberService.checkifmailboxfoldersarecreated(new ProfileModel { profileid = profile.id }) == true)
+
+                        var areamailboxfolderscreated = false;
+                         AnewluvContext = new AnewluvContext();
+                         using (var tempdb = AnewluvContext)
+                         {
+                             MemberService MemberService = new MemberService(tempdb);
+                            areamailboxfolderscreated= MemberService.checkifmailboxfoldersarecreated(new ProfileModel { profileid = profile.id }) ;
+                         }
+
+                         if (areamailboxfolderscreated == true)
                         {
                             //ModelState.AddModelError("", "Your Profile has already been activated");
                             //hide the photo view in thsi case                  
@@ -1117,7 +1263,13 @@ namespace Anewluv.Services.Authentication
                         //create the mailbox folders if they do not exist
                         else
                         {
-                            Api.MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
+                              AnewluvContext = new AnewluvContext();
+                              using (var tempdb = AnewluvContext)
+                              {
+                                  MemberService MemberService = new MemberService(tempdb);
+                                  MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
+                              }
+                           // MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
                         }
 
                         messages.message = "Activation Sucssesful";
@@ -1161,8 +1313,8 @@ namespace Anewluv.Services.Authentication
                     }
                     finally
                     {
-                        Api.DisposePhotoService();
-                        Api.DisposeMemberService();
+                      //  Api.DisposePhotoService();
+                       // Api.DisposeMemberService();
                     }
 
 
@@ -1210,8 +1362,17 @@ namespace Anewluv.Services.Authentication
                             model.photostatus = true;
 
                         }
-                        else if (Api.MemberService.checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true)
+                        else 
                         {
+                            var isprofileactivated = false;
+                            AnewluvContext AnewluvContext  = new AnewluvContext();
+                            using (var tempdb = AnewluvContext)
+                            {
+                               MemberService MemberService = new MemberService(tempdb);
+                              isprofileactivated =    MemberService.checkifprofileisactivated(new ProfileModel { profileid = profile.id });
+                            }
+
+                            if (isprofileactivated == true)                            
                             messages.errormessages.Add("Your Profile has already been activated");
                             //hide the photo view in thsi case
                             //ViewData["ActivateProfileStatus"]=
@@ -1259,7 +1420,7 @@ namespace Anewluv.Services.Authentication
                     }
                     finally
                     {
-                        Api.DisposeMemberService();
+                      //  Api.DisposeMemberService();
                     }
                 }
             }

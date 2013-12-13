@@ -199,6 +199,14 @@
       <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
       <Name>Shell.MVC2.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Services\Anewluv.Services.Mapping\Anewluv.Services.Mapping.csproj">
+      <Project>{A1725D8E-483A-4356-9F76-1CEB600B72D0}</Project>
+      <Name>Anewluv.Services.Mapping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\Anewluv.Services.MemberService\Anewluv.Services.Members.csproj">
+      <Project>{312D9224-C41B-437D-B4ED-A22A74FF9EA9}</Project>
+      <Name>Anewluv.Services.Members</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApiKeys\APIKeys.xml" />

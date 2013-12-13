@@ -19,13 +19,18 @@ using Anewluv.DataExtentionMethods;
 using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Domain.Data;
 using Anewluv.Lib;
-using Anewluv.DataExtentionMethods;
+
 using Nmedia.Infrastructure.Domain.Data.errorlog;
+using GeoData.Domain.Models;
+using Anewluv.Services.Spatial;
+using Anewluv.Domain;
+using Anewluv.Services.Media;
+using Anewluv.Services.Members;
 
 namespace Anewluv.Services.Mapping
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+   //  [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class MembersMapperService : IMembersMapperService
     {
@@ -745,15 +750,21 @@ namespace Anewluv.Services.Mapping
                     quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(model.profile.profiledata.gender_id.GetValueOrDefault());
                     quicksearchmodel.myselectedcountryname = model.mycountryname; //use same country for now
                     //add the postal code status here as well
-                    quicksearchmodel.myselectedpostalcodestatus = (Api.GeoService.getpostalcodestatusbycountryname(model.mycountryname)) ? true : false;
+                    
+                  PostalData2Context GeoContext = new PostalData2Context();
+                  using (var tempdb = GeoContext)
+                  {
+                      GeoService GeoService = new GeoService(tempdb);
 
-                    //TO do get this from search settings
+                      quicksearchmodel.myselectedpostalcodestatus = (GeoService.getpostalcodestatusbycountryname(model.mycountryname)) ? true : false;
+                  }
+                                    //TO do get this from search settings
                     //default for has photos only get this from the 
                     quicksearchmodel.myselectedphotostatus = true;
 
                     model.myquicksearch = quicksearchmodel;  //save it
 
-                    Api.DisposeGeoService();
+                 //   Api.DisposeGeoService();
 
                     return model;
 
@@ -801,8 +812,14 @@ namespace Anewluv.Services.Mapping
                 model.myquicksearch.myselectedseekinggenderid = Extensions.GetLookingForGenderID(1);
 
                 if (Model.Country != "")
-                {                     
-                    model.myquicksearch.myselectedcountryname =  Api.GeoService.getcountryidbycountryname(Model.Country) == 0 ? "United States" : Model.Country; //use same country for now
+                {                    
+                    
+                  PostalData2Context GeoContext = new PostalData2Context();
+                  using (var tempdb = GeoContext)
+                  {
+                      GeoService GeoService = new GeoService(tempdb);
+                      model.myquicksearch.myselectedcountryname = GeoService.getcountryidbycountryname(Model.Country) == 0 ? "United States" : Model.Country; //use same country for now
+                  }
                 }
                 else
                 {
@@ -810,7 +827,7 @@ namespace Anewluv.Services.Mapping
                 }
                 model.myquicksearch.myselectedphotostatus = true;
 
-                Api.DisposeGeoService();
+                //Api.DisposeGeoService();
 
                 return model;
 
@@ -941,14 +958,28 @@ namespace Anewluv.Services.Mapping
                     //or the openID provider name to customize
                     if (membersmodel.rpxmodel.photo != "")
                     {   //build the photobeinguploaded object
-                        photobeinguploaded.imageb64string = Api.PhotoService.getimageb64stringfromurl(membersmodel.rpxmodel.photo, "");
+
+
+                        AnewluvContext AnewluvContext = new AnewluvContext();
+                        using (var tempdb = AnewluvContext)
+                        {
+                              PhotoService PhotoService = new PhotoService(tempdb);
+                              photobeinguploaded.imageb64string = PhotoService.getimageb64stringfromurl(membersmodel.rpxmodel.photo, "");
+                          }
                         photobeinguploaded.imagetypeid = db.GetRepository<lu_photoimagetype>().Find().Where(p => p.id == (int)photoimagetypeEnum.Jpeg).FirstOrDefault().id;
                         photobeinguploaded.creationdate = DateTime.Now;
                         photobeinguploaded.caption = membersmodel.rpxmodel.preferredusername;
                         //TO DO rename this to upload image from URL ?
 
                         //add to repository
-                        Api.PhotoService.addphotos(photouploadvm);
+
+
+                         AnewluvContext = new AnewluvContext();
+                         using (var tempdb = AnewluvContext)
+                         {
+                             PhotoService PhotoService = new PhotoService(tempdb);
+                             PhotoService.addphotos(photouploadvm);
+                         }
                     }
                     //make sure photos is not empty
                     //  if (membersmodel.MyPhotos == null)
@@ -957,7 +988,7 @@ namespace Anewluv.Services.Mapping
                     //    membersmodel.MyPhotos = photolist;
                     // }
                     //don't pass back photos for now
-                    Api.DisposePhotoService();
+                  //  Api.DisposePhotoService();
 
 
                     return model;
@@ -980,7 +1011,7 @@ namespace Anewluv.Services.Mapping
                 }
                 finally
                 {
-                    Api.DisposePhotoService(); ;
+                   // Api.DisposePhotoService(); ;
                 }
 
             }
@@ -1302,7 +1333,15 @@ namespace Anewluv.Services.Mapping
                 model.mycountryname = "United States";// georepository.getcountrynamebycountryid(profile.profiledata.countryid);
 #else
                 //TO DO get this from appfabric ( get this list from there and use it from there)
-                model.mycountryname = Api.GeoService.getcountrynamebycountryid(profile.profiledata.countryid.GetValueOrDefault().ToString());
+                
+
+
+                  PostalData2Context GeoContext = new PostalData2Context();
+                  using (var tempdb = GeoContext)
+                  {
+                      GeoService GeoService = new GeoService(tempdb);
+                      model.mycountryname = GeoService.getcountrynamebycountryid(profile.profiledata.countryid.GetValueOrDefault().ToString());
+                  }
 #endif
 
                 model.mycountryid = profile.profiledata.countryid.GetValueOrDefault();
@@ -1354,7 +1393,12 @@ namespace Anewluv.Services.Mapping
                 if (profile.profilemetadata.searchsettings.Count == 0)
                 {
                     //TO DO put into extention so no need to make new service call
-                    Api.MemberService.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = profile.id });
+                    AnewluvContext AnewluvContext  = new AnewluvContext();
+                    using (var tempdb = AnewluvContext)
+                    {
+                        MemberService MemberService = new MemberService(tempdb);
+                        MemberService.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = profile.id });
+                    }
                     //update the profile data with the updated value
                     //TO DO stop storing profiledata
                     // model.profiledata = membersrepository.getprofiledata(profile.id);
@@ -1391,8 +1435,8 @@ namespace Anewluv.Services.Mapping
             finally
             {
 
-                Api.DisposeGeoService();
-                Api.DisposeMemberService();
+               // Api.DisposeGeoService();
+              //  Api.DisposeMemberService();
             }
 
             
@@ -1454,8 +1498,13 @@ namespace Anewluv.Services.Mapping
                 {
                     //get search sttings from DB
                     //TO DO change this to not use API call
-                    searchsetting perfectmatchsearchsettings = Api.MemberService.getperfectmatchsearchsettingsbyprofileid(Model);   //model.profile.profilemetadata.searchsettings.FirstOrDefault();
-
+                    searchsetting perfectmatchsearchsettings = null;
+                     AnewluvContext AnewluvContext  = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MemberService MemberService = new MemberService(tempdb);
+                          perfectmatchsearchsettings = MemberService.getperfectmatchsearchsettingsbyprofileid(Model);   //model.profile.profilemetadata.searchsettings.FirstOrDefault();
+                     }
                     MembersViewModel model = mapmember(Model.profileid.ToString());
 
                     //set default perfect match distance as 100 for now later as we get more members lower
@@ -1636,7 +1685,7 @@ namespace Anewluv.Services.Mapping
                 finally
                 {
                   //  Api.DisposeGeoService();
-                    Api.DisposeMemberService();
+                  //  Api.DisposeMemberService();
                //   Api.DisposePhotoService();
 
                 }
@@ -1824,9 +1873,9 @@ namespace Anewluv.Services.Mapping
                 }
                 finally
                 {
-                    Api.DisposeGeoService();
-                    Api.DisposeMemberService();
-                    Api.DisposePhotoService();
+                  //  Api.DisposeGeoService();
+                 //   Api.DisposeMemberService();
+                  //  Api.DisposePhotoService();
 
                 }
 
@@ -1849,12 +1898,18 @@ namespace Anewluv.Services.Mapping
 
                 //TO DO change to use unit of work in here
                 //get search sttings from DB
-                searchsetting perfectmatchsearchsettings = Api.MemberService.getperfectmatchsearchsettingsbyprofileid(profilemodel);   //model.profile.profilemetadata.searchsettings.FirstOrDefault();
 
-                //set default perfect match distance as 100 for now later as we get more members lower
-                //TO DO move this to a _datingcontext setting or resourcer file
+                profile profile = new profile();
+                profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (profilemodel.profileid) });
+               // MembersViewModel model = mapmember(profilemodel.profileid.ToString());
+
                 MembersViewModel model = this.getmemberdata(profilemodel.profileid.ToString());
 
+                //get search sttings from DB
+                searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
+                //set default perfect match distance as 100 for now later as we get more members lower
+                //TO DO move this to a _datingcontext setting or resourcer file
+               
                 if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
                     model.maxdistancefromme = 5000;
 
@@ -1979,7 +2034,7 @@ namespace Anewluv.Services.Mapping
             finally
             {
                // Api.DisposeGeoService();
-                Api.DisposeMemberService();
+              //  Api.DisposeMemberService();
              //   Api.DisposePhotoService();
 
             }

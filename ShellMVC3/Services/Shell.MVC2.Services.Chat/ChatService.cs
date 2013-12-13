@@ -16,7 +16,7 @@ using Anewluv.Domain.Data.ViewModels;
 
 namespace Shell.MVC2.Services.Chat
 {
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+   //  [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]  
     public class ChatService : IChatService
     {

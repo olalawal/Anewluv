@@ -25,10 +25,10 @@ using Anewluv.Lib;
 using Shell.MVC2.Infrastructure.WCF;
 
 
-namespace Anewluv.Services.MemberService
+namespace Anewluv.Services.Members
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+   ////  [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class MemberService : IMemberService 
     {

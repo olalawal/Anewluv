@@ -20,6 +20,7 @@ using Anewluv.Lib;
 using Anewluv.Domain.Data;
 using Anewluv.Domain;
 using GeoData.Domain.Models.ViewModels;
+using Anewluv.Services.Mapping;
 
 
 
@@ -539,8 +540,14 @@ namespace Shell.MVC2.AppFabric
                         if (dataCache != null)
                         {
                             //remap the user data if cache is empty
+                            
 
-                            model = Api.MemberMapperService.mapmember(profileid.ToString());
+                             AnewluvContext AnewluvContext  = new AnewluvContext();
+                             using (var tempdb = AnewluvContext)
+                             {
+                                 MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                                 model = MemberMapperService.mapmember(profileid.ToString());
+                             }
                             // Datings context = new modelContext();
                             // model = context.models.Single(c => c.Id == id);
                             dataCache.Put("membersviewmodel" + profileid, model);
@@ -548,8 +555,15 @@ namespace Shell.MVC2.AppFabric
                         else
                         {
                             //TO DO map to gest i think
-                            model = Api.MemberMapperService.mapmember(profileid.ToString());
-                            //model =Api.MemberMapperService.mapguest();
+                            
+
+                         AnewluvContext AnewluvContext  = new AnewluvContext();
+                         using (var tempdb = AnewluvContext)
+                         {
+                             MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                             model = MemberMapperService.mapmember(profileid.ToString());
+                         }
+                                                    //model =Api.MemberMapperService.mapguest();
 
                         }
                     } return model;
@@ -573,7 +587,7 @@ namespace Shell.MVC2.AppFabric
                 }
                 finally
                 {
-                    Api.DisposeMemberMapperService();
+                   // Api.DisposeMemberMapperService();
                 }
             }
             //Items for guests are just dumped in the session area not the members region
@@ -603,13 +617,26 @@ namespace Shell.MVC2.AppFabric
                         //also map the guest members viewmodel
                        // var mm = new ViewModelMapper();
                        
-                        model = Api.MemberMapperService.mapguest();
+
+                         AnewluvContext AnewluvContext  = new AnewluvContext();
+                         using (var tempdb = AnewluvContext)
+                         {
+                             MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                             model = MemberMapperService.mapguest();
+                         }
 
                         //poulate the model from the view model mapper
                        // ViewModelMapper Mapper = new ViewModelMapper();
 #if DEBUG
                                                 Console.WriteLine("Debug version");
-                                                model.register = Api.MemberMapperService.getregistermodeltest();
+                        
+
+                      AnewluvContext  = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         model.register = MemberMapperService.getregistermodeltest();
+                     }
                                                //model.Register = Mapper.MapRegistration();
 #else
                         model = Api.MemberMapperService.mapmember (model.profile_id);
@@ -705,7 +732,14 @@ namespace Shell.MVC2.AppFabric
 
                             //remap the user data if cache is empty
                             //var mm = new ViewModelMapper();
-                            p = Api.MemberMapperService.mapmember(p.profile.id.ToString());
+                            
+
+                         AnewluvContext AnewluvContext  = new AnewluvContext();
+                         using (var tempdb = AnewluvContext)
+                         {
+                             MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                             p = MemberMapperService.mapmember(p.profile.id.ToString());
+                         }
 
                         }
                         else if (p != null && (p.profile.id != null | p.profile == null ))
@@ -758,8 +792,14 @@ namespace Shell.MVC2.AppFabric
 
                 //get the current prodile data
 
+                
 
-                model = Api.MemberMapperService.mapmember(profileid.ToString());
+                 AnewluvContext AnewluvContext  = new AnewluvContext();
+                 using (var tempdb = AnewluvContext)
+                 {
+                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                     model = MemberMapperService.mapmember(profileid.ToString());
+                 }
                 model.profiledata = model.profile.profiledata ;
 
                 //  MembersViewModel oldMembersViewModel = new MembersViewModel();
@@ -814,7 +854,14 @@ namespace Shell.MVC2.AppFabric
                         //Mapguest will probbaly get geo data like what country city state thier IP matches and any cookie data we can scrap or facebook data
                         // oldMembersViewModel = mm.MapGuest(); //default values probbaly just for test don't map anything in this case since 
                         //we do not want to populate data yet
-                        p = Api.MemberMapperService.mapguest();
+
+
+                        AnewluvContext AnewluvContext = new AnewluvContext();
+                        using (var tempdb = AnewluvContext)
+                        {
+                            MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                            p = MemberMapperService.mapguest();
+                        }
                     }
 
                     //now update and save
@@ -842,7 +889,7 @@ namespace Shell.MVC2.AppFabric
                 }
                 finally
                 {
-                    Api.DisposeMemberMapperService();
+                   // Api.DisposeMemberMapperService();
                 }
 
                 return false;

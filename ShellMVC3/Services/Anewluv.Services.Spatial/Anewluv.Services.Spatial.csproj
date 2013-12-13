@@ -72,6 +72,10 @@
       <Project>{FF7B929D-6086-4509-9095-396845569906}</Project>
       <Name>LoggingLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Components\Anewluv.Api\Anewluv.Api.csproj">
+      <Project>{1E78FD8F-5A46-4894-B7E9-9E572D558562}</Project>
+      <Name>Anewluv.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Components\Anewluv.Lib\Anewluv.Lib.csproj">
       <Project>{7AED0F61-0992-42BA-AA92-148C163D7517}</Project>
       <Name>Anewluv.Lib</Name>

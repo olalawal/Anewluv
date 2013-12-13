@@ -20,11 +20,14 @@ using Shell.MVC2.Infrastructure;
 using Anewluv.Lib;
 using Anewluv.DataExtentionMethods;
 using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Anewluv.Domain;
+using Anewluv.Services.Members;
+using Anewluv.Services.Mapping;
 
 namespace Anewluv.Services.MemberActions
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+   //  [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class MemberActionsService : IMemberActionsService
     {
@@ -647,11 +650,16 @@ namespace Anewluv.Services.MemberActions
                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                     //return interests.ToList();
-                    return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-
+                    List<MemberSearchViewModel> results;
+                    AnewluvContext AnewluvContext  = new AnewluvContext();
+                    using (var tempdb = AnewluvContext)
+                    {
+                        MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                        results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                    }
                     // return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
                     //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
-
+                    return results;
                 }
                 catch (Exception ex)
                 {
@@ -671,7 +679,7 @@ namespace Anewluv.Services.MemberActions
                 }
                 finally
                 {
-                    Api.DisposeMemberMapperService();
+                    //Api.DisposeMemberMapperService();
                 }
 
 
@@ -725,9 +733,15 @@ namespace Anewluv.Services.MemberActions
                  // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                  //return interests.ToList();
-                 return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 List<MemberSearchViewModel> results;
+                 AnewluvContext AnewluvContext = new AnewluvContext();
+                 using (var tempdb = AnewluvContext)
+                 {
+                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                    results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 }
 
-
+                 return results;
              }
              catch (Exception ex)
              {
@@ -742,7 +756,7 @@ namespace Anewluv.Services.MemberActions
              }
              finally
              {
-                 Api.DisposeMemberMapperService();
+               //  Api.DisposeMemberMapperService();
              }
 
          }
@@ -798,8 +812,12 @@ namespace Anewluv.Services.MemberActions
                  // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                  //return interests.ToList();
-                 return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-
+                   AnewluvContext AnewluvContext = new AnewluvContext();
+                   using (var tempdb = AnewluvContext)
+                   {
+                       MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                       return MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                   }
 
 
              }
@@ -817,7 +835,7 @@ namespace Anewluv.Services.MemberActions
 
              finally
              {
-                 Api.DisposeMemberMapperService();
+                // Api.DisposeMemberMapperService();
              }
 
          }
@@ -1551,9 +1569,13 @@ namespace Anewluv.Services.MemberActions
                  // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                  //return interests.ToList();
-                 return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                   AnewluvContext AnewluvContext = new AnewluvContext();
+                   using (var tempdb = AnewluvContext)
+                   {
+                       MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                       return MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
-
+                   }
              }
              catch (Exception ex)
              {
@@ -1568,7 +1590,7 @@ namespace Anewluv.Services.MemberActions
              }
              finally
              {
-                 Api.DisposeMemberMapperService();
+                // Api.DisposeMemberMapperService();
              }
 
          }
@@ -1622,8 +1644,14 @@ namespace Anewluv.Services.MemberActions
                  // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                  //return interests.ToList();
-                 return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-
+                  List<MemberSearchViewModel> results;
+                    AnewluvContext AnewluvContext  = new AnewluvContext();
+                    using (var tempdb = AnewluvContext)
+                    {
+                        MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                        results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                    }
+                    return results;
 
              }
              catch (Exception ex)
@@ -1639,7 +1667,7 @@ namespace Anewluv.Services.MemberActions
              }
              finally
              {
-                 Api.DisposeMemberMapperService();
+                // Api.DisposeMemberMapperService();
              }
 
          }
@@ -1697,8 +1725,15 @@ namespace Anewluv.Services.MemberActions
                  // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                  //return interests.ToList();
-                 return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-
+                 List<MemberSearchViewModel> results;
+                 AnewluvContext AnewluvContext = new AnewluvContext();
+                 using (var tempdb = AnewluvContext)
+                 {
+                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 }
+                 return results;
+                
 
              }
              catch (Exception ex)
@@ -1714,7 +1749,7 @@ namespace Anewluv.Services.MemberActions
              }
              finally
              {
-                 Api.DisposeMemberMapperService();
+               //  Api.DisposeMemberMapperService();
              }
 
 
@@ -2326,9 +2361,14 @@ namespace Anewluv.Services.MemberActions
                  //this.AddRange(pageData.ToList());
                  // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-                 //return interests.ToList();
-                 return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-
+                 List<MemberSearchViewModel> results;
+                 AnewluvContext AnewluvContext = new AnewluvContext();
+                 using (var tempdb = AnewluvContext)
+                 {
+                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 }
+                 return results;
 
              }
              catch (Exception ex)
@@ -2344,7 +2384,7 @@ namespace Anewluv.Services.MemberActions
              }
              finally
              {
-                 Api.DisposeMemberMapperService();
+                // Api.DisposeMemberMapperService();
              }
 
 
@@ -2390,10 +2430,14 @@ namespace Anewluv.Services.MemberActions
                  //this.AddRange(pageData.ToList());
                  // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-                 //return interests.ToList();
-                 return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-
-
+                 List<MemberSearchViewModel> results;
+                 AnewluvContext AnewluvContext = new AnewluvContext();
+                 using (var tempdb = AnewluvContext)
+                 {
+                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 }
+                 return results;
              }
              catch (Exception ex)
              {
@@ -2408,7 +2452,7 @@ namespace Anewluv.Services.MemberActions
              }
              finally
              {
-                 Api.DisposeMemberMapperService();
+                // Api.DisposeMemberMapperService();
              }
 
 
@@ -3055,8 +3099,14 @@ namespace Anewluv.Services.MemberActions
                  // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                  //return interests.ToList();
-                 return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-
+                 List<MemberSearchViewModel> results;
+                 AnewluvContext AnewluvContext = new AnewluvContext();
+                 using (var tempdb = AnewluvContext)
+                 {
+                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 }
+                 return results;
 
              }
              catch (Exception ex)
@@ -3072,7 +3122,7 @@ namespace Anewluv.Services.MemberActions
              }
              finally
              {
-                 Api.DisposeMemberMapperService();
+                // Api.DisposeMemberMapperService();
              }
 
 
@@ -3128,8 +3178,14 @@ namespace Anewluv.Services.MemberActions
                  // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                  //return interests.ToList();
-                 return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-
+                 List<MemberSearchViewModel> results;
+                 AnewluvContext AnewluvContext = new AnewluvContext();
+                 using (var tempdb = AnewluvContext)
+                 {
+                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 }
+                 return results;
 
              }
              catch (Exception ex)
@@ -3145,7 +3201,7 @@ namespace Anewluv.Services.MemberActions
              }
              finally
              {
-                 Api.DisposeMemberMapperService();
+                // Api.DisposeMemberMapperService();
              }
 
 
@@ -3201,8 +3257,14 @@ namespace Anewluv.Services.MemberActions
                  // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                  //return interests.ToList();
-                 return Api.MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-
+                 List<MemberSearchViewModel> results;
+                 AnewluvContext AnewluvContext = new AnewluvContext();
+                 using (var tempdb = AnewluvContext)
+                 {
+                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 }
+                 return results;
 
              }
              catch (Exception ex)
@@ -3218,7 +3280,7 @@ namespace Anewluv.Services.MemberActions
              }
              finally
              {
-                 Api.DisposeMemberMapperService();
+                // Api.DisposeMemberMapperService();
              }
 
 

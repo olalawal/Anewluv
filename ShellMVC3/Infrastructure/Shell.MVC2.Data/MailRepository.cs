@@ -16,6 +16,7 @@ using Anewluv.Domain;
 using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Lib;
 using Anewluv.Domain.Data;
+using Anewluv.Services.Members;
 
 namespace Shell.MVC2.Data
 {
@@ -196,7 +197,12 @@ namespace Shell.MVC2.Data
                 if (fldId == 0)
                 {
                     //TO do move this to a mail repop
-                    Api.MemberService.createmailboxfolders(new ProfileModel { profileid = profileId });
+                    AnewluvContext AnewluvContext  = new AnewluvContext();
+                    using (var tempdb = AnewluvContext)
+                    {
+                        MemberService MemberService = new MemberService(tempdb);
+                        MemberService.createmailboxfolders(new ProfileModel { profileid = profileId });
+                    }
                     return newmailboxmessagefolderobject(mailboxFolderTypeName, profileId);
                 }
 
