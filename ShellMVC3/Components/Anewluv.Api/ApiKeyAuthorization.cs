@@ -16,6 +16,8 @@ using Shell.MVC2.Infrastructure;
 using Anewluv.Lib;
 using Nmedia.Infrastructure.Domain;
 using Nmedia.Services.Authorization;
+using Anewluv.Domain;
+using Anewluv.Services.Authentication;
 
 namespace Anewluv.Api
 {
@@ -235,17 +237,17 @@ namespace Anewluv.Api
             if (authinfo != null)
             {
                 //TO DO convert to asynch
-                //ApiKeyContext ApiKeyContext = new ApiKeyContext();
-                //var IsUserAuthenticated = false;
-                //using (var db = ApiKeyContext)
-                //{
-                //    AuthenticationService ApiKeyService = new ApiKeyService(db);
-                //    IsApiKeyValid = ApiKeyService.NonAysncIsValidAPIKey(key);
-                //}
+               // AnewluvContext AnewluvContext = new AnewluvContext();
+                var IsUserValidated = false;
+                using (var tempdb = new  AnewluvContext())
+                {
+                    AuthenticationService AuthenticationService = new AuthenticationService(tempdb);
+                    IsUserValidated = AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
+                }
 
-                var result = Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
+                //var result = Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
                //.0 Api.DisposeAuthenticationService();
-                return result;
+                return IsUserValidated;
             }
             return false;
 

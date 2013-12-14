@@ -41,9 +41,9 @@ namespace Shell.MVC2.DependencyResolution.Ninject.Modules
             // var webApiEFRepository = kernel.Get<IRepository<Entity>>("WebApiEFRepository");
             //  this.Unbind(typeof(IUnitOfWork));
             //Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
-            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.MemberService.MemberService")).InScope(c => OperationContext.Current); ;
+            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Members.MemberService")).InScope(c => OperationContext.Current); ;
             // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.MemberService.MemberService")).InScope(c => OperationContext.Current); 
+            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Members.MemberService")).InScope(c => OperationContext.Current); 
                 ;
 
             //the Unit of work module should already be loaded by now

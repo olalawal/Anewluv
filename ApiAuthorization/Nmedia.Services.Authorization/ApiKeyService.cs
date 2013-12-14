@@ -25,7 +25,7 @@ namespace Nmedia.Services.Authorization
     //MOve the remaining ext method methods into this service layer that uses the EF unit of work
     //TO do also make a single Update method generic and implement that for the rest of the Repo saves.
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
-   //  [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class ApiKeyService : IApiKeyService
     {
