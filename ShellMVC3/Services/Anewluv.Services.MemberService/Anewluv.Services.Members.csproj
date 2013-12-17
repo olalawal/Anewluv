@@ -53,7 +53,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Shell.MVC2.Services.Contracts\Anewluv.Services.Contracts.csproj">
+    <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Anewluv.Services.Contracts\Anewluv.Services.Contracts.csproj">
       <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
       <Name>Anewluv.Services.Contracts</Name>
     </ProjectReference>
