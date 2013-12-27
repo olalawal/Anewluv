@@ -193,21 +193,33 @@ namespace Anewluv.DataExtentionMethods
         {
             try
             {
+                var profile = repo.Find().Where(p => p.id == 1).FirstOrDefault();
+                var logtimes = profile.userlogtimes;
+
+                if (logtimes.Count > 0)
+                {
+                    return logtimes.Any(z => z.offline == false);
+                }
+                else
+                {
+                    return false;
+                }
                 //get the profile
                 //profile myProfile;
                // IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
                
-               var  myQuery = repo.Find().OfType<userlogtime>().Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime).ToList();
-
+              // var  myQuery = repo.Find().OfType<userlogtime>().Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime).ToList();
+                var myQuery = repo.Find().Where(p => p.id == model.profileid && !(p.userlogtimes !=null && p.userlogtimes.Any(z => z.offline == false))).FirstOrDefault() != null;
+                return myQuery;
                 //            var queryB =
                 //                (from o in db.Orders
                 // select o.Employee.LastName)
                 //.Distinct().OrderBy(n => n);
-                if (myQuery.Count() > 0)
-                {
-                    return true;
-                }
-                else { return false; }
+                //if (myQuery.Count() > 0)
+                //{
+                //    return true;
+                //}
+                //else { return false; }
             }
             catch (Exception ex)
             {                

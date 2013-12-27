@@ -1695,19 +1695,25 @@ namespace Anewluv.Services.MemberActions
                  //gets all  interestets from the interest table based on if the person's profiles are stil lvalid tho
 
 
-                 var MyActiveblocks = (from c in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      }).ToList();
+                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+                                                                      select new
+                                                                      {
+                                                                          ProfilesBlockedId = c.blockprofile_id
+                                                                      }).ToList();
 
+                 //if (MyActiveblocks.Count != 0 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == ))
+                // {
+                //     var test = "";
+                // }
+
+                 
                  //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                  //rematerialize on the back end.
                  //final query to send back only the profile datatas of the interests we want
                  var peeknew = (from f in  db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == id )
                                // join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
                               //  join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                where (f.profilemetadata1.profile.status_id < 3 && (MyActiveblocks !=null && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                where (f.profilemetadata1.profile.status_id < 3  && !(MyActiveblocks.Count !=0 && f.profilemetadata1 !=null ))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                 select new MemberSearchViewModel
                                 {
                                     peekdate = f.creationdate,

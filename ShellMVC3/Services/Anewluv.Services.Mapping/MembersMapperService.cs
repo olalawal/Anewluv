@@ -89,7 +89,7 @@ namespace Anewluv.Services.Mapping
                         //TO DO change to use Ninject maybe
                         // DatingService db = new DatingService();
                         //  MembersRepository membersrepo=  new MembersRepository();
-                        profile profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt32(viewerprofileid) });
+                        profile profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id) });
                             // membersrepository.getprofilebyprofileid(new ProfileModel { profileid = modeltomap.id }); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
                         //  membereditRepository membereditRepository = new membereditRepository();
 
@@ -123,7 +123,7 @@ namespace Anewluv.Services.Mapping
                         model.city = Extensions.ReduceStringLength(profile.profiledata.city, 11);
                         model.lastlogindate = profile.logindate;
                         //TO DO move the generic infratructure extentions
-                        model.lastloggedonstring = profileextentionmethods.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
+                        model.lastloggedonstring = profileextentionmethods.getlastloggedinstring(profile.logindate.GetValueOrDefault());
                             //   membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
                         model.mycatchyintroline = profile.profiledata.mycatchyintroLine;
                         model.aboutme = profile.profiledata.aboutme;

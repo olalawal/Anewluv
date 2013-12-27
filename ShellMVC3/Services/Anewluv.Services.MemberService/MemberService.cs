@@ -676,7 +676,7 @@ namespace Anewluv.Services.Members
                          var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
                           foreach (userlogtime p in myQuery)
-                          {
+                          {                              
                               p.offline = true;
                               db.Update(p);
                           }
@@ -692,6 +692,7 @@ namespace Anewluv.Services.Members
                           //noew aslo update the logtime and then 
                           userlogtime myLogtime = new userlogtime();
                           myLogtime.profile_id = model.profileid.GetValueOrDefault();
+                          myLogtime.offline = false;
                           myLogtime.sessionid = model.sessionid;
                           myLogtime.logintime = DateTime.Now;
                           db.Add(myLogtime);
@@ -812,6 +813,7 @@ namespace Anewluv.Services.Members
                         //noew aslo update the logtime and then 
                         userlogtime myLogtime = new userlogtime();
                         myLogtime.profile_id = model.profileid.GetValueOrDefault();
+                        myLogtime.offline = false;
                         myLogtime.sessionid = model.sessionid;
                         myLogtime.logintime = DateTime.Now;
                         db.Add(myLogtime);

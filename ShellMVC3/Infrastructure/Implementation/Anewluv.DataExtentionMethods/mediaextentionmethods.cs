@@ -37,12 +37,15 @@ namespace Anewluv.DataExtentionMethods
         {
 
            
-            
+              
                 try
                 {
+                    var convertedprofileid = Convert.ToInt32(profileid);
+                    var converedtedphotoformat = Convert.ToInt16(format);
+                    //var format = 
 
                   return  (from p in
-                                            (from r in repo.Find().Where(a => a.lu_photoformat.id == Convert.ToInt16(format) && (a.photo.profile_id == Convert.ToInt32(profileid) & a.photo.lu_photostatus.id == (int)photostatusEnum.Gallery)).ToList()
+                               (from r in repo.Find().Where(a => a.lu_photoformat.id ==converedtedphotoformat && (a.photo.profile_id == convertedprofileid & a.photo.lu_photostatus.id == (int)photostatusEnum.Gallery)).ToList()
                                              select new
                                              {
                                                  photoid = r.photo.id,
