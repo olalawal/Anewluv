@@ -141,16 +141,18 @@ namespace Anewluv.Services.Mapping
                         // var NotApproved = membereditRepository.GetApproved(MyPhotos, "No", page, ps);
                         // var Private = membereditRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
                         model.profilephotos = new PhotoViewModel();
+                        int something = (int)photoformatEnum.Thumbnail;
                         if (allphotos == "true")
                         {
+                          
                             model.profilephotos.ProfilePhotosApproved =db.GetRepository<photoconversion>().getpagedphotomodelbyprofileidandstatus(              
                                 profile.id.ToString(),
-                                photoapprovalstatusEnum.Approved.ToString(), photoformatEnum.Thumbnail.ToString(), page.ToString(), ps.ToString());   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                                photoapprovalstatusEnum.Approved.ToString(),((int)photoformatEnum.Thumbnail).ToString(), page.ToString(), ps.ToString());   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
                         }// approvedphotos = photorepository.
                         else
                         {
                             // model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
-                            model.galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id.ToString(), photoformatEnum.Thumbnail.ToString());
+                            model.galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id.ToString(),((int)photoformatEnum.Thumbnail).ToString());
                         }
 
                        // Api.DisposeGeoService();
@@ -1660,7 +1662,7 @@ namespace Anewluv.Services.Mapping
                         lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                         lastlogindate = x.lastlogindate,
                         distancefromme = x.distancefromme,
-                        galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), photoformatEnum.Thumbnail.ToString()),
+                        galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString()),
                         lookingforagefrom = x.lookingforagefrom,
                         lookingForageto = x.lookingForageto,
                         online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
@@ -1846,7 +1848,7 @@ namespace Anewluv.Services.Mapping
                                   lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                     lastlogindate = x.lastlogindate,
                     distancefromme = x.distancefromme,
-                        galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), photoformatEnum.Thumbnail.ToString()),
+                        galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString()),
                         lookingforagefrom = x.lookingforagefrom,
                     lookingForageto = x.lookingForageto,
                     online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
@@ -2005,7 +2007,7 @@ namespace Anewluv.Services.Mapping
                     lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                     lastlogindate = x.lastlogindate,
                     distancefromme = x.distancefromme,
-                    galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(),photoformatEnum.Thumbnail.ToString()),
+                    galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(),((int)photoformatEnum.Thumbnail).ToString()),
                     lookingforagefrom = x.lookingforagefrom,
                     lookingForageto = x.lookingForageto,
                     online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })

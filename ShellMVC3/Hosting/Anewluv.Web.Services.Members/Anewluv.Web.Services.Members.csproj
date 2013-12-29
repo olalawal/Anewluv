@@ -114,6 +114,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Components\Anewluv.Api\Anewluv.Api.csproj">
+      <Project>{1E78FD8F-5A46-4894-B7E9-9E572D558562}</Project>
+      <Name>Anewluv.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Ninject\Shell.MVC2.DependencyResolution.Ninject\Shell.MVC2.DependencyResolution.Ninject.csproj">
       <Project>{0145184E-916D-4DB2-BB19-E069DF0F1F36}</Project>
       <Name>Shell.MVC2.DependencyResolution.Ninject</Name>

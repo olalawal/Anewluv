@@ -187,8 +187,11 @@ namespace Anewluv.Services.Media
                 
                     try
                     {
+                        var convertedformat = Convert.ToInt16(format);
+                        var convertedphotoid = Guid.Parse(photoid);
+
                         PhotoModel model = (from p in
-                                                (from r in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == Convert.ToInt16(format) && (a.photo.id == Guid.Parse(photoid))).ToList()
+                                                (from r in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == convertedformat && (a.photo.id == convertedphotoid)).ToList()
                                                  select new
                                                   {
                                                       photoid = r.photo.id,
@@ -269,6 +272,7 @@ namespace Anewluv.Services.Media
             }
           
         }
+
         public List<PhotoModel> getphotomodelsbyprofileidandstatus(string profileid, string status, string format)
         {
 
@@ -277,14 +281,19 @@ namespace Anewluv.Services.Media
             {
                 try
                 {
+                    var convertedformat = Convert.ToInt16(format);
+                    var convertedprofileid = Convert.ToInt32(profileid);
+                    var convertedstatus = Convert.ToInt16(status);
+
+                    //var convertedphotoid = Guid.Parse(photoid);
                     // Retrieve All User's Photos that are not approved.
                     //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
 
                     // Retrieve All User's Approved Photo's that are not Private and approved.
                     //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
-                    var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == Convert.ToInt16(format) && a.photo.profile_id == Convert.ToInt32(profileid) &&
-                        ((a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id == Convert.ToInt16(status)))).ToList()
+                    var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == convertedformat && a.photo.profile_id == convertedprofileid &&
+                        ((a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id == convertedstatus))).ToList()
                                  select new PhotoModel
                                  {
                                      photoid = p.photo.id,
@@ -384,7 +393,12 @@ namespace Anewluv.Services.Media
             {
                 try
                 {
-                    photoeditmodel model = (from p in db.GetRepository<photoconversion>().Find().Where(p => p.formattype_id == Convert.ToInt16(format) && p.photo.id == Guid.Parse(photoid)).ToList()
+                    var convertedformat = Convert.ToInt16(format);
+                    var convertedphotoid = Guid.Parse(photoid);
+                   // var convertedprofileid = Convert.ToInt32(profileid);
+                   // var convertedstatus = Convert.ToInt16(status);
+
+                    photoeditmodel model = (from p in db.GetRepository<photoconversion>().Find().Where(p => p.formattype_id == convertedformat && p.photo.id == convertedphotoid).ToList()
                                             select new photoeditmodel
                                             {
                                                 photoid = p.photo.id,
@@ -427,9 +441,11 @@ namespace Anewluv.Services.Media
             {
                 try
                 {
+                    var convertedformat = Convert.ToInt16(format);                 
+                    var convertedstatus = Convert.ToInt16(status);
 
-                    var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == Convert.ToInt16( format)
-                        && a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id ==  Convert.ToInt16(status)).ToList()
+                    var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == convertedformat
+                        && a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id ==  convertedstatus).ToList()
                                  select new photoeditmodel
                                  {
                                      photoid = p.photo.id,
@@ -476,14 +492,18 @@ namespace Anewluv.Services.Media
             {
                 try
                 {
+                    var convertedformat = Convert.ToInt16(format);
+                    //var convertedphotoid = Guid.Parse(photoid);
+                    //var convertedprofileid = Convert.ToInt32(profileid);
+                    var convertedstatus = Convert.ToInt16(status);
                     // Retrieve All User's Photos that are not approved.
                     //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
 
                     // Retrieve All User's Approved Photo's that are not Private and approved.
                     //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
-                    var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == Convert.ToInt16(format) && a.photo.lu_photoapprovalstatus != null
-                        && a.photo.approvalstatus_id == Convert.ToInt16(status)).ToList()
+                    var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == convertedformat && a.photo.lu_photoapprovalstatus != null
+                        && a.photo.approvalstatus_id == convertedstatus).ToList()
                                  select new photoeditmodel
                                  {
                                      photoid = p.photo.id,
@@ -525,7 +545,12 @@ namespace Anewluv.Services.Media
             {
                 try
                 {
-                    var myPhotos = db.GetRepository<photoconversion>().Find().Where(z => z.formattype_id == Convert.ToInt16(format) && z.photo.profile_id == Convert.ToInt32(profileid)).ToList();
+                    var convertedformat = Convert.ToInt16(format);
+                   // var convertedphotoid = Guid.Parse(photoid);
+                    var convertedprofileid = Convert.ToInt32(profileid);
+                  //  var convertedstatus = Convert.ToInt16(status);
+
+                    var myPhotos = db.GetRepository<photoconversion>().Find().Where(z => z.formattype_id == convertedformat && z.photo.profile_id == convertedprofileid).ToList();
                     var ApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, Convert.ToInt16(page), Convert.ToInt16(pagesize)).ToList();
                     var NotApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, Convert.ToInt16(page), Convert.ToInt16(pagesize));
                     //TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
@@ -567,8 +592,13 @@ namespace Anewluv.Services.Media
                 {
                     try
                     {
+                       // var convertedformat = Convert.ToInt16(format);
+                        var convertedphotoid = Guid.Parse(photoid);
+                        //var convertedprofileid = Convert.ToInt32(profileid);
+                       // var convertedstatus = Convert.ToInt16(status);
+
                         // Retrieve single value from photos table
-                        photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id == Guid.Parse(photoid));
+                        photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id == convertedphotoid);
                         PhotoModify.photostatus_id = (int)photostatusEnum.deletedbyuser;
                         db.Update(PhotoModify);
                         // Update database
@@ -607,15 +637,20 @@ namespace Anewluv.Services.Media
                 {
                     try
                     {
+                        //var convertedformat = Convert.ToInt16(format);
+                        var convertedphotoid = Guid.Parse(photoid);
+                       // var convertedprofileid = Convert.ToInt32(profileid);
+                       // var convertedstatus = Convert.ToInt16(status);
+
                         // Retrieve single value from photos table
-                        photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id == Guid.Parse(photoid));
+                        photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id == convertedphotoid);
                         PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
 
                         if (PhotoModify.photo_securitylevel.Any(z => z.id != (int)securityleveltypeEnum.Private))
                         {
                             PhotoModify.photo_securitylevel.Add(new photo_securitylevel
                             {
-                                photo_id = Guid.Parse(photoid),
+                                photo_id = convertedphotoid,
                                 lu_securityleveltype = db.GetRepository<lu_securityleveltype>().FindSingle(p => p.id == (int)securityleveltypeEnum.Private)
                             });
                             // newsecurity.id = (int)securityleveltypeEnum.Private;
@@ -658,8 +693,13 @@ namespace Anewluv.Services.Media
                 {
                     try
                     {
+                        //var convertedformat = Convert.ToInt16(format);
+                        var convertedphotoid = Guid.Parse(photoid);
+                       // var convertedprofileid = Convert.ToInt32(profileid);
+                       // var convertedstatus = Convert.ToInt16(status);
+
                         // Retrieve single value from photos table
-                        photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id ==  Guid.Parse(photoid));
+                        photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id ==  convertedphotoid);
                         PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
                         db.Update(PhotoModify);
                         // Update database
@@ -817,6 +857,11 @@ namespace Anewluv.Services.Media
                 {
                     try
                     {
+                        //var convertedformat = Convert.ToInt16(format);
+                       // var convertedphotoid = Guid.Parse(photoid);
+                        var convertedprofileid = Convert.ToInt32(profileid);
+                        //var convertedstatus = Convert.ToInt16(status);
+
                         AnewluvResponse response = new AnewluvResponse();
                         AnewluvMessages message = new AnewluvMessages();
                         ResponseMessage responsemessage = new ResponseMessage();
@@ -824,7 +869,7 @@ namespace Anewluv.Services.Media
                         photo NewPhoto = new photo();
                         Guid identifier = Guid.NewGuid();
                         NewPhoto.id = identifier;
-                        NewPhoto.profile_id = Convert.ToInt32(profileid); //model.ProfileImage.Length;
+                        NewPhoto.profile_id = convertedprofileid; //model.ProfileImage.Length;
                         // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
                         NewPhoto.creationdate = newphoto.creationdate;
                         NewPhoto.imagecaption = newphoto.caption;
@@ -841,7 +886,7 @@ namespace Anewluv.Services.Media
                         {
 
                             //existing conversions to compare with new one : 
-                            var existingthumbnailconversion = db.GetRepository<photoconversion>().Find().Where(z => z.photo.profile_id == Convert.ToInt32(profileid) & z.formattype_id == (int)photoformatEnum.Thumbnail).ToList();
+                            var existingthumbnailconversion = db.GetRepository<photoconversion>().Find().Where(z => z.photo.profile_id == convertedprofileid & z.formattype_id == (int)photoformatEnum.Thumbnail).ToList();
                             var newphotothumbnailconversion = temp.Where(p => p.formattype_id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
                             if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
                             {
@@ -945,9 +990,13 @@ namespace Anewluv.Services.Media
             {
                 try
                 {
+                    var convertedformat = Convert.ToInt16(format);
+                  //  var convertedphotoid = Guid.Parse(photoid);
+                  //  var convertedprofileid = Convert.ToInt32(profileid);
+                   // var convertedstatus = Convert.ToInt16(status);
                     var GalleryPhoto = (from p in db.GetRepository<profile>().Find().Where(p => p.screenname == strscreenname).ToList()
                                         join f in db.GetRepository<photoconversion>().Find() on p.id equals f.photo.profile_id
-                                        where (f.formattype_id == (int)Convert.ToInt16(format) && f.photo.lu_photoapprovalstatus != null &&
+                                        where (f.formattype_id == (int)convertedformat && f.photo.lu_photoapprovalstatus != null &&
                                         f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
                                         f.photo.imagetype_id == (int)photostatusEnum.Gallery)
                                         select f).FirstOrDefault();
@@ -982,8 +1031,13 @@ namespace Anewluv.Services.Media
                 try
                 {
 
-            var GalleryPhoto = (from f in db.GetRepository<photoconversion>().Find().Where(f => f.photo.id == (Guid.Parse(photoid)) &&
-             f.formattype_id == (int) Convert.ToInt16(format) && f.photo.lu_photoapprovalstatus != null &&
+                    var convertedformat = Convert.ToInt16(format);
+                    var convertedphotoid = Guid.Parse(photoid);
+                    //var convertedprofileid = Convert.ToInt32(profileid);
+                   // var convertedstatus = Convert.ToInt16(status);
+
+            var GalleryPhoto = (from f in db.GetRepository<photoconversion>().Find().Where(f => f.photo.id == (convertedphotoid) &&
+             f.formattype_id == (int) convertedformat && f.photo.lu_photoapprovalstatus != null &&
              f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
              f.photo.imagetype_id == (int)photostatusEnum.Gallery).ToList()
                                         select f).FirstOrDefault();
@@ -1017,8 +1071,11 @@ namespace Anewluv.Services.Media
             {
                 try
                 {
+                    var convertedformat = Convert.ToInt16(format);                 
+                    var convertedprofileid = Convert.ToInt32(profileid);
+                   
 
-                    var GalleryPhoto = (from p in db.GetRepository<profile>().Find().Where(p => p.id == Convert.ToInt32(profileid)).ToList()
+                    var GalleryPhoto = (from p in db.GetRepository<profile>().Find().Where(p => p.id == convertedprofileid).ToList()
                                         join f in db.GetRepository<photoconversion>().Find() on p.id equals f.photo.profile_id
                                         where (f.formattype_id == (int)Convert.ToInt32(format) && f.photo.lu_photoapprovalstatus != null &&
                                         f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
@@ -1097,7 +1154,11 @@ namespace Anewluv.Services.Media
             {
                 try
                 {
-                    var myPhotoList = db.GetRepository<photo>().Find().Where(p => p.profile_id == Convert.ToInt32(profileid) && p.imagecaption == strPhotoCaption).FirstOrDefault();
+               
+                    var convertedprofileid = Convert.ToInt32(profileid);
+                
+
+                    var myPhotoList = db.GetRepository<photo>().Find().Where(p => p.profile_id == convertedprofileid && p.imagecaption == strPhotoCaption).FirstOrDefault();
 
                     if (myPhotoList != null)
                     {
@@ -1122,7 +1183,7 @@ namespace Anewluv.Services.Media
                 }
             }
         
-          //  return _photorepo.checkifphotocaptionalreadyexists(Convert.ToInt32(profileid), strPhotoCaption);
+          //  return _photorepo.checkifphotocaptionalreadyexists(convertedprofileid, strPhotoCaption);
 
 
            
@@ -1136,7 +1197,11 @@ namespace Anewluv.Services.Media
             {
                 try
                 {
-                    var GalleryPhoto = db.GetRepository<photo>().Find().Where(p => p.profile_id == Convert.ToInt32(profileid) &&
+                   
+                    var convertedprofileid = Convert.ToInt32(profileid);
+                 
+
+                    var GalleryPhoto = db.GetRepository<photo>().Find().Where(p => p.profile_id == convertedprofileid &&
                 p.lu_photoapprovalstatus != null &&   p.approvalstatus_id == (int)photoapprovalstatusEnum.Approved && p.imagetype_id == (int)photostatusEnum.Gallery).FirstOrDefault();
 
                     if (GalleryPhoto != null)
@@ -1174,9 +1239,13 @@ namespace Anewluv.Services.Media
             {
                 try
                 {
+                
+                    var convertedprofileid = Convert.ToInt32(profileid);
+                   
+
                     IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
                     //Dim ctx As New Entities()
-                    GalleryPhoto = db.GetRepository<photo>().Find().Where(p => p.profile_id == Convert.ToInt32(profileid));
+                    GalleryPhoto = db.GetRepository<photo>().Find().Where(p => p.profile_id == convertedprofileid);
 
                     if (GalleryPhoto.Count() > 0)
                     {

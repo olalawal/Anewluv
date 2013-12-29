@@ -144,7 +144,7 @@ namespace Anewluv.Services.MemberActions
         //                 select new MemberSearchViewModel
         //                 {
         //                     interestdate = p.creationdate,
-        //                     id = f.profile_id
+        //                    id = f.profilemetadata1.profile_id 
         //                     // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
         //                 }).ToList();
 
@@ -189,7 +189,7 @@ namespace Anewluv.Services.MemberActions
         //                select new MemberSearchViewModel
         //                {
         //                    interestdate = p.creationdate,
-        //                    id = f.profile_id
+        //                   id = f.profilemetadata1.profile_id 
         //                    // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
         //                }).ToList();
         //    }
@@ -229,7 +229,7 @@ namespace Anewluv.Services.MemberActions
         //                 select new MemberSearchViewModel
         //                 {
         //                     peekdate = p.creationdate,
-        //                     id = f.profile_id
+        //                    id = f.profilemetadata1.profile_id 
         //                     // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
         //                 }).ToList();
 
@@ -273,7 +273,7 @@ namespace Anewluv.Services.MemberActions
         //                 select new MemberSearchViewModel
         //                 {
         //                     peekdate = p.creationdate,
-        //                     id = f.profile_id
+        //                    id = f.profilemetadata1.profile_id 
         //                 }).ToList();
 
         //     }
@@ -311,7 +311,7 @@ namespace Anewluv.Services.MemberActions
         //                 select new MemberSearchViewModel
         //                 {
         //                     blockdate = p.creationdate,
-        //                     id = f.profile_id
+        //                    id = f.profilemetadata1.profile_id 
         //                 }).ToList();
 
 
@@ -352,7 +352,7 @@ namespace Anewluv.Services.MemberActions
         //                 select new MemberSearchViewModel
         //                 {
         //                     likedate = p.creationdate,
-        //                     id = f.profile_id
+        //                    id = f.profilemetadata1.profile_id 
         //                 }).ToList();
 
         //     }
@@ -393,7 +393,7 @@ namespace Anewluv.Services.MemberActions
         //                 select new MemberSearchViewModel
         //                 {
         //                     likedate = p.creationdate,
-        //                     id = f.profile_id
+        //                    id = f.profilemetadata1.profile_id 
         //                 }).ToList();
 
 
@@ -618,23 +618,21 @@ namespace Anewluv.Services.MemberActions
 
                     int id = Convert.ToInt32(profileid);
 
-                    var MyActiveblocks = from c in db.GetRepository<block>().Find().OfType<block>().Where(p => p.profile_id == id && p.removedate == null)
-                                         select new
-                                         {
-                                             ProfilesBlockedId = c.blockprofile_id
-                                         };
+                    var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+                                          select new
+                                          {
+                                              ProfilesBlockedId = c.blockprofile_id
+                                          }).ToList();
 
                     //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                     //rematerialize on the back end.
                     //final query to send back only the profile datatas of the interests we want
-                    var interests = (from p in db.GetRepository<interest>().Find().OfType<interest>().Where(p => p.profile_id == id && p.deletedbymemberdate == null)                              
-                                     join f in  db.GetRepository<profiledata>().Find() on p.interestprofile_id equals f.profile_id
-                                     join z in  db.GetRepository<profile>().Find() on p.interestprofile_id equals z.id
-                                     where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                    var interests = (from f in db.GetRepository<interest>().Find().OfType<interest>().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
+                                     where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                      select new MemberSearchViewModel
                                      {
-                                         interestdate = p.creationdate,
-                                         id = f.profile_id
+                                         interestdate = f.creationdate,
+                                        id = f.profilemetadata1.profile_id 
                                          // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                                      }).ToList();
                     // var dd2 = 0;
@@ -703,23 +701,24 @@ namespace Anewluv.Services.MemberActions
              {
                  var id = Convert.ToInt32(profileid);
 
-                 var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
+                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+                                       select new
+                                       {
+                                           ProfilesBlockedId = c.blockprofile_id
+                                       }).ToList();
+
 
                  //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                  //rematerialize on the back end.
                  //final query to send back only the profile datatas of the interests we want
-                 var whoisinterestedinme = (from p in db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == id && p.deletedbymemberdate == null)
-                                            join f in db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                            join z in db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                            where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                 var whoisinterestedinme = (from f in db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == id && p.deletedbymemberdate == null)
+                                            //join f in db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
+                                           // join z in db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                                            where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                             select new MemberSearchViewModel
                                             {
-                                                interestdate = p.creationdate,
-                                                id = f.profile_id
+                                                interestdate = f.creationdate,
+                                                id = f.profilemetadata1.profile_id
                                                 // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                                             }).ToList();
 
@@ -781,24 +780,21 @@ namespace Anewluv.Services.MemberActions
              {
                  var id = Convert.ToInt32(profileid);
 
-                 var MyActiveblocks = from c in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate != null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
+                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+                                       select new
+                                       {
+                                           ProfilesBlockedId = c.blockprofile_id
+                                       }).ToList();
 
                  //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                  //rematerialize on the back end.
                  //final query to send back only the profile datatas of the interests we want
-                 var whoisinterestedinmenew = (from p in  db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == id && p.viewdate == null)
-                                               join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                               join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                               where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-
+                 var whoisinterestedinmenew = (from f in  db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == id && p.viewdate == null)
+                                               where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))                
                                                select new MemberSearchViewModel
                                                {
-                                                   interestdate = p.creationdate,
-                                                   id = f.profile_id
+                                                   interestdate = f.creationdate,
+                                                  id = f.profilemetadata1.profile_id 
                                                    // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                                                }).ToList();
 
@@ -1539,23 +1535,21 @@ namespace Anewluv.Services.MemberActions
              {
                  var id = Convert.ToInt32(profileid);
 
-                 var MyActiveblocks = from c in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
+                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+                                       select new
+                                       {
+                                           ProfilesBlockedId = c.blockprofile_id
+                                       }).ToList();
 
                  //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                  //rematerialize on the back end.
                  //final query to send back only the profile datatas of the interests we want
-                 var peeks = (from p in  db.GetRepository<peek>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
-                              join f in  db.GetRepository<profiledata>().Find() on p.peekprofile_id equals f.profile_id
-                              join z in  db.GetRepository<profile>().Find() on p.peekprofile_id equals z.id
-                              where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                 var peeks = (from f in  db.GetRepository<peek>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
+                              where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                               select new MemberSearchViewModel
                               {
-                                  peekdate = p.creationdate,
-                                  id = f.profile_id
+                                  peekdate = f.creationdate,
+                                 id = f.profilemetadata1.profile_id 
                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                               }).ToList();
 
@@ -1614,23 +1608,21 @@ namespace Anewluv.Services.MemberActions
              {
                  var id = Convert.ToInt32(profileid);
 
-                 var MyActiveblocks = from c in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
+                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+                                       select new
+                                       {
+                                           ProfilesBlockedId = c.blockprofile_id
+                                       }).ToList();
 
                  //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                  //rematerialize on the back end.
                  //final query to send back only the profile datatas of the interests we want
-                 var WhoPeekedAtMe = (from p in  db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == id && p.deletedbymemberdate == null)
-                                      join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                      join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                      where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
+                 var WhoPeekedAtMe = (from f in  db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == id && p.deletedbymemberdate == null)
+                                      where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                       select new MemberSearchViewModel
                                       {
-                                          peekdate = p.creationdate,
-                                          id = f.profile_id
+                                          peekdate = f.creationdate,
+                                         id = f.profilemetadata1.profile_id 
                                           // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                                       }).ToList();
 
@@ -2348,15 +2340,15 @@ namespace Anewluv.Services.MemberActions
              try
              {
                  var id = Convert.ToInt32(profileid);
-                 var blocknew = (from p in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                 join f in  db.GetRepository<profiledata>().Find() on p.blockprofile_id equals f.profile_id
-                                 join z in  db.GetRepository<profile>().Find() on p.blockprofile_id equals z.id
-                                 where (f.profile.status_id < 3)
-                                 orderby (p.creationdate) descending
+                 var blocknew = (from f in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+                                // join f in  db.GetRepository<profiledata>().Find() on p.blockprofile_id equals f.profile_id
+                               //  join z in  db.GetRepository<profile>().Find() on p.blockprofile_id equals z.id
+                                 where (f.profilemetadata1.profile.status_id < 3)
+                                 orderby (f.creationdate) descending
                                  select new MemberSearchViewModel
                                  {
-                                     blockdate = p.creationdate,
-                                     id = f.profile_id
+                                     blockdate = f.creationdate,
+                                    id = f.profilemetadata1.profile_id 
                                      // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                                  }).ToList();
 
@@ -2417,15 +2409,15 @@ namespace Anewluv.Services.MemberActions
              {
                  var id = Convert.ToInt32(profileid);
 
-                 var whoblockedme = (from p in  db.GetRepository<block>().Find().Where(p => p.blockprofile_id == id && p.removedate == null)
-                                     join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                     join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                     where (f.profile.status_id < 3)
-                                     orderby (p.creationdate) descending
+                 var whoblockedme = (from f in  db.GetRepository<block>().Find().Where(p => p.blockprofile_id == id && p.removedate == null)
+                                   //  join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
+                                    // join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                                     where (f.profilemetadata1.profile.status_id < 3)
+                                     orderby (f.creationdate) descending
                                      select new MemberSearchViewModel
                                      {
-                                         blockdate = p.creationdate,
-                                         id = f.profile_id
+                                         blockdate =f.creationdate,
+                                        id = f.profilemetadata1.profile_id 
                                          // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                                      }).ToList();
 
@@ -3074,8 +3066,8 @@ namespace Anewluv.Services.MemberActions
              try
              {
                  var id = Convert.ToInt32(profileid);
-                 
-                 var MyActiveblocks = (from c in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+
+                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
                                        select new
                                        {
                                            ProfilesBlockedId = c.blockprofile_id
@@ -3084,15 +3076,15 @@ namespace Anewluv.Services.MemberActions
                  //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                  //rematerialize on the back end.
                  //final query to send back only the profile datatas of the interests we want
-                 var likenew = (from p in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == id && p.viewdate == null).ToList()
-                                join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                                orderby (p.creationdate) descending
+                 var likenew = (from f in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == id && p.viewdate == null).ToList()
+                                //join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
+                                //join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                                where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                orderby (f.creationdate) descending
                                 select new MemberSearchViewModel
                                 {
-                                    likedate = p.creationdate,
-                                    id = f.profile_id
+                                    likedate = f.creationdate,
+                                   id = f.profilemetadata1.profile_id 
                                     // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                                 }).ToList();
 
@@ -3155,24 +3147,24 @@ namespace Anewluv.Services.MemberActions
              {
                  var id = Convert.ToInt32(profileid);
 
-                 var MyActiveblocks = from c in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate != null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
+                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+                                       select new
+                                       {
+                                           ProfilesBlockedId = c.blockprofile_id
+                                       }).ToList();
 
                  //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                  //rematerialize on the back end.
                  //final query to send back only the profile datatas of the interests we want
-                 var wholikesme = (from p in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == id && p.deletedbylikedate == null)
-                                   join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                   join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                   where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                                   orderby (p.creationdate) descending
+                 var wholikesme = (from f in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == id && p.deletedbylikedate == null)
+                                  // join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
+                                  // join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                                   where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                   orderby (f.creationdate) descending
                                    select new MemberSearchViewModel
                                    {
-                                       likedate = p.creationdate,
-                                       id = f.profile_id
+                                       likedate = f.creationdate,
+                                      id = f.profilemetadata1.profile_id 
                                        // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                                    }).ToList();
 
@@ -3234,24 +3226,24 @@ namespace Anewluv.Services.MemberActions
              {
                  var id = Convert.ToInt32(profileid);
 
-                 var MyActiveblocks = from c in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate != null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
+                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+                                       select new
+                                       {
+                                           ProfilesBlockedId = c.blockprofile_id
+                                       }).ToList();
 
                  //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                  //rematerialize on the back end.
                  //final query to send back only the profile datatas of the interests we want
-                 var whoilike = (from p in  db.GetRepository<like>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
-                                 join f in  db.GetRepository<profiledata>().Find() on p.likeprofile_id equals f.profile_id
-                                 join z in  db.GetRepository<profile>().Find() on p.likeprofile_id equals z.id
-                                 where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profile_id))
-                                 orderby (p.creationdate) descending
+                 var whoilike = (from f in  db.GetRepository<like>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
+                               //  join f in  db.GetRepository<profiledata>().Find() on p.likeprofile_id equals f.profile_id
+                               //  join z in  db.GetRepository<profile>().Find() on p.likeprofile_id equals z.id
+                                 where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                 orderby (f.creationdate) descending
                                  select new MemberSearchViewModel
                                  {
-                                     likedate = p.creationdate,
-                                     id = f.profile_id
+                                     likedate = f.creationdate,
+                                    id = f.profilemetadata1.profile_id 
                                      // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                                  }).ToList();
 
