@@ -887,8 +887,8 @@ namespace Anewluv.Services.Authentication
 
                         //split up the city from state province
                         //Build the profile data table                   
-                        objprofileDateEntity.latitude = _GpsData.Latitude;
-                        objprofileDateEntity.longitude = _GpsData.Longitude;
+                        objprofileDateEntity.latitude = Convert.ToDouble( _GpsData.Latitude);
+                        objprofileDateEntity.longitude = Convert.ToDouble( _GpsData.Longitude);
                         objprofileDateEntity.city = tempCityAndStateProvince[0];
                         objprofileDateEntity.countryregion = "NA";
 

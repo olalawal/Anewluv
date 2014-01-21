@@ -127,6 +127,10 @@
     <None Include="Scripts\jquery-1.9.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Components\Anewluv.Api\Anewluv.Api.csproj">
+      <Project>{1E78FD8F-5A46-4894-B7E9-9E572D558562}</Project>
+      <Name>Anewluv.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Hubs\Shell.MVC.Hubs\Shell.MVC2.SignalR.Hubs.csproj">
       <Project>{DDE554E0-816F-4C97-B141-C603C4B8B513}</Project>
       <Name>Shell.MVC2.SignalR.Hubs</Name>

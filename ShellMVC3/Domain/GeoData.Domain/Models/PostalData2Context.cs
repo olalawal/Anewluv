@@ -361,10 +361,20 @@ namespace GeoData.Domain.Models
         {
             // List<T> myList = new List<T>();
 
-            var groupData = this.ObjectContext.ExecuteStoreQuery<T>(commandText, parameters);
+            var groupData = this.ObjectContext.ExecuteStoreQuery<T>(commandText, parameters).ToList();
 
             return groupData.ToList();
         }
+
+        //public T ExecuteStoredProcedureSingle<T>(string commandText, params object[] parameters)
+        //where T : class
+        //{
+        //    // List<T> myList = new List<T>();
+
+        //     return this.ObjectContext.ExecuteStoreQuery<T>(commandText, parameters).FirstOrDefault();
+
+            
+        //}
 
         public bool RemoveAndAudit<T>(T entity)
         where T : class

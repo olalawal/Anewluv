@@ -10,9 +10,9 @@ namespace GeoData.Domain.Models.ViewModels
     public class gpsdata
     {
         [DataMember]
-        public float Latitude { get; set; }
+        public string Latitude { get; set; }
          [DataMember]
-        public float Longitude { get; set; }
+        public string Longitude { get; set; }
          [DataMember]
         public string State_Province { get; set; }
         [DataMember]

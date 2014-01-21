@@ -79,7 +79,7 @@ namespace Anewluv.Services.Spatial
                             db.SetIsolationToDefault = true;
                             //TDocRecon loandetail2 = new TDocRecon();
                             string query = "sp_GetCountryNameByCountryID";
-                            SqlParameter parameter = new SqlParameter("CountryID", countryid);
+                            SqlParameter parameter = new SqlParameter("@CountryID", countryid);
                             parameter.ParameterName = "@CountryID";
                             parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                             parameter.Size = 40;
@@ -88,7 +88,7 @@ namespace Anewluv.Services.Spatial
                             var parameters = new object[] { parameter };
  
                             //object params                      
-                             countryname = db.ExecuteStoredProcedure<string>(query + " " , parameters).FirstOrDefault();
+                            countryname = db.ExecuteStoredProcedure<string>(query + " @CountryID ", parameters).FirstOrDefault();
                             if (countryname != null) return countryname;
                     
 
@@ -153,8 +153,8 @@ namespace Anewluv.Services.Spatial
                         //TO DO rename this function.                  
                         gpsData = this.getgpsdatabycitycountrypostalcode(model.GeoRegisterModel.country, model.GeoRegisterModel.ziporpostalcode, tempcityAndStateProvince[0]);
 
-                        model.GeoRegisterModel.lattitude  = (gpsData != null) ? gpsData.Latitude    : 0;
-                        model.GeoRegisterModel.longitude = (gpsData != null) ? gpsData.Longitude   : 0;
+                        model.GeoRegisterModel.lattitude  = (gpsData != null) ?  Convert.ToDouble( gpsData.Latitude )   : 0;
+                        model.GeoRegisterModel.longitude = (gpsData != null) ? Convert.ToDouble(gpsData.Longitude) : 0;
 
                         return model.GeoRegisterModel ;
 
@@ -375,25 +375,25 @@ namespace Anewluv.Services.Spatial
                         //11/13/2009 addded wild ca
 
                         string query = "sp_CityListbycountryNamePostalcodeandCity";
-                     
-                        SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("StrPrefixText", filter);
-                        parameter.ParameterName = "@StrPrefixText";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 40;
+                        SqlParameter parameter2 = new SqlParameter("@StrPrefixText", filter);
+                        parameter2.ParameterName = "@StrPrefixText";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 40;
                         
-                        SqlParameter parameter3 = new SqlParameter("StrPostalCode", postalcode);
-                        parameter.ParameterName = "@StrPostalCode";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 40;
+                        SqlParameter parameter3 = new SqlParameter("@StrPostalCode", postalcode);
+                        parameter3.ParameterName = "@StrPostalCode";
+                        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter3.Size = 40;
 
                         var parameters = new object[] { parameter, parameter2, parameter3 };
 
-                        var citylist = db.ExecuteStoredProcedure<CityList>(query + " " , parameters).ToList();
+                        var citylist = db.ExecuteStoredProcedure<CityList>(query + " @StrcountryDatabaseName,@StrPrefixText,@StrPostalCode", parameters).ToList();
 
                         
                         int index = 0;
@@ -441,24 +441,24 @@ namespace Anewluv.Services.Spatial
 
                           string query = "sp_GetGPSDataByPostalCodeandCity";
 
-                          SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+                          SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                           parameter.ParameterName = "@StrcountryDatabaseName";
                           parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                           parameter.Size = 50;                        
 
-                          SqlParameter parameter2 = new SqlParameter("StrPostalCode", postalcode);
-                          parameter.ParameterName = "@StrPostalCode";
-                          parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                          parameter.Size = 40;
+                          SqlParameter parameter2 = new SqlParameter("@StrPostalCode", postalcode);
+                          parameter2.ParameterName = "@StrPostalCode";
+                          parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                          parameter2.Size = 40;
 
-                          SqlParameter parameter3 = new SqlParameter("StrCity", city);
-                          parameter.ParameterName = "@StrCity";
-                          parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                          parameter.Size = 100;
+                          SqlParameter parameter3 = new SqlParameter("@StrCity", city);
+                          parameter3.ParameterName = "@StrCity";
+                          parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                          parameter3.Size = 100;
 
                           var parameters = new object[] { parameter,parameter2,parameter3 };
 
-                          var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " " , parameters).ToList();
+                          var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrPostalCode,@StrCity ", parameters).ToList();
                       
                              return ((from s in gpsdatalist.ToList() select new gpsdata {  Latitude = s.Latitude,  Longitude  = s.Longitude, State_Province = s.State_Province }).ToList());
             
@@ -501,20 +501,20 @@ namespace Anewluv.Services.Spatial
 
                         string query = "sp_GetGPSDataByCountryAndCity";
 
-                        SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
                     
-                        SqlParameter parameter2 = new SqlParameter("StrCity", city);
-                        parameter.ParameterName = "@StrCity";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 100;
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        parameter2.ParameterName = "@StrCity";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 100;
 
                         var parameters = new object[] { parameter, parameter2  };
 
-                        var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " " , parameters).ToList();
+                        var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrCity ", parameters).ToList();
 
                       //  var gpsdatalist = _postalcontext.GetGpsDataByCountryAndCity(countryname, city);
                         return ((from s in gpsdatalist.ToList() select new gpsdata {   Latitude  = s.Latitude,  Longitude  = s.Longitude,  State_Province  = s.State_Province }).ToList());
@@ -560,26 +560,26 @@ namespace Anewluv.Services.Spatial
 
                         string query = "sp_GetGPSDataByPostalCodeandCity";
 
-                        SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("StrPostalCode", postalcode);
-                        parameter.ParameterName = "@StrPostalCode";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 40;
+                        SqlParameter parameter2 = new SqlParameter("@StrPostalCode", postalcode);
+                        parameter2.ParameterName = "@StrPostalCode";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 40;
 
-                        SqlParameter parameter3 = new SqlParameter("StrCity", city);
-                        parameter.ParameterName = "@StrCity";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 100;
+                        SqlParameter parameter3 = new SqlParameter("@StrCity", city);
+                        parameter3.ParameterName = "@StrCity";
+                        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter3.Size = 100;
 
                         var parameters = new object[] { parameter, parameter2, parameter3 };
 
-                        var gpsdata = db.ExecuteStoredProcedure<gpsdata>(query + " " , parameters).FirstOrDefault();
+                        var gpsdata = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrPostalCode,@StrCity", parameters);
 
-                        return gpsdata;
+                        return gpsdata.ToList().FirstOrDefault();
                         //var s = _postalcontext.GetGpsDataSingleByCityCountryAndPostalCode(countryname, postalcode, city);
                         //if (gpsdata != null)
                         //{
@@ -628,24 +628,24 @@ namespace Anewluv.Services.Spatial
 
                         string query = "sp_GetPostalCodesByCountryNameCityandPrefix";
 
-                        SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("StrCity", city);
-                        parameter.ParameterName = "@StrCity";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 100;
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        parameter2.ParameterName = "@StrCity";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 100;
 
                         SqlParameter parameter3 = new SqlParameter("StrprefixText", filter);
-                        parameter.ParameterName = "@StrprefixText";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 40;
+                        parameter3.ParameterName = "@StrprefixText";
+                        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter3.Size = 40;
 
                         var parameters = new object[] { parameter, parameter2, parameter3 };
 
-                        var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " " , parameters).ToList();
+                        var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrprefixText", parameters).ToList();
 
                        // var gpsdatalist = _postalcontext.GetPostalCodesByCountryAndCityPrefixDynamic(countryname, city, filter);
                         //TO DO remove this and reutner object as is
@@ -694,20 +694,20 @@ namespace Anewluv.Services.Spatial
 
                         string query = "sp_GetPostalCodesByCountryNameCity";
 
-                        SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
 
-                        SqlParameter parameter2 = new SqlParameter("StrCity", city);
-                        parameter.ParameterName = "@StrCity";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 100;
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        parameter2.ParameterName = "@StrCity";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 100;
 
                         var parameters = new object[] { parameter, parameter2 };
 
-                        var postalcodelist = _unitOfWork.ExecuteStoredProcedure<PostalCodeList>(query + " " , parameters).ToList();
+                        var postalcodelist = _unitOfWork.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity", parameters).ToList();
 
 
                       //  var postalcodelist = _postalcontext.getpostalcodesbycountrynamecity(countryname, city);
@@ -747,25 +747,25 @@ namespace Anewluv.Services.Spatial
 
                         string query = "sp_ValidatePostalCodeByCountryNameandCity";
 
-                        SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("StrCity", city);
-                        parameter.ParameterName = "@StrCity";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 100;
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        parameter2.ParameterName = "@StrCity";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 100;
 
-                        SqlParameter parameter3 = new SqlParameter("StrPostalCode", postalcode);
-                        parameter.ParameterName = "@StrPostalCode";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 40;
+                        SqlParameter parameter3 = new SqlParameter("@StrPostalCode", postalcode);
+                        parameter3.ParameterName = "@StrPostalCode";
+                        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter3.Size = 40;
                                            
 
                         var parameters = new object[] { parameter, parameter2, parameter3 };
 
-                        var foundpostalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " " , parameters).ToList();
+                        var foundpostalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrPostalCode", parameters).ToList();
 
                        // var foundpostalcodes = _postalcontext.ValidatePostalCodeByCOuntryandCity(countryname, city, postalcode);
                        // return foundpostalcodes;
@@ -811,26 +811,26 @@ namespace Anewluv.Services.Spatial
 
                         string query = "sp_GetPostalCodesByCountryAndLatLong";
 
-                        SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("StrLattitude", lattitude);
-                        parameter.ParameterName = "@StrLattitude";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 25;
+                        SqlParameter parameter2 = new SqlParameter("@StrLattitude", lattitude);
+                        parameter2.ParameterName = "@StrLattitude";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 25;
 
-                        SqlParameter parameter3 = new SqlParameter("StrLongitude", longitude);
-                        parameter.ParameterName = "@StrLongitude";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 25;
+                        SqlParameter parameter3 = new SqlParameter("@StrLongitude", longitude);
+                        parameter3.ParameterName = "@StrLongitude";
+                        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter3.Size = 25;
 
 
                         var parameters = new object[] { parameter, parameter2, parameter3 };
 
 
-                        var geopostalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " " , parameters);
+                        var geopostalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName.@StrLattitude,@StrLongitude", parameters);
    
 
                       //  var geopostalcodes = _postalcontext.GetPostalCodesByCountryAndLatLongDynamic(countryname, lattitude, longitude);
@@ -870,25 +870,25 @@ namespace Anewluv.Services.Spatial
 
                         string query = "sp_GetPostalCodeByCountryNameCityandStateProvince";
 
-                        SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("StrCity", city);
-                        parameter.ParameterName = "@StrCity";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 50;
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        parameter2.ParameterName = "@StrCity";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 50;
 
                         SqlParameter parameter3 = new SqlParameter("StrStateProvince", stateprovince);
-                        parameter.ParameterName = "@StrStateProvince";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 100;
+                        parameter3.ParameterName = "@StrStateProvince";
+                        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter3.Size = 100;
                         
 
                         var parameters = new object[] { parameter, parameter2, parameter3 };
 
-                        var geopostalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " " , parameters).ToList();
+                        var geopostalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrStateProvince", parameters).ToList();
 
                       //  var geopostalcodes = _postalcontext.GetPostalCodesByCountryNameCityandStateProvinceDynamic(countryname, city, stateprovince);
                         if (geopostalcodes != null)
@@ -922,7 +922,7 @@ namespace Anewluv.Services.Spatial
             /// <param name="filter"></param>
             /// <param name="postalcode"></param>
             /// <returns></returns>
-            public List<citystateprovince> getfilteredcitiesbycountryfilteroptionalpostalcode(string country, string filter,string postalcode ="")
+            public List<citystateprovince> getfilteredcitybycountryandpostalcodefilter(string country, string filter)
             {
 
 
@@ -931,10 +931,7 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
-                        //List<CityList> _CityList = new List<CityList>();
-                        if (postalcode !="")
-                        postalcode = string.Format("%{0}%", postalcode.Replace("'", "''"));
-                        // fix country names if theres a space
+                      
                         country = string.Format(country.Replace(" ", ""));
 
                         //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
@@ -944,25 +941,21 @@ namespace Anewluv.Services.Spatial
 
                         string query = "sp_CityListbycountryNamePostalcodeandCity";
 
-                        SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 150;
-                        
-                        SqlParameter parameter3 = new SqlParameter("StrPrefixText", filter);
-                        parameter.ParameterName = "@StrPrefixText";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 25;
+                                                
+                        SqlParameter parameter2 = new SqlParameter("@StrPrefixText", filter);
+                        parameter2.ParameterName = "@StrPrefixText";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 25;
 
-                        SqlParameter parameter2 = new SqlParameter("StrPostalCode", postalcode);
-                        parameter.ParameterName = "@StrPostalCode";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 25;
+                     
 
+                        var parameters = new object[] { parameter, parameter2 };
 
-                        var parameters = new object[] { parameter, parameter2, parameter3 };
-
-                        var cities = db.ExecuteStoredProcedure<CityList>(query + " ", parameters).Take(50);
+                        var cities = db.ExecuteStoredProcedure<CityList>(query + " @StrcountryDatabaseName,@StrPrefixText", parameters).Take(50);
 
                        // var cities = _postalcontext.GetCityListDynamic(country, "", filter).Take(50);
 
@@ -988,7 +981,70 @@ namespace Anewluv.Services.Spatial
 
 
             }
-          
+
+            public List<citystateprovince> getfilteredcitybycountryandcityfilter(string country, string filter)
+            {
+
+                //var params = new object[] {new SqlParameter("@FirstName", "Bob")};
+                //this._repositoryContext.ObjectContext.ExecuteStoreQuery<ResultType>("GetByName @FirstName", params) 
+
+
+
+                _unitOfWork.DisableProxyCreation = true;
+                using (var db = _unitOfWork)
+                {
+                    try
+                    {
+                       
+                        country = string.Format(country.Replace(" ", ""));
+
+                        //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
+                        //for cites as well so its a 1 to 1 search no spaces on input and on db side
+                        filter = string.Format("%{0}%", filter.Replace(" ", ""));
+                        //11/13/2009 addded wild ca
+
+                        string query = "sp_CityListbycountryNameCityFilter";
+
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        parameter.ParameterName = "@StrcountryDatabaseName";
+                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter.Size = 150;
+
+                        SqlParameter parameter2 = new SqlParameter("@StrPrefixText", filter);
+                        parameter2.ParameterName = "@StrPrefixText";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 25;
+
+                        
+                        var parameters = new object[] { parameter, parameter2 };
+
+                        var cities = db.ExecuteStoredProcedure<CityList>(query + " @StrcountryDatabaseName,@StrPrefixText", parameters).Take(50);
+
+                        // var cities = _postalcontext.GetCityListDynamic(country, "", filter).Take(50);
+
+                        var temp = (from s in cities.ToList() select new citystateprovince { citystateprovincevalue = s.City + "," + s.State_Province }).ToList();
+                        return temp;
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
+                        new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in GeoService service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                        //throw convertedexcption;
+                    }
+
+                }
+
+
+            }
+
             public List<postalcode> getfilteredpostalcodesbycountrycityfilter(string country, string city, string filter)
             {
 
@@ -1012,24 +1068,24 @@ namespace Anewluv.Services.Spatial
 
                         string query = "sp_GetPostalCodesByCountryNameCityandPrefix";
 
-                        SqlParameter parameter = new SqlParameter("StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("StrCity", city);
-                        parameter.ParameterName = "@StrCity";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 100;
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        parameter2.ParameterName = "@StrCity";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 100;
 
                         SqlParameter parameter3 = new SqlParameter("StrprefixText", filter);
-                        parameter.ParameterName = "@StrprefixText";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 40;
+                        parameter3.ParameterName = "@StrprefixText";
+                        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter3.Size = 40;
 
                         var parameters = new object[] { parameter, parameter2, parameter3 };
 
-                        var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " ", parameters).ToList();
+                        var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrPrefixText" + " ", parameters).ToList();
 
                         //  var customers = _postalcontext.GetPostalCodesByCountryAndCityPrefixDynamic(country, city, filter);
 
