@@ -11,9 +11,9 @@ namespace Anewluv.Domain.Data.ViewModels
     public class ValidateRegistrationGeoDataModel
     {
        [DataMember ]
-        public registermodel GeoRegisterModel {get;set;}
-        [DataMember]
-        public MembersViewModel GeoMembersModel { get; set; }
+       public registermodel GeoRegisterModel {get;set;}
+       // [DataMember]
+       // public MembersViewModel GeoMembersModel { get; set; }
 
     }
 }

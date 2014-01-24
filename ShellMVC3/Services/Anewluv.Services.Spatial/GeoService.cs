@@ -18,6 +18,7 @@ using Anewluv.Domain.Data.ViewModels;
 using Anewluv.DataExtentionMethods;
 using Nmedia.Infrastructure.Domain.Data.errorlog;
 using Anewluv.Lib;
+using GeoData.Domain.ViewModels;
 
 
 
@@ -63,7 +64,7 @@ namespace Anewluv.Services.Spatial
 
 
 
-            public string getcountrynamebycountryid(string countryid)
+            public string getcountrynamebycountryid(GeoModel model)
             {
                
                     string countryname = "";
@@ -79,7 +80,7 @@ namespace Anewluv.Services.Spatial
                             db.SetIsolationToDefault = true;
                             //TDocRecon loandetail2 = new TDocRecon();
                             string query = "sp_GetCountryNameByCountryID";
-                            SqlParameter parameter = new SqlParameter("@CountryID", countryid);
+                            SqlParameter parameter = new SqlParameter("@CountryID", model.countryid);
                             parameter.ParameterName = "@CountryID";
                             parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                             parameter.Size = 40;
@@ -96,7 +97,7 @@ namespace Anewluv.Services.Spatial
                         catch (Exception ex)
                         {
 
-                            Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(countryid.ToString(), "", "", ex.Message, ex.InnerException);
+                            Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.countryid.ToString(), "", "", ex.Message, ex.InnerException);
                             new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment,  convertedexcption);
                             //can parse the error to build a more custom error mssage and populate fualt faultreason
                             FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -121,48 +122,49 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
-                        //4-24-2012 fixed code to hanlde if we did not have a postcal code
-                        gpsdata gpsData = new gpsdata();
-                        string[] tempcityAndStateProvince = model.GeoRegisterModel.city .Split(',');
-                        //int countryID;
+                        ////4-24-2012 fixed code to hanlde if we did not have a postcal code
+                        //gpsdata gpsData = new gpsdata();
+                        //string[] tempcityAndStateProvince = model.GeoRegisterModel.city .Split(',');
+                        ////int countryID;
 
-                        //attmept to get postal postalcode if it is empty
+                        ////attmept to get postal postalcode if it is empty
 
-                        model.GeoRegisterModel.ziporpostalcode = (model.GeoRegisterModel.ziporpostalcode == null) ? 
+                        //model.GeoRegisterModel.ziporpostalcode = (model.GeoRegisterModel.ziporpostalcode == null) ?
 
-           
 
-                        this.getpostalcodesbycountrynamecity(model.GeoRegisterModel.country, tempcityAndStateProvince[0]).Where(p=>p.postalcodevalue  == model.GeoRegisterModel.ziporpostalcode ).FirstOrDefault().postalcodevalue  :
-                        model.GeoRegisterModel.ziporpostalcode;
-                        model.GeoRegisterModel.stateprovince = ((tempcityAndStateProvince.Count() > 1)) ? tempcityAndStateProvince[1] : "NA";
-                        //countryID = postaldataservicecontext.GetcountryIdBycountryName(model.GeoRegisterModel.country);
 
-                        //check if the  city and country match
-                        if (model.GeoRegisterModel.country == model.GeoMembersModel.myquicksearch.myselectedcountryname && 
-                            tempcityAndStateProvince[0] == model.GeoMembersModel.myquicksearch.myselectedcity)
-                        {
-                            if (model.GeoRegisterModel.lattitude  != null | model.GeoRegisterModel.lattitude  == 0)
-                                return model.GeoRegisterModel;
-                        }
+                        //this.getpostalcodesbycountrynamecity(new GeoModel { country = model.GeoRegisterModel.country, city = tempcityAndStateProvince[0] }).Where(p => p.postalcodevalue == model.GeoRegisterModel.ziporpostalcode).FirstOrDefault().postalcodevalue :
+                        //model.GeoRegisterModel.ziporpostalcode;
+                        //model.GeoRegisterModel.stateprovince = ((tempcityAndStateProvince.Count() > 1)) ? tempcityAndStateProvince[1] : "NA";
+                        ////countryID = postaldataservicecontext.GetcountryIdBycountryName(model.GeoRegisterModel.country);
 
-                        //get GPS data here
-                        //conver the unquiqe coountry Name to an ID
-                        //store country ID for use later
-                        //get the longidtue and latttude 
-                        //1-11-2011 postal code and city are flipped by the way not this function should be renamed
-                        //TO DO rename this function.                  
-                        gpsData = this.getgpsdatabycitycountrypostalcode(model.GeoRegisterModel.country, model.GeoRegisterModel.ziporpostalcode, tempcityAndStateProvince[0]);
+                        ////check if the  city and country match
+                        //if (model.GeoRegisterModel.country == model.GeoMembersModel.myquicksearch.myselectedcountryname && 
+                        //    tempcityAndStateProvince[0] == model.GeoMembersModel.myquicksearch.myselectedcity)
+                        //{
+                        //    if (model.GeoRegisterModel.lattitude  != null | model.GeoRegisterModel.lattitude  == 0)
+                        //        return model.GeoRegisterModel;
+                        //}
 
-                        model.GeoRegisterModel.lattitude  = (gpsData != null) ?  Convert.ToDouble( gpsData.Latitude )   : 0;
-                        model.GeoRegisterModel.longitude = (gpsData != null) ? Convert.ToDouble(gpsData.Longitude) : 0;
+                        ////get GPS data here
+                        ////conver the unquiqe coountry Name to an ID
+                        ////store country ID for use later
+                        ////get the longidtue and latttude 
+                        ////1-11-2011 postal code and city are flipped by the way not this function should be renamed
+                        ////TO DO rename this function.                  
+                        //gpsData = this.getgpsdatabycitycountrypostalcode(new GeoModel { country = model.GeoRegisterModel.country, postalcode = model.GeoRegisterModel.ziporpostalcode, city = tempcityAndStateProvince[0] });
+                        //model.GeoRegisterModel.lattitude  = (gpsData != null) ?  Convert.ToDouble( gpsData.Latitude )   : 0;
+                        //model.GeoRegisterModel.longitude = (gpsData != null) ? Convert.ToDouble(gpsData.Longitude) : 0;
 
-                        return model.GeoRegisterModel ;
+                       // return model.GeoRegisterModel ;
+
+                        return null;
 
                     }
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.GeoRegisterModel.country , "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException("" , "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -276,7 +278,8 @@ namespace Anewluv.Services.Spatial
             /// <summary>
             /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
             /// </summary>        
-            public bool getpostalcodestatusbycountryname(string countryname)
+            public bool getpostalcodestatusbycountryname(GeoModel model)
+
             {
 
 
@@ -287,7 +290,7 @@ namespace Anewluv.Services.Spatial
                     {
                              //  List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
                             //Dim ctx As New Entities()
-                              var myQuery = db.GetRepository<Country_PostalCode_List>().Find().ToList().ToList().Where(p => p.CountryName == countryname).ToList();
+                              var myQuery = db.GetRepository<Country_PostalCode_List>().Find().ToList().ToList().Where(p => p.CountryName == model.country).ToList();
 
                             return (myQuery.Count > 0 ? true : false);
                           //  return myQuery.FirstOrDefault().PostalCodes.Value
@@ -296,7 +299,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(countryname.ToString(), "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -312,7 +315,7 @@ namespace Anewluv.Services.Spatial
                
             }
 
-            public int getcountryidbycountryname(string country)
+            public int getcountryidbycountryname(GeoModel model)
             {
 
 
@@ -323,7 +326,7 @@ namespace Anewluv.Services.Spatial
                     {
                         List<Country_PostalCode_List> countryCodeQuery = default(List<Country_PostalCode_List>);
                         //3-18-2013 olawal added code to remove the the spaces when we test
-                        countryCodeQuery = db.GetRepository<Country_PostalCode_List>().Find().ToList().Where(p => p.CountryName.Replace(" ", "") == country).ToList();
+                        countryCodeQuery = db.GetRepository<Country_PostalCode_List>().Find().ToList().Where(p => p.CountryName.Replace(" ", "") == model.country).ToList();
 
                         if (countryCodeQuery.Count() > 0)
                         {
@@ -340,7 +343,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -356,7 +359,7 @@ namespace Anewluv.Services.Spatial
             
             //Dynamic LINQ to Entites quries 
             //*****************************************************************************************************************************************
-            public List<citystateprovince> getcitystateprovincelistbycountrynamepostalcodefilter(string country, string postalcode, string filter)
+            public List<citystateprovince> getcitystateprovincelistbycountrynamepostalcodefilter(GeoModel model)
             {
 
 
@@ -366,27 +369,27 @@ namespace Anewluv.Services.Spatial
                     try
                     {
                         List<CityList> _CityList = new List<CityList>();
-                        postalcode = string.Format("%{0}%", postalcode.Replace("'", "''"));
+                        model.postalcode = string.Format("%{0}%", model.postalcode.Replace("'", "''"));
                         // fix country names if theres a space
-                        country = string.Format(country.Replace(" ", ""));
+                        model.country = string.Format(model.country.Replace(" ", ""));
                         //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
                         //for cites as well so its a 1 to 1 search no spaces on input and on db side
-                        filter = string.Format("%{0}%", filter.Replace(" ", ""));
+                        model.filter = string.Format("%{0}%", model.filter.Replace(" ", ""));
                         //11/13/2009 addded wild ca
 
                         string query = "sp_CityListbycountryNamePostalcodeandCity";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("@StrPrefixText", filter);
+                        SqlParameter parameter2 = new SqlParameter("@StrPrefixText", model.filter);
                         parameter2.ParameterName = "@StrPrefixText";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 40;
-                        
-                        SqlParameter parameter3 = new SqlParameter("@StrPostalCode", postalcode);
+
+                        SqlParameter parameter3 = new SqlParameter("@StrPostalCode", model.postalcode);
                         parameter3.ParameterName = "@StrPostalCode";
                         parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter3.Size = 40;
@@ -404,7 +407,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -421,7 +424,7 @@ namespace Anewluv.Services.Spatial
                      
             }
 
-            public List<gpsdata> getgpsdatalistbycountrycitypostalcode(string country, string city, string postalcode)
+            public List<gpsdata> getgpsdatalistbycountrycitypostalcode(GeoModel model)
             {
 
 
@@ -435,23 +438,23 @@ namespace Anewluv.Services.Spatial
                          //   IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
 
                           List<gpsdata> _GpsData = new List<gpsdata>();
-                          country = string.Format(country.Replace(" ", ""));
+                         model.country = string.Format(model.country.Replace(" ", ""));
                           // fix country names if theres a space
                           // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
 
                           string query = "sp_GetGPSDataByPostalCodeandCity";
 
-                          SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                          SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                           parameter.ParameterName = "@StrcountryDatabaseName";
                           parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                           parameter.Size = 50;                        
 
-                          SqlParameter parameter2 = new SqlParameter("@StrPostalCode", postalcode);
+                          SqlParameter parameter2 = new SqlParameter("@StrPostalCode", model.postalcode);
                           parameter2.ParameterName = "@StrPostalCode";
                           parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                           parameter2.Size = 40;
 
-                          SqlParameter parameter3 = new SqlParameter("@StrCity", city);
+                          SqlParameter parameter3 = new SqlParameter("@StrCity", model.city);
                           parameter3.ParameterName = "@StrCity";
                           parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
                           parameter3.Size = 100;
@@ -468,7 +471,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country.ToString(), "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -484,7 +487,7 @@ namespace Anewluv.Services.Spatial
               
             }
          
-            public List<gpsdata> getgpsdatalistbycountrycity(string country, string city)
+            public List<gpsdata> getgpsdatalistbycountrycity(GeoModel model)
             {
 
                 _unitOfWork.DisableProxyCreation = true;
@@ -495,19 +498,19 @@ namespace Anewluv.Services.Spatial
                         //IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
 
                         List<gpsdata> _GpsData = new List<gpsdata>();
-                        country = string.Format(country.Replace(" ", ""));
+                       model.country = string.Format(model.country.Replace(" ", ""));
                         // fix country names if theres a space
                         // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
 
                         string query = "sp_GetGPSDataByCountryAndCity";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
                     
-                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
                         parameter2.ParameterName = "@StrCity";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 100;
@@ -524,7 +527,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country.ToString(), "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -541,7 +544,7 @@ namespace Anewluv.Services.Spatial
                
             }
         
-            public gpsdata getgpsdatabycitycountrypostalcode(string country, string city, string postalcode)
+            public gpsdata getgpsdatabycitycountrypostalcode(GeoModel model)
             {
 
 
@@ -554,23 +557,23 @@ namespace Anewluv.Services.Spatial
                         //   IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
 
                         List<gpsdata> _GpsData = new List<gpsdata>();
-                        country = string.Format(country.Replace(" ", ""));
+                        model.country = string.Format(model.country.Replace(" ", ""));
                         // fix country names if theres a space
                         // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
 
                         string query = "sp_GetGPSDataByPostalCodeandCity";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("@StrPostalCode", postalcode);
+                        SqlParameter parameter2 = new SqlParameter("@StrPostalCode", model.postalcode);
                         parameter2.ParameterName = "@StrPostalCode";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 40;
 
-                        SqlParameter parameter3 = new SqlParameter("@StrCity", city);
+                        SqlParameter parameter3 = new SqlParameter("@StrCity", model.city);
                         parameter3.ParameterName = "@StrCity";
                         parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter3.Size = 100;
@@ -591,7 +594,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -607,7 +610,7 @@ namespace Anewluv.Services.Spatial
              
             }
 
-            public List<postalcode > getpostalcodesbycountrycityfilter(string country,string city, string filter)
+            public List<postalcode > getpostalcodesbycountrycityfilter(GeoModel model)
             {
 
 
@@ -617,28 +620,28 @@ namespace Anewluv.Services.Spatial
                     try
                     {
                         //added 5/12/2011 to handle empty countries
-                        if (country == null) return null;
+                        if (model.country == null) return null;
 
                       //  List<PostalCode> _PostalCodeList = new List<PostalCode>();
-                        city = string.Format("%{0}%", city);
-                        country = string.Format(country.Replace(" ", ""));
+                        model.city = string.Format("%{0}%", model.city);
+                       model.country = string.Format(model.country.Replace(" ", ""));
                         // fix country names if theres a space
-                        filter = string.Format("%{0}%", filter);
+                        model.filter = string.Format("%{0}%", model.filter);
                         //11/13/2009 addded wild ca
 
                         string query = "sp_GetPostalCodesByCountryNameCityandPrefix";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
                         parameter2.ParameterName = "@StrCity";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 100;
 
-                        SqlParameter parameter3 = new SqlParameter("StrprefixText", filter);
+                        SqlParameter parameter3 = new SqlParameter("StrprefixText", model.filter);
                         parameter3.ParameterName = "@StrprefixText";
                         parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter3.Size = 40;
@@ -656,7 +659,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country.ToString(), "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -674,7 +677,7 @@ namespace Anewluv.Services.Spatial
 
             //gets the single geo code as string
             //No using internal method
-            private List<postalcode> getpostalcodesbycountrynamecity(string country, string city)
+            private List<postalcode> getpostalcodesbycountrynamecity(GeoModel model)
             {
 
                 _unitOfWork.DisableProxyCreation = true;
@@ -683,24 +686,24 @@ namespace Anewluv.Services.Spatial
                     {
 
                         //added 5/12/2011 to handle empty countries
-                        if (country == null) return null;
+                        if (model.country == null) return null;
 
                         //List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
-                        city = string.Format("%{0}%", city);
-                        country = string.Format(country.Replace(" ", ""));
+                        model.city = string.Format("%{0}%", model.city);
+                       model.country = string.Format(model.country.Replace(" ", ""));
                         // fix country names if theres a space
                         // StrprefixText = string.Format("%{0}%", StrprefixText);
                         //11/13/2009 addded wild ca
 
                         string query = "sp_GetPostalCodesByCountryNameCity";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
 
-                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
                         parameter2.ParameterName = "@StrCity";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 100;
@@ -718,7 +721,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country.ToString(), "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -731,7 +734,7 @@ namespace Anewluv.Services.Spatial
 
                 }
 
-            public bool validatepostalcodebycountrycitypostalcode(string country, string city, string postalcode)
+            public bool validatepostalcodebycountrycitypostalcode(GeoModel model)
             {
                 
                 _unitOfWork.DisableProxyCreation = true;
@@ -741,23 +744,23 @@ namespace Anewluv.Services.Spatial
                     {
                         //Dim _PostalCodeList As New List(Of PostalCodeList)()
                        
-                        city = string.Format("%{0}%", city);
-                        country = string.Format(country.Replace(" ", ""));
+                        model.city = string.Format("%{0}%", model.city);
+                       model.country = string.Format(model.country.Replace(" ", ""));
                         // fix country names if theres a space
 
                         string query = "sp_ValidatePostalCodeByCountryNameandCity";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
                         parameter2.ParameterName = "@StrCity";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 100;
 
-                        SqlParameter parameter3 = new SqlParameter("@StrPostalCode", postalcode);
+                        SqlParameter parameter3 = new SqlParameter("@StrPostalCode", model.postalcode);
                         parameter3.ParameterName = "@StrPostalCode";
                         parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter3.Size = 40;
@@ -776,7 +779,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country.ToString(), "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -792,7 +795,7 @@ namespace Anewluv.Services.Spatial
                
             }
 
-            public List<postalcode> getpostalcodesbycountrylatlong(string country, string lattitude, string longitude)
+            public List<postalcode> getpostalcodesbycountrylatlong(GeoModel model)
             {
 
                 _unitOfWork.DisableProxyCreation = true;
@@ -801,27 +804,27 @@ namespace Anewluv.Services.Spatial
                     try
                     {
                         //added 5/12/2011 to handle empty countries
-                        if (country == null) return null;
+                        if (model.country == null) return null;
                         //TO DO copy postal code stuff from shared models into here
                         //List<PostalCodeItem> _PostalCodeList = new List<PostalCodeList>();
-                        country = string.Format(country.Replace(" ", ""));
+                       model.country = string.Format(model.country.Replace(" ", ""));
                         // fix country names if theres a space
                         //StrprefixText = string.Format("%{0}%", StrprefixText);
 
 
                         string query = "sp_GetPostalCodesByCountryAndLatLong";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("@StrLattitude", lattitude);
+                        SqlParameter parameter2 = new SqlParameter("@StrLattitude", model.lattitude);
                         parameter2.ParameterName = "@StrLattitude";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 25;
 
-                        SqlParameter parameter3 = new SqlParameter("@StrLongitude", longitude);
+                        SqlParameter parameter3 = new SqlParameter("@StrLongitude", model.longitude);
                         parameter3.ParameterName = "@StrLongitude";
                         parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter3.Size = 25;
@@ -842,7 +845,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -858,7 +861,7 @@ namespace Anewluv.Services.Spatial
                
             }
 
-            public List<postalcode> getpostalcodesbycountrynamecitystateprovince(string country, string city, string stateprovince)
+            public List<postalcode> getpostalcodesbycountrynamecitystateprovince(GeoModel model)
             {
 
                 _unitOfWork.DisableProxyCreation = true;
@@ -870,17 +873,17 @@ namespace Anewluv.Services.Spatial
 
                         string query = "sp_GetPostalCodeByCountryNameCityandStateProvince";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
                         parameter2.ParameterName = "@StrCity";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 50;
 
-                        SqlParameter parameter3 = new SqlParameter("StrStateProvince", stateprovince);
+                        SqlParameter parameter3 = new SqlParameter("StrStateProvince", model.stateprovince);
                         parameter3.ParameterName = "@StrStateProvince";
                         parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter3.Size = 100;
@@ -899,7 +902,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -922,7 +925,7 @@ namespace Anewluv.Services.Spatial
             /// <param name="filter"></param>
             /// <param name="postalcode"></param>
             /// <returns></returns>
-            public List<citystateprovince> getfilteredcitybycountryandpostalcodefilter(string country, string filter)
+            public List<citystateprovince> getfilteredcitybycountryandpostalcodefilter(GeoModel model)
             {
 
 
@@ -932,21 +935,21 @@ namespace Anewluv.Services.Spatial
                     try
                     {
                       
-                        country = string.Format(country.Replace(" ", ""));
+                       model.country = string.Format(model.country.Replace(" ", ""));
 
                         //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
                         //for cites as well so its a 1 to 1 search no spaces on input and on db side
-                        filter = string.Format("%{0}%", filter.Replace(" ", ""));
+                        model.filter = string.Format("%{0}%", model.filter.Replace(" ", ""));
                         //11/13/2009 addded wild ca
 
                         string query = "sp_CityListbycountryNamePostalcodeandCity";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 150;
                                                 
-                        SqlParameter parameter2 = new SqlParameter("@StrPrefixText", filter);
+                        SqlParameter parameter2 = new SqlParameter("@StrPrefixText", model.filter);
                         parameter2.ParameterName = "@StrPrefixText";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 25;
@@ -966,7 +969,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -982,7 +985,7 @@ namespace Anewluv.Services.Spatial
 
             }
 
-            public List<citystateprovince> getfilteredcitybycountryandcityfilter(string country, string filter)
+            public List<citystateprovince> getfilteredcitybycountryandcityfilter(GeoModel model)
             {
 
                 //var params = new object[] {new SqlParameter("@FirstName", "Bob")};
@@ -996,21 +999,21 @@ namespace Anewluv.Services.Spatial
                     try
                     {
                        
-                        country = string.Format(country.Replace(" ", ""));
+                       model.country = string.Format(model.country.Replace(" ", ""));
 
                         //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
                         //for cites as well so its a 1 to 1 search no spaces on input and on db side
-                        filter = string.Format("%{0}%", filter.Replace(" ", ""));
+                        model.filter = string.Format("%{0}%", model.filter.Replace(" ", ""));
                         //11/13/2009 addded wild ca
 
                         string query = "sp_CityListbycountryNameCityFilter";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 150;
 
-                        SqlParameter parameter2 = new SqlParameter("@StrPrefixText", filter);
+                        SqlParameter parameter2 = new SqlParameter("@StrPrefixText", model.filter);
                         parameter2.ParameterName = "@StrPrefixText";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 25;
@@ -1029,7 +1032,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -1045,7 +1048,7 @@ namespace Anewluv.Services.Spatial
 
             }
 
-            public List<postalcode> getfilteredpostalcodesbycountrycityfilter(string country, string city, string filter)
+            public List<postalcode> getfilteredpostalcodesbycountrycityfilter(GeoModel model)
             {
 
 
@@ -1056,29 +1059,29 @@ namespace Anewluv.Services.Spatial
                     {
 
                         //added 5/12/2011 to handle empty countries
-                        if (country == null) return null;
+                        if (model.country == null) return null;
                         List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
-                        city = string.Format("%{0}%", city);
-                        country = string.Format(country.Replace(" ", ""));
+                        model.city = string.Format("%{0}%", model.city);
+                       model.country = string.Format(model.country.Replace(" ", ""));
                         // fix country names if theres a space
-                        filter = string.Format("%{0}%", filter);
+                        model.filter = string.Format("%{0}%", model.filter);
                         //11/13/2009 addded wild ca
 
                         //sp_GetPostalCodesByCountryNameCityandPrefix
 
                         string query = "sp_GetPostalCodesByCountryNameCityandPrefix";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", country);
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
                         parameter.ParameterName = "@StrcountryDatabaseName";
                         parameter.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("@StrCity", city);
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
                         parameter2.ParameterName = "@StrCity";
                         parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter2.Size = 100;
 
-                        SqlParameter parameter3 = new SqlParameter("StrprefixText", filter);
+                        SqlParameter parameter3 = new SqlParameter("StrprefixText", model.filter);
                         parameter3.ParameterName = "@StrprefixText";
                         parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
                         parameter3.Size = 40;
@@ -1097,7 +1100,7 @@ namespace Anewluv.Services.Spatial
                     catch (Exception ex)
                     {
 
-                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(country, "", "", ex.Message, ex.InnerException);
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
                          new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in GeoService service");
@@ -1122,9 +1125,9 @@ namespace Anewluv.Services.Spatial
 
 
             // use this function to get distance at the same time, add it to the model
-            public double? getdistancebetweenmembers(string lat1, string lon1, string lat2, string lon2, string unit)
+            public double? getdistancebetweenmembers(GeoModel model)
             {
-                return spatialextentions.getdistancebetweenmembers(Convert.ToDouble(lat1), Convert.ToDouble(lon1), Convert.ToDouble(lat2), Convert.ToDouble(lon2), unit);
+                return spatialextentions.getdistancebetweenmembers(Convert.ToDouble(model.lattitude), Convert.ToDouble(model.longitude), Convert.ToDouble(model.lattitude2), Convert.ToDouble(model.longitude2), model.unit);
                
             }
 

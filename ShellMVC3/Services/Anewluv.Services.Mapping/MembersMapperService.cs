@@ -26,6 +26,7 @@ using Anewluv.Services.Spatial;
 using Anewluv.Domain;
 using Anewluv.Services.Media;
 using Anewluv.Services.Members;
+using GeoData.Domain.ViewModels;
 
 namespace Anewluv.Services.Mapping
 {
@@ -758,7 +759,7 @@ namespace Anewluv.Services.Mapping
                   {
                       GeoService GeoService = new GeoService(tempdb);
 
-                      quicksearchmodel.myselectedpostalcodestatus = (GeoService.getpostalcodestatusbycountryname(model.mycountryname)) ? true : false;
+                      quicksearchmodel.myselectedpostalcodestatus = (GeoService.getpostalcodestatusbycountryname(new GeoModel { country = model.mycountryname })) ? true : false;
                   }
                                     //TO do get this from search settings
                     //default for has photos only get this from the 
@@ -820,7 +821,7 @@ namespace Anewluv.Services.Mapping
                   using (var tempdb = GeoContext)
                   {
                       GeoService GeoService = new GeoService(tempdb);
-                      model.myquicksearch.myselectedcountryname = GeoService.getcountryidbycountryname(Model.Country) == 0 ? "United States" : Model.Country; //use same country for now
+                      model.myquicksearch.myselectedcountryname = GeoService.getcountryidbycountryname(new GeoModel { country = Model.Country }) == 0 ? "United States" : Model.Country; //use same country for now
                   }
                 }
                 else
@@ -1342,7 +1343,7 @@ namespace Anewluv.Services.Mapping
                   using (var tempdb = GeoContext)
                   {
                       GeoService GeoService = new GeoService(tempdb);
-                      model.mycountryname = GeoService.getcountrynamebycountryid(profile.profiledata.countryid.GetValueOrDefault().ToString());
+                      model.mycountryname = GeoService.getcountrynamebycountryid(new GeoModel { countryid = profile.profiledata.countryid.GetValueOrDefault().ToString() });
                   }
 #endif
 

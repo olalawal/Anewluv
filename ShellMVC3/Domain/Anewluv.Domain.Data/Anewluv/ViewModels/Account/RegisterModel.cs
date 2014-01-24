@@ -30,47 +30,47 @@ namespace Anewluv.Domain.Data.ViewModels
 
 
         [DataMember]
-        [Required]
+        //[Required]
        // [ValidateUsername]
-        [ValidateUserNameHasNoSpaces]
-        [DisplayName("User Name")]
-        [StringLength(15, ErrorMessage = "User Name must be 15 characters or less")]
+        //[ValidateUserNameHasNoSpaces]
+        //[DisplayName("User Name")]
+       // [StringLength(15, ErrorMessage = "User Name must be 15 characters or less")]
         public string username { get; set; }
 
         [DataMember]
-        [Required]
+       // [Required]
        // [ValidateScreenname]
-        [StringLength(10, ErrorMessage = "Screen Name must be 10 characters or less")]
-        [DisplayName("Screen Name")]
+      //  [StringLength(10, ErrorMessage = "Screen Name must be 10 characters or less")]
+       // [DisplayName("Screen Name")]
         public string screenname { get; set; }
 
         [DataMember]
-        [Required]
+       // [Required]
         // [EmailAddress(ErrorMessage = "Valid Email Address is required.")]
-        [StringLength(200, ErrorMessage = "Email must be 200 characters or less.")]
-        [DisplayName("Email address")]
+       // [StringLength(200, ErrorMessage = "Email must be 200 characters or less.")]
+       // [DisplayName("Email address")]
        // [EmailDoesNotExistAttribute]
         public string emailaddress { get; set; }
 
            [DataMember]
-        [Required]
-        [DataType(DataType.EmailAddress)]
+       // [Required]
+        //[DataType(DataType.EmailAddress)]
         //[Compare("Email", ErrorMessage = "The Email Adresses do not match.")]
-        [DisplayName("Confirm Email")]
+      //  [DisplayName("Confirm Email")]
         public string confirmemailaddress { get; set; }
 
            [DataMember]
-        [Required]
-        [DataType(DataType.Password)]
-        [ValidatePasswordHasNoSpaces]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters", MinimumLength = 7)]
-        [DisplayName("Password")]
+       // [Required]
+        //[DataType(DataType.Password)]
+        //[ValidatePasswordHasNoSpaces]
+        //[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters", MinimumLength = 7)]
+        //[DisplayName("Password")]
         public string password { get; set; }
 
            [DataMember]
-        [Required]
-        [DataType(DataType.Password)]
-        [DisplayName("Confirm password")]
+       // [Required]
+      //  [DataType(DataType.Password)]
+      //  [DisplayName("Confirm password")]
         //[Compare("Password", ErrorMessage = "The Passwords do not match.")]
         public string confirmpassword { get; set; }
 
@@ -81,10 +81,10 @@ namespace Anewluv.Domain.Data.ViewModels
         public string openidprovider { get; set; }
 
         [IgnoreDataMember]
-        [Required]
-        [DataType(DataType.Date)]
-        [CustomValidation(typeof(registermodel), "ValidatebirthdateDate")]
-        [DisplayName("Date of Birth")]
+       // [Required]
+      //  [DataType(DataType.Date)]
+       // [CustomValidation(typeof(registermodel), "ValidatebirthdateDate")]
+       // [DisplayName("Date of Birth")]
         public DateTime birthdate { get; set; }
 
         [DataMember(Name = "birthdate")]
@@ -98,18 +98,18 @@ namespace Anewluv.Domain.Data.ViewModels
         public List<string> genders { get; set; }
 
            [DataMember]
-        [Required]
-        [DataType(DataType.Text)]
-        [DisplayName("Gender")]
+       // [Required]
+      //  [DataType(DataType.Text)]
+      //  [DisplayName("Gender")]
         public string gender { get; set; }
 
         [DataMember]
         public List<string> countries { get; set; }
 
            [DataMember]
-        [Required]
-        [DataType(DataType.Text)]
-        [DisplayName("Country")]
+      //  [Required]
+       // [DataType(DataType.Text)]
+      //  [DisplayName("Country")]
         public string country { get; set; }
 
            [DataMember]
@@ -119,13 +119,13 @@ namespace Anewluv.Domain.Data.ViewModels
         public List<string> cities { get; set; }
 
            [DataMember]
-        [Required]
-        [DataType(DataType.Text)]
-        [DisplayName("City")]
+        //[Required]
+      //  [DataType(DataType.Text)]
+        //[DisplayName("City")]
         public string city { get; set; }
 
         [DataMember]
-        [DataType(DataType.Text)]
+       // [DataType(DataType.Text)]
         public string stateprovince { get; set; }
 
         [DataMember]
@@ -140,8 +140,8 @@ namespace Anewluv.Domain.Data.ViewModels
         public List<string> ziporpostalcodes { get; set; }
 
            [DataMember]
-        [DataType(DataType.Text)]
-        [DisplayName("Zip/PostalCode")]
+      //  [DataType(DataType.Text)]
+       // [DisplayName("Zip/PostalCode")]
         //[RequiredPostalCodeIf("PostalCodeStatus", Comparison.IsEqualTo, true)]
         public string ziporpostalcode { get; set; }
 
@@ -167,20 +167,20 @@ namespace Anewluv.Domain.Data.ViewModels
         public string activationcode { get; set; }
 
 
-        public static ValidationResult ValidatebirthdateDate(DateTime birthdateDateToValidate)
-        {
+        //public static ValidationResult ValidatebirthdateDate(DateTime birthdateDateToValidate)
+        //{
 
-            //if (birthdateDateToValidate.Date > DateTime.Today) 
-            //{ 
-            //   return new ValidationResult("Your must be at least 18 years old to Register"); 
+        //    //if (birthdateDateToValidate.Date > DateTime.Today) 
+        //    //{ 
+        //    //   return new ValidationResult("Your must be at least 18 years old to Register"); 
 
-            //} 
-            if (birthdateDateToValidate.Date > DateTime.Today.AddYears(-18))
-            {
-                return new ValidationResult("You must be at least 18 years old");
-            }
-            return ValidationResult.Success;
-        }
+        //    //} 
+        //    if (birthdateDateToValidate.Date > DateTime.Today.AddYears(-18))
+        //    {
+        //        return new ValidationResult("You must be at least 18 years old");
+        //    }
+        //    return ValidationResult.Success;
+        //}
 
 
 

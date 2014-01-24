@@ -27,6 +27,7 @@ using Anewluv.Domain;
 using Anewluv.Services.Spatial;
 using GeoData.Domain.Models;
 using Anewluv.Services.Media;
+using GeoData.Domain.ViewModels;
 
 
 namespace Anewluv.Services.Authentication
@@ -645,7 +646,7 @@ namespace Anewluv.Services.Authentication
                         using (var tempdb = GeoContext)
                         {
                             GeoService GeoService = new GeoService(tempdb);
-                          countryID=   GeoService.getcountryidbycountryname(country);    
+                            countryID = GeoService.getcountryidbycountryname(new GeoModel { country = country });    
                         }
                        // countryID = Api.GeoService.getcountryidbycountryname(country);
 
@@ -872,10 +873,10 @@ namespace Anewluv.Services.Authentication
                             GeoService GeoService = new GeoService(tempdb);
                           //  countryID = GeoService.getcountryidbycountryname(country);
 
-                            GeoService.getcountryidbycountryname(u.country);
+                            GeoService.getcountryidbycountryname(new GeoModel { country = u.country });
 
                             //get the longidtue and latttude 
-                            GeoService.getgpsdatabycitycountrypostalcode(u.country, tempCityAndStateProvince[0], u.ziporpostalcode);
+                            GeoService.getgpsdatabycitycountrypostalcode(new GeoModel { country = u.country, city = tempCityAndStateProvince[0], postalcode = u.ziporpostalcode });
                         }
 
                       //  int countryID = Api.GeoService.getcountryidbycountryname(u.country);
