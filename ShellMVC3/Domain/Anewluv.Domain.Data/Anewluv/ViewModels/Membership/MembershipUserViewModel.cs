@@ -35,9 +35,9 @@ namespace Anewluv.Domain.Data.ViewModels
        [DataMember]
        public string stateprovince { get; set; } 
          [DataMember]
-       public double? longitude { get; set; }
+       public string longitude { get; set; }
          [DataMember]
-       public double? lattitude { get; set; } 
+       public string lattitude { get; set; } 
          [DataMember]
        public string screenname { get; set; }
          [DataMember]

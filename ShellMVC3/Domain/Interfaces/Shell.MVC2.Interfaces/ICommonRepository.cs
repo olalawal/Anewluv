@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Anewluv.Domain.Data.ViewModels;
 
 
 namespace Shell.MVC2.Interfaces
@@ -11,8 +12,7 @@ namespace Shell.MVC2.Interfaces
 
 
 
-             string  getNETJSONdatefromISO(string isodate);
-            
+        string getNETJSONdatefromISO(DateValidateModel date);
 
           
 

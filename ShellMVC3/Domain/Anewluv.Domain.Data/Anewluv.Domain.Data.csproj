@@ -240,6 +240,7 @@
     <Compile Include="Anewluv\ViewModels\AdminPhotoModel.cs" />
     <Compile Include="Anewluv\ViewModels\Admin\AdminViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\ContactUsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\DateValidateModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\AppearanceSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\AppearanceSettingsViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\BasicSettingsModel.cs" />

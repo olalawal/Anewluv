@@ -282,6 +282,7 @@ namespace Anewluv.Services.Spatial
 
             {
 
+                if (model.country == null ) return false;
 
                 _unitOfWork.DisableProxyCreation = true;
                 using (var db = _unitOfWork)
@@ -324,6 +325,8 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+                        if (model.country == null ) return 0;
+
                         List<Country_PostalCode_List> countryCodeQuery = default(List<Country_PostalCode_List>);
                         //3-18-2013 olawal added code to remove the the spaces when we test
                         countryCodeQuery = db.GetRepository<Country_PostalCode_List>().Find().ToList().Where(p => p.CountryName.Replace(" ", "") == model.country).ToList();
@@ -368,6 +371,9 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+                        if (model.country == null | model.filter == null | model.postalcode == null) return null;
+
+
                         List<CityList> _CityList = new List<CityList>();
                         model.postalcode = string.Format("%{0}%", model.postalcode.Replace("'", "''"));
                         // fix country names if theres a space
@@ -434,6 +440,9 @@ namespace Anewluv.Services.Spatial
                     try
                     {
                         //
+                        if (model.country == null | model.city == null | model.postalcode == null) return null;
+
+
 
                          //   IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
 
@@ -495,6 +504,9 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+                        if (model.country == null | model.city == null) return null;
+
+
                         //IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
 
                         List<gpsdata> _GpsData = new List<gpsdata>();
@@ -553,6 +565,9 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+
+
+                        if (model.country == null | model.filter == null | model.postalcode == null) return null;
 
                         //   IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
 
@@ -619,6 +634,10 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+
+                        if (model.country == null | model.filter == null | model.filter == null) return null;
+
+
                         //added 5/12/2011 to handle empty countries
                         if (model.country == null) return null;
 
@@ -685,6 +704,9 @@ namespace Anewluv.Services.Spatial
                     try
                     {
 
+                        if (model.country == null | model.city == null ) return null;
+
+
                         //added 5/12/2011 to handle empty countries
                         if (model.country == null) return null;
 
@@ -742,6 +764,9 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+
+                        if (model.country == null | model.filter == null | model.postalcode == null) return false;
+
                         //Dim _PostalCodeList As New List(Of PostalCodeList)()
                        
                         model.city = string.Format("%{0}%", model.city);
@@ -803,6 +828,9 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+                        if (model.country == null | model.lattitude == null | model.longitude == null) return null;
+
+
                         //added 5/12/2011 to handle empty countries
                         if (model.country == null) return null;
                         //TO DO copy postal code stuff from shared models into here
@@ -869,6 +897,10 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+
+                        if (model.country == null | model.city == null | model.stateprovince == null) return null;
+
+
                         //sp_GetPostalCodeByCountryNameCityandStateProvince
 
                         string query = "sp_GetPostalCodeByCountryNameCityandStateProvince";
@@ -934,7 +966,9 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
-                      
+
+                        if (model.country == null || model.filter == null) return null;
+
                        model.country = string.Format(model.country.Replace(" ", ""));
 
                         //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
@@ -998,7 +1032,9 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
-                       
+
+                        if (model.country == null || model.filter == null) return null;
+
                        model.country = string.Format(model.country.Replace(" ", ""));
 
                         //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
@@ -1057,6 +1093,9 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+
+                        if (model.country == null | model.filter == null | model.city == null) return null;
+
 
                         //added 5/12/2011 to handle empty countries
                         if (model.country == null) return null;

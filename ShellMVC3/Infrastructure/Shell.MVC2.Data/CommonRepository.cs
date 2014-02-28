@@ -7,6 +7,7 @@ using Shell.MVC2.Interfaces;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data.errorlog;
 using Anewluv.Lib;
+using Anewluv.Domain.Data.ViewModels;
 
 
 
@@ -29,11 +30,11 @@ namespace Shell.MVC2.Data
 
 
 
-        public   string getNETJSONdatefromISO(string isodate)
+        public   string getNETJSONdatefromISO(DateValidateModel date)
         {
             try
             {
-                return Serialization.datetimetojson(DateTime.Parse(isodate));
+                return Serialization.datetimetojson(DateTime.Parse(date.IsoDate));
             }
             catch (Exception ex)
             {

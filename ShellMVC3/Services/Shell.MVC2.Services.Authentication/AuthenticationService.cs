@@ -596,7 +596,7 @@ namespace Anewluv.Services.Authentication
                   string email,
             //  string securityQuestion,
             // string securityAnswer,
-                  DateTime birthdate, string gender, string country, string city, string stateprovince, double? longitude, double? latitude, string screenname, string zippostalcode, string activationcode,
+                  DateTime birthdate, string gender, string country, string city, string stateprovince, string longitude, string latitude, string screenname, string zippostalcode, string activationcode,
                   bool isApproved,
                   object providerUserKey,
                  out MembershipCreateStatus status)
@@ -678,8 +678,8 @@ namespace Anewluv.Services.Authentication
                         //Build the profile data table
                         // objprofileDataEntity.id  = ;
                         //objprofileDataEntity.profile.emailaddress = email;
-                        objprofileDataEntity.latitude = latitude;
-                        objprofileDataEntity.longitude = longitude; //_GpsData.longitude;
+                        objprofileDataEntity.latitude = Convert.ToDouble(latitude);
+                        objprofileDataEntity.longitude = Convert.ToDouble(longitude); //_GpsData.longitude;
                         objprofileDataEntity.city = tempCityAndStateProvince[0];
                         objprofileDataEntity.countryregion = "NA";
 

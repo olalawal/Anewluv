@@ -14,6 +14,7 @@ using System.Net;
 
 
 using System.ServiceModel.Activation;
+using Anewluv.Domain.Data.ViewModels;
 
 namespace Shell.MVC2.Services.Common
 {
@@ -34,13 +35,13 @@ namespace Shell.MVC2.Services.Common
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
         }
 
-        public string getNETJSONdatefromISO(string isodate)
+        public string getNETJSONdatefromISO(DateValidateModel date)
         {
 
 
             try
             {
-                return _commonrepository.getNETJSONdatefromISO(isodate);
+                return _commonrepository.getNETJSONdatefromISO(date);
 
             }
             catch (Exception ex)
