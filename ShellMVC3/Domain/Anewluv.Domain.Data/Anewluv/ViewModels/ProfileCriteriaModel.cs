@@ -23,41 +23,41 @@ namespace Anewluv.Domain.Data.ViewModels
         
 
         //proprperies from profileDetail I think
-          public string ScreenName { get; set; }
-       public string AboutMe { get; set; }
-      // public string MyCatchyIntroLine { get; set; }
+          [DataMember]  public string ScreenName { get; set; }
+       [DataMember]  public string AboutMe { get; set; }
+      // [DataMember]  public string MyCatchyIntroLine { get; set; }
    
 
         // properties        
-        public string HeightByCulture { get; set; }
-        public string BodyType { get; set; }
-        public string EyeColor { get; set; }   
-        public string HairColor { get; set; }
-        public string Exercise { get; set; }
-        public string Religion { get; set; }
-        public string ReligiousAttendance { get; set; }
-        public string Drinks { get; set; }
-        public string Smokes { get; set; }
-        public string Humor { get; set; }
+        [DataMember]  public string HeightByCulture { get; set; }
+        [DataMember]  public string BodyType { get; set; }
+        [DataMember]  public string EyeColor { get; set; }   
+        [DataMember]  public string HairColor { get; set; }
+        [DataMember]  public string Exercise { get; set; }
+        [DataMember]  public string Religion { get; set; }
+        [DataMember]  public string ReligiousAttendance { get; set; }
+        [DataMember]  public string Drinks { get; set; }
+        [DataMember]  public string Smokes { get; set; }
+        [DataMember]  public string Humor { get; set; }
               
          
-        public string PoliticalView { get; set; }
-        public string Diet { get; set; }
-        public string Sign { get; set; }
-        public string IncomeLevel { get; set; }
-        public string HaveKids { get; set; }
-        public string WantsKids { get; set; }
-        public string EmploymentSatus { get; set; }
-        public string EducationLevel { get; set; }
-        public string Profession { get; set; }
-        public string MaritalStatus { get; set; }
-        public string LivingSituation { get; set; }
+        [DataMember]  public string PoliticalView { get; set; }
+        [DataMember]  public string Diet { get; set; }
+        [DataMember]  public string Sign { get; set; }
+        [DataMember]  public string IncomeLevel { get; set; }
+        [DataMember]  public string HaveKids { get; set; }
+        [DataMember]  public string WantsKids { get; set; }
+        [DataMember]  public string EmploymentSatus { get; set; }
+        [DataMember]  public string EducationLevel { get; set; }
+        [DataMember]  public string Profession { get; set; }
+        [DataMember]  public string MaritalStatus { get; set; }
+        [DataMember]  public string LivingSituation { get; set; }
 
-       public List<string>  Ethnicity  = new List<string>();
-       [DataMember]
-       public List<string> Hobbies = new List<string>();
-       [DataMember]
-       public List<string> LookingFor = new List<string>();
+      [DataMember]     public List<string>  Ethnicity  = new List<string>();
+    
+      [DataMember]     public List<string> Hobbies = new List<string>();
+      
+      [DataMember]     public List<string> LookingFor = new List<string>();
        [DataMember]
        public List<string> HotFeature = new List<string>();
 

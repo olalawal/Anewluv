@@ -72,6 +72,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public profile profile { get; set; }
 
       //  [DataMember]
+
         public profiledata profiledata { get; set; }
 
         [DataMember]

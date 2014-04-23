@@ -114,7 +114,7 @@ namespace Anewluv.Services.Spatial
              
             }
 
-            public registermodel verifyorupdateregistrationgeodata(ValidateRegistrationGeoDataModel model)
+            public registermodel verifyorupdateregistrationgeodata(registermodel model)
             {
                 
                 _unitOfWork.DisableProxyCreation = true;
@@ -122,43 +122,40 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
-                        ////4-24-2012 fixed code to hanlde if we did not have a postcal code
-                        //gpsdata gpsData = new gpsdata();
-                        //string[] tempcityAndStateProvince = model.GeoRegisterModel.city .Split(',');
-                        ////int countryID;
+                        //4-24-2012 fixed code to hanlde if we did not have a postcal code
+                        gpsdata gpsData = new gpsdata();
+                       // string[] tempcityAndStateProvince = model.city.Split(',');
+                        //int countryID;
+                         //model.stateprovince = ((tempcityAndStateProvince.Count() > 1)) ? tempcityAndStateProvince[1] : "NA";
+                         GeoModel geomodel = new GeoModel { country = model.country, city = model.city };
+                        //attmept to get postal postalcode if it is empty
+                        if ( model.ziporpostalcode == null) 
+                        {
+                            gpsData = this.getgpsdatabycountrycity(geomodel,db);
+                        }
+                        else
+                        {
+                            geomodel.postalcode = model.ziporpostalcode;
+                            gpsData = this.getgpsdatabycitycountrypostalcode(geomodel, db);
+                        }
 
-                        ////attmept to get postal postalcode if it is empty
+                        //this.getpostalcodesbycountrynamecity(new GeoModel { country = model.country, city = tempcityAndStateProvince[0] })
+                        //.FirstOrDefault().postalcodevalue :   model.ziporpostalcode;                       
+                        //countryID = postaldataservicecontext.GetcountryIdBycountryName(model.GeoRegisterModel.country);                       
+                        //get GPS data here this works as long as zip or postal code was populated from above
+                        //conver the unquiqe coountry Name to an ID
+                        //store country ID for use later
+                        //get the longidtue and latttude 
+                        //1-11-2011 postal code and city are flipped by the way not this function should be renamed
+                        //TO DO rename this function.                  
+                       // gpsData =  this.getgpsdatabycitycountrypostalcode(new GeoModel { country = model.country, postalcode = model.ziporpostalcode, city = tempcityAndStateProvince[0] },db);
+                        model.lattitude = (gpsData != null) ? Convert.ToDouble(gpsData.Latitude) : 0;
+                        model.longitude = (gpsData != null) ? Convert.ToDouble(gpsData.Longitude) : 0;
+                        model.stateprovince = (gpsData != null) ? gpsData.State_Province : "";
 
-                        //model.GeoRegisterModel.ziporpostalcode = (model.GeoRegisterModel.ziporpostalcode == null) ?
+                        return model;
 
-
-
-                        //this.getpostalcodesbycountrynamecity(new GeoModel { country = model.GeoRegisterModel.country, city = tempcityAndStateProvince[0] }).Where(p => p.postalcodevalue == model.GeoRegisterModel.ziporpostalcode).FirstOrDefault().postalcodevalue :
-                        //model.GeoRegisterModel.ziporpostalcode;
-                        //model.GeoRegisterModel.stateprovince = ((tempcityAndStateProvince.Count() > 1)) ? tempcityAndStateProvince[1] : "NA";
-                        ////countryID = postaldataservicecontext.GetcountryIdBycountryName(model.GeoRegisterModel.country);
-
-                        ////check if the  city and country match
-                        //if (model.GeoRegisterModel.country == model.GeoMembersModel.myquicksearch.myselectedcountryname && 
-                        //    tempcityAndStateProvince[0] == model.GeoMembersModel.myquicksearch.myselectedcity)
-                        //{
-                        //    if (model.GeoRegisterModel.lattitude  != null | model.GeoRegisterModel.lattitude  == 0)
-                        //        return model.GeoRegisterModel;
-                        //}
-
-                        ////get GPS data here
-                        ////conver the unquiqe coountry Name to an ID
-                        ////store country ID for use later
-                        ////get the longidtue and latttude 
-                        ////1-11-2011 postal code and city are flipped by the way not this function should be renamed
-                        ////TO DO rename this function.                  
-                        //gpsData = this.getgpsdatabycitycountrypostalcode(new GeoModel { country = model.GeoRegisterModel.country, postalcode = model.GeoRegisterModel.ziporpostalcode, city = tempcityAndStateProvince[0] });
-                        //model.GeoRegisterModel.lattitude  = (gpsData != null) ?  Convert.ToDouble( gpsData.Latitude )   : 0;
-                        //model.GeoRegisterModel.longitude = (gpsData != null) ? Convert.ToDouble(gpsData.Longitude) : 0;
-
-                       // return model.GeoRegisterModel ;
-
-                        return null;
+                      
 
                     }
                     catch (Exception ex)
@@ -496,7 +493,7 @@ namespace Anewluv.Services.Spatial
               
             }
          
-            public List<gpsdata> getgpsdatalistbycountrycity(GeoModel model)
+            public gpsdata getgpsdatabycountrycity(GeoModel model)
             {
 
                 _unitOfWork.DisableProxyCreation = true;
@@ -504,36 +501,8 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
-                        if (model.country == null | model.city == null) return null;
 
-
-                        //IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
-
-                        List<gpsdata> _GpsData = new List<gpsdata>();
-                       model.country = string.Format(model.country.Replace(" ", ""));
-                        // fix country names if theres a space
-                        // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
-
-                        string query = "sp_GetGPSDataByCountryAndCity";
-
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
-                        parameter.ParameterName = "@StrcountryDatabaseName";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 50;
-
-                    
-                        SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
-                        parameter2.ParameterName = "@StrCity";
-                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter2.Size = 100;
-
-                        var parameters = new object[] { parameter, parameter2  };
-
-                        var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrCity ", parameters).ToList();
-
-                      //  var gpsdatalist = _postalcontext.GetGpsDataByCountryAndCity(countryname, city);
-                        return ((from s in gpsdatalist.ToList() select new gpsdata {   Latitude  = s.Latitude,  Longitude  = s.Longitude,  State_Province  = s.State_Province }).ToList());
-         
+                        return getgpsdatabycountrycity(model, db);
 
                     }
                     catch (Exception ex)
@@ -555,19 +524,44 @@ namespace Anewluv.Services.Spatial
 
                
             }
-        
+
             public gpsdata getgpsdatabycitycountrypostalcode(GeoModel model)
             {
-
-
-                _unitOfWork.DisableProxyCreation = true;
+             _unitOfWork.DisableProxyCreation = true;
                 using (var db = _unitOfWork)
                 {
                     try
                     {
+                        return this.getgpsdatabycitycountrypostalcode(model,db);
+                    }
+                     catch (Exception ex)
+                    {
+
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
+                         new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in GeoService service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                        //throw convertedexcption;
+                    }
+                }
+
+            }
+        
+            private gpsdata getgpsdatabycitycountrypostalcode(GeoModel model,IUnitOfWork db)
+            {
+
+                _unitOfWork.DisableProxyCreation = true;
+              //  using (var db = _unitOfWork)
+              //  {
+                    try
+                    {
 
 
-                        if (model.country == null | model.filter == null | model.postalcode == null) return null;
+                        if (model.country == null | model.city == null ) return null;
 
                         //   IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
 
@@ -620,14 +614,72 @@ namespace Anewluv.Services.Spatial
                         //throw convertedexcption;
                     }
 
-                }
+               // }
                
              
             }
 
-            public List<postalcode > getpostalcodesbycountrycityfilter(GeoModel model)
+            public gpsdata getgpsdatabycountrycity(GeoModel model,IUnitOfWork db)
             {
 
+                _unitOfWork.DisableProxyCreation = true;
+               
+                    try
+                    {
+                        if (model.country == null | model.city == null) return null;
+
+
+                        //IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
+
+                        List<gpsdata> _GpsData = new List<gpsdata>();
+                        model.country = string.Format(model.country.Replace(" ", ""));
+                        // fix country names if theres a space
+                        // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
+
+                        string query = "sp_GetGPSDataByCountryAndCity";
+
+                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
+                        parameter.ParameterName = "@StrcountryDatabaseName";
+                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter.Size = 50;
+
+
+                        SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
+                        parameter2.ParameterName = "@StrCity";
+                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                        parameter2.Size = 100;
+
+                        var parameters = new object[] { parameter, parameter2 };
+
+                        var gpsdatalist = db.ExecuteStoredProcedure<gpsdata>(query + " @StrcountryDatabaseName,@StrCity ", parameters).ToList();
+
+                        //  var gpsdatalist = _postalcontext.GetGpsDataByCountryAndCity(countryname, city);
+                        return ((from s in gpsdatalist.ToList() select new gpsdata { Latitude = s.Latitude, Longitude = s.Longitude, State_Province = s.State_Province }).ToList().FirstOrDefault());
+
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country.ToString(), "", "", ex.Message, ex.InnerException);
+                        new ErroLogging(logapplicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in GeoService service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                        //throw convertedexcption;
+                    }
+
+                
+
+
+
+            }
+
+            public List<postalcode> getpostalcodesbycountrycityfilter(GeoModel model)
+            {
 
                 _unitOfWork.DisableProxyCreation = true;
                 using (var db = _unitOfWork)

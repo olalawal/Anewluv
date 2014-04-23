@@ -54,6 +54,7 @@
     <Reference Include="Microsoft.AspNet.SignalR.Owin">
       <HintPath>..\..\..\Shell.MVC2\packages\Microsoft.AspNet.SignalR.Owin.1.0.0\lib\net40\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\..\Shell.MVC2\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -99,17 +100,15 @@
   <ItemGroup>
     <Compile Include="Extentions\NinjectExtentions.cs" />
     <Compile Include="Infrastructure\NinjectSignalRDependencyResolver.cs" />
+    <Compile Include="IUnitoOfWorkModules\CommonModule.cs" />
+    <Compile Include="IUnitoOfWorkModules\ChatModule.cs" />
+    <Compile Include="IUnitoOfWorkModules\SearchEditModule.cs" />
+    <Compile Include="IUnitoOfWorkModules\LookupModule.cs" />
     <Compile Include="IUnitoOfWorkModules\MemberActionsModule.cs" />
     <Compile Include="IUnitoOfWorkModules\RepositoryModule.cs" />
     <Compile Include="IUnitoOfWorkModules\ContextModules\AnewluvContextModule.cs" />
     <Compile Include="IUnitoOfWorkModules\ContextModules\ChatContextModule.cs" />
-    <Compile Include="Modules\ChatModule.cs" />
-    <Compile Include="Modules\CommonModule.cs" />
     <Compile Include="IUnitoOfWorkModules\ContextModules\PostalDataContextModule.cs" />
-    <Compile Include="Modules\LookupModule.cs" />
-    <Compile Include="Modules\MemberEditModule.cs" />
-    <Compile Include="Modules\SearchEditModule.cs" />
-    <Compile Include="Modules\MailModule.cs" />
     <Compile Include="IUnitoOfWorkModules\AuthenticationModule.cs" />
     <Compile Include="IUnitoOfWorkModules\GeoModule.cs" />
     <Compile Include="IUnitoOfWorkModules\MembersMapperModule.cs" />
@@ -119,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Fakes Include="Fakes\Shell.MVC2.Data.fakes" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +150,10 @@
       <Project>{DDE554E0-816F-4C97-B141-C603C4B8B513}</Project>
       <Name>Shell.MVC2.SignalR.Hubs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Services\Anewluv.Services.Common\Anewluv.Services.Common.csproj">
+      <Project>{7C23C034-12AE-4697-BBF2-8A45F3EFAB73}</Project>
+      <Name>Anewluv.Services.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Services\Anewluv.Services.MemberService\Anewluv.Services.Members.csproj">
       <Project>{312D9224-C41B-437D-B4ED-A22A74FF9EA9}</Project>
       <Name>Anewluv.Services.Members</Name>
@@ -162,12 +166,10 @@
       <Project>{6AF3685D-3C0F-4CC8-B0EE-1960462C6DE9}</Project>
       <Name>Shell.MVC2.Services.Chat</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Shell.MVC2.Data\Shell.MVC2.Data.csproj">
-      <Project>{69ACF655-FC62-490E-A321-4049873F69DF}</Project>
-      <Name>Shell.MVC2.Data</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Modules\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

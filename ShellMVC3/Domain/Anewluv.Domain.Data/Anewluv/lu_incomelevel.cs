@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_incomelevel
+    [DataContract] public partial class lu_incomelevel
     {
         public lu_incomelevel()
         {
@@ -11,9 +12,9 @@ namespace Anewluv.Domain.Data
             this.searchsetting_incomelevel = new List<searchsetting_incomelevel>();
         }
 
-        public int id { get; set; }
-        public string description { get; set; }
-        public virtual ICollection<profiledata> profiledatas { get; set; }
-        public virtual ICollection<searchsetting_incomelevel> searchsetting_incomelevel { get; set; }
+        [DataMember]   public int id { get; set; }
+        [DataMember]   public string description { get; set; }
+        [IgnoreDataMember]  public virtual ICollection<profiledata> profiledatas { get; set; }
+        [IgnoreDataMember]  public virtual ICollection<searchsetting_incomelevel> searchsetting_incomelevel { get; set; }
     }
 }

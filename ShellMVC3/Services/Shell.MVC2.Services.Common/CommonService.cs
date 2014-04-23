@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using Anewluv.Services.Contracts;
-using Shell.MVC2.Interfaces;
+
 
 
 
@@ -15,6 +15,10 @@ using System.Net;
 
 using System.ServiceModel.Activation;
 using Anewluv.Domain.Data.ViewModels;
+using Nmedia.DataAccess.Interfaces;
+using LoggingLibrary;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Anewluv.Lib;
 
 namespace Shell.MVC2.Services.Common
 {
@@ -26,13 +30,33 @@ namespace Shell.MVC2.Services.Common
     {
 
 
-        private ICommonRepository _commonrepository;
+       
+        IUnitOfWork _unitOfWork;
+        private LoggingLibrary.ErroLogging logger;
+
+        //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
-        public CommonService(ICommonRepository commonrepository)
+
+        public CommonService(IUnitOfWork unitOfWork)
         {
-            _commonrepository = commonrepository;
+
+            if (unitOfWork == null)
+            {
+                throw new ArgumentNullException("unitOfWork", "unitOfWork cannot be null");
+            }
+
+            if (unitOfWork == null)
+            {
+                throw new ArgumentNullException("dataContext", "dataContext cannot be null");
+            }
+
+            //promotionrepository = _promotionrepository;
+            _unitOfWork = unitOfWork;
+            //disable proxy stuff by default
+            //_unitOfWork.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+
         }
 
         public string getNETJSONdatefromISO(DateValidateModel date)
@@ -41,7 +65,20 @@ namespace Shell.MVC2.Services.Common
 
             try
             {
-                return _commonrepository.getNETJSONdatefromISO(date);
+                try
+                {
+                    return Serialization.datetimetojson(DateTime.Parse(date.IsoDate));
+                }
+                catch (Exception ex)
+                {
+                    //instantiate logger here so it does not break anything else.
+                    //new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null,false);
+                    //logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null);
+                    //log error mesasge
+                    //handle logging here
+                    var message = ex.Message;
+                    throw;
+                }
 
             }
             catch (Exception ex)

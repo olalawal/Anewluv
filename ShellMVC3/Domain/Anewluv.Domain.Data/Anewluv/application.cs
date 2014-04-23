@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
+    [DataContract]
     public partial class application
     {
         public application()
@@ -12,14 +14,18 @@ namespace Anewluv.Domain.Data
             this.applicationroles = new List<applicationrole>();
         }
 
-        public int id { get; set; }
+        [DataMember]  public int id { get; set; }
         public System.DateTime creationdate { get; set; }
-        public bool active { get; set; }
-        public Nullable<System.DateTime> deactivationdate { get; set; }
-        public Nullable<int> applicationtype_id { get; set; }
-        public virtual ICollection<applicationiconconversion> applicationiconconversions { get; set; }
-        public virtual ICollection<applicationitem> applicationitems { get; set; }
-        public virtual ICollection<applicationrole> applicationroles { get; set; }
-        public virtual lu_applicationtype lu_applicationtype { get; set; }
+        [DataMember] public bool active { get; set; }
+       [DataMember]   public Nullable<System.DateTime> deactivationdate { get; set; }
+       [DataMember]   public Nullable<int> applicationtype_id { get; set; }
+       [DataMember]
+       public virtual ICollection<applicationiconconversion> applicationiconconversions { get; set; }
+       [DataMember]
+       public virtual ICollection<applicationitem> applicationitems { get; set; }
+       [DataMember]
+       public virtual ICollection<applicationrole> applicationroles { get; set; }
+       [DataMember]
+       public virtual lu_applicationtype lu_applicationtype { get; set; }
     }
 }

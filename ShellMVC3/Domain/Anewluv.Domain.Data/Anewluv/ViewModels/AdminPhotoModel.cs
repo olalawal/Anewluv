@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Runtime.Serialization;
 
 
 
@@ -11,37 +12,39 @@ using System.Web;
 
 namespace Shell.MVC2.Models
 {
-    public class AdminPhotoModel
+  [DataContract] public class AdminPhotoModel
     {
 
        
 
-        public Guid PhotoID { get; set; }
-        public string ProfileID { get; set; }
-        public string Aproved { get; set; }
-        public bool checkedAproved { get; set; }
-        public List<string> AprovedList { get; set; }
+     [DataMember]       public Guid PhotoID { get; set; }
+        [DataMember]  public string ProfileID { get; set; }
+        [DataMember]  public string Aproved { get; set; }
+        [DataMember] public bool checkedAproved { get; set; }
+       [DataMember]     public List<string> AprovedList { get; set; }
 
-        public string ProfileImageType { get; set; }
-        public DateTime? PhotoDate { get; set; }
-        public DateTime? PhotoReviewDate { get; set; }
-        public string PhotoReviewerID { get; set; }
-        public string photoreviewID { get; set; }
-        public int PhotoRejectionReasonID { get; set; }
+        [DataMember]  public string ProfileImageType { get; set; }
+       [DataMember]    public DateTime? PhotoDate { get; set; }
+       [DataMember]    public DateTime? PhotoReviewDate { get; set; }
+        [DataMember]  public string PhotoReviewerID { get; set; }
+        [DataMember]  public string photoreviewID { get; set; }
+        [DataMember]  public int PhotoRejectionReasonID { get; set; }
 
-        public List<string> PhotoRejectionReasonList { get; set; }
+       [DataMember]     public List<string> PhotoRejectionReasonList { get; set; }
 
-        public bool BoolAproved(string Approved)
-        {
-            bool check = false;
 
-            if (Approved == "Yes")
-            {
-                check = true;
-            }
+        //public bool Aproved(string Approved)
+        //{
+            
+        //    bool check = false;
 
-            return check;
-        }
+        //    if (Approved == "Yes")
+        //    {
+        //        check = true;
+        //    }
+
+        //    return check;
+        //}
 
     }
 

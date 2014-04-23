@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_role
+    [DataContract] public partial class lu_role
     {
         public lu_role()
         {
@@ -11,9 +12,9 @@ namespace Anewluv.Domain.Data
             this.membersinroles = new List<membersinrole>();
         }
 
-        public int id { get; set; }
-        public string description { get; set; }
-        public virtual ICollection<applicationrole> applicationroles { get; set; }
-        public virtual ICollection<membersinrole> membersinroles { get; set; }
+        [DataMember]   public int id { get; set; }
+        [DataMember]   public string description { get; set; }
+        [IgnoreDataMember]  public virtual ICollection<applicationrole> applicationroles { get; set; }
+        [IgnoreDataMember]  public virtual ICollection<membersinrole> membersinroles { get; set; }
     }
 }

@@ -12,7 +12,6 @@ using Anewluv.Services.Contracts;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
-using Ninject.Modules;
 using Ninject.Web.Common;
 using Ninject.Activation;
 using Ninject;

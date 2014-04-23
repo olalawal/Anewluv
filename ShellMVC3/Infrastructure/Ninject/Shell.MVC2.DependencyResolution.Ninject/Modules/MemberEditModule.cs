@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ninject.Modules;
-using Shell.MVC2.Data;
+
 using Shell.MVC2.Interfaces;
 //using Shell.MVC2.Services.Media;
 //using Shell.MVC2.Services.Dating;

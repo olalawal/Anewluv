@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_securityquestion
+    [DataContract] public partial class lu_securityquestion
     {
         public lu_securityquestion()
         {
             this.profiles = new List<profile>();
         }
 
-        public int id { get; set; }
-        public string description { get; set; }
-        public virtual ICollection<profile> profiles { get; set; }
+        [DataMember]   public int id { get; set; }
+        [DataMember]   public string description { get; set; }
+        [IgnoreDataMember]  public virtual ICollection<profile> profiles { get; set; }
     }
 }

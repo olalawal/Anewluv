@@ -34,6 +34,9 @@
     <Reference Include="EntityFramework">
       <HintPath>..\..\Domain\Anewluv.Domain\bin\Debug\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ServiceBus">
+      <HintPath>..\..\Infrastructure\Shell.MVC2.Data\bin\Debug\Microsoft.ServiceBus.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />

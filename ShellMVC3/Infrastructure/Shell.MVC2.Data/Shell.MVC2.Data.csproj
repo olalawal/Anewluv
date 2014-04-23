@@ -179,10 +179,6 @@
       <Project>{7AED0F61-0992-42BA-AA92-148C163D7517}</Project>
       <Name>Anewluv.Lib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Dating.Server.Data.Web\Dating.Server.Data.Web.csproj">
-      <Project>{8EBF425E-D494-4599-BB7D-6C42BD182EF7}</Project>
-      <Name>Dating.Server.Data.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Domain\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
       <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
       <Name>Anewluv.Domain.Data</Name>

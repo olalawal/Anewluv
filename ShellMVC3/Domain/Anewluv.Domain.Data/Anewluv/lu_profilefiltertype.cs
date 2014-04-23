@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_profilefiltertype
+    [DataContract] public partial class lu_profilefiltertype
     {
-        public int id { get; set; }
-        public string description { get; set; }
+        [DataMember]   public int id { get; set; }
+        [DataMember]   public string description { get; set; }
     }
 }

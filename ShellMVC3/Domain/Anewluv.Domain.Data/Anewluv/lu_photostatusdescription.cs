@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_photostatusdescription
+    [DataContract] public partial class lu_photostatusdescription
     {
-        public int id { get; set; }
-        public string description { get; set; }
+        [DataMember]   public int id { get; set; }
+        [DataMember]   public string description { get; set; }
         public Nullable<int> photostatus_id { get; set; }
-        public virtual lu_photostatus lu_photostatus { get; set; }
+        [IgnoreDataMember]  public virtual lu_photostatus lu_photostatus { get; set; }
     }
 }

@@ -8,8 +8,7 @@ namespace Anewluv.Domain.Data.ViewModels
 {
     //10-29-2011 moved the  edit photo stuff here but it is not edit only, probably should be in photomodel
    
-   [DataContract ]
-    [Serializable ]
+    [DataContract]
     public class photoeditmodel
     {
         [DataMember]
@@ -19,7 +18,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int profileid { get; set; }
         [DataMember]
-        public virtual lu_photoformat photoformat { get; set; }
+        public  lu_photoformat photoformat { get; set; }
         [DataMember]
         public bool approved { get; set; }
         [DataMember]

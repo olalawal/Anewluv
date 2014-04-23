@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_lookingfor
+    [DataContract] public partial class lu_lookingfor
     {
         public lu_lookingfor()
         {
@@ -11,9 +12,9 @@ namespace Anewluv.Domain.Data
             this.searchsetting_lookingfor = new List<searchsetting_lookingfor>();
         }
 
-        public int id { get; set; }
-        public string description { get; set; }
-        public virtual ICollection<profiledata_lookingfor> profiledata_lookingfor { get; set; }
-        public virtual ICollection<searchsetting_lookingfor> searchsetting_lookingfor { get; set; }
+        [DataMember]   public int id { get; set; }
+        [DataMember]   public string description { get; set; }
+        [IgnoreDataMember]  public virtual ICollection<profiledata_lookingfor> profiledata_lookingfor { get; set; }
+        [IgnoreDataMember]  public virtual ICollection<searchsetting_lookingfor> searchsetting_lookingfor { get; set; }
     }
 }

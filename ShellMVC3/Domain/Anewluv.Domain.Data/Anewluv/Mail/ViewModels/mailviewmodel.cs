@@ -3,42 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Shell.MVC2.Infrastructure;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data.ViewModels
 {
-    public class mailviewmodel
+     [DataContract] public class mailviewmodel
     {
        
 
 
         //to do maybe change these to the object and use enums ?
-        public int senderstatus_id { get; set; }
-        public int recipientstatus_id { get; set; }
+        [DataMember]  public int senderstatus_id { get; set; }
+        [DataMember]  public int recipientstatus_id { get; set; }
 
         public  bool? blockstatus { get; set; }
         //added to hide blocked messaged and banned
-        public int mailboxmessageid { get; set; }
+        [DataMember]  public int mailboxmessageid { get; set; }
 
-        public string body { get; set; }
-        public string subject { get; set; }
-        public int mailboxmessagefolder_id { get; set; }
-        public int mailboxfolder_id { get; set; }
+        [DataMember]  public string body { get; set; }
+        [DataMember]  public string subject { get; set; }
+        [DataMember]  public int mailboxmessagefolder_id { get; set; }
+        [DataMember]  public int mailboxfolder_id { get; set; }
         public DateTime age { get; set; }
-        public int? uniqueid { get; set; }
-        public string mailboxfoldername { get; set; }
-        public string mailboxfolderprofile_id { get; set; }
-        public string city { get; set; }
-        public string state { get; set; }
-        public DateTime? creationdate { get; set; }
-        public int sender_id { get; set; }
-        public string senderscreenname { get; set; }
-        public int recipient_id { get; set; }
-        public string recipientscreenname { get; set; }
-        public DateTime? readdate { get; set; }
-        public DateTime? replieddate { get; set; }
+        [DataMember]  public int? uniqueid { get; set; }
+        [DataMember]  public string mailboxfoldername { get; set; }
+        [DataMember]  public string mailboxfolderprofile_id { get; set; }
+        [DataMember]  public string city { get; set; }
+        [DataMember]  public string state { get; set; }
+       [DataMember]    public DateTime? creationdate { get; set; }
+        [DataMember]  public int sender_id { get; set; }
+        [DataMember]  public string senderscreenname { get; set; }
+        [DataMember]  public int recipient_id { get; set; }
+        [DataMember]  public string recipientscreenname { get; set; }
+       [DataMember]    public DateTime? readdate { get; set; }
+       [DataMember]    public DateTime? replieddate { get; set; }
 
 
-        //public string read
+        //[DataMember]  public string read
         //{
         //    get
         //    {
@@ -50,7 +51,7 @@ namespace Anewluv.Domain.Data.ViewModels
         //        ;
         //    }
         //}
-        //public string Replied
+        //[DataMember]  public string Replied
         //{
         //    get
         //    {
@@ -62,7 +63,7 @@ namespace Anewluv.Domain.Data.ViewModels
         //        ;
         //    }
         //}
-        public int dob
+        [DataMember]  public int dob
         {
             get
             {

@@ -1,20 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class applicationrole
+   [DataContract]  public partial class applicationrole
     {
-        public int id { get; set; }
-        public Nullable<bool> active { get; set; }
-        public int application_id { get; set; }
-        public Nullable<System.DateTime> roleexpiredate { get; set; }
-        public Nullable<System.DateTime> rolestartdate { get; set; }
-        public Nullable<System.DateTime> deactivationdate { get; set; }
-        public Nullable<System.DateTime> creationdate { get; set; }
-        public Nullable<int> application_id1 { get; set; }
-        public Nullable<int> role_id { get; set; }
-        public virtual application application { get; set; }
-        public virtual lu_role lu_role { get; set; }
+        [DataMember]  public int id { get; set; }
+        [DataMember]  public Nullable<bool> active { get; set; }
+        [DataMember]  public int application_id { get; set; }
+       [DataMember]   public Nullable<System.DateTime> roleexpiredate { get; set; }
+       [DataMember]   public Nullable<System.DateTime> rolestartdate { get; set; }
+       [DataMember]   public Nullable<System.DateTime> deactivationdate { get; set; }
+       [DataMember]   public Nullable<System.DateTime> creationdate { get; set; }
+       [DataMember]   public Nullable<int> application_id1 { get; set; }
+       [DataMember]   public Nullable<int> role_id { get; set; }
+       [DataMember]
+       public virtual application application { get; set; }
+       [DataMember]
+       public virtual lu_role lu_role { get; set; }
     }
 }

@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Factory="Anewluv.Web.Services.Edit.ServiceHostFactories.NinjectServiceHostFactory" Service="Shell.MVC2.Services.Edit.MemberEditService"  %>
+﻿<%@ ServiceHost Factory="Anewluv.Web.Services.Edit.ServiceHostFactories.NinjectServiceHostFactory" Service="Anewluv.Services.Edit.MemberEditService"  %>

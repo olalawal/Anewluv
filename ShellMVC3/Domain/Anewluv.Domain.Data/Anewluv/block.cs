@@ -1,24 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class block
+    [DataContract]
+     public partial class block
     {
         public block()
         {
             this.blocknotes = new List<blocknote>();
         }
 
-        public int id { get; set; }
-        public int profile_id { get; set; }
-        public int blockprofile_id { get; set; }
-        public Nullable<System.DateTime> creationdate { get; set; }
-        public Nullable<System.DateTime> modificationdate { get; set; }
-        public Nullable<System.DateTime> removedate { get; set; }
-        public Nullable<int> mutual { get; set; }
-        public virtual ICollection<blocknote> blocknotes { get; set; }
-        public virtual profilemetadata profilemetadata { get; set; }
-        public virtual profilemetadata profilemetadata1 { get; set; }
+        [DataMember]  public int id { get; set; }
+        [DataMember]  public int profile_id { get; set; }
+        [DataMember]  public int blockprofile_id { get; set; }
+       [DataMember]   public Nullable<System.DateTime> creationdate { get; set; }
+       [DataMember]   public Nullable<System.DateTime> modificationdate { get; set; }
+       [DataMember]   public Nullable<System.DateTime> removedate { get; set; }
+       [DataMember]   public Nullable<int> mutual { get; set; }
+       [DataMember]
+       public virtual ICollection<blocknote> blocknotes { get; set; }
+       [DataMember]
+       public virtual profilemetadata profilemetadata { get; set; }
+       [DataMember]
+       public virtual profilemetadata profilemetadata1 { get; set; }
     }
 }

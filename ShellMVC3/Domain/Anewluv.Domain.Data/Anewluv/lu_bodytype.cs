@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
+      [DataContract]
     public partial class lu_bodytype
     {
         public lu_bodytype()
@@ -11,9 +13,13 @@ namespace Anewluv.Domain.Data
             this.searchsetting_bodytype = new List<searchsetting_bodytype>();
         }
 
-        public int id { get; set; }
-        public string description { get; set; }
-        public virtual ICollection<profiledata> profiledatas { get; set; }
-        public virtual ICollection<searchsetting_bodytype> searchsetting_bodytype { get; set; }
+      
+        [DataMember]   public int id { get; set; }
+       
+        [DataMember]   public string description { get; set; }
+    
+        [IgnoreDataMember]  public virtual ICollection<profiledata> profiledatas { get; set; }
+     
+        [IgnoreDataMember]  public virtual ICollection<searchsetting_bodytype> searchsetting_bodytype { get; set; }
     }
 }
