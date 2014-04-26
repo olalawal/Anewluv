@@ -51,6 +51,7 @@ namespace Anewluv.Api
             try
             {
                 bool validrequest = true;
+                bool apikeyauthonly = false;
 
                 //if its preflight allow all
                 //if (OperationContext.Current.RequestContext  == "OPTIONS")
@@ -59,6 +60,7 @@ namespace Anewluv.Api
                 {
                     const String HttpRequestKey = "httpRequest";
                     const String MethodName = "OPTIONS";
+                    
 
                     MessageProperties messageProperties = OperationContext.Current.IncomingMessageProperties;
 
@@ -92,19 +94,26 @@ namespace Anewluv.Api
 
                 //for now while testing ignore api key
                 //Inject this somewhere or add to API key repo
-                List<string> nonauthenticatedservices = new List<string>();
-                List<string> nonauthenticatedURLS = new List<string>();
+               // List<string> nonauthenticatedservices = new List<string>();
+                List<string> apikeyonlyURLS = new List<string>();  //need apikey authorization only
+                List<string> nonauthenticatedURLS = new List<string>();  //urals that are not authenticated at all
+
+                //everything else needs api and user auth
 
                 //TO DO this list needs to be more broken down
-                nonauthenticatedservices.Add("Nmedia.Infrastructure.Web.Services.Logging");
-                nonauthenticatedservices.Add("Nmedia.Infrastructure.Web.Services.Notification");
-                nonauthenticatedservices.Add("Nmedia.Infrastructure.Web.Services.Authorization"); //allow calls to API key auth
-                nonauthenticatedservices.Add("Anewluv.Web.Services.Authentication");
-                nonauthenticatedservices.Add("Anewluv.Web.Services.Common");
-                nonauthenticatedservices.Add("Anewluv.Web.Services.Spatial");
-                nonauthenticatedservices.Add("Anewluv.Web.Services.Media/PhotoService.svc");
-                nonauthenticatedservices.Add("updateuserlogintimebyprofileidandsessionid");
-                
+                nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Logging");
+                nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Notification");
+                nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Authorization");
+                nonauthenticatedURLS.Add("updateuserlogintimebyprofileidandsessionid");
+                //allow calls to API key auth
+                apikeyonlyURLS.Add("Anewluv.Web.Services.Authentication");
+                                   //"Anewluv.Web.Services.Authentication"
+                apikeyonlyURLS.Add("Anewluv.Web.Services.Common");
+                apikeyonlyURLS.Add("Anewluv.Web.Services.Spatial");
+                apikeyonlyURLS.Add("Anewluv.Web.Services.Media/PhotoService.svc");
+               
+
+                             
                 //allow all photo uploads
                 //TO DO add code to  call membership service and make sure the requestor has rights to view the data they are requesting
                 //TO DO List the Service URLS that and handle differing security for each 
@@ -122,9 +131,13 @@ namespace Anewluv.Api
                     return true;
 
                 //check if we are looking at the URLS or specific methods that allow Anonymoys access
-                if (nonauthenticatedservices.Contains(urisegments[1].ToString().Replace("/", ""))) return true;
-                //look at the urls for specicif URLS that allow anonymous
-                if (nonauthenticatedURLS.Contains(urisegments[2].ToString())) return true;
+                //seecon part checks the end of the URL i.e updateuserlogintimebyprofileidandsessionid since it could be called from somehwere else
+                if (nonauthenticatedURLS.Contains(urisegments[1].ToString().Replace("/", "")) | (nonauthenticatedURLS.Contains(urisegments[4].ToString()))) return true;
+                
+                //flag the API key only auth URLS
+                if (apikeyonlyURLS.Contains(urisegments[1].ToString().Replace("/", ""))) apikeyauthonly = true; ;
+
+
 
 
                 //allows service to be discovereable with no api key
@@ -175,18 +188,20 @@ namespace Anewluv.Api
                         if (IsApiKeyValid) //(Api.ApiKeyService.NonAysncIsValidAPIKey(key))
                         {
 
-                            //now validate the username password info if required 
-                            //TO DO determine which URLS need validation of this i.e personal data only
-                            if (ValidateUser(operationContext))
+                            if (!apikeyauthonly)
                             {
-                                validrequest = true;
+                                //now validate the username password info if required 
+                                //TO DO determine which URLS need validation of this i.e personal data only
+                                if (ValidateUser(operationContext))
+                                {
+                                    validrequest = true;
+                                }
+                                else
+                                {
+                                    validrequest = false;
+                                    CreateUserNamePasswordErrorReply(operationContext);
+                                }
                             }
-                            else
-                            {
-                                validrequest = false;
-                                CreateUserNamePasswordErrorReply(operationContext);
-                            }
-
                            // Api.DisposeApiKeyService();
                             return validrequest;
                         }
