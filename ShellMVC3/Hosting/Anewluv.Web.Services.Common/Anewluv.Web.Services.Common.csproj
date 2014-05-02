@@ -20,6 +20,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -114,6 +118,10 @@
       <Project>{1E78FD8F-5A46-4894-B7E9-9E572D558562}</Project>
       <Name>Anewluv.Api</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Components\Anewluv.Caching\Anewluv.Caching.csproj">
+      <Project>{3b7bbc00-62a6-4892-9eed-2312f9714ca0}</Project>
+      <Name>Anewluv.Caching</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Ninject\Shell.MVC2.DependencyResolution.Ninject\Shell.MVC2.DependencyResolution.Ninject.csproj">
       <Project>{0145184E-916D-4DB2-BB19-E069DF0F1F36}</Project>
       <Name>Shell.MVC2.DependencyResolution.Ninject</Name>
@@ -122,6 +130,9 @@
       <Project>{7C23C034-12AE-4697-BBF2-8A45F3EFAB73}</Project>
       <Name>Anewluv.Services.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\Profile1.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -144,7 +155,6 @@
           <CustomServerUrl>
           </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-          <EnableWcfTestClientForSVCDefaultValue>True</EnableWcfTestClientForSVCDefaultValue>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

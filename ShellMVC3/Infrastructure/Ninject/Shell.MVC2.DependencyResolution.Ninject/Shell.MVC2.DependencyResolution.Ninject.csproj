@@ -142,10 +142,6 @@
       <Project>{01A79DCC-39CA-447E-A668-DD4206A8E5AA}</Project>
       <Name>GeoData.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Domain\Interfaces\Shell.MVC2.Interfaces\Shell.MVC2.Interfaces.csproj">
-      <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
-      <Name>Shell.MVC2.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Hubs\Shell.MVC.Hubs\Shell.MVC2.SignalR.Hubs.csproj">
       <Project>{DDE554E0-816F-4C97-B141-C603C4B8B513}</Project>
       <Name>Shell.MVC2.SignalR.Hubs</Name>

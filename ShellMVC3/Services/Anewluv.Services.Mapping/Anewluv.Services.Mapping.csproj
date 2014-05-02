@@ -89,10 +89,6 @@
       <Project>{01A79DCC-39CA-447E-A668-DD4206A8E5AA}</Project>
       <Name>GeoData.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Domain\Interfaces\Shell.MVC2.Interfaces\Shell.MVC2.Interfaces.csproj">
-      <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
-      <Name>Shell.MVC2.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Implementation\Anewluv.DataExtentionMethods\Anewluv.DataExtentionMethods.csproj">
       <Project>{3CBB8D0A-5EA5-4336-AEAF-6717D2A09A45}</Project>
       <Name>Anewluv.DataExtentionMethods</Name>

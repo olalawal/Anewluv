@@ -1,7 +1,0 @@
-﻿
-
-
-sample user of API KEY
-http://localhost/Shell.MVC2.Web.NotificationService/InfoNotificationService.svc/rest/help/?apikey=bda11d91-7ade-4da1-855d-24adfe39d174
-
-eihter puth apikey in request header or URL or authorization header of JASON or other type call

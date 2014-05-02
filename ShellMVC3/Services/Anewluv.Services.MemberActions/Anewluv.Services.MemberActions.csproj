@@ -89,7 +89,7 @@
       <Name>LoggingLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Components\Anewluv.Api\Anewluv.Api.csproj">
-      <Project>{1E78FD8F-5A46-4894-B7E9-9E572D558562}</Project>
+      <Project>{1e78fd8f-5a46-4894-b7e9-9e572d558562}</Project>
       <Name>Anewluv.Api</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Components\Anewluv.Lib\Anewluv.Lib.csproj">
@@ -103,10 +103,6 @@
     <ProjectReference Include="..\..\Domain\Anewluv.Domain\Anewluv.Domain.csproj">
       <Project>{A0B04284-784B-4322-A213-DB178716EFC1}</Project>
       <Name>Anewluv.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Domain\Interfaces\Shell.MVC2.Interfaces\Shell.MVC2.Interfaces.csproj">
-      <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
-      <Name>Shell.MVC2.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Implementation\Anewluv.DataExtentionMethods\Anewluv.DataExtentionMethods.csproj">
       <Project>{3CBB8D0A-5EA5-4336-AEAF-6717D2A09A45}</Project>

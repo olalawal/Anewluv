@@ -81,7 +81,7 @@
       <Name>Anewluv.Domain.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Domain\Interfaces\Shell.MVC2.Interfaces\Shell.MVC2.Interfaces.csproj">
-      <Project>{D158FD7A-D03F-4BEB-855E-525CC49E13F8}</Project>
+      <Project>{d158fd7a-d03f-4beb-855e-525cc49e13f8}</Project>
       <Name>Shell.MVC2.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>

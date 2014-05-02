@@ -77,7 +77,7 @@
       <Name>Nmedia.DataAccess.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Common\NET\Shared\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
-      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
+      <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
       <Name>Shell.MVC2.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\LoggingAndNotification\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">

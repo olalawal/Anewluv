@@ -117,14 +117,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceHostFactories\NinjectServiceHostFactory.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\Profile1.pubxml" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Components\Anewluv.Api\Anewluv.Api.csproj">
-      <Project>{1E78FD8F-5A46-4894-B7E9-9E572D558562}</Project>
+      <Project>{1e78fd8f-5a46-4894-b7e9-9e572d558562}</Project>
       <Name>Anewluv.Api</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Ninject\Shell.MVC2.DependencyResolution.Ninject\Shell.MVC2.DependencyResolution.Ninject.csproj">
-      <Project>{0145184E-916D-4DB2-BB19-E069DF0F1F36}</Project>
+      <Project>{0145184e-916d-4db2-bb19-e069df0f1f36}</Project>
       <Name>Shell.MVC2.DependencyResolution.Ninject</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\Shell.MVC2.Services.Authentication\Anewluv.Services.Authentication.csproj">
