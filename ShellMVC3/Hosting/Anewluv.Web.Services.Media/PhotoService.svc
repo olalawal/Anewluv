@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Factory="Anewluv.Web.Services.Media.ServiceHostFactories.NinjectServiceHostFactory" Service="Anewluv.Services.Media.PhotoService"  %>

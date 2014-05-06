@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Factory="Anewluv.Web.EditService.ServiceHostFactories.NinjectServiceHostFactory" Service="Anewluv.Services.Edit.SearchEditService"  %>

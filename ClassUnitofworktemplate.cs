@@ -10,14 +10,15 @@ public class Class1
          {
              try
              {
-                  db.GetRepository<Country_PostalCode_List>().Find()
-
+                 
              }
              catch (Exception ex)
              {
 
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                  using (var logger = new ErroLogging(logapplicationEnum.EditMemberService ))
+                {
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment,ex, Convert.ToInt32(profileid));
+                }     
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -27,7 +28,47 @@ public class Class1
 
          }
 
+
+
+
          //update method code
+
+
+         using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                       
+                          //create a new messages object
+                        AnewluvMessages messages = new AnewluvMessages();
+
+
+                        //get the profile details :
+                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemode.profileid).First();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        using (var logger = new ErroLogging(logapplicationEnum.EditMemberService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        }
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+
+
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
@@ -35,12 +76,17 @@ public class Class1
                 {
                     try
                     {
+
+                         profile p = db.GetRepository<profile>().Find().Where(z => z.id == profileid).FirstOrDefault();
                     }
                         catch (Exception ex)
              {
   transaction.Rollback();
-                    logger = new ErroLogging(applicationEnum.MemberService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(profileid));
+                        
+              using (var logger = new ErroLogging(logapplicationEnum.EditMemberService ))
+                {
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment,ex, Convert.ToInt32(profileid));
+                }   
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -65,9 +111,10 @@ public class Class1
              {
                    transaction.Rollback();
                  //instantiate logger here so it does not break anything else.
-                 logger = new ErroLogging(applicationEnum.MemberService);
-                 //int profileid = Convert.ToInt32(viewerprofileid);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError, ex, Convert.ToInt32(model.profileid));
+                using (var logger = new ErroLogging(logapplicationEnum.EditMemberService ))
+                {
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment,ex, Convert.ToInt32(profileid));
+                }     
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member service");
                  string ErrorMessage = "";

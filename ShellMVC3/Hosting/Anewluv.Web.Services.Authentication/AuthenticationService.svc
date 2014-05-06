@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost  Factory="Anewluv.Web.Services.Authentication.ServiceHostFactories.NinjectServiceHostFactory"  Service="Anewluv.Services.Authentication.AuthenticationService"  %>

@@ -1,1 +1,0 @@
-ilmerge /log:log.txt /targetplatform:v4,C:\Windows\Microsoft.NET\Framework\v4.0.30319 /keyfile:RazorEngine.snk /out:RazorEngine.dll lib\net40\RazorEngine.dll lib\net40\System.Web.Razor.dll
