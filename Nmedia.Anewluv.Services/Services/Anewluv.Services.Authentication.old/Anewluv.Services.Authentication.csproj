@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{071D6DB4-A733-43AD-8FCA-2A73F7FE0DF5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Anewluv.Services.Authentication</RootNamespace>
+    <AssemblyName>Anewluv.Services.Authentication</AssemblyName>
+    <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoCacheDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\NoCacheDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AuthenticationService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Anewluv.Services.Contracts\Anewluv.Services.Contracts.csproj">
+      <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
+      <Name>Anewluv.Services.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
+      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
+      <Name>Nmedia.DataAccess.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
+      <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>
+      <Name>Nmedia.Infrastructure.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\LoggingLibrary\LoggingLibrary.csproj">
+      <Project>{FF7B929D-6086-4509-9095-396845569906}</Project>
+      <Name>LoggingLibrary %28Infrastructure\LoggingNotificationApiAuth\LoggingLibrary\LoggingLibrary%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Context\GeoData.Domain\GeoData.Domain.csproj">
+      <Project>{01a79dcc-39ca-447e-a668-dd4206a8e5aa}</Project>
+      <Name>GeoData.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\DataExtentionMethods\Anewluv.DataExtentionMethods\Anewluv.DataExtentionMethods.csproj">
+      <Project>{3cbb8d0a-5ea5-4336-aeaf-6717d2a09a45}</Project>
+      <Name>Anewluv.DataExtentionMethods</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>
+      <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Anewluv.Services.Media\Anewluv.Services.Media.csproj">
+      <Project>{D748E13C-887B-40C9-812C-67210746638B}</Project>
+      <Name>Anewluv.Services.Media</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Anewluv.Services.MemberService\Anewluv.Services.Members.csproj">
+      <Project>{312D9224-C41B-437D-B4ED-A22A74FF9EA9}</Project>
+      <Name>Anewluv.Services.Members</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Anewluv.Services.Spatial\Anewluv.Services.Spatial.csproj">
+      <Project>{5130AC6C-76E9-4471-96D9-D5C8DCABA093}</Project>
+      <Name>Anewluv.Services.Spatial</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{3D9AD99F-2412-4246-B90B-4EAA41C64699}">
+        <WcfProjectProperties>
+          <AutoStart>False</AutoStart>
+        </WcfProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

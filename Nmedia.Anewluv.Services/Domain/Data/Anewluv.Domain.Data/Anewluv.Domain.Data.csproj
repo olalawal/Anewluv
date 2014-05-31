@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8E3079E3-2244-47B1-AB1F-EE171398666E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Anewluv.Domain.Data</RootNamespace>
+    <AssemblyName>Anewluv.Domain.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Anewluv\abusereport.cs" />
+    <Compile Include="Anewluv\abusereportnote.cs" />
+    <Compile Include="Anewluv\application.cs" />
+    <Compile Include="Anewluv\applicationiconconversion.cs" />
+    <Compile Include="Anewluv\applicationitem.cs" />
+    <Compile Include="Anewluv\applicationrole.cs" />
+    <Compile Include="Anewluv\block.cs" />
+    <Compile Include="Anewluv\blocknote.cs" />
+    <Compile Include="Anewluv\communicationquota.cs" />
+    <Compile Include="Anewluv\Enums\applicationitempaymenttype.cs" />
+    <Compile Include="Anewluv\Enums\applicationitemtransfertype.cs" />
+    <Compile Include="Anewluv\Enums\applicationtype.cs" />
+    <Compile Include="Anewluv\Enums\iconformat.cs" />
+    <Compile Include="Anewluv\Enums\iconImageresizerformat.cs" />
+    <Compile Include="Anewluv\Enums\bodytype.cs" />
+    <Compile Include="Anewluv\Enums\diet.cs" />
+    <Compile Include="Anewluv\Enums\drinks.cs" />
+    <Compile Include="Anewluv\Enums\educationlevel.cs" />
+    <Compile Include="Anewluv\Enums\employmentstatus.cs" />
+    <Compile Include="Anewluv\Enums\ethnicity.cs" />
+    <Compile Include="Anewluv\Enums\excercise.cs" />
+    <Compile Include="Anewluv\Enums\eyecolor.cs" />
+    <Compile Include="Anewluv\Enums\haircolor.cs" />
+    <Compile Include="Anewluv\Enums\havekids.cs" />
+    <Compile Include="Anewluv\Enums\hobby.cs" />
+    <Compile Include="Anewluv\Enums\hotfeature.cs" />
+    <Compile Include="Anewluv\Enums\humor.cs" />
+    <Compile Include="Anewluv\Enums\incomelevel.cs" />
+    <Compile Include="Anewluv\Enums\livingsituation.cs" />
+    <Compile Include="Anewluv\Enums\lookingfor.cs" />
+    <Compile Include="Anewluv\Enums\maritalstatus.cs" />
+    <Compile Include="Anewluv\Enums\politicalview.cs" />
+    <Compile Include="Anewluv\Enums\profession.cs" />
+    <Compile Include="Anewluv\Enums\religion.cs" />
+    <Compile Include="Anewluv\Enums\religiousattendance.cs" />
+    <Compile Include="Anewluv\Enums\sign.cs" />
+    <Compile Include="Anewluv\Enums\smokes.cs" />
+    <Compile Include="Anewluv\Enums\wantskids.cs" />
+    <Compile Include="Anewluv\Enums\abusetype.cs" />
+    <Compile Include="Anewluv\Enums\activitytype.cs" />
+    <Compile Include="Anewluv\Enums\defaultmailboxfoldertype.cs" />
+    <Compile Include="Anewluv\Enums\flagyesno.cs" />
+    <Compile Include="Anewluv\Enums\gender.cs" />
+    <Compile Include="Anewluv\Enums\notetype.cs" />
+    <Compile Include="Anewluv\Enums\openidprovider.cs" />
+    <Compile Include="Anewluv\Enums\photoapprovalstatus.cs" />
+    <Compile Include="Anewluv\Enums\photoformat.cs" />
+    <Compile Include="Anewluv\Enums\photoImageresizerformat.cs" />
+    <Compile Include="Anewluv\Enums\photoimagetype.cs" />
+    <Compile Include="Anewluv\Enums\photorejectionreason.cs" />
+    <Compile Include="Anewluv\Enums\photorejectionreasonusermessage.cs" />
+    <Compile Include="Anewluv\Enums\photostatus.cs" />
+    <Compile Include="Anewluv\Enums\profilefiltertype.cs" />
+    <Compile Include="Anewluv\Enums\profilestatus.cs" />
+    <Compile Include="Anewluv\Enums\role.cs" />
+    <Compile Include="Anewluv\Enums\securityleveltype.cs" />
+    <Compile Include="Anewluv\Enums\securityquestion.cs" />
+    <Compile Include="Anewluv\Enums\showme.cs" />
+    <Compile Include="Anewluv\Enums\sortbytype.cs" />
+    <Compile Include="Anewluv\favorite.cs" />
+    <Compile Include="Anewluv\friend.cs" />
+    <Compile Include="Anewluv\hotlist.cs" />
+    <Compile Include="Anewluv\interest.cs" />
+    <Compile Include="Anewluv\like.cs" />
+    <Compile Include="Anewluv\lu_abusetype.cs" />
+    <Compile Include="Anewluv\lu_activitytype.cs" />
+    <Compile Include="Anewluv\lu_applicationitempaymenttype.cs" />
+    <Compile Include="Anewluv\lu_applicationitemtransfertype.cs" />
+    <Compile Include="Anewluv\lu_applicationtype.cs" />
+    <Compile Include="Anewluv\lu_bodytype.cs" />
+    <Compile Include="Anewluv\lu_defaultmailboxfolder.cs" />
+    <Compile Include="Anewluv\lu_diet.cs" />
+    <Compile Include="Anewluv\lu_drinks.cs" />
+    <Compile Include="Anewluv\lu_educationlevel.cs" />
+    <Compile Include="Anewluv\lu_employmentstatus.cs" />
+    <Compile Include="Anewluv\lu_ethnicity.cs" />
+    <Compile Include="Anewluv\lu_exercise.cs" />
+    <Compile Include="Anewluv\lu_eyecolor.cs" />
+    <Compile Include="Anewluv\lu_flagyesno.cs" />
+    <Compile Include="Anewluv\lu_gender.cs" />
+    <Compile Include="Anewluv\lu_haircolor.cs" />
+    <Compile Include="Anewluv\lu_havekids.cs" />
+    <Compile Include="Anewluv\lu_height.cs" />
+    <Compile Include="Anewluv\lu_hobby.cs" />
+    <Compile Include="Anewluv\lu_hotfeature.cs" />
+    <Compile Include="Anewluv\lu_humor.cs" />
+    <Compile Include="Anewluv\lu_iconformat.cs" />
+    <Compile Include="Anewluv\lu_iconImagersizerformat.cs" />
+    <Compile Include="Anewluv\lu_incomelevel.cs" />
+    <Compile Include="Anewluv\lu_livingsituation.cs" />
+    <Compile Include="Anewluv\lu_lookingfor.cs" />
+    <Compile Include="Anewluv\lu_maritalstatus.cs" />
+    <Compile Include="Anewluv\lu_notetype.cs" />
+    <Compile Include="Anewluv\lu_openidprovider.cs" />
+    <Compile Include="Anewluv\lu_photoapprovalstatus.cs" />
+    <Compile Include="Anewluv\lu_photoformat.cs" />
+    <Compile Include="Anewluv\lu_photoImagersizerformat.cs" />
+    <Compile Include="Anewluv\lu_photoimagetype.cs" />
+    <Compile Include="Anewluv\lu_photorejectionreason.cs" />
+    <Compile Include="Anewluv\lu_photostatus.cs" />
+    <Compile Include="Anewluv\lu_photostatusdescription.cs" />
+    <Compile Include="Anewluv\lu_politicalview.cs" />
+    <Compile Include="Anewluv\lu_profession.cs" />
+    <Compile Include="Anewluv\lu_profilefiltertype.cs" />
+    <Compile Include="Anewluv\lu_profilestatus.cs" />
+    <Compile Include="Anewluv\lu_religion.cs" />
+    <Compile Include="Anewluv\lu_religiousattendance.cs" />
+    <Compile Include="Anewluv\lu_role.cs" />
+    <Compile Include="Anewluv\lu_securityleveltype.cs" />
+    <Compile Include="Anewluv\lu_securityquestion.cs" />
+    <Compile Include="Anewluv\lu_showme.cs" />
+    <Compile Include="Anewluv\lu_sign.cs" />
+    <Compile Include="Anewluv\lu_smokes.cs" />
+    <Compile Include="Anewluv\lu_sortbytype.cs" />
+    <Compile Include="Anewluv\lu_wantskids.cs" />
+    <Compile Include="Anewluv\mailboxfolder.cs" />
+    <Compile Include="Anewluv\mailboxfoldertype.cs" />
+    <Compile Include="Anewluv\mailboxmessage.cs" />
+    <Compile Include="Anewluv\mailboxmessagefolder.cs" />
+    <Compile Include="Anewluv\mailupdatefreqency.cs" />
+    <Compile Include="Anewluv\Mail\ViewModels\mailmessageviewmodel.cs" />
+    <Compile Include="Anewluv\Mail\ViewModels\mailviewmodel.cs" />
+    <Compile Include="Anewluv\membersinrole.cs" />
+    <Compile Include="Anewluv\openid.cs" />
+    <Compile Include="Anewluv\peek.cs" />
+    <Compile Include="Anewluv\photo.cs" />
+    <Compile Include="Anewluv\photoalbum.cs" />
+    <Compile Include="Anewluv\photoalbum_securitylevel.cs" />
+    <Compile Include="Anewluv\photoconversion.cs" />
+    <Compile Include="Anewluv\photoreview.cs" />
+    <Compile Include="Anewluv\photo_securitylevel.cs" />
+    <Compile Include="Anewluv\profile.cs" />
+    <Compile Include="Anewluv\profileactivity.cs" />
+    <Compile Include="Anewluv\profileactivitygeodata.cs" />
+    <Compile Include="Anewluv\profiledata.cs" />
+    <Compile Include="Anewluv\profiledata_ethnicity.cs" />
+    <Compile Include="Anewluv\profiledata_hobby.cs" />
+    <Compile Include="Anewluv\profiledata_hotfeature.cs" />
+    <Compile Include="Anewluv\profiledata_lookingfor.cs" />
+    <Compile Include="Anewluv\profilemetadata.cs" />
+    <Compile Include="Anewluv\rating.cs" />
+    <Compile Include="Anewluv\ratingvalue.cs" />
+    <Compile Include="Anewluv\searchsetting.cs" />
+    <Compile Include="Anewluv\searchsetting_bodytype.cs" />
+    <Compile Include="Anewluv\searchsetting_diet.cs" />
+    <Compile Include="Anewluv\searchsetting_drink.cs" />
+    <Compile Include="Anewluv\searchsetting_educationlevel.cs" />
+    <Compile Include="Anewluv\searchsetting_employmentstatus.cs" />
+    <Compile Include="Anewluv\searchsetting_ethnicity.cs" />
+    <Compile Include="Anewluv\searchsetting_exercise.cs" />
+    <Compile Include="Anewluv\searchsetting_eyecolor.cs" />
+    <Compile Include="Anewluv\searchsetting_gender.cs" />
+    <Compile Include="Anewluv\searchsetting_haircolor.cs" />
+    <Compile Include="Anewluv\searchsetting_havekids.cs" />
+    <Compile Include="Anewluv\searchsetting_hobby.cs" />
+    <Compile Include="Anewluv\searchsetting_hotfeature.cs" />
+    <Compile Include="Anewluv\searchsetting_humor.cs" />
+    <Compile Include="Anewluv\searchsetting_incomelevel.cs" />
+    <Compile Include="Anewluv\searchsetting_livingstituation.cs" />
+    <Compile Include="Anewluv\searchsetting_location.cs" />
+    <Compile Include="Anewluv\searchsetting_lookingfor.cs" />
+    <Compile Include="Anewluv\searchsetting_maritalstatus.cs" />
+    <Compile Include="Anewluv\searchsetting_politicalview.cs" />
+    <Compile Include="Anewluv\searchsetting_profession.cs" />
+    <Compile Include="Anewluv\searchsetting_religion.cs" />
+    <Compile Include="Anewluv\searchsetting_religiousattendance.cs" />
+    <Compile Include="Anewluv\searchsetting_showme.cs" />
+    <Compile Include="Anewluv\searchsetting_sign.cs" />
+    <Compile Include="Anewluv\searchsetting_smokes.cs" />
+    <Compile Include="Anewluv\searchsetting_sortbytype.cs" />
+    <Compile Include="Anewluv\searchsetting_wantkids.cs" />
+    <Compile Include="Anewluv\SharedModels\generatedlists.cs" />
+    <Compile Include="Anewluv\SharedModels\sharedmodels.cs" />
+    <Compile Include="Anewluv\systempagesetting.cs" />
+    <Compile Include="Anewluv\userlogtime.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\AccountModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\ActivateProfileContainerViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\ActivateProfileModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\AnewLuvMessages.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\ChangePasswordModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\ExternalLogin.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\LocalPasswordModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\LogOnModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\LogonViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\LostAccountInfoModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\LostActivationCodeModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\ProfilesearchModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\RegisterExternalLoginModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Account\RegisterModel.cs" />
+    <Compile Include="Anewluv\ViewModels\AdminPhotoModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Admin\AdminViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\ContactUsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\DateValidateModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\AppearanceSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\AppearanceSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\BasicSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\BasicSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\CharacterSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\CharacterSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\EditProfileModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\EditProfileVisibilitySettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Email\EmailEnums\subjecttype.cs" />
+    <Compile Include="Anewluv\ViewModels\Email\EmailModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Email\EmailViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\MemberSearchViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
+    <Compile Include="Anewluv\ViewModels\Membership\MembershipUserViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\MembersViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\OpenId\rpxauthinfo.cs" />
+    <Compile Include="Anewluv\ViewModels\OpenId\RpxProfile.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoEditModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoEditViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoUploadModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoUploadViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\ProfileBrowseModels.cs" />
+    <Compile Include="Anewluv\ViewModels\ProfileCriteriaModel.cs" />
+    <Compile Include="Anewluv\ViewModels\QuickSearchModel.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\AppearanceSearchSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\BasicSearchSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\CharacterSearchSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\LifeStyleSearchSettingsModel.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\SearchSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\UxMessages\UxMessageTypeModel.cs" />
+    <Compile Include="Anewluv\ViewModels\ValidateRegistrationGeoDataModel.cs" />
+    <Compile Include="Anewluv\visiblitysetting.cs" />
+    <Compile Include="Anewluv\visiblitysettings_country.cs" />
+    <Compile Include="Anewluv\visiblitysettings_gender.cs" />
+    <Compile Include="Chat\ChatClient.cs" />
+    <Compile Include="Chat\ChatMessage.cs" />
+    <Compile Include="Chat\ChatRoom.cs" />
+    <Compile Include="Chat\ChatUser.cs" />
+    <Compile Include="Chat\ClientOnlyModels\ClientMessage.cs" />
+    <Compile Include="Chat\ClientOnlyModels\ClientState.cs" />
+    <Compile Include="Chat\Lookups\Enums\roomstatus.cs" />
+    <Compile Include="Chat\Lookups\Enums\userstatus.cs" />
+    <Compile Include="Chat\Lookups\lu_roomstatus.cs" />
+    <Compile Include="Chat\Lookups\lu_userstatus.cs" />
+    <Compile Include="Chat\ViewModels\MessageViewModel.cs" />
+    <Compile Include="Chat\ViewModels\RoomViewModel.cs" />
+    <Compile Include="Chat\ViewModels\UserViewModel.cs" />
+    <Compile Include="Helpers\DataFormatingExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Anewluv\Validation\" />
+    <Folder Include="Anewluv\ViewModels\Search\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

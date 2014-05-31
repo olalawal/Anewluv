@@ -1,0 +1,649 @@
+﻿using Anewluv.Domain.Data;
+using Anewluv.Domain.Data.ViewModels;
+using Anewluv.Lib;
+using Anewluv.Services.Contracts;
+using LoggingLibrary;
+using Nmedia.DataAccess.Interfaces;
+using Nmedia.Infrastructure.Domain.Data.errorlog;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.ServiceModel;
+using System.ServiceModel.Activation;
+using System.Text;
+
+namespace Anewluv.Services.Messaging
+{
+
+    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
+
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
+    public class MailService : IMailService
+    {
+        //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
+        //private IPromotionRepository  promotionrepository;
+
+        IUnitOfWork _unitOfWork;
+        private LoggingLibrary.ErroLogging logger;
+        // logenviromentEnum currentenviroment = logenviromentEnum.dev;
+
+        //  private IMemberActionsRepository  _memberactionsrepository;
+        // private string _apikey;
+
+        public MailService(IUnitOfWork unitOfWork)
+        {
+
+            if (unitOfWork == null)
+            {
+                throw new ArgumentNullException("unitOfWork", "unitOfWork cannot be null");
+            }
+
+            if (unitOfWork == null)
+            {
+                throw new ArgumentNullException("dataContext", "dataContext cannot be null");
+            }
+
+            //promotionrepository = _promotionrepository;
+            _unitOfWork = unitOfWork;
+            //disable proxy stuff by default
+            //_unitOfWork.DisableProxyCreation = true;
+            //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
+            //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+
+        }
+
+
+        // Query Methods
+        public List<mailmessageviewmodel> replyemail1(int? id, int mailboxMsgFldId)
+        {
+
+
+            try
+            {
+                var allMail =
+                                 from m in db.mailboxmessages.Where(x => x.id == id)
+                                 select new mailmessageviewmodel
+                                 {
+
+                                     mailboxmessage_id = m.id,
+                                     //mailboxmessagefoldersID  = mailboxMsgFldId,
+                                     uniqueid = m.uniqueid,
+                                     sender_id = m.recipient_id,
+                                     recipient_id = m.sender_id,
+                                     body = m.body,
+                                     subject = m.subject,
+                                     creationdate = m.creationdate,
+                                     // Sender and Recipient are flipped in a reply
+                                     senderscreenname = (from p in db.profiles where (p.id == m.recipient_id) select p.screenname).FirstOrDefault(),
+                                     recipientscreenname = (from p in db.profiles where (p.id == m.sender_id) select p.screenname).FirstOrDefault()
+                                 };
+                return allMail.ToList();
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, id, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, id, null, false);
+                throw;
+            }
+        }
+        // tobe deleted
+        public List<mailmessageviewmodel> replyemail(int? id)
+        {
+
+
+            try
+            {
+                var allMail =
+                 from m in db.mailboxmessages.Where(x => x.id == id)
+                 select new mailmessageviewmodel
+                 {
+
+                     mailboxmessage_id = m.id,
+                     //mailboxmessagefoldersID = mailboxMsgFldId,
+                     uniqueid = m.uniqueid,
+                     sender_id = m.recipient_id,
+                     body = m.body,
+                     subject = m.subject,
+                     creationdate = m.creationdate,
+                     recipient_id = m.sender_id,
+                     senderscreenname = (from p in db.profiles where (p.id == m.recipient_id) select p.screenname).FirstOrDefault(),
+                     recipientscreenname = (from p in db.profiles where (p.id == m.sender_id) select p.screenname).FirstOrDefault()
+                 };
+                return allMail.ToList();
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, id, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, id, null, false);
+                throw;
+            }
+        }
+        public int getmailboxmessagefoldersid(int mailboxMsgId)
+        {
+
+            try
+            {
+                return (from p in db.mailboxmessagefolders
+                        where p.mailboxmessage.id == mailboxMsgId
+                        && p.mailboxfolder.mailboxfoldertype.defaultfolder_id == (int)defaultmailboxfoldertypeEnum.Inbox
+                        select p.mailboxfolder_id).FirstOrDefault();
+
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, null, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null, false);
+                throw;
+            }
+        }
+
+        public int getmailboxfolderid(string mailboxFolderTypeName, int profileId)
+        {
+
+
+            try
+            {
+                return (from i in db.mailboxfolders
+                        where i.mailboxfoldertype.name == mailboxFolderTypeName && i.profiled_id == profileId
+                        select i.id).FirstOrDefault();
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileId, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileId, null, false);
+                throw;
+            }
+        }
+
+        public mailboxmessagefolder newmailboxmessagefolderobject(string mailboxFolderTypeName, int profileId)
+        {
+
+
+            try
+            {
+                int fldId = getmailboxfolderid(mailboxFolderTypeName, profileId); // Retrieve specific mailboxfolderId by its mailboxFolderTypename and ProfileID
+
+                //create mailbox folders if we have a null mailbox folders for a user
+                if (fldId == 0)
+                {
+                    //TO do move this to a mail repop
+                    AnewluvContext AnewluvContext = new AnewluvContext();
+                    using (var tempdb = AnewluvContext)
+                    {
+                        MemberService MemberService = new MemberService(tempdb);
+                        MemberService.createmailboxfolders(new ProfileModel { profileid = profileId });
+                    }
+                    return newmailboxmessagefolderobject(mailboxFolderTypeName, profileId);
+                }
+
+                mailboxmessagefolder fld_mailboxmessagefolder = new mailboxmessagefolder() // Create a new mailboxmessagefolder object
+                {
+                    mailboxfolder_id = fldId,
+                    readdate = null,
+                    replieddate = null,
+                    flaggeddate = null,
+                    deleteddate = null,
+                    draftdate = null,
+                    recent = false
+                };
+                return fld_mailboxmessagefolder;
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileId, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileId, null, false);
+                throw;
+            }
+        }
+
+        public void add(mailboxmessage mailboxmessage)
+        {
+
+
+            try
+            {
+                db.mailboxmessages.Add(mailboxmessage); //Updating the context
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, null, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null, false);
+                throw;
+            }
+        }
+
+        // Persistence
+        public void Save()
+        {
+
+            try
+            {
+                db.SaveChanges(); //Save to Database
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, null, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null, false);
+                throw;
+            }
+        }
+
+
+        //
+        // Query Methods
+
+        public string getuserid(string User)
+        {
+
+
+
+            try
+            {
+                return (from p in db.profiles
+                        where p.username == User
+                        select p.id).FirstOrDefault().ToString();
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, null, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null, false);
+                throw;
+            }
+        }
+
+        public int getallmailcountbyfolderid(int folderid, int profileid)
+        {
+
+            try
+            {
+                IEnumerable<mailviewmodel> models = null;
+
+                //return (from i in db.mailboxmessagefolders
+                //             .Where(u => u.mailboxfolderID == u.mailboxfolder.mailboxfolderID
+                //            && u.mailboxfolder.foldertype.name == MailType && u.mailboxfolder.ProfileID == User)
+                //        select i.MessageRead).Count();
+
+
+                //join f in _datingcontext.profiledatas on p.blockprofile_id  equals f.id 
+                //get a model of the messages that match this mail type
+
+                //get a model of the messages that match this mail type
+                models = (from m in db.mailboxmessages
+                          join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
+                              && u.mailboxfolder.profiled_id == profileid)
+                          on m.id equals f.mailboxmessage_id
+                          select new mailviewmodel
+                          {
+
+                              sender_id = m.sender_id,
+                              recipient_id = m.recipient_id,
+                              mailboxmessagefolder_id = f.mailboxfolder_id,
+                              mailboxfolder_id = f.mailboxfolder.id,
+                              senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                              recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
+                              blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
+                              creationdate = m.creationdate,
+                              senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                              recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+
+                          });
+                return filtermailmodels(models).Count();
+
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileid, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null, false);
+                throw;
+            }
+
+        }
+
+        public int getnewmailcountbyfolderid(int folderid, int profileid)
+        {
+
+
+            try
+            {
+                IEnumerable<mailviewmodel> models = null;
+
+                models = (from m in db.mailboxmessages
+                          join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
+                              && u.mailboxfolder.profiled_id == profileid && u.readdate == null)
+                          on m.id equals f.mailboxmessage_id
+                          select new mailviewmodel
+                          {
+
+                              sender_id = m.sender_id,
+                              recipient_id = m.recipient_id,
+                              mailboxmessagefolder_id = f.mailboxfolder_id,
+                              mailboxfolder_id = f.mailboxfolder.id,
+                              senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                              recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
+                              blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
+                              creationdate = m.creationdate,
+                              senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                              recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+
+                          });
+
+                return filtermailmodels(models).Count();
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileid, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null, false);
+                throw;
+            }
+
+        }
+
+        //TO DO find a way to use ENUM for these names 
+        //TO DO re-wite code based on EF code first composite table queries
+        public List<mailviewmodel> getallmailbydefaultmailboxfoldertypemail(string foldertypename, int profileid)
+        {
+
+
+
+            try
+            {
+
+                IEnumerable<mailviewmodel> models = null;
+
+                models = (from m in db.mailboxmessages
+                          join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
+                              && u.mailboxfolder.mailboxfoldertype.name == foldertypename && u.mailboxfolder.profiled_id == profileid)
+                           on m.id equals f.mailboxmessage_id
+                          orderby m.creationdate descending
+                          select new mailviewmodel
+                          {
+
+                              mailboxfoldername = f.mailboxfolder.mailboxfoldertype.name,
+                              mailboxmessageid = m.id,
+                              sender_id = m.sender_id,
+                              body = m.body,
+                              subject = m.subject,
+                              mailboxfolder_id = f.mailboxfolder.id,
+                              age = m.profilemetadata.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
+                              city = m.profilemetadata.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
+                              state = m.profilemetadata.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
+                              creationdate = m.creationdate,
+                              recipient_id = m.recipient_id,
+                              readdate = f.readdate,
+                              replieddate = f.replieddate,
+                              senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                              recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
+                              blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
+                              senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                              recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+
+                          });
+
+                return filtermailmodels(models).ToList();
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileid, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null, false);
+                throw;
+            }
+
+
+        }
+
+        public List<mailviewmodel> getallmailbyfolder(int folderid, int profileid)
+        {
+
+            try
+            {
+                var models = (from m in db.mailboxmessages
+                              join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
+                                  && u.mailboxfolder.profiled_id == profileid && u.readdate == null && u.mailboxfolder.id == folderid)
+                              on m.id equals f.mailboxmessage_id
+                              select new mailviewmodel
+                              {
+
+
+                                  mailboxfoldername = f.mailboxfolder.mailboxfoldertype.name,
+                                  mailboxmessageid = m.id,
+                                  sender_id = m.sender_id,
+                                  body = m.body,
+                                  subject = m.subject,
+                                  mailboxfolder_id = f.mailboxfolder.id,
+                                  age = m.profilemetadata.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
+                                  city = m.profilemetadata.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
+                                  state = m.profilemetadata.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
+                                  creationdate = m.creationdate,
+                                  recipient_id = m.recipient_id,
+                                  readdate = f.readdate,
+                                  replieddate = f.replieddate,
+                                  senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                                  recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
+                                  blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
+                                  senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                                  recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+
+                              });
+
+                return filtermailmodels(models);
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileid, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null, false);
+                throw;
+            }
+        }
+
+        //TO DO read out the description feild from enum using sample code
+        public List<mailviewmodel> getmailmsgthreadbyuserid(int uniqueId, int profileid)
+        {
+
+
+            try
+            {
+
+                IEnumerable<mailviewmodel> model = null;
+
+                model = (from m in db.mailboxmessages.Where(x => x.uniqueid == uniqueId)
+                         join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder.mailboxfoldertype.name != "Deleted"
+                         && u.mailboxfolder.profiled_id == profileid)
+                           on m.id equals f.mailboxmessage_id
+                         orderby m.creationdate ascending
+                         select new mailviewmodel
+                         {
+
+
+                             mailboxfoldername = f.mailboxfolder.mailboxfoldertype.name,
+                             mailboxmessageid = m.id,
+                             sender_id = m.sender_id,
+                             body = m.body,
+                             subject = m.subject,
+                             mailboxfolder_id = f.mailboxfolder.id,
+                             age = m.profilemetadata.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
+                             city = m.profilemetadata.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
+                             state = m.profilemetadata.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
+                             creationdate = m.creationdate,
+                             recipient_id = m.recipient_id,
+                             readdate = f.readdate,
+                             replieddate = f.replieddate,
+                             senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
+                             recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
+                             blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
+                             senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
+                             recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
+                         });
+                return filtermailmodels(model);
+
+            }
+
+            catch (DataException dx)
+            {
+                //Log the error (add a variable name after DataException) 
+                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                // return model;
+                //handle logging here
+                var message = dx.Message;
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileid, null, false);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                //log error mesasge
+                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null, false);
+                throw;
+            }
+
+        }
+    
+     
+
+    }
+}

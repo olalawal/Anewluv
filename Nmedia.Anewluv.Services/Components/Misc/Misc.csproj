@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D1F87F9F-7628-4874-BA2D-0ADB3CA6B4F2}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Misc</RootNamespace>
+    <AssemblyName>Misc</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Dev\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Dev\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Dev\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Disconected|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Disconected\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Disconected|AnyCPU'">
+    <OutputPath>bin\Disconected\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Disconected|x64'">
+    <OutputPath>bin\x64\Disconected\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Misc.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoCacheDebug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\NoCacheDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoCacheDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\NoCacheDebug\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoCacheDebug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\NoCacheDebug\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\Shell.MVC2\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\Shell.MVC2\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.DomainServices.EntityFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.DomainServices.Server, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="OutputTypes.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Testlist.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.photo.datasource" />
+    <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email.EmailModel.datasource" />
+    <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email.EmailViewModel.datasource" />
+    <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoEditModel.datasource" />
+    <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoEditViewModel.datasource" />
+    <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoModel.datasource" />
+    <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.PhotoViewModel.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
+      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
+      <Name>Nmedia.DataAccess.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Shell.MVC2.Infrastructure\Shell.MVC2.Infrastructure.csproj">
+      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
+      <Name>Shell.MVC2.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{8E3079E3-2244-47B1-AB1F-EE171398666E}</Project>
+      <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Anewluv.Domain\Anewluv.Domain.csproj">
+      <Project>{A0B04284-784B-4322-A213-DB178716EFC1}</Project>
+      <Name>Anewluv.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\GeoData.Domain\GeoData.Domain.csproj">
+      <Project>{01A79DCC-39CA-447E-A668-DD4206A8E5AA}</Project>
+      <Name>GeoData.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tests\Shell.MVC2.Tests.Common\Shell.MVC2.Tests.Common.csproj">
+      <Project>{BF35650C-A0C7-47EE-885A-DB2A1A9F5893}</Project>
+      <Name>Shell.MVC2.Tests.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\jquery.signalR-1.0.0.js" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
