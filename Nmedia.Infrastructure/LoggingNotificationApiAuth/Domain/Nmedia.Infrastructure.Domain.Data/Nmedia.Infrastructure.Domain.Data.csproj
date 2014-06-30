@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Nmedia.Infrastructure.Domain.Data</RootNamespace>
+    <AssemblyName>Nmedia.Infrastructure.Domain.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApiKey\apicalls.cs" />
+    <Compile Include="ApiKey\apikey.cs" />
+    <Compile Include="ApiKey\Enums\accesslevels.cs" />
+    <Compile Include="ApiKey\Enums\applications.cs" />
+    <Compile Include="ApiKey\lu_accesslevel.cs" />
+    <Compile Include="ApiKey\lu_application_apikey.cs" />
+    <Compile Include="ApiKey\user.cs" />
+    <Compile Include="ErrorLog\lu_logenviroment.cs" />
+    <Compile Include="ErrorLog\Enums\Applications.cs" />
+    <Compile Include="ErrorLog\Enums\Logenviroment.cs" />
+    <Compile Include="ErrorLog\Enums\LogSeverities.cs" />
+    <Compile Include="ErrorLog\Enums\LogSeveritiesInternal.cs" />
+    <Compile Include="ErrorLog\errorlog.cs" />
+    <Compile Include="ErrorLog\LogMessage.cs" />
+    <Compile Include="ErrorLog\LogValue.cs" />
+    <Compile Include="ErrorLog\lu_logapplication.cs" />
+    <Compile Include="ErrorLog\lu_logSeverity.cs" />
+    <Compile Include="ErrorLog\lu_logseverityinternal.cs" />
+    <Compile Include="Globals.cs" />
+    <Compile Include="Notification\address.cs" />
+    <Compile Include="Notification\Enums\addresstype.cs" />
+    <Compile Include="Notification\Enums\MessageType.cs" />
+    <Compile Include="Notification\Enums\news.cs" />
+    <Compile Include="Notification\Enums\systemaddresstype.cs" />
+    <Compile Include="Notification\Enums\template.cs" />
+    <Compile Include="Notification\Enums\templatebody.cs" />
+    <Compile Include="Notification\Enums\templatefilename.cs" />
+    <Compile Include="Notification\Enums\templatesubject.cs" />
+    <Compile Include="Notification\lu_addressType.cs" />
+    <Compile Include="Notification\lu_messageType.cs" />
+    <Compile Include="Notification\lu_news.cs" />
+    <Compile Include="Notification\lu_systemAddressType.cs" />
+    <Compile Include="Notification\lu_template.cs" />
+    <Compile Include="Notification\lu_templatebody.cs" />
+    <Compile Include="Notification\lu_templatesubject.cs" />
+    <Compile Include="Notification\message.cs" />
+    <Compile Include="Notification\messagedetail.cs" />
+    <Compile Include="Notification\systemaddress.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\EmailModel.cs" />
+    <Compile Include="ViewModels\EmailViewModel.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

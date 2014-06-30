@@ -28,6 +28,7 @@ using Anewluv.Services.Media;
 using Anewluv.Services.Members;
 using GeoData.Domain.ViewModels;
 using Nmedia.Infrastructure.Domain.Data;
+using System.Threading.Tasks;
 
 namespace Anewluv.Services.Mapping
 {
@@ -749,7 +750,7 @@ namespace Anewluv.Services.Mapping
 
 
                     quicksearchmodel.myselectediamgenderid = model.profile.profiledata.gender_id.GetValueOrDefault();
-                    quicksearchmodel.myselectedcitystateprovince = model.profile.profiledata.city + "," + model.profile.profiledata.stateprovince; ;
+                    quicksearchmodel.myselectedstateprovince = model.profile.profiledata.city + "," + model.profile.profiledata.stateprovince; ;
                     //TO DO convert genders to a list of genders 
                     quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(model.profile.profiledata.gender_id.GetValueOrDefault());
                     quicksearchmodel.myselectedcountryname = model.mycountryname; //use same country for now
@@ -812,7 +813,7 @@ namespace Anewluv.Services.Mapping
                 model.myquicksearch.myselectedfromage = 18;
                 model.myquicksearch.myselectedtoage = 99;
                 model.myquicksearch.myselectediamgenderid = 1;
-                model.myquicksearch.myselectedcitystateprovince = "ALL";
+                model.myquicksearch.myselectedstateprovince = "ALL";
                 model.myquicksearch.myselectedseekinggenderid = Extensions.GetLookingForGenderID(1);
 
                 if (Model.Country != "")
@@ -1022,7 +1023,6 @@ namespace Anewluv.Services.Mapping
 
 
         }
-
 
         public registermodel getregistermodeltest()
         {
@@ -1890,6 +1890,209 @@ namespace Anewluv.Services.Mapping
 
 
         }
+
+       //search functions that should be moved to thier own service when time allows
+
+        //quick search for members in the same country for now, no more filters yet
+        //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
+        public async Task<List<MemberSearchViewModel>> getquicksearch(quicksearchmodel Model)
+        {
+
+            _unitOfWork.DisableProxyCreation = false;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+
+                     var task = Task.Factory.StartNew(() =>
+                        {
+
+                          
+                            //get the  gender's from search settings
+                            int genderid = Model.myselectedseekinggenderid.GetValueOrDefault();
+                            int mygenderid = Model.myselectediamgenderid.GetValueOrDefault();
+
+                            
+                            // int[,] courseIDs = new int[,] UserProfile.profiledata.searchsettings.FirstOrDefault().searchsettings_Genders.ToList();
+                            int AgeTo = Model.myselectedtoage != null ? Model.myselectedtoage.GetValueOrDefault() : 99;
+                            int AgeFrom = Model.myselectedfromage != null ? Model.myselectedfromage.GetValueOrDefault() : 18;
+                            //Height
+                            //int intheightmin = Model.h != null ? Model.heightmin.GetValueOrDefault() : 0;
+                           // int intheightmax = Model.heightmax != null ? Model.heightmax.GetValueOrDefault() : 100;
+                          //  bool blEvaluateHeights = intheightmin > 0 ? true : false;
+                            //get the rest of the values if they are needed in calculations
+                            //convert lattitudes from string (needed for JSON) to bool           
+                            double? myLongitude = (Model.myselectedlongitude != null) ? Convert.ToDouble(Model.myselectedlongitude) : 0;
+                            double? myLattitude = (Model.myselectedlatitude != null) ? Convert.ToDouble(Model.myselectedlatitude) : 0;
+                            
+
+                            //set variables
+                            //  List<MemberSearchViewModel> MemberSearchViewmodels;
+                            DateTime today = DateTime.Today;
+                            DateTime max = today.AddYears(-(AgeFrom + 1));
+                            DateTime min = today.AddYears(-AgeTo);
+
+                            //get country and city data
+                            string countryname = Model.myselectedcountryname;
+                            int countryid = Model.myselectedcountryid.GetValueOrDefault();
+                            // myselectedcountryid 
+                            string stringpostalcode = Model.myselectedpostalcode;
+
+                            //added 10/17/20011 so we can toggle postalcode box similar to register 
+                            string  city =Model.myselectedcity;
+                            int photostatus = (Model.myselectedphotostatus !=null) ? (int)photostatusEnum.Gallery : (int)photostatusEnum.Nostatus;
+                            string stateprovince = Model.myselectedstateprovince;
+                            double? maxdistancefromme = Model.myselectedmaxdistancefromme;
+
+
+
+                            //skip these
+                            //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
+                            //requery all the has tbls
+                            HashSet<int> LookingForGenderValues = new HashSet<int>();
+                            LookingForGenderValues.Add(genderid);  //add the gender id being searched for
+
+
+                            ////Appearacnce seache settings values         
+
+                            ////set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
+
+                            //HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
+                            //LookingForBodyTypesValues = (Model != null) ? new HashSet<int>(Model.searchsetting_bodytype.Select(c => c.id)) : LookingForBodyTypesValues;
+
+                            //HashSet<int> LookingForEthnicityValues = new HashSet<int>();
+                            //LookingForEthnicityValues = (Model != null) ? new HashSet<int>(Model.searchsetting_ethnicity.Select(c => c.id)) : LookingForEthnicityValues;
+
+                            //HashSet<int> LookingForEyeColorValues = new HashSet<int>();
+                            //LookingForEyeColorValues = (Model != null) ? new HashSet<int>(Model.searchsetting_eyecolor.Select(c => c.id)) : LookingForEyeColorValues;
+
+                            //HashSet<int> LookingForHairColorValues = new HashSet<int>();
+                            //LookingForHairColorValues = (Model != null) ? new HashSet<int>(Model.searchsetting_haircolor.Select(c => c.id)) : LookingForHairColorValues;
+
+                            //HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
+                            //LookingForHotFeatureValues = (Model != null) ? new HashSet<int>(Model.searchsetting_hotfeature.Select(c => c.id)) : LookingForHotFeatureValues;
+
+                            // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
+
+                            //add more values as we get more members 
+                            //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
+                            var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
+                             p.countryid == countryid && p.city == city && p.stateprovince == stateprovince).ToList()
+                                                         
+                                                        
+                                            .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.lu_gender.id)).ToList() //using whereIF predicate function  
+                                            
+                                                              //Appearance filtering not implemented yet                        
+                                          //Only evealuate if the user searching actually has height values they look for 
+                                                          //we have to filter on the back end now since we cant use UDFs
+                                                          // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
+                                                          join f in db.GetRepository<profile>().Find() on x.profile_id equals f.id
+                                                          select new MemberSearchViewModel
+                                                          {
+                                                              // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                                              id = x.profile_id,
+                                                              stateprovince = x.stateprovince,
+                                                              postalcode = x.postalcode,
+                                                              countryid = x.countryid,
+                                                              genderid = x.gender_id,
+                                                              birthdate = x.birthdate,
+                                                              //profile = f,
+                                                              screenname = f.screenname,
+                                                              longitude = x.longitude ?? 0,
+                                                              latitude = x.latitude ?? 0,
+                                                              // hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                                              creationdate = f.creationdate,
+                                                              // city = db.fnTruncateString(x.city, 11),
+                                                              // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
+                                                              lastlogindate = f.logindate,
+                                                              distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
+                                                              //TO DO look at this and explore
+                                                              //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                                                              //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
+                                                              //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
+
+
+                                                          }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
+
+
+
+
+                            //Come back to these filiters later
+                            //11/20/2011 handle case where  no profiles were found
+                            //if (MemberSearchViewmodels.Count() == 0)
+                               // return null; //getquickmatcheswhenquickmatchesempty(new ProfileModel { profileid = Model.profileid }).Take(maxemailmatches).ToList();
+
+                            //filter our the ones in the right distance and reutnr the top webmacthes
+                            //USes max search results snce this could be called by any other method with a variable set of return macthes or results
+                           // var profiles = (model.maxdistancefromme > 0) ? (from q in MemberSearchViewmodels
+                            //    .Where(a => a.distancefromme.GetValueOrDefault() <= model.maxdistancefromme)
+                            //                                                select q).Take(maxemailmatches)
+                            //                                            :
+                           //     MemberSearchViewmodels.Take(maxemailmatches);
+
+                            //do any conversions and calcs here
+                            return MemberSearchViewmodels.
+                            Select(x => new MemberSearchViewModel
+                            {
+                                // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                id = x.id,
+                                stateprovince = x.stateprovince,
+                                postalcode = x.postalcode,
+                                countryid = x.countryid,
+                                genderid = x.genderid,
+                                birthdate = x.birthdate,
+                                profile = x.profile,
+                                screenname = x.screenname,
+                                longitude = x.longitude ?? 0,
+                                latitude = x.latitude ?? 0,
+                                hasgalleryphoto = x.hasgalleryphoto,
+                                creationdate = x.creationdate,
+                                // city = db.fnTruncateString(x.city, 11),                       
+                                lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
+                                lastlogindate = x.lastlogindate,
+                                distancefromme = x.distancefromme,
+                                galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString()),
+                                lookingforagefrom = x.lookingforagefrom,
+                                lookingForageto = x.lookingForageto,
+                                online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
+
+
+                            }).ToList();
+                   });
+                   return await task.ConfigureAwait(false);
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+                finally
+                {
+                    //  Api.DisposeGeoService();
+                    //   Api.DisposeMemberService();
+                    //  Api.DisposePhotoService();
+
+                }
+
+            }
+
+
+
+
+
+        }
+
 
         //TO DO clean up and just use gener and newest
         internal List<MemberSearchViewModel> getquickmatcheswhenquickmatchesempty(ProfileModel profilemodel)

@@ -765,10 +765,7 @@ namespace Anewluv.Services.Authentication
             return membershipprovider;
         }
 
-
-
-
-
+        
         public override string ResetPassword(string profileID, string answer)
         {
 

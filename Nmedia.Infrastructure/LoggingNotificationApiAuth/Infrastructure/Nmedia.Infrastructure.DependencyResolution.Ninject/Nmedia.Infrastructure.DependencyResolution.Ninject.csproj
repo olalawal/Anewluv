@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B848BD2C-BA7C-4B9F-A2EE-8501A05ACAE6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Nmedia.Infrastructure.DependencyResolution.Ninject</RootNamespace>
+    <AssemblyName>Nmedia.Infrastructure.DependencyResolution.Ninject</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Wcf">
+      <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\Ninject.Extensions.Wcf.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common">
+      <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extentions\NinjectExtentions.cs" />
+    <Compile Include="Modules\ContextModules\ApiKeyContextModule.cs" />
+    <Compile Include="Modules\ContextModules\ErrorlogContextModule.cs" />
+    <Compile Include="Modules\ContextModules\NotificationContextModule.cs" />
+    <Compile Include="Modules\ApikeyAuthServiceModule.cs" />
+    <Compile Include="Modules\ErrorlogServiceModule.cs" />
+    <Compile Include="Modules\AnewluvNotificationServiceModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
+      <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
+      <Name>Nmedia.DataAccess.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Nmedia.Infrastructure.Domain\Nmedia.Infrastructure.Domain.csproj">
+      <Project>{e2af89fa-eae4-4980-a9c5-149daceda4ab}</Project>
+      <Name>Nmedia.Infrastructure.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\Contracts\Nmedia.Services.Contracts\Nmedia.Services.Contracts.csproj">
+      <Project>{2322c931-607a-46d5-bc71-be6b25288b14}</Project>
+      <Name>Nmedia.Services.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\Nmedia.Services.ApikeyAuthorization\Nmedia.Services.ApiKeyAuthorization.csproj">
+      <Project>{086ce7ec-c6bf-49d0-88bd-f5c86624c289}</Project>
+      <Name>Nmedia.Services.ApiKeyAuthorization</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

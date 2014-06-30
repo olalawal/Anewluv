@@ -148,9 +148,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>53384</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Anewluv.Web.Services..Media</IISUrl>
+          <IISUrl>http://localhost/Anewluv.Web.Services.Media</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/Anewluv.Web.Services..Media</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost/Anewluv.Web.Services.Media</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E2AF89FA-EAE4-4980-A9C5-149DACEDA4AB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Nmedia.Infrastructure.Domain</RootNamespace>
+    <AssemblyName>Nmedia.Infrastructure.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\..\ShellMVC3\Shell.MVC2\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\..\ShellMVC3\Shell.MVC2\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApikeyMigrations\201311220531287_InitialMigrations.cs" />
+    <Compile Include="ApikeyMigrations\201311220531287_InitialMigrations.Designer.cs">
+      <DependentUpon>201311220531287_InitialMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApikeyMigrations\201312060451182_ffff.cs" />
+    <Compile Include="ApikeyMigrations\201312060451182_ffff.Designer.cs">
+      <DependentUpon>201312060451182_ffff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApikeyMigrations\Configuration.cs" />
+    <Compile Include="ApiKey\Context\Apikey.Context.cs" />
+    <Compile Include="ApiKey\Context\ApikeyModelbuilder.cs" />
+    <Compile Include="ApiKey\Context\SeedMethods.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="ErrorlogMigrations\201312060559516_Initial.cs" />
+    <Compile Include="ErrorlogMigrations\201312060559516_Initial.Designer.cs">
+      <DependentUpon>201312060559516_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorlogMigrations\Configuration.cs" />
+    <Compile Include="ErrorLog\Context\ErrorLog.Context.cs" />
+    <Compile Include="ErrorLog\Context\ErrorLog.Context.Lookups.cs" />
+    <Compile Include="ErrorLog\Context\ErrorLogModelbuilder.cs" />
+    <Compile Include="ErrorLog\Context\SeedingConversions.cs" />
+    <Compile Include="ErrorLog\Context\SeedMethods.cs" />
+    <Compile Include="NotificationMigrations\201312060606060_Initial.cs" />
+    <Compile Include="NotificationMigrations\201312060606060_Initial.Designer.cs">
+      <DependentUpon>201312060606060_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationMigrations\Configuration.cs" />
+    <Compile Include="NotificationModel\Context\Notification.Context.cs" />
+    <Compile Include="NotificationModel\Context\NotificationModelbuilder.cs" />
+    <Compile Include="NotificationModel\Context\SeedMethods.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Helpers.cs" />
+    <Compile Include="Utils\EFUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Documentation\ApikeyDocumentation.txt" />
+    <Content Include="Documentation\Migration Instructions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
+      <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
+      <Name>Nmedia.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
+      <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
+      <Name>Nmedia.DataAccess.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
+      <Project>{c4c10e84-8c87-43d3-aef3-9c0a03a2f7db}</Project>
+      <Name>Nmedia.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
+      <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>
+      <Name>Nmedia.Infrastructure.Domain.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ApikeyMigrations\201311220531287_InitialMigrations.resx">
+      <DependentUpon>201311220531287_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApikeyMigrations\201312060451182_ffff.resx">
+      <DependentUpon>201312060451182_ffff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ErrorlogMigrations\201312060559516_Initial.resx">
+      <DependentUpon>201312060559516_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NotificationMigrations\201312060606060_Initial.resx">
+      <DependentUpon>201312060606060_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
