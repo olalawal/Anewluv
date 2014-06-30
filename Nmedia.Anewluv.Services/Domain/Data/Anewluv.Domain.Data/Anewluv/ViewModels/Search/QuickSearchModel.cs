@@ -42,5 +42,6 @@ namespace Anewluv.Domain.Data.ViewModels
         //add flag to let us know that the data comes from geocoinding ?
         public bool geocodeddata { get; set; }
 
+
     }
 }

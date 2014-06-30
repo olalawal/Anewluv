@@ -2012,9 +2012,12 @@ namespace Anewluv.Services.Mapping
                                                               //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
 
 
-                                                          }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
+                                                          }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).ToList();//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
 
+                          
+                            //this.AddRange(pageData.ToList());
+                            // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
 
                             //Come back to these filiters later
@@ -2030,11 +2033,22 @@ namespace Anewluv.Services.Mapping
                             //                                            :
                            //     MemberSearchViewmodels.Take(maxemailmatches);
 
+
+                            //do paging here after last filtering
+
+                            int? pageint = Convert.ToInt32(Model.myselectedcurrentpage);
+                            int? numberperpageint = Convert.ToInt32(Model.myselectedpagesize);
+
+                            bool allowpaging = (MemberSearchViewmodels.Count >= (pageint * numberperpageint) ? true : false);
+                            var pageData = pageint > 1 & allowpaging ?
+                                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(MemberSearchViewmodels, pageint ?? 1, numberperpageint ?? 20) : MemberSearchViewmodels.Take(numberperpageint.GetValueOrDefault());
+
+
                             //do any conversions and calcs here
-                            return MemberSearchViewmodels.
+                           var test = pageData.
                             Select(x => new MemberSearchViewModel
                             {
-                                // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                MyCatchyIntroLineQuickSearch = x.aboutme,
                                 id = x.id,
                                 stateprovince = x.stateprovince,
                                 postalcode = x.postalcode,
@@ -2058,6 +2072,8 @@ namespace Anewluv.Services.Mapping
 
 
                             }).ToList();
+
+                           return test;
                    });
                    return await task.ConfigureAwait(false);
 
