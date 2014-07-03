@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using Nmedia.Infrastructure.Domain.Data.Notification;
 
-namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
+namespace Nmedia.Infrastructure.Domain.Data.Notification
 {
     public class news
     {
@@ -29,16 +30,16 @@ namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
         public DateTime creationDate { get; set; }
         public bool? sent { get; set; }
 
-        public static message Create(Action<message> init)
+        public  news Create(Action<news> init)
         {
-            var message = new message();
+            var news = new news();
             //address.MessageAddressID = Guid.NewGuid();
             //message.messagetype = new lu_messageType();
           //  message.template = new lu_template();
           //  message.recipients = new List<address>();
-            message.creationDate = DateTime.Now;
-            message.sent =false;           
-            init(message); return message;
+            this.creationDate = DateTime.Now;
+            this.sent =false;
+            init(news); return news;
         }
 
             ////use create method it like this 

@@ -1,4 +1,4 @@
-﻿using Nmedia.Infrastructure.Domain.Data.errorlog;
+﻿using  Nmedia.Infrastructure.Domain.Data.log;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +9,12 @@ namespace Nmedia.Infrastructure.Domain.Data
     public class globals
     {
 
-        public static logenviromentEnum getenviroment
+        public static enviromentEnum getenviroment
         {
             get
             {
-                //logenviromentEnum currentenviroment = logenviromentEnum.dev;
-                return logenviromentEnum.dev;
+                //enviromentEnum currentenviroment = enviromentEnum.dev;
+                return enviromentEnum.dev;
             }
         }
 

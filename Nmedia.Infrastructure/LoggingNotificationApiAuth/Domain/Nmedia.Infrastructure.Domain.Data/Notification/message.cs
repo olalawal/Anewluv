@@ -21,14 +21,21 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 	       // creationdate = DateTime.Now;
 	      //  sent = false;
          }
-        
+
+
         [Key]
         [DataMember()]
         public int id { get; set; }
         [DataMember()]
+        public virtual int messagetype_id { get; set; }
+        [DataMember()]
         public virtual lu_messagetype messagetype { get; set; }
         [DataMember()]
+        public virtual int? template_id { get; set; }
+        [DataMember()]
         public virtual lu_template template { get; set; }
+        [DataMember()]
+        public virtual int systemaddress_id { get; set; }
         [DataMember()]
         public virtual systemaddress systemaddress { get; set; }
         [DataMember()]
@@ -49,21 +56,20 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         public int? sendattempts { get; set; }
         [DataMember()]
         public bool? sent { get; set; }
-        
+
 
         public static message Create(Action<message> init)
         {
             var message = new message();
             //address.MessageAddressID = Guid.NewGuid();
             //message.messagetype = new lu_messageType();
-           // message.template = new lu_template();
-          //  message.recipients = new List<address>();
+            // message.template = new lu_template();
+            //  message.recipients = new List<address>();
             message.creationdate = DateTime.Now;
-            message.sent =false;
+            message.sent = false;
             message.sendattempts = 0;
             init(message); return message;
         }
-
             ////use create method it like this 
             //  message=  (Message.Create (c =>
             //   {

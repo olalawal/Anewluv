@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 
-namespace Shell.MVC2.Infrastructure.Entities.NotificationModel
+namespace Nmedia.Infrastructure.Domain.Data.Notification
 {
 
 

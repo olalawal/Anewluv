@@ -79,9 +79,13 @@
       <Project>{59bc30af-1691-44ea-bffa-34b39e334e93}</Project>
       <Name>Nmedia.Infrastructure.Domain.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contracts\Nmedia.Services.Contracts\Nmedia.Services.Contracts.csproj">
+    <ProjectReference Include="..\..\Domain\Nmedia.Infrastructure.Domain\Nmedia.Infrastructure.Domain.csproj">
+      <Project>{e2af89fa-eae4-4980-a9c5-149daceda4ab}</Project>
+      <Name>Nmedia.Infrastructure.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contracts\Nmedia.Services.Contracts\Nmedia.Infrastructure.Services.Contracts.csproj">
       <Project>{2322C931-607A-46D5-BC71-BE6B25288B14}</Project>
-      <Name>Nmedia.Services.Contracts</Name>
+      <Name>Nmedia.Infrastructure.Services.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -71,6 +71,7 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -79,7 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ErrorLoggingLibrary.cs" />
+    <Compile Include="LoggingLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -98,9 +99,9 @@
       <Project>{59bc30af-1691-44ea-bffa-34b39e334e93}</Project>
       <Name>Nmedia.Infrastructure.Domain.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Services\Contracts\Nmedia.Services.Contracts\Nmedia.Services.Contracts.csproj">
+    <ProjectReference Include="..\Services\Contracts\Nmedia.Services.Contracts\Nmedia.Infrastructure.Services.Contracts.csproj">
       <Project>{2322c931-607a-46d5-bc71-be6b25288b14}</Project>
-      <Name>Nmedia.Services.Contracts</Name>
+      <Name>Nmedia.Infrastructure.Services.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

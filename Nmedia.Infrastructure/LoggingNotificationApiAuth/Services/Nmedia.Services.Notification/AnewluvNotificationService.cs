@@ -9,8 +9,7 @@ using System.Text;
 using System.ServiceModel.Activation;
 using Nmedia.Services.Contracts;
 using Nmedia.DataAccess.Interfaces;
-using Nmedia.Infrastructure.Domain.Data.errorlog;
-using Nmedia.Infrastructure.Domain.Data.ViewModels;
+using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data.Notification;
 
 using System.Net.Mail;
@@ -18,6 +17,9 @@ using System.Net.Mail;
 using System.Configuration;
 using Nmedia.Infrastructure;
 using Nmedia.Infrastructure.WCF;
+using Nmedia.Infrastructure.Domain;
+using System.Threading.Tasks;
+
 
 
 namespace Nmedia.Services.Notification
@@ -60,28 +62,40 @@ namespace Nmedia.Services.Notification
         }
 
 
-        public IAsyncResult Beginsenderrormessage(errorlog error, string addresstype, AsyncCallback callback, object asyncState)
+        /// <summary>
+        /// addresses are hard coded for developers so need for the emial model to be passed
+        /// </summary>
+        /// <param name="error"></param>
+        /// <param name="addresstype"></param>
+        /// <param name="callback"></param>
+        /// <param name="asyncState"></param>
+        /// <returns></returns>
+        // public IAsyncResult 
+        public async void senderrormessage(log error, string systemaddresstype)
         {
-            
 
             EmailModel emailmodels = new EmailModel();
 
-
-            using (var db = _unitOfWork)
+            using (var db = new NotificationContext())
             {
                 db.IsAuditEnabled = false; //do not audit on adds
+                //db.DisableProxyCreation = true;
                 using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
-
                         //parse the address type
-                        var addresstypeenum = (addresstypeenum)Enum.Parse(typeof(addresstypeenum), addresstype);
 
-                        dynamic systemsenderaddress = (from x in (db.GetRepository<systemaddress>().Find().Where(f => f.id == (int)(systemaddresstypeenum.DoNotReplyAddress))) select x).First();
-                        lu_template template = (from x in (db.GetRepository<lu_template>().Find().Where(f => f.id == (int)(templateenum.GenericErrorMessage))) select x).First();
-                        lu_messagetype messagetype = (from x in (db.GetRepository<lu_messagetype>().Find().Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).First();
-                        var recipientemailaddresss = (from x in (db.GetRepository<address>().Find().Where(f => f.addresstype.id == (int)(addresstypeenum))) select x).ToList();
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+                        var systemaddresstypeenum = (systemaddresstypeenum)Enum.Parse(typeof(systemaddresstypeenum), systemaddresstype);
+                        //Id's messed up in DB use the first 
+                        dynamic systemsenderaddress = (from x in (db.GetRepository<systemaddress>().Find().ToList()) select x).First();
+                        lu_template template = (from x in (db.GetRepository<lu_template>().Find().ToList().Where(f => f.id == 1)) select x).First();
+
+                        lu_messagetype messagetype = (from x in (db.GetRepository<lu_messagetype>().Find().ToList().Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).First();
+                        var recipientemailaddresss = (from x in (db.GetRepository<address>().Find().ToList().Where(f => f.addresstype.id == (int)(addresstypeenum.Developer))) select x).ToList();
 
                         //build the recipient address objects
                         EmailModel returnmodel = new EmailModel();
@@ -95,13 +109,10 @@ namespace Nmedia.Services.Notification
                         // recipeints = context.MessageSystemAddresses.Where(Function(c) c.SystemAddressType = CInt(AddressType))
                         //Perform validation on the updated order before applying the changes.
                         message message = new message();
-
+                        //use create method it like this 
 
                         //11-29-2013 get the template path from web config
                         var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
-
-                        //use create method it like this 
-
 
                         message = (message.Create(c =>
                         {
@@ -109,44 +120,43 @@ namespace Nmedia.Services.Notification
                             c.id = (int)templateenum.GenericErrorMessage;
                             c.template = template;
                             c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
-                            c.body = TemplateParser.RazorFileTemplate(template.filename, ref returnmodel, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                            c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref returnmodel, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
                             c.subject = returnmodel.subject;
                             c.recipients = recipientemailaddresss;
                             c.sendingapplication = "NotificationService";
                             c.systemaddress = systemsenderaddress;
                         }));
 
+                        message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
+                        message.sendattempts = message.body != null ? 1 : 0;
                         db.Add(message);
-                        int i = db.Commit();
+                        int j = db.Commit();
                         transaction.Commit();
+                        });
+                        await task;
 
-                        message.sent = sendemail(message); //attempt to send the message
-
-                        return new CompletedAsyncResult<EmailModel>(returnmodel);
+                        //return new CompletedAsyncResult<EmailModel>(returnmodel);
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                        // transaction.Rollback();
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Generic Error");
                         string ErrorMessage = "";
                         string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        //log the error but dont notifiy
+                        // new Logging(applicationEnum.notificationservice).WriteSingleEntry(logseverityEnum.Warning, LogenviromentEnum.dev, ex, null, null, false);
                         throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                         //log error mesasge
-                        // new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning , ex, null, null,false);
-                       
+                        // new Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning , ex, null, null,false);
+
                     }
                 }
             }
-           
 
-        }
 
-        public EmailModel Endsenderrormessage(IAsyncResult r)
-        {
-            CompletedAsyncResult<EmailModel> result = r as CompletedAsyncResult<EmailModel>;
-            Console.WriteLine("EndServiceAsyncMethod called with: \"{0}\"", result.Data);
-            return result.Data;
+
+
         }
 
         ////TO Do find a way to differentiate between user and Member
@@ -244,7 +254,7 @@ namespace Nmedia.Services.Notification
         //    catch (Exception ex)
         //    {
         //        //log error mesasge
-        //        new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+        //        new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
         //        throw;
         //    }
         //    // return null;
@@ -344,7 +354,7 @@ namespace Nmedia.Services.Notification
         //    catch (Exception ex)
         //    {
         //        //log error mesasge
-        //        new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+        //        new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
         //        throw;
         //    }
 
@@ -375,7 +385,7 @@ namespace Nmedia.Services.Notification
         //    catch (Exception ex)
         //    {
         //        //log error mesasge
-        //        new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+        //        new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
         //        throw;
         //    }
         //    return null;
@@ -406,7 +416,7 @@ namespace Nmedia.Services.Notification
         //    catch (Exception ex)
         //    {
         //        //log error mesasge
-        //        new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+        //        new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
         //        throw;
         //    }
         //    return null;
@@ -441,7 +451,7 @@ namespace Nmedia.Services.Notification
         //    catch (Exception ex)
         //    {
         //        //log error mesasge
-        //        new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
+        //        new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning, ex, null, null, false);
         //        throw;
         //    }
         //    return null;
@@ -949,21 +959,28 @@ namespace Nmedia.Services.Notification
         #region "Private methods"
         //Private reusable internal functions 
         //TO DO this should be handled as a separate send for each so we can update the susccess individually
+        //Private reusable internal functions  
+        //TO DO this should be handled as a separate send for each so we can update the susccess individually
         private bool sendemail(message message)
         {
             bool isEmailSendSuccessfully = false;
             try
             {
+                //SmtpClient oSmtpClient = new SmtpClient();
+                //MailMessage oMailMessage = new MailMessage();
+                var FromAddress = (message.systemaddress == null | message.systemaddress.emailaddress == null | message.systemaddress.emailaddress == "") ? "MISReporting@wellsfargo.com" : message.systemaddress.emailaddress;
+
                 foreach (address recip_loopVariable in message.recipients)
                 {
                     var recip = recip_loopVariable;
-                    System.Net.Mail.MailMessage mailMessage = new System.Net.Mail.MailMessage(message.systemaddress.emailaddress, recip_loopVariable.emailaddress);
+                    System.Net.Mail.MailMessage mailMessage = new System.Net.Mail.MailMessage(FromAddress, recip_loopVariable.emailaddress);
                     mailMessage.IsBodyHtml = true;
                     mailMessage.Subject = message.subject;
                     mailMessage.Body = message.body;
                     SmtpClient smtp = new SmtpClient();
                     smtp.Host = !string.IsNullOrEmpty(message.systemaddress.hostname) ? message.systemaddress.hostname : message.systemaddress.hostip;
                     //smtp.Credentials()
+                    //TO DO no credentials required i think
                     smtp.Credentials = new System.Net.NetworkCredential(message.systemaddress.credentialusername, message.systemaddress.credentialpassword);
                     smtp.Send(mailMessage);
                     isEmailSendSuccessfully = true;
@@ -976,7 +993,19 @@ namespace Nmedia.Services.Notification
                 //TO DO log this
                 string ErrorMessage = ex.Message;
                 isEmailSendSuccessfully = false;
-                throw;
+
+                // transaction.Rollback();
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Generic Error");
+                //string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                //log the error but dont notifiy
+                using (var logger = new Logging(applicationEnum.notificationservice))
+                {
+                    logger.WriteSingleEntry(logseverityEnum.Warning, LogenviromentEnum.dev, ex, message.recipients.FirstOrDefault().emailaddress, null, false);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason              
+                }
+                return isEmailSendSuccessfully;
             }
 
             return isEmailSendSuccessfully;
@@ -988,14 +1017,19 @@ namespace Nmedia.Services.Notification
 
             try
             {
-                emaildetail.body = db.GetRepository<lu_template>().Find().Where(p => p.id == (int)template).FirstOrDefault().bodystring.description;
-                emaildetail.subject = db.GetRepository<lu_template>().Find().Where(p => p.id == (int)template).FirstOrDefault().subjectstring.description;
+                emaildetail.body = db.GetRepository<lu_template>().Find().ToList().Where(p => p.id == (int)template).FirstOrDefault().body.description;
+                emaildetail.subject = db.GetRepository<lu_template>().Find().ToList().Where(p => p.id == (int)template).FirstOrDefault().subject.description;
                 //TO DO figure out if we will populate other values here
                 return emaildetail;
             }
             catch (Exception ex)
             {
                 //handle logging here
+                using (var logger = new Logging(applicationEnum.NotificationService))
+                {
+                    logger.WriteSingleEntry(logseverityEnum.Warning, enviromentEnum.dev, ex, null, null, false);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason              
+                }
             }
             return null;
 
@@ -1009,9 +1043,9 @@ namespace Nmedia.Services.Notification
 
             try
             {
-                newmessagedetail.template = db.GetRepository<lu_template>().Find().Where(p => p.id == (int)template).FirstOrDefault();
-                newmessagedetail.body = newmessagedetail.template.bodystring.description;
-                newmessagedetail.subject = newmessagedetail.template.subjectstring.description;
+                newmessagedetail.template = db.GetRepository<lu_template>().Find().ToList().Where(p => p.id == (int)template).FirstOrDefault();
+                newmessagedetail.body = newmessagedetail.template.body.description;
+                newmessagedetail.subject = newmessagedetail.template.subject.description;
                 return newmessagedetail;
             }
             catch (Exception ex)

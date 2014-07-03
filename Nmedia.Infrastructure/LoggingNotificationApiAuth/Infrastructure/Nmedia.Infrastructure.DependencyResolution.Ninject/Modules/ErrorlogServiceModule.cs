@@ -14,26 +14,26 @@ using Nmedia.Services.Contracts;
 
 namespace Nmedia.Infrastructure.DependencyResolution.Ninject.Modules
 {
-    public class ErrorlogServiceModule : NinjectModule
+    public class logServiceModule : NinjectModule
     {
 
         public override void Load()
         {
             // IKernel kernel = new StandardKernel();
 
-            this.Bind<ErrorlogContext>().ToSelf().InRequestScope();
+            this.Bind<logContext>().ToSelf().InRequestScope();
             //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToConstructor(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope ();
             //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToMethod(ctx => ctx.Kernel.Get<PromotionContext>());//).ToMethod()(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope();
 
             // var webApiEFRepository = kernel.Get<IRepository<Entity>>("WebApiEFRepository");
             //  this.Unbind(typeof(IUnitOfWork));
             //Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
-            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<ErrorlogContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Nmedia.Services.Logging.ErrorLoggingService"));
+            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<logContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Nmedia.Services.Logging.loggingService"));
             // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<ErrorlogContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Nmedia.Services.Logging.ErrorLoggingService"));
+            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<logContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Nmedia.Services.Logging.loggingService"));
 
             //the Unit of work module should already be loaded by now
-            this.Bind<IErrorLoggingService>().ToSelf().InRequestScope();
+            this.Bind<IloggingService>().ToSelf().InRequestScope();
 
         }
     }

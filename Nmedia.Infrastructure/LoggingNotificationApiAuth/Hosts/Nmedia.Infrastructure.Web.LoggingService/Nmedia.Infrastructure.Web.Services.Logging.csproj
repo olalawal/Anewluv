@@ -113,9 +113,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Services\Contracts\Nmedia.Services.Contracts\Nmedia.Services.Contracts.csproj">
+    <ProjectReference Include="..\..\Services\Contracts\Nmedia.Services.Contracts\Nmedia.Infrastructure.Services.Contracts.csproj">
       <Project>{2322C931-607A-46D5-BC71-BE6B25288B14}</Project>
-      <Name>Nmedia.Services.Contracts</Name>
+      <Name>Nmedia.Infrastructure.Services.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\Nmedia.Services.Logging\Nmedia.Services.Logging.csproj">
       <Project>{BA0C8EF0-5259-4208-93F3-DB1494E0FA52}</Project>

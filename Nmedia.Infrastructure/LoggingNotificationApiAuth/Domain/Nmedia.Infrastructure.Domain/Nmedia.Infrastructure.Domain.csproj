@@ -50,37 +50,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApikeyMigrations\201311220531287_InitialMigrations.cs" />
-    <Compile Include="ApikeyMigrations\201311220531287_InitialMigrations.Designer.cs">
-      <DependentUpon>201311220531287_InitialMigrations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ApikeyMigrations\201312060451182_ffff.cs" />
-    <Compile Include="ApikeyMigrations\201312060451182_ffff.Designer.cs">
-      <DependentUpon>201312060451182_ffff.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ApikeyMigrations\Configuration.cs" />
     <Compile Include="ApiKey\Context\Apikey.Context.cs" />
-    <Compile Include="ApiKey\Context\ApikeyModelbuilder.cs" />
-    <Compile Include="ApiKey\Context\SeedMethods.cs" />
-    <Compile Include="Configuration.cs" />
-    <Compile Include="ErrorlogMigrations\201312060559516_Initial.cs" />
-    <Compile Include="ErrorlogMigrations\201312060559516_Initial.Designer.cs">
-      <DependentUpon>201312060559516_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ErrorlogMigrations\Configuration.cs" />
-    <Compile Include="ErrorLog\Context\ErrorLog.Context.cs" />
-    <Compile Include="ErrorLog\Context\ErrorLog.Context.Lookups.cs" />
-    <Compile Include="ErrorLog\Context\ErrorLogModelbuilder.cs" />
-    <Compile Include="ErrorLog\Context\SeedingConversions.cs" />
-    <Compile Include="ErrorLog\Context\SeedMethods.cs" />
-    <Compile Include="NotificationMigrations\201312060606060_Initial.cs" />
-    <Compile Include="NotificationMigrations\201312060606060_Initial.Designer.cs">
-      <DependentUpon>201312060606060_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NotificationMigrations\Configuration.cs" />
-    <Compile Include="NotificationModel\Context\Notification.Context.cs" />
-    <Compile Include="NotificationModel\Context\NotificationModelbuilder.cs" />
-    <Compile Include="NotificationModel\Context\SeedMethods.cs" />
+    <Compile Include="ApiKey\Migrations\Configuration.cs" />
+    <Compile Include="ApiKey\ModelBuilder\ApikeyModelbuilder.cs" />
+    <Compile Include="ApiKey\Migrations\SeedMethods.cs" />
+    <Compile Include="Logging\Context\Logging.Context.cs" />
+    <Compile Include="Logging\Context\Logging.Context.Lookups.cs" />
+    <Compile Include="Logging\Migrations\Configuration.cs" />
+    <Compile Include="Logging\ModelBuilder\LoggingModelbuilder.cs" />
+    <Compile Include="Logging\Migrations\SeedingConversions.cs" />
+    <Compile Include="Logging\Migrations\SeedMethods.cs" />
+    <Compile Include="Notification\Context\Notification.Context.cs" />
+    <Compile Include="Notification\Migrations\Configuration.cs" />
+    <Compile Include="Notification\ModelBuilder\NotificationModelbuilder.cs" />
+    <Compile Include="Notification\Migrations\SeedMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Helpers.cs" />
     <Compile Include="Utils\EFUtils.cs" />
@@ -113,20 +96,7 @@
       <Name>Nmedia.Infrastructure.Domain.Data</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ApikeyMigrations\201311220531287_InitialMigrations.resx">
-      <DependentUpon>201311220531287_InitialMigrations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ApikeyMigrations\201312060451182_ffff.resx">
-      <DependentUpon>201312060451182_ffff.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ErrorlogMigrations\201312060559516_Initial.resx">
-      <DependentUpon>201312060559516_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NotificationMigrations\201312060606060_Initial.resx">
-      <DependentUpon>201312060606060_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

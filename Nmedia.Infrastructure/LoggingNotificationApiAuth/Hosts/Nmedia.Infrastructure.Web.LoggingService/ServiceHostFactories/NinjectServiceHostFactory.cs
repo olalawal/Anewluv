@@ -19,7 +19,7 @@ namespace Nmedia.Infrastructure.Web.Services.Logging.ServiceHostFactories
             IKernel container = new StandardKernel();
 
             //Add apikey context module here
-            container.Load<NinjectModules.ErrorlogServiceModule>();
+            container.Load<NinjectModules.logServiceModule>();
            ;         
             return container;
         }

@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Factory="Nmedia.Infrastructure.Web.Services.Logging.ServiceHostFactories.NinjectServiceHostFactory"  Service="Nmedia.Services.Logging.ErrorLoggingService"  %>
+﻿<%@ ServiceHost Factory="Nmedia.Infrastructure.Web.Services.Logging.ServiceHostFactories.NinjectServiceHostFactory"  Service="Nmedia.Services.Logging.loggingService"  %>

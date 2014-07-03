@@ -22,11 +22,17 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         [DataMember()]
         public int id { get; set; }
         [DataMember()]
-        public virtual lu_messagetype type { get; set; }
+        public virtual int messagetype_id { get; set; }
         [DataMember()]
-        public virtual lu_templatebody body { get; set; }
+        public virtual lu_messagetype messagetype { get; set; }
         [DataMember()]
-        public virtual lu_templatesubject subject { get; set; }
+        public virtual int templatebody_id { get; set; }
+        [DataMember()]
+        public virtual lu_templatebody templatebody { get; set; }
+        [DataMember()]
+        public virtual int templatesubject_id { get; set; }
+        [DataMember()]
+        public virtual lu_templatesubject templatesubject { get; set; }
 
     }
 }

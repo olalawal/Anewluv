@@ -15,7 +15,7 @@ using System.Web;
 using System.IO;
 using System.Xml;
 using Nmedia.Infrastructure.Domain.Data.ApiKey;
-using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Nmedia.Infrastructure.Domain.Data.log;
 
 using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Infrastructure.WCF;
@@ -40,7 +40,7 @@ namespace Nmedia.Services.ApikeyAuthorization
 
      //  private static  IUnitOfWork _unitOfWork;
         private  IUnitOfWork _unitOfWork;
-        private ErroLogging logger;
+        private Logging logger;
 
         public ApiKeyService(IUnitOfWork unitOfWork)
         {
@@ -107,7 +107,7 @@ namespace Nmedia.Services.ApikeyAuthorization
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -153,7 +153,7 @@ namespace Nmedia.Services.ApikeyAuthorization
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -190,7 +190,7 @@ namespace Nmedia.Services.ApikeyAuthorization
         //    {
 
         //        //instantiate logger here so it does not break anything else.
-        //        logger = new ErroLogging(logapplicationEnum.MemberService);
+        //        logger = new  Logging(applicationEnum.MemberService);
         //        //int profileid = Convert.ToInt32(viewerprofileid);
         //        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null);
         //        //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -240,7 +240,7 @@ namespace Nmedia.Services.ApikeyAuthorization
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason

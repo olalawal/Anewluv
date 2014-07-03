@@ -16,10 +16,14 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
     {
         //we generate this manually from enums for now
         [Key]
-        public int id { get; set; }    
+        public int id { get; set; }
+        [DataMember]
         public string description { get; set; }
+        [DataMember]
         public bool? active { get; set; }
+        [DataMember]
         public DateTime? creationdate { get; set; }
+        [DataMember]
         public DateTime? removaldate { get; set; }
 
     }

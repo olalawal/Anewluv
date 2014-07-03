@@ -13,28 +13,32 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
     public class lu_template
     {
         //we generate this manually from enums for now
-     
- [Key]
-       [DataMember()]
-       public int id { get; set; }
- [DataMember()]
- public string description { get; set; }
- [DataMember()]
- public string physicallocation { get; set; }
- [DataMember()]
- public string filename { get; set; }
- [DataMember()]
- public DateTime? creationdate { get; set; }
- [DataMember()]
- public DateTime? removaldate { get; set; }
- [DataMember()]
- public bool active { get; set; }
- [DataMember()]
- public string razortemplatebody { get; set; }
- [DataMember()]
- public virtual lu_templatebody bodystring { get; set; }
- [DataMember()]
- public virtual lu_templatesubject subjectstring { get; set; }
+
+        [Key]
+        [DataMember()]
+        public int id { get; set; }
+        [DataMember()]
+        public string description { get; set; }
+        [DataMember()]
+        public string defaultlocation { get; set; }
+        [DataMember()]
+        public DateTime? creationdate { get; set; }
+        [DataMember()]
+        public DateTime? removaldate { get; set; }
+        [DataMember()]
+        public bool active { get; set; }
+        [DataMember()]
+        public virtual int filename_id { get; set; }
+        [DataMember()]
+        public virtual lu_templatefilename filename { get; set; }
+        [DataMember()]
+        public virtual int body_id { get; set; }
+        [DataMember()]
+        public virtual lu_templatebody body { get; set; }
+        [DataMember()]
+        public virtual int subject_id { get; set; }
+        [DataMember()]
+        public virtual lu_templatesubject subject { get; set; }
 
         public static lu_template Create(Action<lu_template> init)
         {

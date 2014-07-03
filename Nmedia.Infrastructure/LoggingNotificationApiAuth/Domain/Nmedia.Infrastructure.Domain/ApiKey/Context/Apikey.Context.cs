@@ -28,7 +28,7 @@ namespace Nmedia.Infrastructure.Domain
         private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
 
         public ApiKeyContext()
-            : base("name=AnewLuvCommonContext")
+            : base("name=AnewLuvApikeyContext")
         {
             this.Configuration.ProxyCreationEnabled = true;
             this.Configuration.AutoDetectChangesEnabled = true;

@@ -13,7 +13,7 @@ using LoggingLibrary;
 //using Anewluv.Domain.Data.ViewModels;
 using System.Web;
 using Nmedia.Infrastructure;
-using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain;
 using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Services.ApikeyAuthorization;
@@ -234,7 +234,7 @@ namespace Anewluv.Api
                 //instantiate logger here so it does not break anything else.
                 //TO DO get HTTP context to replace the null
 
-                new ErroLogging(logapplicationEnum.UserAuthorizationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex,1,null,true);
+                new  Logging(applicationEnum.UserAuthorizationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex,1,null,true);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null);
                 //log error mesasge
                 //handle logging here

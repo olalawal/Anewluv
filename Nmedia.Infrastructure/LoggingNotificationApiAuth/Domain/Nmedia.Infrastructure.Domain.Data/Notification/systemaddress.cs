@@ -10,12 +10,16 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
      [DataContract(Namespace = "")]
     public class systemaddress
     {
-        
+
+
         [Key]
-         [DataMember()]
-         public int id { get; set; }
-        //public int systemaddresstype_id { get; set; }
-     [DataMember ()]  public virtual lu_systemaddresstype systemaddresstype { get; set; }              
+        [DataMember()]
+        public int id { get; set; }
+        [DataMember()]
+        public int systemaddresstype_id { get; set; }
+        [DataMember()]
+        public virtual lu_systemaddresstype systemaddresstype { get; set; }
+        [DataMember()]
         public string emailaddress { get; set; }
         [DataMember()]
         public string hostip { get; set; }
@@ -39,9 +43,9 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
             var systemaddress = new systemaddress();
             //address.MessageAddressID = Guid.NewGuid();
             //systemaddress.creationdate = DateTime.Now;
-           // systemaddress.RemovalDate = DateTime.Now;
-           // systemaddress.active = true;
-           // init(systemaddress); return systemaddress;
+            // systemaddress.RemovalDate = DateTime.Now;
+            // systemaddress.active = true;
+            // init(systemaddress); return systemaddress;
             return systemaddress;
         }
 

@@ -6,8 +6,8 @@ using System.Text;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.ServiceModel.Activation;
-using Nmedia.Infrastructure.Domain.Data.ViewModels;
-using Nmedia.Infrastructure.Domain.Data.errorlog;
+
+using Nmedia.Infrastructure.Domain.Data.log;
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain.Data.ApiKey;
 
@@ -20,7 +20,7 @@ namespace Nmedia.Services.Contracts
 
 
         //[OperationContract]
-        //string WriteLogEntry(errorlog logEntry);
+        //string WriteLogEntry(log logEntry);
 
 
         ////temporary method for use by designer to get the message information formated for them

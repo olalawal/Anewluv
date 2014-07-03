@@ -22,8 +22,9 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
         [Key]
         public int id { get; set; }
-        //public int addresstype_id { get; set; }
-        [DataMember]
+        [DataMember()]
+        public int addresstype_id { get; set; }
+        [DataMember()]
         public virtual lu_addresstype addresstype { get; set; }
         public virtual ICollection<message> messages { get; set; }
         [DataMember()]
@@ -38,16 +39,17 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         public DateTime? creationdate { get; set; }
         [DataMember()]
         public DateTime? removaldate { get; set; }
-       
+
         public static address Create(Action<address> init)
         {
             var address = new address();
-          
+
             //address.MessageAddressID = Guid.NewGuid();
-            address.creationdate = DateTime.Now;          
+            address.addresstype = new lu_addresstype();
+            address.creationdate = DateTime.Now;
             address.active = true;
-         //   address.messages = new List<message>();
-            init(address); return address; 
+            //   address.messages = new List<message>();
+            init(address); return address;
         } 
     
        //  //use create method it like this 

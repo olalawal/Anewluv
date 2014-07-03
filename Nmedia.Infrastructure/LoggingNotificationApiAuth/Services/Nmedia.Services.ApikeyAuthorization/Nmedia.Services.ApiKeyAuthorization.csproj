@@ -101,9 +101,9 @@
       <Project>{ff7b929d-6086-4509-9095-396845569906}</Project>
       <Name>LoggingLibrary %28Infrastructure\LoggingNotificationApiAuth\LoggingLibrary\LoggingLibrary%29</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contracts\Nmedia.Services.Contracts\Nmedia.Services.Contracts.csproj">
+    <ProjectReference Include="..\Contracts\Nmedia.Services.Contracts\Nmedia.Infrastructure.Services.Contracts.csproj">
       <Project>{2322c931-607a-46d5-bc71-be6b25288b14}</Project>
-      <Name>Nmedia.Services.Contracts</Name>
+      <Name>Nmedia.Infrastructure.Services.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
