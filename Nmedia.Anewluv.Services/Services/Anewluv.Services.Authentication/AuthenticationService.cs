@@ -18,7 +18,7 @@ using System.Web;
 using Anewluv.Domain;
 using Anewluv.Services.Members;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data;
 using GeoData.Domain.Models;
 using GeoData.Domain.ViewModels;
@@ -29,6 +29,7 @@ using Anewluv.Services.Media;
 using Anewluv.DataExtentionMethods;
 using Anewluv.Services.Spatial;
 using System.Threading.Tasks;
+using Nmedia.Infrastructure.Domain.Data.log;
 
 
 
@@ -42,7 +43,7 @@ namespace Anewluv.Services.Authentication
 
 
         private  IUnitOfWork _unitOfWork;
-        //private LoggingLibrary.ErroLogging logger;
+        //private LoggingLibrary.Logging logger;
         //constant strings for reseting passwords
         const String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; const String LOWER = "abcdefghijklmnopqrstuvwxyz"; const String NUMBERS = "1234567890"; const String SPECIAL = "*$-+?&=!%/";
 
@@ -127,7 +128,7 @@ namespace Anewluv.Services.Authentication
             }
             catch (Exception ex)
             {
-                using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                 {
                     logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                 }      
@@ -309,7 +310,7 @@ namespace Anewluv.Services.Authentication
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     //instantiate logger here so it does not break anything else.
 
-                    using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, myQuery != null ? myQuery.id : 0, null);
                     }                   
@@ -418,7 +419,7 @@ namespace Anewluv.Services.Authentication
                 }
                 catch (Exception ex)
                 {
-                    using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, myQuery != null ? myQuery.id : 0, null);
                     }          
@@ -549,7 +550,7 @@ namespace Anewluv.Services.Authentication
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                     {
 
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, myprofile != null ? myprofile.id : 0, null);
@@ -740,7 +741,7 @@ namespace Anewluv.Services.Authentication
                     {
                         transaction.Rollback();
 
-                        using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                        using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                         {
 
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
@@ -775,7 +776,7 @@ namespace Anewluv.Services.Authentication
             }
             catch (Exception ex)
             {
-                using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                 {
 
                     logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
@@ -836,7 +837,7 @@ namespace Anewluv.Services.Authentication
                     }
                     catch (Exception ex)
                     {
-                        using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                        using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                         {
 
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
@@ -979,7 +980,7 @@ namespace Anewluv.Services.Authentication
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                        using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                         {
 
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
@@ -1076,7 +1077,7 @@ namespace Anewluv.Services.Authentication
 
 
                     //instantiate logger here so it does not break anything else.
-                    using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
                     }      
@@ -1120,7 +1121,7 @@ namespace Anewluv.Services.Authentication
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-                using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                 {
                     logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
                 }   
@@ -1171,7 +1172,7 @@ namespace Anewluv.Services.Authentication
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                     {
 
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
@@ -1212,7 +1213,7 @@ namespace Anewluv.Services.Authentication
                 {
 
 
-                    using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                     {
 
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
@@ -1251,7 +1252,7 @@ namespace Anewluv.Services.Authentication
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     } 
@@ -1285,7 +1286,7 @@ namespace Anewluv.Services.Authentication
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     }
@@ -1345,7 +1346,7 @@ namespace Anewluv.Services.Authentication
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     } 
@@ -1554,7 +1555,7 @@ namespace Anewluv.Services.Authentication
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                        using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
                         } 
@@ -1663,7 +1664,7 @@ namespace Anewluv.Services.Authentication
                     {
                         transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
-                        using (var logger = new ErroLogging(logapplicationEnum.UserAuthorizationService))
+                        using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
                         } 

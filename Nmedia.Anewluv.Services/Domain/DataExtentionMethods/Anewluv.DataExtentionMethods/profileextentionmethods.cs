@@ -180,7 +180,7 @@ namespace Anewluv.DataExtentionMethods
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-               // logger = new ErroLogging(logapplicationEnum.MemberService);
+               // logger = new  Logging(applicationEnum.MemberService);
                // logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                 //log error mesasge
                 //handle logging here

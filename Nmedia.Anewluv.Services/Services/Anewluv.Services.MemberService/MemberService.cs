@@ -17,8 +17,8 @@ using System.ServiceModel.Activation;
 using Nmedia.DataAccess.Interfaces;
 
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Data.errorlog;
-//using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Nmedia.Infrastructure.Domain.Data.log;
+//using Nmedia.Infrastructure.Domain.Data.log;
 
 
 using Nmedia.Infrastructure.WCF;
@@ -39,7 +39,7 @@ namespace Anewluv.Services.Members
 
 
         IUnitOfWork _unitOfWork;
-        private LoggingLibrary.ErroLogging logger;
+        private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
@@ -84,7 +84,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid ));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -141,7 +141,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -189,7 +189,7 @@ namespace Anewluv.Services.Members
                       {
                           transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
-                          logger = new ErroLogging(logapplicationEnum.MemberService);
+                          logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
                           logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -225,7 +225,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -293,7 +293,7 @@ namespace Anewluv.Services.Members
                        {
                            transaction.Rollback();
                            //instantiate logger here so it does not break anything else.
-                           logger = new ErroLogging(logapplicationEnum.MemberService);
+                           logger = new  Logging(applicationEnum.MemberService);
                            //int profileid = Convert.ToInt32(viewerprofileid);
                            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                            //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -360,7 +360,7 @@ namespace Anewluv.Services.Members
                       {
                           transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
-                          logger = new ErroLogging(logapplicationEnum.MemberService);
+                          logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
                           logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -406,7 +406,7 @@ namespace Anewluv.Services.Members
                       {
                           transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
-                          logger = new ErroLogging(logapplicationEnum.MemberService);
+                          logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
                           logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -447,7 +447,7 @@ namespace Anewluv.Services.Members
                       {
                           transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
-                          logger = new ErroLogging(logapplicationEnum.MemberService);
+                          logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
                           logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -493,7 +493,7 @@ namespace Anewluv.Services.Members
                       {
                           transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
-                          logger = new ErroLogging(logapplicationEnum.MemberService);
+                          logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
                           logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -538,7 +538,7 @@ namespace Anewluv.Services.Members
                       {
                           transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
-                          logger = new ErroLogging(logapplicationEnum.MemberService);
+                          logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
                           logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -573,7 +573,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -605,7 +605,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -639,7 +639,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -710,7 +710,7 @@ namespace Anewluv.Services.Members
                       {
                           transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
-                          logger = new ErroLogging(logapplicationEnum.MemberService);
+                          logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
                           logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -767,7 +767,7 @@ namespace Anewluv.Services.Members
                 {
                     transaction.Rollback();
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -831,7 +831,7 @@ namespace Anewluv.Services.Members
                     {
                         transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger = new  Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -890,7 +890,7 @@ namespace Anewluv.Services.Members
                     {
                         transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(logapplicationEnum.MemberService);
+                        logger = new  Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profile_id));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -933,7 +933,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);                  
+                    logger = new  Logging(applicationEnum.MemberService);                  
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -964,7 +964,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1000,7 +1000,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1041,7 +1041,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1082,7 +1082,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1117,7 +1117,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1148,7 +1148,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1178,7 +1178,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1210,7 +1210,7 @@ namespace Anewluv.Services.Members
                {
 
                    //instantiate logger here so it does not break anything else.
-                   logger = new ErroLogging(logapplicationEnum.MemberService);
+                   logger = new  Logging(applicationEnum.MemberService);
                    //int profileid = Convert.ToInt32(viewerprofileid);
                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                    //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1245,7 +1245,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1275,7 +1275,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1305,7 +1305,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1335,7 +1335,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1366,7 +1366,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1397,7 +1397,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1428,7 +1428,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1460,7 +1460,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1491,7 +1491,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1521,7 +1521,7 @@ namespace Anewluv.Services.Members
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MemberService);
+                    logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason

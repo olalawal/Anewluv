@@ -12,7 +12,7 @@ using Anewluv.Domain.Data;
 using Nmedia.DataAccess.Interfaces;
 using Anewluv.Caching;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data;
 
 namespace Anewluv.Services.Common
@@ -29,7 +29,7 @@ namespace Anewluv.Services.Common
         //private IPromotionRepository  promotionrepository;
 
         IUnitOfWork _unitOfWork;
-       // private LoggingLibrary.ErroLogging logger;
+       // private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
@@ -87,7 +87,7 @@ namespace Anewluv.Services.Common
                    catch (Exception ex)
                    {
 
-                        using (var logger =  new ErroLogging(logapplicationEnum.LookupService))
+                        using (var logger =  new  Logging(applicationEnum.LookupService))
                         {
                            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -130,7 +130,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -177,7 +177,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -224,7 +224,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -269,7 +269,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -316,7 +316,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -362,7 +362,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -406,7 +406,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -452,7 +452,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -499,7 +499,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -546,7 +546,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -592,7 +592,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -637,7 +637,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -682,7 +682,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -728,7 +728,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -774,7 +774,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -830,7 +830,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -868,7 +868,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -915,7 +915,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -955,7 +955,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -993,7 +993,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1046,7 +1046,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1092,7 +1092,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1138,7 +1138,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1184,7 +1184,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1237,7 +1237,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1285,7 +1285,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1329,7 +1329,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1375,7 +1375,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1423,7 +1423,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1468,7 +1468,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1515,7 +1515,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1560,7 +1560,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1605,7 +1605,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1651,7 +1651,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1701,7 +1701,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1747,7 +1747,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1792,7 +1792,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1839,7 +1839,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1884,7 +1884,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1929,7 +1929,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1976,7 +1976,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2022,7 +2022,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2069,7 +2069,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.LookupService))
+                    using (var logger = new  Logging(applicationEnum.LookupService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason

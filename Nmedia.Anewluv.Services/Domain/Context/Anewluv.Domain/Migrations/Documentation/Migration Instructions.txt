@@ -13,12 +13,12 @@ I am going through all the new modles and properly naming the lookup tables and 
 
 So I looked into the scheme deal and you can make sure db objects are mapped to a named scheme using this fluent syntax called in the onmodelcreating method
 
-    modelBuilder.Entity(Of errorlog)().ToTable("Errorlogs", schemaName:="Logging")
+    modelBuilder.Entity(Of log)().ToTable("logs", schemaName:="Logging")
     modelBuilder.Entity(Of lu_application)().ToTable("lu_application", schemaName:="Logging")
     modelBuilder.Entity(Of lu_logSeverity)().ToTable("lu_logSeverity", schemaName:="Logging")
 
 or you can decorate the entiies as follows 
-   <Table("errorlog", Schema:="Logging")> _
+   <Table("log", Schema:="Logging")> _
 
 And thwy will be automatically renamed or mapped to the correct schema.
 
@@ -28,13 +28,13 @@ I like how it checks for the schema to exist and if it does’nt creates a new o
 
 Sample migraation command.
 
-PM> Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel" -verbose 
+PM> Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel" -verbose 
 
 
 if you dont care if any data is deleted use the -force flag. and If you are having problems with previous migrations you can delete the migrations
 table that is created in SQL
 
-Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel" -verbose –force
+Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel" -verbose –force
 Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose –force
 
 check the model updating model for custom database migration settings i.e schema and object relationships
@@ -42,5 +42,5 @@ check the model updating model for custom database migration settings i.e schema
 
  added this code to configure migrations to be constally updated on db changes automatically
  add-Migration -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" ConfigurationNotificationModelInitial
- add-Migration  -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomerrorLogModel"  ConfigurationCustomerrorLogModelInitial
+ add-Migration  -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel"  ConfigurationCustomlogModelInitial
 

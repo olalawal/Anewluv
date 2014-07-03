@@ -17,7 +17,7 @@ using System.ServiceModel.Activation;
 using Anewluv.Domain.Data.ViewModels;
 using Nmedia.DataAccess.Interfaces;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Nmedia.Infrastructure.Domain.Data.log;
 using System.Threading.Tasks;
 
 
@@ -33,7 +33,7 @@ namespace Anewluv.Services.Common
 
        
         IUnitOfWork _unitOfWork;
-        private LoggingLibrary.ErroLogging logger;
+        private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
@@ -80,7 +80,7 @@ namespace Anewluv.Services.Common
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    //new ErroLogging(logapplicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null,false);
+                    //new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null,false);
                     //logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null);
                     //log error mesasge
                     //handle logging here

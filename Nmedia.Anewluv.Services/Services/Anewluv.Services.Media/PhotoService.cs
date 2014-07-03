@@ -20,7 +20,7 @@ using ImageResizer;
 using Nmedia.DataAccess.Interfaces;
 using System.Drawing;
 
-using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data;
 using Anewluv.DataExtentionMethods;
 using Nmedia.Infrastructure.ExceptionHandling;
@@ -38,7 +38,7 @@ namespace Anewluv.Services.Media
         //private IPromotionRepository  promotionrepository;
 
         IUnitOfWork _unitOfWork;
-        private LoggingLibrary.ErroLogging logger;
+        private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
@@ -132,25 +132,25 @@ namespace Anewluv.Services.Media
                                 catch (ImageResizer.ImageMissingException missing)
                                 {
                                     Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename, missing.Message, missing);
-                                    new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning,globals.getenviroment, convertedexcption, photo.profile_id, null);
+                                    new  Logging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning,globals.getenviroment, convertedexcption, photo.profile_id, null);
                                     //domt throw just log and move on
                                 }
                                 catch (ImageResizer.ImageCorruptedException cr)
                                 {
                                     Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename, cr.Message, cr);
-                                    new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, convertedexcption, photo.profile_id, null);
+                                    new  Logging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, convertedexcption, photo.profile_id, null);
                                     //domt throw just log and move on
                                 }
                                 catch (ImageResizer.ImageProcessingException ex)
                                 {
                                     Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename, ex.Message, ex);
-                                    new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, convertedexcption, photo.profile_id, null);
+                                    new  Logging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, convertedexcption, photo.profile_id, null);
                                     //domt throw just log and move on
                                 }
                                 catch (Exception ex)
                                 {
                                     Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), photo.imagename, ex.Message, ex);
-                                    new ErroLogging(logapplicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, convertedexcption, photo.profile_id, null);
+                                    new  Logging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, convertedexcption, photo.profile_id, null);
                                     //domt throw just log and move on
                                 }
                             }
@@ -164,7 +164,7 @@ namespace Anewluv.Services.Media
                 {
                     //logg this from the caller ? so we dont log twice
                     Exception convertedexcption = new CustomExceptionTypes.MediaException(photo.profile_id.ToString(), "", ex.Message, ex.InnerException);
-                    //new ErroLogging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
+                    //new  Logging(applicationEnum.MediaService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption, null, null);
                     throw convertedexcption;
                 }
 
@@ -234,7 +234,7 @@ namespace Anewluv.Services.Media
                     catch (Exception ex)
                     {
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(logapplicationEnum.MediaService);
+                        logger = new  Logging(applicationEnum.MediaService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in photo service");
@@ -263,7 +263,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -318,7 +318,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -343,7 +343,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -370,7 +370,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -425,7 +425,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -471,7 +471,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -527,7 +527,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -567,7 +567,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -615,7 +615,7 @@ namespace Anewluv.Services.Media
                         //rollback transaction
                         transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(logapplicationEnum.MediaService);
+                        logger = new  Logging(applicationEnum.MediaService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in photo service");
@@ -671,7 +671,7 @@ namespace Anewluv.Services.Media
                         //rollback transaction
                         transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(logapplicationEnum.MediaService);
+                        logger = new  Logging(applicationEnum.MediaService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in photo service");
@@ -716,7 +716,7 @@ namespace Anewluv.Services.Media
                             //rollback transaction
                             transaction.Rollback();
                             //instantiate logger here so it does not break anything else.
-                            logger = new ErroLogging(logapplicationEnum.MediaService);
+                            logger = new  Logging(applicationEnum.MediaService);
                             logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                             //can parse the error to build a more custom error mssage and populate fualt faultreason
                             FaultReason faultreason = new FaultReason("Error in photo service");
@@ -805,7 +805,7 @@ namespace Anewluv.Services.Media
                             AnewluvMessage.errormessages.Add(ex.Message );
                             //just log and continue
                             //instantiate logger here so it does not break anything else.
-                            logger = new ErroLogging(logapplicationEnum.MediaService);
+                            logger = new  Logging(applicationEnum.MediaService);
                             logger.WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, ex);
                           //no need to throw heer wince we build the eror thing for them
                         }
@@ -822,7 +822,7 @@ namespace Anewluv.Services.Media
                             //rollback transaction
                             transaction.Rollback();
                             //instantiate logger here so it does not break anything else.
-                            logger = new ErroLogging(logapplicationEnum.MediaService);
+                            logger = new  Logging(applicationEnum.MediaService);
                             logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                             //can parse the error to build a more custom error mssage and populate fualt faultreason
                             FaultReason faultreason = new FaultReason("Error in photo service");
@@ -931,7 +931,7 @@ namespace Anewluv.Services.Media
                         //rollback transaction
                         transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
-                        logger = new ErroLogging(logapplicationEnum.MediaService);
+                        logger = new  Logging(applicationEnum.MediaService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in photo service");
@@ -966,7 +966,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -1011,7 +1011,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -1053,7 +1053,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -1090,7 +1090,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -1132,7 +1132,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -1175,7 +1175,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -1219,7 +1219,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -1262,7 +1262,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");
@@ -1312,7 +1312,7 @@ namespace Anewluv.Services.Media
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    logger = new ErroLogging(logapplicationEnum.MediaService);
+                    logger = new  Logging(applicationEnum.MediaService);
                     logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in photo service");

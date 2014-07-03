@@ -28,7 +28,7 @@ namespace Anewluv.Services.Common
         //private IPromotionRepository  promotionrepository;
 
         IUnitOfWork _unitOfWork;
-        // private LoggingLibrary.ErroLogging logger;
+        // private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;

@@ -18,7 +18,7 @@ using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
 using Nmedia.DataAccess.Interfaces;
 using LoggingLibrary;
-using Nmedia.Infrastructure.Domain.Data.errorlog;
+using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data;
 using Anewluv.Services.Contracts;
 
@@ -33,7 +33,7 @@ namespace Anewluv.Services.Edit
 
 
         IUnitOfWork _unitOfWork;
-       // private ErroLogging logger;
+       // private Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
@@ -126,7 +126,7 @@ namespace Anewluv.Services.Edit
              catch (Exception ex)
              {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.EditMemberService ))
+                    using (var logger = new  Logging(applicationEnum.EditMemberService ))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
                     }   
@@ -184,7 +184,7 @@ namespace Anewluv.Services.Edit
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.EditMemberService))
+                    using (var logger = new  Logging(applicationEnum.EditMemberService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
                     }
@@ -234,7 +234,7 @@ namespace Anewluv.Services.Edit
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.EditMemberService))
+                    using (var logger = new  Logging(applicationEnum.EditMemberService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
                     }
@@ -289,7 +289,7 @@ namespace Anewluv.Services.Edit
                 catch (Exception ex)
                 {
 
-                    using (var logger = new ErroLogging(logapplicationEnum.EditMemberService))
+                    using (var logger = new  Logging(applicationEnum.EditMemberService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
                     }
@@ -350,7 +350,7 @@ namespace Anewluv.Services.Edit
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        using (var logger = new ErroLogging(logapplicationEnum.EditMemberService))
+                        using (var logger = new  Logging(applicationEnum.EditMemberService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
                         }
@@ -453,7 +453,7 @@ namespace Anewluv.Services.Edit
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        using (var logger = new ErroLogging(logapplicationEnum.EditMemberService))
+                        using (var logger = new  Logging(applicationEnum.EditMemberService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
                         }
@@ -575,7 +575,7 @@ namespace Anewluv.Services.Edit
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        using (var logger = new ErroLogging(logapplicationEnum.EditMemberService))
+                        using (var logger = new  Logging(applicationEnum.EditMemberService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
                         }
@@ -703,7 +703,7 @@ namespace Anewluv.Services.Edit
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        using (var logger = new ErroLogging(logapplicationEnum.EditMemberService))
+                        using (var logger = new  Logging(applicationEnum.EditMemberService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
                         }
