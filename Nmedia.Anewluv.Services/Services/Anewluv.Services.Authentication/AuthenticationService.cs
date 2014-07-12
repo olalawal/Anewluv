@@ -76,8 +76,7 @@ namespace Anewluv.Services.Authentication
             {
 
                 var task = Task.Factory.StartNew(() =>
-                {
-                    
+                {                   
               
 
                 // string username,

@@ -30,7 +30,7 @@ namespace Nmedia.Services.Contracts
         [WebInvoke(UriTemplate = "/WriteCompleteLogEntry", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
         Task WriteCompleteLogEntry(log logEntry);
 
-        int EndWriteCompleteLogEntry(IAsyncResult result);
+     //   int EndWriteCompleteLogEntry(IAsyncResult result);
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [ServiceKnownType(typeof(logseverityEnum))]

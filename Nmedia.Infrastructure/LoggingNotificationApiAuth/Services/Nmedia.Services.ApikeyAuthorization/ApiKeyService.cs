@@ -67,11 +67,11 @@ namespace Nmedia.Services.ApikeyAuthorization
 
         const string APIKEYLIST = "APIKeyList";
 
-        public async Task<bool> NonAysncIsValidAPIKey(apikey model)
+        public async Task<bool> IsValidAPIKey(apikey model)
         {
             // TODO: Implement IsValidAPI Key using your repository
 
-            Guid apiKey;
+            //Guid apiKey;
 
             // _unitOfWork.DisableProxyCreation = true;
             using (var db = new ApiKeyContext())
@@ -121,60 +121,9 @@ namespace Nmedia.Services.ApikeyAuthorization
 
             }
         }
+     
 
-        public IAsyncResult BeginIsValidAPIKey(string key, AsyncCallback callback, object asyncState)
-        {
-            // TODO: Implement IsValidAPI Key using your repository
-
-            Guid apiKey;
-
-           // _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-
-                    //Convert the string into a Guid and validate it
-                    // not validating against a list anymore
-                    if (Guid.TryParse(key, out apiKey) && db.GetRepository<apikey>().Find().Any(p => p.key == apiKey))     //APIKeys.Contains(apiKey))
-                    {
-                      //  return true;
-                        return new CompletedAsyncResult<bool>(true);
-                    }
-                    else
-                    {
-                      //  return false;
-                        return new CompletedAsyncResult<bool>(false);
-
-                    }
-
-                }
-                catch (Exception ex)
-                {
-
-                    //instantiate logger here so it does not break anything else.
-                    logger = new  Logging(applicationEnum.MemberService);
-                    //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in member Apikey service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-                    //throw convertedexcption;
-                }
-
-            }
-        }
-
-        public bool EndIsValidAPIKey(IAsyncResult r)
-        {
-            CompletedAsyncResult<bool> result = r as CompletedAsyncResult<bool>;
-           // Console.WriteLine("EndServiceAsyncMethod called with: \"{0}\"", result.Data);
-            return result.Data;
-        }
-
+    
         //public List<Guid> APIKeys()
         //{
         //    try
@@ -223,7 +172,7 @@ namespace Nmedia.Services.ApikeyAuthorization
         //}
 
         //TO DO use enum maybe
-        public IAsyncResult BegingenerateAPIkey(string service, AsyncCallback callback, object asyncState)
+        public async Task<Guid> GenerateAPIkey(string service, string username )
         {
            
             _unitOfWork.DisableProxyCreation = true;
@@ -231,10 +180,19 @@ namespace Nmedia.Services.ApikeyAuthorization
             {
                 try
                 {
-                    Guid key = new Guid();
-                    //store to DB
-                    return new CompletedAsyncResult<Guid>(key);
-                    //return key;
+                    var task = Task.Factory.StartNew(() =>
+                    {                   
+              
+
+                        Guid key = new Guid();
+                        //TO  DO store to DB    
+                    
+
+
+                        return key;
+                    });
+                    return await task.ConfigureAwait(false);
+
                 }
                 catch (Exception ex)
                 {
@@ -255,12 +213,6 @@ namespace Nmedia.Services.ApikeyAuthorization
 
         }
 
-        public Guid EndgenerateAPIkey(IAsyncResult r)
-        {
-            CompletedAsyncResult<Guid> result = r as CompletedAsyncResult<Guid>;
-            //Console.WriteLine("EndServiceAsyncMethod called with: \"{0}\"", result.Data);
-            return result.Data;
-        }
-
+       
     }
 }

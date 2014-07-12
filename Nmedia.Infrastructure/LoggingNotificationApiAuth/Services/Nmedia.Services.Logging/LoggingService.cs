@@ -53,7 +53,7 @@ namespace Nmedia.Services.Logging
         }
 
 
-        public  async void WriteCompleteLogEntry(log logEntry)
+        public  async Task WriteCompleteLogEntry(log logEntry)
         {
             using (var db = new LoggingContext())
             {
@@ -63,7 +63,7 @@ namespace Nmedia.Services.Logging
                 {
                     try
                     {
-                        var task = Task.Factory.StartNew(() =>
+                        await Task.Factory.StartNew (() =>                        
                         {
 
                         IRepository<lu_logapplication> applicationrepo = db.GetRepository<lu_logapplication>();
@@ -84,7 +84,7 @@ namespace Nmedia.Services.Logging
                         int i = db.Commit();
                         transaction.Commit();
                         });
-                          await task;
+                         // await task;
 
                         // return i;
                         // return new CompletedAsyncResult<int>(i);

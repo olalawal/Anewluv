@@ -252,8 +252,6 @@
     <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Email\EmailEnums\subjecttype.cs" />
-    <Compile Include="Anewluv\ViewModels\Email\EmailModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Email\EmailViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Search\MemberSearchViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\MembershipUserViewModel.cs" />
@@ -297,6 +295,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Anewluv\Validation\" />
+    <Folder Include="Infrasrtucture\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

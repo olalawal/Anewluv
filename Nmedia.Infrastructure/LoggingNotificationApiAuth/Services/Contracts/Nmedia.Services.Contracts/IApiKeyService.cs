@@ -19,40 +19,20 @@ namespace Nmedia.Services.Contracts
 
 
 
-        //[OperationContract]
-        //string WriteLogEntry(log logEntry);
-
-
-        ////temporary method for use by designer to get the message information formated for them
-        //[OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        //[WebInvoke(UriTemplate = "/IsValidAPIKey/{key}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        //bool IsValidAPIKey(string key);
-
-
-        ////temporary method for use by designer to get the message information formated for them
-        //[OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        //[WebInvoke(UriTemplate = "/generateAPIkey/{service}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        //Guid generateAPIkey(string service);
-
       
          
         ////temporary method for use by designer to get the message information formated for them
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/NonAysncIsValidAPIKey", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        Task<bool> NonAysncIsValidAPIKey(apikey apikeymodel);
+        [WebInvoke(UriTemplate = "/IsValidAPIKey", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        Task<bool> IsValidAPIKey(apikey apikeymodel);
 
-        [OperationContract(AsyncPattern = true), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/IsValidAPIKey/{key}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        IAsyncResult BeginIsValidAPIKey(string key, AsyncCallback callback, object asyncState);
-
-        bool EndIsValidAPIKey(IAsyncResult result);
+   
 
         //temporary method for use by designer to get the message information formated for them
         [OperationContract(AsyncPattern = true), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/generateAPIkey/{service}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        IAsyncResult BegingenerateAPIkey(string service, AsyncCallback callback, object asyncState);
+        [WebInvoke(UriTemplate = "/generateAPIkey/{service}/{username}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        Task<Guid> GenerateAPIkey(string service, string username);
 
-        Guid EndgenerateAPIkey(IAsyncResult result);
-
+      
     }
 }

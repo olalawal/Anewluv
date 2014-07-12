@@ -8,14 +8,14 @@ using Ninject.Web.Common;
 
 namespace Nmedia.Infrastructure.DependencyResolution.Ninject.Modules
 {
-   public class logContextModule : NinjectModule
+   public class LoggingContextModule : NinjectModule
     {
         public override void Load()
         {
             //TO DO should be a separate service or something
             //bind the dbset context
             //  this.Bind<IContext>().ToConstructor(x => new PromotionContext()).InTransientScope().Named("PromotionContext");
-            this.Bind<logContext>().ToConstructor(x => new logContext()).InRequestScope();
+            this.Bind<LoggingContext>().ToConstructor(x => new LoggingContext()).InRequestScope();
         }
 
     }

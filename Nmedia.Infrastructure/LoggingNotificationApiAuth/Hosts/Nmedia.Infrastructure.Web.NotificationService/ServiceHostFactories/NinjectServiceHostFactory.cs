@@ -22,7 +22,7 @@ namespace Nmedia.Infrastructure.Web.Services.Notification.ServiceHostFactories
             IKernel container = new StandardKernel();
 
         
-           // container.Load<NinjectModules.logContextModule>();
+           // container.Load<NinjectModules.LoggingContextModule>();
            // container.Load<NinjectModules.AnewLuvContextModule>();
            // container.Load<NinjectModules.ApiKeyContextModule>();        
             container.Load<NinjectModules.AnewluvNotificationServiceModule>();

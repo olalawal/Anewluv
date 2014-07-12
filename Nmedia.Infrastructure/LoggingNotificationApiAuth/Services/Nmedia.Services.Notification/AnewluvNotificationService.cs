@@ -19,6 +19,8 @@ using Nmedia.Infrastructure;
 using Nmedia.Infrastructure.WCF;
 using Nmedia.Infrastructure.Domain;
 using System.Threading.Tasks;
+using LoggingLibrary;
+using Nmedia.Infrastructure.Domain.Data;
 
 
 
@@ -71,7 +73,7 @@ namespace Nmedia.Services.Notification
         /// <param name="asyncState"></param>
         /// <returns></returns>
         // public IAsyncResult 
-        public async void senderrormessage(log error, string systemaddresstype)
+        public async Task  senderrormessage(log error, string systemaddresstype)
         {
 
             EmailModel emailmodels = new EmailModel();
@@ -86,7 +88,8 @@ namespace Nmedia.Services.Notification
                     {
                         //parse the address type
 
-                        var task = Task.Factory.StartNew(() =>
+                        //Task that returns nothing
+                        await Task.Factory.StartNew (() =>
                         {
 
                         var systemaddresstypeenum = (systemaddresstypeenum)Enum.Parse(typeof(systemaddresstypeenum), systemaddresstype);
@@ -133,7 +136,103 @@ namespace Nmedia.Services.Notification
                         int j = db.Commit();
                         transaction.Commit();
                         });
-                        await task;
+                       // return task ;
+
+                        //return new CompletedAsyncResult<EmailModel>(returnmodel);
+                    }
+                    catch (Exception ex)
+                    {
+                        // transaction.Rollback();
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Generic Error");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        //log the error but dont notifiy
+                        // new Logging(applicationEnum.notificationservice).WriteSingleEntry(logseverityEnum.Warning, LogenviromentEnum.dev, ex, null, null, false);
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                        //log error mesasge
+                        // new Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning , ex, null, null,false);
+
+                    }
+                }
+            }
+
+
+
+
+        }
+
+
+        public async Task sendmessagebytemplate(EmailViewModel model)
+        {
+
+            EmailModel emailmodels = new EmailModel();
+
+            using (var db = new NotificationContext())
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                //db.DisableProxyCreation = true;
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                        //parse the address type
+
+                        //determine if we are sending a To or From email.
+
+
+                        //Task that returns nothing
+                        await Task.Factory.StartNew(() =>
+                        {
+
+                            var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
+                            //Id's messed up in DB use the first 
+                            dynamic systemsenderaddress = (from x in (db.GetRepository<systemaddress>().Find().ToList()) select x).First();
+                            lu_template template = (from x in (db.GetRepository<lu_template>().Find().ToList().Where(f => f.id == (int)templateenum)) select x).First();                            
+                            lu_messagetype messagetype = (from x in (db.GetRepository<lu_messagetype>().Find().ToList().Where(f => f.id == (int)templateenum)) select x).First();
+                            //var recipientemailaddresss = (from x in (db.GetRepository<address>().Find().ToList().Where(f => f.addresstype.id == (int)(addresstypeenum.Developer))) select x).ToList();
+
+                            //build the recipient address objects
+                            EmailModel returnmodel = new EmailModel();
+                            returnmodel = getemailbytemplateid(templateenum, db);
+                            //fill in the rest of the email model values 
+                             ICollection<address> addresses = new List<address>();
+                            addresses.Add(getorcreateaddaddress(model,db));
+
+                            //Now build the message e
+                            // recipeints = context.MessageSystemAddresses.Where(Function(c) c.SystemAddressType = CInt(AddressType))
+                            //Perform validation on the updated order before applying the changes.
+                            message message = new message();
+                            //use create method it like this 
+
+                            //11-29-2013 get the template path from web config
+                            var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
+
+                            //the member message created and sent here
+                            message = (message.Create(c =>
+                            {
+
+                                c.id = (int)templateenum;
+                                c.template = template;
+                                c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
+                                c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                                c.subject = returnmodel.subject;
+                                c.recipients = addresses;
+                                c.sendingapplication = "NotificationService";
+                                c.systemaddress = systemsenderaddress;
+                            }));
+
+                            message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
+                            message.sendattempts = message.body != null ? 1 : 0;
+                            db.Add(message);
+                            int j = db.Commit();
+                            transaction.Commit();
+
+                          
+
+
+                        });
+                        // return task ;
 
                         //return new CompletedAsyncResult<EmailModel>(returnmodel);
                     }
@@ -1000,9 +1099,9 @@ namespace Nmedia.Services.Notification
                 //string ErrorMessage = "";
                 string ErrorDetail = "ErrorMessage: " + ex.Message;
                 //log the error but dont notifiy
-                using (var logger = new Logging(applicationEnum.notificationservice))
+                using (var logger = new  Logging(applicationEnum.LoggingService))
                 {
-                    logger.WriteSingleEntry(logseverityEnum.Warning, LogenviromentEnum.dev, ex, message.recipients.FirstOrDefault().emailaddress, null, false);
+                    logger.WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, ex,null, null, false);
                     //can parse the error to build a more custom error mssage and populate fualt faultreason              
                 }
                 return isEmailSendSuccessfully;
@@ -1011,7 +1110,49 @@ namespace Nmedia.Services.Notification
             return isEmailSendSuccessfully;
         }
 
-        private EmailModel getemailbytemplateid(templateenum template, IUnitOfWork db)
+      
+       
+       //TO do might want to be able to send multiple emails at once instead instead of verifiying each 
+       private address getorcreateaddaddress(EmailViewModel Model, IUnitOfWork db)
+       {
+       
+         //check to see if the recipeint address already exists if not add i
+                        address current =
+                        db.GetRepository<address>().Find().ToList()
+                        .Where(p => p.emailaddress.ToUpper() == Model.EmailModel.emailaddress && p.addresstype_id == (int)Model.EmailModel.addresstype).FirstOrDefault();
+                            //db.GetRepository<address>().Find().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
+
+                         
+                        if (current == null)
+                        {
+                            current = new address();
+                           // var addresstype = new lu_addresstype();
+                         //   current.addresstype = addresstype;
+                            //add the email address                         
+                            current.addresstype_id =  (int)Model.EmailModel.addresstype ;//:  (int)Model.EmailModel.addresstypefrom;
+                            current.username = Model.EmailModel.username;
+                            current.emailaddress =   Model.EmailModel.emailaddress;  //IsToAddress == true? Model.EmailModel.to:Model.EmailModel.from;
+                            current.active = true;
+                            current.creationdate = DateTime.Now;
+                            db.Add(current); 
+                            int i = db.Commit();
+                        }
+                      
+                        //get the ID since it is required either way , got to be a betetr way to do this than to query twice
+                       // var currentaddress = db.GetRepository<address>().Find().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
+
+                       //ICollection<address> addresses = new List<address>();
+                        //add the address 
+                       // addresses.Add(current);
+
+                    
+                        message message = new message();
+                        return current;
+       
+       }
+       
+       
+       private EmailModel getemailbytemplateid(templateenum template, IUnitOfWork db)
         {
             EmailModel emaildetail = new EmailModel();
 

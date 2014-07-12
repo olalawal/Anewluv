@@ -234,7 +234,7 @@ namespace Anewluv.Api
                 //instantiate logger here so it does not break anything else.
                 //TO DO get HTTP context to replace the null
 
-                new  Logging(applicationEnum.UserAuthorizationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex,1,null,true);
+                new  Logging(applicationEnum.UserAuthorizationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex,null,null,true);
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
@@ -260,7 +260,7 @@ namespace Anewluv.Api
                     Guid apiKey;
                     Guid.TryParse(key.ToString(), out apiKey);
                     ApiKeyService ApiKeyService = new ApiKeyService(db);
-                    Task<bool> returnedTaskTResult = ApiKeyService.NonAysncIsValidAPIKey(new apikey { key = apiKey });
+                    Task<bool> returnedTaskTResult = ApiKeyService.IsValidAPIKey(new apikey { key = apiKey });
                     bool result = await returnedTaskTResult;
                  
                     // IsApiKeyValid = await 

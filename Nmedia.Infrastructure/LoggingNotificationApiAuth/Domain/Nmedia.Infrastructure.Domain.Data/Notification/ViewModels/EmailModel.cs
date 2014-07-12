@@ -9,9 +9,12 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
     [DataContract]
     public class EmailModel
     {
-     [DataMember]  public string to { get; set; }
-     [DataMember]
-     public string from { get; set; }  //only used in contact us
+
+     [DataMember] public messagetypeenum messagetype { get; set; }  //TO DO use the template maybe to determined what kind of email it is
+     [DataMember] public addresstypeenum addresstype { get; set; }
+     [DataMember] public string emailaddress { get; set; }
+   //  [DataMember] public addresstypeenum addresstypefrom { get; set; }
+    // [DataMember] public string from { get; set; }  //only used in contact us
      [DataMember]
      public string subject { get; set; }
      [DataMember]
