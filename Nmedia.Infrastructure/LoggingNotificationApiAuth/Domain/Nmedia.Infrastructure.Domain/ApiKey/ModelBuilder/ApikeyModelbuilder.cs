@@ -54,18 +54,19 @@ namespace Nmedia.Infrastructure.Domain
 
 
 
-           //many to many for address and recipeints
-           modelBuilder.Entity<apikey>()
-                .HasMany(p => p.registeredusers  )
-                .WithMany(t => t.apikeys )
-                .Map(mc =>
-                   {
-                       mc.ToTable("user_apikey");
-                       mc.MapLeftKey("apikey_id");
-                       mc.MapRightKey("user_id");
+           ////many to many for user and apikeys
+           //modelBuilder.Entity<apikey>()
+           //     .HasMany(p => p.registeredusers  )
+           //     .WithMany(t => t.apikeys )
+           //     .Map(mc =>
+           //        {
+           //            mc.ToTable("user_apikey");
+           //            mc.MapLeftKey("apikey_id");
+           //            mc.MapRightKey("user_id");
 
-                   });
+           //        });
             
+
          
 
             

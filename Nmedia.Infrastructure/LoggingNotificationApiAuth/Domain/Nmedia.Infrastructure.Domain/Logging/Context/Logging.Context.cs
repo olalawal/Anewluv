@@ -26,7 +26,7 @@ namespace Nmedia.Infrastructure.Domain
 
 
         public LoggingContext()
-            : base("name=AnewluvLoggingContext")
+            : base("name=LoggingContext")
         {
             this.Configuration.ValidateOnSaveEnabled = false;
             IsAuditEnabled = true;

@@ -34,11 +34,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Nmedia.Anewluv.Services\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Nmedia.Anewluv.Services\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -51,16 +53,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiKey\Context\Apikey.Context.cs" />
+    <Compile Include="ApiKey\Migrations\201407132217320_first.cs" />
+    <Compile Include="ApiKey\Migrations\201407132217320_first.Designer.cs">
+      <DependentUpon>201407132217320_first.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApiKey\Migrations\Configuration.cs" />
     <Compile Include="ApiKey\ModelBuilder\ApikeyModelbuilder.cs" />
     <Compile Include="ApiKey\Migrations\SeedMethods.cs" />
     <Compile Include="Logging\Context\Logging.Context.cs" />
     <Compile Include="Logging\Context\Logging.Context.Lookups.cs" />
+    <Compile Include="Logging\Migrations\201407131902027_first.cs" />
+    <Compile Include="Logging\Migrations\201407131902027_first.Designer.cs">
+      <DependentUpon>201407131902027_first.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logging\Migrations\Configuration.cs" />
     <Compile Include="Logging\ModelBuilder\LoggingModelbuilder.cs" />
     <Compile Include="Logging\Migrations\SeedingConversions.cs" />
     <Compile Include="Logging\Migrations\SeedMethods.cs" />
     <Compile Include="Notification\Context\Notification.Context.cs" />
+    <Compile Include="Notification\Migrations\201407131935192_first.cs" />
+    <Compile Include="Notification\Migrations\201407131935192_first.Designer.cs">
+      <DependentUpon>201407131935192_first.cs</DependentUpon>
+    </Compile>
     <Compile Include="Notification\Migrations\Configuration.cs" />
     <Compile Include="Notification\ModelBuilder\NotificationModelbuilder.cs" />
     <Compile Include="Notification\Migrations\SeedMethods.cs" />
@@ -96,7 +110,17 @@
       <Name>Nmedia.Infrastructure.Domain.Data</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="ApiKey\Migrations\201407132217320_first.resx">
+      <DependentUpon>201407132217320_first.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Logging\Migrations\201407131902027_first.resx">
+      <DependentUpon>201407131902027_first.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Notification\Migrations\201407131935192_first.resx">
+      <DependentUpon>201407131935192_first.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -32,6 +32,8 @@ type 2 mutiple contexts  use the full namespace of the config (use the namespace
 examples
 Add-Migration first -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Notification.Migrations.Configuration"
 Add-Migration first -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Logging.Migrations.Configuration"
+Add-Migration first -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Logging.Migrations.Configuration"
+
 
 adding another migration sample after this :
 
@@ -55,6 +57,8 @@ or
 Update-Database -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "Configurationlog"
 
 3) more multi tentant with diff dirs use the fully qualfied namespace
+Update-Database -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.ApikeyMigrations.Configuration" 
+Update-Database -TargetMigration "201402282200271_ffff" -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.NotificationMigrations.ConfigurationNotification" 
 Update-Database -TargetMigration "201402282200271_ffff" -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.NotificationMigrations.ConfigurationNotification" 
 
 if you dont care about datalosss or dropped tables use this command first

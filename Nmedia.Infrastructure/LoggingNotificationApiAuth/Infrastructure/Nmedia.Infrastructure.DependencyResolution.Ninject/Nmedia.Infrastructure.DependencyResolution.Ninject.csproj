@@ -65,8 +65,8 @@
     <Compile Include="Modules\ContextModules\ErrorlogContextModule.cs" />
     <Compile Include="Modules\ContextModules\NotificationContextModule.cs" />
     <Compile Include="Modules\ApikeyAuthServiceModule.cs" />
-    <Compile Include="Modules\ErrorlogServiceModule.cs" />
-    <Compile Include="Modules\AnewluvNotificationServiceModule.cs" />
+    <Compile Include="Modules\LoggingServiceModule.cs" />
+    <Compile Include="Modules\NotificationServiceModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

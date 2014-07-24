@@ -35,8 +35,8 @@ namespace LoggingLibrary
         // private List<LogMessage> lstMessages;
         // private List<LogValue> lstValues;
 
-        //private IAnewluvLoggingService LoggingServiceProxy;
-        //ChannelFactory<IAnewluvLoggingService> ErrorLoggingfactory;
+        //private ILoggingService LoggingServiceProxy;
+        //ChannelFactory<ILoggingService> ErrorLoggingfactory;
         private bool disposed = false;
         private int errorpass = 0;
 
@@ -75,7 +75,7 @@ namespace LoggingLibrary
             //mysClient.Test();
             // LogClient = new Log;//LoggerSoapClient();
             //oLogEntry = CreateLgEntryObject(null, null, logseverityEnum.Information);
-            // ErrorLoggingfactory = new ChannelFactory<IAnewluvLoggingService>("webHttpBinding_IAnewluvLoggingService");//(mysClient.Endpoint);
+            // ErrorLoggingfactory = new ChannelFactory<ILoggingService>("webHttpBinding_ILoggingService");//(mysClient.Endpoint);
             // LoggingServiceProxy = ErrorLoggingfactory.CreateChannel();
 
             //create chanle for notifcaiton servierc
@@ -102,7 +102,7 @@ namespace LoggingLibrary
             //mysClient.Test();
             // LogClient = new Log;//LoggerSoapClient();
             //oLogEntry = CreateLgEntryObject(null, null, logseverityEnum.Information);
-            // ErrorLoggingfactory = new ChannelFactory<IAnewluvLoggingService>("webHttpBinding_IAnewluvLoggingService");//(mysClient.Endpoint);
+            // ErrorLoggingfactory = new ChannelFactory<ILoggingService>("webHttpBinding_ILoggingService");//(mysClient.Endpoint);
             // LoggingServiceProxy = ErrorLoggingfactory.CreateChannel();
 
             //create chanle for notifcaiton servierc
@@ -137,7 +137,7 @@ namespace LoggingLibrary
             try
             {
 
-                //new LamdaProxyHelper<IAnewluvLoggingService>().UseAsync(serviceProxy =>
+                //new LamdaProxyHelper<ILoggingService>().UseAsync(serviceProxy =>
                 //    {
                 //        serviceProxy.BeginWriteCompleteLogEntry(CreateErrorLog(severityLevelvalue, enviroment, referedexception, username, context), null, null);  
                 //    }, AsyncResultCallBack, Guid.NewGuid());
@@ -145,7 +145,7 @@ namespace LoggingLibrary
 
                 //first  write database entry
                 //test of auth header info
-                //Channelfactoryhelper.Service<IAnewluvLoggingService>.Use(d =>
+                //Channelfactoryhelper.Service<ILoggingService>.Use(d =>
                 //{
                 //   // errorlog dd = CreateErrorLog(severityLevelvalue, referedexception,username,null);                       
                 //    //AsyncCallback callback = result =>
@@ -161,8 +161,8 @@ namespace LoggingLibrary
                 //moved this to a separate call
                 //ErrorNotificationServiceProxy.SendErrorMessageToDevelopers(oLogEntry);
                 // Clear();
-                WebChannelFactory<IAnewluvLoggingService> cflogging = new WebChannelFactory<IAnewluvLoggingService>("webHttpBinding_IAnewluvLoggingService");
-                IAnewluvLoggingService channellogging = cflogging.CreateChannel();
+                WebChannelFactory<ILoggingService> cflogging = new WebChannelFactory<ILoggingService>("webHttpBinding_ILoggingService");
+                ILoggingService channellogging = cflogging.CreateChannel();
                 channellogging.WriteCompleteLogEntry(oLogEntry);
                // bool result = await returnedTaskTResult;
                 cflogging.Close();
@@ -173,7 +173,7 @@ namespace LoggingLibrary
             {
                 ////we get an error trying to log log it here I guess i.e connecting or watatever
                 // //write error directly
-                //Channelfactoryhelper.Service<IAnewluvLoggingService>.Use(d =>
+                //Channelfactoryhelper.Service<ILoggingService>.Use(d =>
                 // {
                 //    // var id = d.WriteCompleteLogEntry(CreateErrorLog(logseverityEnum.CriticalError, ex));
                 //   //  oLogEntry.id = id;
@@ -186,8 +186,8 @@ namespace LoggingLibrary
 
                 // });
 
-                //WebChannelFactory<IAnewluvLoggingService> cflogging = new WebChannelFactory<IAnewluvLoggingService>("webHttpBinding_IAnewluvLoggingService");
-                //IAnewluvLoggingService channellogging = cflogging.CreateChannel();
+                //WebChannelFactory<ILoggingService> cflogging = new WebChannelFactory<ILoggingService>("webHttpBinding_ILoggingService");
+                //ILoggingService channellogging = cflogging.CreateChannel();
                 //channellogging.WriteCompleteLogEntry(CreateErrorLog(logseverityEnum.CriticalError, enviroment, ex));
                 //cflogging.Close();
             }
@@ -217,8 +217,8 @@ namespace LoggingLibrary
 
                     //}
                     //);
-                    WebChannelFactory<IAnewluvNotificationService> cfnotification = new WebChannelFactory<IAnewluvNotificationService>("webHttpBinding_IAnewluvNotificationService");
-                    IAnewluvNotificationService channel = cfnotification.CreateChannel();
+                    WebChannelFactory<INotificationService> cfnotification = new WebChannelFactory<INotificationService>("webHttpBinding_INotificationService");
+                    INotificationService channel = cfnotification.CreateChannel();
                     //TO DO get the systemaddress type from app.config 
                     channel.senderrormessage(oLogEntry, systemaddresstypeenum.DoNotReplyAddress.ToString());
                     cfnotification.Close();
@@ -229,7 +229,7 @@ namespace LoggingLibrary
                     //Errors are logged in notification service n
                     //write error directly
 
-                    // Channelfactoryhelper.Service<IAnewluvLoggingService>.Use(d =>
+                    // Channelfactoryhelper.Service<ILoggingService>.Use(d =>
                     // {
                     //     //AsyncCallback callback = result =>
                     //     //{
@@ -362,12 +362,12 @@ namespace LoggingLibrary
             entry.loggeduser = sessionID;
 
 
-            WebChannelFactory<IAnewluvLoggingService> cflogging = new WebChannelFactory<IAnewluvLoggingService>("webHttpBinding_IAnewluvLoggingService");
-            IAnewluvLoggingService channellogging = cflogging.CreateChannel();
+            WebChannelFactory<ILoggingService> cflogging = new WebChannelFactory<ILoggingService>("webHttpBinding_ILoggingService");
+            ILoggingService channellogging = cflogging.CreateChannel();
             entry.id = channellogging.TranslateLogSeverity(severityLevel);
             cflogging.Close();
 
-            //Channelfactoryhelper.Service<IAnewluvLoggingService>.Use(d =>
+            //Channelfactoryhelper.Service<ILoggingService>.Use(d =>
             //{                 
             //    entry.id = d.TranslateLogSeverity(severityLevel);               
             //});

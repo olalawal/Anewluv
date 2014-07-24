@@ -61,7 +61,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="CommonInstanceFactory">
-      <HintPath>..\..\..\..\..\AnewLuv\ShellMVC3\Shell.MVC2\packages\CommonInstanceFactory.1.0.0.0\lib\net40\CommonInstanceFactory.dll</HintPath>
+      <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\CommonInstanceFactory.dll</HintPath>
     </Reference>
     <Reference Include="CommonInstanceFactory.Adapters.Ninject">
       <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\CommonInstanceFactory.Adapters.Ninject.dll</HintPath>
@@ -96,7 +96,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AnewluvNotificationService.svc" />
+    <Content Include="NotificationService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

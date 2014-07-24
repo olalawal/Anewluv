@@ -38,7 +38,7 @@ namespace Anewluv.Caching
     public class CachingFactory
     {
         private static  Logging logger;
-        // public  LoggingServiceClient  svcloggingService;
+        // public  LoggingServiceClient  svcLoggingService;
         public static DataCacheFactory _cacheFactory;
         private static DataCache _cache;
         private static string _sessionStateCacheName = "AnewLuv";
@@ -46,11 +46,11 @@ namespace Anewluv.Caching
         private static string _LeadCacheHost = "NmediaApps01"; // add NemdiaAPPs IP address to hostnames file on production webserver
         static readonly object _locker = new object();
 
-        //public  CachingFactory(LoggingServiceClient _loggingService)
+        //public  CachingFactory(LoggingServiceClient _LoggingService)
         //{
         //    IKernel kernel = new StandardKernel();
         //    //Get these initalized
-        //    svcloggingService = kernel.Get<LoggingServiceClient>();
+        //    svcLoggingService = kernel.Get<LoggingServiceClient>();
 
         //}
 

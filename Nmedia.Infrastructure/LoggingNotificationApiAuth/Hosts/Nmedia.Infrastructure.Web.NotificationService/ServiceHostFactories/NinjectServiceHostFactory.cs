@@ -25,7 +25,7 @@ namespace Nmedia.Infrastructure.Web.Services.Notification.ServiceHostFactories
            // container.Load<NinjectModules.LoggingContextModule>();
            // container.Load<NinjectModules.AnewLuvContextModule>();
            // container.Load<NinjectModules.ApiKeyContextModule>();        
-            container.Load<NinjectModules.AnewluvNotificationServiceModule>();
+            container.Load<NinjectModules.NotificationServiceModule>();
                            
             return container;
         }

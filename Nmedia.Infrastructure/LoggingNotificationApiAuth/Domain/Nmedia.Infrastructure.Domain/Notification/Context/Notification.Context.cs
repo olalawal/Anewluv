@@ -41,13 +41,13 @@ namespace Nmedia.Infrastructure.Domain
 
 
         public NotificationContext()
-            : base("name=AnewLuvNotificationContext")
+            : base("name=NotificationContext")
         {
             this.Configuration.ValidateOnSaveEnabled = false;
             IsAuditEnabled = true;
             ObjectContext.SavingChanges += OnSavingChanges;
             Database.SetInitializer(
-                new DropCreateDatabaseIfModelChanges<NotificationContext>());
+            new DropCreateDatabaseIfModelChanges<NotificationContext>());
         }
 
 
