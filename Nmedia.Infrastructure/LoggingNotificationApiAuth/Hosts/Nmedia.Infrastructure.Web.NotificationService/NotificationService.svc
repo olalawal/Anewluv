@@ -1,0 +1,2 @@
+﻿<%@ ServiceHost Factory="Nmedia.Infrastructure.Web.Services.Notification.ServiceHostFactories.NinjectServiceHostFactory" Service="Nmedia.Services.Notification.NotificationService"  %>
+                                                                                                                                
