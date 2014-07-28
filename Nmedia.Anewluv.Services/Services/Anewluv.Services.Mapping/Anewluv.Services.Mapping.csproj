@@ -62,6 +62,10 @@
       <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
       <Name>Anewluv.Services.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\ApplicationSpecfic\Anewluv.Api\Anewluv.Api.csproj">
+      <Project>{1e78fd8f-5a46-4894-b7e9-9e572d558562}</Project>
+      <Name>Anewluv.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
       <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>

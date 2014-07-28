@@ -38,13 +38,13 @@ namespace Anewluv.Domain.Data.ViewModels
     {
 
         //Added session ID
-          [DataMember]
+        [DataMember]
         public string sessionid { get; set; }
-          [DataMember]
+        [DataMember]
         public int profile_id { get; set; } 
 
         //added to hold RPX /OpenID data
-        [DataMember ]
+        //[DataMember ]
         public rpxprofile rpxmodel { get; set; }
 
         //ADD A STATE VIEWMODEL AS WELL  to determine weather the member is in 
@@ -53,54 +53,54 @@ namespace Anewluv.Domain.Data.ViewModels
         //public MemberCurrentStatusViewModel MyCurrentStatus;
 
         //4-27-2012 added profile visiblity mode
-          [DataMember]
+        // [DataMember]
         public visiblitysetting  profilevisiblity { get; set; }
 
         //added 9/05/2011
         //determines if the member has been shown thier daily status message i.e if neede
-         [DataMember]
+        //[DataMember]
         public bool profilestatusmessageshown { get; set; }
 
         //id of this particually item
-          [DataMember]
+        //  [DataMember]
         public string membersviewmodelid { get; set; }
 
         // public photo  Photos { get; set; }
 
         //profileData should enumarate the entire model 
-        [DataMember]
+        //[DataMember]
         public profile profile { get; set; }
 
-      //  [DataMember]
-
+       // [IgnoreDataMember]
         public profiledata profiledata { get; set; }
 
-        [DataMember]
+        //[DataMember]
         public quicksearchmodel myquicksearch { get; set; }
 
-         [DataMember]
+        // [DataMember]
         public registermodel register { get; set; }
 
-       [DataMember]
+       //[DataMember]
         public AccountModel account { get; set; }
 
   
         //used for uploading photos , just temporary
-        [DataMember ]
+     //   [DataMember ]
         public List<PhotoModel> myphotos { get; set; }
 
+       // [IgnoreDataMember]
          public photoconversion galleryphoto { get; set; }
 
         //10-26-2011 added as another temp storrange
-        [DataMember ]
+       // [DataMember ]
         public PhotoEditViewModel myeditprofilephotosviewmodel { get; set; }
 
         //1-12-2012 olawal added this to handle uploaded photos 
-         [DataMember]
+       //  [DataMember]
         public List<PhotoUploadModel> recentlyuploadedphotos { get; set; }
 
         //10-26-2011 another tmeporary model 
-        [DataMember]
+       // [DataMember]
         public List<MemberSearchViewModel> mycurrentsearchlist { get; set; }
 
         //counters
@@ -138,7 +138,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public string myblockcount { get; set; }
 
         //male would be default looking for female etc
-         [DataMember]
+        // [DataMember]
         public HashSet<int> lookingforgendersid { get; set; }
 
         //gender ID when they do not have anything in search settings fallback 

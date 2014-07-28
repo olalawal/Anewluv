@@ -83,10 +83,6 @@
       <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>
       <Name>Anewluv.Domain.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Services\Anewluv.Services.Authentication\Anewluv.Services.Authentication.csproj">
-      <Project>{87bcb0bf-cff1-4daa-b64a-f89baa8fa8ee}</Project>
-      <Name>Anewluv.Services.Authentication</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
       <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>

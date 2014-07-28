@@ -29,7 +29,8 @@ using Anewluv.Services.Media;
 using Anewluv.DataExtentionMethods;
 using Anewluv.Services.Spatial;
 using System.Threading.Tasks;
-using Nmedia.Infrastructure.Domain.Data.log;
+using Anewluv.Api;
+
 
 
 
@@ -255,7 +256,7 @@ namespace Anewluv.Services.Authentication
                             using (var tempdb = AnewluvContext)
                             {
                                 MemberService MemberService = new MemberService(tempdb);
-                                MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }, callback, MemberService);
+                                MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }).Start();
                             }
                         }
                         else
@@ -275,7 +276,7 @@ namespace Anewluv.Services.Authentication
                             using (var tempdb = AnewluvContext)
                             {
                                MemberService MemberService = new MemberService(tempdb);
-                               MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
+                               MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }).Start();
                            //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
                              }
                         }
@@ -370,7 +371,7 @@ namespace Anewluv.Services.Authentication
                             using (var tempdb = AnewluvContext)
                             {
                                 MemberService MemberService = new MemberService(tempdb);
-                                MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }, callback, MemberService);
+                                MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID });
                             }
                         }
                         else
@@ -390,7 +391,7 @@ namespace Anewluv.Services.Authentication
                             using (var tempdb = AnewluvContext)
                             {
                                MemberService MemberService = new MemberService(tempdb);
-                               MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
+                               MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id });
                            //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
                              }
                         }
@@ -497,7 +498,7 @@ namespace Anewluv.Services.Authentication
                             using (var tempdb = AnewluvContext)
                             {
                                 MemberService MemberService = new MemberService(tempdb);
-                                MemberService.Beginupdateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myprofile.id, sessionid = HttpContext.Current.Session.SessionID }, null, MemberService); }
+                                MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myprofile.id, sessionid = HttpContext.Current.Session.SessionID }); }
                         }
                         else
                         {
@@ -516,7 +517,7 @@ namespace Anewluv.Services.Authentication
                             using (var tempdb = AnewluvContext)
                             {
                                MemberService MemberService = new MemberService(tempdb);
-                               MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myprofile.id }, null, MemberService);
+                               MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myprofile.id });
                                 //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
                              }
                         }
@@ -1369,208 +1370,177 @@ namespace Anewluv.Services.Authentication
         #region "Extra Methods added to interface to clean up MVC controllers that do member stuff"
 
         //1-8-2013 olawal addedrobust method for activating profiles
-        public AnewluvResponse activateprofile(activateprofilemodel model)
+        public async Task<AnewluvResponse> activateprofile(activateprofilemodel model)
         {
             AnewluvMessages messages = new AnewluvMessages();
             messages.message = "";
             messages.errormessages = null;
             profile profile = new profile();
-
+            AnewluvResponse response = new AnewluvResponse();
+            bool activationsuccesful = false;
 
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
                 {
+
                     try
-                    {
-                        //Clear any errors kinda redundant tho  
-                        //also create a members view model to store pertinent data i.e persist photos profile ID etc
-                        var membersmodel = new MembersViewModel();
-                        //get the macthcing member data using the profile ID/email entered
-                        profile = db.GetRepository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
-                        //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
-
-                        //verify that user entered correct email before doing anything
-                        //TO DO add these error messages to resource files
-                        if (profile == null | db.GetRepository<profile>().checkifemailalreadyexists(new ProfileModel { email = profile.emailaddress }) == false)
                         {
-                            messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
-                            //hide the photo view in thsi case
-                            model.photostatus = true;
-                            //  return messages;
-                        }
-
-                        //separate context for each call
-                        AnewluvContext AnewluvContext = new AnewluvContext();
-                        using (var tempdb = AnewluvContext)
-                        {
-                            PhotoService PhotoService = new PhotoService(tempdb);
-
-                            //11-1-2011
-                            //store the valid profileID in appfarbic cache
-                            // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
-                            model.photostatus = PhotoService.checkforuploadedphotobyprofileid((profile.id.ToString()));
-                        }
-
-                        //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
-                        // photoeditmodel photoviewmodel = new photoeditmodel();
-                        //registermodel registerviewmodel = new registermodel();
-                        model.emailaddress = profile.emailaddress;
-                        model.activationcode = profile.activationcode; //model.activateprofilemodel.ActivationCode;
-                        // model.profileid = profile.id;
-                        // model.activateprofilemodel.username = profile.username; // model.activateprofilemodel.profileid;  //store the profileID i.e email addy into photo viewmodel
-                        //registerviewmodel.RegistrationPhotos = photoviewmodel;  //map it to the empty photo view model
-                        //add the registermodel to the activate model          
-                        //membersmodel.Register = registerviewmodel;         
-                        //store the members viewmodel
-                        //CachingFactory.MembersViewModelHelper.UpdateMemberData(membersmodel, model.activateprofilemodel.profileid);
-                        //populate the values of all the form feilds from model if they are empty
-                        //verify that the modelstate is good beforeing even starting, this so that in case it was a redirecect 
-                        // from action we display any preivous errors from another associated partial view
-                        // if (ModelState.IsValid != true)
-                        // {
-                        //show the photo partial view as well since any previous errors will be from here
-                        // model.activateprofilemodel.PhotoStatus = true;
-                        //ModelState.Clear();
-                        // return View(model);
-                        // }
 
 
-                        // create temprary instances of both models since the partial view only passes one or the other not both
-                        //depending on which partial view made the request
-                        //var activateProfileModel = new activateprofilemodel();
-                        //var photoModel = new photoeditmodel();
 
-                        //5/11/2011
-                        //TO DO USE TASK for this
-                        // add photo view model stuff
-                        //Need to me made to run asynch
-                        if (model.photouploadviewmodel.photosuploaded.Count() > 0)
-                        {
-                            //TO DO convert to Asynch call
-                            AnewluvContext = new AnewluvContext();
-                            using (var tempdb = AnewluvContext)
+                            var task = Task.Factory.StartNew(() =>
                             {
-                                PhotoService PhotoService = new PhotoService(tempdb);
 
-                                //11-1-2011
-                                //store the valid profileID in appfarbic cache
-                                // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
-                                //model.photostatus = PhotoService.checkforuploadedphotobyprofileid((profile.id.ToString()));
-                                PhotoService.addphotos(model.photouploadviewmodel);
-                            }
+                                //Clear any errors kinda redundant tho  
+                                //also create a members view model to store pertinent data i.e persist photos profile ID etc
+                                var membersmodel = new MembersViewModel();
+                                //get the macthcing member data using the profile ID/email entered
+                                profile = db.GetRepository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
+                                //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
 
-                           // Api.PhotoService.addphotos(model.photouploadviewmodel);
+                                //verify that user entered correct email before doing anything
+                                //TO DO add these error messages to resource files
+                                if (profile == null | db.GetRepository<profile>().checkifemailalreadyexists(new ProfileModel { email = profile.emailaddress }) == false)
+                                {
+                                    messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
+                                    //hide the photo view in thsi case
+                                    // model.photostatus = true;
+                                    // return messages;
+                                }
+                                else if (db.GetRepository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true)
+                                {
+                                    messages.errormessages.Add("Your Profile has already been activated");
+                                    //hide the photo view in thsi case
+                                    //ViewData["ActivateProfileStatus"]=
+                                    // return View("LogOn", _logonmodel);
+                                    //return messages;
+                                }
+                                else
+                                {
+                                    //11-1-2011
+                                    //store the valid profileID in appfarbic cache
+                                    // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
+                                    var returnedTaskTResult = AsyncCalls.checkforuploadedphotobyprofileidasync((profile.id.ToString()));
+                                    // bool result =
+                                    model.photostatus = returnedTaskTResult.Result;
+                                    //}
+
+                                    //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
+                                    // photoeditmodel photoviewmodel = new photoeditmodel();
+                                    //registermodel registerviewmodel = new registermodel();
+                                    model.emailaddress = profile.emailaddress;
+                                    model.activationcode = profile.activationcode; //model.activateprofilemodel.ActivationCode;
+
+                                    //5/11/2011
+                                    //TO DO USE TASK for this
+                                    // add photo view model stuff
+                                    //Need to me made to run asynch
+                                    //if (model.photouploadviewmodel.photosuploaded.Count() > 0)
+                                    //{
+
+                                    //    var returnedTaskTResult = AsyncCalls.addphotosasync(model.photouploadviewmodel);
+
+                                    //    // Api.PhotoService.addphotos(model.photouploadviewmodel);
+                                    //}
+
+                                    //since we got here we can now check if the user has a photo
+                                    //first check to see if there is an email address for the given user on the server add it to the data anotaions validation                 
+                                    //get a value for photo status so we know weather to display uplodad phot dialog or not
+                                    //if the photo status is TRUE then hide the upload photo div
+
+                                    if (model.photostatus == false)
+                                    {
+                                        messages.errormessages.Add("Please upload at least one profile photo using the browser below");
+                                        //return messages;
+                                    }
+                                    //activaate profile here as long as photo exists 
+                                    else
+                                    {
+                                        //TO DO convert to Asynch call
+                                        // AnewluvContext = new AnewluvContext();
+                                        // using (var tempdb = AnewluvContext)
+                                        // {
+                                        //       MemberService MemberService = new MemberService(tempdb);
+                                      var activateProfileResult= AsyncCalls.activateprofileasync(new ProfileModel { profileid = profile.id });
+                                      activationsuccesful = activateProfileResult.Result;
+                                        //  }
+                                    }
+
+                                    //check if mailbox folders exist, if they dont create em , don't add any error status
+
+                                    var areamailboxfolderscreated = false;
+                                    //AnewluvContext = new AnewluvContext();
+                                    //  using (var tempdb = AnewluvContext)
+                                    //   {
+                                    //     MemberService MemberService = new MemberService(tempdb);
+                                    areamailboxfolderscreated =  AsyncCalls.checkifmailboxfoldersarecreatedasync(new ProfileModel { profileid = profile.id }).Result;
+                                    // }
+
+                                    if (!(areamailboxfolderscreated))                                    
+                                    {
+                                        //    AnewluvContext = new AnewluvContext();
+                                        //  using (var tempdb = AnewluvContext)
+                                        //   {
+                                        //    MemberService MemberService = new MemberService(tempdb);
+                                        AsyncCalls.createmailboxfoldersasync(new ProfileModel { profileid = profile.id });
+                                        //  }
+                                        // MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
+                                    }
+
+                                    messages.message = "Activation Sucssesful";
+                                }
+
+
+
+
+                                if (messages.errormessages.Count() == 0)
+                                {
+                                    //get the profile info to return
+                                    //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
+                                    //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
+                                    response.email = model.emailaddress;//profile.emailaddress;
+                                    ResponseMessage reponsemessage = new ResponseMessage("", messages.message, "");
+                                    response.ResponseMessages.Add(reponsemessage);
+
+                                }
+                                else
+                                {
+                                    ResponseMessage reponsemessage = new ResponseMessage("", "There was a problem activating the profile, please try again later", messages.errormessages.First());
+                                    response.ResponseMessages.Add(reponsemessage);
+                                }
+
+                                return response;
+
+                                // return messages;
+                            });
+                            return await task.ConfigureAwait(false);
+
                         }
-
-
-                        //since we got here we can now check if the user has a photo
-                        //first check to see if there is an email address for the given user on the server add it to the data anotaions validation                 
-                        //get a value for photo status so we know weather to display uplodad phot dialog or not
-                        //if the photo status is TRUE then hide the upload photo div
-
-                        if (model.photostatus == false | model.photouploadviewmodel.photosuploaded.Count() > 0)
+                        catch (Exception ex)
                         {
-                            messages.errormessages.Add("Please upload at least one profile photo using the browser below");
-                            //return messages;
-
-                        }
-
-
-
-
-                        if (db.GetRepository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true)
-                        {
-                            messages.errormessages.Add("Your Profile has already been activated");
-                            //hide the photo view in thsi case
-                            //ViewData["ActivateProfileStatus"]=
-                            // return View("LogOn", _logonmodel);
-                            //return messages;
-                        }
-                        //activaate profile here
-                        else
-                        {
-                            //TO DO convert to Asynch call
-                            AnewluvContext = new AnewluvContext();
-                            using (var tempdb = AnewluvContext)
+                            transaction.Rollback();
+                            using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                             {
-                                MemberService MemberService = new MemberService(tempdb);
-                                MemberService.activateprofile(new ProfileModel { profileid = profile.id });
+                                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
                             }
+                            FaultReason faultreason = new FaultReason("Error in User Authentication service");
+                            string ErrorMessage = "";
+                            string ErrorDetail = "ErrorMessage: " + ex.Message;
+                            throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+
+                            //throw convertedexcption;
                         }
-
-                        //check if mailbox folders exist, if they dont create em , don't add any error status
-
-                        var areamailboxfolderscreated = false;
-                         AnewluvContext = new AnewluvContext();
-                         using (var tempdb = AnewluvContext)
-                         {
-                             MemberService MemberService = new MemberService(tempdb);
-                            areamailboxfolderscreated= MemberService.checkifmailboxfoldersarecreated(new ProfileModel { profileid = profile.id }) ;
-                         }
-
-                         if (areamailboxfolderscreated == true)
+                        finally
                         {
-                            //ModelState.AddModelError("", "Your Profile has already been activated");
-                            //hide the photo view in thsi case                  
+                            //  Api.DisposePhotoService();
+                            // Api.DisposeMemberService();
                         }
-                        //create the mailbox folders if they do not exist
-                        else
-                        {
-                              AnewluvContext = new AnewluvContext();
-                              using (var tempdb = AnewluvContext)
-                              {
-                                  MemberService MemberService = new MemberService(tempdb);
-                                  MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
-                              }
-                           // MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
-                        }
+                  
 
-                        messages.message = "Activation Sucssesful";
-
-                        AnewluvResponse response = new AnewluvResponse();
-
-                        if (messages.errormessages.Count() == 0)
-                        {
-                            //get the profile info to return
-                            //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
-                            //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
-                            response.email = model.emailaddress;//profile.emailaddress;
-                            ResponseMessage reponsemessage = new ResponseMessage("", messages.message, "");
-                            response.ResponseMessages.Add(reponsemessage);
-
-                        }
-                        else
-                        {
-                            ResponseMessage reponsemessage = new ResponseMessage("", "There was a problem activating the profile, please try again later", messages.errormessages.First());
-                            response.ResponseMessages.Add(reponsemessage);
-                        }
-
-                        return response;
-
-                        // return messages;
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
-                        {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
-                        } 
-                      FaultReason faultreason = new FaultReason("Error in User Authentication service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-
-                        //throw convertedexcption;
-                    }
-                    finally
-                    {
-                      //  Api.DisposePhotoService();
-                       // Api.DisposeMemberService();
-                    }
+                   
 
 
                 }
@@ -1620,12 +1590,12 @@ namespace Anewluv.Services.Authentication
                         else 
                         {
                             var isprofileactivated = false;
-                            AnewluvContext AnewluvContext  = new AnewluvContext();
-                            using (var tempdb = AnewluvContext)
-                            {
-                               MemberService MemberService = new MemberService(tempdb);
-                              isprofileactivated =    MemberService.checkifprofileisactivated(new ProfileModel { profileid = profile.id });
-                            }
+                          //  AnewluvContext AnewluvContext  = new AnewluvContext();
+                          //  using (var tempdb = AnewluvContext)
+                          //  {
+                             //  MemberService MemberService = new MemberService(tempdb);
+                              isprofileactivated = (db.GetRepository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true);
+                           // }
 
                             if (isprofileactivated == true)                            
                             messages.errormessages.Add("Your Profile has already been activated");

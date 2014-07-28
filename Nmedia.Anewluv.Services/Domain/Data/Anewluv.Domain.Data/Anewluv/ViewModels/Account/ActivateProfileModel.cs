@@ -18,7 +18,7 @@ using System.Text.RegularExpressions;
 namespace Anewluv.Domain.Data.ViewModels
 {
     
-
+    //7-25-2014 olawal removed photo model, have users pass that info before hand in a prior call or after
     // [ActivationCodeIsValid("ProfileId", "ActivationCode", ErrorMessage = "Invalid Activation Code or Email Address")]
     [DataContract]
     //[Serializable]
@@ -45,8 +45,8 @@ namespace Anewluv.Domain.Data.ViewModels
         [Display(Name = "Photo Status")]
         public bool photostatus { get; set; }
 
-        [DataMember]
-        public PhotoUploadViewModel photouploadviewmodel { get; set; }
+       // [DataMember]
+       // public PhotoUploadViewModel photouploadviewmodel { get; set; }
 
        // [DataMember]
      //  public int profileid { get; set; }

@@ -64,14 +64,6 @@ namespace Nmedia.Services.Notification
         }
 
 
-
-
-
-
-
-
-
-
        /// <summary>
        /// TO DO cache these as well similar to lookup service
        /// </summary>
@@ -288,10 +280,10 @@ namespace Nmedia.Services.Notification
         }
 
 
-        public async Task sendmessagebytemplate(EmailViewModel model)
+        public async Task sendmessagebytemplate(EmailModel model)
         {
 
-            EmailModel emailmodels = new EmailModel();
+            EmailViewModel viewmodel = new EmailViewModel();
 
             using (var db = new NotificationContext())
             {
@@ -318,11 +310,19 @@ namespace Nmedia.Services.Notification
                             //var recipientemailaddresss = (from x in (db.GetRepository<address>().Find().ToList().Where(f => f.addresstype.id == (int)(addresstypeenum.Developer))) select x).ToList();
 
                             //build the recipient address objects
-                            EmailModel returnmodel = new EmailModel();
-                            returnmodel = getemailbytemplateid(templateenum, db);
+                           // EmailModel returnmodel = new EmailModel();
+                            model = getemailbytemplateid(templateenum, db);
                             //fill in the rest of the email model values 
                              ICollection<address> addresses = new List<address>();
-                            addresses.Add(getorcreateaddaddress(model,db));
+                            addresses.Add(getorcreateaddaddress(viewmodel,db));
+
+
+                            //TO DO put in special code for the matches and the searches 
+                            //i.e if template ID = 
+                            if (templateenum == templateenum.MemberMatchesSentMemberNotification)
+                            { 
+                             //TO DO use the API service to get that data QuickMatches and put it into the viewmodel
+                            }
 
                             //Now build the message e
                             // recipeints = context.MessageSystemAddresses.Where(Function(c) c.SystemAddressType = CInt(AddressType))
@@ -341,7 +341,7 @@ namespace Nmedia.Services.Notification
                                 c.template = template;
                                 c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
                                 c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                                c.subject = returnmodel.subject;
+                                c.subject = model.subject;
                                 c.recipients = addresses;
                                 c.sendingapplication = "NotificationService";
                                 c.systemaddress = systemsenderaddress;
@@ -1194,7 +1194,7 @@ namespace Nmedia.Services.Notification
             {
                 //SmtpClient oSmtpClient = new SmtpClient();
                 //MailMessage oMailMessage = new MailMessage();
-                var FromAddress = (message.systemaddress == null | message.systemaddress.emailaddress == null | message.systemaddress.emailaddress == "") ? "MISReporting@wellsfargo.com" : message.systemaddress.emailaddress;
+                var FromAddress = "noreply@anewluv.com"; // (message.systemaddress == null | message.systemaddress.emailaddress == null | message.systemaddress.emailaddress == "") ? "MISReporting@wellsfargo.com" : message.systemaddress.emailaddress;
 
                 foreach (address recip_loopVariable in message.recipients)
                 {

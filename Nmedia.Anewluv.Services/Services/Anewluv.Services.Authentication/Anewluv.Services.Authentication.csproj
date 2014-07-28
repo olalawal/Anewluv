@@ -72,6 +72,10 @@
       <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
       <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\ApplicationSpecfic\Anewluv.Api\Anewluv.Api.csproj">
+      <Project>{1e78fd8f-5a46-4894-b7e9-9e572d558562}</Project>
+      <Name>Anewluv.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
       <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>

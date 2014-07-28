@@ -29,6 +29,7 @@ using Anewluv.Services.Members;
 using GeoData.Domain.ViewModels;
 using Nmedia.Infrastructure.Domain.Data;
 using System.Threading.Tasks;
+using Anewluv.Api;
 
 namespace Anewluv.Services.Mapping
 {
@@ -965,12 +966,15 @@ namespace Anewluv.Services.Mapping
                     {   //build the photobeinguploaded object
 
 
-                        AnewluvContext AnewluvContext = new AnewluvContext();
-                        using (var tempdb = AnewluvContext)
-                        {
-                              PhotoService PhotoService = new PhotoService(tempdb);
-                              photobeinguploaded.imageb64string = PhotoService.getimageb64stringfromurl(membersmodel.rpxmodel.photo, "");
-                          }
+                      //  AnewluvContext AnewluvContext = new AnewluvContext();
+                      //  using (var tempdb = AnewluvContext)
+                      //  {
+                            //  PhotoService PhotoService = new PhotoService(tempdb);
+                       
+                            var returnedTaskTResult = AsyncCalls.getimageb64stringfromurlasync(membersmodel.rpxmodel.photo, "");
+                            photobeinguploaded.imageb64string = returnedTaskTResult.Result;
+
+                      //    }
                         photobeinguploaded.imagetypeid = db.GetRepository<lu_photoimagetype>().Find().Where(p => p.id == (int)photoimagetypeEnum.Jpeg).FirstOrDefault().id;
                         photobeinguploaded.creationdate = DateTime.Now;
                         photobeinguploaded.caption = membersmodel.rpxmodel.preferredusername;
@@ -979,12 +983,14 @@ namespace Anewluv.Services.Mapping
                         //add to repository
 
 
-                         AnewluvContext = new AnewluvContext();
-                         using (var tempdb = AnewluvContext)
-                         {
-                             PhotoService PhotoService = new PhotoService(tempdb);
-                             PhotoService.addphotos(photouploadvm);
-                         }
+                        // AnewluvContext = new AnewluvContext();
+                       //  using (var tempdb = AnewluvContext)
+                        // {
+                            // PhotoService PhotoService = new PhotoService(tempdb);
+                           var photouploadTaskResult = AsyncCalls.addphotosasync(photouploadvm);
+                           var messages =  photouploadTaskResult.Result;
+
+                       //  }
                     }
                     //make sure photos is not empty
                     //  if (membersmodel.MyPhotos == null)

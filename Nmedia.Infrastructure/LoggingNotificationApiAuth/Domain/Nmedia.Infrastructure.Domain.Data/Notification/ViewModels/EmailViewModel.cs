@@ -41,8 +41,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
         }
 
-        [DataMember]
-        public string templateid { get; set; }   
+     
         [DataMember]
         public EmailModel EmailModel { get; set; }
        // [DataMember]

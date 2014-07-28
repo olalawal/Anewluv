@@ -27,6 +27,7 @@ using Anewluv.Domain.Data;
 using Nmedia.Infrastructure.Domain.Data;
 
 using Anewluv.DataExtentionMethods;
+using System.Threading.Tasks;
 
 
 namespace Anewluv.Services.Members
@@ -311,7 +312,7 @@ namespace Anewluv.Services.Members
         // "Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
         //*************************************************************************************************
         //update the database i.e create folders and change profile status from guest to active ?!
-        public bool createmailboxfolders(ProfileModel model)
+        public async Task<bool> createmailboxfolders(ProfileModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -322,39 +323,47 @@ namespace Anewluv.Services.Members
 
                       try
                       {
-                          int max = 5;
-                          int i = 1;
 
-                          for (i = 1; i < max; i++)
+
+                          var task = Task.Factory.StartNew(() =>
                           {
-                              mailboxfolder p = new mailboxfolder();
-                              p.foldertype_id = i;
-                              p.profiled_id = model.profileid.GetValueOrDefault();
-                              //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
-                              switch (i)
-                              {
-                                  case 1:
-                                      p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Inbox";
-                                      break;
-                                  case 2:
-                                      p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Sent";
-                                      break;
-                                  case 3:
-                                      p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Drafts";
-                                      break;
-                                  case 4:
-                                      p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Trash";
-                                      break;
-                                  case 5:
-                                      p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Deleted";
-                                      break;
-                              }
-                               db.Add(p);
-                               int z = db.Commit();
-                               transaction.Commit();
+                              int max = 5;
+                              int i = 1;
 
-                               return true;
-                          }
+                              for (i = 1; i < max; i++)
+                              {
+                                  mailboxfolder p = new mailboxfolder();
+                                  p.foldertype_id = i;
+                                  p.profiled_id = model.profileid.GetValueOrDefault();
+                                  //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
+                                  switch (i)
+                                  {
+                                      case 1:
+                                          p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Inbox";
+                                          break;
+                                      case 2:
+                                          p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Sent";
+                                          break;
+                                      case 3:
+                                          p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Drafts";
+                                          break;
+                                      case 4:
+                                          p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Trash";
+                                          break;
+                                      case 5:
+                                          p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Deleted";
+                                          break;
+                                  }
+                                  db.Add(p);
+                                  int z = db.Commit();
+                                  transaction.Commit();
+
+                                  return true;
+                              }
+                              return false;
+                          });
+                          return await task.ConfigureAwait(false);
+
                       }
                       catch (Exception ex)
                       {
@@ -373,13 +382,12 @@ namespace Anewluv.Services.Members
                       }
                   }
 
-                  return false;
             }
 
      
         }
       
-        public bool activateprofile(ProfileModel model)
+        public async Task<bool> activateprofile(ProfileModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -387,36 +395,46 @@ namespace Anewluv.Services.Members
                   db.IsAuditEnabled = false; //do not audit on adds
                   using (var transaction = db.BeginTransaction())
                   {
+
                       try
-                      {
+                          {
 
-                          var myProfile =  db.GetRepository<profile>().getprofilebyprofileid(model);
-                         // if( myProfile == null ) return null;
-                          //update the profile status to 2
-                          myProfile.status_id = (int)profilestatusEnum.Activated;
-                          //handele the update using EF
-                          //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                          db.Update(myProfile);
-                          int i = db.Commit();
-                          transaction.Commit();
+                              var task = Task.Run(() =>
+                              {
+                                  var myProfile = db.GetRepository<profile>().getprofilebyprofileid(model);
+                                  // if( myProfile == null ) return null;
+                                  //update the profile status to 2
+                                  myProfile.status_id = (int)profilestatusEnum.Activated;
+                                  //handele the update using EF
+                                  //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                                  db.Update(myProfile);
+                                  int i = db.Commit();
+                                  transaction.Commit();
 
-                          return true;
-                      }
-                      catch (Exception ex)
-                      {
-                          transaction.Rollback();
-                          //instantiate logger here so it does not break anything else.
-                          logger = new  Logging(applicationEnum.MemberService);
-                          //int profileid = Convert.ToInt32(viewerprofileid);
-                          logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                          //can parse the error to build a more custom error mssage and populate fualt faultreason
-                          FaultReason faultreason = new FaultReason("Error in member service");
-                          string ErrorMessage = "";
-                          string ErrorDetail = "ErrorMessage: " + ex.Message;
-                          throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                                  return true;
+                              });
+                             return await task.ConfigureAwait(false);
 
-                          //throw convertedexcption;
-                      }
+                             
+                          }
+                          catch (Exception ex)
+                          {
+                              transaction.Rollback();
+                              //instantiate logger here so it does not break anything else.
+                              logger = new Logging(applicationEnum.MemberService);
+                              //int profileid = Convert.ToInt32(viewerprofileid);
+                              logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                              //can parse the error to build a more custom error mssage and populate fualt faultreason
+                              FaultReason faultreason = new FaultReason("Error in member service");
+                              string ErrorMessage = "";
+                              string ErrorDetail = "ErrorMessage: " + ex.Message;
+                              throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                              //throw convertedexcption;
+                          }
+                   
+
+                     
                   }
             }
 
@@ -556,34 +574,45 @@ namespace Anewluv.Services.Members
         }
 
         //check if profile is activated 
-        public bool checkifprofileisactivated(ProfileModel model)
+        public async Task<bool> checkifprofileisactivated(ProfileModel model)
         {
             _unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
             {
-                try
-                {
 
-                    return db.GetRepository<profile>().checkifprofileisactivated(model);
+              
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                            return db.GetRepository<profile>().checkifprofileisactivated(model);
+                        });
+                        return await task.ConfigureAwait(false);
+                      
 
 
-                    
-                }
-                catch (Exception ex)
-                {
 
-                    //instantiate logger here so it does not break anything else.
-                    logger = new  Logging(applicationEnum.MemberService);
-                    //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in member service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+                    catch (Exception ex)
+                    {
 
-                    //throw convertedexcption;
-                }
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MemberService);
+                        //int profileid = Convert.ToInt32(viewerprofileid);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                        //throw convertedexcption;
+                    }
+            
+
+
+               
 
             }
 
@@ -591,23 +620,31 @@ namespace Anewluv.Services.Members
         }
 
         //check if mailbox folder exist
-        public bool checkifmailboxfoldersarecreated(ProfileModel model)
+        public async Task<bool> checkifmailboxfoldersarecreated(ProfileModel model)
         {
             _unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
             {
+
+               
+
                 try
                 {
 
-                    return (db.GetRepository<mailboxfolder>().Find().Where(p => p.profiled_id == model.profileid).FirstOrDefault() != null);
-    }
+                    var task = Task.Factory.StartNew(() =>
+                    {
+                        return (db.GetRepository<mailboxfolder>().Find().Where(p => p.profiled_id == model.profileid).FirstOrDefault() != null);
+                    });
+                    return await task.ConfigureAwait(false);
+                   
+                }
                 catch (Exception ex)
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new  Logging(applicationEnum.MemberService);
+                    logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -616,6 +653,7 @@ namespace Anewluv.Services.Members
 
                     //throw convertedexcption;
                 }
+              
 
             }
 
@@ -623,25 +661,34 @@ namespace Anewluv.Services.Members
         }      
 
         //get the last time the user logged in from profile
-        public Nullable<DateTime> getmemberlastlogintimebyprofileid(ProfileModel model)
+        public async Task<DateTime?>  getmemberlastlogintimebyprofileid(ProfileModel model)
         {
 
             _unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
             {
+
+               
+
                 try
                 {
-                    return db.GetRepository<profile>().getprofilebyprofileid(model).logindate;
-                                  
+                    var task = Task.Factory.StartNew(() =>
+                    {
+                        return db.GetRepository<profile>().getprofilebyprofileid(model).logindate;
+
+                    });
+                    return await task.ConfigureAwait(false);
+
+                  
 
                 }
                 catch (Exception ex)
                 {
 
                     //instantiate logger here so it does not break anything else.
-                    logger = new  Logging(applicationEnum.MemberService);
+                    logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -650,6 +697,7 @@ namespace Anewluv.Services.Members
 
                     //throw convertedexcption;
                 }
+
 
             }
 
@@ -659,7 +707,7 @@ namespace Anewluv.Services.Members
         //updates all the areas  that handle when a user logs in 
         // added 1/18/2010 ola lawal
         //also updates the last log in and profile data
-        public IAsyncResult Beginupdateuserlogintimebyprofileidandsessionid(ProfileModel model, AsyncCallback callback, object asyncState)
+        public async Task<bool>  updateuserlogintimebyprofileidandsessionid(ProfileModel model)
         {
 
             //get the profile
@@ -674,37 +722,46 @@ namespace Anewluv.Services.Members
                   db.IsAuditEnabled = false; //do not audit on adds
                   using (var transaction = db.BeginTransaction())
                   {
+                    
                       try
                       {
-                          //update all other sessions that were not properly logged out
-                         var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
-
-                          foreach (userlogtime p in myQuery)
-                          {                              
-                              p.offline = true;
-                              db.Update(p);
-                          }
-                        
-
-                          //aloso update the profile table with current login date
-                         var  myProfile = db.GetRepository<profile>().getprofilebyprofileid(model);
-                          //update the profile status to 2
-                          myProfile.logindate = DateTime.Now;
-                          db.Update(myProfile);
 
 
-                          //noew aslo update the logtime and then 
-                          userlogtime myLogtime = new userlogtime();
-                          myLogtime.profile_id = model.profileid.GetValueOrDefault();
-                          myLogtime.offline = false;
-                          myLogtime.sessionid = model.sessionid;
-                          myLogtime.logintime = DateTime.Now;
-                          db.Add(myLogtime);
-                          //save all changes bro                         
-                          int i = db.Commit();
-                          transaction.Commit();
+                          var task = Task.Factory.StartNew(() =>
+                          {
+                              //update all other sessions that were not properly logged out
+                              var myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
-                          return new CompletedAsyncResult<bool>(true);
+                              foreach (userlogtime p in myQuery)
+                              {
+                                  p.offline = true;
+                                  db.Update(p);
+                              }
+
+
+                              //aloso update the profile table with current login date
+                              var myProfile = db.GetRepository<profile>().getprofilebyprofileid(model);
+                              //update the profile status to 2
+                              myProfile.logindate = DateTime.Now;
+                              db.Update(myProfile);
+
+
+                              //noew aslo update the logtime and then 
+                              userlogtime myLogtime = new userlogtime();
+                              myLogtime.profile_id = model.profileid.GetValueOrDefault();
+                              myLogtime.offline = false;
+                              myLogtime.sessionid = model.sessionid;
+                              myLogtime.logintime = DateTime.Now;
+                              db.Add(myLogtime);
+                              //save all changes bro                         
+                              int i = db.Commit();
+                              transaction.Commit();
+
+                              return true;
+                          });
+                          return await task.ConfigureAwait(true);
+
+                      
                       }
                       catch (Exception ex)
                       {
@@ -726,19 +783,13 @@ namespace Anewluv.Services.Members
 
        }
 
-        public bool Endupdateuserlogintimebyprofileidandsessionid(IAsyncResult r)
-        {
-            CompletedAsyncResult<bool> result = r as CompletedAsyncResult<bool>;
-            //Console.WriteLine("EndServiceAsyncMethod called with: \"{0}\"", result.Data);
-            return result.Data;
-        }
-
+      
 
         //"DateTimeFUcntiosn for longin etc "
         //**********************************************************
         // Description:	Updates the users logout time
         // added 1/18/2010 ola lawal
-        public bool updateuserlogouttimebyprofileid(ProfileModel model)
+        public async Task<bool> updateuserlogouttimebyprofileid(ProfileModel model)
         {
             //_unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
@@ -748,20 +799,28 @@ namespace Anewluv.Services.Members
                   {
                 try
                 {
-                    //update all other sessions that were not properly logged out
-                    var myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
-                    foreach (userlogtime p in myQuery)
+
+                    var task = Task.Factory.StartNew(() =>
                     {
-                        p.offline = true;
-                        p.logouttime = DateTime.Now;                          
-                        db.Update(p);
-                    }
+                        //update all other sessions that were not properly logged out
+                        var myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
-                    int i = db.Commit();
-                    transaction.Commit();
+                        foreach (userlogtime p in myQuery)
+                        {
+                            p.offline = true;
+                            p.logouttime = DateTime.Now;
+                            db.Update(p);
+                        }
 
-                    return true;
+                        int i = db.Commit();
+                        transaction.Commit();
+
+                        return true;
+                    });
+                    return await task.ConfigureAwait(false);
+
+                    
                 }
                 catch (Exception ex)
                 {
@@ -787,7 +846,7 @@ namespace Anewluv.Services.Members
         //**********************************************************
         // Description:	Updates the users logout time
         // added 1/18/2010 ola lawal
-        public IAsyncResult Beginupdateuserlogintimebyprofileid(ProfileModel model,AsyncCallback callback, object asyncState)
+        public async Task<bool> updateuserlogintimebyprofileid(ProfileModel model)
         {
             //_unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
@@ -797,7 +856,11 @@ namespace Anewluv.Services.Members
                 {
                     try
                     {
-                        //update all other sessions that were not properly logged out
+
+                        
+                    var task = Task.Factory.StartNew(() =>
+                    {
+                         //update all other sessions that were not properly logged out
                         var myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
                         foreach (userlogtime p in myQuery)
@@ -825,7 +888,12 @@ namespace Anewluv.Services.Members
                         int i = db.Commit();
                         transaction.Commit();
 
-                        return new CompletedAsyncResult<bool>(true);
+                         return true;
+
+                     });
+                    return await task.ConfigureAwait(false);
+
+                       
                     }
                     catch (Exception ex)
                     {
@@ -847,14 +915,8 @@ namespace Anewluv.Services.Members
 
         }
 
-        public bool Endupdateuserlogintimebyprofileid(IAsyncResult r)
-        {
-            CompletedAsyncResult<bool> result = r as CompletedAsyncResult<bool>;
-            //Console.WriteLine("EndServiceAsyncMethod called with: \"{0}\"", result.Data);
-            return result.Data;
-        }
-
-        public IAsyncResult Beginaddprofileactvity(profileactivity model,AsyncCallback callback, object asyncState)
+     
+        public async Task<bool> addprofileactvity(profileactivity model)
         {
             //get the profile
             //profile myProfile;
@@ -877,13 +939,18 @@ namespace Anewluv.Services.Members
                       // var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
                         
-                       
-                         db.Add(model);
-                        //save all changes bro
-                         int i = db.Commit();
-                         transaction.Commit();
+                    var task = Task.Factory.StartNew(() =>
+                    {
+                               db.Add(model);
+                            //save all changes bro
+                             int i = db.Commit();
+                             transaction.Commit();
 
-                        return new CompletedAsyncResult<bool>(true);
+                          return true;
+                           });
+                    return await task.ConfigureAwait(false);
+                       
+                      
 
                     }
                     catch (Exception ex)
@@ -906,13 +973,7 @@ namespace Anewluv.Services.Members
 
         }
 
-        public bool Endaddprofileactvity(IAsyncResult r)
-        {
-            CompletedAsyncResult<bool> result = r as CompletedAsyncResult<bool>;
-            //Console.WriteLine("EndServiceAsyncMethod called with: \"{0}\"", result.Data);
-            return result.Data;
-        }
-
+      
         //date time functions '
         //***********************************************************
         //this function will send back when the member last logged in

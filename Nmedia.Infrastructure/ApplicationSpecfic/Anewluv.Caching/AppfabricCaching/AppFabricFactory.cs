@@ -2840,7 +2840,7 @@ namespace Anewluv.Caching
                         countrys.Add(new country { id = "0", name = "Any" });
 
 
-                        foreach (countrypostalcode item in Api.AsyncCalls.getcountryandpostalcodestatuslist().Result)
+                        foreach (countrypostalcode item in Api.AsyncCalls.getcountryandpostalcodestatuslistasync().Result)
                             {
                                 var currentcountry = new country { id = item.id.ToString(), name = item.name };
                                 countrys.Add(currentcountry);
@@ -2909,7 +2909,7 @@ namespace Anewluv.Caching
                         using (var tempdb = PostalDataContext)
                         {
                             GeoService GeoService = new GeoService(tempdb);
-                            var results = Api.AsyncCalls.getcountryandpostalcodestatuslist().Result.Where(p => p.name != "").OrderBy(p => p.name);
+                            var results = Api.AsyncCalls.getcountryandpostalcodestatuslistasync().Result.Where(p => p.name != "").OrderBy(p => p.name);
 
                             countryandpostalcodes = results.ToList();
 

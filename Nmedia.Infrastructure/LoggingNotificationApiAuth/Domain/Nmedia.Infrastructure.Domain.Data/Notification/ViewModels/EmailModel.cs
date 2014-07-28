@@ -12,6 +12,8 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
      [DataMember] public messagetypeenum messagetype { get; set; }  //TO DO use the template maybe to determined what kind of email it is
      [DataMember] public addresstypeenum addresstype { get; set; }
+     [DataMember] public string templateid { get; set; }   
+
      [DataMember] public string emailaddress { get; set; }
    //  [DataMember] public addresstypeenum addresstypefrom { get; set; }
     // [DataMember] public string from { get; set; }  //only used in contact us
@@ -27,5 +29,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
      public string username { get; set; }  //Personal user updates strored here
      [DataMember]
      public string userlogon { get; set; }  //Personal user updates strored here
+
+
     }
 }

@@ -19,7 +19,6 @@ using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Services.ApikeyAuthorization;
 using Anewluv.Domain;
 using Anewluv.Domain.Data.ViewModels;
-using Anewluv.Services.Authentication;
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain.Data.ApiKey;
 //using Anewluv.Lib;
@@ -196,7 +195,7 @@ namespace Anewluv.Api
                             {
                                 //now validate the username password info if required 
                                 //TO DO determine which URLS need validation of this i.e personal data only
-                                if (ValidateUser(operationContext).Result)
+                                if (ValidateUser(operationContext))
                                 {
                                     validrequest = true;
                                 }
@@ -277,31 +276,29 @@ namespace Anewluv.Api
         }
 
 
-        static async Task<bool> ValidateUser(OperationContext operationContext)
+        static bool ValidateUser(OperationContext operationContext)
         {
             var authinfo = GetUserNamePassword(operationContext);
+            
             if (authinfo != null)
             {
-                //TO DO convert to asynch
-               // AnewluvContext AnewluvContext = new AnewluvContext();
-                var IsUserValidated = false;
-                using (var tempdb = new  AnewluvContext())
-                {
-                    AuthenticationService AuthenticationService = new AuthenticationService(tempdb);
-                    Task<bool> returnedTaskTResult =  AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
-                    bool result = await returnedTaskTResult;
-
-                    // IsApiKeyValid = await 
-                    return result;
-                   
-                }
-
+                    //TO DO convert to asynch
+                   // AnewluvContext AnewluvContext = new AnewluvContext();
+                  //  var IsUserValidated = false;
+                  ////  using (var tempdb = new  AnewluvContext())
+                  //  {
+                      //  AuthenticationService AuthenticationService = new AuthenticationService(tempdb);
+                 var  dd =  AsyncCalls.validateuserbyusernamepasswordasync(authinfo[0], authinfo[1]);
+                  return dd.Result;
+                       // bool result = await returnedTaskTResult;
+                        // IsApiKeyValid = await 
+                       // return result;                   
+              
+            }
+           return false;
                 //var result = Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
                //.0 Api.DisposeAuthenticationService();
-                return IsUserValidated;
-            }
-            return false;
-
+               // return IsUserValidated;
         }
 
         public string GetAPIKey(OperationContext operationContext)
