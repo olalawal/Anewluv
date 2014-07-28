@@ -22,9 +22,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public byte?[] imagebytes { get; set; }
         [DataMember]
-        public string imageb64string { get; set; } 
-        //[DataMember]
-        //public int? size { get; set; } 
+        public string imageb64string { get; set; }       
         [DataMember]
         public int? approvalstatusid { get; set; }
        [DataMember]
