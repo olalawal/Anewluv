@@ -11,10 +11,8 @@ namespace Anewluv.Domain.Data.ViewModels
     [DataContract]  
     public class PhotoUploadViewModel
     {
-        public PhotoUploadViewModel()
-        {
-            this.photosuploaded = new List<PhotoUploadModel>();
-        }
+       
+      
        
         [DataMember]
         public List<PhotoUploadModel> photosuploaded { get; set; }
@@ -25,8 +23,11 @@ namespace Anewluv.Domain.Data.ViewModels
         public bool autoupload { get; set; }
         [DataMember]
         public bool multiple { get; set; }
-     
 
+        public PhotoUploadViewModel()
+        {
+            this.photosuploaded = new List<PhotoUploadModel>();
+        }
 
     }
 }

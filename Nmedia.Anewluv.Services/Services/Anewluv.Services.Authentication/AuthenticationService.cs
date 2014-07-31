@@ -70,6 +70,10 @@ namespace Anewluv.Services.Authentication
 
         }
 
+
+
+
+
         public async Task<AnewluvResponse> createuser(MembershipUserViewModel model)
         {
 

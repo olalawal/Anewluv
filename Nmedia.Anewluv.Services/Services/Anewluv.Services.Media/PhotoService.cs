@@ -88,7 +88,7 @@ namespace Anewluv.Services.Media
         /// <param name="photo"></param>
         /// <param name="photouploaded"></param>
         /// <returns></returns>
-        private List<photoconversion> addphotoconverionsb64string(photo photo, PhotoUploadModel photouploaded)
+        private List<photoconversion> addphotoconverionsb64string(photo photo, PhotoUploadModel photouploaded,AnewluvContext db)
         {
             //TemporaryImageUpload tempImageUpload = new TemporaryImageUpload();             
             // tempImageUpload = _service.GetImageData(id) ?? null;
@@ -99,7 +99,7 @@ namespace Anewluv.Services.Media
 
                 try
                 {
-                    var db = _unitOfWork;
+                   //var db = _unitOfWork;
                     var test = db.GetRepository<lu_photoformat>().Find().OfType<lu_photoformat>().ToList();
                     foreach (lu_photoformat currentformat in db.GetRepository<lu_photoformat>().Find().OfType<lu_photoformat>().ToList())
                     {
@@ -180,7 +180,7 @@ namespace Anewluv.Services.Media
 
         public async Task<PhotoModel> getphotomodelbyphotoid(string photoid, string format)
         {
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
              
@@ -295,7 +295,7 @@ namespace Anewluv.Services.Media
         public async Task<List<PhotoModel>> getphotomodelsbyprofileidandstatus(string profileid, string status, string format)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
 
@@ -498,7 +498,7 @@ namespace Anewluv.Services.Media
 
         public async Task<List<photoeditmodel>> getphotoeditmodelsbyprofileidandstatus(string profile_id, string status, string format)
         {
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
               
@@ -853,115 +853,111 @@ namespace Anewluv.Services.Media
         public async Task<AnewluvMessages> addphotos(PhotoUploadViewModel model)
         {
 
+
+
+
             AnewluvResponse response = new AnewluvResponse();
             AnewluvMessages AnewluvMessage = new AnewluvMessages();
             var errormessages = new List<string>();
             ResponseMessage responsemessage = new ResponseMessage();
+            int photosaddedcount = 0;
 
             //update method code
             //Test this with unit oof work as ut for now...
-            //using (var db = new AnewluvContext())  
-            using (var db = _unitOfWork)  
+           using (var db = new AnewluvContext())  
+          //  using (var db = _unitOfWork)  
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                db.DisableProxyCreation = true;
+                db.DisableProxyCreation = false;
                 using (var transaction = db.BeginTransaction())
                 {
 
-
-
-                    foreach (PhotoUploadModel item in model.photosuploaded)
+                    try
                     {
-                        try
-                        {
-
-
-                            var task = Task.Factory.StartNew(() =>
+                        var task = Task.Factory.StartNew(() =>
                             {
-                                #region "inner code"
-
-
-                                photo NewPhoto = new photo();
-                                Guid identifier = Guid.NewGuid();
-                                NewPhoto.id = identifier;
-                                NewPhoto.profile_id = model.profileid; //model.ProfileImage.Length;
-                                // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
-                                NewPhoto.creationdate = item.creationdate;
-                                NewPhoto.imagecaption = item.caption;
-                                NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
-                                // NewPhoto.size = item.size.GetValueOrDefault();                        
-                                //set the rest of the information as needed i.e approval status refecttion etc
-                                NewPhoto.lu_photoimagetype = (item.imagetypeid != null) ? db.GetRepository<lu_photoimagetype>().Find().ToList().Where(p => p.id == item.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
-                                NewPhoto.lu_photoapprovalstatus = (item.approvalstatusid != null) ? db.GetRepository<lu_photoapprovalstatus>().Find().ToList().Where(p => p.id == item.approvalstatusid).FirstOrDefault() : null;
-                                NewPhoto.lu_photorejectionreason = (item.rejectionreasonid != null) ? db.GetRepository<lu_photorejectionreason>().Find().ToList().Where(p => p.id == item.rejectionreasonid).FirstOrDefault() : null;
-                                NewPhoto.lu_photostatus = (item.photostatusid != null) ? db.GetRepository<lu_photostatus>().Find().ToList().Where(p => p.id == item.photostatusid).FirstOrDefault() : null;
-
-                                var temp = addphotoconverionsb64string(NewPhoto, item);
-                                if (temp.Count > 0)
+                                
+                                foreach (PhotoUploadModel item in model.photosuploaded)
                                 {
+                                    #region "inner code"
 
-                                    //existing conversions to compare with new one : 
-                                    var existingthumbnailconversion = db.GetRepository<photoconversion>().Find().Where(z => z.photo.profile_id == model.profileid & z.lu_photoformat.id == (int)photoformatEnum.Thumbnail).ToList();
-                                    var newphotothumbnailconversion = temp.Where(p => p.lu_photoformat.id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
-                                    if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
-                                    {
-                                        AnewluvMessage.message = AnewluvMessage.message + "<br/>" + "This photo has already been uploaded";
-                                    }
-                                    else
-                                    {
-                                        AnewluvMessage.message = AnewluvMessage.message + "<br/>" + "photo with name " + NewPhoto.imagecaption + "Has been uploaded";
-                                        //allow saving of new photo 
-                                        db.Add(NewPhoto);
-                                        int i2 = db.Commit();
+                                    photo NewPhoto = new photo();
+                                    Guid identifier = Guid.NewGuid();
+                                    NewPhoto.id = identifier;
+                                    NewPhoto.profile_id = model.profileid; //model.ProfileImage.Length;
+                                    // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
+                                    NewPhoto.creationdate = item.creationdate;
+                                    NewPhoto.imagecaption = item.caption;
+                                    NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
+                                    // NewPhoto.size = item.size.GetValueOrDefault();                        
+                                    //set the rest of the information as needed i.e approval status refecttion etc
+                                    NewPhoto.lu_photoimagetype = (item.imagetypeid != null) ? db.GetRepository<lu_photoimagetype>().Find().ToList().Where(p => p.id == item.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
+                                    NewPhoto.lu_photoapprovalstatus = (item.approvalstatusid != null) ? db.GetRepository<lu_photoapprovalstatus>().Find().ToList().Where(p => p.id == item.approvalstatusid).FirstOrDefault() : null;
+                                    NewPhoto.lu_photorejectionreason = (item.rejectionreasonid != null) ? db.GetRepository<lu_photorejectionreason>().Find().ToList().Where(p => p.id == item.rejectionreasonid).FirstOrDefault() : null;
+                                    NewPhoto.lu_photostatus = (item.photostatusid != null) ? db.GetRepository<lu_photostatus>().Find().ToList().Where(p => p.id == item.photostatusid).FirstOrDefault() : null;
 
-                                        foreach (photoconversion convertedphoto in temp)
+                                    var temp = addphotoconverionsb64string(NewPhoto, item, db);
+                                    if (temp.Count > 0)
+                                    {
+                                        //existing conversions to compare with new one : 
+                                        var existingthumbnailconversion = db.GetRepository<photoconversion>().Find().Where(z => z.photo.profile_id == model.profileid & z.lu_photoformat.id == (int)photoformatEnum.Thumbnail).ToList();
+                                        var newphotothumbnailconversion = temp.Where(p => p.lu_photoformat.id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
+                                        if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
                                         {
-                                            //if this does not recognise the photo object we might need to save that and delete it later
-                                            db.Add(convertedphoto);
+                                            AnewluvMessage.message = AnewluvMessage.message + "<br/>" + "This photo has already been uploaded";
                                         }
+                                        else
+                                        {
+                                            AnewluvMessage.message = AnewluvMessage.message + "<br/>" + "photo with name " + NewPhoto.imagecaption + "Has been uploaded";
+                                            //allow saving of new photo 
+                                            db.Add(NewPhoto);
+                                            int i2 = db.Commit();
+                                            photosaddedcount = +1;
 
+                                            foreach (photoconversion convertedphoto in temp)
+                                            {
+                                                //if this does not recognise the photo object we might need to save that and delete it later
+                                                db.Add(convertedphoto);
+                                            }
+                                        }
                                     }
+                                
+                                    //commit if no errors                               
+                                    int i = db.Commit();                                                                   
+
+                                    #endregion
                                 }
-
-                                //commit if no errors                               
-                                int i = db.Commit();
-                                transaction.Commit();
-
+                                
                                 // responsemessage = new ResponseMessage("", message.message, "");
                                 // response.ResponseMessages.Add(responsemessage);
-                                return AnewluvMessage;
 
-                                #endregion
+                                if (photosaddedcount > 0)
+                                {
+                                    transaction.Commit();
+                                }
+
+                                return AnewluvMessage;
                             });
                             return await task.ConfigureAwait(false);
-
-                            
-
-                        }
-
-                        catch (Exception ex)  //internal excetion for the indivual item
-                        {
-
-                            //add the error to message object
-                            AnewluvMessage.errormessages.Add(ex.Message);
-                            //just log and continue
-                            //instantiate logger here so it does not break anything else.
-                            logger = new Logging(applicationEnum.MediaService);
-                            logger.WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, ex);
-                            //no need to throw heer wince we build the eror thing for them
-                        }
-
                     }
+                    catch (Exception ex)  //internal excetion for the indivual item
+                    {
+
+                        //add the error to message object
+                        AnewluvMessage.errormessages.Add(ex.Message);
+                        //just log and continue
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, ex);
+                        //no need to throw heer wince we build the eror thing for them
+                    }
+
+
 
                     // responsemessage = new ResponseMessage("", message.message, "");
                     // response.ResponseMessages.Add(responsemessage);
-                    return AnewluvMessage;       
-                            
+                    return AnewluvMessage;
 
-                     
-
-                           
-                     
                 }
                  
             }
@@ -979,7 +975,7 @@ namespace Anewluv.Services.Media
         {
 
             //update method code
-            using (var db = _unitOfWork)
+            using (var db = new AnewluvContext())
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -1016,7 +1012,7 @@ namespace Anewluv.Services.Media
                             NewPhoto.lu_photorejectionreason = (newphoto.rejectionreasonid != null) ? db.GetRepository<lu_photorejectionreason>().Find().ToList().Where(p => p.id == newphoto.rejectionreasonid).FirstOrDefault() : null;
                             NewPhoto.lu_photostatus = (newphoto.photostatusid != null) ? db.GetRepository<lu_photostatus>().Find().ToList().Where(p => p.id == newphoto.photostatusid).FirstOrDefault() : null;
 
-                            var temp = addphotoconverionsb64string(NewPhoto, newphoto);
+                            var temp = addphotoconverionsb64string(NewPhoto, newphoto,db);
                             if (temp.Count > 0)
                             {
                                 //existing conversions to compare with new one : 
@@ -1081,7 +1077,7 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkvalidjpggif(byte[] image)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
 
@@ -1133,7 +1129,7 @@ namespace Anewluv.Services.Media
         public async Task<string> getgalleryphotobyscreenname(string strscreenname, string format)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
 
@@ -1290,7 +1286,7 @@ namespace Anewluv.Services.Media
         public async Task<string> getgalleryimagebynormalizedscreenname(string strScreenName, string format)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
 
@@ -1346,7 +1342,7 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkifphotocaptionalreadyexists(string profileid, string strPhotoCaption)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
 
@@ -1397,7 +1393,7 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkforgalleryphotobyprofileid(string profileid)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {                
                       
@@ -1443,7 +1439,7 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkforuploadedphotobyprofileid(string profileid)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
                                     
@@ -1496,7 +1492,7 @@ namespace Anewluv.Services.Media
         /// <returns></returns>
         public async Task<string> getimageb64stringfromurl(string imageUrl, string source)
         {
-            _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
                 try

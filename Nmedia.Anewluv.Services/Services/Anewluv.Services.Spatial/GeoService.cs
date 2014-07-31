@@ -22,6 +22,7 @@ using GeoData.Domain.ViewModels;
 using Nmedia.Infrastructure.ExceptionHandling;
 using Nmedia.Infrastructure.Domain.Data;
 using System.Threading.Tasks;
+using Anewluv.Services.Contracts.ServiceResponse;
 
 
 
@@ -64,6 +65,7 @@ namespace Anewluv.Services.Spatial
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
 
         }
+
 
 
 
@@ -1024,7 +1026,7 @@ namespace Anewluv.Services.Spatial
             /// <param name="filter"></param>
             /// <param name="postalcode"></param>
             /// <returns></returns>
-            public List<citystateprovince> getfilteredcitybycountryandpostalcodefilter(GeoModel model)
+           public async Task<List<citystateprovince>> getfilteredcitybycountryandpostalcodefilter(GeoModel model)
             {
 
 
@@ -1033,6 +1035,9 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+
+                           var task = Task.Factory.StartNew(() =>
+                            {
 
                         if (model.country == null || model.filter == null) return null;
 
@@ -1071,6 +1076,10 @@ namespace Anewluv.Services.Spatial
                                             s.City + "," + s.State_Province : s.City
                                     }).ToList();
                         return temp;
+
+                            });
+                       return await task.ConfigureAwait(false);
+
 
                     }
                     catch (Exception ex)
