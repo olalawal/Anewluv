@@ -673,6 +673,7 @@ namespace Anewluv.Services.Media
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
                 using (var transaction = db.BeginTransaction())
                 {
 
@@ -696,7 +697,8 @@ namespace Anewluv.Services.Media
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
                                 int i = db.Commit();
                                 transaction.Commit();
-                                return new AnewluvMessages { message = "photo deleted successfully" };
+                                AnewluvMessages.messages.Add("photo deleted successfully");
+                                return AnewluvMessages;
                             });
                             return await task.ConfigureAwait(false);
 
@@ -731,6 +733,7 @@ namespace Anewluv.Services.Media
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
                 using (var transaction = db.BeginTransaction())
                 {
                       try
@@ -763,7 +766,8 @@ namespace Anewluv.Services.Media
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
                                 int i = db.Commit();
                                 transaction.Commit();
-                                return new AnewluvMessages { message = "photo privacy added" };
+                                AnewluvMessages.messages.Add("photo privacy added");
+                                return AnewluvMessages;
                            });
                     return await task.ConfigureAwait(false);
 
@@ -794,6 +798,7 @@ namespace Anewluv.Services.Media
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
                 using (var transaction = db.BeginTransaction())
                 {
                  
@@ -815,7 +820,9 @@ namespace Anewluv.Services.Media
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
                                 int i = db.Commit();
                                 transaction.Commit();
-                                return new AnewluvMessages { message = "photo privacy removed" };
+                               AnewluvMessages.messages.Add("photo privacy removed");
+                               return AnewluvMessages;
+
                             });
                             return await task.ConfigureAwait(false);
 
@@ -904,11 +911,11 @@ namespace Anewluv.Services.Media
                                         var newphotothumbnailconversion = temp.Where(p => p.lu_photoformat.id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
                                         if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
                                         {
-                                            AnewluvMessage.message = AnewluvMessage.message + "<br/>" + "This photo has already been uploaded";
+                                            AnewluvMessage.messages.Add( "<br/>" + "This photo has already been uploaded:" + NewPhoto.imagename) ;
                                         }
                                         else
                                         {
-                                            AnewluvMessage.message = AnewluvMessage.message + "<br/>" + "photo with name " + NewPhoto.imagecaption + "Has been uploaded";
+                                            AnewluvMessage.messages.Add("<br/>" + "photo with name " + NewPhoto.imagecaption + "Has been uploaded");
                                             //allow saving of new photo 
                                             db.Add(NewPhoto);
                                             int i2 = db.Commit();
@@ -918,12 +925,13 @@ namespace Anewluv.Services.Media
                                             {
                                                 //if this does not recognise the photo object we might need to save that and delete it later
                                                 db.Add(convertedphoto);
+                                                //commit if no errors                               
+                                                int i = db.Commit();      
                                             }
                                         }
                                     }
                                 
-                                    //commit if no errors                               
-                                    int i = db.Commit();                                                                   
+                                                                                                 
 
                                     #endregion
                                 }
@@ -1020,7 +1028,7 @@ namespace Anewluv.Services.Media
                                 var newphotothumbnailconversion = temp.Where(p => p.formattype_id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
                                 if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
                                 {
-                                    message.message = "This photo has already been uploaded";
+                                    message.messages.Add("This photo has already been uploaded");
                                 }
                                 else
                                 {
@@ -1037,7 +1045,7 @@ namespace Anewluv.Services.Media
                                     transaction.Commit();
                                 }
 
-                                message.message = "photo added succesfully ";
+                                message.messages.Add("photo added succesfully ");
                             }
 
                             //return the response

@@ -35,6 +35,7 @@ namespace GeoData.Domain.Models
         {
             this.Configuration.ProxyCreationEnabled = true;
             this.Configuration.AutoDetectChangesEnabled = true;
+            this.DisableLazyLoading = true;
             //rebuild DB if schema is differnt
             //Initializer init = new Initializer();            
             // init.InitializeDatabase(this);

@@ -10,10 +10,16 @@ namespace Anewluv.Domain.Data.ViewModels
    public  class AnewluvMessages
     {
         [DataMember]
-        public string message { get; set; }
+        public List<string> messages { get; set; }
         [DataMember]
        public  List<string> errormessages { get; set; }
         //TO DO allow for objects to comeback
+
+        public AnewluvMessages()
+        {
+            this.messages = new List<string>();
+            this.errormessages = new List<string>();
+        }
 
         
     }
