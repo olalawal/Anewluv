@@ -143,7 +143,7 @@ namespace LoggingLibrary
                 //    }, AsyncResultCallBack, Guid.NewGuid());
 
 
-                //first  write database entry
+                //first  write Initial Catalog= entry
                 //test of auth header info
                 //Channelfactoryhelper.Service<ILoggingService>.Use(d =>
                 //{

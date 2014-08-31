@@ -1195,7 +1195,7 @@ namespace Anewluv.Services.Authentication
 
         }
         /// <summary>
-        /// Determines wethare an activation code matches the value in the database for a given profileid
+        /// Determines wethare an activation code matches the value in the Initial Catalog= for a given profileid
         /// </summary>
        public async Task<bool> checkifactivationcodeisvalid(ProfileModel model)
         {
@@ -1377,7 +1377,7 @@ namespace Anewluv.Services.Authentication
         public async Task<AnewluvResponse> activateprofile(activateprofilemodel model)
         {
             AnewluvMessages messages = new AnewluvMessages();
-            messages.message = "";
+           // messages.message = "";
             messages.errormessages = null;
             profile profile = new profile();
             AnewluvResponse response = new AnewluvResponse();
@@ -1392,6 +1392,7 @@ namespace Anewluv.Services.Authentication
                     try
                         {
 
+                            ResponseMessage reponsemessage = new ResponseMessage();
 
 
                             var task = Task.Factory.StartNew(() =>
@@ -1493,7 +1494,7 @@ namespace Anewluv.Services.Authentication
                                         // MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
                                     }
 
-                                    messages.message = "Activation Sucssesful";
+                                    messages.messages.Add("Activation Sucssesful");
                                 }
 
 
@@ -1505,13 +1506,13 @@ namespace Anewluv.Services.Authentication
                                     //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
                                     //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
                                     response.email = model.emailaddress;//profile.emailaddress;
-                                    ResponseMessage reponsemessage = new ResponseMessage("", messages.message, "");
-                                    response.ResponseMessages.Add(reponsemessage);
+                                    ResponseMessage currentmessages = new ResponseMessage("", messages.messages.FirstOrDefault(), "");
+                                    response.ResponseMessages.Add(currentmessages);
 
                                 }
                                 else
                                 {
-                                    ResponseMessage reponsemessage = new ResponseMessage("", "There was a problem activating the profile, please try again later", messages.errormessages.First());
+                                    ResponseMessage currentmessages = new ResponseMessage("", "There was a problem activating the profile, please try again later", messages.errormessages.First());
                                     response.ResponseMessages.Add(reponsemessage);
                                 }
 
@@ -1571,7 +1572,7 @@ namespace Anewluv.Services.Authentication
                     try
                     {
                         AnewluvMessages messages = new AnewluvMessages();
-                        messages.message = "";
+                       // messages.messages = "";
                         messages.errormessages = null;
 
 
@@ -1615,10 +1616,10 @@ namespace Anewluv.Services.Authentication
                             //Shell.MVC2.Domain.Entities.Anewluv.profile profile = _memberservice.getpro(model.username);
                             //  response.profileid1 = model.profileid.ToString();//profile.id.ToString();
                             //oke send back theer activvation code
-                            messages.message = "Your activiation code has been sent to the email address: " + model.emailaddress;
+                            messages.messages.Add("Your activiation code has been sent to the email address: " + model.emailaddress);
 
                             response.email = model.emailaddress;//profile.emailaddress;
-                            ResponseMessage reponsemessage = new ResponseMessage("", messages.message, "");
+                            ResponseMessage reponsemessage = new ResponseMessage("", messages.messages.FirstOrDefault(), "");
                             response.ResponseMessages.Add(reponsemessage);
                             //send the email vai service
 

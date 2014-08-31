@@ -21,7 +21,7 @@ namespace Nmedia.Infrastructure.Domain
     //Configure migrations
     //PM> enable-migrations
     // PM> add-migration -startupproject NotificationModel ddsd
-    // Update-DataBase -startupproject NotificationModel -verbose
+    // Update-Database -startupproject NotificationModel -verbose
 
     public class ApiKeyContext : DbContext , IUnitOfWork
     {
@@ -63,7 +63,7 @@ namespace Nmedia.Infrastructure.Domain
             // map required relationships abusereport
             //**************************************
 
-            //comment this out when sharing after generating the database
+            //comment this out when sharing after generating the Database
             //only share with sql scripts 
             ApiKeymodelbuilder.buildgeneralmodels(modelBuilder);
           

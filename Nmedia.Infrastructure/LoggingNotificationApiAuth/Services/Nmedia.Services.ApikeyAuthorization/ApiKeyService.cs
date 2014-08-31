@@ -63,7 +63,7 @@ namespace Nmedia.Services.ApikeyAuthorization
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
         }
 
-        //TO DO use the database context wehre API key is stored 
+        //TO DO use the Initial Catalog= context wehre API key is stored 
 
         const string APIKEYLIST = "APIKeyList";
 

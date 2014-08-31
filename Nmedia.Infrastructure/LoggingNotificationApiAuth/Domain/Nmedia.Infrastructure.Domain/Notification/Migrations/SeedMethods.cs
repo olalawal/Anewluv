@@ -172,7 +172,7 @@ namespace Nmedia.Infrastructure.Domain
 
 
 
-              ////add template names, to do maybe parse templates into database from strings down the line
+              ////add template names, to do maybe parse templates into Initial Catalog= from strings down the line
               ////
               //List<string> template = new List<string>();
               //List<string> templatefilename = new List<string>();

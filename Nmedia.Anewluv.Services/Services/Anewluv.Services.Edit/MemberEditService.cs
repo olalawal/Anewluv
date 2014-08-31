@@ -340,10 +340,10 @@ namespace Anewluv.Services.Edit
 
                         if (messages.errormessages.Count > 0)
                         {
-                            messages.message = "There was a problem Editing You Basic Settings, Please try again later";
+                            messages.errormessages.Add("There was a problem Editing You Basic Settings, Please try again later");
                             return messages;
                         }
-                        messages.message = "Edit Basic Settings Successful";
+                        messages.messages.Add("Edit Basic Settings Successful");
                         return messages;
 
                     }
@@ -443,10 +443,10 @@ namespace Anewluv.Services.Edit
 
                         if (messages.errormessages.Count > 0)
                         {
-                            messages.message = "There was a problem Editing You Appearance Settings, Please try again later";
+                            messages.errormessages.Add("There was a problem Editing You Appearance Settings, Please try again later");
                             return messages;
                         }
-                        messages.message = "Edit Appearance Settings Successful";
+                        messages.messages.Add("Edit Appearance Settings Successful");
                         return messages;
 
                     }
@@ -566,10 +566,10 @@ namespace Anewluv.Services.Edit
 
                         if (messages.errormessages.Count > 0)
                         {
-                            messages.message = "There was a problem Editing You lifestyle Settings, Please try again later";
+                            messages.errormessages.Add("There was a problem Editing You lifestyle Settings, Please try again later");
                             return messages;
                         }
-                        messages.message = "Edit lifestyle Settings Successful";
+                        messages.messages.Add("Edit lifestyle Settings Successful");
                         return messages;
                     }
                     catch (Exception ex)
@@ -693,10 +693,10 @@ namespace Anewluv.Services.Edit
 
                         if (messages.errormessages.Count > 0)
                         {
-                            messages.message = "There was a problem Editing You character Settings, Please try again later";
+                            messages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
                             return messages;
                         }
-                        messages.message = "Edit character Settings Successful";
+                        messages.messages.Add("Edit character Settings Successful");
                         return messages;
 
                     }

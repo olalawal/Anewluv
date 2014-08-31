@@ -529,7 +529,7 @@ namespace Anewluv.Domain.Chat
         //    // map required relationships abusereport
         //    //**************************************
 
-        //    //comment this out when sharing after generating the database
+        //    //comment this out when sharing after generating the Database
         //    //only share with sql scripts 
 
         //    chatmodelbuilder.buildgeneralmodels(modelBuilder);

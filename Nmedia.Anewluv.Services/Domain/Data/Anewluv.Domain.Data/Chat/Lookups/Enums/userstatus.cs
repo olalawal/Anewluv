@@ -9,7 +9,7 @@ namespace Anewluv.Domain.Data.Chat
 {
      /// <summary>
     /// This is an enumeration type for the log severity types we track
-    /// this is parsed into database values when the context is created
+    /// this is parsed into Initial Catalog= values when the context is created
     /// </summary>
     [DataContract]
     public enum userstatusEnum : int

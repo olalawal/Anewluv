@@ -46,7 +46,7 @@ namespace Anewluv.Domain.Data.Chat
             // Private rooms this user is allowed to go into
             public virtual ICollection<ChatRoom> AllowedRooms { get; set; }
 
-            //TO Do this use database to decalare
+            //TO Do this use Initial Catalog= to decalare
             //DO it in the serice
             public ChatUser()
             {

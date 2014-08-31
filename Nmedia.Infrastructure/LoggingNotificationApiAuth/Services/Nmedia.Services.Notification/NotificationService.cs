@@ -453,7 +453,7 @@ namespace Nmedia.Services.Notification
 
 
         //        message.sent = sendemail(message); //attempt to send the message
-        //        savemessage(message);  //save the message into database 
+        //        savemessage(message);  //save the message into Initial Catalog= 
 
         //        ////now send the admin message
         //        ////use create method it like this 
@@ -471,7 +471,7 @@ namespace Nmedia.Services.Notification
         //        }));
 
         //        message.sent = sendemail(message); //attempt to send the message
-        //        savemessage(message);  //save the message into database 
+        //        savemessage(message);  //save the message into Initial Catalog= 
 
         //        //TO DO remove this after testing is complete;
         //        return returnmodel;
@@ -553,7 +553,7 @@ namespace Nmedia.Services.Notification
 
 
         //        message.sent = sendemail(message); //attempt to send the message
-        //        savemessage(message);  //save the message into database 
+        //        savemessage(message);  //save the message into Initial Catalog= 
 
         //        ////now send the admin message
         //        ////use create method it like this 
@@ -571,7 +571,7 @@ namespace Nmedia.Services.Notification
         //        }));
 
         //        message.sent = sendemail(message); //attempt to send the message
-        //        savemessage(message);  //save the message into database 
+        //        savemessage(message);  //save the message into Initial Catalog= 
 
         //        //TO DO remove this after testing is complete;
         //        return returnmodel;

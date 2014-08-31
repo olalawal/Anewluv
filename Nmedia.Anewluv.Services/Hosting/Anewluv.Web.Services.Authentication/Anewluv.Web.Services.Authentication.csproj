@@ -137,6 +137,10 @@
       <Project>{0145184e-916d-4db2-bb19-e069df0f1f36}</Project>
       <Name>Anewluv.Services.DependencyResolution.Ninject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Services\Anewluv.Services.Authentication\Anewluv.Services.Authentication.csproj">
+      <Project>{87bcb0bf-cff1-4daa-b64a-f89baa8fa8ee}</Project>
+      <Name>Anewluv.Services.Authentication</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

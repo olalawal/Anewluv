@@ -93,7 +93,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         }
                    
-                        FaultReason faultreason = new FaultReason("Error in member actions service");
+                        FaultReason faultreason = new FaultReason("Error in Lookup service");
                         string ErrorMessage = "";
                         string ErrorDetail = "ErrorMessage: " + ex.Message;
                         throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -136,7 +136,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -183,7 +183,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -230,7 +230,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -275,7 +275,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -322,7 +322,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -368,7 +368,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -412,7 +412,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -458,7 +458,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -505,7 +505,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -552,7 +552,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -598,7 +598,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -643,7 +643,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -688,7 +688,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -734,7 +734,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -780,7 +780,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -836,7 +836,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -874,7 +874,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -921,7 +921,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -961,7 +961,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -999,7 +999,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1052,7 +1052,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1098,7 +1098,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1144,7 +1144,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1190,7 +1190,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1243,7 +1243,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1291,7 +1291,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1335,7 +1335,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1381,7 +1381,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1429,7 +1429,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1474,7 +1474,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1521,7 +1521,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1566,7 +1566,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1611,7 +1611,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1657,7 +1657,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1707,7 +1707,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1753,7 +1753,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1798,7 +1798,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1845,7 +1845,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1890,7 +1890,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1935,7 +1935,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -1982,7 +1982,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -2028,7 +2028,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -2075,7 +2075,7 @@ namespace Anewluv.Services.Common
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                     }
 
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
                     throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);

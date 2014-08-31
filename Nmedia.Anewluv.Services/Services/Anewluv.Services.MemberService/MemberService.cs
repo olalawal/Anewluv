@@ -131,7 +131,7 @@ namespace Anewluv.Services.Members
                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
                         //   db.GetRepository<Country_PostalCode_List>().searchsettings.Add(Newsearchsettings);
                         //   db.GetRepository<Country_PostalCode_List>().SaveChanges();
-                        //save the profile data with the search settings to the database so we dont have to create it again
+                        //save the profile data with the search settings to the Initial Catalog= so we dont have to create it again
                         return Newsearchsettings;
 
 
@@ -182,7 +182,7 @@ namespace Anewluv.Services.Members
                            transaction.Commit();
 
 
-                          //save the profile data with the search settings to the database so we dont have to create it again
+                          //save the profile data with the search settings to the Initial Catalog= so we dont have to create it again
                           return Newsearchsettings;
 
                       }
@@ -311,7 +311,7 @@ namespace Anewluv.Services.Members
 
         // "Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
         //*************************************************************************************************
-        //update the database i.e create folders and change profile status from guest to active ?!
+        //update the Initial Catalog= i.e create folders and change profile status from guest to active ?!
         public async Task<bool> createmailboxfolders(ProfileModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
@@ -1160,7 +1160,7 @@ namespace Anewluv.Services.Members
         }
 
         /// <summary>
-        /// Determines wethare an activation code matches the value in the database for a given profileid
+        /// Determines wethare an activation code matches the value in the Initial Catalog= for a given profileid
         /// </summary>
         public bool checkifactivationcodeisvalid(ProfileModel model)
         {

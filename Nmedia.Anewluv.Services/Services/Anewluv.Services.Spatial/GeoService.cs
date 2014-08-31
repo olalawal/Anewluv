@@ -383,12 +383,12 @@ namespace Anewluv.Services.Spatial
 
 
                         List<CityList> _CityList = new List<CityList>();
-                        model.postalcode = string.Format("%{0}%", model.postalcode.Replace("'", "''"));
+                        model.postalcode = string.Format("{0}%", model.postalcode.Replace("'", "''"));
                         // fix country names if theres a space
                         model.country = string.Format(model.country.Replace(" ", ""));
                         //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
                         //for cites as well so its a 1 to 1 search no spaces on input and on db side
-                        model.filter = string.Format("%{0}%", model.filter.Replace(" ", ""));
+                        model.filter = string.Format("{0}%", model.filter.Replace(" ", ""));
                         //11/13/2009 addded wild ca
 
                         string query = "sp_CityListbycountryNamePostalcodeandCity";
@@ -707,10 +707,10 @@ namespace Anewluv.Services.Spatial
                             if (model.country == null) return null;
 
                             //  List<PostalCode> _PostalCodeList = new List<PostalCode>();
-                            model.city = string.Format("%{0}%", model.city);
+                            model.city = string.Format("{0}%", model.city);
                             model.country = string.Format(model.country.Replace(" ", ""));
                             // fix country names if theres a space
-                            model.filter = string.Format("%{0}%", model.filter);
+                            model.filter = string.Format("{0}%", model.filter);
                             //11/13/2009 addded wild ca
 
                             string query = "sp_GetPostalCodesByCountryNameCityandPrefix";
@@ -780,7 +780,7 @@ namespace Anewluv.Services.Spatial
                         if (model.country == null) return null;
 
                         //List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
-                        model.city = string.Format("%{0}%", model.city);
+                        model.city = string.Format("{0}%", model.city);
                        model.country = string.Format(model.country.Replace(" ", ""));
                         // fix country names if theres a space
                         // StrprefixText = string.Format("%{0}%", StrprefixText);
@@ -838,7 +838,7 @@ namespace Anewluv.Services.Spatial
 
                         //Dim _PostalCodeList As New List(Of PostalCodeList)()
                        
-                        model.city = string.Format("%{0}%", model.city);
+                        model.city = string.Format("{0}%", model.city);
                        model.country = string.Format(model.country.Replace(" ", ""));
                         // fix country names if theres a space
 
@@ -1045,7 +1045,7 @@ namespace Anewluv.Services.Spatial
 
                         //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
                         //for cites as well so its a 1 to 1 search no spaces on input and on db side
-                        model.filter = string.Format("%{0}%", model.filter.Replace(" ", ""));
+                        model.filter = string.Format("{0}%", model.filter.Replace(" ", ""));
                         //11/13/2009 addded wild ca
 
                         string query = "sp_CityListbycountryNamePostalcodeandCity";
@@ -1123,7 +1123,7 @@ namespace Anewluv.Services.Spatial
 
                             //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
                             //for cites as well so its a 1 to 1 search no spaces on input and on db side
-                            model.filter = string.Format("%{0}%", model.filter.Replace(" ", ""));
+                            model.filter = string.Format("{0}%", model.filter.Replace(" ", ""));
                             //11/13/2009 addded wild ca
 
                             string query = "sp_CityListbycountryNameCityFilter";
@@ -1194,10 +1194,10 @@ namespace Anewluv.Services.Spatial
                         //added 5/12/2011 to handle empty countries
                         if (model.country == null) return null;
                         List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
-                        model.city = string.Format("%{0}%", model.city);
+                        model.city = string.Format("{0}%", model.city);
                        model.country = string.Format(model.country.Replace(" ", ""));
                         // fix country names if theres a space
-                        model.filter = string.Format("%{0}%", model.filter);
+                        model.filter = string.Format("{0}%", model.filter);
                         //11/13/2009 addded wild ca
 
                         //sp_GetPostalCodesByCountryNameCityandPrefix

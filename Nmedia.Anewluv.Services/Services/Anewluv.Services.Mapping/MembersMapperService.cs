@@ -498,7 +498,7 @@ namespace Anewluv.Services.Mapping
                         }
 
                         //handle perfect match settings here .
-                        // first load perfect match settings for this user from database
+                        // first load perfect match settings for this user from Initial Catalog=
                         //set defaults if no values are available
                         var PerfectMatchSettings = metadata.searchsettings.First();
 
@@ -591,7 +591,7 @@ namespace Anewluv.Services.Mapping
                         foreach (var item in PerfectMatchSettings.searchsetting_drink)
                         { CriteriaModel.CharacterSearchSettings.drinkslist.Add(item.lu_drinks); }
 
-                        //FIX after database update
+                        //FIX after Initial Catalog= update
                         foreach (var item in PerfectMatchSettings.searchsetting_exercise)
                         { CriteriaModel.CharacterSearchSettings.exerciselist.Add(item.lu_exercise); }
 
@@ -803,7 +803,7 @@ namespace Anewluv.Services.Mapping
                 try
                 {
                           MembersViewModel model = new MembersViewModel();
-                //check if the country is in our database
+                //check if the country is in our Initial Catalog=
 
                 //set defualt values for guests
                 //model.myquicksearch.mySelectedPageSize = 4;

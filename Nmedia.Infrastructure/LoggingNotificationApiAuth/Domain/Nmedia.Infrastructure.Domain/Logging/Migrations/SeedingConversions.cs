@@ -14,8 +14,8 @@ namespace Nmedia.Infrastructure.Domain
     {
 
 
-        //synch up anew luv database with the new database 
-        //add the old database model 
+        //synch up anew luv Database with the new Database 
+        //add the old Database model 
         public static void ConvertDatabase()
        {
          //  var olddb = new AnewluvFtsEntities();

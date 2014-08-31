@@ -44,7 +44,7 @@ namespace Anewluv.Domain.Data.Chat
         public virtual ICollection<ChatMessage> Messages { get; set; }
         public virtual ICollection<ChatUser> Users { get; set; }
 
-        //do this using database
+        //do this using Initial Catalog=
         public ChatRoom()
         {
           //  Owners = new SafeCollection<ChatUser>();

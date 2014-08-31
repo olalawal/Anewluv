@@ -2,8 +2,8 @@
 
  PM> Enable-Migrations  
 
- PM>  Update-Database -StartUpProjectName "Shell.MVC2.DOmain.Entities" -ConfigurationTypeName "ConfigurationAnewluv" -verbose -force
- PM>  Update-Database -StartUpProjectName "Shell.MVC2.DOmain.Entities" -ConfigurationTypeName "ConfigurationChat" -verbose -force
+ PM>  Update-Initial Catalog= -StartUpProjectName "Shell.MVC2.DOmain.Entities" -ConfigurationTypeName "ConfigurationAnewluv" -verbose -force
+ PM>  Update-Initial Catalog= -StartUpProjectName "Shell.MVC2.DOmain.Entities" -ConfigurationTypeName "ConfigurationChat" -verbose -force
 
  
 
@@ -22,22 +22,22 @@ or you can decorate the entiies as follows
 
 And thwy will be automatically renamed or mapped to the correct schema.
 
- Below is the commad to create/modify the database from visual studio and the generated script is listed for your intrest.
+ Below is the commad to create/modify the Initial Catalog= from visual studio and the generated script is listed for your intrest.
 I like how it checks for the schema to exist and if it does’nt creates a new one which is cool.
 
 
 Sample migraation command.
 
-PM> Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel" -verbose 
+PM> Update-Initial Catalog= -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel" -verbose 
 
 
 if you dont care if any data is deleted use the -force flag. and If you are having problems with previous migrations you can delete the migrations
 table that is created in SQL
 
-Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel" -verbose –force
-Update-Database -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose –force
+Update-Initial Catalog= -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel" -verbose –force
+Update-Initial Catalog= -StartUpProjectName "Medtox.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose –force
 
-check the model updating model for custom database migration settings i.e schema and object relationships
+check the model updating model for custom Initial Catalog= migration settings i.e schema and object relationships
  
 
  added this code to configure migrations to be constally updated on db changes automatically

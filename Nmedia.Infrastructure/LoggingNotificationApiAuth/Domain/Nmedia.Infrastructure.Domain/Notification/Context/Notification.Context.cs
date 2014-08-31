@@ -21,7 +21,7 @@ namespace Nmedia.Infrastructure.Domain
     //Configure migrations
     //PM> enable-migrations
     // PM> add-migration -startupproject NotificationModel ddsd
-    // Update-DataBase -startupproject NotificationModel -verbose
+    // Update-Database -startupproject NotificationModel -verbose
 
     public partial class NotificationContext : DbContext, IUnitOfWork
     {
