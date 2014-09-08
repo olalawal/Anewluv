@@ -13,6 +13,12 @@ namespace Anewluv.Domain.Data.ViewModels
 
         //current values selected from User Interface , we bind them to the user 
         //viewmodel for now unless we run into memory issues and effecinery, then they will expire with the view
+
+        //added stuff for paging
+        [DataMember]
+        public int? page { get; set; }
+        [DataMember]
+        public int? numberperpage { get; set; }
       
         [DataMember]  public int? myselectediamgenderid { get; set; }
         [DataMember]  public int? myselectedseekinggenderid { get; set; }
@@ -24,7 +30,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]  public int? myselectedcountryid { get; set; }
         [DataMember]  public string myselectedpostalcode { get; set; }
         //added 10/17/20011 so we can toggle postalcode box similar to register
-      [DataMember]   public Boolean myselectedpostalcodestatus { get; set; }
+      [DataMember]   public bool? myselectedpostalcodestatus { get; set; }
 
         [DataMember]  public string myselectedcity { get; set; }
       [DataMember]   public Boolean? myselectedphotostatus { get; set; }
@@ -37,10 +43,10 @@ namespace Anewluv.Domain.Data.ViewModels
 
 
         // private MembersRepository membersrepository;
-        [DataMember]  public int myselectedpagesize { get; set; }
-        [DataMember]  public int? myselectedcurrentpage { get; set; }
+        //[DataMember]  public int myselectedpagesize { get; set; }
+        //[DataMember]  public int? myselectedcurrentpage { get; set; }
         //add flag to let us know that the data comes from geocoinding ?
-        public bool geocodeddata { get; set; }
+        public bool? geocodeddata { get; set; }
 
 
     }

@@ -117,8 +117,8 @@ namespace Anewluv.Api
                                    //"Anewluv.Web.Services.Authentication"
                 apikeyonlyURLS.Add("Anewluv.Web.Services.Common");
                 apikeyonlyURLS.Add("Anewluv.Web.Services.Spatial");
-                apikeyonlyURLS.Add("Anewluv.Web.Services.Media/PhotoService.svc/Rest/addphotos");  //everyone can call addphotos
-                apikeyonlyURLS.Add("Anewluv.Web.Services.Members/MembersMapperService.svc/Rest/getquicksearch");  //added quick search to this apikey only to allow for quick search to 
+                apikeyonlyURLS.Add("/Anewluv.Web.Services.Media/PhotoService.svc/Rest/addphotos");  //everyone can call addphotos
+                apikeyonlyURLS.Add("/Anewluv.Web.Services.Members/MembersMapperService.svc/Rest/getquicksearch");  //added quick search to this apikey only to allow for quick search to 
                 //to bypass userid and password auth
                
 
@@ -127,6 +127,7 @@ namespace Anewluv.Api
                 //TO DO add code to  call membership service and make sure the requestor has rights to view the data they are requesting
                 //TO DO List the Service URLS that and handle differing security for each 
 
+                string path = OperationContext.Current.IncomingMessageHeaders.To.AbsolutePath;
                 string[] urisegments = OperationContext.Current.IncomingMessageHeaders.To.Segments;
                 string helpsegment = "help"; //this is the thing we are checking   
                 string restsegment = "rest"; //this is the thing we are checking 
@@ -144,7 +145,7 @@ namespace Anewluv.Api
                 if (nonauthenticatedURLS.Contains(urisegments[1].ToString().Replace("/", "")) | (nonauthenticatedURLS.Contains(urisegments[4].ToString()))) return true;
                 
                 //flag the API key only auth URLS
-                if (apikeyonlyURLS.Contains(urisegments[1].ToString().Replace("/", ""))) apikeyauthonly = true; ;
+                if ((apikeyonlyURLS.Contains(urisegments[1].ToString().Replace("/", "")) || apikeyonlyURLS.Contains(path))) apikeyauthonly = true; ;
 
 
 

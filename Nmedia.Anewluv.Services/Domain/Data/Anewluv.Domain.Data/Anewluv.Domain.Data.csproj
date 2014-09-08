@@ -252,6 +252,7 @@
     <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Email\EmailEnums\subjecttype.cs" />
+    <Compile Include="Anewluv\ViewModels\Search\SearchResultsViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Search\MemberSearchViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\MembershipUserViewModel.cs" />

@@ -46,7 +46,7 @@ namespace Anewluv.DataExtentionMethods
                     //var format = 
 
                   return  (from p in
-                               (from r in repo.Find().Where(a => a.lu_photoformat.id ==converedtedphotoformat && (a.photo.profile_id == convertedprofileid & a.photo.lu_photostatus.id == (int)photostatusEnum.Gallery)).ToList()
+                               (from r in repo.Find().Where(a => a.lu_photoformat.id ==converedtedphotoformat && (a.photo.profile_id == convertedprofileid & a.photo.lu_photostatus.id == (int)photostatusEnum.Gallery))
                                              select new
                                              {
                                                  photoid = r.photo.id,

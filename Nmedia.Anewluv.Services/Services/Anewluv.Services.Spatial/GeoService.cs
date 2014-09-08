@@ -200,6 +200,7 @@ namespace Anewluv.Services.Spatial
                                     select new countrypostalcode
                                     {
                                         name = s.CountryName,
+                                        id = s.CountryID.ToString(),
                                         code = s.Country_Code,
                                         customregionid = s.CountryCustomRegionID,
                                         region = s.Country_Region,

@@ -740,7 +740,7 @@ namespace Anewluv.Services.Mapping
                     // PostalDataService postaldataservicecontext = new PostalDataService().Initialize();
                     //set deafult paging or pull from DB
                     //quicksearchmodel.myse = 4;
-                    quicksearchmodel.myselectedcurrentpage = 1;
+                    quicksearchmodel.numberperpage = 1;
                     //added state province with comma 
 
                     quicksearchmodel.myselectedcity = model.profile.profiledata.city;
@@ -807,7 +807,7 @@ namespace Anewluv.Services.Mapping
 
                 //set defualt values for guests
                 //model.myquicksearch.mySelectedPageSize = 4;
-                model.myquicksearch.myselectedcurrentpage = 1;
+                model.myquicksearch.numberperpage = 1;
                 model.myquicksearch.myselectedcity = "";
                 model.mypostalcodestatus = false;
                 model.myquicksearch.myselectedmaxdistancefromme = 2000;
@@ -873,7 +873,7 @@ namespace Anewluv.Services.Mapping
                     model.country = membersmodel.myquicksearch.myselectedcountryname;
                     model.longitude = membersmodel.myquicksearch.myselectedlongitude;
                     model.lattitude = membersmodel.myquicksearch.myselectedlongitude;
-                    model.postalcodestatus = membersmodel.myquicksearch.myselectedpostalcodestatus;
+                    model.postalcodestatus = membersmodel.myquicksearch.myselectedpostalcodestatus.GetValueOrDefault();
 
                     // model.SecurityAnswer = "moma";
                     //5/8/2011  set other defualt values here
@@ -1494,7 +1494,7 @@ namespace Anewluv.Services.Mapping
        
         }
 
-
+       // TO DO use the same filtering done by the prmotion objects search  service where the filter is done during the first search
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
         public List<MemberSearchViewModel> getquickmatches(ProfileModel Model)
@@ -1619,7 +1619,7 @@ namespace Anewluv.Services.Mapping
                                                       screenname = f.screenname,
                                                       longitude = x.longitude ?? 0,
                                                       latitude = x.latitude ?? 0,
-                                                      hasgalleryphoto = (db.GetRepository<photo>().Find().Where(i => i.profile_id == f.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                                      hasgalleryphoto = (db.GetRepository<photo>().Find().Where(i => i.profile_id == f.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null) ? true : false,
                                                       creationdate = f.creationdate,
                                                       // city = db.fnTruncateString(x.city, 11),
                                                       // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
@@ -1805,7 +1805,7 @@ namespace Anewluv.Services.Mapping
                                                       screenname = f.screenname,
                                                       longitude = x.longitude ?? 0,
                                                       latitude = x.latitude ?? 0,
-                                                      // hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
+                                                      hasgalleryphoto = (db.GetRepository<photo>().Find().Where(i => i.profile_id == f.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null) ? true : false,
                                                       creationdate = f.creationdate,
                                                       // city = db.fnTruncateString(x.city, 11),
                                                       // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
@@ -1901,7 +1901,7 @@ namespace Anewluv.Services.Mapping
 
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public async Task<List<MemberSearchViewModel>> getquicksearch(quicksearchmodel Model)
+        public async Task<SearchResultsViewModel> getquicksearch(quicksearchmodel Model)
         {
 
             _unitOfWork.DisableProxyCreation = false;
@@ -1913,7 +1913,7 @@ namespace Anewluv.Services.Mapping
                      var task = Task.Factory.StartNew(() =>
                         {
 
-                          
+                            // SearchResultsViewModel searchresults = new SearchResultsViewModel();
                             //get the  gender's from search settings
                             int genderid = Model.myselectedseekinggenderid.GetValueOrDefault();
                             int mygenderid = Model.myselectediamgenderid.GetValueOrDefault();
@@ -1983,9 +1983,7 @@ namespace Anewluv.Services.Mapping
                             //add more values as we get more members 
                             //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
                             var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
-                             p.countryid == countryid && p.city == city && p.stateprovince == stateprovince).ToList()
-                                                         
-                                                        
+                             p.countryid == countryid && p.city == city && p.stateprovince == stateprovince)
                                             .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.lu_gender.id)).ToList() //using whereIF predicate function  
                                             
                                                               //Appearance filtering not implemented yet                        
@@ -1998,6 +1996,7 @@ namespace Anewluv.Services.Mapping
                                                               // MyCatchyIntroLineQuickSearch = x.AboutMe,
                                                               id = x.profile_id,
                                                               stateprovince = x.stateprovince,
+                                                              city=x.city,
                                                               postalcode = x.postalcode,
                                                               countryid = x.countryid,
                                                               genderid = x.gender_id,
@@ -2006,7 +2005,6 @@ namespace Anewluv.Services.Mapping
                                                               screenname = f.screenname,
                                                               longitude = x.longitude ?? 0,
                                                               latitude = x.latitude ?? 0,
-                                                              // hasgalleryphoto = (_datingcontext.photos.Where(i => i.profile_id == f.id && i.photostatus.id == (int)photostatusEnum.Gallery).FirstOrDefault().id != null) ? true : false,
                                                               creationdate = f.creationdate,
                                                               // city = db.fnTruncateString(x.city, 11),
                                                               // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
@@ -2016,8 +2014,6 @@ namespace Anewluv.Services.Mapping
                                                               //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
                                                               //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
                                                               //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
-
-
                                                           }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).ToList();//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
 
@@ -2040,14 +2036,23 @@ namespace Anewluv.Services.Mapping
                            //     MemberSearchViewmodels.Take(maxemailmatches);
 
 
+             //               var page = query.OrderBy(p => p.Name)
+             //   .Select(p => new PersonResult { Name = p.Name })
+             //   .Skip(skipRows).Take(pageSize)
+             //   .GroupBy(p => new { Total = query.Count() })
+              //  .First();
+
                             //do paging here after last filtering
 
-                            int? pageint = Convert.ToInt32(Model.myselectedcurrentpage);
-                            int? numberperpageint = Convert.ToInt32(Model.myselectedpagesize);
+                            int? totalrecordcount = MemberSearchViewmodels.Count;
 
-                            bool allowpaging = (MemberSearchViewmodels.Count >= (pageint * numberperpageint) ? true : false);
-                            var pageData = pageint > 1 & allowpaging ?
-                                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(MemberSearchViewmodels, pageint ?? 1, numberperpageint ?? 20) : MemberSearchViewmodels.Take(numberperpageint.GetValueOrDefault());
+                            //handle zero and null paging values
+                            if (Model.page == null || Model.page == 0) Model.page = 1;
+                            if (Model.numberperpage == null || Model.numberperpage == 0) Model.numberperpage =1;
+
+                            bool allowpaging = (totalrecordcount >= (Model.page * Model.numberperpage) ? true : false);
+                            var pageData = Model.page > 1 & allowpaging ?
+                                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(MemberSearchViewmodels, Model.page ?? 1, Model.numberperpage ?? 20) : MemberSearchViewmodels.Take(Model.numberperpage.GetValueOrDefault());
 
 
                             //do any conversions and calcs here
@@ -2065,13 +2070,13 @@ namespace Anewluv.Services.Mapping
                                 screenname = x.screenname,
                                 longitude = x.longitude ?? 0,
                                 latitude = x.latitude ?? 0,
-                                hasgalleryphoto = x.hasgalleryphoto,
+                                hasgalleryphoto =  db.GetRepository<photo>().Find().Where(i => i.profile_id == x.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false,                                                            
                                 creationdate = x.creationdate,
-                                // city = db.fnTruncateString(x.city, 11),                       
+                                city = Extensions.Chop(x.city, 11),                       
                                 lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                                 lastlogindate = x.lastlogindate,
                                 distancefromme = x.distancefromme,
-                                galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString()),
+                                galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString()) ,
                                 lookingforagefrom = x.lookingforagefrom,
                                 lookingForageto = x.lookingForageto,
                                 online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
@@ -2079,7 +2084,8 @@ namespace Anewluv.Services.Mapping
 
                             }).ToList();
 
-                           return test;
+
+                           return new SearchResultsViewModel { results = test, totalresults = totalrecordcount };
                    });
                    return await task.ConfigureAwait(false);
 
