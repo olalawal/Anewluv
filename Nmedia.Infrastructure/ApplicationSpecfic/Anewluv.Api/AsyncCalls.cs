@@ -17,7 +17,7 @@ namespace Anewluv.Api
         public static async Task<List<countrypostalcode>> getcountryandpostalcodestatuslistasync()
         {
 
-            Task<List<countrypostalcode>> returnedTaskTResult = Api.GeoService.getcountryandpostalcodestatuslist();
+            Task<List<countrypostalcode>> returnedTaskTResult = Api.GeoService.getcountrypostalcodestatuslist();
             List<countrypostalcode> result = await returnedTaskTResult;
 
             return result;

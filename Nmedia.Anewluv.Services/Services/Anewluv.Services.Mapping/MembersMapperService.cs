@@ -2045,7 +2045,6 @@ namespace Anewluv.Services.Mapping
                             //do paging here after last filtering
 
                             int? totalrecordcount = MemberSearchViewmodels.Count;
-
                             //handle zero and null paging values
                             if (Model.page == null || Model.page == 0) Model.page = 1;
                             if (Model.numberperpage == null || Model.numberperpage == 0) Model.numberperpage =1;

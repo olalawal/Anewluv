@@ -182,7 +182,7 @@ namespace Anewluv.Services.Spatial
             }
             //gets the country list and orders it
             //added sorting
-            public async Task<List<countrypostalcode>> getcountryandpostalcodestatuslist()
+            public async Task<List<countrypostalcode>> getcountrypostalcodestatuslist()
             {
                 _unitOfWork.DisableProxyCreation = true;
                 using (var db = _unitOfWork)
@@ -233,7 +233,7 @@ namespace Anewluv.Services.Spatial
              
             }
 
-            public List<country> getcountrylist()
+            public async Task<List<country>> getcountrylist()
             {
                 
                 _unitOfWork.DisableProxyCreation = true;
@@ -241,28 +241,34 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
-                        List<country> countries = new List<country>();
+
+                         var task = Task.Factory.StartNew(() =>
+                        {
+                       
+                            List<country> countries = new List<country>();
                             #if DISCONECTED
                        
-                                                    List<country> countrylist = new List<country>();
-                                                    countrylist.Add(new country { countryvalue = "United", countryindex = "44", selected = false });
-                                                    countrylist.Add(new country { countryvalue = "Canada", countryindex = "43", selected = false });
-                                                    return countrylist;
+                                                        List<country> countrylist = new List<country>();
+                                                        countrylist.Add(new country { countryvalue = "United", countryindex = "44", selected = false });
+                                                        countrylist.Add(new country { countryvalue = "Canada", countryindex = "43", selected = false });
+                                                        return countrylist;
 
-                            #else
+                             #else
+                             
+                             //  return CachingFactory.SharedObjectHelper.getcountrylist(_postalcontext);
+                            //TO do move to caches server 
 
-                                          //  return CachingFactory.SharedObjectHelper.getcountrylist(_postalcontext);
-                        //TO do move to caches server 
+                            countries.Add(new country { id = "0", name = "Any" });
+                            foreach (Country_PostalCode_List item in db.GetRepository<Country_PostalCode_List>().Find().ToList().OrderBy(p => p.CountryName))
+                            {
+                                var currentcountry = new country { id = item.CountryID.ToString(), name = item.CountryName };
+                                countries.Add(currentcountry);
+                            }
 
-                        countries.Add(new country { id = "0", name = "Any" });
-                        foreach (Country_PostalCode_List item in db.GetRepository<Country_PostalCode_List>().Find().ToList().OrderBy(p => p.CountryName))
-                        {
-                            var currentcountry = new country { id = item.CountryID.ToString(), name = item.CountryName };
-                            countries.Add(currentcountry);
-                        }
-
-                        return countries;
+                            return countries;
                             #endif
+                        });
+                         return await task.ConfigureAwait(false);
 
                     }
                     catch (Exception ex)
@@ -1027,7 +1033,7 @@ namespace Anewluv.Services.Spatial
             /// <param name="filter"></param>
             /// <param name="postalcode"></param>
             /// <returns></returns>
-           public async Task<List<citystateprovince>> getfilteredcitybycountryandpostalcodefilter(GeoModel model)
+           public async Task<List<citystateprovince>> getfilteredcitybycountrypostalcodefilter(GeoModel model)
             {
 
 
@@ -1102,7 +1108,7 @@ namespace Anewluv.Services.Spatial
 
             }
 
-            public async Task<List<citystateprovince>> getfilteredcitybycountryandcityfilter(GeoModel model)
+            public async Task<List<citystateprovince>> getfilteredcitybycountrycityfilter(GeoModel model)
             {
 
                 //var params = new object[] {new SqlParameter("@FirstName", "Bob")};
@@ -1179,7 +1185,86 @@ namespace Anewluv.Services.Spatial
 
             }
 
-            public List<postalcode> getfilteredpostalcodesbycountrycityfilter(GeoModel model)
+             /// <summary>
+             /// NEW added
+             /// </summary>
+             /// <param name="model"></param>
+             /// <returns></returns>
+            public async Task<List<citystateprovince>> getfilteredcitybycountryidcityfilter(GeoModel model)
+            {
+
+                //var params = new object[] {new SqlParameter("@FirstName", "Bob")};
+                //this._repositoryContext.ObjectContext.ExecuteStoreQuery<ResultType>("GetByName @FirstName", params) 
+
+
+                _unitOfWork.DisableProxyCreation = true;
+                using (var db = _unitOfWork)
+                {
+                    try
+                    {
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+                            if (model.countryid == null || model.filter == null) return null;
+
+                            //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
+                            //for cites as well so its a 1 to 1 search no spaces on input and on db side
+                            model.filter = string.Format("{0}%", model.filter.Replace(" ", ""));
+                            //11/13/2009 addded wild ca                           
+
+                            string query = "sp_CityListbycountryIDCityFilter";
+
+                            SqlParameter parameter = new SqlParameter("@StrcountryID", model.countryid);
+                            parameter.ParameterName = "@StrcountryID";
+                            parameter.SqlDbType = System.Data.SqlDbType.Int;
+                         
+
+                            SqlParameter parameter2 = new SqlParameter("@StrPrefixText", model.filter);
+                            parameter2.ParameterName = "@StrPrefixText";
+                            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                            parameter2.Size = 25;
+
+
+                            var parameters = new object[] { parameter, parameter2 };
+
+                            var cities = db.ExecuteStoredProcedure<CityList>(query + " @StrcountryID,@StrPrefixText", parameters).Take(50);
+
+                            // var cities = _postalcontext.GetCityListDynamic(country, "", filter).Take(50);
+
+                            var temp = (from s in cities.ToList()
+                                        select new citystateprovince
+                                        {
+                                            citystateprovincevalue = s.State_Province != "" ?
+                                                s.City + "," + s.State_Province : s.City
+                                        }).ToList();
+                            return temp;
+                        });
+                        return await task.ConfigureAwait(false);
+
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
+                        new Logging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in GeoService service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                        //throw convertedexcption;
+                    }
+
+                }
+
+
+            }
+
+            public async Task<List<postalcode>> getfilteredpostalcodesbycountrycityfilter(GeoModel model)
             {
 
 
@@ -1188,48 +1273,54 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
+                          var task = Task.Factory.StartNew(() =>
+                        {
 
-                        if (model.country == null | model.filter == null | model.city == null) return null;
+
+                            if (model.country == null | model.filter == null | model.city == null) return null;
 
 
-                        //added 5/12/2011 to handle empty countries
-                        if (model.country == null) return null;
-                        List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
-                        model.city = string.Format("{0}%", model.city);
-                       model.country = string.Format(model.country.Replace(" ", ""));
-                        // fix country names if theres a space
-                        model.filter = string.Format("{0}%", model.filter);
-                        //11/13/2009 addded wild ca
+                            //added 5/12/2011 to handle empty countries
+                            if (model.country == null) return null;
+                            List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
+                            model.city = string.Format("{0}%", model.city);
+                            model.country = string.Format(model.country.Replace(" ", ""));
+                            // fix country names if theres a space
+                            model.filter = string.Format("{0}%", model.filter);
+                            //11/13/2009 addded wild ca
 
-                        //sp_GetPostalCodesByCountryNameCityandPrefix
+                            //sp_GetPostalCodesByCountryNameCityandPrefix
 
-                        string query = "sp_GetPostalCodesByCountryNameCityandPrefix";
+                            string query = "sp_GetPostalCodesByCountryNameCityandPrefix";
 
-                        SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
-                        parameter.ParameterName = "@StrcountryDatabaseName";
-                        parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter.Size = 50;
+                            SqlParameter parameter = new SqlParameter("@StrcountryDatabaseName", model.country);
+                            parameter.ParameterName = "@StrcountryDatabaseName";
+                            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+                            parameter.Size = 50;
 
-                        SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
-                        parameter2.ParameterName = "@StrCity";
-                        parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter2.Size = 100;
+                            SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
+                            parameter2.ParameterName = "@StrCity";
+                            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                            parameter2.Size = 100;
 
-                        SqlParameter parameter3 = new SqlParameter("StrprefixText", model.filter);
-                        parameter3.ParameterName = "@StrprefixText";
-                        parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
-                        parameter3.Size = 40;
+                            SqlParameter parameter3 = new SqlParameter("StrprefixText", model.filter);
+                            parameter3.ParameterName = "@StrprefixText";
+                            parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                            parameter3.Size = 40;
 
-                        var parameters = new object[] { parameter, parameter2, parameter3 };
+                            var parameters = new object[] { parameter, parameter2, parameter3 };
 
-                        var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrPrefixText" + " ", parameters).ToList();
+                            var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity,@StrPrefixText" + " ", parameters).ToList();
 
-                        //  var customers = _postalcontext.GetPostalCodesByCountryAndCityPrefixDynamic(country, city, filter);
+                            //  var customers = _postalcontext.GetPostalCodesByCountryAndCityPrefixDynamic(country, city, filter);
 
-                        if (postalcodes !=null) 
-                        return ((from s in postalcodes.Take(25).ToList() select new postalcode { postalcodevalue = s.PostalCode }).ToList());
+                            if (postalcodes !=null)
+                                return ((from s in postalcodes.Take(25).ToList() select new postalcode { postalcodevalue = s.PostalCode, lattitude = s.LATITUDE, longitude = s.LONGITUDE }).ToList());
 
-                        return null;
+                            return null;
+
+                        });
+                          return await task.ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -1250,6 +1341,85 @@ namespace Anewluv.Services.Spatial
              
             }
 
+             /// <summary>
+             /// NEW added
+             /// </summary>
+             /// <param name="model"></param>
+             /// <returns></returns>
+            public async Task< List<postalcode>> getfilteredpostalcodesbycountryidcityfilter(GeoModel model)
+            {
+
+
+                _unitOfWork.DisableProxyCreation = true;
+                using (var db = _unitOfWork)
+                {
+                    try
+                    {
+
+                          var task = Task.Factory.StartNew(() =>
+                        {
+                           // if (model.country == null | model.filter == null | model.city == null) return null;
+
+                            //added 5/12/2011 to handle empty countries
+                            if (model.countryid == null) return null;
+                            List<PostalCodeList> _PostalCodeList = new List<PostalCodeList>();
+                            model.city = string.Format("{0}%", model.city);
+                            //model.country = string.Format(model.country.Replace(" ", ""));
+                            // fix country names if theres a space
+                            model.filter = string.Format("{0}%", model.filter);
+                            //11/13/2009 addded wild ca
+
+                            //sp_GetPostalCodesByCountryNameCityandPrefix
+
+                            string query = "sp_GetPostalCodesByCountryIDCityandPrefix";
+
+                            SqlParameter parameter = new SqlParameter("@StrcountryID",Convert.ToInt32(model.countryid));
+                            parameter.ParameterName = "@StrcountryID";
+                            parameter.SqlDbType = System.Data.SqlDbType.Int;
+                            //parameter.Size = 50;
+
+                            SqlParameter parameter2 = new SqlParameter("@StrCity", model.city);
+                            parameter2.ParameterName = "@StrCity";
+                            parameter2.SqlDbType = System.Data.SqlDbType.VarChar;
+                            parameter2.Size = 100;
+
+                            SqlParameter parameter3 = new SqlParameter("StrprefixText", model.filter);
+                            parameter3.ParameterName = "@StrprefixText";
+                            parameter3.SqlDbType = System.Data.SqlDbType.VarChar;
+                            parameter3.Size = 40;
+
+                            var parameters = new object[] { parameter, parameter2, parameter3 };
+
+                            var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryID,@StrCity,@StrPrefixText" + " ", parameters).ToList();
+
+                            //  var customers = _postalcontext.GetPostalCodesByCountryAndCityPrefixDynamic(country, city, filter);
+
+                            //TO DO scafold in lattitude and longitude
+                            if (postalcodes != null)
+                                return ((from s in postalcodes.Take(25).ToList() select new postalcode { postalcodevalue = s.PostalCode, lattitude =s.LATITUDE,longitude =s.LONGITUDE }).ToList());
+
+                            return null;
+                        });
+                          return await task.ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
+                        new Logging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, convertedexcption);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in GeoService service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                        //throw convertedexcption;
+                    }
+
+                }
+
+
+            }
 
             #region "Spatial Functions"
 
