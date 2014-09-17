@@ -678,7 +678,7 @@ namespace Anewluv.Services.Authentication
 
 
                         //split up the city from state province
-                        var tempCityAndStateProvince = city.Split(',');
+                        //  var tempCityAndStateProvince = city.Split(',');
                         //set all the entity values for profile
                         ObjProfileEntity.username = username;
                         ObjProfileEntity.emailaddress = email;
@@ -706,10 +706,10 @@ namespace Anewluv.Services.Authentication
                         //objprofileDataEntity.profile.emailaddress = email;
                         objprofileDataEntity.latitude = Convert.ToDouble(latitude);
                         objprofileDataEntity.longitude = Convert.ToDouble(longitude); //_GpsData.longitude;
-                        objprofileDataEntity.city = tempCityAndStateProvince[0];
+                        objprofileDataEntity.city = city;
                         objprofileDataEntity.countryregion = "NA";
 
-                        objprofileDataEntity.stateprovince = ((tempCityAndStateProvince.Count() > 1)) ? tempCityAndStateProvince[1] : "NA";
+                        objprofileDataEntity.stateprovince = (stateprovince == null || stateprovince == "") ?   "" :stateprovince;
 
                         objprofileDataEntity.countryid = countryID;
                         objprofileDataEntity.postalcode = zippostalcode;
