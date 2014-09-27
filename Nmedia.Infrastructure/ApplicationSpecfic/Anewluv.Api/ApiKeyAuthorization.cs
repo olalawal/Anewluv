@@ -189,7 +189,7 @@ namespace Anewluv.Api
 
 
                         var IsApiKeyValid =    CallValidateApiKey(key);
-                        if (IsApiKeyValid.Result) //(Api.ApiKeyService.NonAysncIsValidAPIKey(key))
+                        if (IsApiKeyValid) //(Api.ApiKeyService.NonAysncIsValidAPIKey(key))
                         {
 
                             if (!apikeyauthonly)
@@ -249,24 +249,21 @@ namespace Anewluv.Api
             }
         }
 
-        static async Task<bool> CallValidateApiKey(string key)
+        static bool CallValidateApiKey(string key)
         {
             try
             {
-                ApiKeyContext ApiKeyContext = new ApiKeyContext();
-                
-                using (var db = ApiKeyContext)
-                {
+                    bool result = false;
                     Guid apiKey;
                     Guid.TryParse(key.ToString(), out apiKey);
-                    ApiKeyService ApiKeyService = new ApiKeyService(db);
-                    Task<bool> returnedTaskTResult = ApiKeyService.IsValidAPIKey(new apikey { key = apiKey });
-                    bool result = await returnedTaskTResult;
+                   // ApiKeyService ApiKeyService = new ApiKeyService(db);
+                   // Task<bool> returnedTaskTResult = ApiKeyService.IsValidAPIKey(new apikey { key = apiKey });
+                    result = Anewluv.Api.AsyncCalls.isvalidapikeyasync(new apikey { key = apiKey }).Result;
                  
                     // IsApiKeyValid = await 
                     return result;
                     // IsApiKeyValid = result.Result;
-                }
+                
 
             }
             catch (Exception ex )

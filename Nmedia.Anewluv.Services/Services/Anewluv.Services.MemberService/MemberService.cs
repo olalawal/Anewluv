@@ -1054,7 +1054,9 @@ namespace Anewluv.Services.Members
                 try
                 {
 
-                 return   db.GetRepository<profile>().checkifscreennamealreadyexists(model);                   
+                    //TO DO remove dd
+                 var dd =  db.GetRepository<profile>().checkifscreennamealreadyexists(model);
+                 return dd;
 
                 }
                 catch (Exception ex)
@@ -1093,7 +1095,7 @@ namespace Anewluv.Services.Members
             {
                 try
                 {
-                    IQueryable<profile> myQuery = default(IQueryable<profile>);
+                    //IQueryable<profile> myQuery = default(IQueryable<profile>);
                      return db.GetRepository<profile>().checkifusernamealreadyexists(model);
 
                   
@@ -1514,7 +1516,9 @@ namespace Anewluv.Services.Members
             {
                 try
                 {
-                    return db.GetRepository<profile>().checkifemailalreadyexists(model);
+                  var dd = db.GetRepository<profile>().checkifemailalreadyexists(model);
+
+                  return dd;
 
                 }
                 catch (Exception ex)

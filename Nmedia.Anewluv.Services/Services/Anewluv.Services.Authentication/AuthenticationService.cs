@@ -617,6 +617,29 @@ namespace Anewluv.Services.Authentication
                   out status);
         }
 
+
+        /// <summary>
+        /// actual impelemation
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="openidIdentifer"></param>
+        /// <param name="openidProvidername"></param>
+        /// <param name="email"></param>
+        /// <param name="birthdate"></param>
+        /// <param name="gender"></param>
+        /// <param name="country"></param>
+        /// <param name="city"></param>
+        /// <param name="stateprovince"></param>
+        /// <param name="longitude"></param>
+        /// <param name="latitude"></param>
+        /// <param name="screenname"></param>
+        /// <param name="zippostalcode"></param>
+        /// <param name="activationcode"></param>
+        /// <param name="isApproved"></param>
+        /// <param name="providerUserKey"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public AnewLuvMembershipUser CreateUserCustom(string username,
                    string password, string openidIdentifer, string openidProvidername,
                   string email,
@@ -643,6 +666,7 @@ namespace Anewluv.Services.Authentication
 
                         //4/12/2013 OLAWAL  added code to make sure that dupe email,username is not allowed is now allowed
 
+                      
                         if (db.GetRepository<profile>().checkifemailalreadyexists(new ProfileModel { email = email }) == true)
                         {
                             status = MembershipCreateStatus.DuplicateEmail;
@@ -1158,16 +1182,52 @@ namespace Anewluv.Services.Authentication
 
         public async Task<bool> checkifemailalreadyexists(ProfileModel model)
         {
-            using (var db = new AnewluvContext())
-            {
-                db.DisableProxyCreation = true;
+           
+
+                Boolean result = false;
                 try
                 {
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var test = db.GetRepository<profile>().checkifemailalreadyexists(model);
-                        return test;
+
+                       
+                        using (AnewluvContext db = new AnewluvContext())
+                            {
+                                //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
+                                //{
+
+                                    db.DisableProxyCreation = true;
+                                    db.DisableLazyLoading = true;
+                                    result = ((db.profiles.Where(p => p.emailaddress == model.email).FirstOrDefault()) != null);
+                                        
+                                      //  db.GetRepository<profile>().checkifscreennamealreadyexists(model);
+                                //}
+
+                            }
+                        return result;
+
+                        // _unitOfWork.DisableProxyCreation = true;
+                        //_unitOfWork.DisableLazyLoading = true;
+                        //using (var db = _unitOfWork)
+                        //{
+                         
+                        //    result = db.
+                        //        ((db.profiles.Where(p => p.screenname == model.screenname).FirstOrDefault()) != null);
+
+                        //    result = db.GetRepository<profile>().checkifemailalreadyexists(model);
+                        //}
+
+
+                        // using (var db = new AnewluvContext())
+                        // {
+                        //    db.DisableProxyCreation = true;
+                        //    db.DisableLazyLoading = true;
+                        //    result = db.GetRepository<profile>().checkifemailalreadyexists(model);
+                                           
+                        //}
+                        return result;
+                       
                     });
                     return await task.ConfigureAwait(false);
                
@@ -1191,7 +1251,7 @@ namespace Anewluv.Services.Authentication
                     //throw convertedexcption;
                 }
 
-            }
+            
 
         }
         /// <summary>
@@ -1276,14 +1336,29 @@ namespace Anewluv.Services.Authentication
 
         public async Task<bool> checkifusernamealreadyexists(ProfileModel model)
         {
-            using (var db = new AnewluvContext())
-            {
+            
+            Boolean result = false;
                 try
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
-                        // IQueryable<profile> myQuery = default(IQueryable<profile>);
-                        return db.GetRepository<profile>().checkifusernamealreadyexists(model);
+
+                        _unitOfWork.DisableProxyCreation = true;
+                        _unitOfWork.DisableLazyLoading = true;
+                        using (var db = _unitOfWork)
+                        {
+                            // IQueryable<profile> myQuery = default(IQueryable<profile>);
+                            result = db.GetRepository<profile>().checkifusernamealreadyexists(model);    
+                        }
+
+                        //using (var db = new AnewluvContext())
+                        // {
+                        //    db.DisableProxyCreation = true;
+                        //    db.DisableLazyLoading = true;
+                        //    // IQueryable<profile> myQuery = default(IQueryable<profile>);
+                        //   result =  db.GetRepository<profile>().checkifusernamealreadyexists(model);                        
+                        //}
+                        return result;
                     });
                     return await task.ConfigureAwait(false);
                 }
@@ -1303,48 +1378,34 @@ namespace Anewluv.Services.Authentication
                     //throw convertedexcption;
                 }
 
-            }
-
-
-
-            //_unitOfWork.DisableProxyCreation = true;
-
-            //using (var db = _unitOfWork)
-            //{
-            //    try
-            //    {
-                   
-                 
-
-            //    }
-               
-
-            //}
 
         }
 
         public async  Task<bool> checkifscreennamealreadyexists(ProfileModel model)
-        {
-
-           
-       
-
-
-
+        {       
         
-            using (var db = new AnewluvContext())
-            {
-                db.DisableProxyCreation = true;
+                Boolean result = false;              
                 try
                 {
-
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var test = db.GetRepository<profile>().checkifscreennamealreadyexists(model);
-                        return test;
+
+                        using (AnewluvContext db = new AnewluvContext())
+                            {
+                                //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
+                                //{
+
+                                    db.DisableProxyCreation = true;
+                                    db.DisableLazyLoading = true;
+                                    result = ((db.profiles.Where(p => p.screenname == model.screenname).FirstOrDefault()) != null);
+                                        
+                                      //  db.GetRepository<profile>().checkifscreennamealreadyexists(model);
+                                //}
+
+                            }
+                        return result;
                     });
-                    return await task.ConfigureAwait(false);
-                  
+                    return await task.ConfigureAwait(false);                  
 
                 }
                 catch (Exception ex)
@@ -1363,7 +1424,7 @@ namespace Anewluv.Services.Authentication
                     //throw convertedexcption;
                 }
 
-            }
+            
 
 
         }

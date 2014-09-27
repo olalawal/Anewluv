@@ -27,7 +27,7 @@ namespace Anewluv.Domain
         public AnewluvContext()
             : base("name=AnewluvContext")
         {
-            Database.SetInitializer<AnewluvContext>(null);
+            Database.SetInitializer<AnewluvContext>(null);           
             this.Configuration.ProxyCreationEnabled = true;
             this.Configuration.AutoDetectChangesEnabled = true;
             this.DisableLazyLoading = true;

@@ -47,7 +47,6 @@ namespace Nmedia.DataAccess
 
             // _dataContext = Context.;
             Context = _Context;
-
             dbSet = this.Context.Set<T>();
 
         }

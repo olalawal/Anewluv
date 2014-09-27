@@ -1,5 +1,6 @@
 ﻿using Anewluv.Domain.Data.ViewModels;
 using GeoData.Domain.Models.ViewModels;
+using Nmedia.Infrastructure.Domain.Data.ApiKey;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,20 @@ namespace Anewluv.Api
     {
 
 
+        #region "API key auth asyc calls"
+        public static async Task<bool> isvalidapikeyasync(apikey model)
+        {
+
+            Task<bool> returnedTaskTResult = Api.ApiKeyService.IsValidAPIKey(model);
+            bool  result = await returnedTaskTResult;
+
+            return result;
+
+            // IsApiKeyValid = await 
+
+
+        }
+        #endregion
 
         #region "Spatial API asyc calls"
         public static async Task<List<countrypostalcode>> getcountryandpostalcodestatuslistasync()

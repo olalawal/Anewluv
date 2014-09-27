@@ -74,9 +74,8 @@ namespace Nmedia.Services.ApikeyAuthorization
             //Guid apiKey;
 
             // _unitOfWork.DisableProxyCreation = true;
-            using (var db = new ApiKeyContext())
-            {
-               
+         
+               Boolean result = false;
                 try
                 {
 
@@ -85,18 +84,13 @@ namespace Nmedia.Services.ApikeyAuthorization
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        if ( db.GetRepository<apikey>().Find().Any(p => p.key == model.key))    //APIKeys.Contains(apiKey))
-                        {
-
-                            //  return true;
-                            return true;
-                        }
-                        else
-                        {
-                            //  return false;
-                            return false;
-
-                        }
+                        _unitOfWork.DisableProxyCreation = true;
+                        _unitOfWork.DisableLazyLoading = true;
+                         using (var db = _unitOfWork)
+                         {
+                            result =  db.GetRepository<apikey>().Find().Any(p => p.key == model.key); 
+                         }
+                        return result;
                     });
                     return await task.ConfigureAwait(false);
                 }               
@@ -119,7 +113,7 @@ namespace Nmedia.Services.ApikeyAuthorization
                     //throw convertedexcption;
                 }
 
-            }
+            
         }
      
 

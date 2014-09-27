@@ -54,6 +54,7 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
+            //lazy loading needed
             var profile = repo.Find().OfType<profile>().Where(p => p.emailaddress == model.email).FirstOrDefault();
             
 
@@ -69,7 +70,7 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
-           return  (repo.Find().OfType<profile>().Where(p => p.emailaddress == model.email).FirstOrDefault() != null);
+            return (repo.FindSingle(p => p.emailaddress == model.email) != null);
             
 
         }
@@ -78,13 +79,13 @@ namespace Anewluv.DataExtentionMethods
          {
              //MembersRepository membersrepository = new MembersRepository();
              //get the correct value from DB
-             return (repo.Find().OfType<profile>().Where(p => p.screenname  == model.screenname).FirstOrDefault() != null);
+             return (repo.FindSingle(p => p.screenname == model.screenname) != null);
 
          }
 
          public static bool checkifusernamealreadyexists(this IRepository<profile> repo, ProfileModel model)
          {
-             return (repo.Find().OfType<profile>().Where(p => p.username  == model.username).FirstOrDefault() != null);
+             return (repo.FindSingle(p => p.username == model.username) != null);
          }
 
         //TO DO need enum for stats
