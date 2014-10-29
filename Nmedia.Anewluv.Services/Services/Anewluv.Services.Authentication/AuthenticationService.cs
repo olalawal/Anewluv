@@ -1334,6 +1334,13 @@ namespace Anewluv.Services.Authentication
 
         }
 
+
+        /// <summary>
+        /// TO DO : this method is the only one using Iunitof work and the repo pattern 
+        /// its not breaking anymore but need to look into it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<bool> checkifusernamealreadyexists(ProfileModel model)
         {
             
@@ -1342,6 +1349,24 @@ namespace Anewluv.Services.Authentication
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
+
+
+
+                        //using (AnewluvContext db = new AnewluvContext())
+                        //{
+                        //    //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
+                        //    //{
+
+                        //    db.DisableProxyCreation = true;
+                        //    db.DisableLazyLoading = true;
+                        //    // IQueryable<profile> myQuery = default(IQueryable<profile>);
+                        //    result = db.GetRepository<profile>().checkifusernamealreadyexists(model);  
+
+                        //    //  db.GetRepository<profile>().checkifscreennamealreadyexists(model);
+                        //    //}
+
+                        //}
+                        //return result;
 
                         _unitOfWork.DisableProxyCreation = true;
                         _unitOfWork.DisableLazyLoading = true;
