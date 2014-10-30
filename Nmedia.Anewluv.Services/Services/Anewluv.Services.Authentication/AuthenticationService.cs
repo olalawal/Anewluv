@@ -712,7 +712,7 @@ namespace Anewluv.Services.Authentication
                         // ObjProfileEntity.id   = email;
                         ObjProfileEntity.screenname = screenname;
                         //need to add a new feild
-                        ObjProfileEntity.activationcode = activationcode;
+                        ObjProfileEntity.activationcode = Nmedia.Infrastructure.Helpers.StringHelpers.RandomReadableString(15);
                         //Mid(intStart, intStart, 14) & CStr(intLastTwo) 'need to beef this up with the session variable
                         ObjProfileEntity.creationdate = System.DateTime.Now;
                         ObjProfileEntity.modificationdate = System.DateTime.Now;
