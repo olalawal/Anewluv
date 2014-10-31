@@ -1267,7 +1267,10 @@ namespace Anewluv.Services.Authentication
                     var task = Task.Factory.StartNew(() =>
                     {
                         //Dim ctx As New Entities()
-                        return db.GetRepository<profile>().checkifactivationcodeisvalid(model);
+                        var dd =  db.GetRepository<profile>().checkifactivationcodeisvalid(model);
+
+                        return dd;
+
 
                     });
                     return await task.ConfigureAwait(false);
@@ -1305,7 +1308,8 @@ namespace Anewluv.Services.Authentication
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
-                        return db.GetRepository<profile>().checkifprofileisactivated(model);
+                        var dd =  db.GetRepository<profile>().checkifprofileisactivated(model);
+                        return dd;
                     });
                     return await task.ConfigureAwait(false);
 
@@ -1469,6 +1473,8 @@ namespace Anewluv.Services.Authentication
             AnewluvResponse response = new AnewluvResponse();
             bool activationsuccesful = false;
 
+            
+
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
@@ -1488,7 +1494,20 @@ namespace Anewluv.Services.Authentication
                                 //also create a members view model to store pertinent data i.e persist photos profile ID etc
                                 var membersmodel = new MembersViewModel();
                                 //get the macthcing member data using the profile ID/email entered
-                                profile = db.GetRepository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
+                                if (model.emailaddress != "")
+                                {
+                                    profile = db.GetRepository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
+                                }
+                                else if (model.username != null && model.username != "")
+                                {
+                                    profile = db.GetRepository<profile>().getprofilebyusername(new ProfileModel { email = model.username });
+                             
+                                }
+                                else { profile = null;
+                                
+                                };
+
+
                                 //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
 
                                 //verify that user entered correct email before doing anything

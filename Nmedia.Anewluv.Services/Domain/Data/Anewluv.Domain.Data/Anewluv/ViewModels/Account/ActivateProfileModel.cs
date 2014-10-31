@@ -31,6 +31,11 @@ namespace Anewluv.Domain.Data.ViewModels
         // to toggle the upload photo dialog in the controller anyways
         //  [GalleryPhotoExistsValid("ProfileId", ErrorMessage = "You must Upload a GalleryPhoto to Register")]
         //#########################################################
+
+        [DisplayName("UserName")]
+        [DataMember]
+        public string username { get; set; }
+        
         [DisplayName("Email Address")]
         [DataMember]
         public string  emailaddress { get; set; }
@@ -43,7 +48,7 @@ namespace Anewluv.Domain.Data.ViewModels
 
         [DataMember]
         [Display(Name = "Photo Status")]
-        public bool photostatus { get; set; }
+        public bool? photostatus { get; set; }
 
        // [DataMember]
        // public PhotoUploadViewModel photouploadviewmodel { get; set; }
