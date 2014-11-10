@@ -17,6 +17,11 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
      [DataMember] public string emailaddress { get; set; }
    //  [DataMember] public addresstypeenum addresstypefrom { get; set; }
     // [DataMember] public string from { get; set; }  //only used in contact us
+
+     [DataMember]
+     public string to { get; set; }
+     [DataMember]
+     public string from { get; set; }  //only used in contact us   
      [DataMember]
      public string subject { get; set; }
      [DataMember]
@@ -29,7 +34,8 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
      public string username { get; set; }  //Personal user updates strored here
      [DataMember]
      public string userlogon { get; set; }  //Personal user updates strored here
-
+     [DataMember]
+     public int? addresstypeid { get; set; }  //Personal user updates strored here
 
     }
 }

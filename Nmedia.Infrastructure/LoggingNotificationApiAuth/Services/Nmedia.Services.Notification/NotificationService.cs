@@ -384,6 +384,116 @@ namespace Nmedia.Services.Notification
         }
 
 
+        ////Send generic message using the noted email viewmodel to determine the template etc and everything else requires
+        //public async Task sendmessage(EmailViewModel model, string systemaddresstype)
+        //{
+
+        //    EmailModel emailmodels = new EmailModel();
+
+        //    using (var db = new NotificationContext())
+        //    {
+        //        db.IsAuditEnabled = false; //do not audit on adds
+        //        //db.DisableProxyCreation = true;
+        //        using (var transaction = db.BeginTransaction())
+        //        {
+
+        //            try
+        //            {
+
+
+        //                  //Task that returns nothing
+        //                await Task.Factory.StartNew(() =>
+        //                {
+
+
+        //                //parse the address type
+        //                var systemaddresstypeenum = (systemaddresstypeenum)Enum.Parse(typeof(systemaddresstypeenum), systemaddresstype);
+        //                int value = (int)systemaddresstypeenum;
+        //                // var list = db.GetRepository<systemaddress>().Find().ToList();
+        //                var addresstypes = db.GetRepository<systemaddress>().Find().ToList();
+
+        //                //  dynamic systemsenderaddress = (from x in (db.GetRepository<systemaddress>().Find().ToList()) select x).First();
+
+        //                systemaddress systemsenderaddress = (from x in (db.GetRepository<systemaddress>().Find().ToList().Where(f => f.systemaddresstype_id == value)) select x).FirstOrDefault();
+        //                lu_template template = (from x in (db.GetRepository<lu_template>().Find().ToList().Where(f => f.id == (int)(model.template.id))) select x).First();
+        //                //verify message type, if meessage type is empty just send the user update
+        //                var messagetype = model.messagetype != null ? (from x in (db.GetRepository<lu_messagetype>().Find().ToList().Where(f => f.id == model.messagetype.id)) select x).First() :
+        //                                                          (from x in (db.GetRepository<lu_messagetype>().Find().ToList().Where(f => f.id == (int)(messagetypeenum.UserUpdate))) select x).First();
+        //                //check to see if the recipeint address already exists if not add i
+        //                //took out filtering for now , if an email address was passed we will just send it , trusting the sending app.
+        //                address current = db.GetRepository<address>().Find().ToList().Where(p => p.emailaddress.ToUpper() == model.userEmailViewModel.to.ToUpper()).FirstOrDefault(); //&& (p.addresstype_id == (int)addresstypeenum.PromotionUser | p.addresstype.description.ToUpper() == "DEVELOPER")  ).FirstOrDefault();
+
+        //                if (current == null)
+        //                {
+        //                    current = new address();
+        //                    // var addresstype = new lu_addresstype();
+        //                    //   current.addresstype = addresstype;
+        //                    //add the email address                         
+        //                    current.addresstype_id = model.userEmailViewModel.addresstype != null ? model.userEmailViewModel.addresstype.GetValueOrDefault() : (int)addresstypeenum.PromotionUser;
+        //                    current.username = model.userEmailViewModel.username;
+        //                    current.otheridentifer = model.adminEmailViewModel.userlogon;
+        //                    current.emailaddress = model.userEmailViewModel.to;
+        //                    current.active = true;
+        //                    current.creationdate = DateTime.Now;
+        //                    db.Add(current);
+        //                    int i = db.Commit();
+        //                }
+
+        //                //get the ID since it is required either way , got to be a betetr way to do this than to query twice
+        //                // var currentaddress = db.GetRepository<address>().Find().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
+
+        //                ICollection<address> addresses = new List<address>();
+        //                //add the address 
+        //                addresses.Add(current);
+
+
+        //                message message = new message();
+        //                //use create method it like this 
+
+        //                //11-29-2013 get the template path from web config
+        //                var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
+
+        //                message = (message.Create(c =>
+        //                {
+        //                    //c.id = (int)templateenum.;
+        //                    c.template = template;
+        //                    c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
+        //                    c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+        //                    c.subject = model.userEmailViewModel.subject;
+        //                    c.recipients = addresses;
+        //                    c.sendingapplication = "NotificationService";
+        //                    c.systemaddress = systemsenderaddress;
+        //                }));
+
+
+        //                message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
+        //                message.sendattempts = message.body != null ? 1 : 0;
+        //                db.Add(message);
+        //                int j = db.Commit();
+        //                transaction.Commit();
+        //                });
+        //                // return new CompletedAsyncResult<EmailModel>(model);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                // transaction.Rollback();
+        //                //can parse the error to build a more custom error mssage and populate fualt faultreason
+        //                FaultReason faultreason = new FaultReason("Generic Error");
+        //                //string ErrorMessage = "";
+        //                string ErrorDetail = "ErrorMessage: " + ex.Message;
+        //                //log the error but dont notifiy
+        //                new Logging(applicationEnum.notificationservice).WriteSingleEntry(logseverityEnum.Warning, LogenviromentEnum.dev, ex, null, null, false);
+        //                //throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+        //                //log error mesasge
+        //                // new Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.Warning , ex, null, null,false);
+
+        //            }
+
+        //        }
+
+        //    }
+        //}
+
         
         ////TO Do find a way to differentiate between user and Member
         //public EmailViewModel sendcontactusemail(ContactUsModel model)

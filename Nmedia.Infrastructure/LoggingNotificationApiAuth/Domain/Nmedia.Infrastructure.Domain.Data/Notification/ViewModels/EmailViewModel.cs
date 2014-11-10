@@ -25,8 +25,8 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
             try
             {
                // this.promotionobjects = new List<promotionobject>();
-                this.EmailModel = new EmailModel();
-              //  this.adminEmailViewModel = new EmailModel();
+                this.userEmailViewModel = new EmailModel();
+                this.adminEmailViewModel = new EmailModel();
                 this.messagetype = new lu_messagetype();
                 this.emailmatches = new List<MemberSearchViewModel>();
                 this.FeaturedMember = new MemberSearchViewModel();
@@ -43,7 +43,9 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
      
         [DataMember]
-        public EmailModel EmailModel { get; set; }
+        public EmailModel userEmailViewModel { get; set; }
+        [DataMember]
+        public EmailModel adminEmailViewModel { get; set; } 
        // [DataMember]
      //   public EmailModel adminEmailViewModel { get; set; }
         [DataMember]

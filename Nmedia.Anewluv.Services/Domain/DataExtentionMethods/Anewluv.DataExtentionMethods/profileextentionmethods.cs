@@ -13,21 +13,21 @@ namespace Anewluv.DataExtentionMethods
 {
     public static class profileextentionmethods
     {
-       
 
-        public static profiledata getprofiledatabyprofileid(this IRepository<profiledata> repo, ProfileModel model)     
+
+        public static profiledata getprofiledatabyprofileid(this IRepository<profiledata> repo, ProfileModel model)
         {
             return repo.Find().OfType<profiledata>().Where(p => p.profile_id == model.profileid).FirstOrDefault();
         }
 
         public static profiledata getprofiledatabyscreenname(this IRepository<profiledata> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profiledata>().Where(p => p.profile.screenname  == model.screenname).FirstOrDefault();
+            return repo.Find().OfType<profiledata>().Where(p => p.profile.screenname == model.screenname).FirstOrDefault();
         }
 
-        public static profilemetadata  getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
+        public static profilemetadata getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profilemetadata>().Where(p => p.profile_id  == model.profileid).FirstOrDefault();
+            return repo.Find().OfType<profilemetadata>().Where(p => p.profile_id == model.profileid).FirstOrDefault();
         }
 
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)
@@ -37,17 +37,17 @@ namespace Anewluv.DataExtentionMethods
 
         public static profile getprofilebyscreenname(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profile>().Where(p => p.screenname  == model.screenname ).FirstOrDefault();
+            return repo.Find().OfType<profile>().Where(p => p.screenname == model.screenname).FirstOrDefault();
         }
 
         public static profile getprofilebyemailaddress(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profile>().Where(p => p.emailaddress  == model.email ).FirstOrDefault();
+            return repo.Find().OfType<profile>().Where(p => p.emailaddress == model.email).FirstOrDefault();
         }
 
         public static profile getprofilebyusername(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profile>().Where(p => p.username == model.username ).FirstOrDefault();
+            return repo.Find().OfType<profile>().Where(p => p.username == model.username).FirstOrDefault();
         }
 
         public static profile getprofileidbyopenid(this IRepository<profile> repo, ProfileModel model)
@@ -56,61 +56,61 @@ namespace Anewluv.DataExtentionMethods
             //get the correct value from DB
             //lazy loading needed
             var profile = repo.Find().OfType<profile>().Where(p => p.emailaddress == model.email).FirstOrDefault();
-            
+
 
             //if we have an active cache we store the current value 
-            if (profile!=null &&  profile.openids.Any(p=>p.lu_openidprovider.description  == model.openidprovider))
+            if (profile != null && profile.openids.Any(p => p.lu_openidprovider.description == model.openidprovider))
             {
                 return profile;
             }
             return null;
         }
 
-         public static bool checkifemailalreadyexists(this IRepository<profile> repo, ProfileModel model)
+        public static bool checkifemailalreadyexists(this IRepository<profile> repo, ProfileModel model)
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
             return (repo.FindSingle(p => p.emailaddress == model.email) != null);
-            
+
 
         }
 
-         public static bool  checkifscreennamealreadyexists(this IRepository<profile> repo, ProfileModel model)
-         {
-             //MembersRepository membersrepository = new MembersRepository();
-             //get the correct value from DB
-             return (repo.FindSingle(p => p.screenname == model.screenname) != null);
+        public static bool checkifscreennamealreadyexists(this IRepository<profile> repo, ProfileModel model)
+        {
+            //MembersRepository membersrepository = new MembersRepository();
+            //get the correct value from DB
+            return (repo.FindSingle(p => p.screenname == model.screenname) != null);
 
-         }
+        }
 
-         public static bool checkifusernamealreadyexists(this IRepository<profile> repo, ProfileModel model)
-         {
-             return (repo.FindSingle(p => p.username == model.username) != null);
-         }
+        public static bool checkifusernamealreadyexists(this IRepository<profile> repo, ProfileModel model)
+        {
+            return (repo.FindSingle(p => p.username == model.username) != null);
+        }
 
         //TO DO need enum for stats
-         public static bool checkifprofileisactivated(this IRepository<profile> repo, ProfileModel model)
-         {
-             //MembersRepository membersrepository = new MembersRepository();
-             //get the correct value from DB
-             return (repo.Find().OfType<profile>().Where(p => p.id == model.profileid & p.status_id != 1).FirstOrDefault() != null);
+        public static bool checkifprofileisactivated(this IRepository<profile> repo, ProfileModel model)
+        {
+            //MembersRepository membersrepository = new MembersRepository();
+            //get the correct value from DB
+            return (repo.Find().OfType<profile>().Where(p => p.id == model.profileid & p.status_id != 1).FirstOrDefault() != null);
 
-         }
-      
-             //TO DO need enum for stats
-         public static bool checkifactivationcodeisvalid(this IRepository<profile> repo, ProfileModel model)
-         {
-             //MembersRepository membersrepository = new MembersRepository();
-             //get the correct value from DB
-             return (repo.Find().OfType<profile>().Where(p => p.activationcode == model.activationcode & p.username == model.username).FirstOrDefault() != null);
-           
-         }
+        }
+
+        //TO DO need enum for stats
+        public static bool checkifactivationcodeisvalid(this IRepository<profile> repo, ProfileModel model)
+        {
+            //MembersRepository membersrepository = new MembersRepository();
+            //get the correct value from DB
+            return (repo.Find().OfType<profile>().Where(p => p.activationcode == model.activationcode & p.username == model.username).FirstOrDefault() != null);
+
+        }
 
 
-         public static visiblitysetting getvisibilitysettingsbyprofileid(this IRepository<visiblitysetting> repo, ProfileModel model)     
+        public static visiblitysetting getvisibilitysettingsbyprofileid(this IRepository<visiblitysetting> repo, ProfileModel model)
         {
             return repo.Find().OfType<visiblitysetting>().Where(p => p.profile_id == model.profileid).FirstOrDefault();
-        }     
+        }
 
         //TO DO move the generic infratructure extentions
         public static string getlastloggedinstring(DateTime logindate)
@@ -181,8 +181,8 @@ namespace Anewluv.DataExtentionMethods
             catch (Exception ex)
             {
                 //instantiate logger here so it does not break anything else.
-               // logger = new  Logging(applicationEnum.MemberService);
-               // logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
+                // logger = new  Logging(applicationEnum.MemberService);
+                // logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, null, null);
                 //log error mesasge
                 //handle logging here
                 var message = ex.Message;
@@ -208,10 +208,10 @@ namespace Anewluv.DataExtentionMethods
                 }
                 //get the profile
                 //profile myProfile;
-               // IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
-               
-              // var  myQuery = repo.Find().OfType<userlogtime>().Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime).ToList();
-                var myQuery = repo.Find().Where(p => p.id == model.profileid && !(p.userlogtimes !=null && p.userlogtimes.Any(z => z.offline == false))).FirstOrDefault() != null;
+                // IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
+
+                // var  myQuery = repo.Find().OfType<userlogtime>().Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime).ToList();
+                var myQuery = repo.Find().Where(p => p.id == model.profileid && !(p.userlogtimes != null && p.userlogtimes.Any(z => z.offline == false))).FirstOrDefault() != null;
                 return myQuery;
                 //            var queryB =
                 //                (from o in db.Orders
@@ -224,12 +224,12 @@ namespace Anewluv.DataExtentionMethods
                 //else { return false; }
             }
             catch (Exception ex)
-            {                
+            {
                 throw ex;
             }
 
         }
 
-         
+
     }
 }

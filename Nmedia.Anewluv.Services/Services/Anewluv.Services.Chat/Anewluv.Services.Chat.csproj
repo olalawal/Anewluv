@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D2B7124C-D56C-4482-A40B-E50C5E80291A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Anewluv.Services.Chat</RootNamespace>
+    <AssemblyName>Anewluv.Services.Chat</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChatService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Anewluv.Services.Contracts\Anewluv.Services.Contracts.csproj">
+      <Project>{efc502ae-dd76-4278-8738-dd0b1f55a724}</Project>
+      <Name>Anewluv.Services.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
+      <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
+      <Name>Nmedia.DataAccess.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
+      <Project>{59bc30af-1691-44ea-bffa-34b39e334e93}</Project>
+      <Name>Nmedia.Infrastructure.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\LoggingLibrary\LoggingLibrary.csproj">
+      <Project>{ff7b929d-6086-4509-9095-396845569906}</Project>
+      <Name>LoggingLibrary %28Infrastructure\LoggingNotificationApiAuth\LoggingLibrary\LoggingLibrary%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>
+      <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

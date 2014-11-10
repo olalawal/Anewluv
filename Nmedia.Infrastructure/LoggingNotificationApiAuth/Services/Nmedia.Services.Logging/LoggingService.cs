@@ -66,19 +66,23 @@ namespace Nmedia.Services.Logging
                         await Task.Factory.StartNew (() =>                        
                         {
 
-                        IRepository<lu_logapplication> applicationrepo = db.GetRepository<lu_logapplication>();
-                        IRepository<lu_logseverity> logseverityrepo = db.GetRepository<lu_logseverity>();
-                        IRepository<lu_logenviroment> logenviromentrepo = db.GetRepository<lu_logenviroment>();
+                            IRepository<lu_logapplication> applicationrepo = db.GetRepository<lu_logapplication>();
+                            IRepository<lu_logseverity> logseverityrepo = db.GetRepository<lu_logseverity>();
+                            IRepository<lu_logenviroment> logenviromentrepo = db.GetRepository<lu_logenviroment>();
 
-                        //make sure we valid desc and log severites so we are not adding new ones
-                        lu_logapplication application = applicationrepo.FindSingle(p => p.id == logEntry.application.id);
-                        lu_logseverity logseverity = logseverityrepo.FindSingle(p => p.id == logEntry.logseverity.id);
-                        lu_logenviroment enviroment = logenviromentrepo.FindSingle(p => p.id == logEntry.enviroment.id);
+                            //make sure we valid desc and log severites so we are not adding new ones
+                            lu_logapplication application = applicationrepo.FindSingle(p => p.id == logEntry.application.id);
+                            lu_logseverity logseverity = logseverityrepo.FindSingle(p => p.id == logEntry.logseverity.id);
+                            lu_logenviroment enviroment = logenviromentrepo.FindSingle(p => p.id == logEntry.enviroment.id);
 
-                        //set as default error messages if blank
-                        logEntry.application = application != null ? application : applicationrepo.FindSingle(p => p.id == (int)applicationEnum.LoggingService);
-                        logEntry.logseverity = logseverity != null ? logseverity : logseverityrepo.FindSingle(p => p.id == (int)logseverityEnum.Warning);
-                        logEntry.enviroment = enviroment != null ? enviroment : logenviromentrepo.FindSingle(p => p.id == (int)enviromentEnum.dev);
+                            //set as default error messages if blank
+                            //logEntry.application = application != null ? application : applicationrepo.FindSingle(p => p.id == (int)applicationEnum.misc);
+                            logEntry.logseverity = logseverity != null ? logseverity : logseverityrepo.FindSingle(p => p.id == (int)logseverityEnum.Warning);
+                            //logEntry.enviroment = enviroment != null ? enviroment : logenviromentrepo.FindSingle(p => p.id == (int)LogenviromentEnum.dev);                     
+
+                            logEntry.application = application;
+                            logEntry.logseverity = logseverity;
+                            logEntry.enviroment = enviroment;
 
                         db.Add(logEntry);
                         int i = db.Commit();
