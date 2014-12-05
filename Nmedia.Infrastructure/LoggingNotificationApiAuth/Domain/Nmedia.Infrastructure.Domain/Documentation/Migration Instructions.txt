@@ -46,20 +46,19 @@ by running 'Add-Migration InitialMigrations' again.
 
 1)
 after you make changes to the data model you can update the Initial Catalog= using the command :
-PM>  Update-Initial Catalog= -f -verbose -ConfigurationTypeName "Configuration"
+PM>   Update-database -f -verbose -ConfigurationTypeName "Configuration"
 multiple context examples :
-PM>  Update-Initial Catalog= -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Notification.Migrations.Configuration"
-PM>  Update-Initial Catalog= -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Logging.Migrations.Configuration"
+PM>  Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Notification.Migrations.Configuration"
+PM>   Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Logging.Migrations.Configuration"
 2)
 to run a specific migration 
-PM> Update-Initial Catalog= -TargetMigration "201306051636172_InitialMigrations" -ConfigurationTypeName "Configuration"
+PM>  Update-database -TargetMigration "201306051636172_InitialMigrations" -ConfigurationTypeName "Configuration"
 or
 Update-Initial Catalog= -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "Configurationlog"
 
 3) more multi tentant with diff dirs use the fully qualfied namespace
-Update-Initial Catalog= -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.ApikeyMigrations.Configuration" 
-Update-Initial Catalog= -TargetMigration "201402282200271_ffff" -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.NotificationMigrations.ConfigurationNotification" 
-Update-Initial Catalog= -TargetMigration "201402282200271_ffff" -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.NotificationMigrations.ConfigurationNotification" 
+ Update-database -TargetMigration "201407131935192_first" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Notification.Migrations.Configuration"
+ Update-database -TargetMigration "201407132217320_first" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Data.ApiKey.Migrations.Configuration" 
 
 if you dont care about datalosss or dropped tables use this command first
 from following blog:

@@ -1360,7 +1360,7 @@ namespace Nmedia.Services.Notification
          //check to see if the recipeint address already exists if not add i
                         address current =
                         db.GetRepository<address>().Find().ToList()
-                        .Where(p => p.emailaddress.ToUpper() == Model.EmailModel.emailaddress && p.addresstype_id == (int)Model.EmailModel.addresstype).FirstOrDefault();
+                        .Where(p => p.emailaddress.ToUpper() == Model.userEmailViewModel.emailaddress && p.addresstype_id == (int)Model.userEmailViewModel.addresstype).FirstOrDefault();
                             //db.GetRepository<address>().Find().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
 
                          
@@ -1370,9 +1370,9 @@ namespace Nmedia.Services.Notification
                            // var addresstype = new lu_addresstype();
                          //   current.addresstype = addresstype;
                             //add the email address                         
-                            current.addresstype_id =  (int)Model.EmailModel.addresstype ;//:  (int)Model.EmailModel.addresstypefrom;
-                            current.username = Model.EmailModel.username;
-                            current.emailaddress =   Model.EmailModel.emailaddress;  //IsToAddress == true? Model.EmailModel.to:Model.EmailModel.from;
+                            current.addresstype_id = (int)Model.userEmailViewModel.addresstype;//:  (int)Model.EmailModel.addresstypefrom;
+                            current.username = Model.userEmailViewModel.username;
+                            current.emailaddress = Model.userEmailViewModel.emailaddress;  //IsToAddress == true? Model.EmailModel.to:Model.EmailModel.from;
                             current.active = true;
                             current.creationdate = DateTime.Now;
                             db.Add(current); 
