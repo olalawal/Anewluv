@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="MemberEditService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchEditService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

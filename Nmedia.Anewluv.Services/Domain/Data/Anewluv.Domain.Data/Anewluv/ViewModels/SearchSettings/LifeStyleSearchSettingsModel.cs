@@ -9,6 +9,11 @@ namespace Anewluv.Domain.Data.ViewModels
       [DataContract]
     public class LifeStyleSearchSettingsModel
     {
+
+        [DataMember]
+        public int searchid { get; set; }
+        [DataMember]
+        public string searchname { get; set; }
         //Lifestyle setting here
        [DataMember] public List<lu_educationlevel> educationlevellist  { get; set; } // = new List<string>();
        [DataMember]

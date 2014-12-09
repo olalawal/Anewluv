@@ -12,6 +12,12 @@ namespace Anewluv.Domain.Data.ViewModels
     {
 
         [DataMember]
+        public int searchid { get; set; }
+        [DataMember]
+        public string searchname { get; set; }
+
+
+        [DataMember]
         public int? agemax { get; set; }
         [DataMember]
         public int? agemin { get; set; }
@@ -29,16 +35,13 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public bool? myperfectmatch { get; set; }
         [DataMember]
-        public bool? savedsearch { get; set; }
-        [DataMember]
-        public string searchname { get; set; }
+        public bool? savedsearch { get; set; }      
         [DataMember]
         public int? searchrank { get; set; }
         [DataMember]
         //public int searchsettingsid { get; set; }
         // [DataMember]
         public bool? systemmatch { get; set; }
-
         [DataMember]
         public List<lu_showme> showmelist { get; set; }
         [DataMember]

@@ -12,9 +12,9 @@ namespace Anewluv.Domain.Data.ViewModels
         //appereance search settings 
 
         [DataMember]
-        public string heightmax { get; set; }
+        public int? heightmax { get; set; }
         [DataMember]
-        public string heightmin { get; set; }
+        public int? heightmin { get; set; }
        [DataMember]
        public List<lu_ethnicity> ethnicitylist { get; set; } // = new List<string>();
        [DataMember]

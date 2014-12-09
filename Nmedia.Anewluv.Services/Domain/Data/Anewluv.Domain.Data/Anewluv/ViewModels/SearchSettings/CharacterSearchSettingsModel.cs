@@ -10,7 +10,10 @@ namespace Anewluv.Domain.Data.ViewModels
     public class CharacterSearchSettingsModel
 
     {
-
+        [DataMember]
+        public int searchid { get; set; }
+        [DataMember]
+        public string searchname { get; set; }
         //populate character settings here
           [DataMember]
           public List<lu_diet> dietlist  { get; set; } // = new List<string>();

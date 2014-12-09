@@ -631,6 +631,7 @@ namespace Anewluv.Services.Edit
                 if (livingsituation != null) p.profiledata.lu_livingsituation = livingsituation;
                 if (havekids != null) p.profiledata.lu_havekids = havekids;
 
+                //checkbos item updates 
                 if (lookingfors.Count > 0)
                     updatemembermetatdatalookingfor(lookingfors, p.profilemetadata,db);
 
