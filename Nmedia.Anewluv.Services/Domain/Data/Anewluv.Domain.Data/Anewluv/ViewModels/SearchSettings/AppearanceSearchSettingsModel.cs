@@ -10,7 +10,10 @@ namespace Anewluv.Domain.Data.ViewModels
     public class AppearanceSearchSettingsModel
     {
         //appereance search settings 
-
+        [DataMember]
+        public int searchid { get; set; }
+        [DataMember]
+        public string searchname { get; set; }
         [DataMember]
         public int? heightmax { get; set; }
         [DataMember]

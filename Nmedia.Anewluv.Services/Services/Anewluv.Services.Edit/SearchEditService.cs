@@ -312,7 +312,7 @@ namespace Anewluv.Services.Edit
         #region "edit methods for search settings"
 
             //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-            public async Task<AnewluvMessages> updatbasicsearchsettings(BasicSearchSettingsModel model)
+            public async Task<AnewluvMessages> updatebasicsearchsettings(BasicSearchSettingsModel model)
             {
                 _unitOfWork.DisableProxyCreation = false;
                 using (var db = _unitOfWork)
@@ -381,8 +381,70 @@ namespace Anewluv.Services.Edit
             }
             //TO DO add validation and pass back via messages 
 
+            public async Task<AnewluvMessages> updateappearancesearchsettings(AppearanceSearchSettingsModel model)
+            {
+                _unitOfWork.DisableProxyCreation = false;
+                using (var db = _unitOfWork)
+                {
+                    try
+                    {
 
-            public async Task<AnewluvMessages> updatbasicsearchsettings(BasicSearchSettingsModel model)
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                            AnewluvMessages messages = new AnewluvMessages();
+                            searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.profile_id == model.searchid || z.searchname == model.searchname).FirstOrDefault();
+                            //create a new messages object
+                            if (p == null)
+                            {
+                                messages.errormessages.Add("There is no appearance search with this parameters");
+                                return messages;
+                            }
+
+                            p.heightmax = model.heightmin;
+                            p.heightmax = model.heightmax;
+
+                            //checkbos item updates 
+                            if (p.searchsetting_ethnicity.Count > 0)
+                                updatesearchsettingsethnicity(p.searchsetting_ethnicity.ToList(), p, db);
+                            if (p.searchsetting_bodytype.Count > 0)
+                                updatesearchsettingsbodytypes(p.searchsetting_bodytype.ToList(), p, db);
+                            if (p.searchsetting_eyecolor.Count > 0)
+                                updatesearchsettingseyecolor(p.searchsetting_eyecolor.ToList(), p, db);
+                            if (p.searchsetting_haircolor.Count > 0)
+                                updatesearchsettingshaircolor(p.searchsetting_haircolor.ToList(), p, db);
+                            if (p.searchsetting_hotfeature.Count > 0)
+                                updatesearchsettingshotfeature(p.searchsetting_hotfeature.ToList(), p, db);
+
+                            db.Update(p);
+
+
+                            return messages;
+
+
+                        });
+                        return await task.ConfigureAwait(false);
+
+                    }
+                    //TOD DO
+                    //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+                    //return newmodel;                    
+                    catch (Exception ex)
+                    {
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.EditSearchService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+                }
+
+
+            }
+
+            public async Task<AnewluvMessages> updatecharactersearchsettings(CharacterSearchSettingsModel model)
             {
                 _unitOfWork.DisableProxyCreation = false;
                 using (var db = _unitOfWork)
@@ -401,24 +463,41 @@ namespace Anewluv.Services.Edit
                                 return messages;
                             }
 
-                            p.agemin = model.agemin;
-                            p.agemax = model.agemax;
-
-                            p.distancefromme = model.distancefromme;
-                            p.lastupdatedate = model.lastupdatedate;
-                            p.searchname = model.searchname;
-                            p.searchrank = model.searchrank;
-                            p.myperfectmatch = model.myperfectmatch;
 
                             //checkbos item updates 
-                            if (p.searchsetting_gender.Count > 0)
+                            if (p.searchsetting_diet.Count > 0)
                                 updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, db);
-                            if (p.searchsetting_showme.Count > 0)
+
+                            if (p.searchsetting_humor.Count > 0)
                                 updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, db);
-                            if (p.searchsetting_showme.Count > 0)
+
+                            if (p.searchsetting_hobby.Count > 0)
                                 updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, db);
+
+                            if (p.searchsetting_drink.Count > 0)
+                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
+                            if (p..Count > 0)
+                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
                             if (p.searchsetting_location.Count > 0)
                                 updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
+                            if (p.searchsetting_location.Count > 0)
+                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
+                            if (p.searchsetting_location.Count > 0)
+                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
+                            if (p.searchsetting_location.Count > 0)
+                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
+                            if (p.searchsetting_location.Count > 0)
+                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
+                            if (p.searchsetting_location.Count > 0)
+                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
 
 
                             db.Update(p);
@@ -450,76 +529,7 @@ namespace Anewluv.Services.Edit
 
             }
 
-
-            public async Task<AnewluvMessages> updatbasicsearchsettings(BasicSearchSettingsModel model)
-            {
-                _unitOfWork.DisableProxyCreation = false;
-                using (var db = _unitOfWork)
-                {
-                    try
-                    {
-
-                        var task = Task.Factory.StartNew(() =>
-                        {
-                            AnewluvMessages messages = new AnewluvMessages();
-                            searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.profile_id == model.searchid || z.searchname == model.searchname).FirstOrDefault();
-                            //create a new messages object
-                            if (p == null)
-                            {
-                                messages.errormessages.Add("There is no search with this parameters");
-                                return messages;
-                            }
-
-                            p.agemin = model.agemin;
-                            p.agemax = model.agemax;
-
-                            p.distancefromme = model.distancefromme;
-                            p.lastupdatedate = model.lastupdatedate;
-                            p.searchname = model.searchname;
-                            p.searchrank = model.searchrank;
-                            p.myperfectmatch = model.myperfectmatch;
-
-                            //checkbos item updates 
-                            if (p.searchsetting_gender.Count > 0)
-                                updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, db);
-                            if (p.searchsetting_showme.Count > 0)
-                                updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, db);
-                            if (p.searchsetting_showme.Count > 0)
-                                updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, db);
-                            if (p.searchsetting_location.Count > 0)
-                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
-
-
-                            db.Update(p);
-
-
-                            return messages;
-
-
-                        });
-                        return await task.ConfigureAwait(false);
-
-                    }
-                    //TOD DO
-                    //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-                    //return newmodel;                    
-                    catch (Exception ex)
-                    {
-                        //instantiate logger here so it does not break anything else.
-                        logger = new Logging(applicationEnum.EditSearchService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in photo service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    }
-                }
-
-
-            }
-
-            public async Task<AnewluvMessages> updatbasicsearchsettings(BasicSearchSettingsModel model)
+            public async Task<AnewluvMessages> updatbasicsearchsettings(LifeStyleSearchSettingsModel model)
             {
                 _unitOfWork.DisableProxyCreation = false;
                 using (var db = _unitOfWork)
