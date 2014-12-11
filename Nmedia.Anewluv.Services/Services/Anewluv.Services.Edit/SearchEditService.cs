@@ -61,7 +61,7 @@ namespace Anewluv.Services.Edit
 
         }
 
-        public async Task<searchsetting> getsearchsettingbyname(SearchSettingsViewModel model)
+        public async Task<searchsetting> getsearchsettings(SearchSettingsViewModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -74,7 +74,7 @@ namespace Anewluv.Services.Edit
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                        searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.profile_id == model.profileid && z.searchname == model.searchname).FirstOrDefault();
+                        searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid && z.searchname == model.searchname).FirstOrDefault();
                         return p;
                     });
                     return await task.ConfigureAwait(false);
@@ -95,7 +95,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<List<searchsetting>> getallsearchsettings(SearchSettingsViewModel model)
+        public async Task<List<searchsetting>> getallsearchsettingsbyprofileid(SearchSettingsViewModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -129,7 +129,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<SearchSettingsViewModel> getsearchsettingsviewmodelbyname(SearchSettingsViewModel model)
+        public async Task<SearchSettingsViewModel> getsearchsettingsviewmodel(SearchSettingsViewModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -142,7 +142,7 @@ namespace Anewluv.Services.Edit
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                        searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.profile_id == model.profileid && z.searchname == model.searchname).FirstOrDefault();
+                        searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid && z.searchname == model.searchname).FirstOrDefault();
 
                         model.basicsearchsettings = this.getbasicsearchsettings(model,db);
                         model.lifestylesearchsettings = this.getlifestylesearchsettings(model, db);
@@ -206,7 +206,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<AppearanceSearchSettingsModel> getappearancesearchsettings(string searchid)
+        public async Task<AppearanceSearchSettingsModel> getappearancesearchsettings(SearchSettingsViewModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -240,7 +240,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<CharacterSearchSettingsModel> getcharactersearchsettings(string searchid)
+        public async Task<CharacterSearchSettingsModel> getcharactersearchsettings(SearchSettingsViewModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -274,7 +274,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<LifeStyleSearchSettingsModel> getlifestylesearchsettings(string searchid)
+        public async Task<LifeStyleSearchSettingsModel> getlifestylesearchsettings(SearchSettingsViewModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -323,7 +323,7 @@ namespace Anewluv.Services.Edit
                         var task = Task.Factory.StartNew(() =>
                         {
                             AnewluvMessages messages = new AnewluvMessages();
-                            searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.profile_id == model.searchid || z.searchname == model.searchname).FirstOrDefault();
+                            searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
                             //create a new messages object
                             if (p == null) 
                             {
@@ -352,7 +352,7 @@ namespace Anewluv.Services.Edit
 
 
                              db.Update(p);
-
+                             int i = db.Commit();
 
                             return messages;
 
@@ -392,7 +392,7 @@ namespace Anewluv.Services.Edit
                         var task = Task.Factory.StartNew(() =>
                         {
                             AnewluvMessages messages = new AnewluvMessages();
-                            searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.profile_id == model.searchid || z.searchname == model.searchname).FirstOrDefault();
+                            searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
                             //create a new messages object
                             if (p == null)
                             {
@@ -416,7 +416,7 @@ namespace Anewluv.Services.Edit
                                 updatesearchsettingshotfeature(p.searchsetting_hotfeature.ToList(), p, db);
 
                             db.Update(p);
-
+                            int i = db.Commit();
 
                             return messages;
 
@@ -455,7 +455,7 @@ namespace Anewluv.Services.Edit
                         var task = Task.Factory.StartNew(() =>
                         {
                             AnewluvMessages messages = new AnewluvMessages();
-                            searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.profile_id == model.searchid || z.searchname == model.searchname).FirstOrDefault();
+                            searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
                             //create a new messages object
                             if (p == null)
                             {
@@ -477,30 +477,28 @@ namespace Anewluv.Services.Edit
                             if (p.searchsetting_drink.Count > 0)
                                 updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
 
-                            if (p..Count > 0)
-                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+                            if (p.searchsetting_exercise.Count > 0)
+                                updatesearchsettingsexercise(p.searchsetting_exercise.ToList(), p, db);
 
-                            if (p.searchsetting_location.Count > 0)
-                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+                            if (p.searchsetting_smokes.Count > 0)
+                                updatesearchsettingssmokes(p.searchsetting_smokes.ToList(), p, db);
 
-                            if (p.searchsetting_location.Count > 0)
-                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+                            if (p.searchsetting_sign.Count > 0)
+                                updatesearchsettingssign(p.searchsetting_sign.ToList(), p, db);
 
-                            if (p.searchsetting_location.Count > 0)
-                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+                            if (p.searchsetting_politicalview.Count > 0)
+                                updatesearchsettingspoliticalview(p.searchsetting_politicalview.ToList(), p, db);
 
-                            if (p.searchsetting_location.Count > 0)
-                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+                            if (p.searchsetting_religion.Count > 0)
+                                updatesearchsettingsreligion(p.searchsetting_religion.ToList(), p, db);
 
-                            if (p.searchsetting_location.Count > 0)
-                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
-
-                            if (p.searchsetting_location.Count > 0)
-                                updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+                            if (p.searchsetting_religiousattendance.Count > 0)
+                                updatesearchsettingsreligiousattendance(p.searchsetting_religiousattendance.ToList(), p, db);
 
 
 
-                            db.Update(p);
+
+                            int i = db.Commit();
 
 
                             return messages;
@@ -540,7 +538,7 @@ namespace Anewluv.Services.Edit
                         var task = Task.Factory.StartNew(() =>
                         {
                             AnewluvMessages messages = new AnewluvMessages();
-                            searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.profile_id == model.searchid || z.searchname == model.searchname).FirstOrDefault();
+                            searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
                             //create a new messages object
                             if (p == null)
                             {
@@ -548,27 +546,37 @@ namespace Anewluv.Services.Edit
                                 return messages;
                             }
 
-                            p.agemin = model.agemin;
-                            p.agemax = model.agemax;
-
-                            p.distancefromme = model.distancefromme;
-                            p.lastupdatedate = model.lastupdatedate;
-                            p.searchname = model.searchname;
-                            p.searchrank = model.searchrank;
-                            p.myperfectmatch = model.myperfectmatch;
 
                             //checkbos item updates 
-                            if (p.searchsetting_gender.Count > 0)
-                                updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, db);
-                            if (p.searchsetting_showme.Count > 0)
-                                updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, db);
-                            if (p.searchsetting_showme.Count > 0)
-                                updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, db);
-                            if (p.searchsetting_location.Count > 0)
+                            if (p.searchsetting_educationlevel.Count > 0)
+                                updatesearchsettingseducationlevel(p.searchsetting_educationlevel.ToList(), p, db);
+
+                            if (p.searchsetting_lookingfor.Count > 0)
+                                updatesearchsettingslookingfor(p.searchsetting_lookingfor.ToList(), p, db);
+
+                            if (p.searchsetting_havekids.Count > 0)
+                                updatesearchsettingshavekids(p.searchsetting_havekids.ToList(), p, db);
+
+                            if (p.searchsetting_incomelevel.Count > 0)
+                                updatesearchsettingsincomelevel(p.searchsetting_incomelevel.ToList(), p, db);
+
+                            if (p.searchsetting_livingstituation.Count > 0)
                                 updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
 
+                            if (p.searchsetting_location.Count > 0)
+                                updatesearchsettingslivingsituation(p.searchsetting_livingstituation.ToList(), p, db);
 
-                            db.Update(p);
+                            if (p.searchsetting_maritalstatus.Count > 0)
+                                updatesearchsettingsmaritalstatus(p.searchsetting_maritalstatus.ToList(), p, db);
+
+                            if (p.searchsetting_profession.Count > 0)
+                                updatesearchsettingsprofession(p.searchsetting_profession.ToList(), p, db);
+
+                             if (p.searchsetting_wantkids.Count > 0)
+                                 updatesearchsettingswantskids(p.searchsetting_wantkids.ToList(), p, db);
+
+
+                             int i = db.Commit();
 
 
                             return messages;
@@ -596,6 +604,8 @@ namespace Anewluv.Services.Edit
 
 
             }
+
+
         #endregion
 
         #region "private get methods for reuses"
@@ -605,7 +615,7 @@ namespace Anewluv.Services.Edit
         {
             try
             {
-                searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
+                searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
 
                 BasicSearchSettingsModel model = new BasicSearchSettingsModel();
 
@@ -680,7 +690,7 @@ namespace Anewluv.Services.Edit
         {
             try
             {
-                searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
+                searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
 
                 AppearanceSearchSettingsModel model = new AppearanceSearchSettingsModel();
 
@@ -745,7 +755,7 @@ namespace Anewluv.Services.Edit
         {
             try
             {
-                searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
+                searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
 
                 CharacterSearchSettingsModel model = new CharacterSearchSettingsModel();
 
@@ -834,7 +844,7 @@ namespace Anewluv.Services.Edit
         {
             try
             {
-                searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
+                searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
 
                 LifeStyleSearchSettingsModel model = new LifeStyleSearchSettingsModel();
 
@@ -1013,7 +1023,7 @@ namespace Anewluv.Services.Edit
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_sortbytype>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.sortby_id == sortby.id).First();
+                    var temp = db.GetRepository<searchsetting_sortbytype>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.sortbytype_id == sortby.id).First();
                     if (temp != null)
                         db.Remove(temp);
                 }
@@ -1050,7 +1060,7 @@ namespace Anewluv.Services.Edit
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_location>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.location_id == location.id).First();
+                    var temp = db.GetRepository<searchsetting_location>().Find().Where(z => z.searchsetting_id == currentsearchsettings.id && z.countryid == location.countryid & z.city == location.city & z.postalcode == location.postalcode).First();
                     if (temp != null)
                         db.Remove(temp);
                 }
@@ -1124,7 +1134,7 @@ namespace Anewluv.Services.Edit
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_bodytype>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.bodytypes_id == bodytypes.id).First();
+                    var temp = db.GetRepository<searchsetting_bodytype>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.bodytype_id == bodytypes.id).First();
                     if (temp != null)
                         db.Remove(temp);
                 }
@@ -1685,7 +1695,7 @@ namespace Anewluv.Services.Edit
                     //SearchSettings_showme.showmeID = showme.showmeID;
                     var temp = new searchsetting_drink();
                     temp.searchsetting_id = currentsearchsettings.id;
-                    temp.drinks_id = drinks.id; //add the current drinks value since its new.
+                    temp.drink_id = drinks.id; //add the current drinks value since its new.
                     db.Add(temp);
 
                 }
@@ -1693,7 +1703,7 @@ namespace Anewluv.Services.Edit
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_drink>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.drinks_id == drinks.id).First();
+                    var temp = db.GetRepository<searchsetting_drink>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.drink_id == drinks.id).First();
                     if (temp != null)
                         db.Remove(temp);
                 }
@@ -1750,12 +1760,12 @@ namespace Anewluv.Services.Edit
             foreach (var smokes in db.GetRepository<searchsetting_smokes>().Find().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
-                if ((!currentsearchsettings.searchsetting_smokes.Where(z => z.smokes_id == smokes.id).Any()))
+                if ((!currentsearchsettings.searchsetting_smokes.Where(z => z.smoke_id == smokes.id).Any()))
                 {
                     //SearchSettings_showme.showmeID = showme.showmeID;
                     var temp = new searchsetting_smokes();
                     temp.searchsetting_id = currentsearchsettings.id;
-                    temp.smokes_id = smokes.id; //add the current smokes value since its new.
+                    temp.smoke_id = smokes.id; //add the current smokes value since its new.
                     db.Add(temp);
 
                 }
@@ -1763,7 +1773,7 @@ namespace Anewluv.Services.Edit
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_smokes>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.smokes_id == smokes.id).First();
+                    var temp = db.GetRepository<searchsetting_smokes>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.smoke_id == smokes.id).First();
                     if (temp != null)
                         db.Remove(temp);
                 }

@@ -9,6 +9,8 @@ namespace Anewluv.Domain.Data.ViewModels
       [DataContract]
     public class AppearanceSearchSettingsModel
     {
+          [DataMember]
+          public int profileid { get; set; }
         //appereance search settings 
         [DataMember]
         public int searchid { get; set; }

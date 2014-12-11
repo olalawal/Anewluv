@@ -10,6 +10,8 @@ namespace Anewluv.Domain.Data.ViewModels
     public class CharacterSearchSettingsModel
 
     {
+          [DataMember]
+          public int profileid { get; set; }
         [DataMember]
         public int searchid { get; set; }
         [DataMember]
