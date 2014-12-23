@@ -16,11 +16,8 @@ namespace Anewluv.Domain.Data
 
         [DataMember]
         public int id { get; set; }
-        [DataMember]
-        public string description { get; set; }
-        [DataMember]
-        public virtual ICollection<abusereportnote> abusereportnotes { get; set; }
-        [DataMember]
-        public virtual ICollection<blocknote> blocknotes { get; set; }
+        [DataMember]  public string description { get; set; }
+        [DataMember]  public virtual ICollection<abusereportnote> abusereportnotes { get; set; }
+        [DataMember]  public virtual ICollection<blocknote> blocknotes { get; set; }
     }
 }

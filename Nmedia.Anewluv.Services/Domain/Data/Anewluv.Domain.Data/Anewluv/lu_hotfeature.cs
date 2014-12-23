@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
@@ -12,6 +14,8 @@ namespace Anewluv.Domain.Data
         }
 
         public int id { get; set; }
+        [NotMapped, DataMember]
+        public bool? isselected { get; set; }
         public string description { get; set; }
         public virtual ICollection<profiledata_hotfeature> profiledata_hotfeature { get; set; }
         public virtual ICollection<searchsetting_hotfeature> searchsetting_hotfeature { get; set; }

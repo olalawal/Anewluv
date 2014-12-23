@@ -1,0 +1,397 @@
+﻿@model Nmedia.Infrastructure.Domain.Data.Notification.EmailViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Member Offline Chat Message</title>
+    <style type="text/css">
+        body
+        {
+             bgcolor="#ffffff";
+             font-family: Arial,Helvetica,sans-serif; 
+             font-size: 12px;
+             color: #0c52b2;
+             
+        }
+        
+        body a
+        {
+             
+             font-family: Arial,Helvetica,sans-serif; 
+             font-size: 12px;
+             color: #0c52b2;
+             /*text-decoration:none;*/
+        }
+        .header
+        {
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: none;
+            border-left-style: solid;
+            border-top-color: #6bb5ff;
+            border-right-color: #6bb5ff;
+            border-bottom-color: #6bb5ff;
+            border-left-color: #6bb5ff;
+            border-radius: 5px 5px 0px 0px;
+            padding: 10px 0px 0px 10px;
+            vertical-align: top;
+            
+        }
+        .templatebody
+        {
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: none;
+            border-left-style: solid;
+            border-top-color: #6bb5ff;
+            border-right-color: #6bb5ff;
+            border-bottom-color: #6bb5ff;
+            border-left-color: #6bb5ff;
+            position: relative;            
+            font-size: 14px;
+        }
+        
+         .templatebody a
+        {            
+            font-size: 14px;
+        }
+        
+        .templatebodygradient
+        {
+             background: background: #a0d8ef;
+             
+                        /* old browsers */            
+            background: -moz-linear-gradient(top,  #F6FBFD 0%, #F6FBFD 17%, #feffff 100%); /* ff3.6+ */
+            
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#EAF6FB), color-stop(17%,#EAF6FB), color-stop(100%,#feffff));
+                        /* chrome,safari4+ */
+            background: -webkit-linear-gradient(top,  #EAF6FB 0%,#F6FBFD 17%,#feffff 100%); /* chrome10+,safari5.1+ */
+            background: -o-linear-gradient(top,  #EAF6FB 0%,#F6FBFD 17%,#feffff 100%); /* opera 11.10+ */
+            background: -ms-linear-gradient(top,  #EAF6FB 0%,#F6FBFD 17%,#feffff 100%); /* ie10+ */
+            background: linear-gradient(to bottom,  #EAF6FB 0%,#F6FBFD 17%,#feffff 100%); /* w3c */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EAF6FB', endColorstr='#feffff',GradientType=0 );/* ie6-9 */
+            
+        }
+        .footer
+        {
+            border-top-width: 1px; 
+            border-right-width: 1px; 
+            border-bottom-width: 1px;
+            border-left-width: 1px; 
+            border-top-style: solid; 
+            border-right-style: solid; 
+            border-bottom-style: solid;
+            border-left-style: solid; 
+            border-top-color: #6bb5ff; 
+            border-right-color: #6bb5ff;
+            border-bottom-color: #6bb5ff; 
+            border-left-color: #6bb5ff; 
+            border-radius: 0px 0px 5px 5px;
+            text-align: left;  
+            padding: 10px 10px 10px 10px;                    
+        }
+        .tab
+        {
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: none;
+            border-left-style: solid;
+            border-top-color: #6bb5ff;
+            border-right-color: #6bb5ff;
+            border-bottom-color: #6bb5ff;
+            border-left-color: #6bb5ff;
+            border-radius: 5px 5px 0px 0px;
+            padding: 10px 10px 10px 10px;
+            vertical-align: top;
+            /*background-color:#a0d8ef;*/
+            background-color: #94C8FC;
+        }
+        .tab a
+        {           
+            color:White;
+        }
+            
+        .newsHeader
+        {                
+            padding:0px 10px 10px 0px;
+        }
+            
+        .news
+        {
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: solid;
+            border-left-style: solid;
+            border-top-color: #6bb5ff;
+            border-right-color: #6bb5ff;
+            border-bottom-color: #6bb5ff;
+            border-left-color: #6bb5ff;
+            padding:10px 10px 10px 10px;
+            background-color:#ffffff;
+            width:460px;
+        }
+            
+        .newsfooter
+        {                
+            padding: 10px 10px 0px 0px;
+        }
+        .newsbody
+        {
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: solid;
+            border-left-style: solid;
+            border-top-color: #6bb5ff;
+            border-right-color: #6bb5ff;
+            border-bottom-color: #6bb5ff;
+            border-left-color: #6bb5ff;
+                        
+            padding: 10px 20px 5px 20px;
+             background: background: #a0d8ef;
+                                    /* old browsers */            
+            background: -moz-linear-gradient(top,  #F6FBFD 0%, #F6FBFD 17%, #feffff 100%); /* ff3.6+ */
+            
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#EAF6FB), color-stop(17%,#EAF6FB), color-stop(100%,#feffff));
+                        /* chrome,safari4+ */
+            background: -webkit-linear-gradient(top,  #EAF6FB 0%,#F6FBFD 17%,#feffff 100%); /* chrome10+,safari5.1+ */
+            background: -o-linear-gradient(top,  #EAF6FB 0%,#F6FBFD 17%,#feffff 100%); /* opera 11.10+ */
+            background: -ms-linear-gradient(top,  #EAF6FB 0%,#F6FBFD 17%,#feffff 100%); /* ie10+ */
+            background: linear-gradient(to bottom,  #EAF6FB 0%,#F6FBFD 17%,#feffff 100%); /* w3c */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EAF6FB', endColorstr='#feffff',GradientType=0 );/* ie6-9 */
+            
+        }
+        
+        .profileheader
+        {
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: none;
+            border-left-style: solid;
+            border-top-color: #6bb5ff;
+            border-right-color: #6bb5ff;
+            border-bottom-color: #6bb5ff;
+            border-left-color: #6bb5ff;
+            border-radius: 15px 15px 0px 0px;
+            padding: 10px 0px 0px 10px;
+            vertical-align: top;
+            width:500px;
+            padding:10px 10px 10px 10px;
+            background: url(&quot;&quot;) repeat-x 100% 0px #6bb5ff;
+            color:White;
+        }
+        .profilebody
+        {
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: solid;
+            border-left-style: solid;
+            border-top-color: #6bb5ff;
+            border-right-color: #6bb5ff;
+            border-bottom-color: #6bb5ff;
+            border-left-color: #6bb5ff;
+            position: relative;
+            z-index: -1;
+            width:500px;
+            padding:10px 10px 10px 10px;
+            border-radius: 0px 0px 15px 15px;
+            background: url(&quot;&quot;) repeat-x 100% 0px white;
+        }
+        .profilesubheader
+        {
+            background: url(&quot;&quot;) repeat-x 100% 0px #6bb5ff;
+            color:White;
+            font-weight:bold;
+            font-size: 10x !important;
+            padding:5px 5px 5px 5px;
+        }
+        .profiletext
+        {
+            padding: 2px 2px 2px 5px;
+        }
+    </style>
+</head>
+<body>
+    <table align="center" width="550" border="0" cellspacing="0" cellpadding="0" summary="Anewluv.com Email and matches">
+        <tbody>
+            <tr id="Header">
+                <td class="header">
+                    <table width="100%" cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p>
+                                        <a href="#">View in Web Browser</a> |<a href="#"> Unsubscribe</a>
+                                        <br>
+                                        To ensure e-mail delivery, please add admin@anewluv.com to your address book.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img alt="A Newlove" src="../../Images/anewluv.jpg" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <table>
+                                        <tr>
+                                            <td class="tab">
+                                                <a href="#" style="text-decoration: none">My Profile</a>
+                                            </td>
+                                            <td class="tab">
+                                                <a href="#" style="text-decoration: none">Messages</a>
+                                            </td>
+                                            <td class="tab">
+                                                <a href="#" style="text-decoration: none">Friend</a>
+                                            </td>
+                                            <td class="tab">
+                                                <a href="#" style="text-decoration: none">Chat</a>
+                                            </td>
+                                            <td class="tab">
+                                                <a href="#" style="text-decoration: none">Browse</a>
+                                            </td>
+                                            <td class="tab">
+                                                <a href="#" style="text-decoration: none">Search</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr id="body">
+                <td class="templatebody templatebodygradient">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="">
+                        <tbody>
+                            <tr>
+                                <td height="6" colspan="2">
+                                    <br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="280" valign="bottom" style="padding-left: 10px;">
+                                    <div>
+                                        <p>
+                                            <b>Dear @Model.MembersViewModel.profile.screenname,</b><br />
+                                        </p>
+                                        <p class="lastNode">
+                                             @Html.Raw(Model.memberEmailViewModel.body)
+                                        </p>
+                                    </div>
+                                </td>
+                                <td width="150" align="right" style="padding-right: 20px; vertical-align: top">
+                                    <table width="100%" cellspacing="0" cellpadding="0">
+                                        <tbody>
+                                            <tr>
+                                                <td align="right">
+                                                    <b>@Model.memberEmailViewModel.subject</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">
+                                                    <font size="1" color="#78735f"><b>@DateTime.Today.ToString("MMM dd, yyyy")</b></font>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="280" valign="bottom" style="padding-left: 10px;">
+                                    <div style="border: 1px solid #6bb5ff; width: 130px; padding: 5px 5px 5px 5px">
+                                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td valign="middle" height="110" align="center">
+                                                        <a target="_blank" style="text-decoration: none" href="#">
+                                                            <img width="120" height="120" src="../../Images/photo.jpg" alt="photo" style="border: 1px solid #6bb5ff;" /></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center">
+                                                        <a target="_blank" href="#"><b>jigna81</b> </a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center">
+                                                        New Athens
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="padding-right: 10px" colspan="2">
+                                    <table cellspacing="1" cellpadding="6" border="0" align="">
+                                        <tbody>
+                                            <tr>
+                                                <td valign="middle" bgcolor="#6bb5ff" align="center" style="background: url(&quot;&quot;) repeat-x 100% 0px #6bb5ff;
+                                                    border: 1px solid #6bb5ff">
+                                                    <div style="padding-right: 10px; padding-left: 10px">
+                                                        <a target="_blank" rel="nofollow" href="#" style="text-decoration: none"><span style="color: white;
+                                                            font-weight: bold; display: block; white-space: nowrap">LOGIN to your account</span></a></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0px; margin: 0px" colspan="3">
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr id="footer">
+                <td class="footer">
+                    <p>
+                        You are receiving this email because you are a registered anewluv.com dating site
+                        subscriber. You have agreed under member terms and conditions to accept emails from
+                        our service regarding offers and service updates.<br />
+                        You can change your email delivery options or unsubscribe at anytime if you <a href="#">
+                            click here</a> and follow the instructions. Or log into your account and click
+                        on &ldquo;Account settings&rdquo; and follow the prompts.<br />
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

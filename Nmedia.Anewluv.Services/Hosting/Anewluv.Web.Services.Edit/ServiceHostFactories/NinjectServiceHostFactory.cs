@@ -19,12 +19,13 @@ namespace Anewluv.Web.Services.Edit.ServiceHostFactories
            // container.Load<NinjectModules.ApiKeyContextModule>();
            // container.Load<NinjectModules.AnewLuvContextModule>();
            // container.Load<NinjectModules.MembershipModule>();
+            container.Load<NinjectModules.AnewLuvContextModule>();
             container.Load<NinjectModules.MemberEditModule>();
-           // container.Load<NinjectModules.SearchEditModule>(); 
+           container.Load<NinjectModules.SearchEditModule>(); 
             return container;
         }
 
-        protected override ServiceHost CreateInjectedServiceHost
+        protected override ServiceHost CreateInjectedServiceHost 
             (IKernel container, Type serviceType, Uri[] baseAddresses)
         {
             ServiceHost serviceHost = new NinjectServiceHost

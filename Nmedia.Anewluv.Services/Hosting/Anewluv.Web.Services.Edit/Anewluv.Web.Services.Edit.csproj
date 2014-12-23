@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Anewluv.Web.Services.EditService</RootNamespace>
-    <AssemblyName>Anewluv.Web.Services.EditService</AssemblyName>
+    <RootNamespace>Anewluv.Web.Services.Edit</RootNamespace>
+    <AssemblyName>Anewluv.Web.Services.Edit</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
@@ -120,10 +120,6 @@
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\Services\Contracts\Nmedia.Services.Contracts\Nmedia.Infrastructure.Services.Contracts.csproj">
       <Project>{2322c931-607a-46d5-bc71-be6b25288b14}</Project>
       <Name>Nmedia.Infrastructure.Services.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\Ninject\Anewluv.Services.Chat.DependencyResolution.Ninject\Anewluv.Services.Chat.DependencyResolution.Ninject.csproj">
-      <Project>{36cc415e-2668-4c67-adbf-5fa8e13e901a}</Project>
-      <Name>Anewluv.Services.Chat.DependencyResolution.Ninject</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Ninject\Anewluv.Services.DependencyResolution.Ninject\Anewluv.Services.DependencyResolution.Ninject.csproj">
       <Project>{0145184e-916d-4db2-bb19-e069df0f1f36}</Project>

@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Infrastructure.Domain.Data.log;
+using Anewluv.Caching;
 
 
 namespace Anewluv.Services.Edit
@@ -641,10 +642,20 @@ namespace Anewluv.Services.Edit
                     model.systemmatch = p.systemmatch;
 
 
+                    //get all the showmes so we can deterimine which are checked and which are not
+                    var showmelist =  CachingFactory.SharedObjectHelper.getshowmelist(db);
 
-                    foreach (var item in p.searchsetting_showme)
+                    foreach (var item in showmelist)  //p.searchsetting_showme)
                     {
-                        model.showmelist.Add(item.lu_showme);
+                        foreach (var item2 in p.searchsetting_showme)
+                        {
+                            if (item.id == item2.showme_id)
+                            {
+                                item.isselected = true;
+                                model.showmelist.Add(item);
+                            }
+                            model.showmelist.Add(item);
+                        }
                     }
 
                     foreach (var item in p.searchsetting_sortbytype)

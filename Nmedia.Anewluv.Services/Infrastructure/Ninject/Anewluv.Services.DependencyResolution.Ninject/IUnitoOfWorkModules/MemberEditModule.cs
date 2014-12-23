@@ -31,7 +31,7 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 
             // IKernel kernel = new StandardKernel();
 
-            this.Bind<AnewluvContext>().ToSelf().InRequestScope();
+           // this.Bind<AnewluvContext>().ToSelf().InRequestScope();
             this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Edit.MemberEditService")).InScope(c => OperationContext.Current); 
             // this.Unbind(typeof(DbContext));
             this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Edit.MemberEditService")).InScope(c => OperationContext.Current); 

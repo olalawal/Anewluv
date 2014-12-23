@@ -137,6 +137,10 @@
       <Project>{01A79DCC-39CA-447E-A668-DD4206A8E5AA}</Project>
       <Name>GeoData.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Services\Anewluv.Services.Edit\Anewluv.Services.Edit.csproj">
+      <Project>{d021f886-dfdc-483b-a69f-5b8f376f37b1}</Project>
+      <Name>Anewluv.Services.Edit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Services\Anewluv.Services.MemberService\Anewluv.Services.Members.csproj">
       <Project>{312D9224-C41B-437D-B4ED-A22A74FF9EA9}</Project>
       <Name>Anewluv.Services.Members</Name>

@@ -166,8 +166,8 @@ namespace Anewluv.Services.Edit
 
                     //pilot how to show the rest of the values 
                     //sample of doing string values
-                    // var allhotfeature = db.lu_hotfeature;
-                    //model.hotfeaturelist =  p.profilemetadata.hotfeatures.ToList();
+                   
+                   // model.hotfeaturelist = db.GetRepository<l>()
                     foreach (var item in model.hotfeaturelist)
                     {
                         model.hotfeaturelist.Add(item);

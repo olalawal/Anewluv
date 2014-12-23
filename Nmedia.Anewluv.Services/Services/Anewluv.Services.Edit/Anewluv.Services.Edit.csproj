@@ -74,6 +74,10 @@
       <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
       <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\ApplicationSpecfic\Anewluv.Caching\Anewluv.Caching.csproj">
+      <Project>{3b7bbc00-62a6-4892-9eed-2312f9714ca0}</Project>
+      <Name>Anewluv.Caching</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
       <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>

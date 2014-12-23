@@ -19,6 +19,7 @@ using Anewluv.Domain;
 using Nmedia.DataAccess.Interfaces;
 using System.Data.Entity;
 using System.ServiceModel;
+using Anewluv.Services.Edit;
 
 
 namespace Anewluv.Services.DependencyResolution.Ninject.Modules
@@ -31,17 +32,16 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 
             // IKernel kernel = new StandardKernel();
 
-            this.Bind<AnewluvContext>().ToConstructor(x => new AnewluvContext()).InScope(c => OperationContext.Current); 
-            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Edit")).InScope(c => OperationContext.Current); 
+            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Edit.SearchEditService")).InScope(c => OperationContext.Current); 
             // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Edit")).InScope(c => OperationContext.Current); 
+            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Edit.SearchEditService")).InScope(c => OperationContext.Current); 
 
             //the Unit of work module should already be loaded by now
-            this.Bind<ISearchEditService>().ToSelf().InScope(c => OperationContext.Current);
+           // this.Bind<ISearchEditService>().ToSelf().InScope(c => OperationContext.Current);
+            //Bind<ISearchEditService,SearchEditService>().To<SearchEditService>().InRequestScope();
 
-            Bind<ISearchEditService>().To<ISearchEditService>().InRequestScope();
-            
-         
+            //the Unit of work module should already be loaded by now
+            this.Bind<ISearchEditService>().ToSelf().InRequestScope();
          
       }
 	}

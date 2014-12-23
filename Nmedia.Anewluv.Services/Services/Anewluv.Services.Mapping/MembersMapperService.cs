@@ -520,8 +520,8 @@ namespace Anewluv.Services.Mapping
                             CriteriaModel.BasicSearchSettings.genderlist.Add(item.lu_gender);
                         }
                         //appearance search settings here
-                        CriteriaModel.AppearanceSearchSettings.heightmax = (PerfectMatchSettings == null || PerfectMatchSettings.heightmax == null) ? Extensions.ToFeetInches(48) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmax);
-                        CriteriaModel.AppearanceSearchSettings.heightmin = (PerfectMatchSettings == null || PerfectMatchSettings.heightmin == null) ? Extensions.ToFeetInches(89) : Extensions.ToFeetInches((double)PerfectMatchSettings.heightmin);
+                        CriteriaModel.AppearanceSearchSettings.heightmax = (PerfectMatchSettings == null || PerfectMatchSettings.heightmax == null) ? Convert.ToInt32(Extensions.ToFeetInches(48)) : Convert.ToInt32(Extensions.ToFeetInches((double)PerfectMatchSettings.heightmax));
+                        CriteriaModel.AppearanceSearchSettings.heightmin = (PerfectMatchSettings == null || PerfectMatchSettings.heightmin == null) ? Convert.ToInt32(Extensions.ToFeetInches(89)) : Convert.ToInt32(Extensions.ToFeetInches((double)PerfectMatchSettings.heightmin));
 
                         foreach (var item in PerfectMatchSettings.searchsetting_ethnicity)
                         {
