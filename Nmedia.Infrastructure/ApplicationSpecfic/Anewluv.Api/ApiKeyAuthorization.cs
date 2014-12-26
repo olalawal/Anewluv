@@ -10,6 +10,8 @@ using System.IO;
 using System.Collections.Specialized;
 using LoggingLibrary;
 
+using System.Runtime.Serialization.Json;
+
 //using Anewluv.Domain.Data.ViewModels;
 using System.Web;
 using Nmedia.Infrastructure;
@@ -21,6 +23,7 @@ using Anewluv.Domain;
 using Anewluv.Domain.Data.ViewModels;
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain.Data.ApiKey;
+using System.Xml;
 //using Anewluv.Lib;
 //using Nmedia.Services.Authorization;
 //using Anewluv.Domain;
@@ -189,11 +192,35 @@ namespace Anewluv.Api
 
 
                         var IsApiKeyValid =    CallValidateApiKey(key);
+                        ProfileModel ProfileModel = new ProfileModel();
                         if (IsApiKeyValid) //(Api.ApiKeyService.NonAysncIsValidAPIKey(key))
                         {
 
                             if (!apikeyauthonly)
                             {
+                                //TO DO check if the call body has a profileid in the request body to make sure the user can access the revevant data being called for.
+                                //if so return use a diffeernt validation call that returns the profileID so we can match against the passed on.
+                                Message msg = OperationContext.Current.RequestContext.RequestMessage.CreateBufferedCopy(Int32.MaxValue).CreateMessage();
+
+                                //if we have a body look for the profileid
+                                if (!msg.IsEmpty)
+                                {
+                                    var dd = this.MessageToString(ref msg);
+                                    //get the profile id and map and other values as needed to the model if it exists otherwise no nothing
+                                    if (dd != "" && dd.Contains("profileid"))
+                                    {
+                                        ProfileModel = JsonExtentionsMethods.Deserialize<ProfileModel>(dd);
+                                    }
+
+                                    msg.Close();  //kill this since we need it no more.
+                                }
+                                
+                                //TO DO code here to call the other method that gets the profileid and valiates that the username password
+                                //combo has the same profileID and send no error reply but bad request the method is : 
+                               //Task<int> getprofileidbyusernamepassword(ProfileModel profile); 
+
+                              
+
                                 //now validate the username password info if required 
                                 //TO DO determine which URLS need validation of this i.e personal data only
                                 if (ValidateUser(operationContext))
@@ -248,6 +275,95 @@ namespace Anewluv.Api
               //   Api.DisposeApiKeyService();
             }
         }
+
+
+
+        private WebContentFormat GetMessageContentFormat(Message message)
+        {
+            WebContentFormat format = WebContentFormat.Default;
+            if (message.Properties.ContainsKey(WebBodyFormatMessageProperty.Name))
+            {
+                WebBodyFormatMessageProperty bodyFormat;
+                bodyFormat = (WebBodyFormatMessageProperty)message.Properties[WebBodyFormatMessageProperty.Name];
+                format = bodyFormat.Format;
+            }
+
+            return format;
+        }
+
+        private string MessageToString(ref Message message)
+        {
+            WebContentFormat messageFormat = this.GetMessageContentFormat(message);
+            MemoryStream ms = new MemoryStream();
+            XmlDictionaryWriter writer = null;
+            switch (messageFormat)
+            {
+                case WebContentFormat.Default:
+                case WebContentFormat.Xml:
+                    writer = XmlDictionaryWriter.CreateTextWriter(ms);
+                    break;
+                case WebContentFormat.Json:
+                    writer = JsonReaderWriterFactory.CreateJsonWriter(ms);
+                    break;
+                case WebContentFormat.Raw:
+                    // special case for raw, easier implemented separately
+                    return this.ReadRawBody(ref message);
+            }
+
+            message.WriteMessage(writer);
+            writer.Flush();
+            string messageBody = Encoding.UTF8.GetString(ms.ToArray());
+
+            // Here would be a good place to change the message body, if so desired.
+
+            // now that the message was read, it needs to be recreated.
+            ms.Position = 0;
+
+            // if the message body was modified, needs to reencode it, as show below
+            // ms = new MemoryStream(Encoding.UTF8.GetBytes(messageBody));
+
+            XmlDictionaryReader reader;
+            if (messageFormat == WebContentFormat.Json)
+            {
+                reader = JsonReaderWriterFactory.CreateJsonReader(ms, XmlDictionaryReaderQuotas.Max);
+            }
+            else
+            {
+                reader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max);
+            }
+
+            Message newMessage = Message.CreateMessage(reader, int.MaxValue, message.Version);
+            newMessage.Properties.CopyProperties(message.Properties);
+            message = newMessage;
+
+            return messageBody;
+        }
+
+        private string ReadRawBody(ref Message message)
+        {
+            XmlDictionaryReader bodyReader = message.GetReaderAtBodyContents();
+            bodyReader.ReadStartElement("Binary");
+            byte[] bodyBytes = bodyReader.ReadContentAsBase64();
+            string messageBody = Encoding.UTF8.GetString(bodyBytes);
+
+            // Now to recreate the message
+            MemoryStream ms = new MemoryStream();
+            XmlDictionaryWriter writer = XmlDictionaryWriter.CreateBinaryWriter(ms);
+            writer.WriteStartElement("Binary");
+            writer.WriteBase64(bodyBytes, 0, bodyBytes.Length);
+            writer.WriteEndElement();
+            writer.Flush();
+            ms.Position = 0;
+            XmlDictionaryReader reader = XmlDictionaryReader.CreateBinaryReader(ms, XmlDictionaryReaderQuotas.Max);
+            Message newMessage = Message.CreateMessage(reader, int.MaxValue, message.Version);
+            newMessage.Properties.CopyProperties(message.Properties);
+            message = newMessage;
+
+            return messageBody;
+        }
+
+      
+
 
         static bool CallValidateApiKey(string key)
         {

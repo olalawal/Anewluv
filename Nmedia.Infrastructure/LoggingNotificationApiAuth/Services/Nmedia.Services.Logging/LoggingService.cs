@@ -10,7 +10,7 @@ using System.ServiceModel.Activation;
 using Nmedia.Services.Contracts;
 using Nmedia.DataAccess.Interfaces;
 using Nmedia.Infrastructure.Domain.Data.log;
-using Nmedia.Infrastructure.WCF;
+
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain;
 

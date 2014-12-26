@@ -18,7 +18,7 @@ using Nmedia.Infrastructure.Domain.Data.ApiKey;
 using Nmedia.Infrastructure.Domain.Data.log;
 
 using Nmedia.Infrastructure.Domain.Data;
-using Nmedia.Infrastructure.WCF;
+
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain;
 //using Nmedia.Infrastructure.WCF;

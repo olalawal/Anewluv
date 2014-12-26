@@ -4,7 +4,7 @@ namespace Anewluv.Domain.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;   
-    using Nmedia.Infrastructure;
+   // using Nmedia.Infrastructure;
 
     internal sealed class ConfigurationAnewluv : DbMigrationsConfiguration<AnewluvContext>
     {

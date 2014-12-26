@@ -73,13 +73,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
+      <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
+      <Name>Nmedia.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
       <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
-      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
-      <Name>Nmedia.Infrastructure</Name>
+    <ProjectReference Include="..\..\..\WCF\Nmedia.WCFHelpers\Nmedia.WCFHelpers.csproj">
+      <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
+      <Name>Nmedia.WCFHelpers</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
       <Project>{59bc30af-1691-44ea-bffa-34b39e334e93}</Project>

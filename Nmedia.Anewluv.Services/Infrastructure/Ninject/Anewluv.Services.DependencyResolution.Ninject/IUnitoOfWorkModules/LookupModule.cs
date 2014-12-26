@@ -19,7 +19,7 @@ using Anewluv.Services.Contracts;
 using Anewluv.Domain;
 using System.Data.Entity;
 using System.ServiceModel;
-using Anewluv.Services.Members;
+//using Anewluv.Services.Members;
 
 
 

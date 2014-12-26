@@ -102,6 +102,10 @@
       <Project>{1e78fd8f-5a46-4894-b7e9-9e572d558562}</Project>
       <Name>Anewluv.Api</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\WCF\Nmedia.WCFHelpers\Nmedia.WCFHelpers.csproj">
+      <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
+      <Name>Nmedia.WCFHelpers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain\Context\Anewluv.Domain\Anewluv.Domain.csproj">
       <Project>{a0b04284-784b-4322-a213-db178716efc1}</Project>
       <Name>Anewluv.Domain</Name>

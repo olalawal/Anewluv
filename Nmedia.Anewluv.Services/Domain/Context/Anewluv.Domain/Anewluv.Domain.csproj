@@ -194,6 +194,10 @@
     <Content Include="Migrations\Documentation\Migration Instructions.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
+      <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
+      <Name>Nmedia.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
       <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>
@@ -201,10 +205,6 @@
     <ProjectReference Include="..\..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
       <Project>{C4C10E84-8C87-43D3-AEF3-9C0A03A2F7DB}</Project>
       <Name>Nmedia.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
-      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
-      <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
       <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>

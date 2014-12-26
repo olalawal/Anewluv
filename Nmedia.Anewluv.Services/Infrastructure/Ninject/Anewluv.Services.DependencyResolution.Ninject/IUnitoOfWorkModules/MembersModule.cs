@@ -19,7 +19,7 @@ using Anewluv.Services.Contracts;
 using Anewluv.Domain;
 using System.Data.Entity;
 using System.ServiceModel;
-using Anewluv.Services.Members;
+//using Anewluv.Services.Members;
 
 
 //using CommonInstanceFactory.Sample.Interfaces;
@@ -49,7 +49,9 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 
             //the Unit of work module should already be loaded by now
            // this.Bind<IMemberService>().ToSelf();
-            Bind<IMemberService, MemberService>().To<MemberService>().InRequestScope();
+                Bind<IMemberService>().ToSelf().InRequestScope();
+
+            //Bind<IMemberService, MemberService>().To<MemberService>().InRequestScope();
 
 
          

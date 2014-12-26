@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Anewluv.Domain;
-using Nmedia.Infrastructure;
+//using Nmedia.Infrastructure;
 using Anewluv.Domain.Data;
+using Nmedia.Infrastructure;
 
 namespace Anewluv.Domain.Migrations
 {

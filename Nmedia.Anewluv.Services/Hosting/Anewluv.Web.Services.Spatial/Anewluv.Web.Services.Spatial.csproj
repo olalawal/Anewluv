@@ -130,7 +130,7 @@
       <Name>Anewluv.Services.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\ApplicationSpecfic\Anewluv.Api\Anewluv.Api.csproj">
-      <Project>{1E78FD8F-5A46-4894-B7E9-9E572D558562}</Project>
+      <Project>{1e78fd8f-5a46-4894-b7e9-9e572d558562}</Project>
       <Name>Anewluv.Api</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Ninject\Anewluv.Services.DependencyResolution.Ninject\Anewluv.Services.DependencyResolution.Ninject.csproj">
@@ -138,12 +138,15 @@
       <Name>Anewluv.Services.DependencyResolution.Ninject</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Services\Anewluv.Services.Spatial\Anewluv.Services.Spatial.csproj">
-      <Project>{5130AC6C-76E9-4471-96D9-D5C8DCABA093}</Project>
+      <Project>{5130ac6c-76e9-4471-96d9-d5c8dcaba093}</Project>
       <Name>Anewluv.Services.Spatial</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -156,13 +159,12 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>53557</DevelopmentServerPort>
+          <DevelopmentServerPort>58484</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Anewluv.Web.Services.Spatial</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/Anewluv.Web.Services.Spatial</IISAppRootUrl>
+          <IISUrl>
+          </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

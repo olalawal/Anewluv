@@ -122,12 +122,8 @@
       <Name>Anewluv.Services.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
-      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
+      <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
-      <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
-      <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Domain\Context\Anewluv.Domain\Anewluv.Domain.csproj">
       <Project>{A0B04284-784B-4322-A213-DB178716EFC1}</Project>
@@ -136,14 +132,6 @@
     <ProjectReference Include="..\..\..\Domain\Context\GeoData.Domain\GeoData.Domain.csproj">
       <Project>{01A79DCC-39CA-447E-A668-DD4206A8E5AA}</Project>
       <Name>GeoData.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Services\Anewluv.Services.Edit\Anewluv.Services.Edit.csproj">
-      <Project>{d021f886-dfdc-483b-a69f-5b8f376f37b1}</Project>
-      <Name>Anewluv.Services.Edit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Services\Anewluv.Services.MemberService\Anewluv.Services.Members.csproj">
-      <Project>{312D9224-C41B-437D-B4ED-A22A74FF9EA9}</Project>
-      <Name>Anewluv.Services.Members</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -21,7 +21,7 @@ using Nmedia.Infrastructure.Domain.Data.log;
 //using Nmedia.Infrastructure.Domain.Data.log;
 
 
-using Nmedia.Infrastructure.WCF;
+
 using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Domain.Data;
 using Nmedia.Infrastructure.Domain.Data;

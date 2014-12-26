@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Anewluv.Domain;
-using Nmedia.Infrastructure;
+//using Nmedia.Infrastructure;
 //using Dating.Server.Data.Models;
 
 namespace Anewluv.Domain.Migrations.Chat

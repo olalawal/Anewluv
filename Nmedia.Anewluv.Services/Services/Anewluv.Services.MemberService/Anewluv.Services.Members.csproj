@@ -85,6 +85,10 @@
       <Project>{FF7B929D-6086-4509-9095-396845569906}</Project>
       <Name>LoggingLibrary %28Infrastructure\LoggingNotificationApiAuth\LoggingLibrary\LoggingLibrary%29</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\WCF\Nmedia.WCFHelpers\Nmedia.WCFHelpers.csproj">
+      <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
+      <Name>Nmedia.WCFHelpers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain\DataExtentionMethods\Anewluv.DataExtentionMethods\Anewluv.DataExtentionMethods.csproj">
       <Project>{3cbb8d0a-5ea5-4336-aeaf-6717d2a09a45}</Project>
       <Name>Anewluv.DataExtentionMethods</Name>

@@ -19,7 +19,7 @@ using Anewluv.Domain;
 using Nmedia.DataAccess.Interfaces;
 using System.Data.Entity;
 using System.ServiceModel;
-using Anewluv.Services.Edit;
+//using Anewluv.Services.Edit;
 
 
 namespace Anewluv.Services.DependencyResolution.Ninject.Modules
