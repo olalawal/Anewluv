@@ -616,12 +616,12 @@ namespace Anewluv.Services.Edit
         {
             try
             {
-                searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
+                searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => (searchmodel.searchid !=null && z.id == searchmodel.searchid) || z.profile_id == searchmodel.profileid  ).FirstOrDefault(); // && //(searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
 
                 BasicSearchSettingsModel model = new BasicSearchSettingsModel();
 
                 //populate values here ok ?
-                if (p != null) return null;
+                if (p == null) return null;
 
                     // model. = p.searchname == null ? "Unamed Search" : p.searchname;
                     //model.di = p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();

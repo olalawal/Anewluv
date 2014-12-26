@@ -332,6 +332,9 @@ namespace Anewluv.Services.Authentication
             }
         }
 
+
+
+
         //5-82012 updated to only valudate username
         //overide for validate user that uses just the username, this can be used for pass through auth where a user was already prevalidated via another method
         public bool ValidateUser(string username)
@@ -1461,7 +1464,7 @@ namespace Anewluv.Services.Authentication
         #endregion
 
 
-        #region "Extra Methods added to interface to clean up MVC controllers that do member stuff"
+        #region "Extra Methods added to interface to clean up MVC controllers that do member stuff as well as methods custom to anewluv"
 
         //1-8-2013 olawal addedrobust method for activating profiles
         public async Task<AnewluvResponse> activateprofile(activateprofilemodel model)
@@ -1767,6 +1770,170 @@ namespace Anewluv.Services.Authentication
 
         }
 
+
+        public async Task<int> getprofileidbyusernamepassword(ProfileModel profile)
+        {
+
+            var myQuery = new profile();
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+
+
+                    var task = Task.Factory.StartNew(() =>
+                    {
+
+
+                        // return db.GetRepository<profiledata>().getprofiledatabyprofileid(model);
+                        //first you have to get the encrypted sctring by email address and username 
+                        string encryptedPassword = "";
+                        //get profile created date
+                        DateTime creationdate;
+                        DateTime? passwordchangedate;
+                        DateTime EncrpytionChangeDate = new DateTime(2011, 8, 3, 4, 5, 0);
+                        string decryptedPassword;
+                        string actualpasswordstring;
+
+                        //Dim ctx As New Entities()
+                        //added profile status ID validation as well i.e 2 for activated and is not banned 
+                        myQuery = db.GetRepository<profile>().FindSingle(p => p.username == profile.username && p.status_id == 2);
+
+
+
+                        if (myQuery != null)
+                        {
+                            //retirve encypted password
+                            encryptedPassword = myQuery.password;
+                            creationdate = myQuery.creationdate.GetValueOrDefault();
+                            passwordchangedate = myQuery.passwordChangeddate;
+                        }
+                        else
+                        {
+                            return 1;
+                        }
+
+                        //case for if the user account was created before encrpyption algorithm was changed
+                        //compare the dates
+                        int resultcreateddate = DateTime.Compare(creationdate, EncrpytionChangeDate);
+                        int resultpasswordchangedate = DateTime.Compare(passwordchangedate.GetValueOrDefault(), EncrpytionChangeDate);
+                        if (resultpasswordchangedate > 0 | resultcreateddate > 0)
+                        //use new decryption method
+                        {
+
+                            decryptedPassword = Encryption.decryptString(encryptedPassword);
+                            actualpasswordstring = profile.password;
+                        }
+                        else
+                        {
+                            decryptedPassword = Encryption.Decrypt(encryptedPassword, profile.password);
+                            actualpasswordstring = profile.username.ToUpper() + Encryption.EncryptionKey;
+                        }
+
+
+                        //TO DO change this to use activity not log time since its a better measure for the data we need 
+                        //FIX the logtime code
+                        //check if decrypted string macthed username to upper  + secret
+                        if (actualpasswordstring == decryptedPassword)
+                        {
+                            //log the user logtime here so it is common to silverlight and MVC                  
+                            if (HttpContext.Current != null)
+                            {
+                                //Just for testing that it worked
+                                //TO DO remove when in prod
+                                AsyncCallback callback = result =>
+                                {
+                                    //we dont do anything really with the callback so not needed really
+                                    //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                                };
+
+
+                                AnewluvContext AnewluvContext = new AnewluvContext();
+                                using (var tempdb = AnewluvContext)
+                                {
+                                    MemberService MemberService = new MemberService(tempdb);
+                                    MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }).Start();
+                                }
+                            }
+                            else
+                            {
+
+
+                                //Just for testing that it worked
+                                //TO DO remove when in prod
+                                AsyncCallback callback = result =>
+                                {
+                                    //we dont do anything really with the callback so not needed really
+                                    //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
+                                };
+
+                                //use anew  the same DB context
+                                AnewluvContext AnewluvContext = new AnewluvContext();
+                                using (var tempdb = AnewluvContext)
+                                {
+                                    MemberService MemberService = new MemberService(tempdb);
+                                    MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }).Start();
+                                    //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
+                                }
+                            }
+
+
+                            //TO DO get geodata from IP address down the line
+                            //also update profile activity
+                            //MemberService.Beginaddprofileactvity(
+                            //  new profileactivity
+                            //  {
+                            //      lu_activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
+                            //      ,
+                            //      creationdate = DateTime.Now,
+                            //      profile_id = myQuery.id,
+                            //      ipaddress = HttpContext.Current.Request.UserHostAddress,
+                            //      routeurl = HttpContext.Current.Request.RawUrl,
+                            //      sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
+                            //  }, null, MemberService);
+
+                            //also update the profiledata for the last login date
+                            return 0;
+                        }
+                        else
+                        {
+                            return 1;
+                        }
+                    });
+                    return await task.ConfigureAwait(false);
+
+
+
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    //instantiate logger here so it does not break anything else.
+
+                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                    {
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, myQuery != null ? myQuery.id : 0, null);
+                    }
+
+                    FaultReason faultreason = new FaultReason("Error in authenitcation service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
+                //finally
+                //{
+                //    Api.DisposeMemberService();
+                //}
+
+            }
+        }
+
+       
 
 
 
