@@ -21,6 +21,8 @@ using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data;
 using Anewluv.Services.Contracts;
+using Anewluv.Caching;
+using System.Threading.Tasks;
 
 
 namespace Anewluv.Services.Edit
@@ -60,23 +62,25 @@ namespace Anewluv.Services.Edit
 
         }
 
-    
-
-
         #region "profile visisiblity settings update here"
                     
-        public bool updateprofilevisibilitysettings(visiblitysetting model)
+        public async Task<bool> updateprofilevisibilitysettings(visiblitysetting model)
         {
-            if (model.id != null)
+            var task = Task.Factory.StartNew(() =>
             {
 
-                //Impement on member service ?
-                // datingservice.updatememberVisiblitySetting(model);
+                if (model.id != null)
+                {
+
+                    //Impement on member service ?
+                    // datingservice.updatememberVisiblitySetting(model);
 
 
-                return true;
-            }
-            return false;
+                    return true;
+                }
+                return false;
+              });
+              return await task.ConfigureAwait(false);
         }
         #endregion
 
@@ -84,7 +88,7 @@ namespace Anewluv.Services.Edit
         #region "Methods to GET current edit profile settings for a user"
 
         // constructor
-        public BasicSettingsModel getbasicsettingsmodel(EditProfileModel editprofilemodel)
+        public async Task<BasicSettingsModel> getbasicsettingsmodel(EditProfileModel editprofilemodel)
         {
 
               _unitOfWork.DisableProxyCreation = true;
@@ -92,35 +96,36 @@ namespace Anewluv.Services.Edit
          {
              try
              {
-                 profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
-                 BasicSettingsModel model = new BasicSettingsModel();
+                   var task = Task.Factory.StartNew(() =>
+                    {
+                         profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
+                         BasicSettingsModel model = new BasicSettingsModel();
 
-                 //populate values here ok ?
-                 if (p != null)
-
-
-                     // model. = p.searchname == null ? "Unamed Search" : p.searchname;
-                     //model.di = p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();
-                     // model.searchrank = p.searchrank == null ? 0 : p.searchrank.GetValueOrDefault();
-
-                     //populate ages select list here I guess
-                     //TODO get from app fabric
-                     // SharedRepository sharedrepository = new SharedRepository();
-                     //Ages = sharedrepository.AgesSelectList;
-
-                     model.birthdate = p.profiledata.birthdate; //== null ? null :  p.profiledata.lu_birthdate;
-                 //  model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
-                 model.gender = p.profiledata.lu_gender == null ? null : p.profiledata.lu_gender;
-                 model.countryid = p.profiledata.countryid == null ? null : p.profiledata.countryid;
-                 model.city = p.profiledata.city == null ? null : p.profiledata.city;
-                 model.postalcode = p.profiledata.postalcode == null ? null : p.profiledata.postalcode;
-                 model.aboutme = p.profiledata.aboutme == null ? null : p.profiledata.aboutme;
-                 model.phonenumber = p.profiledata.phone == null ? null : p.profiledata.phone;
+                         //populate values here ok ?
+                         if (p != null)
 
 
+                             // model. = p.searchname == null ? "Unamed Search" : p.searchname;
+                             //model.di = p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();
+                             // model.searchrank = p.searchrank == null ? 0 : p.searchrank.GetValueOrDefault();
 
+                             //populate ages select list here I guess
+                             //TODO get from app fabric
+                             // SharedRepository sharedrepository = new SharedRepository();
+                             //Ages = sharedrepository.AgesSelectList;
 
-                 return model;
+                             model.birthdate = p.profiledata.birthdate; //== null ? null :  p.profiledata.lu_birthdate;
+                         //  model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
+                         model.gender = p.profiledata.lu_gender == null ? null : p.profiledata.lu_gender;
+                         model.countryid = p.profiledata.countryid == null ? null : p.profiledata.countryid;
+                         model.city = p.profiledata.city == null ? null : p.profiledata.city;
+                         model.postalcode = p.profiledata.postalcode == null ? null : p.profiledata.postalcode;
+                         model.aboutme = p.profiledata.aboutme == null ? null : p.profiledata.aboutme;
+                         model.phonenumber = p.profiledata.phone == null ? null : p.profiledata.phone;
+
+                         return model;
+                    });
+                   return await task.ConfigureAwait(false);
 
              }
              catch (Exception ex)
@@ -145,7 +150,7 @@ namespace Anewluv.Services.Edit
         }
         //Using a contstructor populate the current values I suppose
         //The actual values will bind to viewmodel I think
-        public AppearanceSettingsModel getappearancesettingsmodel(EditProfileModel editprofilemodel)
+         public async Task<AppearanceSettingsModel> getappearancesettingsmodel(EditProfileModel editprofilemodel)
         {
 
 
@@ -154,31 +159,55 @@ namespace Anewluv.Services.Edit
             {
                 try
                 {
-                    profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
 
-                    AppearanceSettingsModel model = new AppearanceSettingsModel();
-
-                    model.height = p.profiledata.height == null ? null : p.profiledata.height;
-                    model.bodytype = p.profiledata.lu_bodytype == null ? null : p.profiledata.lu_bodytype;
-                    model.haircolor = p.profiledata.lu_haircolor == null ? null : p.profiledata.lu_haircolor;
-                    model.eyecolor = p.profiledata.lu_eyecolor == null ? null : p.profiledata.lu_eyecolor;
-
-
-                    //pilot how to show the rest of the values 
-                    //sample of doing string values
-                   
-                   // model.hotfeaturelist = db.GetRepository<l>()
-                    foreach (var item in model.hotfeaturelist)
+                    var task = Task.Factory.StartNew(() =>
                     {
-                        model.hotfeaturelist.Add(item);
-                    }
+                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
 
-                    foreach (var item in model.ethnicitylist)
-                    {
-                        model.ethnicitylist.Add(item);
-                    }
+                        AppearanceSettingsModel model = new AppearanceSettingsModel();
 
-                    return model;
+                        //12-26-2014 olawal added this to allow for multiple checkbox selections and checked etc
+                        var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(db);
+                        var ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(db);
+
+                        model.height = p.profiledata.height == null ? null : p.profiledata.height;
+                        model.bodytype = p.profiledata.lu_bodytype == null ? null : p.profiledata.lu_bodytype;
+                        model.haircolor = p.profiledata.lu_haircolor == null ? null : p.profiledata.lu_haircolor;
+                        model.eyecolor = p.profiledata.lu_eyecolor == null ? null : p.profiledata.lu_eyecolor;
+                        model.ethnicitylist = ethnicitylist;
+                        model.hotfeaturelist = hotfeaturelist;
+
+                        //pilot how to show the rest of the values 
+                        //sample of doing string values
+
+                        foreach (lu_ethnicity ethnicity in ethnicitylist.Where(c => p.profilemetadata.profiledata_ethnicity.Any(f => f.ethnicty_id == c.id)))
+                        {
+                            //update the value as checked here on the list
+                            model.ethnicitylist.First(d => d.id == ethnicity.id).isselected = true;
+                        }
+                       // model.hotfeaturelist = db.GetRepository<l>()
+                        //foreach (var item in model.hotfeaturelist)
+                        //{
+                        //    model.hotfeaturelist.Add(item);
+                        //}
+
+                        //foreach (var item in model.ethnicitylist)
+                        //{
+                        //    model.ethnicitylist.Add(item);
+                        //}
+
+
+                        //update the list with the items that are selected.
+                        foreach (lu_hotfeature hotfeature in hotfeaturelist.Where(c => p.profilemetadata.profiledata_hotfeature.Any(f => f.hotfeature_id == c.id)))
+                        {
+                            //update the value as checked here on the list
+                            model.hotfeaturelist.First(d => d.id == hotfeature.id).isselected = true;
+                        }
+
+
+                        return model;
+                    });
+                      return await task.ConfigureAwait(false);
 
                 }
                 catch (Exception ex)
@@ -201,8 +230,9 @@ namespace Anewluv.Services.Edit
 
         }
 
-        //populate the enities
-        public LifeStyleSettingsModel getlifestylesettingsmodel(EditProfileModel editprofilemodel)
+        //Using a contstructor populate the current values I suppose
+        //The actual values will bind to viewmodel I think
+        public async Task<CharacterSettingsModel> getcharactersettingsmodel(EditProfileModel editprofilemodel)
         {
 
             _unitOfWork.DisableProxyCreation = true;
@@ -210,16 +240,99 @@ namespace Anewluv.Services.Edit
             {
                 try
                 {
-                    profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();                   
+
+                      var task = Task.Factory.StartNew(() =>
+                    {
+
+                    profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
+
+                    //   profile p = db.profiles.Where(z => z.id == editprofilemodel.intprofileid).FirstOrDefault();
+                    CharacterSettingsModel model = new CharacterSettingsModel();
+
+                    model.diet = p.profiledata.lu_diet;
+                    model.humor = p.profiledata.lu_humor;
+                    var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(db);
+                    model.hobbylist = hobbylist;
+
+                    //update the list with the items that are selected.
+                    foreach (lu_hobby hobby in hobbylist.Where(c => p.profilemetadata.profiledata_hobby.Any(f => f.hobby_id == c.id)))
+                    {
+                        //update the value as checked here on the list
+                        model.hobbylist.First(d => d.id == hobby.id).isselected = true;
+                    }
+
+
+                    ////populiate the hobby list, remeber this comes from the metadata link so you have to drill down
+                    ////var allhobbies = db.lu_hobby;
+                    //foreach (var item in model.hobbylist)
+                    //{
+                    //    model.hobbylist.Add(item);
+                    //}
+
+                    model.drinking = p.profiledata.lu_drinks;
+                    model.excercise = p.profiledata.lu_exercise;
+                    model.smoking = p.profiledata.lu_smokes;
+                    model.sign = p.profiledata.lu_sign;
+                    model.politicalview = p.profiledata.lu_politicalview;
+                    model.religiousattendance = p.profiledata.lu_religiousattendance;
+
+                    return model;
+                    });
+                      return await task.ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+
+                    using (var logger = new Logging(applicationEnum.EditMemberService))
+                    {
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
+                    }
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member actions service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
+
+            }
+
+
+
+
+        }
+
+        //populate the enities
+        public async Task<LifeStyleSettingsModel> getlifestylesettingsmodel(EditProfileModel editprofilemodel)
+        {
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    var task = Task.Factory.StartNew(() =>
+                    {
+                    profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
+
+                    var lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(db);
+                    
                     LifeStyleSettingsModel model = new LifeStyleSettingsModel();
                     model.educationlevel = p.profiledata.lu_educationlevel;
                     model.employmentstatus = p.profiledata.lu_employmentstatus;
                     model.incomelevel = p.profiledata.lu_incomelevel;
+                    model.lookingforlist = lookingforlist;
 
-                    foreach (var item in model.lookingforlist)
+                    //update the list with the items that are selected.
+                    foreach (lu_lookingfor lookingfor in lookingforlist.Where(c => p.profilemetadata.profiledata_lookingfor.Any(f => f.lookingfor_id == c.id)))
                     {
-                        model.lookingforlist.Add(item);
+                        //update the value as checked here on the list
+                        model.lookingforlist.First(d => d.id == lookingfor.id).isselected = true;
                     }
+
+                    //foreach (var item in model.lookingforlist)
+                    //{
+                    //    model.lookingforlist.Add(item);
+                    //}
 
 
                     model.wantskids = p.profiledata.lu_wantskids;
@@ -228,7 +341,12 @@ namespace Anewluv.Services.Edit
                     model.livingsituation = p.profiledata.lu_livingsituation;
                     model.havekids = p.profiledata.lu_havekids;
 
+
+
                     return model;
+
+                      });
+                    return await task.ConfigureAwait(false);
 
                 }
                 catch (Exception ex)
@@ -252,61 +370,6 @@ namespace Anewluv.Services.Edit
 
         }
      
-       //Using a contstructor populate the current values I suppose
-        //The actual values will bind to viewmodel I think
-        public CharacterSettingsModel getcharactersettingsmodel(EditProfileModel editprofilemodel)
-        {
-
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-                    profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
-
-                 //   profile p = db.profiles.Where(z => z.id == editprofilemodel.intprofileid).FirstOrDefault();
-                    CharacterSettingsModel model = new CharacterSettingsModel();
-
-                    model.diet = p.profiledata.lu_diet;
-                    model.humor = p.profiledata.lu_humor;
-
-                    //populiate the hobby list, remeber this comes from the metadata link so you have to drill down
-                    //var allhobbies = db.lu_hobby;
-                    foreach (var item in model.hobbylist)
-                    {
-                        model.hobbylist.Add(item);
-                    }
-
-                    model.drinking = p.profiledata.lu_drinks;
-                    model.excercise = p.profiledata.lu_exercise;
-                    model.smoking = p.profiledata.lu_smokes;
-                    model.sign = p.profiledata.lu_sign;
-                    model.politicalview = p.profiledata.lu_politicalview;
-                    model.religiousattendance = p.profiledata.lu_religiousattendance;
-
-                    return model;
-                }
-                catch (Exception ex)
-                {
-
-                    using (var logger = new  Logging(applicationEnum.EditMemberService))
-                    {
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
-                    }
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in member actions service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-
-            }
-
-
-          
-
-        }
-
         #endregion
 
 
@@ -315,9 +378,9 @@ namespace Anewluv.Services.Edit
 
         #region "Methods to Update profile settings for a user"
 
-        #region "Edit profile Basic Settings Updates here
+        #region "Edit profile Public methods here "
 
-        public AnewluvMessages membereditbasicsettings(EditProfileModel editprofilemodel)
+        public async Task<AnewluvMessages> membereditbasicsettings(EditProfileModel editprofilemodel)
         {
 
           //  _unitOfWork.DisableProxyCreation = true;
@@ -328,6 +391,9 @@ namespace Anewluv.Services.Edit
                 {
                     try
                     {
+                         var task = Task.Factory.StartNew(() =>
+                    {
+
                         profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
 
                         //create a new messages object
@@ -345,6 +411,8 @@ namespace Anewluv.Services.Edit
                         }
                         messages.messages.Add("Edit Basic Settings Successful");
                         return messages;
+                    });
+                         return await task.ConfigureAwait(false);
 
                     }
                     catch (Exception ex)
@@ -365,8 +433,187 @@ namespace Anewluv.Services.Edit
             }
           
         }
+
+        public async Task<AnewluvMessages> membereditappearancesettings(EditProfileModel editprofilemode)
+        {
+
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                         var task = Task.Factory.StartNew(() =>
+                    {
+                        //create a new messages object
+                        AnewluvMessages messages = new AnewluvMessages();
+
+
+                        //get the profile details :
+                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemode.profileid).First();
+
+                        messages = (updatememberappearancesettings(editprofilemode.appearancesettings, p, messages,db));
+                        // messages = (membereditAppearanceSettingsPage2Update(newmodel, profileid, messages));
+                        // messages = (membereditAppearanceSettingsPage3Update(newmodel, profileid, messages));
+                        //  messages = (membereditAppearanceSettingsPage4Update(newmodel, profileid, messages));
+
+                        if (messages.errormessages.Count > 0)
+                        {
+                            messages.errormessages.Add("There was a problem Editing You Appearance Settings, Please try again later");
+                            return messages;
+                        }
+                        messages.messages.Add("Edit Appearance Settings Successful");
+                        return messages;
+
+                    });
+                         return await task.ConfigureAwait(false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        using (var logger = new  Logging(applicationEnum.EditMemberService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
+                        }
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+
+           
+        }
+
+        public async Task<AnewluvMessages> membereditcharactersettings(EditProfileModel editprofilemode)
+        {
+
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+                        //create a new messages object
+                        AnewluvMessages messages = new AnewluvMessages();
+
+
+                        //get the profile details :
+                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemode.profileid).First();
+
+                        messages = (updatemembercharactersettings(editprofilemode.charactersettings, p, messages, db));
+                        // messages = (membereditcharacterSettingsPage2Update(newmodel, profileid, messages));
+                        // messages = (membereditcharacterSettingsPage3Update(newmodel, profileid, messages));
+                        //  messages = (membereditcharacterSettingsPage4Update(newmodel, profileid, messages));
+
+                        if (messages.errormessages.Count > 0)
+                        {
+                            messages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
+                            return messages;
+                        }
+                        messages.messages.Add("Edit character Settings Successful");
+                        return messages;
+                         });
+                    return await task.ConfigureAwait(false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.EditMemberService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
+                        }
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+
+
+
+        }
+
+        public async Task<AnewluvMessages> membereditlifestylesettings(EditProfileModel editprofilemode)
+        {
+
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                          var task = Task.Factory.StartNew(() =>
+                    {
+                        //create a new messages object
+                        AnewluvMessages messages = new AnewluvMessages();
+                        //get the profile details :
+                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemode.profileid).First();
+
+
+                        messages = (updatememberlifestylesettings(editprofilemode.lifestylesettings, p, messages,db));
+                        // messages = (membereditlifestyleSettingsPage2Update(newmodel, profileid, messages));
+                        // messages = (membereditlifestyleSettingsPage3Update(newmodel, profileid, messages));
+                        //  messages = (membereditlifestyleSettingsPage4Update(newmodel, profileid, messages));
+
+                        if (messages.errormessages.Count > 0)
+                        {
+                            messages.errormessages.Add("There was a problem Editing You lifestyle Settings, Please try again later");
+                            return messages;
+                        }
+                        messages.messages.Add("Edit lifestyle Settings Successful");
+                        return messages;
+                    });
+                          return await task.ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        using (var logger = new  Logging(applicationEnum.EditMemberService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
+                        }
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+
+
+        }
+
+        #endregion
+
+        #endregion
+
+        #region "Private update methods that can be re-used"
+
         //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-        private AnewluvMessages updatememberbasicsettings(BasicSettingsModel newmodel, profile p, AnewluvMessages messages,IUnitOfWork db)
+        private AnewluvMessages updatememberbasicsettings(BasicSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWork db)
         {
 
             try
@@ -395,6 +642,8 @@ namespace Anewluv.Services.Edit
                 p.profiledata.mycatchyintroLine = MyCatchyIntroLine;
 
                 db.Update(p);
+
+
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //return newmodel;
@@ -405,74 +654,16 @@ namespace Anewluv.Services.Edit
                 // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 // return model;
                 //handle logging here
-              //  var message = dx.Message;
-               throw ex;
+                //  var message = dx.Message;
+                throw ex;
             }
-          
+
             return messages;
         }
         //TO DO add validation and pass back via messages 
 
-        #endregion
-
-
-        //#region "other editpages to implement"
-        #region "Edit profile Appeareance Settings Updates here"
-
-        public AnewluvMessages membereditappearancesettings(EditProfileModel editprofilemode)
-        {
-
-            using (var db = _unitOfWork)
-            {
-                db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-                        //create a new messages object
-                        AnewluvMessages messages = new AnewluvMessages();
-
-
-                        //get the profile details :
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemode.profileid).First();
-
-                        messages = (updatememberappearancesettings(editprofilemode.appearancesettings, p, messages,db));
-                        // messages = (membereditAppearanceSettingsPage2Update(newmodel, profileid, messages));
-                        // messages = (membereditAppearanceSettingsPage3Update(newmodel, profileid, messages));
-                        //  messages = (membereditAppearanceSettingsPage4Update(newmodel, profileid, messages));
-
-                        if (messages.errormessages.Count > 0)
-                        {
-                            messages.errormessages.Add("There was a problem Editing You Appearance Settings, Please try again later");
-                            return messages;
-                        }
-                        messages.messages.Add("Edit Appearance Settings Successful");
-                        return messages;
-
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        using (var logger = new  Logging(applicationEnum.EditMemberService))
-                        {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
-                        }
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in member actions service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    }
-
-                }
-            }
-
-
-           
-        }
-
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatememberappearancesettings(AppearanceSettingsModel newmodel, profile p, AnewluvMessages messages,IUnitOfWork db)
+        private AnewluvMessages updatememberappearancesettings(AppearanceSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWork db)
         {
             bool nothingupdated = true;
 
@@ -506,141 +697,15 @@ namespace Anewluv.Services.Edit
                 //if (height.HasValue == true) p.profiledata.lu_height = height;
 
                 if (hotfeatures.Count > 0)
-                    updatemembermetatdatahotfeature(hotfeatures, p.profilemetadata,db);
+                    updatemembermetatdatahotfeature(hotfeatures, p.profilemetadata, db);
                 if (ethicities.Count > 0)
-                    updatemembermetatdataethnicity(ethicities, p.profilemetadata,db);
+                    updatemembermetatdataethnicity(ethicities, p.profilemetadata, db);
 
 
                 //db.Entry(profiledata).State = EntityState.Modified;
-                 db.Update(p);
-                 db.Commit();
-
-                //TOD DO
-                //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-                //update session too just in case
-                //membersmodel.profiledata = profiledata;               
-
-                //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
-                //model.CurrentErrors.Clear();
-                // return model;
-            }           
-            catch (Exception ex)
-            {
-                //handle logging here
-                var message = ex.Message;
-                throw ex;
-
-            }
-            return messages;
-
-
-
-        }
-
-        #endregion
-
-
-        #region "Edit profile LifeStyle Settings Updates here"
-
-        public AnewluvMessages membereditlifestylesettings(EditProfileModel editprofilemode)
-        {
-
-            using (var db = _unitOfWork)
-            {
-                db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-
-                        //create a new messages object
-                        AnewluvMessages messages = new AnewluvMessages();
-                        //get the profile details :
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemode.profileid).First();
-
-
-                        messages = (updatememberlifestylesettings(editprofilemode.lifestylesettings, p, messages,db));
-                        // messages = (membereditlifestyleSettingsPage2Update(newmodel, profileid, messages));
-                        // messages = (membereditlifestyleSettingsPage3Update(newmodel, profileid, messages));
-                        //  messages = (membereditlifestyleSettingsPage4Update(newmodel, profileid, messages));
-
-                        if (messages.errormessages.Count > 0)
-                        {
-                            messages.errormessages.Add("There was a problem Editing You lifestyle Settings, Please try again later");
-                            return messages;
-                        }
-                        messages.messages.Add("Edit lifestyle Settings Successful");
-                        return messages;
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        using (var logger = new  Logging(applicationEnum.EditMemberService))
-                        {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
-                        }
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in member actions service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    }
-
-                }
-            }
-
-
-
-        }
-
-        //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatememberlifestylesettings(LifeStyleSettingsModel newmodel, profile p, AnewluvMessages messages,IUnitOfWork db)
-        {
-            bool nothingupdated = true;
-
-            try
-            {
-                // profile p = db.profiles.Where(z => z.id == profileid).First();
-                //sample code for determining weather to edit an item or not or determin if a value changed'
-                //nothingupdated = (newmodel.educationlevel  == p.profiledata.lu_educationlevel) ? false : true;
-
-                //only update items that are not null
-                var educationlevel = (newmodel.educationlevel == p.profiledata.lu_educationlevel) ? newmodel.educationlevel : null;
-                var employmentstatus = (newmodel.employmentstatus == p.profiledata.lu_employmentstatus) ? newmodel.employmentstatus : null;
-                var incomelevel = (newmodel.incomelevel == p.profiledata.lu_incomelevel) ? newmodel.incomelevel : null;
-                var wantskids = (newmodel.wantskids == p.profiledata.lu_wantskids) ? newmodel.wantskids : null;
-                var profession = (newmodel.profession == p.profiledata.lu_profession) ? newmodel.profession : null;
-                var maritalstatus = (newmodel.maritalstatus == p.profiledata.lu_maritalstatus) ? newmodel.maritalstatus : null;
-                var livingsituation = (newmodel.livingsituation == p.profiledata.lu_livingsituation) ? newmodel.livingsituation : null;
-                var havekids = (newmodel.havekids == p.profiledata.lu_havekids) ? newmodel.havekids : null;
-                //TO DO test if anything changed
-                var lookingfors = newmodel.lookingforlist;
-
-
-
-
-                //update my settings 
-                //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
-
-                if (educationlevel != null) p.profiledata.lu_educationlevel = educationlevel;
-                if (employmentstatus != null) p.profiledata.lu_employmentstatus = employmentstatus;
-                if (incomelevel != null) p.profiledata.lu_incomelevel = incomelevel;
-                if (wantskids != null) p.profiledata.lu_wantskids = wantskids;
-                if (profession != null) p.profiledata.lu_profession = profession;
-                if (maritalstatus != null) p.profiledata.lu_maritalstatus = maritalstatus;
-                if (livingsituation != null) p.profiledata.lu_livingsituation = livingsituation;
-                if (havekids != null) p.profiledata.lu_havekids = havekids;
-
-                //checkbos item updates 
-                if (lookingfors.Count > 0)
-                    updatemembermetatdatalookingfor(lookingfors, p.profilemetadata,db);
-
-
-
-                //db.Entry(profiledata).State = EntityState.Modified;
-               // int changes = db.SaveChanges();
                 db.Update(p);
                 db.Commit();
+
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //update session too just in case
@@ -649,7 +714,7 @@ namespace Anewluv.Services.Edit
                 //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
                 //model.CurrentErrors.Clear();
                 // return model;
-            }         
+            }
             catch (Exception ex)
             {
                 //handle logging here
@@ -663,67 +728,8 @@ namespace Anewluv.Services.Edit
 
         }
 
-        #endregion
-
-
-        #region "Edit profile Character Settings Updates here"
-
-
-        public AnewluvMessages membereditcharactersettings(EditProfileModel editprofilemode )
-        {
-           
-              using (var db = _unitOfWork)
-            {
-                db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-                       
-                          //create a new messages object
-                        AnewluvMessages messages = new AnewluvMessages();
-
-
-                        //get the profile details :
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemode.profileid).First();
-
-                        messages = (updatemembercharactersettings(editprofilemode.charactersettings , p, messages,db));
-                        // messages = (membereditcharacterSettingsPage2Update(newmodel, profileid, messages));
-                        // messages = (membereditcharacterSettingsPage3Update(newmodel, profileid, messages));
-                        //  messages = (membereditcharacterSettingsPage4Update(newmodel, profileid, messages));
-
-                        if (messages.errormessages.Count > 0)
-                        {
-                            messages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
-                            return messages;
-                        }
-                        messages.messages.Add("Edit character Settings Successful");
-                        return messages;
-
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        using (var logger = new  Logging(applicationEnum.EditMemberService))
-                        {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
-                        }
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in member actions service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    }
-
-                }
-            }
-            
-            
-            
-
-        }
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatemembercharactersettings(CharacterSettingsModel newmodel, profile p, AnewluvMessages messages,IUnitOfWork db)
+        private AnewluvMessages updatemembercharactersettings(CharacterSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWork db)
         {
             bool nothingupdated = true;
 
@@ -762,12 +768,12 @@ namespace Anewluv.Services.Edit
                 if (religion != null) p.profiledata.lu_religion = religion;
                 if (religiousattendance != null) p.profiledata.lu_religiousattendance = religiousattendance;
                 if (hobylist.Count > 0)
-                    updatemembermetatdatahobby(hobylist, p.profilemetadata,db);
+                    updatemembermetatdatahobby(hobylist, p.profilemetadata, db);
 
 
 
                 //db.Entry(profiledata).State = EntityState.Modified;
-               // int changes = db.SaveChanges();
+                // int changes = db.SaveChanges();
                 db.Update(p);
                 db.Commit();
                 //TOD DO
@@ -778,7 +784,7 @@ namespace Anewluv.Services.Edit
                 //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
                 //model.CurrentErrors.Clear();
                 // return model;
-            }         
+            }
             catch (Exception ex)
             {
                 //handle logging here
@@ -794,13 +800,78 @@ namespace Anewluv.Services.Edit
 
 
 
-        #endregion
+        //TO DO send back the messages on errors and when nothing is changed
+        private AnewluvMessages updatememberlifestylesettings(LifeStyleSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWork db)
+        {
+            bool nothingupdated = true;
+
+            try
+            {
+                // profile p = db.profiles.Where(z => z.id == profileid).First();
+                //sample code for determining weather to edit an item or not or determin if a value changed'
+                //nothingupdated = (newmodel.educationlevel  == p.profiledata.lu_educationlevel) ? false : true;
+
+                //only update items that are not null
+                var educationlevel = (newmodel.educationlevel == p.profiledata.lu_educationlevel) ? newmodel.educationlevel : null;
+                var employmentstatus = (newmodel.employmentstatus == p.profiledata.lu_employmentstatus) ? newmodel.employmentstatus : null;
+                var incomelevel = (newmodel.incomelevel == p.profiledata.lu_incomelevel) ? newmodel.incomelevel : null;
+                var wantskids = (newmodel.wantskids == p.profiledata.lu_wantskids) ? newmodel.wantskids : null;
+                var profession = (newmodel.profession == p.profiledata.lu_profession) ? newmodel.profession : null;
+                var maritalstatus = (newmodel.maritalstatus == p.profiledata.lu_maritalstatus) ? newmodel.maritalstatus : null;
+                var livingsituation = (newmodel.livingsituation == p.profiledata.lu_livingsituation) ? newmodel.livingsituation : null;
+                var havekids = (newmodel.havekids == p.profiledata.lu_havekids) ? newmodel.havekids : null;
+                //TO DO test if anything changed
+                var lookingfors = newmodel.lookingforlist;
+
+
+
+
+                //update my settings 
+                //this does nothing but we shoul verify that items changed before updating anything so have to test each input and list
+
+                if (educationlevel != null) p.profiledata.lu_educationlevel = educationlevel;
+                if (employmentstatus != null) p.profiledata.lu_employmentstatus = employmentstatus;
+                if (incomelevel != null) p.profiledata.lu_incomelevel = incomelevel;
+                if (wantskids != null) p.profiledata.lu_wantskids = wantskids;
+                if (profession != null) p.profiledata.lu_profession = profession;
+                if (maritalstatus != null) p.profiledata.lu_maritalstatus = maritalstatus;
+                if (livingsituation != null) p.profiledata.lu_livingsituation = livingsituation;
+                if (havekids != null) p.profiledata.lu_havekids = havekids;
+
+                //checkbos item updates 
+                if (lookingfors.Count > 0)
+                    updatemembermetatdatalookingfor(lookingfors, p.profilemetadata, db);
+
+
+
+                //db.Entry(profiledata).State = EntityState.Modified;
+                // int changes = db.SaveChanges();
+                db.Update(p);
+                db.Commit();
+                //TOD DO
+                //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
+                //update session too just in case
+                //membersmodel.profiledata = profiledata;               
+
+                //   CachingFactory.MembersViewModelHelper.UpdateMemberProfileDataByProfileID (_ProfileID,profiledata  );
+                //model.CurrentErrors.Clear();
+                // return model;
+            }
+            catch (Exception ex)
+            {
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
+
+            }
+            return messages;
+
+
+
+        }
 
         #endregion
-
-
-
-
+       
 
         #region "PRIVATE Checkbox Update Functions for profiledata many to many"
 

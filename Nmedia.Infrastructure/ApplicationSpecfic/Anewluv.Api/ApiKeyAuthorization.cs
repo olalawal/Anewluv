@@ -205,7 +205,7 @@ namespace Anewluv.Api
                                 //if we have a body look for the profileid
                                 if (!msg.IsEmpty)
                                 {
-                                    var dd = this.MessageToString(ref msg);
+                                    var dd = Utilities.MessageToString(ref msg);
                                     //get the profile id and map and other values as needed to the model if it exists otherwise no nothing
                                     if (dd != "" && dd.Contains("profileid"))
                                     {
@@ -223,14 +223,29 @@ namespace Anewluv.Api
 
                                 //now validate the username password info if required 
                                 //TO DO determine which URLS need validation of this i.e personal data only
-                                if (ValidateUser(operationContext))
+                                int validprofileid = ValidateUserAndGetProfileID(operationContext);
+
+                                if (validprofileid !=0 && (ProfileModel.profileid != null && ProfileModel.profileid == validprofileid ))
                                 {
                                     validrequest = true;
                                 }
-                                else
+                                //next option if there is no profileid in the body we just wanto validate the profileid is valid
+                                else if (validprofileid != 0 && ProfileModel.profileid == null)
+                                {
+                                    validrequest = true;
+                                }    
+                                //option where the user id does not match the profileid in the body - reject !
+                                else if (validprofileid != 0 && (ProfileModel.profileid != null && ProfileModel.profileid != validprofileid))
                                 {
                                     validrequest = false;
+                                    //TO DO log this and also send a custom message 
                                     CreateUserNamePasswordErrorReply(operationContext);
+                                }                                                          
+                                else
+                                {
+                                  
+                                  validrequest = false;
+                                  CreateUserNamePasswordErrorReply(operationContext);
                                 }
                             }
                            // Api.DisposeApiKeyService();
@@ -278,90 +293,7 @@ namespace Anewluv.Api
 
 
 
-        private WebContentFormat GetMessageContentFormat(Message message)
-        {
-            WebContentFormat format = WebContentFormat.Default;
-            if (message.Properties.ContainsKey(WebBodyFormatMessageProperty.Name))
-            {
-                WebBodyFormatMessageProperty bodyFormat;
-                bodyFormat = (WebBodyFormatMessageProperty)message.Properties[WebBodyFormatMessageProperty.Name];
-                format = bodyFormat.Format;
-            }
-
-            return format;
-        }
-
-        private string MessageToString(ref Message message)
-        {
-            WebContentFormat messageFormat = this.GetMessageContentFormat(message);
-            MemoryStream ms = new MemoryStream();
-            XmlDictionaryWriter writer = null;
-            switch (messageFormat)
-            {
-                case WebContentFormat.Default:
-                case WebContentFormat.Xml:
-                    writer = XmlDictionaryWriter.CreateTextWriter(ms);
-                    break;
-                case WebContentFormat.Json:
-                    writer = JsonReaderWriterFactory.CreateJsonWriter(ms);
-                    break;
-                case WebContentFormat.Raw:
-                    // special case for raw, easier implemented separately
-                    return this.ReadRawBody(ref message);
-            }
-
-            message.WriteMessage(writer);
-            writer.Flush();
-            string messageBody = Encoding.UTF8.GetString(ms.ToArray());
-
-            // Here would be a good place to change the message body, if so desired.
-
-            // now that the message was read, it needs to be recreated.
-            ms.Position = 0;
-
-            // if the message body was modified, needs to reencode it, as show below
-            // ms = new MemoryStream(Encoding.UTF8.GetBytes(messageBody));
-
-            XmlDictionaryReader reader;
-            if (messageFormat == WebContentFormat.Json)
-            {
-                reader = JsonReaderWriterFactory.CreateJsonReader(ms, XmlDictionaryReaderQuotas.Max);
-            }
-            else
-            {
-                reader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max);
-            }
-
-            Message newMessage = Message.CreateMessage(reader, int.MaxValue, message.Version);
-            newMessage.Properties.CopyProperties(message.Properties);
-            message = newMessage;
-
-            return messageBody;
-        }
-
-        private string ReadRawBody(ref Message message)
-        {
-            XmlDictionaryReader bodyReader = message.GetReaderAtBodyContents();
-            bodyReader.ReadStartElement("Binary");
-            byte[] bodyBytes = bodyReader.ReadContentAsBase64();
-            string messageBody = Encoding.UTF8.GetString(bodyBytes);
-
-            // Now to recreate the message
-            MemoryStream ms = new MemoryStream();
-            XmlDictionaryWriter writer = XmlDictionaryWriter.CreateBinaryWriter(ms);
-            writer.WriteStartElement("Binary");
-            writer.WriteBase64(bodyBytes, 0, bodyBytes.Length);
-            writer.WriteEndElement();
-            writer.Flush();
-            ms.Position = 0;
-            XmlDictionaryReader reader = XmlDictionaryReader.CreateBinaryReader(ms, XmlDictionaryReaderQuotas.Max);
-            Message newMessage = Message.CreateMessage(reader, int.MaxValue, message.Version);
-            newMessage.Properties.CopyProperties(message.Properties);
-            message = newMessage;
-
-            return messageBody;
-        }
-
+  
       
 
 
@@ -389,7 +321,7 @@ namespace Anewluv.Api
             }
         }
 
-
+        //old way of validating, now we will use a new method so we can get the profile ID and validate it against the message body JSON
         static bool ValidateUser(OperationContext operationContext)
         {
             var authinfo = GetUserNamePassword(operationContext);
@@ -413,6 +345,31 @@ namespace Anewluv.Api
                 //var result = Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
                //.0 Api.DisposeAuthenticationService();
                // return IsUserValidated;
+        }
+
+        static int ValidateUserAndGetProfileID(OperationContext operationContext)
+        {
+            var authinfo = GetUserNamePassword(operationContext);
+
+            if (authinfo != null)
+            {
+                //TO DO convert to asynch
+                // AnewluvContext AnewluvContext = new AnewluvContext();
+                //  var IsUserValidated = false;
+                ////  using (var tempdb = new  AnewluvContext())
+                //  {
+                //  AuthenticationService AuthenticationService = new AuthenticationService(tempdb);
+                var dd = AsyncCalls.getprofileidbyusernamepassword(authinfo[0], authinfo[1]);
+                return dd.Result;
+                // bool result = await returnedTaskTResult;
+                // IsApiKeyValid = await 
+                // return result;                   
+
+            }
+            return 0;
+            //var result = Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
+            //.0 Api.DisposeAuthenticationService();
+            // return IsUserValidated;
         }
 
         public string GetAPIKey(OperationContext operationContext)

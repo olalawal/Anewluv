@@ -76,6 +76,18 @@ namespace Anewluv.Api
         #endregion
 
         #region "Auth API asynch or other calls"
+
+
+        public static async Task<int> getprofileidbyusernamepassword(string username, string password)
+        {
+            Task<int> returnedTaskTResult = Api.AuthenticationService.getprofileidbyusernamepassword(new ProfileModel { username = username, password = password });
+            int result = await returnedTaskTResult;
+            // IsApiKeyValid = await 
+            return result;
+
+        }
+
+        //old method that returned bool, now we want profileid to validate agains body
         public static async Task<bool> validateuserbyusernamepasswordasync(string username,string password)
         {
          Task<bool> returnedTaskTResult =  Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = username, password = password });

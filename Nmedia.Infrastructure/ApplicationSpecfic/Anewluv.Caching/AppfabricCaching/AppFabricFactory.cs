@@ -2084,8 +2084,6 @@ namespace Anewluv.Caching
                 
                 return genders;
             }
-
-
             public static List<age> getagelist()
             {
                 DataCache dataCache;
@@ -2262,6 +2260,34 @@ namespace Anewluv.Caching
                     if (dataCache != null) dataCache.Put("haircolorlist", haircolor);
 
                 } return haircolor;
+            }
+            public static List<lu_hotfeature> gethotfeaturelist(IUnitOfWork context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<lu_hotfeature> hotfeature = null;
+                try { if (dataCache != null)hotfeature = dataCache.Get("hotfeaturelist") as List<lu_hotfeature>; }
+                catch (DataCacheException ex)
+                {
+                    throw new InvalidOperationException();
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                    throw;
+                }
+                if (hotfeature == null)
+                {
+                    //context context = new context();
+                    //remafill the ages list from the repositry and exit
+                    hotfeature = context.GetRepository<lu_hotfeature>().Find().OrderBy(x => x.description).ToList();
+                    // Datings context = new modelContext();
+                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    if (dataCache != null) dataCache.Put("hotfeaturelist", hotfeature);
+
+                } return hotfeature;
             }
 
             #endregion

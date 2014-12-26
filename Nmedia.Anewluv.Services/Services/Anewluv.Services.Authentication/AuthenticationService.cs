@@ -1464,7 +1464,7 @@ namespace Anewluv.Services.Authentication
         #endregion
 
 
-        #region "Extra Methods added to interface to clean up MVC controllers that do member stuff as well as methods custom to anewluv"
+        #region "Extra  methods custom to anewluv"
 
         //1-8-2013 olawal addedrobust method for activating profiles
         public async Task<AnewluvResponse> activateprofile(activateprofilemodel model)
@@ -1665,7 +1665,7 @@ namespace Anewluv.Services.Authentication
 
         }
 
-        public AnewluvResponse recoveractivationcode(activateprofilemodel model)
+        public async Task<AnewluvResponse> recoveractivationcode(activateprofilemodel model)
         {
 
             profile profile = new profile();
@@ -1679,6 +1679,10 @@ namespace Anewluv.Services.Authentication
                 {
                     try
                     {
+
+                               var task = Task.Factory.StartNew(() =>
+                    {
+
                         AnewluvMessages messages = new AnewluvMessages();
                        // messages.messages = "";
                         messages.errormessages = null;
@@ -1740,6 +1744,9 @@ namespace Anewluv.Services.Authentication
 
 
                         return response;
+
+                    });
+                               return await task.ConfigureAwait(false);
                         //return messages;
                     }
                     catch (Exception ex)
@@ -1838,68 +1845,14 @@ namespace Anewluv.Services.Authentication
                         //check if decrypted string macthed username to upper  + secret
                         if (actualpasswordstring == decryptedPassword)
                         {
-                            //log the user logtime here so it is common to silverlight and MVC                  
-                            if (HttpContext.Current != null)
-                            {
-                                //Just for testing that it worked
-                                //TO DO remove when in prod
-                                AsyncCallback callback = result =>
-                                {
-                                    //we dont do anything really with the callback so not needed really
-                                    //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
-                                };
+                           //No need to log this since its used the APIkey inspector on checkascccesscore
 
-
-                                AnewluvContext AnewluvContext = new AnewluvContext();
-                                using (var tempdb = AnewluvContext)
-                                {
-                                    MemberService MemberService = new MemberService(tempdb);
-                                    MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }).Start();
-                                }
-                            }
-                            else
-                            {
-
-
-                                //Just for testing that it worked
-                                //TO DO remove when in prod
-                                AsyncCallback callback = result =>
-                                {
-                                    //we dont do anything really with the callback so not needed really
-                                    //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
-                                };
-
-                                //use anew  the same DB context
-                                AnewluvContext AnewluvContext = new AnewluvContext();
-                                using (var tempdb = AnewluvContext)
-                                {
-                                    MemberService MemberService = new MemberService(tempdb);
-                                    MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }).Start();
-                                    //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
-                                }
-                            }
-
-
-                            //TO DO get geodata from IP address down the line
-                            //also update profile activity
-                            //MemberService.Beginaddprofileactvity(
-                            //  new profileactivity
-                            //  {
-                            //      lu_activitytype = db.GetRepository<lu_activitytype>().FindSingle(p => p.id == (int)activitytypeEnum.login)
-                            //      ,
-                            //      creationdate = DateTime.Now,
-                            //      profile_id = myQuery.id,
-                            //      ipaddress = HttpContext.Current.Request.UserHostAddress,
-                            //      routeurl = HttpContext.Current.Request.RawUrl,
-                            //      sessionid = HttpContext.Current != null ? HttpContext.Current.Session.SessionID : null
-                            //  }, null, MemberService);
-
-                            //also update the profiledata for the last login date
-                            return 0;
+                            //return the profile ID so it can be used for whatver
+                            return myQuery.id;
                         }
                         else
                         {
-                            return 1;
+                            return 0;
                         }
                     });
                     return await task.ConfigureAwait(false);
