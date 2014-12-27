@@ -185,6 +185,7 @@ namespace Anewluv.Services.Edit
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
             {
+                //if (searchmodel.profileid == 0) return null;
 
                 try
                 {
@@ -327,10 +328,10 @@ namespace Anewluv.Services.Edit
                 searchsetting p = new searchsetting();
 
                 allsearchsettings = db.GetRepository<searchsetting>().Find().Where
-                (z => (searchmodel.searchid != null && z.id == searchmodel.searchid) ||
-                (searchmodel.profileid != null && (z.profile_id == searchmodel.profileid))).ToList();
+                (z => (searchmodel.searchid != 0 && z.id == searchmodel.searchid) ||
+                (searchmodel.profileid != 0 && (z.profile_id == searchmodel.profileid))).ToList();
 
-                if (allsearchsettings.Count() > 0 && searchmodel.searchname != "")
+                if (allsearchsettings.Count() > 0 & searchmodel.searchname != null )//|searchmodel.searchname != ""  )
                 {
                     p = allsearchsettings.Where(z => z.searchname == searchmodel.searchname).FirstOrDefault();
                 }
@@ -367,23 +368,23 @@ namespace Anewluv.Services.Edit
                     
 
                     //get all the showmes so we can deterimine which are checked and which are not
-                    var showmelist =  CachingFactory.SharedObjectHelper.getshowmelist(db);
+                    var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(db);
                     var genderlist = CachingFactory.SharedObjectHelper.getgenderlist(db);
                     var sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(db);
 
                     model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
                     model.agemax = p.agemax == null ? 99 : p.agemax.GetValueOrDefault();
-                                                      
+                    model.creationdate = p.creationdate == null ? (DateTime?)null : p.creationdate.GetValueOrDefault();                 
                     model.distancefromme=  p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();
                     model.lastupdatedate = p.lastupdatedate == null ? DateTime.Now : p.lastupdatedate;
                     model.searchname = p.searchname == null ? "Default" : p.searchname;
                     model.searchrank = p.searchrank == null ? 1 : p.searchrank;
                     model.myperfectmatch = p.myperfectmatch == null ? true : p.myperfectmatch;
                     model.systemmatch = p.systemmatch == null ? false : p.systemmatch;
-                    model.showmelist = showmelist.ToList();  //this is all the blank values
-                    //other way using a single var
-                    model.genderlist = genderlist;
-                    model.sortbylist = sortbylist;
+                   
+                    model.showmelist =  showmelist.ToList().Select(o => new lu_showme { id = o.id, description= o.description, isselected = false }).ToList();                  
+                    model.genderlist = genderlist.ToList().Select(o => new lu_gender { id = o.id, description= o.description, isselected = false }).ToList();
+                    model.sortbylist = sortbylist.ToList().Select(o => new lu_sortbytype  {  id = o.id, description= o.description, isselected = false }).ToList();
             
                 
                     //update the list with the items that are selected.
@@ -416,27 +417,7 @@ namespace Anewluv.Services.Edit
                     {
                         model.locationlist.Add(item);
                     }
-                    // memory intensive way to do this
-                    //foreach (var item in showmelist)  //p.searchsetting_showme)
-                    //{
-                    //    //find the matching id item in the user's saved search settings to add to the list to be passed back i.e checked items 
-                    //    if (p.searchsetting_showme.Count() > 0)
-                    //    {
-                    //        foreach (var item2 in p.searchsetting_showme)
-                    //        {
-                    //            if (item.id == item2.showme_id)
-                    //            {
-                    //                item.isselected = true;
-                    //                model.showmelist.Add(item);
-                    //            }
-                    //           // model.showmelist.Add(item);
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        model.showmelist.Add(item);
-                    //    }
-                    //}
+                    
 
                 return model;
 
@@ -480,7 +461,14 @@ namespace Anewluv.Services.Edit
 
                 model.heightmax = p.heightmax == null ? 210 : p.heightmax;
                 model.heightmin = p.heightmin == null ? 100 : p.heightmin;
-              
+
+                model.ethnicitylist = ethnicitylist.ToList().Select(o => new lu_ethnicity { id = o.id, description = o.description, isselected = false }).ToList();
+                model.bodytypeslist = bodytypelist.ToList().Select(o => new lu_bodytype { id = o.id, description = o.description, isselected = false }).ToList();
+                model.eyecolorlist = eyecolorlist.ToList().Select(o => new lu_eyecolor { id = o.id, description = o.description, isselected = false }).ToList();
+                model.haircolorlist = haircolorlist.ToList().Select(o => new lu_haircolor { id = o.id, description = o.description, isselected = false }).ToList();
+                model.hotfeaturelist = hotfeaturelist.ToList().Select(o => new lu_hotfeature { id = o.id, description = o.description, isselected = false }).ToList(); 
+
+               
 
                 //pilot how to show the rest of the values 
                 //sample of doing string values
@@ -560,8 +548,19 @@ namespace Anewluv.Services.Edit
                 var signlist = CachingFactory.SharedObjectHelper.getsignlist(db);
                 var politicalviewlist = CachingFactory.SharedObjectHelper.getpoliticalviewlist(db);
                 var religionlist = CachingFactory.SharedObjectHelper.getreligionlist(db);
-                var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(db); 
-          
+                var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(db);
+
+                model.humorlist = humorlist.ToList().Select(o => new lu_humor { id = o.id, description = o.description, isselected = false }).ToList();
+                model.dietlist = dietlist.ToList().Select(o => new lu_diet { id = o.id, description = o.description, isselected = false }).ToList();
+                model.hobbylist = hobbylist.ToList().Select(o => new lu_hobby { id = o.id, description = o.description, isselected = false }).ToList();
+                model.drinkslist = drinklist.ToList().Select(o => new lu_drinks { id = o.id, description = o.description, isselected = false }).ToList();
+                model.exerciselist = exerciselist.ToList().Select(o => new lu_exercise { id = o.id, description = o.description, isselected = false }).ToList();
+                model.smokeslist = smokeslist.ToList().Select(o => new lu_smokes { id = o.id, description = o.description, isselected = false }).ToList();
+                model.signlist = signlist.ToList().Select(o => new lu_sign { id = o.id, description = o.description, isselected = false }).ToList();
+                model.politicalviewlist = politicalviewlist.ToList().Select(o => new lu_politicalview { id = o.id, description = o.description, isselected = false }).ToList();
+                model.religionlist = religionlist.ToList().Select(o => new lu_religion { id = o.id, description = o.description, isselected = false }).ToList();
+                model.religiousattendancelist = religiousattendancelist.ToList().Select(o => new lu_religiousattendance { id = o.id, description = o.description, isselected = false }).ToList();
+
               
                 //update the list with the items that are selected.
                 foreach (lu_humor humor in humorlist.Where(c => p.searchsetting_humor.Any(f => f.humor_id == c.id)))
@@ -679,6 +678,18 @@ namespace Anewluv.Services.Edit
                 var maritialstatuslist = CachingFactory.SharedObjectHelper.getmaritalstatuslist(db); 
                 var professionlist = CachingFactory.SharedObjectHelper.getprofessionlist(db);
                 var wantkidslist = CachingFactory.SharedObjectHelper.getwantskidslist(db);
+
+
+                model.educationlevellist = educationlevellist.ToList().Select(o => new lu_educationlevel { id = o.id, description = o.description, isselected = false }).ToList();
+                   model. lookingforlist = lookingforlist.ToList().Select(o => new lu_lookingfor { id = o.id, description = o.description, isselected = false }).ToList();
+                   model. employmentstatuslist = employmentstatuslist.ToList().Select(o => new lu_employmentstatus { id = o.id, description = o.description, isselected = false }).ToList();
+                   model. havekidslist = havekidslist.ToList().Select(o => new lu_havekids { id = o.id, description = o.description, isselected = false }).ToList();
+                   model. incomelevellist = incomelevellist.ToList().Select(o => new lu_incomelevel { id = o.id, description = o.description, isselected = false }).ToList();
+                   model. livingsituationlist = livingsituationlist.ToList().Select(o => new lu_livingsituation { id = o.id, description = o.description, isselected = false }).ToList();
+                   model.maritalstatuslist = maritialstatuslist.ToList().Select(o => new lu_maritalstatus { id = o.id, description = o.description, isselected = false }).ToList();
+                   model. professionlist = professionlist.ToList().Select(o => new lu_profession { id = o.id, description = o.description, isselected = false }).ToList();
+                   model.wantskidslist = wantkidslist.ToList().Select(o => new lu_wantskids { id = o.id, description = o.description, isselected = false }).ToList();
+
 
                 //update the list with the items that are selected.
                 foreach (lu_educationlevel educationlevel in educationlevellist.Where(c => p.searchsetting_educationlevel.Any(f => f.educationlevel_id == c.id)))

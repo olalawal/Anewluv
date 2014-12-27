@@ -12,7 +12,7 @@ namespace Anewluv.Api
 {
     public static class  Utilities
     {
-        public static string MessageToString(ref Message message)
+        public static string MessageToString( Message message)
         {
             WebContentFormat messageFormat = GetMessageContentFormat(message);
             MemoryStream ms = new MemoryStream();

@@ -53,7 +53,7 @@ namespace Anewluv.Api
 
         //TO DO re-activate this code when you complete basic testing
         //2-15-2013 olawal validate username password for some URI's
-        protected override bool CheckAccessCore(OperationContext operationContext)
+        public override bool CheckAccess(OperationContext operationContext, ref Message message)
         {
            // string[] authinfo;
 
@@ -66,12 +66,17 @@ namespace Anewluv.Api
                 //if its preflight allow all
                 //if (OperationContext.Current.RequestContext  == "OPTIONS")
 
+
+                //store the message here so we can parse body
+                MessageBuffer buffer = operationContext.RequestContext.RequestMessage.CreateBufferedCopy(8192);
+                message = buffer.CreateMessage();
+                Message internalCopy = buffer.CreateMessage();
+                buffer.Close();
+
                 if (OperationContext.Current != null)
                 {
                     const String HttpRequestKey = "httpRequest";
-                    const String MethodName = "OPTIONS";
-                    
-
+                    const String MethodName = "OPTIONS"; 
                     MessageProperties messageProperties = OperationContext.Current.IncomingMessageProperties;
 
 
@@ -114,10 +119,12 @@ namespace Anewluv.Api
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Logging");
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Notification");
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Authorization");
-                nonauthenticatedURLS.Add("updateuserlogintimebyprofileidandsessionid");
+                //these methods use internal rest calls so need to be excluded
+                nonauthenticatedURLS.Add("updateuserlogintimebyprofileidandsessionid");  // do this this way until we determine how to add headers
+                nonauthenticatedURLS.Add("getprofileidbyusernamepassword");  //internal call no auth required
+
                 //allow calls to API key auth
-                apikeyonlyURLS.Add("Anewluv.Web.Services.Authentication");
-                                   //"Anewluv.Web.Services.Authentication"
+                apikeyonlyURLS.Add("Anewluv.Web.Services.Authentication");                                  
                 apikeyonlyURLS.Add("Anewluv.Web.Services.Common");
                 apikeyonlyURLS.Add("Anewluv.Web.Services.Spatial");
                 apikeyonlyURLS.Add("/Anewluv.Web.Services.Media/PhotoService.svc/Rest/addphotos");  //everyone can call addphotos
@@ -200,25 +207,30 @@ namespace Anewluv.Api
                             {
                                 //TO DO check if the call body has a profileid in the request body to make sure the user can access the revevant data being called for.
                                 //if so return use a diffeernt validation call that returns the profileID so we can match against the passed on.
-                                Message msg = OperationContext.Current.RequestContext.RequestMessage.CreateBufferedCopy(Int32.MaxValue).CreateMessage();
+                               // Message msg = OperationContext.Current.RequestContext.RequestMessage.CreateBufferedCopy(Int32.MaxValue).CreateMessage();
+
+                              
+                                                   
 
                                 //if we have a body look for the profileid
-                                if (!msg.IsEmpty)
+                                if (!internalCopy.IsEmpty)
                                 {
-                                    var dd = Utilities.MessageToString(ref msg);
+
+                                    var dd = Utilities.MessageToString(internalCopy);
                                     //get the profile id and map and other values as needed to the model if it exists otherwise no nothing
                                     if (dd != "" && dd.Contains("profileid"))
                                     {
                                         ProfileModel = JsonExtentionsMethods.Deserialize<ProfileModel>(dd);
                                     }
 
-                                    msg.Close();  //kill this since we need it no more.
+                                   // msg.Close();  //kill this since we need it no more.
                                 }
                                 
                                 //TO DO code here to call the other method that gets the profileid and valiates that the username password
                                 //combo has the same profileID and send no error reply but bad request the method is : 
                                //Task<int> getprofileidbyusernamepassword(ProfileModel profile); 
-
+                                 
+                                //buffer.Close();
                               
 
                                 //now validate the username password info if required 
@@ -280,7 +292,7 @@ namespace Anewluv.Api
                 //logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null);
                 //log error mesasge
                 //handle logging here
-                var message = ex.Message;
+                var message2 = ex.Message;
                 throw;
 
             }

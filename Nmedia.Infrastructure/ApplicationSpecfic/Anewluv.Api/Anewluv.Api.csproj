@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="ApiKeyAuthorization.cs" />
     <Compile Include="AsyncCalls.cs" />
+    <Compile Include="MessageInspectors\Inspectors.cs" />
     <Compile Include="MessageInspectors\Utilities.cs" />
     <Compile Include="samplemessageinspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

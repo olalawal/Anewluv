@@ -1819,7 +1819,7 @@ namespace Anewluv.Services.Authentication
                         }
                         else
                         {
-                            return 1;
+                            return 0;
                         }
 
                         //case for if the user account was created before encrpyption algorithm was changed
@@ -1856,9 +1856,6 @@ namespace Anewluv.Services.Authentication
                         }
                     });
                     return await task.ConfigureAwait(false);
-
-
-
 
 
 

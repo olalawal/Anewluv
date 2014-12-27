@@ -15,6 +15,24 @@ namespace Anewluv.Api
     public static class Api
     {
 
+
+   //TO DO implemext proxy like this so we can pass the headers via the proxy
+    //    // Create the wcf client proxy
+    //var proxy = new HelloSvc.HelloWorldServiceClient();
+
+    //using (var scope = new OperationContextScope(proxy.InnerChannel))
+    //{
+    //    // Create a custom soap header
+    //    var msgHeader = MessageHeader.CreateHeader("myheader", "url:test:wcf", "some test value...", false);
+    //    // Add the header into request message
+    //    OperationContext.Current.OutgoingMessageHeaders.Add(msgHeader);
+
+    //    var products = await proxy.GetProductsAsync(3);
+
+    //    Debug.WriteLine("Got {0} products", products.Count);
+    //}
+
+
         public static System.Exception LastException = null;
 
         public static string ApplicationPath = "";
@@ -184,7 +202,10 @@ namespace Anewluv.Api
                 if (_authenticationservice == null || _authenticationservice.State == CommunicationState.Closed || _authenticationchannel == null)
                 {
                     _authenticationservice = new WebChannelFactory<IAuthenticationService>("webHttpBinding_IAuthenticationService");
+                    
+
                     _authenticationchannel = _authenticationservice.CreateChannel();
+                    
                     return _authenticationchannel;
 
                 }
