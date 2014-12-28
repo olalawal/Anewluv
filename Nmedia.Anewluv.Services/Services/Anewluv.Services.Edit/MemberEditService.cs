@@ -380,6 +380,64 @@ namespace Anewluv.Services.Edit
 
         #region "Edit profile Public methods here "
 
+        //global profile upddate
+        public async Task<AnewluvMessages> membereditallsettings(EditProfileModel editprofilemodel)
+        {
+
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+                            profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
+
+                            //create a new messages object
+                            AnewluvMessages messages = new AnewluvMessages();
+
+                            messages = (updatememberbasicsettings(editprofilemodel.basicsettings, p, messages, db));
+                            messages = (updatememberappearancesettings(editprofilemodel.appearancesettings, p, messages, db));
+                            messages = (updatemembercharactersettings (editprofilemodel.charactersettings, p, messages, db));
+                            messages = (updatememberlifestylesettings(editprofilemodel.lifestylesettings, p, messages, db));
+
+                            if (messages.errormessages.Count > 0)
+                            {
+                                messages.errormessages.Add("There was a problem Editing your profile settings, Please try again later");
+                                return messages;
+                            }
+                            messages.messages.Add("Edit profile Settings Successful");
+                            return messages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.EditSearchService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
+                        }
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+
+
+
+        }
+
         public async Task<AnewluvMessages> membereditbasicsettings(EditProfileModel editprofilemodel)
         {
 
@@ -434,7 +492,7 @@ namespace Anewluv.Services.Edit
           
         }
 
-        public async Task<AnewluvMessages> membereditappearancesettings(EditProfileModel editprofilemode)
+        public async Task<AnewluvMessages> membereditappearancesettings(EditProfileModel editprofilemodel)
         {
 
             using (var db = _unitOfWork)
@@ -452,9 +510,9 @@ namespace Anewluv.Services.Edit
 
 
                         //get the profile details :
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemode.profileid).First();
+                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).First();
 
-                        messages = (updatememberappearancesettings(editprofilemode.appearancesettings, p, messages,db));
+                        messages = (updatememberappearancesettings(editprofilemodel.appearancesettings, p, messages,db));
                         // messages = (membereditAppearanceSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditAppearanceSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditAppearanceSettingsPage4Update(newmodel, profileid, messages));
@@ -476,7 +534,7 @@ namespace Anewluv.Services.Edit
                         transaction.Rollback();
                         using (var logger = new  Logging(applicationEnum.EditMemberService))
                         {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
                         }
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
@@ -492,7 +550,7 @@ namespace Anewluv.Services.Edit
            
         }
 
-        public async Task<AnewluvMessages> membereditcharactersettings(EditProfileModel editprofilemode)
+        public async Task<AnewluvMessages> membereditcharactersettings(EditProfileModel editprofilemodel)
         {
 
             using (var db = _unitOfWork)
@@ -511,9 +569,9 @@ namespace Anewluv.Services.Edit
 
 
                         //get the profile details :
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemode.profileid).First();
+                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).First();
 
-                        messages = (updatemembercharactersettings(editprofilemode.charactersettings, p, messages, db));
+                        messages = (updatemembercharactersettings(editprofilemodel.charactersettings, p, messages, db));
                         // messages = (membereditcharacterSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditcharacterSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditcharacterSettingsPage4Update(newmodel, profileid, messages));
@@ -534,7 +592,7 @@ namespace Anewluv.Services.Edit
                         transaction.Rollback();
                         using (var logger = new Logging(applicationEnum.EditMemberService))
                         {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
                         }
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
@@ -551,7 +609,7 @@ namespace Anewluv.Services.Edit
 
         }
 
-        public async Task<AnewluvMessages> membereditlifestylesettings(EditProfileModel editprofilemode)
+        public async Task<AnewluvMessages> membereditlifestylesettings(EditProfileModel editprofilemodel)
         {
 
             using (var db = _unitOfWork)
@@ -567,10 +625,10 @@ namespace Anewluv.Services.Edit
                         //create a new messages object
                         AnewluvMessages messages = new AnewluvMessages();
                         //get the profile details :
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemode.profileid).First();
+                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).First();
 
 
-                        messages = (updatememberlifestylesettings(editprofilemode.lifestylesettings, p, messages,db));
+                        messages = (updatememberlifestylesettings(editprofilemodel.lifestylesettings, p, messages,db));
                         // messages = (membereditlifestyleSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditlifestyleSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditlifestyleSettingsPage4Update(newmodel, profileid, messages));
@@ -590,7 +648,7 @@ namespace Anewluv.Services.Edit
                         transaction.Rollback();
                         using (var logger = new  Logging(applicationEnum.EditMemberService))
                         {
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemode.profileid));
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
                         }
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");

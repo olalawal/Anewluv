@@ -15,6 +15,7 @@ namespace Anewluv.Domain.Data.ViewModels
        public  List<string> errormessages { get; set; }
         //TO DO allow for objects to comeback
 
+       
         public AnewluvMessages()
         {
             this.messages = new List<string>();

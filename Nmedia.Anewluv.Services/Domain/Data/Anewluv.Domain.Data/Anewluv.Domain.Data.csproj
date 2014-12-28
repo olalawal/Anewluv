@@ -272,7 +272,7 @@
     <Compile Include="Anewluv\ViewModels\SearchSettings\BasicSearchSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\SearchSettings\CharacterSearchSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\SearchSettings\LifeStyleSearchSettingsModel.cs" />
-    <Compile Include="Anewluv\ViewModels\SearchSettings\SearchSettingsViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\SearchSettings\SearchSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\UxMessages\UxMessageTypeModel.cs" />
     <Compile Include="Anewluv\ViewModels\ValidateRegistrationGeoDataModel.cs" />
     <Compile Include="Anewluv\visiblitysetting.cs" />

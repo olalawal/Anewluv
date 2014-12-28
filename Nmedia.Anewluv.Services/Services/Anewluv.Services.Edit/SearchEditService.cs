@@ -37,7 +37,7 @@ namespace Anewluv.Services.Edit
        // private Logging logger;
         private LoggingLibrary.Logging logger;
 
-        //  private IMemberActionsRepository  _memberactionsrepository;
+        //  private IMemberActionsRepository  _searchsettingsactionsrepository;
         // private string _apikey;
 
         public SearchEditService(IUnitOfWork unitOfWork)
@@ -62,7 +62,8 @@ namespace Anewluv.Services.Edit
 
         }
 
-        public async Task<searchsetting> getsearchsettings(SearchSettingsViewModel model)
+        #region "search getter methods"
+        public async Task<searchsetting> getsearchsettings(SearchSettingsModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -96,7 +97,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<List<searchsetting>> getallsearchsettingsbyprofileid(SearchSettingsViewModel searchmodel)
+        public async Task<List<searchsetting>> getallsearchsettingsbyprofileid(SearchSettingsModel searchmodel)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -130,7 +131,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<SearchSettingsViewModel> getsearchsettingsviewmodel(SearchSettingsViewModel searchmodel)
+        public async Task<SearchSettingsModel> getsearchsettingsviewmodel(SearchSettingsModel searchmodel)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -180,7 +181,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<BasicSearchSettingsModel> getbasicsearchsettings(SearchSettingsViewModel searchmodel)
+        public async Task<BasicSearchSettingsModel> getbasicsearchsettings(SearchSettingsModel searchmodel)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -214,7 +215,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<AppearanceSearchSettingsModel> getappearancesearchsettings(SearchSettingsViewModel searchmodel)
+        public async Task<AppearanceSearchSettingsModel> getappearancesearchsettings(SearchSettingsModel searchmodel)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -248,7 +249,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<CharacterSearchSettingsModel> getcharactersearchsettings(SearchSettingsViewModel searchmodel)
+        public async Task<CharacterSearchSettingsModel> getcharactersearchsettings(SearchSettingsModel searchmodel)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -282,7 +283,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        public async Task<LifeStyleSearchSettingsModel> getlifestylesearchsettings(SearchSettingsViewModel searchmodel)
+        public async Task<LifeStyleSearchSettingsModel> getlifestylesearchsettings(SearchSettingsModel searchmodel)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -314,11 +315,292 @@ namespace Anewluv.Services.Edit
                 }
             }
         }       
+#endregion
+
+        #region "search update methods exposed"
+
+        //global search upddate
+        public async Task<AnewluvMessages> searcheditallsettings(SearchSettingsModel model)
+        {
+
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+                            //create a new messages object
+                            AnewluvMessages messages = new AnewluvMessages();
+
+
+                            //get the profile details :
+                            //AnewluvMessages messages = new AnewluvMessages();
+                            searchsetting p = this.filtersearchsettings(model, db);
+                            messages = (updatebasicsearchsettings(model.basicsearchsettings,p, messages, db));
+                            messages = (updateappearancesearchsettings(model.appearancesearchsettings, p, messages, db));
+                            messages = (updatecharactersearchsettings(model.charactersearchsettings, p, messages, db));
+                            messages = (updatelifestylesearchsettings(model.lifestylesearchsettings, p, messages, db));
+                           
+
+                            if (messages.errormessages.Count > 0)
+                            {
+                                messages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
+                                return messages;
+                            }
+                            messages.messages.Add("Edit character Settings Successful");
+                            return messages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.EditSearchService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                        }
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+
+
+
+        }
+
+        public async Task<AnewluvMessages> searcheditbasicsettings(SearchSettingsModel model)
+        {
+
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+                            //create a new messages object
+                            AnewluvMessages messages = new AnewluvMessages();
+
+
+                            searchsetting p = this.filtersearchsettings(model, db);
+                            messages = (updatebasicsearchsettings(model.basicsearchsettings, p, messages, db));
+                           
+
+                            if (messages.errormessages.Count > 0)
+                            {
+                                messages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
+                                return messages;
+                            }
+                            messages.messages.Add("Edit character Settings Successful");
+                            return messages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.EditSearchService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                        }
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+
+
+
+        }
+
+        public async Task<AnewluvMessages> searcheditappearancesettings(SearchSettingsModel model)
+        {
+
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                            //create a new messages object
+                            AnewluvMessages messages = new AnewluvMessages();
+
+                            searchsetting p = this.filtersearchsettings(model, db);                       
+                            messages = (updateappearancesearchsettings(model.appearancesearchsettings, p, messages, db));                          
+
+                            if (messages.errormessages.Count > 0)
+                            {
+                                messages.errormessages.Add("There was a problem Editing You Appearance Settings, Please try again later");
+                                return messages;
+                            }
+                            messages.messages.Add("Edit Appearance Settings Successful");
+                            return messages;
+
+                        });
+                        return await task.ConfigureAwait(false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.SearchService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                        }
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in search actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+
+
+        }
+
+        public async Task<AnewluvMessages> searcheditcharactersettings(SearchSettingsModel model)
+        {
+
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+                            //create a new messages object
+                            AnewluvMessages messages = new AnewluvMessages();
+
+                            searchsetting p = this.filtersearchsettings(model, db);                         
+                            messages = (updatecharactersearchsettings(model.charactersearchsettings, p, messages, db));
+                          
+
+                            if (messages.errormessages.Count > 0)
+                            {
+                                messages.errormessages.Add("There was a problem Editing You character Settings, Please try again later");
+                                return messages;
+                            }
+                            messages.messages.Add("Edit character Settings Successful");
+                            return messages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.EditMemberService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                        }
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+
+
+
+        }      
+
+        public async Task<AnewluvMessages> searcheditlifestylesettings(SearchSettingsModel model)
+        {
+           
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                            //create a new messages object
+                            AnewluvMessages messages = new AnewluvMessages();
+                            //get the profile details :
+                            searchsetting p = this.filtersearchsettings(model, db);                          
+                            messages = (updatelifestylesearchsettings(model.lifestylesearchsettings, p, messages, db));
+
+                            if (messages.errormessages.Count > 0)
+                            {
+                                messages.errormessages.Add("There was a problem Editing You lifestyle Settings, Please try again later");
+                                return messages;
+                            }
+                            messages.messages.Add("Edit lifestyle Settings Successful");
+                            return messages;
+                        });
+                        return await task.ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        using (var logger = new Logging(applicationEnum.EditMemberService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                        }
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in search actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+
+
+        }
+
+
+
+
+        #endregion
+
 
         #region "private get methods for reuses"
 
         //generic filtering function we can reuse
-        private searchsetting filtersearchsettings (SearchSettingsViewModel searchmodel,IUnitOfWork db)
+        private searchsetting filtersearchsettings (SearchSettingsModel searchmodel,IUnitOfWork db)
         {
 
             try
@@ -431,7 +713,7 @@ namespace Anewluv.Services.Edit
                 }
 
                 //can parse the error to build a more custom error mssage and populate fualt faultreason
-                FaultReason faultreason = new FaultReason("Error in member actions service");
+                FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
                 string ErrorMessage = "";
                 string ErrorDetail = "ErrorMessage: " + ex.Message;
                 throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -521,7 +803,7 @@ namespace Anewluv.Services.Edit
                 }
 
                 //can parse the error to build a more custom error mssage and populate fualt faultreason
-                FaultReason faultreason = new FaultReason("Error in member actions service");
+                FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
                 string ErrorMessage = "";
                 string ErrorDetail = "ErrorMessage: " + ex.Message;
                 throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -651,7 +933,7 @@ namespace Anewluv.Services.Edit
                 }
 
                 //can parse the error to build a more custom error mssage and populate fualt faultreason
-                FaultReason faultreason = new FaultReason("Error in member actions service");
+                FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
                 string ErrorMessage = "";
                 string ErrorDetail = "ErrorMessage: " + ex.Message;
                 throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -761,7 +1043,7 @@ namespace Anewluv.Services.Edit
                 }
 
                 //can parse the error to build a more custom error mssage and populate fualt faultreason
-                FaultReason faultreason = new FaultReason("Error in member actions service");
+                FaultReason faultreason = new FaultReason("Error in searchsettings actions service");
                 string ErrorMessage = "";
                 string ErrorDetail = "ErrorMessage: " + ex.Message;
                 throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
@@ -769,6 +1051,249 @@ namespace Anewluv.Services.Edit
         }
 
 #endregion
+
+
+        #region "private update methods for reuse so we can also combine in one call"
+
+        //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
+        private AnewluvMessages updatebasicsearchsettings(BasicSearchSettingsModel model,searchsetting p, AnewluvMessages messages, IUnitOfWork db)
+        {
+
+                bool nothingupdated = true;
+                try
+                {
+
+                 
+                     
+                        //create a new messages object
+                        if (p == null)
+                        {
+                            messages.errormessages.Add("There is no search with this parameters");
+                            return messages;
+                        }
+
+                        p.agemin = model.agemin;
+                        p.agemax = model.agemax;
+
+                        p.distancefromme = model.distancefromme;
+                        p.lastupdatedate = model.lastupdatedate;
+                        p.searchname = model.searchname;
+                        p.searchrank = model.searchrank;
+                        p.myperfectmatch = model.myperfectmatch;
+
+                        //checkbos item updates 
+                        if (p.searchsetting_gender.Count > 0)
+                            updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, db);
+                        if (p.searchsetting_showme.Count > 0)
+                            updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, db);
+                        if (p.searchsetting_showme.Count > 0)
+                            updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, db);
+                        if (p.searchsetting_location.Count > 0)
+                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
+
+                        db.Update(p);
+                        int i = db.Commit();
+
+                       // return messages;
+
+                 
+
+                }
+                catch (Exception ex)
+                {
+                    //handle logging here
+                    var message = ex.Message;
+                    throw ex;
+
+                }
+                return messages;
+
+            
+
+
+        }
+        //TO DO add validation and pass back via messages 
+
+        private AnewluvMessages updateappearancesearchsettings(AppearanceSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWork db)
+        {
+
+            try
+            {
+                  //  searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
+                    //create a new messages object
+                    if (p == null)
+                    {
+                        messages.errormessages.Add("There is no appearance search with this parameters");
+                        return messages;
+                    }
+
+                    p.heightmax = model.heightmin;
+                    p.heightmax = model.heightmax;
+                    //checkbos item updates 
+                    if (p.searchsetting_ethnicity.Count > 0)
+                        updatesearchsettingsethnicity(p.searchsetting_ethnicity.ToList(), p, db);
+                    if (p.searchsetting_bodytype.Count > 0)
+                        updatesearchsettingsbodytypes(p.searchsetting_bodytype.ToList(), p, db);
+                    if (p.searchsetting_eyecolor.Count > 0)
+                        updatesearchsettingseyecolor(p.searchsetting_eyecolor.ToList(), p, db);
+                    if (p.searchsetting_haircolor.Count > 0)
+                        updatesearchsettingshaircolor(p.searchsetting_haircolor.ToList(), p, db);
+                    if (p.searchsetting_hotfeature.Count > 0)
+                        updatesearchsettingshotfeature(p.searchsetting_hotfeature.ToList(), p, db);
+
+                    db.Update(p);
+                    int i = db.Commit();
+
+                  //  return messages;
+            }
+            catch (Exception ex)
+            {
+                    //handle logging here
+                    var message = ex.Message;
+                    throw ex;
+
+            }
+            return messages;
+
+        }
+
+        private AnewluvMessages updatecharactersearchsettings(CharacterSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWork db)
+        {
+         
+                try
+                {
+
+                   
+                       // AnewluvMessages messages = new AnewluvMessages();
+                      //  searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
+                        //create a new messages object
+                        if (p == null)
+                        {
+                            messages.errormessages.Add("There is no search with this parameters");
+                            return messages;
+                        }
+
+
+                        //checkbos item updates 
+                        if (p.searchsetting_diet.Count > 0)
+                            updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, db);
+
+                        if (p.searchsetting_humor.Count > 0)
+                            updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, db);
+
+                        if (p.searchsetting_hobby.Count > 0)
+                            updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, db);
+
+                        if (p.searchsetting_drink.Count > 0)
+                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
+                        if (p.searchsetting_exercise.Count > 0)
+                            updatesearchsettingsexercise(p.searchsetting_exercise.ToList(), p, db);
+
+                        if (p.searchsetting_smokes.Count > 0)
+                            updatesearchsettingssmokes(p.searchsetting_smokes.ToList(), p, db);
+
+                        if (p.searchsetting_sign.Count > 0)
+                            updatesearchsettingssign(p.searchsetting_sign.ToList(), p, db);
+
+                        if (p.searchsetting_politicalview.Count > 0)
+                            updatesearchsettingspoliticalview(p.searchsetting_politicalview.ToList(), p, db);
+
+                        if (p.searchsetting_religion.Count > 0)
+                            updatesearchsettingsreligion(p.searchsetting_religion.ToList(), p, db);
+
+                        if (p.searchsetting_religiousattendance.Count > 0)
+                            updatesearchsettingsreligiousattendance(p.searchsetting_religiousattendance.ToList(), p, db);
+
+
+
+
+                        int i = db.Commit();
+
+
+               
+
+                }
+                 catch (Exception ex)
+            {
+                //handle logging here
+                var message = ex.Message;
+                throw ex;
+
+            }
+            return messages;
+     
+
+
+        }
+
+        private AnewluvMessages updatelifestylesearchsettings(LifeStyleSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWork db)
+        {
+           
+                try
+                {
+
+                   
+                       // AnewluvMessages messages = new AnewluvMessages();
+                        //searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
+                        //create a new messages object
+                        if (p == null)
+                        {
+                            messages.errormessages.Add("There is no search with this parameters, lifestype searchs");
+                            return messages;
+                        }
+
+
+                        //checkbos item updates 
+                        if (p.searchsetting_educationlevel.Count > 0)
+                            updatesearchsettingseducationlevel(p.searchsetting_educationlevel.ToList(), p, db);
+
+                        if (p.searchsetting_lookingfor.Count > 0)
+                            updatesearchsettingslookingfor(p.searchsetting_lookingfor.ToList(), p, db);
+
+                        if (p.searchsetting_havekids.Count > 0)
+                            updatesearchsettingshavekids(p.searchsetting_havekids.ToList(), p, db);
+
+                        if (p.searchsetting_incomelevel.Count > 0)
+                            updatesearchsettingsincomelevel(p.searchsetting_incomelevel.ToList(), p, db);
+
+                        if (p.searchsetting_livingstituation.Count > 0)
+                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+
+                        if (p.searchsetting_location.Count > 0)
+                            updatesearchsettingslivingsituation(p.searchsetting_livingstituation.ToList(), p, db);
+
+                        if (p.searchsetting_maritalstatus.Count > 0)
+                            updatesearchsettingsmaritalstatus(p.searchsetting_maritalstatus.ToList(), p, db);
+
+                        if (p.searchsetting_profession.Count > 0)
+                            updatesearchsettingsprofession(p.searchsetting_profession.ToList(), p, db);
+
+                        if (p.searchsetting_wantkids.Count > 0)
+                            updatesearchsettingswantskids(p.searchsetting_wantkids.ToList(), p, db);
+
+
+                        int i = db.Commit();
+
+
+
+                }
+                  catch (Exception ex)
+                {
+                    //handle logging here
+                    var message = ex.Message;
+                    throw ex;
+
+                }
+            return messages;
+            
+
+
+        }
+
+
+        #endregion
 
         #region "PRIVATE Checkbox Update Functions for seaerch settings many to many"
 
@@ -1775,304 +2300,7 @@ namespace Anewluv.Services.Edit
 
         #endregion
 
-        #region "edit methods for search settings"
-
-        //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-        public async Task<AnewluvMessages> updatebasicsearchsettings(BasicSearchSettingsModel model)
-        {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-
-                    var task = Task.Factory.StartNew(() =>
-                    {
-                        AnewluvMessages messages = new AnewluvMessages();
-                        searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
-                        //create a new messages object
-                        if (p == null)
-                        {
-                            messages.errormessages.Add("There is no search with this parameters");
-                            return messages;
-                        }
-
-                        p.agemin = model.agemin;
-                        p.agemax = model.agemax;
-
-                        p.distancefromme = model.distancefromme;
-                        p.lastupdatedate = model.lastupdatedate;
-                        p.searchname = model.searchname;
-                        p.searchrank = model.searchrank;
-                        p.myperfectmatch = model.myperfectmatch;
-
-                        //checkbos item updates 
-                        if (p.searchsetting_gender.Count > 0)
-                            updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, db);
-                        if (p.searchsetting_showme.Count > 0)
-                            updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, db);
-                        if (p.searchsetting_showme.Count > 0)
-                            updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, db);
-                        if (p.searchsetting_location.Count > 0)
-                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
-
-
-                        db.Update(p);
-                        int i = db.Commit();
-
-                        return messages;
-
-
-                    });
-                    return await task.ConfigureAwait(false);
-
-                }
-                //TOD DO
-                //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-                //return newmodel;                    
-                catch (Exception ex)
-                {
-                    //instantiate logger here so it does not break anything else.
-                    logger = new Logging(applicationEnum.EditSearchService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in photo service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-            }
-
-
-        }
-        //TO DO add validation and pass back via messages 
-
-        public async Task<AnewluvMessages> updateappearancesearchsettings(AppearanceSearchSettingsModel model)
-        {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-
-                    var task = Task.Factory.StartNew(() =>
-                    {
-                        AnewluvMessages messages = new AnewluvMessages();
-                        searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
-                        //create a new messages object
-                        if (p == null)
-                        {
-                            messages.errormessages.Add("There is no appearance search with this parameters");
-                            return messages;
-                        }
-
-                        p.heightmax = model.heightmin;
-                        p.heightmax = model.heightmax;
-
-                        //checkbos item updates 
-                        if (p.searchsetting_ethnicity.Count > 0)
-                            updatesearchsettingsethnicity(p.searchsetting_ethnicity.ToList(), p, db);
-                        if (p.searchsetting_bodytype.Count > 0)
-                            updatesearchsettingsbodytypes(p.searchsetting_bodytype.ToList(), p, db);
-                        if (p.searchsetting_eyecolor.Count > 0)
-                            updatesearchsettingseyecolor(p.searchsetting_eyecolor.ToList(), p, db);
-                        if (p.searchsetting_haircolor.Count > 0)
-                            updatesearchsettingshaircolor(p.searchsetting_haircolor.ToList(), p, db);
-                        if (p.searchsetting_hotfeature.Count > 0)
-                            updatesearchsettingshotfeature(p.searchsetting_hotfeature.ToList(), p, db);
-
-                        db.Update(p);
-                        int i = db.Commit();
-
-                        return messages;
-
-
-                    });
-                    return await task.ConfigureAwait(false);
-
-                }
-                //TOD DO
-                //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-                //return newmodel;                    
-                catch (Exception ex)
-                {
-                    //instantiate logger here so it does not break anything else.
-                    logger = new Logging(applicationEnum.EditSearchService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in photo service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-            }
-
-
-        }
-
-        public async Task<AnewluvMessages> updatecharactersearchsettings(CharacterSearchSettingsModel model)
-        {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-
-                    var task = Task.Factory.StartNew(() =>
-                    {
-                        AnewluvMessages messages = new AnewluvMessages();
-                        searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
-                        //create a new messages object
-                        if (p == null)
-                        {
-                            messages.errormessages.Add("There is no search with this parameters");
-                            return messages;
-                        }
-
-
-                        //checkbos item updates 
-                        if (p.searchsetting_diet.Count > 0)
-                            updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, db);
-
-                        if (p.searchsetting_humor.Count > 0)
-                            updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, db);
-
-                        if (p.searchsetting_hobby.Count > 0)
-                            updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, db);
-
-                        if (p.searchsetting_drink.Count > 0)
-                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
-
-                        if (p.searchsetting_exercise.Count > 0)
-                            updatesearchsettingsexercise(p.searchsetting_exercise.ToList(), p, db);
-
-                        if (p.searchsetting_smokes.Count > 0)
-                            updatesearchsettingssmokes(p.searchsetting_smokes.ToList(), p, db);
-
-                        if (p.searchsetting_sign.Count > 0)
-                            updatesearchsettingssign(p.searchsetting_sign.ToList(), p, db);
-
-                        if (p.searchsetting_politicalview.Count > 0)
-                            updatesearchsettingspoliticalview(p.searchsetting_politicalview.ToList(), p, db);
-
-                        if (p.searchsetting_religion.Count > 0)
-                            updatesearchsettingsreligion(p.searchsetting_religion.ToList(), p, db);
-
-                        if (p.searchsetting_religiousattendance.Count > 0)
-                            updatesearchsettingsreligiousattendance(p.searchsetting_religiousattendance.ToList(), p, db);
-
-
-
-
-                        int i = db.Commit();
-
-
-                        return messages;
-
-
-                    });
-                    return await task.ConfigureAwait(false);
-
-                }
-                //TOD DO
-                //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-                //return newmodel;                    
-                catch (Exception ex)
-                {
-                    //instantiate logger here so it does not break anything else.
-                    logger = new Logging(applicationEnum.EditSearchService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in photo service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-            }
-
-
-        }
-
-        public async Task<AnewluvMessages> updatbasicsearchsettings(LifeStyleSearchSettingsModel model)
-        {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-
-                    var task = Task.Factory.StartNew(() =>
-                    {
-                        AnewluvMessages messages = new AnewluvMessages();
-                        searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
-                        //create a new messages object
-                        if (p == null)
-                        {
-                            messages.errormessages.Add("There is no search with this parameters");
-                            return messages;
-                        }
-
-
-                        //checkbos item updates 
-                        if (p.searchsetting_educationlevel.Count > 0)
-                            updatesearchsettingseducationlevel(p.searchsetting_educationlevel.ToList(), p, db);
-
-                        if (p.searchsetting_lookingfor.Count > 0)
-                            updatesearchsettingslookingfor(p.searchsetting_lookingfor.ToList(), p, db);
-
-                        if (p.searchsetting_havekids.Count > 0)
-                            updatesearchsettingshavekids(p.searchsetting_havekids.ToList(), p, db);
-
-                        if (p.searchsetting_incomelevel.Count > 0)
-                            updatesearchsettingsincomelevel(p.searchsetting_incomelevel.ToList(), p, db);
-
-                        if (p.searchsetting_livingstituation.Count > 0)
-                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
-
-                        if (p.searchsetting_location.Count > 0)
-                            updatesearchsettingslivingsituation(p.searchsetting_livingstituation.ToList(), p, db);
-
-                        if (p.searchsetting_maritalstatus.Count > 0)
-                            updatesearchsettingsmaritalstatus(p.searchsetting_maritalstatus.ToList(), p, db);
-
-                        if (p.searchsetting_profession.Count > 0)
-                            updatesearchsettingsprofession(p.searchsetting_profession.ToList(), p, db);
-
-                        if (p.searchsetting_wantkids.Count > 0)
-                            updatesearchsettingswantskids(p.searchsetting_wantkids.ToList(), p, db);
-
-
-                        int i = db.Commit();
-
-
-                        return messages;
-
-
-                    });
-                    return await task.ConfigureAwait(false);
-
-                }
-                //TOD DO
-                //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
-                //return newmodel;                    
-                catch (Exception ex)
-                {
-                    //instantiate logger here so it does not break anything else.
-                    logger = new Logging(applicationEnum.EditSearchService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in photo service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                }
-            }
-
-
-        }
-
-
-        #endregion
+      
     }
 
 }

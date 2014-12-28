@@ -17,7 +17,7 @@ namespace Anewluv.Domain.Data
         [DataMember]   public int id { get; set; }
         public string month { get; set; }
         [DataMember]   public string description { get; set; }
-        [IgnoreDataMember]  public virtual ICollection<profiledata> profiledatas { get; set; }
-        [IgnoreDataMember]  public virtual ICollection<searchsetting_sign> searchsetting_sign { get; set; }
+       public virtual ICollection<profiledata> profiledatas { get; set; }
+         public virtual ICollection<searchsetting_sign> searchsetting_sign { get; set; }
     }
 }

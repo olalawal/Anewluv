@@ -40,16 +40,14 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int? searchrank { get; set; }
         [DataMember]
-        //public int searchsettingsid { get; set; }
-        // [DataMember]
         public bool? systemmatch { get; set; }
         [DataMember]
         public List<lu_showme> showmelist { get; set; }
         [DataMember]
         public List<lu_gender> genderlist { get; set; }
-        [DataMember]
+      [DataMember]
         public List<lu_sortbytype> sortbylist { get; set; }
-        [DataMember]
+    [DataMember]
         public List<searchsetting_location> locationlist { get; set; }
     }
 }

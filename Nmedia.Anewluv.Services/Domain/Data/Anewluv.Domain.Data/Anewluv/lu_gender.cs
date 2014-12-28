@@ -18,8 +18,8 @@ namespace Anewluv.Domain.Data
         [NotMapped, DataMember]
         public bool? isselected { get; set; }
         [DataMember]   public string description { get; set; }
-        [IgnoreDataMember]  public virtual ICollection<profiledata> profiledatas { get; set; }
-        [IgnoreDataMember]  public virtual ICollection<searchsetting_gender> searchsetting_gender { get; set; }
-        [IgnoreDataMember]  public virtual ICollection<visiblitysettings_gender> visiblitysettings_gender { get; set; }
+        public virtual ICollection<profiledata> profiledatas { get; set; }
+          public virtual ICollection<searchsetting_gender> searchsetting_gender { get; set; }
+          public virtual ICollection<visiblitysettings_gender> visiblitysettings_gender { get; set; }
     }
 }

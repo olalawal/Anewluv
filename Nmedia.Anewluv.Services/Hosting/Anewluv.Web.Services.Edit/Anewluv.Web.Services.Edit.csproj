@@ -150,7 +150,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52073</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Anewluv.Web.Edit</IISUrl>
+          <IISUrl>http://localhost/Anewluv.Web.Services.Edit</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
