@@ -34,9 +34,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.ServiceBus">
       <HintPath>..\..\Infrastructure\Shell.MVC2.Data\bin\Debug\Microsoft.ServiceBus.dll</HintPath>
     </Reference>

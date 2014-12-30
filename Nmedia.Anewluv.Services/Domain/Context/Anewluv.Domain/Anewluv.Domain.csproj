@@ -34,11 +34,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -59,6 +61,10 @@
     <Compile Include="Anewluv\ModelConfigurations\SeedingConversions.cs" />
     <Compile Include="Anewluv\ModelConfigurations\SeedMethods.cs" />
     <Compile Include="Anewluv\ModelConfigurations\Anewluv.Context.Modelbuilder.cs" />
+    <Compile Include="Migrations\201412281808010_MigrationFromJohn.cs" />
+    <Compile Include="Migrations\201412281808010_MigrationFromJohn.Designer.cs">
+      <DependentUpon>201412281808010_MigrationFromJohn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Anewluv\Mapping\abusereportMap.cs" />
     <Compile Include="Anewluv\Mapping\abusereportnoteMap.cs" />
@@ -191,6 +197,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Documentation\Migration Instructions.txt" />
     <Content Include="Migrations\Documentation\Migration Instructions.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -218,6 +225,11 @@
     <Folder Include="Anewluv\Interfaces\" />
     <Folder Include="Anewluv\Modelbuilder\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201412281808010_MigrationFromJohn.resx">
+      <DependentUpon>201412281808010_MigrationFromJohn.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -31,6 +31,7 @@ namespace Anewluv.Domain.Data
         public Nullable<bool> readprivacystatement { get; set; }
         public Nullable<bool> readtemsofuse { get; set; }
         public string password { get; set; }
+        public Guid apikey { get; set; }
         public Nullable<System.DateTime> passwordChangeddate { get; set; }
         public Nullable<int> passwordchangecount { get; set; }
         public Nullable<System.DateTime> failedpasswordchangedate { get; set; }

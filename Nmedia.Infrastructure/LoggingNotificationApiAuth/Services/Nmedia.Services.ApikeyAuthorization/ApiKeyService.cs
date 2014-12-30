@@ -88,7 +88,7 @@ namespace Nmedia.Services.ApikeyAuthorization
                         _unitOfWork.DisableLazyLoading = true;
                          using (var db = _unitOfWork)
                          {
-                            result =  db.GetRepository<apikey>().Find().Any(p => p.key == model.key); 
+                            result =  db.GetRepository<apikey>().Find().Any(p => p.key == model.key & p.active == true); 
                          }
                         return result;
                     });
@@ -166,7 +166,7 @@ namespace Nmedia.Services.ApikeyAuthorization
         //}
 
         //TO DO use enum maybe
-        public async Task<Guid> GenerateAPIkey(string service, string username )
+        public async Task<Guid> GenerateAPIkey(string service, string username ,string application)
         {
            
             _unitOfWork.DisableProxyCreation = true;
@@ -179,7 +179,8 @@ namespace Nmedia.Services.ApikeyAuthorization
               
 
                         Guid key = new Guid();
-                        //TO  DO store to DB    
+                       
+                        
                     
 
 

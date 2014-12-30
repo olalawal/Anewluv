@@ -21,18 +21,20 @@ namespace Nmedia.Infrastructure.Domain.Data.ApiKey
             
        
             [Key]
-            public int id { get; set; }
+            public int id { get; set; }          
             [DataMember]
             public DateTime? timestamp { get; set; }
-           [DataMember]   
+            [DataMember]   
             public string username { get; set; }
             [DataMember]
+            public int useridentifier { get; set; }
+            [DataMember]
             public string email { get; set; }
-           [DataMember]   
+            [DataMember]   
             public bool active { get; set; }
-           [DataMember]   
-           public string registeringapplication { get; set; }
-           public virtual ICollection<apikey> apikeys { get; set; }
+            [DataMember]   
+            public string registeringapplication { get; set; }
+            public virtual ICollection<apikey> apikeys { get; set; }
          
 
           

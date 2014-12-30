@@ -26,7 +26,7 @@ namespace Nmedia.Infrastructure.Domain.Data.ApiKey
             public virtual lu_application  application { get; set; }        
             public virtual lu_accesslevel  accesslevel { get; set; } 
             public string externalapplicationname { get; set; }
-            public virtual ICollection<user> registeredusers { get; set; }
+            public virtual user? user { get; set; }
             [DataMember]
             public Guid key { get; set; }
             public bool? active { get; set; }

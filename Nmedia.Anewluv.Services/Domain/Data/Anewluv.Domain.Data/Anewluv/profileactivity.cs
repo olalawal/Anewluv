@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
+    //added guid tracking
     public partial class profileactivity
     {
         public int id { get; set; }
@@ -10,6 +11,7 @@ namespace Anewluv.Domain.Data
         public string ipaddress { get; set; }
         public int profile_id { get; set; }
         public string sessionid { get; set; }
+        public Guid apikey { get; set; }
         public string useragent { get; set; }
         public string routeurl { get; set; }
         public string actionname { get; set; }

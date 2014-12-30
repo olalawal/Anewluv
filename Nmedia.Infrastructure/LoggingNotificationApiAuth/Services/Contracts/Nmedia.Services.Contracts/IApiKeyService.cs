@@ -30,8 +30,8 @@ namespace Nmedia.Services.Contracts
 
         //temporary method for use by designer to get the message information formated for them
         [OperationContract(AsyncPattern = true), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/generateAPIkey/{service}/{username}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        Task<Guid> GenerateAPIkey(string service, string username);
+        [WebInvoke(UriTemplate = "/generateAPIkey/{service}/{username}/{application}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+      Task<Guid> GenerateAPIkey(string service, string username, string application);
 
       
     }

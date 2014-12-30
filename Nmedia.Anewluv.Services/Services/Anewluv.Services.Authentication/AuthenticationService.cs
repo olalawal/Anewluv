@@ -30,6 +30,7 @@ using Anewluv.DataExtentionMethods;
 using Anewluv.Services.Spatial;
 using System.Threading.Tasks;
 using Anewluv.Api;
+using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
 
 
 
@@ -1778,7 +1779,7 @@ namespace Anewluv.Services.Authentication
         }
 
 
-        public async Task<int> getprofileidbyusernamepassword(ProfileModel profile)
+        public async Task<NmediaToken> ValidateUserAndGetToken(ProfileModel profile)
         {
 
             var myQuery = new profile();
