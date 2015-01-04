@@ -16,14 +16,13 @@ namespace Nmedia.Infrastructure.Domain.Data.ApiKey
     [DataContract]
     public enum accesslevelsenum : int
     {
-        [Description("readonlyuser")][EnumMember]
-        readonlyuser = 1,
-        [Description("readwriteuser")][EnumMember]
+        [Description("user")][EnumMember]
+        user = 1,
+        [Description("application")][EnumMember]
         readwriteuser = 2,
         [Description("admin")][EnumMember]
-        admin = 3,
-        [Description("superadmin")][EnumMember]
-        superadmin = 4
+        admin = 3
+      
     }
 
 }

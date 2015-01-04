@@ -57,7 +57,7 @@ namespace Nmedia.Infrastructure.Domain
                 key = Guid.Parse("bda11d91-7ade-4da1-855d-24adfe39d174") ,
                 timestamp = DateTime.Now , 
                 application  = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
-                accesslevel  = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.superadmin  ).First()
+                accesslevel  = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.admin  ).First()
 
                  
               }
@@ -71,7 +71,7 @@ namespace Nmedia.Infrastructure.Domain
                   key = Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
                   timestamp = DateTime.Now,
                   application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
-                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.readwriteuser).First()
+                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.admin).First()
 
               }
              );
@@ -84,7 +84,7 @@ namespace Nmedia.Infrastructure.Domain
                   key = Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
                   timestamp = DateTime.Now,                 
                   application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluvipad).First(),
-                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.readwriteuser).First()
+                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.admin).First()
                     
               }
               );
@@ -147,7 +147,7 @@ namespace Nmedia.Infrastructure.Domain
               user.apikeys.Add(apikey);
 
                user = context.users.Where(p => p.username == "olawal").FirstOrDefault();
-               apikey = context.apikeys.Where(p => p.accesslevel.id == (int)accesslevelsenum.superadmin).FirstOrDefault();
+               apikey = context.apikeys.Where(p => p.accesslevel.id == (int)accesslevelsenum.admin).FirstOrDefault();
               user.apikeys.Add(apikey);
              
 

@@ -1,6 +1,8 @@
-﻿using Anewluv.Domain.Data.ViewModels;
+﻿using Anewluv.Domain.Data;
+using Anewluv.Domain.Data.ViewModels;
 using GeoData.Domain.Models.ViewModels;
 using Nmedia.Infrastructure.Domain.Data.ApiKey;
+using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,7 @@ namespace Anewluv.Api
 
 
         #region "API key auth asyc calls"
+
         public static async Task<bool> isvalidapikeyasync(apikey model)
         {
 
@@ -26,6 +29,33 @@ namespace Anewluv.Api
 
 
         }
+
+        public static async Task<bool> isvalidapikeyanduser(apikey model)
+        {
+
+            Task<bool> returnedTaskTResult = Api.ApiKeyService.IsValidAPIKeyAndUser(model);
+            bool result = await returnedTaskTResult;
+
+            return result;
+
+            // IsApiKeyValid = await 
+
+
+        }
+
+        public static async Task<Guid> validateorgetapikeyasync(string service,string username,int useridentifier,string application,Guid guid)
+        {
+
+            Task<Guid> returnedTaskTResult = Api.ApiKeyService.ValidateOrGenerateNewApiKey(service,username,useridentifier,application,guid);
+            Guid result = await returnedTaskTResult;
+
+            return result;
+
+            // IsApiKeyValid = await 
+
+
+        }
+
         #endregion
 
         #region "Spatial API asyc calls"
@@ -78,11 +108,11 @@ namespace Anewluv.Api
         #region "Auth API asynch or other calls"
 
 
-        public static async Task<int> getprofileidbyusernamepassword(string username, string password)
+        public static async Task<NmediaToken> validateuserandgettoken(string username, string password)
         {
-            
-            Task<int> returnedTaskTResult = Api.AuthenticationService.getprofileidbyusernamepassword(new ProfileModel { username = username, password = password });
-            int result = await returnedTaskTResult;
+
+            Task<NmediaToken> returnedTaskTResult = Api.AuthenticationService.validateuserandgettoken(new ProfileModel { username = username, password = password });
+            NmediaToken result = await returnedTaskTResult;
             // IsApiKeyValid = await 
             return result;
 
@@ -98,7 +128,15 @@ namespace Anewluv.Api
 
         }
 
+        public static void addprofileactvity(profileactivity activity)
+        {
+            Api.MemberService.addprofileactvity(activity);
+           //  result = await returnedTaskTResult;
+           // IsApiKeyValid = await 
+          //  return result;
 
+            Task.Run(() =>  Api.MemberService.addprofileactvity(activity));
+        }
 
 
         public static async Task<bool> checkifprofileisactivatedasync(ProfileModel model)

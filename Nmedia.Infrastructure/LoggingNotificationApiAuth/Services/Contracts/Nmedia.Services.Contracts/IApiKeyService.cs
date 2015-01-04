@@ -26,12 +26,20 @@ namespace Nmedia.Services.Contracts
         [WebInvoke(UriTemplate = "/IsValidAPIKey", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
         Task<bool> IsValidAPIKey(apikey apikeymodel);
 
+            ////temporary method for use by designer to get the message information formated for them
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebInvoke(UriTemplate = "/IsValidAPIKeyAndUser", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        Task<bool> IsValidAPIKeyAndUser(apikey model);
+
+        [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
+        [WebInvoke(UriTemplate = "/ValidateOrGenerateNewApiKey", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        Task<Guid> ValidateOrGenerateNewApiKey(string service, string username, int useridentifier, string application, Guid key);
    
 
         //temporary method for use by designer to get the message information formated for them
         [OperationContract(AsyncPattern = true), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/generateAPIkey/{service}/{username}/{application}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-      Task<Guid> GenerateAPIkey(string service, string username, string application);
+        Task<Guid> GenerateAPIkey(string service, string username, int useridentifier, string application);
 
       
     }

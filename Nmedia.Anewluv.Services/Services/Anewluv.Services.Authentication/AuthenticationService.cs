@@ -261,7 +261,7 @@ namespace Anewluv.Services.Authentication
                             using (var tempdb = AnewluvContext)
                             {
                                 MemberService MemberService = new MemberService(tempdb);
-                                MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID }).Start();
+                                MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID });
                             }
                         }
                         else
@@ -281,7 +281,7 @@ namespace Anewluv.Services.Authentication
                             using (var tempdb = AnewluvContext)
                             {
                                MemberService MemberService = new MemberService(tempdb);
-                               MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }).Start();
+                               MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id });
                            //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
                              }
                         }
@@ -332,9 +332,6 @@ namespace Anewluv.Services.Authentication
 
             }
         }
-
-
-
 
         //5-82012 updated to only valudate username
         //overide for validate user that uses just the username, this can be used for pass through auth where a user was already prevalidated via another method
@@ -828,8 +825,6 @@ namespace Anewluv.Services.Authentication
 
         }
 
-
-
         //handles reseting password duties.  First verifys that security uqestion was correct for the profile ID, the generated a password
         // using the local generatepassword method the send the encyrpted passwoerd and profile ID to the dating service so it can be updated in the DB
         //finally returns the new password to the calling functon or an empty string if failure.
@@ -1038,7 +1033,6 @@ namespace Anewluv.Services.Authentication
         {
             UpdateUser(user);
         }
-
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
@@ -1778,18 +1772,18 @@ namespace Anewluv.Services.Authentication
 
         }
 
-
-        public async Task<NmediaToken> ValidateUserAndGetToken(ProfileModel profile)
+        public async Task<NmediaToken> validateuserandgettoken(ProfileModel profile)
         {
 
             var myQuery = new profile();
+            var currenttoken = new NmediaToken();
 
             _unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
             {
                 try
                 {
-
+                 
 
                     var task = Task.Factory.StartNew(() =>
                     {
@@ -1813,6 +1807,7 @@ namespace Anewluv.Services.Authentication
 
                         if (myQuery != null)
                         {
+                                                       
                             //retirve encypted password
                             encryptedPassword = myQuery.password;
                             creationdate = myQuery.creationdate.GetValueOrDefault();
@@ -1820,7 +1815,7 @@ namespace Anewluv.Services.Authentication
                         }
                         else
                         {
-                            return 0;
+                            return currenttoken;
                         }
 
                         //case for if the user account was created before encrpyption algorithm was changed
@@ -1846,14 +1841,20 @@ namespace Anewluv.Services.Authentication
                         //check if decrypted string macthed username to upper  + secret
                         if (actualpasswordstring == decryptedPassword)
                         {
-                           //No need to log this since its used the APIkey inspector on checkascccesscore
 
+                            updateuserlogintime(myQuery.id, db);
+                           //No need to log this since its used the APIkey inspector on checkascccesscore
+                            currenttoken.id = myQuery.id;
                             //return the profile ID so it can be used for whatver
-                            return myQuery.id;
+                            var guid = getcurrentapikeybyprofileid(myQuery.id,db);
+                            if (guid != null) currenttoken.Apikey = guid.GetValueOrDefault();
+                            return currenttoken;
+                            //get the token here
+
                         }
                         else
                         {
-                            return 0;
+                            return currenttoken;
                         }
                     });
                     return await task.ConfigureAwait(false);
@@ -1884,12 +1885,72 @@ namespace Anewluv.Services.Authentication
             }
         }
 
-       
+        private Guid? getcurrentapikeybyprofileid(int profileid,IUnitOfWork db)
+        {      
+
+                    db.IsAuditEnabled = false; //do not audit on adds               
+                    try
+                    {
+                        //get the last current activity 
+                        //dont worry about user logtime here and session ID's since user is re-validating we are starting over with this user anyways                        
+                        var  myQuery = db.GetRepository<profileactivity>().Find().Where(p => p.profile_id == profileid && p.apikey != null).OrderByDescending(p=>p.creationdate).FirstOrDefault();
+
+                        if (myQuery != null && myQuery.apikey != null)
+                        {
+                        return myQuery.apikey;
+                        }
+                        return null;
+                      
 
 
 
+                    }
+                    catch (Exception ex)
+                    {
+                       
+                         using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                        {
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null);
+                        }
 
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
 
+                        //throw convertedexcption;
+                    }
+       }
+
+        private void updateuserlogintime(int profileid, IUnitOfWork db)
+        {
+            MemberService MemberService = new MemberService(db);
+            try
+            {
+                //log the user logtime here so it is common to silverlight and MVC
+                if (HttpContext.Current != null)
+                {
+                    //Just for testing that it worked
+                    //TO DO remove when in prod                           
+                   
+                    MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = profileid, sessionid = HttpContext.Current.Session.SessionID });
+                }
+                else
+                {
+                  
+                    MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = profileid });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+          
+        
+        }
+        
+        
         #endregion
 
         // Other overrides not implemented

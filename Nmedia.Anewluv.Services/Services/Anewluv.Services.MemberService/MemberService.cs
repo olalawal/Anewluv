@@ -707,7 +707,7 @@ namespace Anewluv.Services.Members
         //updates all the areas  that handle when a user logs in 
         // added 1/18/2010 ola lawal
         //also updates the last log in and profile data
-        public async Task<bool>  updateuserlogintimebyprofileidandsessionid(ProfileModel model)
+        public async void  updateuserlogintimebyprofileidandsessionid(ProfileModel model)
         {
 
             //get the profile
@@ -757,9 +757,9 @@ namespace Anewluv.Services.Members
                               int i = db.Commit();
                               transaction.Commit();
 
-                              return true;
+                             // return true;
                           });
-                          return await task.ConfigureAwait(true);
+                          await task.ConfigureAwait(false);
 
                       
                       }
@@ -789,7 +789,7 @@ namespace Anewluv.Services.Members
         //**********************************************************
         // Description:	Updates the users logout time
         // added 1/18/2010 ola lawal
-        public async Task<bool> updateuserlogouttimebyprofileid(ProfileModel model)
+        public async void updateuserlogouttimebyprofileid(ProfileModel model)
         {
             //_unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
@@ -816,9 +816,9 @@ namespace Anewluv.Services.Members
                         int i = db.Commit();
                         transaction.Commit();
 
-                        return true;
+                   //     return true;
                     });
-                    return await task.ConfigureAwait(false);
+                    await task.ConfigureAwait(false);
 
                     
                 }
@@ -846,7 +846,7 @@ namespace Anewluv.Services.Members
         //**********************************************************
         // Description:	Updates the users logout time
         // added 1/18/2010 ola lawal
-        public async Task<bool> updateuserlogintimebyprofileid(ProfileModel model)
+        public async void updateuserlogintimebyprofileid(ProfileModel model)
         {
             //_unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
@@ -888,10 +888,10 @@ namespace Anewluv.Services.Members
                         int i = db.Commit();
                         transaction.Commit();
 
-                         return true;
+                        // return true;
 
                      });
-                    return await task.ConfigureAwait(false);
+                     await task.ConfigureAwait(false);
 
                        
                     }
@@ -916,7 +916,7 @@ namespace Anewluv.Services.Members
         }
 
      
-        public async Task<bool> addprofileactvity(profileactivity model)
+        public async void addprofileactvity(profileactivity model)
         {
             //get the profile
             //profile myProfile;
@@ -946,9 +946,9 @@ namespace Anewluv.Services.Members
                              int i = db.Commit();
                              transaction.Commit();
 
-                          return true;
+                         // return true;
                            });
-                    return await task.ConfigureAwait(false);
+                    await task.ConfigureAwait(false);
                        
                       
 

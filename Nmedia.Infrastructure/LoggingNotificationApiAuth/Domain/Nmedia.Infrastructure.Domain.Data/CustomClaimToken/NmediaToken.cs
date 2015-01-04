@@ -12,12 +12,15 @@ namespace Nmedia.Infrastructure.Domain.Data.CustomClaimToken
     /// after validation.  Should be expired after no activity on the application after 30 miniute to an hour.  At that point
     /// user should be red-recteted to login and need another token on the client since previous API key should be inactive
     /// </summary>
+    /// 
+    [DataContract]
     public class NmediaToken
     {
         [DataMember]
         public int id { get; set; }  //standerd id of the application that identifes the user
         [DataMember]
         public Guid Apikey { get; set; }
+        [DataMember]
         public DateTime? timestamp { get; set; }     
 
     }

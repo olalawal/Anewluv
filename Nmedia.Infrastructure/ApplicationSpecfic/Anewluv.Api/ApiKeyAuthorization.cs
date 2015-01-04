@@ -24,6 +24,7 @@ using Anewluv.Domain.Data.ViewModels;
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain.Data.ApiKey;
 using System.Xml;
+using Anewluv.Domain.Data;
 //using Anewluv.Lib;
 //using Nmedia.Services.Authorization;
 //using Anewluv.Domain;
@@ -121,14 +122,14 @@ namespace Anewluv.Api
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Authorization");
                 //these methods use internal rest calls so need to be excluded
                 nonauthenticatedURLS.Add("updateuserlogintimebyprofileidandsessionid");  // do this this way until we determine how to add headers
-                nonauthenticatedURLS.Add("getprofileidbyusernamepassword");  //internal call no auth required
+                nonauthenticatedURLS.Add("validateuserandgettoken");  //internal call no auth required
 
                 //allow calls to API key auth
-                apikeyonlyURLS.Add("Anewluv.Web.Services.Authentication");                                  
-                apikeyonlyURLS.Add("Anewluv.Web.Services.Common");
-                apikeyonlyURLS.Add("Anewluv.Web.Services.Spatial");
-                apikeyonlyURLS.Add("/Anewluv.Web.Services.Media/PhotoService.svc/Rest/addphotos");  //everyone can call addphotos
-                apikeyonlyURLS.Add("/Anewluv.Web.Services.Members/MembersMapperService.svc/Rest/getquicksearch");  //added quick search to this apikey only to allow for quick search to 
+               // apikeyonlyURLS.Add("Anewluv.Web.Services.Authentication");                                  
+               // apikeyonlyURLS.Add("Anewluv.Web.Services.Common");
+               // apikeyonlyURLS.Add("Anewluv.Web.Services.Spatial");
+               // apikeyonlyURLS.Add("/Anewluv.Web.Services.Media/PhotoService.svc/Rest/addphotos");  //everyone can call addphotos
+               //  apikeyonlyURLS.Add("/Anewluv.Web.Services.Members/MembersMapperService.svc/Rest/getquicksearch");  //added quick search to this apikey only to allow for quick search to 
                 //to bypass userid and password auth
                
 
@@ -156,130 +157,68 @@ namespace Anewluv.Api
                 
                 //flag the API key only auth URLS
                 if ((apikeyonlyURLS.Contains(urisegments[1].ToString().Replace("/", "")) || apikeyonlyURLS.Contains(path))) apikeyauthonly = true; ;
-
-
-
+                                
 
                 //allows service to be discovereable with no api key
                 if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/", "") != "$metadata")
                 {
-                    string key = GetAPIKey(operationContext);                                 
-                 
-                    
-                        //AsyncCallback callback = result =>
-                        //{
-                        //    var value = Api.ApiKeyService.EndIsValidAPIKey(result);
-                        //    Api.DisposeApiKeyService(); //clean up
-                        //    if (value)
-                        //    {
-
-                        //        //now validate the username password info if required 
-                        //        //TO DO determine which URLS need validation of this i.e personal data only
-                        //        if (ValidateUser(operationContext)) validrequest = true;
-                        //        else 
-                        //        {
-                        //              validrequest= false;
-                        //              CreateUserNamePasswordErrorReply(operationContext);
-                        //              return true ;
-                        //        }
-                        //    }
-                        //    else
-                        //    {
-                        //        // Send back an HTML reply
-                        //          validrequest = false;
-                        //        CreateApiKeyErrorReply(operationContext, key);
-                              
-                        //    }
-                        //    Api.DisposeApiKeyService();
-                            
-                        //};
-
+                    string key = GetAPIKey(operationContext);   
+              
+                    ProfileModel ProfileModel = new ProfileModel(); 
                     if (key != null)
-                    {
-
-
-                        var IsApiKeyValid =    CallValidateApiKey(key);
-                        ProfileModel ProfileModel = new ProfileModel();
-                        if (IsApiKeyValid) //(Api.ApiKeyService.NonAysncIsValidAPIKey(key))
+                    {  
+                       Guid apiKey;
+                       Guid.TryParse(key.ToString(), out apiKey);
+                                               
+                        if (!apikeyauthonly)
                         {
-
-                            if (!apikeyauthonly)
+                            //TO DO check if the call body has a profileid in the request body to make sure the user can access the revevant data being called for.
+                            //if so return use a diffeernt validation call that returns the profileID so we can match against the passed on.
+                            // Message msg = OperationContext.Current.RequestContext.RequestMessage.CreateBufferedCopy(Int32.MaxValue).CreateMessage();
+                            //if we have a body look for the profileid
+                            if (!internalCopy.IsEmpty)
                             {
-                                //TO DO check if the call body has a profileid in the request body to make sure the user can access the revevant data being called for.
-                                //if so return use a diffeernt validation call that returns the profileID so we can match against the passed on.
-                               // Message msg = OperationContext.Current.RequestContext.RequestMessage.CreateBufferedCopy(Int32.MaxValue).CreateMessage();
-
-                              
-                                                   
-
-                                //if we have a body look for the profileid
-                                if (!internalCopy.IsEmpty)
+                                var dd = Utilities.MessageToString(internalCopy);
+                                //get the profile id and map and other values as needed to the model if it exists otherwise no nothing
+                                if (dd != "" && dd.Contains("profileid"))
                                 {
-
-                                    var dd = Utilities.MessageToString(internalCopy);
-                                    //get the profile id and map and other values as needed to the model if it exists otherwise no nothing
-                                    if (dd != "" && dd.Contains("profileid"))
-                                    {
-                                        ProfileModel = JsonExtentionsMethods.Deserialize<ProfileModel>(dd);
-                                    }
-
-                                   // msg.Close();  //kill this since we need it no more.
+                                    ProfileModel = JsonExtentionsMethods.Deserialize<ProfileModel>(dd);
                                 }
-                                
-                                //TO DO code here to call the other method that gets the profileid and valiates that the username password
-                                //combo has the same profileID and send no error reply but bad request the method is : 
-                               //Task<int> getprofileidbyusernamepassword(ProfileModel profile); 
-                                 
-                                //buffer.Close();
-                              
-
-                                //now validate the username password info if required 
-                                //TO DO determine which URLS need validation of this i.e personal data only
-                                int validprofileid = ValidateUserAndGetProfileID(operationContext);
-
-                                if (validprofileid !=0 && (ProfileModel.profileid != null && ProfileModel.profileid == validprofileid ))
-                                {
-                                    validrequest = true;
-                                }
-                                //next option if there is no profileid in the body we just wanto validate the profileid is valid
-                                else if (validprofileid != 0 && ProfileModel.profileid == null)
-                                {
-                                    validrequest = true;
-                                }    
-                                //option where the user id does not match the profileid in the body - reject !
-                                else if (validprofileid != 0 && (ProfileModel.profileid != null && ProfileModel.profileid != validprofileid))
-                                {
-                                    validrequest = false;
-                                    //TO DO log this and also send a custom message 
-                                    CreateUserNamePasswordErrorReply(operationContext);
-                                }                                                          
-                                else
-                                {
-                                  
-                                  validrequest = false;
-                                  CreateUserNamePasswordErrorReply(operationContext);
-                                }
+                                // msg.Close();  //kill this since we need it no more.
                             }
-                           // Api.DisposeApiKeyService();
-                            return validrequest;
+
+                            if (ProfileModel.profileid != null)
+                            {
+                                validrequest = VallidateApiKeyAndUserId(key, (int)applicationenum.anewluv, ProfileModel.profileid.GetValueOrDefault());  
+                              //log the activity since we have a profileID that is valid 
+                                //TO DO find a way to get the geo data and the activity type from the URL probbaly dictorronay or class to do that.
+                               var activity = new profileactivity
+                                {
+                                    profile_id = ProfileModel.profileid.GetValueOrDefault(),
+                                    apikey = apiKey,
+                                    creationdate = DateTime.Now,
+                                    routeurl = path,
+                                    activitytype_id = (int)activitytypeEnum.NotSet
+                                };
+                               AsyncCalls.addprofileactvity(activity);
+                            }
+                            else  //just validate the api key
+                            {
+                                validrequest = ValidateApiKey(key);                                
+                            }
+
                         }
+                        // Api.DisposeApiKeyService();
+                        //   return validrequest;                        
                     }
                     else
                     {
                         // Send back an HTML reply
                         CreateApiKeyErrorReply(operationContext, key);
                         validrequest = false;
-                    }
-                        // oLogEntry.id = d.Endsenderrormessage(result);
-                        //d.senderrormessage(oLogEntry, addresstypeenum.Developer.ToString());
+                    }  
+               
                 }
-                else
-                {
-                    validrequest = true;
-                }
-
-                              
-
                 return validrequest;
             }
             catch (Exception ex)
@@ -301,15 +240,10 @@ namespace Anewluv.Api
               // Api.DisposeAuthenticationService();
               //   Api.DisposeApiKeyService();
             }
-        }
+        }        
 
-
-
-  
-      
-
-
-        static bool CallValidateApiKey(string key)
+        //validate of api key only not profile id if its not passed
+        static bool ValidateApiKey(string key)
         {
             try
             {
@@ -331,6 +265,17 @@ namespace Anewluv.Api
                 Console.Error.WriteLine("Error: " + ex.Message);
                 return false;
             }
+        }
+
+        static bool VallidateApiKeyAndUserId(string key, int applicationid, int useridentifier)
+        {
+            Guid apiKey;
+            Guid.TryParse(key.ToString(), out apiKey);
+            var model = new apikey { application = new lu_application { id = applicationid }, key = apiKey, user = new user { useridentifier = useridentifier } };
+
+            var dd = AsyncCalls.isvalidapikeyanduser(model);
+            return dd.Result;
+
         }
 
         //old way of validating, now we will use a new method so we can get the profile ID and validate it against the message body JSON
@@ -359,30 +304,7 @@ namespace Anewluv.Api
                // return IsUserValidated;
         }
 
-        static int ValidateUserAndGetProfileID(OperationContext operationContext)
-        {
-            var authinfo = GetUserNamePassword(operationContext);
-
-            if (authinfo != null)
-            {
-                //TO DO convert to asynch
-                // AnewluvContext AnewluvContext = new AnewluvContext();
-                //  var IsUserValidated = false;
-                ////  using (var tempdb = new  AnewluvContext())
-                //  {
-                //  AuthenticationService AuthenticationService = new AuthenticationService(tempdb);
-                var dd = AsyncCalls.getprofileidbyusernamepassword(authinfo[0], authinfo[1]);
-                return dd.Result;
-                // bool result = await returnedTaskTResult;
-                // IsApiKeyValid = await 
-                // return result;                   
-
-            }
-            return 0;
-            //var result = Api.AuthenticationService.validateuserbyusernamepassword(new ProfileModel { username = authinfo[0], password = authinfo[1] });
-            //.0 Api.DisposeAuthenticationService();
-            // return IsUserValidated;
-        }
+     
 
         public string GetAPIKey(OperationContext operationContext)
         {

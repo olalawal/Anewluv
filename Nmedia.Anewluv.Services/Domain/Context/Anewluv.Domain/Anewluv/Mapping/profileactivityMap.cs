@@ -28,7 +28,7 @@ namespace Anewluv.Domain.Data.Mapping
             this.HasOptional(t => t.lu_activitytype)
                 .WithMany(t => t.profileactivities)
                 .HasForeignKey(d => d.activitytype_id);
-            this.HasRequired(t => t.profileactivitygeodata)
+            this.HasOptional(t => t.profileactivitygeodata)
                 .WithMany(t => t.profileactivities)
                 .HasForeignKey(d => d.profileactivitygeodata_id);
             this.HasRequired(t => t.profile)
