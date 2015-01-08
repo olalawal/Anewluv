@@ -53,9 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiKey\Context\Apikey.Context.cs" />
-    <Compile Include="ApiKey\Migrations\201407132217320_first.cs" />
-    <Compile Include="ApiKey\Migrations\201407132217320_first.Designer.cs">
-      <DependentUpon>201407132217320_first.cs</DependentUpon>
+    <Compile Include="ApiKey\Migrations\201501080544093_first.cs" />
+    <Compile Include="ApiKey\Migrations\201501080544093_first.Designer.cs">
+      <DependentUpon>201501080544093_first.cs</DependentUpon>
     </Compile>
     <Compile Include="ApiKey\Migrations\Configuration.cs" />
     <Compile Include="ApiKey\ModelBuilder\ApikeyModelbuilder.cs" />
@@ -111,8 +111,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ApiKey\Migrations\201407132217320_first.resx">
-      <DependentUpon>201407132217320_first.cs</DependentUpon>
+    <EmbeddedResource Include="ApiKey\Migrations\201501080544093_first.resx">
+      <DependentUpon>201501080544093_first.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Logging\Migrations\201407131902027_first.resx">
       <DependentUpon>201407131902027_first.cs</DependentUpon>

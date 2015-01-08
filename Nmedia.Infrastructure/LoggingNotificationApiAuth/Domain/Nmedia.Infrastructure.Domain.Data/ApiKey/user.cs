@@ -16,7 +16,7 @@ namespace Nmedia.Infrastructure.Domain.Data.ApiKey
           {
             //  LogSeverity = new lu_logSeverity();
             //  Application = new lu_application();
-          
+              apikeys = new List<apikey>();
           } 
             
        

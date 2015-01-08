@@ -7,7 +7,7 @@ namespace Anewluv.Domain.Data
     {
         public profileactivitygeodata()
         {
-            this.profileactivities = new List<profileactivity>();
+            this.activity = new profileactivity();
         }
 
         public int id { get; set; }
@@ -20,6 +20,8 @@ namespace Anewluv.Domain.Data
         public Nullable<System.DateTime> creationdate { get; set; }
         public Nullable<double> lattitude { get; set; }
         public Nullable<double> longitude { get; set; }
-        public virtual ICollection<profileactivity> profileactivities { get; set; }
+
+        public int activity_id { get; set; }
+        public virtual profileactivity activity { get; set; }
     }
 }

@@ -16,24 +16,33 @@ run only once !
 PM>Enable-Migrations -v  
 option 2 more contexts  in separate databes
  Enable-Migrations -ContextTypeName "LoggingContext"
+
 -option 3 mutiple contexts in the same project and same Initial Catalog=
 enable-migrations  -ContextTypeName "NotificationContext" -MigrationsDirectory:NotificationMigrations
+
 -option 4 multiple contexts in different projects but same Initial Catalog=
 enable-migrations  -ProjectName:DataLayer.CasinoModel  -ContextTypeName  "NotificationContext" -MigrationsDirectory:NotificationMigrations
+
 -option 5 (current) 2 or more contexts in separate Initial Catalog=s and configuration for migration in seprartae folders 
 Enable-Migrations -ContextTypeName "LoggingContext" -MigrationsDirectory:Logging\Migrations -f
 Enable-Migrations -ContextTypeName "NotificationContext" -MigrationsDirectory:Notification\Migrations -f
+Enable-Migrations -ContextTypeName "Nmedia.Infrastructure.Domain.ApiKeyContext" -MigrationsDirectory:Apikey\Migrations -f
+
+** seed method must be added manually to the code as needed ***
+i.e 
+ SeedMethodsApiKeyModel.seedgenerallookups(context);
+
 
 then you want to have EF code first scafolt your up-down changes for the balank Initial Catalog= into the current migration file
 
 type 1 - single tentant
 PM>Add-Migration InitialMigrations -f -ConfigurationTypeName "Configuration" -verbose
+
 type 2 mutiple contexts  use the full namespace of the config (use the namespace of the conifguration file)
 examples
-Add-Migration first -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Notification.Migrations.Configuration"
-Add-Migration first -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Logging.Migrations.Configuration"
-Add-Migration first -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Logging.Migrations.Configuration"
 
+*** use the full nampeace of the container to indetify the correct project ****
+Add-Migration first -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Apikey.Migrations.Configuration"
 
 adding another migration sample after this :
 
@@ -46,17 +55,18 @@ by running 'Add-Migration InitialMigrations' again.
 
 1)
 after you make changes to the data model you can update the Initial Catalog= using the command :
-PM>   Update-database -f -verbose -ConfigurationTypeName "Configuration"
+  Update-database -f -verbose -ConfigurationTypeName "Configuration"
 multiple context examples :
-PM>  Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Notification.Migrations.Configuration"
-PM>   Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Logging.Migrations.Configuration"
+  Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Notification.Migrations.Configuration"
+  Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Logging.Migrations.Configuration"
 2)
 to run a specific migration 
-PM>  Update-database -TargetMigration "201306051636172_InitialMigrations" -ConfigurationTypeName "Configuration"
+ Update-database -TargetMigration "201306051636172_InitialMigrations" -ConfigurationTypeName "Configuration"
 or
 Update-Initial Catalog= -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "Configurationlog"
 
-3) more multi tentant with diff dirs use the fully qualfied namespace
+3) more multi tentant with diff dirs use the fully qualfied 
+Update-database -TargetMigration "201501080544093_first" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Apikey.Migrations.Configuration"
  Update-database -TargetMigration "201407131935192_first" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Notification.Migrations.Configuration"
  Update-database -TargetMigration "201407132217320_first" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Data.ApiKey.Migrations.Configuration" 
 

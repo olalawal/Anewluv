@@ -50,49 +50,55 @@ namespace Nmedia.Infrastructure.Domain
             
               //add a few keys here
               //super admin anewluv site
-              context.apikeys.AddOrUpdate(h => h.key, new apikey()              
-              {
-                  externalapplicationname = "Anewluvwebsite",
-                   active = true ,
-                key = Guid.Parse("bda11d91-7ade-4da1-855d-24adfe39d174") ,
-                timestamp = DateTime.Now , 
-                application  = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
-                accesslevel  = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.admin  ).First()
+//var key1 = new Guid();
+             //  var key2 = new Guid();
+//var key3 = new Guid();
 
-                 
-              }
-              );
+               var apikey1 = new apikey()
+               {
+                   externalapplicationname = "Anewluvwebsite",
+                   active = true,
+               //    key = key1,
+                   timestamp = DateTime.Now,
+                   application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
+                   accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.admin).First()
+
+
+               };
+              //);
 
             //read write anewluv site
-              context.apikeys.AddOrUpdate(h => h.key, new apikey()
+            
+              var apikey2 = new apikey()
               {
                   active = true,
                   externalapplicationname = "AnewlvuIpadApplication",
-                  key = Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
+               //   key = key2,//Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
                   timestamp = DateTime.Now,
                   application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
-                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.admin).First()
+                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.user).First()
 
-              }
-             );
+              };
+             //);
 
             //ipdad read write
-              context.apikeys.AddOrUpdate(h=>h.key, new apikey()              
+              //context.apikeys.AddOrUpdate(h=>h.key, new apikey()              
+              var apikey3 = new apikey()
               {
-                  active =true ,
+                  active = true,
                   externalapplicationname = "AnewlvuIpadApplication",
-                  key = Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
-                  timestamp = DateTime.Now,                 
+//key = key3,// Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
+                  timestamp = DateTime.Now,
                   application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluvipad).First(),
-                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.admin).First()
-                    
-              }
-              );
+                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.user).First()
+
+              };
+//);
 
 
            
 
-              EFUtils.SaveChanges(context);
+//EFUtils.SaveChanges(context);
 
 
 
@@ -129,7 +135,7 @@ namespace Nmedia.Infrastructure.Domain
                   email = "ola_lawal@yahoo.com",
                   active = true,
                   registeringapplication = "anewluvcore",
-                  timestamp = DateTime.Now
+                  timestamp = DateTime.Now, apikeys = new List<apikey>(),
               }
               );
 
@@ -137,20 +143,25 @@ namespace Nmedia.Infrastructure.Domain
              //link the user to the correct api key 
               EFUtils.SaveChanges(context);
 
-          
-              user user = context.users.Where(p => p.username == "pavankumar").FirstOrDefault();
-              apikey apikey =  context.apikeys.Where(p => p.accesslevel.id   == (int)accesslevelsenum.readwriteuser && p.application.id == (int)applicationenum.anewluv).FirstOrDefault();
-              user.apikeys.Add(apikey);
 
-              user = context.users.Where(p => p.username == "ranapaul").FirstOrDefault();
-              apikey = context.apikeys.Where(p => p.accesslevel.id == (int)accesslevelsenum.readwriteuser && p.application.id == (int)applicationenum.anewluvipad).FirstOrDefault();
-              user.apikeys.Add(apikey);
+              user user1 = context.users.Where(p => p.username == "pavankumar").FirstOrDefault();                 
+              
+              //var key = Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c");
+             // apikey apikey =  context.apikeys.Where(p => p.key == key1 ).FirstOrDefault();
+              //apikey.user.id = user.id;
+              user1.apikeys.Add(apikey1);
 
-               user = context.users.Where(p => p.username == "olawal").FirstOrDefault();
-               apikey = context.apikeys.Where(p => p.accesslevel.id == (int)accesslevelsenum.admin).FirstOrDefault();
-              user.apikeys.Add(apikey);
+              user  user2 = context.users.Where(p => p.username == "ranapaul").FirstOrDefault();
+              // = context.apikeys.Where(p => p.key == key2 ).FirstOrDefault();   //p.accesslevel.id == (int)accesslevelsenum.readwriteuser && p.application.id == (int)applicationenum.anewluvipad).FirstOrDefault();
+             // apikey.user.id = user.id; 
+              user2.apikeys.Add(apikey2);
+
+              user user3 = context.users.Where(p => p.username == "olawal").FirstOrDefault();
+               //apikey = context.apikeys.Where(p => p.key == key3 ).FirstOrDefault();//context.apikeys.Where(p => p.accesslevel.id == (int)accesslevelsenum.admin).FirstOrDefault();
+            //apikey.user.id = user.id; 
+             user3.apikeys.Add(apikey3);
              
-
+              
 
 
             //context.SaveChanges();

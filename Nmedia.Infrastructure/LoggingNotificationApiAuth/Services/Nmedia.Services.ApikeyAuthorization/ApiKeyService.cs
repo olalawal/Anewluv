@@ -252,16 +252,20 @@ namespace Nmedia.Services.ApikeyAuthorization
                         newkey.timestamp = DateTime.Now;
                         newkey.application.id = db.GetRepository<lu_application>().FindSingle(p => p.description.ToUpper() == application.ToUpper()).id;
                         newkey.accesslevel.id = (int)accesslevelsenum.user;
-                        //user handling                        
-                        newkey.user.id = db.GetRepository<user>().FindSingle(p => p.username.ToUpper() == username.ToUpper() && p.useridentifier == useridentifier).id;
-                        if (newkey.user.id == null)
+                        //user handling   
+                        //check for existing user 
+                        var apikeyuser = db.GetRepository<user>().FindSingle(p => p.username.ToUpper() == username.ToUpper() && p.useridentifier == useridentifier).id;
+                        if (apikeyuser == null)
                         {
                             //generate a new user and assign the id
                             newkey.user.id = AddAPIKeyUser(username, useridentifier, db);
                         }
-                        newkey.key = new Guid();
+                        // newkey.key = new Guid();
                         newkey.active = true;
                         newkey.lastaccesstime = DateTime.Now;
+//return newkey.key;
+                        db.Add(newkey);
+                        int i = db.Commit();
                         return newkey.key;
                 }
                 catch (Exception ex)
@@ -281,6 +285,14 @@ namespace Nmedia.Services.ApikeyAuthorization
             
         }
 
+
+        /// <summary>
+        /// create a new user in the API key database
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="useridentifier"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         private int  AddAPIKeyUser(string username, int useridentifier, IUnitOfWork db)
         {
             

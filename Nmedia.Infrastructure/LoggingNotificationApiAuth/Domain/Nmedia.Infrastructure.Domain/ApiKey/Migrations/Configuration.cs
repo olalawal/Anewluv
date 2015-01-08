@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Nmedia.Infrastructure.Domain.Data.ApiKey.Migrations
+namespace Nmedia.Infrastructure.Domain.Apikey.Migrations
 {
     using System;
     using System.Data.Entity;
@@ -33,6 +27,7 @@ namespace Nmedia.Infrastructure.Domain.Data.ApiKey.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
             SeedMethodsApiKeyModel.seedgenerallookups(context);
         }
     }

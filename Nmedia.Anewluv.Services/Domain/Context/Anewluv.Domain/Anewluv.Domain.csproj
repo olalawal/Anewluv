@@ -65,6 +65,22 @@
     <Compile Include="Migrations\201412281808010_MigrationFromJohn.Designer.cs">
       <DependentUpon>201412281808010_MigrationFromJohn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201501080829588_new.cs" />
+    <Compile Include="Migrations\201501080829588_new.Designer.cs">
+      <DependentUpon>201501080829588_new.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501080835207_reset.cs" />
+    <Compile Include="Migrations\201501080835207_reset.Designer.cs">
+      <DependentUpon>201501080835207_reset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501080902100_addedrequiredFKtogeodata.cs" />
+    <Compile Include="Migrations\201501080902100_addedrequiredFKtogeodata.Designer.cs">
+      <DependentUpon>201501080902100_addedrequiredFKtogeodata.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501080905067_fix3.cs" />
+    <Compile Include="Migrations\201501080905067_fix3.Designer.cs">
+      <DependentUpon>201501080905067_fix3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Anewluv\Mapping\abusereportMap.cs" />
     <Compile Include="Anewluv\Mapping\abusereportnoteMap.cs" />
@@ -229,6 +245,18 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201412281808010_MigrationFromJohn.resx">
       <DependentUpon>201412281808010_MigrationFromJohn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501080829588_new.resx">
+      <DependentUpon>201501080829588_new.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501080835207_reset.resx">
+      <DependentUpon>201501080835207_reset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501080902100_addedrequiredFKtogeodata.resx">
+      <DependentUpon>201501080902100_addedrequiredFKtogeodata.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501080905067_fix3.resx">
+      <DependentUpon>201501080905067_fix3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

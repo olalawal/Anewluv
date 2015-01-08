@@ -23,6 +23,15 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.creationdate).HasColumnName("creationdate");
             this.Property(t => t.lattitude).HasColumnName("lattitude");
             this.Property(t => t.longitude).HasColumnName("longitude");
+            this.Property(t => t.activity_id).HasColumnName("activity_id");
+
+            // Relationships
+            this.HasRequired(t => t.activity).WithMany()
+                .HasForeignKey(u => u.activity_id);
+            ;
+
+
+
         }
     }
 }

@@ -14,8 +14,8 @@ namespace Nmedia.Infrastructure.Domain.Data.ApiKey
 
          public apikey() 
           {
-           
-          
+              key = Guid.NewGuid();
+              user = new user();
           } 
             
        

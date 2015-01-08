@@ -15,8 +15,8 @@ namespace Anewluv.Domain.Data
         public string useragent { get; set; }
         public string routeurl { get; set; }
         public string actionname { get; set; }
-        public int profileactivitygeodata_id { get; set; }
-        public Nullable<int> activitytype_id { get; set; }
+        public int? profileactivitygeodata_id { get; set; }
+        public int? activitytype_id { get; set; }
         public virtual lu_activitytype lu_activitytype { get; set; }
         public virtual profileactivitygeodata profileactivitygeodata { get; set; }
         public virtual profile profile { get; set; }
