@@ -1,7 +1,9 @@
 ﻿using Anewluv.Domain.Data;
+using Anewluv.Domain.Data.Anewluv.ViewModels;
 using Anewluv.Domain.Data.ViewModels;
 using GeoData.Domain.Models.ViewModels;
 using Nmedia.Infrastructure.Domain.Data.ApiKey;
+using Nmedia.Infrastructure.Domain.Data.ApiKey.DTOs;
 using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
 using System;
 using System.Collections.Generic;
@@ -43,10 +45,10 @@ namespace Anewluv.Api
 
         }
 
-        public static async Task<Guid> validateorgetapikeyasync(string service,string username,int useridentifier,string application,Guid guid)
+        public static async Task<Guid> validateorgetapikeyasync(ApiKeyValidationModel model)
         {
 
-            Task<Guid> returnedTaskTResult = Api.ApiKeyService.ValidateOrGenerateNewApiKey(service,username,useridentifier,application,guid);
+            Task<Guid> returnedTaskTResult = Api.ApiKeyService.ValidateOrGenerateNewApiKey(model);
             Guid result = await returnedTaskTResult;
 
             return result;
@@ -74,6 +76,7 @@ namespace Anewluv.Api
         #endregion
 
         #region "Media API asyc calls"
+    
         public static async Task<bool> checkforuploadedphotobyprofileidasync(string profileid)
         {
 
@@ -128,15 +131,26 @@ namespace Anewluv.Api
 
         }
 
-        public static void addprofileactvity(profileactivity activity)
+        public static void addprofileactvity(ActivityModel activitymodel)
         {
-            Api.MemberService.addprofileactvity(activity);
+           // Api.MemberService.addprofileactvity(activity);
            //  result = await returnedTaskTResult;
            // IsApiKeyValid = await 
           //  return result;
 
-            Task.Run(() =>  Api.MemberService.addprofileactvity(activity));
+            Task.Run(() => Api.MemberService.addprofileactvity(activitymodel));
         }
+
+        //public static void addprofileactvitygeodata(profileactivitygeodata profileactivitygeodata)
+        //{
+        //    //Api.MemberService.addprofileactvitygeodata(profileactivitygeodata);
+        //    //  result = await returnedTaskTResult;
+        //    // IsApiKeyValid = await 
+        //    //  return result;
+
+        //    Task.Run(() => Api.MemberService.addprofileactvitygeodata(profileactivitygeodata));
+        //}
+
 
 
         public static async Task<bool> checkifprofileisactivatedasync(ProfileModel model)
@@ -158,12 +172,15 @@ namespace Anewluv.Api
         }
 
 
-        public static async Task<bool> createmailboxfoldersasync(ProfileModel model)
+        public static void createmailboxfoldersasync(ProfileModel model)
         {
-         Task<bool> returnedTaskTResult =  Api.MemberService.createmailboxfolders(model);
-                    bool result = await returnedTaskTResult;
-                    // IsApiKeyValid = await 
-                    return result;
+
+            Task.Run(() => Api.MemberService.createmailboxfolders(model));
+
+         //Task<bool> returnedTaskTResult =  Api.MemberService.createmailboxfolders(model);
+         //           bool result = await returnedTaskTResult;
+         //           // IsApiKeyValid = await 
+         //           return result;
         }
 
         public static async Task<bool> checkifmailboxfoldersarecreatedasync(ProfileModel model)

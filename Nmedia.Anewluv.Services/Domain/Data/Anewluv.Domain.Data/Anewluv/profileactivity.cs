@@ -9,6 +9,7 @@ namespace Anewluv.Domain.Data
         public int id { get; set; }
         public Nullable<System.DateTime> creationdate { get; set; }
         public string ipaddress { get; set; }
+
         public int profile_id { get; set; }
         public string sessionid { get; set; }
         public Guid apikey { get; set; }

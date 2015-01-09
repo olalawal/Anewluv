@@ -29,8 +29,9 @@ using Anewluv.Services.Media;
 using Anewluv.DataExtentionMethods;
 using Anewluv.Services.Spatial;
 using System.Threading.Tasks;
-using Anewluv.Api;
+
 using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
+using Nmedia.Infrastructure.Domain.Data.ApiKey.DTOs;
 
 
 
@@ -1530,9 +1531,9 @@ namespace Anewluv.Services.Authentication
                                     //11-1-2011
                                     //store the valid profileID in appfarbic cache
                                     // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
-                                    var returnedTaskTResult = AsyncCalls.checkforuploadedphotobyprofileidasync((profile.id.ToString()));
+                                    var returnedTaskTResult = checkforuploadedphotobyprofileidasync(profile.id.ToString()).Result;
                                     // bool result =
-                                    model.photostatus = returnedTaskTResult.Result;
+                                    model.photostatus = returnedTaskTResult;
                                     //}
 
                                     //5/3/2011 instantiace the photo upload model as well since its the next step if we were succesful    
@@ -1571,8 +1572,8 @@ namespace Anewluv.Services.Authentication
                                         // using (var tempdb = AnewluvContext)
                                         // {
                                         //       MemberService MemberService = new MemberService(tempdb);
-                                      var activateProfileResult= AsyncCalls.activateprofileasync(new ProfileModel { profileid = profile.id });
-                                      activationsuccesful = activateProfileResult.Result;
+                                      var activateProfileResult= activateprofileasync(new ProfileModel { profileid = profile.id }).Result;
+                                      activationsuccesful = activateProfileResult;
                                         //  }
                                     }
 
@@ -1583,7 +1584,7 @@ namespace Anewluv.Services.Authentication
                                     //  using (var tempdb = AnewluvContext)
                                     //   {
                                     //     MemberService MemberService = new MemberService(tempdb);
-                                    areamailboxfolderscreated =  AsyncCalls.checkifmailboxfoldersarecreatedasync(new ProfileModel { profileid = profile.id }).Result;
+                                    areamailboxfolderscreated =  Api.AsyncCalls.checkifmailboxfoldersarecreatedasync(new ProfileModel { profileid = profile.id }).Result;
                                     // }
 
                                     if (!(areamailboxfolderscreated))                                    
@@ -1592,7 +1593,7 @@ namespace Anewluv.Services.Authentication
                                         //  using (var tempdb = AnewluvContext)
                                         //   {
                                         //    MemberService MemberService = new MemberService(tempdb);
-                                        AsyncCalls.createmailboxfoldersasync(new ProfileModel { profileid = profile.id });
+                                        Api.AsyncCalls.createmailboxfoldersasync(new ProfileModel { profileid = profile.id });
                                         //  }
                                         // MemberService.createmailboxfolders(new ProfileModel { profileid = profile.id });
                                     }
@@ -1799,9 +1800,12 @@ namespace Anewluv.Services.Authentication
                         string decryptedPassword;
                         string actualpasswordstring;
 
+                        if (profile == null) return null;
+
+
                         //Dim ctx As New Entities()
                         //added profile status ID validation as well i.e 2 for activated and is not banned 
-                        myQuery = db.GetRepository<profile>().FindSingle(p => p.username == profile.username && p.status_id == 2);
+                        myQuery = db.GetRepository<profile>().Find(p => p.username == profile.username && p.status_id == 2).FirstOrDefault();
 
 
 
@@ -1841,13 +1845,23 @@ namespace Anewluv.Services.Authentication
                         //check if decrypted string macthed username to upper  + secret
                         if (actualpasswordstring == decryptedPassword)
                         {
-
                             updateuserlogintime(myQuery.id, db);
                            //No need to log this since its used the APIkey inspector on checkascccesscore
                             currenttoken.id = myQuery.id;
                             //return the profile ID so it can be used for whatver
-                            var guid = getcurrentapikeybyprofileid(myQuery.id,db);
-                            if (guid != null) currenttoken.Apikey = guid.GetValueOrDefault();
+                           
+                            //for now have it generate a new GUID each time to test 
+                            // var existingguid = getcurrentapikeybyprofileid(myQuery.id, db);
+                            
+                            var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel { service = "AuthenticationService", username = profile.username,
+                                                                                                           useridentifier = currenttoken.id,
+                                                                                                           application = "Anewluv",
+                                                                                                           key = null }).Result;
+                           // var guid = getcurrentapikeybyprofileid(myQuery.id,db);
+                            if (guid != null)                          
+                                currenttoken.Apikey = guid;
+                            
+                          
                             return currenttoken;
                             //get the token here
 
@@ -1885,6 +1899,11 @@ namespace Anewluv.Services.Authentication
             }
         }
 
+
+
+
+        #region "private methods for reuse or other async calls"
+
         private Guid? getcurrentapikeybyprofileid(int profileid,IUnitOfWork db)
         {      
 
@@ -1897,7 +1916,7 @@ namespace Anewluv.Services.Authentication
 
                         if (myQuery != null && myQuery.apikey != null)
                         {
-                        return myQuery.apikey;
+                             return myQuery.apikey;
                         }
                         return null;
                       
@@ -1949,8 +1968,44 @@ namespace Anewluv.Services.Authentication
           
         
         }
-        
-        
+
+        //validate of api key only not profile id if its not passed
+        private async Task<Guid> validateorgetapikeyasync(ApiKeyValidationModel model)
+        {
+
+            Task<Guid> returnedTaskTResult =  Api.AsyncCalls.validateorgetapikeyasync(model);
+            Guid result = await returnedTaskTResult;
+
+            return result;
+
+         
+        }
+
+        private async Task<bool> checkifmailboxfoldersarecreatedasync(ProfileModel model)
+        {
+            Task<bool> returnedTaskTResult = Api.AsyncCalls.checkifmailboxfoldersarecreatedasync(model);
+            bool result = await returnedTaskTResult;
+            return result;
+        }
+
+        private async Task<bool> activateprofileasync(ProfileModel model)
+        {
+            Task<bool> returnedTaskTResult = Api.AsyncCalls.activateprofileasync(model);
+            bool result = await returnedTaskTResult;
+            return result;
+        }
+
+        private async Task<bool> checkforuploadedphotobyprofileidasync(string profileid)
+        {
+            Task<bool> returnedTaskTResult = Api.AsyncCalls.checkforuploadedphotobyprofileidasync(profileid);
+            bool result = await returnedTaskTResult;
+            return result;
+        }
+
+
+
+        #endregion
+
         #endregion
 
         // Other overrides not implemented

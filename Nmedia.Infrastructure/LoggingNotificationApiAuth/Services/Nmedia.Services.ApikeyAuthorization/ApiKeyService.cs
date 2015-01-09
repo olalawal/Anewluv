@@ -21,6 +21,7 @@ using Nmedia.Infrastructure.Domain.Data;
 
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain;
+using Nmedia.Infrastructure.Domain.Data.ApiKey.DTOs;
 //using Nmedia.Infrastructure.WCF;
 //using Anewluv.Lib;
 //using Anewluv.Lib;
@@ -160,7 +161,7 @@ namespace Nmedia.Services.ApikeyAuthorization
 
         }
 
-        public async Task<Guid> ValidateOrGenerateNewApiKey(string service, string username, int useridentifier, string application,Guid key)
+        public async Task<Guid> ValidateOrGenerateNewApiKey(ApiKeyValidationModel model)
         {
 
             try
@@ -175,8 +176,8 @@ namespace Nmedia.Services.ApikeyAuthorization
                     _unitOfWork.DisableLazyLoading = true;
                     using (var db = _unitOfWork)
                     {
-                       var result = db.GetRepository<apikey>().FindSingle(p => p.key ==  key & p.active == true);
-                       if (result == null) return GenerateAPIkey(service, username, useridentifier, application, db);
+                        var result = db.GetRepository<apikey>().FindSingle(p => p.key == model.key & p.active == true);
+                       if (result == null) return GenerateAPIkey(model.service, model.username, model.useridentifier, model.application, db);
                        return result.key;
                     }
                    
@@ -241,6 +242,7 @@ namespace Nmedia.Services.ApikeyAuthorization
 
 
         #region "private methods for re-use"
+
         private Guid GenerateAPIkey(string service, string username, int useridentifier, string application,IUnitOfWork db)
         {
             apikey newkey = new apikey();

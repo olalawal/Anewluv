@@ -7,7 +7,7 @@ using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anewluv.Api
+namespace Anewluv.Apikey
 {
    public static class Inspectors
     {

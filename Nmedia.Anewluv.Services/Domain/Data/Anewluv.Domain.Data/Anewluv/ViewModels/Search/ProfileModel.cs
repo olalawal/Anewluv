@@ -19,9 +19,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int? profileid { get; set; }
         [DataMember]
-        public string screenname { get; set; }
-        [DataMember]
-        public string sessionid { get; set; }
+        public string screenname { get; set; }        
         [DataMember]
         public Guid? photoid { get; set; }
         [DataMember]
@@ -34,7 +32,23 @@ namespace Anewluv.Domain.Data.ViewModels
         public string openididentifier { get; set; }
         [DataMember]
         public string openidprovider { get; set; }
+
+        //added items for stuff like geodata which we want to require maybe at some point
         [DataMember]
-        public string Country { get; set; }
+        public string city { get; set; }
+        [DataMember]
+        public string stateprovince { get; set; }       
+        [DataMember]
+        public string Countryname { get; set; }
+        [DataMember]
+        public double? lattitude { get; set; }
+        [DataMember]
+        public double? longitude { get; set; }
+
+        //activity base items like IP address session etc
+        [DataMember]
+        public string ipaddress { get; set; }
+        [DataMember]
+        public string sessionid { get; set; }
     }
 }

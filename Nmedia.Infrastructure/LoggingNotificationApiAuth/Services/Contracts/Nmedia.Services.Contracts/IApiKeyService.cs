@@ -10,6 +10,7 @@ using System.ServiceModel.Activation;
 using Nmedia.Infrastructure.Domain.Data.log;
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain.Data.ApiKey;
+using Nmedia.Infrastructure.Domain.Data.ApiKey.DTOs;
 
 namespace Nmedia.Services.Contracts
 {
@@ -33,7 +34,7 @@ namespace Nmedia.Services.Contracts
 
         [OperationContract(), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/ValidateOrGenerateNewApiKey", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        Task<Guid> ValidateOrGenerateNewApiKey(string service, string username, int useridentifier, string application, Guid key);
+        Task<Guid> ValidateOrGenerateNewApiKey(ApiKeyValidationModel model);
    
 
         //temporary method for use by designer to get the message information formated for them

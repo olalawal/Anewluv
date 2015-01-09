@@ -18,7 +18,7 @@ using Nmedia.Infrastructure;
 using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain;
 using Nmedia.Infrastructure.Domain.Data;
-using Nmedia.Services.ApikeyAuthorization;
+//using Nmedia.Services.ApikeyAuthorization;
 using Anewluv.Domain;
 using Anewluv.Domain.Data.ViewModels;
 using System.Threading.Tasks;
@@ -31,7 +31,7 @@ using Anewluv.Domain.Data.Anewluv.ViewModels;
 //using Anewluv.Domain;
 //using Anewluv.Services.Authentication;
 
-namespace Anewluv.Api
+namespace Anewluv.Apikey
 {
     //implement this using the api key servbice key service i.e , which is referenced in this API as well
     //sample 

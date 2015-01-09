@@ -48,12 +48,13 @@
   <ItemGroup>
     <Compile Include="ApiKey\apicalls.cs" />
     <Compile Include="ApiKey\apikey.cs" />
+    <Compile Include="ApiKey\DTOs\ApiKeyValidationModel.cs" />
     <Compile Include="ApiKey\Enums\accesslevels.cs" />
     <Compile Include="ApiKey\Enums\applications.cs" />
     <Compile Include="ApiKey\lu_accesslevel.cs" />
     <Compile Include="ApiKey\lu_application_apikey.cs" />
     <Compile Include="ApiKey\user.cs" />
-    <Compile Include="CustomClaimToken\NmediaToken.cs" />
+    <Compile Include="ApiKey\DTOs\CustomClaimToken\NmediaToken.cs" />
     <Compile Include="Log\lu_logenviroment.cs" />
     <Compile Include="Log\Enums\Applications.cs" />
     <Compile Include="Log\Enums\Logenviroment.cs" />

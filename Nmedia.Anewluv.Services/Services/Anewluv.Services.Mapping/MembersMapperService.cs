@@ -817,14 +817,14 @@ namespace Anewluv.Services.Mapping
                 model.myquicksearch.myselectedstateprovince = "ALL";
                 model.myquicksearch.myselectedseekinggenderid = Extensions.GetLookingForGenderID(1);
 
-                if (Model.Country != "")
+                if (Model.Countryname != "")
                 {                    
                     
                   PostalData2Context GeoContext = new PostalData2Context();
                   using (var tempdb = GeoContext)
                   {
                       GeoService GeoService = new GeoService(tempdb);
-                      model.myquicksearch.myselectedcountryname = GeoService.getcountryidbycountryname(new GeoModel { country = Model.Country }) == 0 ? "United States" : Model.Country; //use same country for now
+                      model.myquicksearch.myselectedcountryname = GeoService.getcountryidbycountryname(new GeoModel { country = Model.Countryname }) == 0 ? "United States" : Model.Countryname; //use same country for now
                   }
                 }
                 else

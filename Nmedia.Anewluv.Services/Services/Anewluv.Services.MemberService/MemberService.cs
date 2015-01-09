@@ -28,6 +28,7 @@ using Nmedia.Infrastructure.Domain.Data;
 
 using Anewluv.DataExtentionMethods;
 using System.Threading.Tasks;
+using Anewluv.Domain.Data.Anewluv.ViewModels;
 
 
 namespace Anewluv.Services.Members
@@ -101,6 +102,7 @@ namespace Anewluv.Services.Members
 
         
         }
+
         public searchsetting getperfectmatchsearchsettingsbyprofileid(ProfileModel model)
         {
             _unitOfWork.DisableProxyCreation = true;
@@ -157,6 +159,7 @@ namespace Anewluv.Services.Members
             }
 
         }
+
         public searchsetting createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model)
         {
            
@@ -312,7 +315,7 @@ namespace Anewluv.Services.Members
         // "Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
         //*************************************************************************************************
         //update the Initial Catalog= i.e create folders and change profile status from guest to active ?!
-        public async Task<bool> createmailboxfolders(ProfileModel model)
+        public async void createmailboxfolders(ProfileModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -358,11 +361,11 @@ namespace Anewluv.Services.Members
                                   int z = db.Commit();
                                   transaction.Commit();
 
-                                  return true;
+                               //   return true;
                               }
-                              return false;
+                            //  return false;
                           });
-                          return await task.ConfigureAwait(false);
+                          await task.ConfigureAwait(false);
 
                       }
                       catch (Exception ex)
@@ -915,8 +918,8 @@ namespace Anewluv.Services.Members
 
         }
 
-     
-        public async void addprofileactvity(profileactivity model)
+
+        public async void addprofileactvity(ActivityModel model)
         {
             //get the profile
             //profile myProfile;
@@ -941,12 +944,11 @@ namespace Anewluv.Services.Members
                         
                     var task = Task.Factory.StartNew(() =>
                     {
-                               db.Add(model);
-                            //save all changes bro
-                             int i = db.Commit();
-                             transaction.Commit();
-
-                         // return true;
+                             var id = addprofileactvity(model.activitybase,db); 
+                             //get the ID and save geodata if there is data for it
+                             model.activitygeodata.activity_id =id;
+                             if (id!=0 && ( model.activitygeodata.countryname != null | model.activitygeodata.lattitude != null)) addprofileactvitygeodata(model.activitygeodata,db);
+                   
                            });
                     await task.ConfigureAwait(false);
                        
@@ -959,7 +961,7 @@ namespace Anewluv.Services.Members
                         //instantiate logger here so it does not break anything else.
                         logger = new  Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profile_id));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.activitybase.profile_id));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member service");
                         string ErrorMessage = "";
@@ -973,7 +975,157 @@ namespace Anewluv.Services.Members
 
         }
 
-      
+        /// <summary>
+        /// actvity ID is needed for this so use this carefully
+        /// </summary>
+        /// <param name="model"></param>
+        public async void addprofileactvitygeodata(ActivityModel model)
+        {
+            //get the profile
+            //profile myProfile;
+            //IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
+            // profile myProfile = new profile();
+            // userlogtime myLogtime = new userlogtime();
+            //  DateTime currenttime = DateTime.Now;
+
+            //_unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+
+                    try
+                    {
+                        //update all other sessions that were not properly logged out
+                        // var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+ 
+                          addprofileactvitygeodata(model.activitygeodata,db);
+
+                            // return true;
+                        });
+                        await task.ConfigureAwait(false);
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MemberService);
+                        //int profileid = Convert.ToInt32(viewerprofileid);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.activitygeodata.activity_id));
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                        //throw convertedexcption;
+                    }
+                }
+            }
+
+        }
+
+        #region "private methods for actvity"
+    
+        public int addprofileactvity(profileactivity model,IUnitOfWork db)
+        {
+            //get the profile
+            //profile myProfile;
+            //IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
+            // profile myProfile = new profile();
+            // userlogtime myLogtime = new userlogtime();
+            //  DateTime currenttime = DateTime.Now;
+
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+
+                    try
+                    {
+                        //update all other sessions that were not properly logged out
+                        // var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+
+
+                      
+                            db.Add(model);
+                            //save all changes bro
+                            int i = db.Commit();
+                            transaction.Commit();
+                            return model.id;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MemberService);
+                        //int profileid = Convert.ToInt32(viewerprofileid);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profile_id));
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw ex;
+
+                        //throw convertedexcption;
+                    }
+                
+            }
+
+        }
+
+        private int addprofileactvitygeodata(profileactivitygeodata model,IUnitOfWork db)
+        {
+
+            db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+
+                    try
+                    {
+                        //update all other sessions that were not properly logged out
+                        // var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+
+
+                      
+                            db.Add(model);
+                            //save all changes bro
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                           return model.id;
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MemberService);
+                        //int profileid = Convert.ToInt32(viewerprofileid);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.activity_id));
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw ex;
+
+                        //throw convertedexcption;
+                    }
+                }
+            
+
+        }
+        #endregion
+
         //date time functions '
         //***********************************************************
         //this function will send back when the member last logged in
