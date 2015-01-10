@@ -31,7 +31,8 @@ using Anewluv.Services.Spatial;
 using System.Threading.Tasks;
 
 using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
-using Nmedia.Infrastructure.Domain.Data.ApiKey.DTOs;
+using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
+using Nmedia.Infrastructure.Domain.Data.Apikey;
 
 
 
@@ -1848,6 +1849,7 @@ namespace Anewluv.Services.Authentication
                             updateuserlogintime(myQuery.id, db);
                            //No need to log this since its used the APIkey inspector on checkascccesscore
                             currenttoken.id = myQuery.id;
+                            currenttoken.timestamp = DateTime.Now;
                             //return the profile ID so it can be used for whatver
                            
                             //for now have it generate a new GUID each time to test 
@@ -1855,8 +1857,9 @@ namespace Anewluv.Services.Authentication
                             
                             var guid = Api.AsyncCalls.validateorgetapikeyasync(new ApiKeyValidationModel { service = "AuthenticationService", username = profile.username,
                                                                                                            useridentifier = currenttoken.id,
-                                                                                                           application = "Anewluv",
-                                                                                                           key = null }).Result;
+                                                                                                           application = "Anewluv", application_id = (int)applicationenum.anewluv,
+                                                                                                           keyvalue = null
+                            }).Result;
                            // var guid = getcurrentapikeybyprofileid(myQuery.id,db);
                             if (guid != null)                          
                                 currenttoken.Apikey = guid;

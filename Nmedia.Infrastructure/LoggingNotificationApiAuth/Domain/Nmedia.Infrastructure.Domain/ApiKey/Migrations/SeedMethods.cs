@@ -4,7 +4,7 @@ using System.Data.Entity.Migrations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Nmedia.Infrastructure.Domain.Data.ApiKey;
+using Nmedia.Infrastructure.Domain.Data.Apikey;
 
 
 namespace Nmedia.Infrastructure.Domain
@@ -61,39 +61,46 @@ namespace Nmedia.Infrastructure.Domain
                //    key = key1,
                    timestamp = DateTime.Now,
                    application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
-                   accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.admin).First()
+                   accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.admin).First(),
+                   user = null
 
 
                };
-              //);
+              //);            
+              
 
-            //read write anewluv site
-            
+            //read write anewluv site            
               var apikey2 = new apikey()
               {
                   active = true,
                   externalapplicationname = "AnewlvuIpadApplication",
                //   key = key2,//Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
                   timestamp = DateTime.Now,
-                  application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluv).First(),
-                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.user).First()
+                  application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluvipad).First(),
+                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.admin).First(),
+                   user = null
 
               };
              //);
 
-            //ipdad read write
-              //context.apikeys.AddOrUpdate(h=>h.key, new apikey()              
-              var apikey3 = new apikey()
-              {
-                  active = true,
-                  externalapplicationname = "AnewlvuIpadApplication",
-//key = key3,// Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
-                  timestamp = DateTime.Now,
-                  application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluvipad).First(),
-                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.user).First()
+              context.Add(apikey1);
+              context.Add(apikey2);
 
-              };
-//);
+
+
+//            //ipdad read write
+//              //context.apikeys.AddOrUpdate(h=>h.key, new apikey()              
+//              var apikey3 = new apikey()
+//              {
+//                  active = true,
+//                  externalapplicationname = "AnewlvuIpadApplication",
+////key = key3,// Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c"),
+//                  timestamp = DateTime.Now,
+//                  application = context.lu_applications.Where(p => p.id == (int)applicationenum.anewluvipad).First(),
+//                  accesslevel = context.lu_accesslevels.Where(p => p.id == (int)accesslevelsenum.user).First()
+
+//              };
+////);
 
 
            
@@ -103,69 +110,69 @@ namespace Nmedia.Infrastructure.Domain
 
 
 
-              //use create some users here
-              context.users.AddOrUpdate(h => h.username, new user()
-              {
-                  username = "pavankumar",
-                  email = "pavankumark130@gmail.com",
-                  active = true,
-                  registeringapplication = "web development",
-                  timestamp = DateTime.Now
+             // //use create some users here
+             // context.users.AddOrUpdate(h => h.username, new user()
+             // {
+             //     username = "pavankumar",
+             //     email = "pavankumark130@gmail.com",
+             //     active = true,
+             //     registeringapplication = "web development",
+             //     timestamp = DateTime.Now
 
 
-              }
-              );
+             // }
+             // );
 
-              context.users.AddOrUpdate(h => h.username, new user()
-              {
-                  username = "ranapaul",
-                  email = "rana.paul130@gmail.com",
-                  active = true,
-                  registeringapplication = "ipad devlopment",
-                  timestamp = DateTime.Now
-
-
-              }
-             );
+             // context.users.AddOrUpdate(h => h.username, new user()
+             // {
+             //     username = "ranapaul",
+             //     email = "rana.paul130@gmail.com",
+             //     active = true,
+             //     registeringapplication = "ipad devlopment",
+             //     timestamp = DateTime.Now
 
 
-              context.users.AddOrUpdate(h => h.username, new user()
-              {
-                  username = "olawal",
-                  email = "ola_lawal@yahoo.com",
-                  active = true,
-                  registeringapplication = "anewluvcore",
-                  timestamp = DateTime.Now, apikeys = new List<apikey>(),
-              }
-              );
+             // }
+             //);
+
+
+             // context.users.AddOrUpdate(h => h.username, new user()
+             // {
+             //     username = "olawal",
+             //     email = "ola_lawal@yahoo.com",
+             //     active = true,
+             //     registeringapplication = "anewluvcore",
+             //     timestamp = DateTime.Now, apikeys = new List<apikey>(),
+             // }
+             // );
 
             
              //link the user to the correct api key 
               EFUtils.SaveChanges(context);
 
 
-              user user1 = context.users.Where(p => p.username == "pavankumar").FirstOrDefault();                 
+            //  user user1 = context.users.Where(p => p.username == "pavankumar").FirstOrDefault();                 
               
-              //var key = Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c");
-             // apikey apikey =  context.apikeys.Where(p => p.key == key1 ).FirstOrDefault();
-              //apikey.user.id = user.id;
-              user1.apikeys.Add(apikey1);
+            //  //var key = Guid.Parse("460ad6f3-8216-469f-9b1c-52cffa5d812c");
+            // // apikey apikey =  context.apikeys.Where(p => p.key == key1 ).FirstOrDefault();
+            //  //apikey.user.id = user.id;
+            //  user1.apikeys.Add(apikey1);
 
-              user  user2 = context.users.Where(p => p.username == "ranapaul").FirstOrDefault();
-              // = context.apikeys.Where(p => p.key == key2 ).FirstOrDefault();   //p.accesslevel.id == (int)accesslevelsenum.readwriteuser && p.application.id == (int)applicationenum.anewluvipad).FirstOrDefault();
-             // apikey.user.id = user.id; 
-              user2.apikeys.Add(apikey2);
+            //  user  user2 = context.users.Where(p => p.username == "ranapaul").FirstOrDefault();
+            //  // = context.apikeys.Where(p => p.key == key2 ).FirstOrDefault();   //p.accesslevel.id == (int)accesslevelsenum.readwriteuser && p.application.id == (int)applicationenum.anewluvipad).FirstOrDefault();
+            // // apikey.user.id = user.id; 
+            //  user2.apikeys.Add(apikey2);
 
-              user user3 = context.users.Where(p => p.username == "olawal").FirstOrDefault();
-               //apikey = context.apikeys.Where(p => p.key == key3 ).FirstOrDefault();//context.apikeys.Where(p => p.accesslevel.id == (int)accesslevelsenum.admin).FirstOrDefault();
-            //apikey.user.id = user.id; 
-             user3.apikeys.Add(apikey3);
+            //  user user3 = context.users.Where(p => p.username == "olawal").FirstOrDefault();
+            //   //apikey = context.apikeys.Where(p => p.key == key3 ).FirstOrDefault();//context.apikeys.Where(p => p.accesslevel.id == (int)accesslevelsenum.admin).FirstOrDefault();
+            ////apikey.user.id = user.id; 
+            // user3.apikeys.Add(apikey3);
              
               
 
 
             //context.SaveChanges();
-              EFUtils.SaveChanges(context);
+           //   EFUtils.SaveChanges(context);
 
 
 

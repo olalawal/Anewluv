@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implemenation\ContextBase.cs" />
     <Compile Include="ExceptionTypes\UnitOfWorkException.cs" />
     <Compile Include="Implemenation\EFRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

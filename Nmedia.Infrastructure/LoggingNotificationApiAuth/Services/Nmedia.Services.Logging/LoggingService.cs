@@ -55,7 +55,7 @@ namespace Nmedia.Services.Logging
 
         public  async Task WriteCompleteLogEntry(log logEntry)
         {
-            using (var db = new LoggingContext())
+            using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 db.DisableProxyCreation = true;

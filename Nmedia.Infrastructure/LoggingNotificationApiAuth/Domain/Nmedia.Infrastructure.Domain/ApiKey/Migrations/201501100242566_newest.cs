@@ -3,7 +3,7 @@ namespace Nmedia.Infrastructure.Domain.Apikey.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class first : DbMigration
+    public partial class newest : DbMigration
     {
         public override void Up()
         {
@@ -27,20 +27,20 @@ namespace Nmedia.Infrastructure.Domain.Apikey.Migrations
                     {
                         id = c.Int(nullable: false, identity: true),
                         timestamp = c.DateTime(),
+                        application_id = c.Int(nullable: false),
+                        accesslevel_id = c.Int(nullable: false),
                         externalapplicationname = c.String(),
+                        user_id = c.Int(),
                         key = c.Guid(nullable: false),
                         active = c.Boolean(),
                         lastaccesstime = c.DateTime(),
-                        accesslevel_id = c.Int(nullable: false),
-                        application_id = c.Int(nullable: false),
-                        user_id = c.Int(),
                     })
                 .PrimaryKey(t => t.id)
                 .ForeignKey("dbo.lu_accesslevel", t => t.accesslevel_id, cascadeDelete: true)
                 .ForeignKey("dbo.lu_application", t => t.application_id, cascadeDelete: true)
                 .ForeignKey("dbo.users", t => t.user_id)
-                .Index(t => t.accesslevel_id)
                 .Index(t => t.application_id)
+                .Index(t => t.accesslevel_id)
                 .Index(t => t.user_id);
             
             CreateTable(
@@ -84,8 +84,8 @@ namespace Nmedia.Infrastructure.Domain.Apikey.Migrations
             DropForeignKey("dbo.apikeys", "application_id", "dbo.lu_application");
             DropForeignKey("dbo.apikeys", "accesslevel_id", "dbo.lu_accesslevel");
             DropIndex("dbo.apikeys", new[] { "user_id" });
-            DropIndex("dbo.apikeys", new[] { "application_id" });
             DropIndex("dbo.apikeys", new[] { "accesslevel_id" });
+            DropIndex("dbo.apikeys", new[] { "application_id" });
             DropIndex("dbo.apicalls", new[] { "apikey_id" });
             DropTable("dbo.users");
             DropTable("dbo.lu_application");

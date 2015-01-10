@@ -236,22 +236,22 @@ namespace Anewluv.Api
 
         }
 
-        private static WebChannelFactory<IApiKeyService> _apikeyservice;
-        private static IApiKeyService _apikeychannel=null;
-        public static IApiKeyService ApiKeyService
+        private static WebChannelFactory<IApikeyService> _apikeyservice;
+        private static IApikeyService _apikeychannel=null;
+        public static IApikeyService ApiKeyService
         {
             get
             {
                 if (_apikeyservice ==null || _apikeyservice.State ==  CommunicationState.Closed || _apikeychannel == null)
                 {
-                    _apikeyservice = new WebChannelFactory<IApiKeyService>("webHttpBinding_IApiKeyService");
+                    _apikeyservice = new WebChannelFactory<IApikeyService>("webHttpBinding_IApikeyService");
                     _apikeychannel = _apikeyservice.CreateChannel();
                     return _apikeychannel;
 
                 }
                 else
                 {
-                   // IApiKeyService channel = _apikeyservice.CreateChannel();
+                   // IApikeyService channel = _apikeyservice.CreateChannel();
                     return _apikeychannel;
 
 

@@ -77,7 +77,7 @@ namespace Nmedia.Services.Notification
             var task = Task.Factory.StartNew(() =>
             {
                 var list = new List<lu_template>();
-                using (var db = new NotificationContext())
+                using (var db = _unitOfWork)
                 {
                     db.IsAuditEnabled = false; //do not audit on adds
                     db.DisableProxyCreation = true;
@@ -113,7 +113,7 @@ namespace Nmedia.Services.Notification
             var task = Task.Factory.StartNew(() =>
             {
                 var list = new List<systemaddress>();
-                using (var db = new NotificationContext())
+                using (var db = _unitOfWork)
                 {
                     db.IsAuditEnabled = false; //do not audit on adds
                     db.DisableProxyCreation = true;
@@ -149,7 +149,7 @@ namespace Nmedia.Services.Notification
             var task = Task.Factory.StartNew(() =>
             {
                 var list = new List<lu_messagetype>();
-                using (var db = new NotificationContext())
+                using (var db = _unitOfWork)
                 {
                     db.IsAuditEnabled = false; //do not audit on adds
                     db.DisableProxyCreation = true;
@@ -196,7 +196,7 @@ namespace Nmedia.Services.Notification
 
             EmailModel emailmodels = new EmailModel();
 
-            using (var db = new NotificationContext())
+            using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 //db.DisableProxyCreation = true;
@@ -286,7 +286,7 @@ namespace Nmedia.Services.Notification
 
             EmailViewModel viewmodel = new EmailViewModel();
 
-            using (var db = new NotificationContext())
+            using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 //db.DisableProxyCreation = true;

@@ -125,6 +125,10 @@
       <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
+      <Project>{c4c10e84-8c87-43d3-aef3-9c0a03a2f7db}</Project>
+      <Name>Nmedia.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Domain\Context\Anewluv.Domain\Anewluv.Domain.csproj">
       <Project>{A0B04284-784B-4322-A213-DB178716EFC1}</Project>
       <Name>Anewluv.Domain</Name>

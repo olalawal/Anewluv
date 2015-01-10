@@ -115,9 +115,9 @@
       <Project>{efc502ae-dd76-4278-8738-dd0b1f55a724}</Project>
       <Name>Anewluv.Services.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\ApplicationSpecfic\Anewluv.Api\Anewluv.Api.csproj">
-      <Project>{1E78FD8F-5A46-4894-B7E9-9E572D558562}</Project>
-      <Name>Anewluv.Api</Name>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\ApplicationSpecfic\Anewluv.Apikey\Anewluv.Apikey.csproj">
+      <Project>{554a577c-8408-43f0-9cec-b8251ac219a5}</Project>
+      <Name>Anewluv.Apikey</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\Services\Contracts\Nmedia.Services.Contracts\Nmedia.Infrastructure.Services.Contracts.csproj">
       <Project>{2322c931-607a-46d5-bc71-be6b25288b14}</Project>

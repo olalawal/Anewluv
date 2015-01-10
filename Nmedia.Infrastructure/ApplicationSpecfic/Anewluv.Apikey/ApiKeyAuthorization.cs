@@ -22,7 +22,7 @@ using Nmedia.Infrastructure.Domain.Data;
 using Anewluv.Domain;
 using Anewluv.Domain.Data.ViewModels;
 using System.Threading.Tasks;
-using Nmedia.Infrastructure.Domain.Data.ApiKey;
+using Nmedia.Infrastructure.Domain.Data.Apikey;
 using System.Xml;
 using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.Anewluv.ViewModels;
@@ -36,17 +36,16 @@ namespace Anewluv.Apikey
     //implement this using the api key servbice key service i.e , which is referenced in this API as well
     //sample 
     //http://stackoverflow.com/questions/11192610/inject-repository-into-serviceauthorizationmanager-using-unity
-    public class ApiKeyAuthorization : ServiceAuthorizationManager
+    public class ApikeyAuthorization : ServiceAuthorizationManager
     {
-       
-
+                 
         //public APIKeyAuthorization(IAPIkeyRepository apikeyrepository)
         //{
         //    _apikeyrepository = apikeyrepository;
         //}
         //had to set up a parameterless contrycture due to WCF restructtions 
         //its not too bad since this only seems to be called on the first instantiaion
-        public ApiKeyAuthorization()
+        public ApikeyAuthorization()
         {
          
 
@@ -107,7 +106,7 @@ namespace Anewluv.Apikey
                 //TO DO this list needs to be more broken down
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Logging");
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Notification");
-                //nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Authorization");
+                nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Authorization");
                 //these methods use internal rest calls so need to be excluded
                 //nonauthenticatedURLS.Add("updateuserlogintimebyprofileidandsessionid");  // do this this way until we determine how to add headers
                 //nonauthenticatedURLS.Add("validateuserandgettoken");  //internal call no auth required
@@ -187,7 +186,10 @@ namespace Anewluv.Apikey
 
                            if (ProfileModel.profileid != null)
                            {
-                               validrequest = Utilities.VallidateApiKeyAndUserId(key, (int)applicationenum.anewluv, ProfileModel.profileid.GetValueOrDefault());
+                               validrequest = Anewluv.Api.AsyncCalls.isvalidapikeyanduserasync(new
+                               apikey { application = new lu_application { id = (int)applicationenum.anewluv }, keyvalue = apiKey, user = new user { useridentifier = ProfileModel.profileid.GetValueOrDefault() } }).Result;
+                                   
+                                 //  (key, (int)applicationenum.anewluv, );
 
                                //log activity and geodata if it exists
                                Utilities.LogProfileActivity(ProfileModel, path, apiKey);
@@ -199,7 +201,8 @@ namespace Anewluv.Apikey
                        else
                        {
                            //just validate the api key
-                           validrequest = Utilities.ValidateApiKey(key).Result;
+                          // var dd = Api.ApiKeyService.IsValidAPIKey(new apikey { key = apiKey }).Result;
+                           validrequest = Anewluv.Api.AsyncCalls.isvalidapikeyasync(new apikey { keyvalue = apiKey, application_id = (int)applicationenum.anewluv }).Result;//; Utilities.ValidateApiKey(key).Result;
                        }
                         //Api.DisposeApiKeyService();
                         //   return validrequest;                        

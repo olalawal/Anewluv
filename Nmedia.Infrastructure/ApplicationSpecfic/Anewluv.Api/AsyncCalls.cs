@@ -2,8 +2,8 @@
 using Anewluv.Domain.Data.Anewluv.ViewModels;
 using Anewluv.Domain.Data.ViewModels;
 using GeoData.Domain.Models.ViewModels;
-using Nmedia.Infrastructure.Domain.Data.ApiKey;
-using Nmedia.Infrastructure.Domain.Data.ApiKey.DTOs;
+using Nmedia.Infrastructure.Domain.Data.Apikey;
+using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
 using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
 using System;
 using System.Collections.Generic;
@@ -22,17 +22,25 @@ namespace Anewluv.Api
         public static async Task<bool> isvalidapikeyasync(apikey model)
         {
 
-            Task<bool> returnedTaskTResult = Api.ApiKeyService.IsValidAPIKey(model);
-            bool  result = await returnedTaskTResult;
+            try
+            {
+                Task<bool> returnedTaskTResult = Api.ApiKeyService.IsValidAPIKey(model);
+                bool result = await returnedTaskTResult;
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            
+            }
 
             // IsApiKeyValid = await 
 
 
         }
 
-        public static async Task<bool> isvalidapikeyanduser(apikey model)
+        public static async Task<bool> isvalidapikeyanduserasync(apikey model)
         {
 
             Task<bool> returnedTaskTResult = Api.ApiKeyService.IsValidAPIKeyAndUser(model);

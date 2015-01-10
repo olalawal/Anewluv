@@ -76,6 +76,10 @@
       <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
+      <Project>{c4c10e84-8c87-43d3-aef3-9c0a03a2f7db}</Project>
+      <Name>Nmedia.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain\Nmedia.Infrastructure.Domain\Nmedia.Infrastructure.Domain.csproj">
       <Project>{e2af89fa-eae4-4980-a9c5-149daceda4ab}</Project>
       <Name>Nmedia.Infrastructure.Domain</Name>
@@ -84,9 +88,9 @@
       <Project>{2322c931-607a-46d5-bc71-be6b25288b14}</Project>
       <Name>Nmedia.Infrastructure.Services.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\Nmedia.Services.ApikeyAuthorization\Nmedia.Services.ApiKeyAuthorization.csproj">
+    <ProjectReference Include="..\..\Services\Nmedia.Services.ApikeyAuthorization\Nmedia.Services.ApikeyAuthorization.csproj">
       <Project>{086ce7ec-c6bf-49d0-88bd-f5c86624c289}</Project>
-      <Name>Nmedia.Services.ApiKeyAuthorization</Name>
+      <Name>Nmedia.Services.ApikeyAuthorization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

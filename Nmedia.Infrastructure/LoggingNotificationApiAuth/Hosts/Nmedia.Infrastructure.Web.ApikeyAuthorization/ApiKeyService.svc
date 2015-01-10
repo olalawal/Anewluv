@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Factory=" Nmedia.Infrastructure.Web.Services.ApikeyAuthorization.ServiceHostFactories.NinjectServiceHostFactory"  Service="Nmedia.Services.ApikeyAuthorization.ApiKeyService"  %>
+﻿<%@ ServiceHost Factory=" Nmedia.Infrastructure.Web.Services.ApikeyAuthorization.ServiceHostFactories.NinjectServiceHostFactory"  Service="Nmedia.Services.ApikeyAuthorization.ApikeyService"  %>

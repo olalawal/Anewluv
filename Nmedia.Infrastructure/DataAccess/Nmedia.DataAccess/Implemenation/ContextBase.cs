@@ -1,72 +1,47 @@
-﻿using System;
+﻿using Nmedia.DataAccess.Interfaces;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.Entity;
-using Nmedia.Infrastructure.Domain.Data.Notification;
-
 using System.Data;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Common;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
-using System.Data.Common;
-using System.Data.Entity.Core.Objects;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-
-using Nmedia.DataAccess.Interfaces;
-using Nmedia.DataAccess;
-
-namespace Nmedia.Infrastructure.Domain
+namespace Nmedia.DataAccess
 {
-    //Configure migrations
-    //PM> enable-migrations
-    // PM> add-migration -startupproject NotificationModel ddsd
-    // Update-Database -startupproject NotificationModel -verbose
-
-    public partial class NotificationContext : ContextBase //DbContext, IUnitOfWork
+    public class ContextBase : DbContext, IUnitOfWork
     {
-        private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
 
-        public DbSet<address> address { get; set; }
-        public DbSet<systemaddress> systemaddress { get; set; }
-        public DbSet<lu_addresstype> lu_addresstype { get; set; }
-        public DbSet<lu_messagetype> lu_messagetype { get; set; }
-        public DbSet<lu_news> lu_news { get; set; }
-        public DbSet<lu_systemaddresstype> lu_systemaddresstype { get; set; }
-        public DbSet<lu_template> lu_template { get; set; }
-        public DbSet<lu_templatefilename> lu_templatefilename { get; set; }
-        public DbSet<lu_templatebody> lu_templatebody { get; set; }
-        public DbSet<lu_templatesubject> lu_templatesubject { get; set; }
-        public DbSet<message> messages { get; set; }
-
-
-        public NotificationContext()
-            : base("name=NotificationContext")
+        public ContextBase(string nameOrConnectionString) :
+            base(nameOrConnectionString)
         {
-            this.Configuration.ValidateOnSaveEnabled = false;
+            //defaults for the base, can be overidded on the induvidual contets
+            this.Configuration.ProxyCreationEnabled = true;
+            this.Configuration.AutoDetectChangesEnabled = true;
+                  this.Configuration.ValidateOnSaveEnabled = false;
             IsAuditEnabled = true;
-         //   ObjectContext.SavingChanges += OnSavingChanges;
-            Database.SetInitializer(
-            new DropCreateDatabaseIfModelChanges<NotificationContext>());
+            ObjectContext.SavingChanges += OnSavingChanges;
+            Configuration.LazyLoadingEnabled = false;
         }
 
+        //public ContextBase()
+        //    : base("name='ChatContext")
+        //{
+        //    ;
+        //    //rebuild DB if schema is differnt
+        //    //Initializer init = new Initializer();            
+        //    // init.InitializeDatabase(this);
+          
+        //   // Database.SetInitializer(
+        //   //      new DropCreateDatabaseIfModelChanges<AnewluvContext>());
+        //}
 
-        public class Initializer : IDatabaseInitializer<NotificationContext>
-        {
-            public void InitializeDatabase(NotificationContext context)
-            {
-                if (!context.Database.Exists() || !context.Database.CompatibleWithModel(false))
-                {
-                    context.Database.Create();
-                    context.SaveChanges();
-                }
-                else if (!context.Database.CompatibleWithModel(false))
-                {
-                    //DO migrations here
-                }
 
-            }
-        }
+        private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
 
         #region IContext Implementation
 
@@ -249,6 +224,17 @@ namespace Nmedia.Infrastructure.Domain
             return groupData.ToList();
         }
 
+        //method of excuting sql strings directly
+        public int ExecuteStoreCommand(string commandText, params object[] parameters)
+        {
+            // List<T> myList = new List<T>();
+
+            var result = this.ObjectContext.ExecuteStoreCommand(commandText, parameters);
+
+            return result;
+        }
+
+
         public bool RemoveAndAudit<T>(T entity)
         where T : class
         {
@@ -318,6 +304,7 @@ namespace Nmedia.Infrastructure.Domain
         //}
 
         #endregion
+
 
         #region "Overides"
 
@@ -408,13 +395,13 @@ namespace Nmedia.Infrastructure.Domain
                     {
                         //error happens here on any saves 
                         //string modifedentiyname =  entity.Entity.GetType ()
-                        //      var promotionobjectauditrecords = CreateAuditRecordsForPromotionObjectChanges(entity);
+                        //    var promotionobjectauditrecords = CreateAuditRecordsForPromotionObjectChanges(entity);
                         // var reviewsauditrecords = 
 
 
                         //TO DO maybe I think this is overkill though
                         //Add a method to do housekeeping and create surf data for mapping to deployments
-                        //   AddSurfs();
+                        //AddSurfs();
 
                         //only add records if we have some actual auit data for promotion objects to add
                         //if (promotionobjectauditrecords != null && promotionobjectauditrecords.Count > 0)
@@ -430,10 +417,6 @@ namespace Nmedia.Infrastructure.Domain
         }
 
 
-        private bool AddSurfs()
-        {
-            return true;
-        }
 
         //private List<promotionobjecthistory> CreateAuditRecordsForPromotionObjectChanges(DbEntityEntry dbEntry)
         //{
@@ -532,6 +515,5 @@ namespace Nmedia.Infrastructure.Domain
         //}
 
         #endregion
-
     }
 }

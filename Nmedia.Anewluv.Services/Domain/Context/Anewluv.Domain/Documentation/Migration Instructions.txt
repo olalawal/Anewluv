@@ -58,7 +58,7 @@ Update-Initial Catalog= -TargetMigration "201311082150226_addedEnviroment" -Conf
 
 3) more multi tentant with diff dirs use the fully qualfied namespace
  Update-database -TargetMigration "201407131935192_first" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Notification.Migrations.Configuration"
- Update-database -TargetMigration "201407132217320_first" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Data.ApiKey.Migrations.Configuration" 
+ Update-database -TargetMigration "201407132217320_first" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Data.Apikey.Migrations.Configuration" 
 
 if you dont care about datalosss or dropped tables use this command first
 from following blog:

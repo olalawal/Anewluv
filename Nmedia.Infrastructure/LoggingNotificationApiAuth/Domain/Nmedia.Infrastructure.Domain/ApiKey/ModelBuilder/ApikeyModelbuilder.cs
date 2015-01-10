@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
-using Nmedia.Infrastructure.Domain.Data.ApiKey;
+using Nmedia.Infrastructure.Domain.Data.Apikey;
 
 namespace Nmedia.Infrastructure.Domain
 {
@@ -39,18 +39,43 @@ namespace Nmedia.Infrastructure.Domain
           //  modelBuilder.Entity<systemaddress>().HasRequired(a => a.systemaddresstype)
            // .WithMany().HasForeignKey(a => a.systemaddresstype_id  );
 
-            //set up required fiel lookups
-            modelBuilder.Entity<apikey>()
-           .HasRequired(t => t.accesslevel );
 
+            //Apikey Mapping
+            //set up required fiel lookups
+           // modelBuilder.Entity<apikey>()
+          // .HasRequired(t => t.accesslevel );         
+
+          //  modelBuilder.Entity<apikey >()
+         //  .HasRequired(t => t.application );
+
+            //new added
+            // FK Relationships
+            modelBuilder.Entity<apikey>().HasRequired(t => t.application).WithMany()
+                .HasForeignKey(u => u.application_id);
+            ;
+
+            modelBuilder.Entity<apikey>().HasRequired(t => t.accesslevel).WithMany()
+               .HasForeignKey(u => u.accesslevel_id);
+            ;
+
+            modelBuilder.Entity<apikey>().HasOptional(t => t.user).WithMany()
+               .HasForeignKey(u => u.user_id);
+            ;
+
+            modelBuilder.Entity<apikey>()
+                               .HasOptional(p => p.user)
+                               .WithMany(t => t.apikeys).HasForeignKey(p => p.user_id).WillCascadeOnDelete(false);
+                               
+                              
+
+
+
+            //APicall mapping
             //set up required fiel lookups
             modelBuilder.Entity<apicall>()
            .HasRequired(t => t.apikey);
           
 
-            modelBuilder.Entity<apikey >()
-           .HasRequired(t => t.application );
-            
 
 
 

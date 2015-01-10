@@ -42,7 +42,10 @@ namespace Nmedia.DataAccess.Interfaces
         /// <param name="procName"></param>
         /// <returns>An object resultset</returns>
         List<T> ExecuteStoredProcedure<T>(string commandText, params object[] parameters) where T : class;
-    
+
+        int ExecuteStoreCommand(string commandText, params object[] parameters);
+       
+
 
 
         DbTransaction BeginTransaction();

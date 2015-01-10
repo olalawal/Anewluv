@@ -99,6 +99,10 @@
       <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
+      <Project>{c4c10e84-8c87-43d3-aef3-9c0a03a2f7db}</Project>
+      <Name>Nmedia.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LoggingNotificationApiAuth\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
       <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>
       <Name>Nmedia.Infrastructure.Domain.Data</Name>

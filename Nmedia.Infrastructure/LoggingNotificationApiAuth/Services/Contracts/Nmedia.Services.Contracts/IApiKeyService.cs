@@ -9,13 +9,13 @@ using System.ServiceModel.Activation;
 
 using Nmedia.Infrastructure.Domain.Data.log;
 using System.Threading.Tasks;
-using Nmedia.Infrastructure.Domain.Data.ApiKey;
-using Nmedia.Infrastructure.Domain.Data.ApiKey.DTOs;
+using Nmedia.Infrastructure.Domain.Data.Apikey;
+using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
 
 namespace Nmedia.Services.Contracts
 {
     [ServiceContract]
-    public interface IApiKeyService
+    public interface IApikeyService
     {
 
 
@@ -39,8 +39,8 @@ namespace Nmedia.Services.Contracts
 
         //temporary method for use by designer to get the message information formated for them
         [OperationContract(AsyncPattern = true), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
-        [WebInvoke(UriTemplate = "/generateAPIkey/{service}/{username}/{application}", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
-        Task<Guid> GenerateAPIkey(string service, string username, int useridentifier, string application);
+        [WebInvoke(UriTemplate = "/generateAPIkey", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Bare)]
+        Task<Guid> GenerateAPIkey(ApiKeyValidationModel model);
 
       
     }

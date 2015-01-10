@@ -113,13 +113,17 @@
       <Project>{EFC502AE-DD76-4278-8738-DD0B1F55A724}</Project>
       <Name>Anewluv.Services.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
-      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
-      <Name>Nmedia.DataAccess.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
       <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
       <Name>Nmedia.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
+      <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
+      <Name>Nmedia.DataAccess.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
+      <Project>{c4c10e84-8c87-43d3-aef3-9c0a03a2f7db}</Project>
+      <Name>Nmedia.DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
       <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>

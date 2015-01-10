@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 using Nmedia.Infrastructure.Domain.Data.log;
+using Nmedia.DataAccess;
 
 namespace Nmedia.Infrastructure.Domain
 {
-    public partial class LoggingContext : DbContext 
+    public partial class LoggingContext : ContextBase 
     {
         public DbSet<lu_logapplication> lu_application { get; set; }
         public DbSet<lu_logenviroment> lu_enviroment { get; set; }        

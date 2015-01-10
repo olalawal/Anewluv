@@ -3,7 +3,7 @@ using Anewluv.Domain.Data.Anewluv.ViewModels;
 using Anewluv.Domain.Data.ViewModels;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data;
-using Nmedia.Infrastructure.Domain.Data.ApiKey;
+using Nmedia.Infrastructure.Domain.Data.Apikey;
 using Nmedia.Infrastructure.Domain.Data.log;
 using System;
 using System.Collections.Generic;
@@ -26,44 +26,34 @@ namespace Anewluv.Apikey
         #region "validation Utilities"
 
         //validate of api key only not profile id if its not passed
-       public static Task<bool> ValidateApiKey(string key)
-        {
-            try
-            {
-                bool result = false;
-                Guid apiKey;
-                Guid.TryParse(key.ToString(), out apiKey);
-                // ApiKeyService ApiKeyService = new ApiKeyService(db);
-                // Task<bool> returnedTaskTResult = ApiKeyService.IsValidAPIKey(new apikey { key = apiKey });
-                Task<bool> returnedTaskTResult = Anewluv.Api.AsyncCalls.isvalidapikeyasync(new apikey { key = apiKey });
+       //public static Task<bool> ValidateApiKey(string key)
+       // {
+       //     try
+       //     {
+       //         bool result = false;
+       //         Guid apiKey;
+       //         Guid.TryParse(key.ToString(), out apiKey);
+       //         // ApiKeyService ApiKeyService = new ApiKeyService(db);
+       //         // Task<bool> returnedTaskTResult = ApiKeyService.IsValidAPIKey(new apikey { key = apiKey });
+       //         Task<bool> returnedTaskTResult = Anewluv.Api.AsyncCalls.isvalidapikeyasync(new apikey { key = apiKey });
 
-                return returnedTaskTResult;
+       //         return returnedTaskTResult;
 
-                // IsApiKeyValid = await 
-               // return result;
-                // IsApiKeyValid = result.Result;
+       //         // IsApiKeyValid = await 
+       //        // return result;
+       //         // IsApiKeyValid = result.Result;
 
 
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine("Error: " + ex.Message);
-               // return false;
-            }
-            return null;
-        }
+       //     }
+       //     catch (Exception ex)
+       //     {
+       //         Console.Error.WriteLine("Error: " + ex.Message);
+       //        // return false;
+       //     }
+       //     return null;
+       // }
 
-       public static bool VallidateApiKeyAndUserId(string key, int applicationid, int useridentifier)
-        {
-            Guid apiKey;
-            Guid.TryParse(key.ToString(), out apiKey);
-            var model = new apikey { application = new lu_application { id = applicationid }, key = apiKey, user = new user { useridentifier = useridentifier } };
-
-            var dd = AsyncCalls.isvalidapikeyanduser(model);
-            return dd.Result;
-
-        }
-
+     
         //old way of validating, now we will use a new method so we can get the profile ID and validate it against the message body JSON
         public static bool ValidateUser(OperationContext operationContext)
         {

@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Nmedia.Infrastructure.Domain.Data.ApiKey.DTOs
+namespace Nmedia.Infrastructure.Domain.Data.Apikey.DTOs
 {
      [DataContract]
    public class ApiKeyValidationModel
@@ -17,9 +17,11 @@ namespace Nmedia.Infrastructure.Domain.Data.ApiKey.DTOs
          [DataMember]
          public int useridentifier { get; set; }
          [DataMember]
+         public int? application_id { get; set; }
+         [DataMember]
          public string application { get; set; }
          [DataMember]
-         public Guid? key { get; set; }
+         public Guid? keyvalue { get; set; }
 
     }
 }

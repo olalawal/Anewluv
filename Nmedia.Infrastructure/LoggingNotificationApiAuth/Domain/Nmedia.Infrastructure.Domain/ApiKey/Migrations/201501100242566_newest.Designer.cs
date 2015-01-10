@@ -7,13 +7,13 @@ namespace Nmedia.Infrastructure.Domain.Apikey.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.2-31219")]
-    public sealed partial class first : IMigrationMetadata
+    public sealed partial class newest : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(first));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(newest));
         
         string IMigrationMetadata.Id
         {
-            get { return "201501080544093_first"; }
+            get { return "201501100242566_newest"; }
         }
         
         string IMigrationMetadata.Source

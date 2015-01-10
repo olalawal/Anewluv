@@ -85,6 +85,10 @@
       <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
       <Name>Nmedia.DataAccess.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
+      <Project>{c4c10e84-8c87-43d3-aef3-9c0a03a2f7db}</Project>
+      <Name>Nmedia.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\WCF\Nmedia.WCFHelpers\Nmedia.WCFHelpers.csproj">
       <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
       <Name>Nmedia.WCFHelpers</Name>

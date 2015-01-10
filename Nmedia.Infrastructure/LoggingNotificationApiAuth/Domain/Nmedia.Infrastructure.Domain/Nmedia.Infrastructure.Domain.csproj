@@ -53,9 +53,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiKey\Context\Apikey.Context.cs" />
-    <Compile Include="ApiKey\Migrations\201501080544093_first.cs" />
-    <Compile Include="ApiKey\Migrations\201501080544093_first.Designer.cs">
-      <DependentUpon>201501080544093_first.cs</DependentUpon>
+    <Compile Include="ApiKey\Migrations\201501100242566_newest.cs" />
+    <Compile Include="ApiKey\Migrations\201501100242566_newest.Designer.cs">
+      <DependentUpon>201501100242566_newest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApiKey\Migrations\201501100526273_renamedkey.cs" />
+    <Compile Include="ApiKey\Migrations\201501100526273_renamedkey.Designer.cs">
+      <DependentUpon>201501100526273_renamedkey.cs</DependentUpon>
     </Compile>
     <Compile Include="ApiKey\Migrations\Configuration.cs" />
     <Compile Include="ApiKey\ModelBuilder\ApikeyModelbuilder.cs" />
@@ -111,8 +115,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ApiKey\Migrations\201501080544093_first.resx">
-      <DependentUpon>201501080544093_first.cs</DependentUpon>
+    <EmbeddedResource Include="ApiKey\Migrations\201501100242566_newest.resx">
+      <DependentUpon>201501100242566_newest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiKey\Migrations\201501100526273_renamedkey.resx">
+      <DependentUpon>201501100526273_renamedkey.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Logging\Migrations\201407131902027_first.resx">
       <DependentUpon>201407131902027_first.cs</DependentUpon>

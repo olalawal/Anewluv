@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IApiKeyService.cs" />
+    <Compile Include="IApikeyService.cs" />
     <Compile Include="INotificationService.cs" />
     <Compile Include="ILoggingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
