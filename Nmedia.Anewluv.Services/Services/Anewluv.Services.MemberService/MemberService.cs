@@ -315,7 +315,7 @@ namespace Anewluv.Services.Members
         // "Activate, Valiate if Profile is Acivated Code and Create Mailbox Folders as well"
         //*************************************************************************************************
         //update the Initial Catalog= i.e create folders and change profile status from guest to active ?!
-        public async void createmailboxfolders(ProfileModel model)
+        public async Task createmailboxfolders(ProfileModel model)
         {
             _unitOfWork.DisableProxyCreation = false;
             using (var db = _unitOfWork)
@@ -710,7 +710,7 @@ namespace Anewluv.Services.Members
         //updates all the areas  that handle when a user logs in 
         // added 1/18/2010 ola lawal
         //also updates the last log in and profile data
-        public async void  updateuserlogintimebyprofileidandsessionid(ProfileModel model)
+      public async Task  updateuserlogintimebyprofileidandsessionid(ProfileModel model)
         {
 
             //get the profile
@@ -792,7 +792,7 @@ namespace Anewluv.Services.Members
         //**********************************************************
         // Description:	Updates the users logout time
         // added 1/18/2010 ola lawal
-        public async void updateuserlogouttimebyprofileid(ProfileModel model)
+      public async Task updateuserlogouttimebyprofileid(ProfileModel model)
         {
             //_unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
@@ -849,7 +849,7 @@ namespace Anewluv.Services.Members
         //**********************************************************
         // Description:	Updates the users logout time
         // added 1/18/2010 ola lawal
-        public async void updateuserlogintimebyprofileid(ProfileModel model)
+      public async Task updateuserlogintimebyprofileid(ProfileModel model)
         {
             //_unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
@@ -919,7 +919,7 @@ namespace Anewluv.Services.Members
         }
 
 
-        public async void addprofileactvity(ActivityModel model)
+      public async Task addprofileactvity(ActivityModel model)
         {
             //get the profile
             //profile myProfile;
@@ -979,7 +979,7 @@ namespace Anewluv.Services.Members
         /// actvity ID is needed for this so use this carefully
         /// </summary>
         /// <param name="model"></param>
-        public async void addprofileactvitygeodata(ActivityModel model)
+      public async Task addprofileactvitygeodata(ActivityModel model)
         {
             //get the profile
             //profile myProfile;
