@@ -123,7 +123,8 @@ namespace Anewluv.Apikey
                 apikeyonlyURLS.Add("/Anewluv.Web.Services.Media/PhotoService.svc/Rest/addphotos");  //everyone can call addphotos
                 //added quick search to this apikey only to allow for quick search to 
                 //to bypass userid and password auth
-                apikeyonlyURLS.Add("/Anewluv.Web.Services.Members/MembersMapperService.svc/Rest/getquicksearch"); 
+                apikeyonlyURLS.Add("/Anewluv.Web.Services.Members/MembersMapperService.svc/Rest/getquicksearch");
+                apikeyonlyURLS.Add("/Anewluv.Web.Services.Edit/SearchEditService.svc/Rest/getbasicsearchsettings");
                
 
                              
@@ -159,7 +160,7 @@ namespace Anewluv.Apikey
               
                    // ProfileModel ProfileModel = new ProfileModel(); 
                     //if there is no API key nothing happens
-                    if (key != null)
+                    if (key != "undefined" && key != null )
                     {  
                        Guid apiKey;
                        Guid.TryParse(key.ToString(), out apiKey);
@@ -187,10 +188,8 @@ namespace Anewluv.Apikey
                            if (ProfileModel.profileid != null)
                            {
                                validrequest = Anewluv.Api.AsyncCalls.isvalidapikeyanduserasync(new
-                               apikey { application = new lu_application { id = (int)applicationenum.anewluv }, keyvalue = apiKey, user = new user { useridentifier = ProfileModel.profileid.GetValueOrDefault() } }).Result;
-                                   
-                                 //  (key, (int)applicationenum.anewluv, );
-
+                               apikey { application = new lu_application { id = (int)applicationenum.anewluv }, keyvalue = apiKey, user = new user { useridentifier = ProfileModel.profileid.GetValueOrDefault() } }).Result;                                   
+                               //  (key, (int)applicationenum.anewluv, );
                                //log activity and geodata if it exists
                                Utilities.LogProfileActivity(ProfileModel, path, apiKey);
                            }

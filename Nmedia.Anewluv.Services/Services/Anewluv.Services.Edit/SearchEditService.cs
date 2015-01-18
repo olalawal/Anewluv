@@ -608,6 +608,9 @@ namespace Anewluv.Services.Edit
                 //This query assumes that one search is always called default and cannot be deleted dont like that
                 List<searchsetting> allsearchsettings = new List<searchsetting>();
                 searchsetting p = new searchsetting();
+                
+                //default handling for empty profile ID and other search data
+                if (searchmodel == null) return p;
 
                 allsearchsettings = db.GetRepository<searchsetting>().Find().Where
                 (z => (searchmodel.searchid != 0 && z.id == searchmodel.searchid) ||

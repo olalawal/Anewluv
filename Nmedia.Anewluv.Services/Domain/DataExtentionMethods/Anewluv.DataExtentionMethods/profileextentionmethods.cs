@@ -93,7 +93,7 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
-            return (repo.Find().OfType<profile>().Where(p => p.id == model.profileid & p.status_id != 1).FirstOrDefault() != null);
+            return (repo.Find().OfType<profile>().Where(p => p.username == model.username & p.status_id != 1).FirstOrDefault() != null);
 
         }
 

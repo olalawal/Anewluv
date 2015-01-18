@@ -31,15 +31,15 @@ namespace Anewluv.Domain.Data.ViewModels
         public CharacterSearchSettingsModel charactersearchsettings { get; set; }
         //index of what page we are looking at i.e we want to split up this model into diff partial views
         [DataMember]
-        public int profileid { get; set; }
+        public int? profileid { get; set; }
         [DataMember]
-        public int searchid { get; set; }
+        public int? searchid { get; set; }
         [DataMember]
         public string searchname { get; set; }
         [DataMember]
-        public int searchrank { get; set; }
+        public int? searchrank { get; set; }
         [DataMember]
-        public int viewindex { get; set; }
+        public int? viewindex { get; set; }
         public bool postalcodestatus { get; set; }
         [DataMember]
         public bool isfullediting { get; set; }
