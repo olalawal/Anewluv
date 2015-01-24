@@ -183,7 +183,7 @@ namespace Anewluv.Services.Edit
                         foreach (lu_ethnicity ethnicity in ethnicitylist.Where(c => p.profilemetadata.profiledata_ethnicity.Any(f => f.ethnicty_id == c.id)))
                         {
                             //update the value as checked here on the list
-                            model.ethnicitylist.First(d => d.id == ethnicity.id).isselected = true;
+                            model.ethnicitylist.First(d => d.id == ethnicity.id).selected = true;
                         }
                        // model.hotfeaturelist = db.GetRepository<l>()
                         //foreach (var item in model.hotfeaturelist)
@@ -201,7 +201,7 @@ namespace Anewluv.Services.Edit
                         foreach (lu_hotfeature hotfeature in hotfeaturelist.Where(c => p.profilemetadata.profiledata_hotfeature.Any(f => f.hotfeature_id == c.id)))
                         {
                             //update the value as checked here on the list
-                            model.hotfeaturelist.First(d => d.id == hotfeature.id).isselected = true;
+                            model.hotfeaturelist.First(d => d.id == hotfeature.id).selected = true;
                         }
 
 
@@ -258,7 +258,7 @@ namespace Anewluv.Services.Edit
                     foreach (lu_hobby hobby in hobbylist.Where(c => p.profilemetadata.profiledata_hobby.Any(f => f.hobby_id == c.id)))
                     {
                         //update the value as checked here on the list
-                        model.hobbylist.First(d => d.id == hobby.id).isselected = true;
+                        model.hobbylist.First(d => d.id == hobby.id).selected = true;
                     }
 
 
@@ -326,7 +326,7 @@ namespace Anewluv.Services.Edit
                     foreach (lu_lookingfor lookingfor in lookingforlist.Where(c => p.profilemetadata.profiledata_lookingfor.Any(f => f.lookingfor_id == c.id)))
                     {
                         //update the value as checked here on the list
-                        model.lookingforlist.First(d => d.id == lookingfor.id).isselected = true;
+                        model.lookingforlist.First(d => d.id == lookingfor.id).selected = true;
                     }
 
                     //foreach (var item in model.lookingforlist)

@@ -16,7 +16,7 @@ namespace Anewluv.Domain.Data
 
       
         [DataMember]  public int id { get; set; }
-        [NotMapped, DataMember] public bool? isselected { get; set; }
+        [NotMapped, DataMember] public bool selected { get; set; }
         [DataMember]  public string description { get; set; }
         [DataMember]  public int photoImagersizerformat_id { get; set; }
         public virtual lu_photoImagersizerformat lu_photoImagersizerformat { get; set; }

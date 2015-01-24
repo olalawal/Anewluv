@@ -13,7 +13,7 @@ namespace Anewluv.Domain.Data
             this.searchsetting_sign = new List<searchsetting_sign>();
         }
 
-        [NotMapped, DataMember]  public bool? isselected { get; set; }
+        [NotMapped, DataMember]  public bool selected { get; set; }
         [DataMember]   public int id { get; set; }
         public string month { get; set; }
         [DataMember]   public string description { get; set; }

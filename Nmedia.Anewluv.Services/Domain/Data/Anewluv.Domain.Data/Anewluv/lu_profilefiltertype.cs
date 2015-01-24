@@ -8,7 +8,7 @@ namespace Anewluv.Domain.Data
     [DataContract] public partial class lu_profilefiltertype
     {
         [DataMember]   public int id { get; set; }
-        [NotMapped, DataMember] public bool? isselected { get; set; }
+        [NotMapped, DataMember] public bool selected { get; set; }
         [DataMember]   public string description { get; set; }
     }
 }

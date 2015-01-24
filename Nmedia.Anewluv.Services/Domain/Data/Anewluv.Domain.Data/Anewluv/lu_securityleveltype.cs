@@ -14,7 +14,7 @@ namespace Anewluv.Domain.Data
         }
 
         [DataMember]   public int id { get; set; }
-        [NotMapped, DataMember]  public bool? isselected { get; set; }
+        [NotMapped, DataMember]  public bool selected { get; set; }
         [DataMember]   public string description { get; set; }
         [IgnoreDataMember]  public virtual ICollection<photo_securitylevel> photo_securitylevel { get; set; }
         [IgnoreDataMember]  public virtual ICollection<photoalbum_securitylevel> photoalbum_securitylevel { get; set; }

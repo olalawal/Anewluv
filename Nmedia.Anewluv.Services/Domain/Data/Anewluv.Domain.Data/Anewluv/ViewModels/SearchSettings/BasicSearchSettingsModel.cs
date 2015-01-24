@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
+using Nmedia.Infrastructure.DTOs;
 
 namespace Anewluv.Domain.Data.ViewModels
 {
@@ -16,7 +17,8 @@ namespace Anewluv.Domain.Data.ViewModels
         public int searchid { get; set; }
         [DataMember]
         public string searchname { get; set; }
-
+        [DataMember]
+        public int mygenderid { get; set; }
 
         [DataMember]
         public int? agemax { get; set; }
@@ -42,7 +44,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public bool? systemmatch { get; set; }
         [DataMember]
-        public List<lu_showme> showmelist { get; set; }
+        public List<listitem> showmelist { get; set; }
         [DataMember]
         public List<lu_gender> genderlist { get; set; }
       [DataMember]

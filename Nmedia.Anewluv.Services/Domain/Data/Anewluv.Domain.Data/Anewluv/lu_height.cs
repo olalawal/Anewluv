@@ -9,7 +9,7 @@ namespace Anewluv.Domain.Data
     {
         public int id { get; set; }
         [NotMapped, DataMember]
-        public bool? isselected { get; set; }
+        public bool selected { get; set; }
         public string description { get; set; }
     }
 }

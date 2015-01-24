@@ -11,7 +11,7 @@ namespace Anewluv.Domain.Data
         {
             this.photos = new List<photo>();
         }
-        [NotMapped, DataMember] public bool? isselected { get; set; }
+        [NotMapped, DataMember] public bool selected { get; set; }
         public int id { get; set; }
         public string description { get; set; }
         public virtual ICollection<photo> photos { get; set; }

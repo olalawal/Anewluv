@@ -21,6 +21,7 @@ using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Infrastructure.Domain.Data.log;
 using Anewluv.Caching;
+using Nmedia.Infrastructure.DTOs;
 
 
 namespace Anewluv.Services.Edit
@@ -658,6 +659,7 @@ namespace Anewluv.Services.Edit
                     var sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(db);
 
                     model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
+                    model.mygenderid = p.profilemetadata.profiledatas.First().gender_id.GetValueOrDefault();
                     model.agemax = p.agemax == null ? 99 : p.agemax.GetValueOrDefault();
                     model.creationdate = p.creationdate == null ? (DateTime?)null : p.creationdate.GetValueOrDefault();                 
                     model.distancefromme=  p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();
@@ -666,23 +668,23 @@ namespace Anewluv.Services.Edit
                     model.searchrank = p.searchrank == null ? 1 : p.searchrank;
                     model.myperfectmatch = p.myperfectmatch == null ? true : p.myperfectmatch;
                     model.systemmatch = p.systemmatch == null ? false : p.systemmatch;
-                   
-                    model.showmelist =  showmelist.ToList().Select(o => new lu_showme { id = o.id, description= o.description, isselected = false }).ToList();                  
-                    model.genderlist = genderlist.ToList().Select(o => new lu_gender { id = o.id, description= o.description, isselected = false }).ToList();
-                    model.sortbylist = sortbylist.ToList().Select(o => new lu_sortbytype  {  id = o.id, description= o.description, isselected = false }).ToList();
+                    //test of map the list items to the generic listitem object in order to clean up the models so no iselected item on them
+                    model.showmelist =  showmelist.ToList().Select(o => new listitem { id = o.id, description= o.description }).ToList();                  
+                    model.genderlist = genderlist.ToList().Select(o => new lu_gender { id = o.id, description= o.description, selected = false }).ToList();
+                    model.sortbylist = sortbylist.ToList().Select(o => new lu_sortbytype  {  id = o.id, description= o.description, selected = false }).ToList();
             
                 
                     //update the list with the items that are selected.
                     foreach (lu_showme showme in showmelist.Where(c => p.searchsetting_showme.Any(f => f.showme_id == c.id))) {
                        //update the value as checked here on the list
-                       model.showmelist.First(d => d.id == showme.id).isselected = true; 
+                       model.showmelist.First(d => d.id == showme.id).selected = true; 
                     }
 
                     //update the list with the items that are selected.
                     foreach (lu_gender gender in genderlist.Where(c => p.searchsetting_gender.Any(f => f.gender_id == c.id)))
                     {
                         //update the value as checked here on the list
-                        model.showmelist.First(d => d.id == gender.id).isselected = true;
+                        model.showmelist.First(d => d.id == gender.id).selected = true;
                     }
 
 
@@ -690,7 +692,7 @@ namespace Anewluv.Services.Edit
                     foreach (lu_sortbytype sortbytype in sortbylist.Where(c => p.searchsetting_sortbytype.Any(f => f.sortbytype_id == c.id)))
                     {
                         //update the value as checked here on the list
-                        model.sortbylist.First(d => d.id == sortbytype.id).isselected = true;
+                        model.sortbylist.First(d => d.id == sortbytype.id).selected = true;
                     }
 
 
@@ -747,11 +749,11 @@ namespace Anewluv.Services.Edit
                 model.heightmax = p.heightmax == null ? 210 : p.heightmax;
                 model.heightmin = p.heightmin == null ? 100 : p.heightmin;
 
-                model.ethnicitylist = ethnicitylist.ToList().Select(o => new lu_ethnicity { id = o.id, description = o.description, isselected = false }).ToList();
-                model.bodytypeslist = bodytypelist.ToList().Select(o => new lu_bodytype { id = o.id, description = o.description, isselected = false }).ToList();
-                model.eyecolorlist = eyecolorlist.ToList().Select(o => new lu_eyecolor { id = o.id, description = o.description, isselected = false }).ToList();
-                model.haircolorlist = haircolorlist.ToList().Select(o => new lu_haircolor { id = o.id, description = o.description, isselected = false }).ToList();
-                model.hotfeaturelist = hotfeaturelist.ToList().Select(o => new lu_hotfeature { id = o.id, description = o.description, isselected = false }).ToList(); 
+                model.ethnicitylist = ethnicitylist.ToList().Select(o => new lu_ethnicity { id = o.id, description = o.description, selected = false }).ToList();
+                model.bodytypeslist = bodytypelist.ToList().Select(o => new lu_bodytype { id = o.id, description = o.description, selected = false }).ToList();
+                model.eyecolorlist = eyecolorlist.ToList().Select(o => new lu_eyecolor { id = o.id, description = o.description, selected = false }).ToList();
+                model.haircolorlist = haircolorlist.ToList().Select(o => new lu_haircolor { id = o.id, description = o.description, selected = false }).ToList();
+                model.hotfeaturelist = hotfeaturelist.ToList().Select(o => new lu_hotfeature { id = o.id, description = o.description, selected = false }).ToList(); 
 
                
 
@@ -763,35 +765,35 @@ namespace Anewluv.Services.Edit
                 foreach (lu_ethnicity ethnicity in ethnicitylist.Where(c => p.searchsetting_ethnicity.Any(f => f.ethnicity_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.ethnicitylist.First(d => d.id == ethnicity.id).isselected = true;
+                    model.ethnicitylist.First(d => d.id == ethnicity.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_bodytype bodytype in bodytypelist.Where(c => p.searchsetting_bodytype.Any(f => f.bodytype_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.bodytypeslist.First(d => d.id == bodytype.id).isselected = true;
+                    model.bodytypeslist.First(d => d.id == bodytype.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_eyecolor eyecolor in eyecolorlist.Where(c => p.searchsetting_eyecolor.Any(f => f.eyecolor_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.eyecolorlist.First(d => d.id == eyecolor.id).isselected = true;
+                    model.eyecolorlist.First(d => d.id == eyecolor.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_haircolor haircolor in haircolorlist.Where(c => p.searchsetting_haircolor.Any(f => f.haircolor_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.haircolorlist.First(d => d.id == haircolor.id).isselected = true;
+                    model.haircolorlist.First(d => d.id == haircolor.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_hotfeature hotfeature in hotfeaturelist.Where(c => p.searchsetting_hotfeature.Any(f => f.hotfeature_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.hotfeaturelist.First(d => d.id == hotfeature.id).isselected = true;
+                    model.hotfeaturelist.First(d => d.id == hotfeature.id).selected = true;
                 }
 
                 return model;
@@ -835,23 +837,23 @@ namespace Anewluv.Services.Edit
                 var religionlist = CachingFactory.SharedObjectHelper.getreligionlist(db);
                 var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(db);
 
-                model.humorlist = humorlist.ToList().Select(o => new lu_humor { id = o.id, description = o.description, isselected = false }).ToList();
-                model.dietlist = dietlist.ToList().Select(o => new lu_diet { id = o.id, description = o.description, isselected = false }).ToList();
-                model.hobbylist = hobbylist.ToList().Select(o => new lu_hobby { id = o.id, description = o.description, isselected = false }).ToList();
-                model.drinkslist = drinklist.ToList().Select(o => new lu_drinks { id = o.id, description = o.description, isselected = false }).ToList();
-                model.exerciselist = exerciselist.ToList().Select(o => new lu_exercise { id = o.id, description = o.description, isselected = false }).ToList();
-                model.smokeslist = smokeslist.ToList().Select(o => new lu_smokes { id = o.id, description = o.description, isselected = false }).ToList();
-                model.signlist = signlist.ToList().Select(o => new lu_sign { id = o.id, description = o.description, isselected = false }).ToList();
-                model.politicalviewlist = politicalviewlist.ToList().Select(o => new lu_politicalview { id = o.id, description = o.description, isselected = false }).ToList();
-                model.religionlist = religionlist.ToList().Select(o => new lu_religion { id = o.id, description = o.description, isselected = false }).ToList();
-                model.religiousattendancelist = religiousattendancelist.ToList().Select(o => new lu_religiousattendance { id = o.id, description = o.description, isselected = false }).ToList();
+                model.humorlist = humorlist.ToList().Select(o => new lu_humor { id = o.id, description = o.description, selected = false }).ToList();
+                model.dietlist = dietlist.ToList().Select(o => new lu_diet { id = o.id, description = o.description, selected = false }).ToList();
+                model.hobbylist = hobbylist.ToList().Select(o => new lu_hobby { id = o.id, description = o.description, selected = false }).ToList();
+                model.drinkslist = drinklist.ToList().Select(o => new lu_drinks { id = o.id, description = o.description, selected = false }).ToList();
+                model.exerciselist = exerciselist.ToList().Select(o => new lu_exercise { id = o.id, description = o.description, selected = false }).ToList();
+                model.smokeslist = smokeslist.ToList().Select(o => new lu_smokes { id = o.id, description = o.description, selected = false }).ToList();
+                model.signlist = signlist.ToList().Select(o => new lu_sign { id = o.id, description = o.description, selected = false }).ToList();
+                model.politicalviewlist = politicalviewlist.ToList().Select(o => new lu_politicalview { id = o.id, description = o.description, selected = false }).ToList();
+                model.religionlist = religionlist.ToList().Select(o => new lu_religion { id = o.id, description = o.description, selected = false }).ToList();
+                model.religiousattendancelist = religiousattendancelist.ToList().Select(o => new lu_religiousattendance { id = o.id, description = o.description, selected = false }).ToList();
 
               
                 //update the list with the items that are selected.
                 foreach (lu_humor humor in humorlist.Where(c => p.searchsetting_humor.Any(f => f.humor_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.humorlist.First(d => d.id == humor.id).isselected = true;
+                    model.humorlist.First(d => d.id == humor.id).selected = true;
                 }
 
 
@@ -859,7 +861,7 @@ namespace Anewluv.Services.Edit
                 foreach (lu_diet diet in dietlist.Where(c => p.searchsetting_diet.Any(f => f.diet_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.dietlist.First(d => d.id == diet.id).isselected = true;
+                    model.dietlist.First(d => d.id == diet.id).selected = true;
                 }
 
 
@@ -867,7 +869,7 @@ namespace Anewluv.Services.Edit
                 foreach (lu_hobby hobby in hobbylist.Where(c => p.searchsetting_hobby.Any(f => f.hobby_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.hobbylist.First(d => d.id == hobby.id).isselected = true;
+                    model.hobbylist.First(d => d.id == hobby.id).selected = true;
                 }
 
 
@@ -875,7 +877,7 @@ namespace Anewluv.Services.Edit
                 foreach (lu_drinks drink in drinklist.Where(c => p.searchsetting_drink.Any(f => f.drink_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.drinkslist.First(d => d.id == drink.id).isselected = true;
+                    model.drinkslist.First(d => d.id == drink.id).selected = true;
                 }
 
 
@@ -883,7 +885,7 @@ namespace Anewluv.Services.Edit
                 foreach (lu_exercise exercise in exerciselist.Where(c => p.searchsetting_exercise.Any(f => f.exercise_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.exerciselist.First(d => d.id == exercise.id).isselected = true;
+                    model.exerciselist.First(d => d.id == exercise.id).selected = true;
                 }
 
 
@@ -891,7 +893,7 @@ namespace Anewluv.Services.Edit
                 foreach (lu_smokes smokes in smokeslist.Where(c => p.searchsetting_smokes.Any(f => f.smoke_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.smokeslist.First(d => d.id == smokes.id).isselected = true;
+                    model.smokeslist.First(d => d.id == smokes.id).selected = true;
                 }
 
 
@@ -899,28 +901,28 @@ namespace Anewluv.Services.Edit
                 foreach (lu_sign sign in signlist.Where(c => p.searchsetting_sign.Any(f => f.sign_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.signlist.First(d => d.id == sign.id).isselected = true;
+                    model.signlist.First(d => d.id == sign.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_politicalview politicalview in politicalviewlist.Where(c => p.searchsetting_politicalview.Any(f => f.politicalview_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.politicalviewlist.First(d => d.id == politicalview.id).isselected = true;
+                    model.politicalviewlist.First(d => d.id == politicalview.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_politicalview politicalview in politicalviewlist.Where(c => p.searchsetting_politicalview.Any(f => f.politicalview_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.politicalviewlist.First(d => d.id == politicalview.id).isselected = true;
+                    model.politicalviewlist.First(d => d.id == politicalview.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_religiousattendance religiousattendance in religiousattendancelist.Where(c => p.searchsetting_religiousattendance.Any(f => f.religiousattendance_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.religiousattendancelist.First(d => d.id == religiousattendance.id).isselected = true;
+                    model.religiousattendancelist.First(d => d.id == religiousattendance.id).selected = true;
                 }
 
 
@@ -965,71 +967,71 @@ namespace Anewluv.Services.Edit
                 var wantkidslist = CachingFactory.SharedObjectHelper.getwantskidslist(db);
 
 
-                model.educationlevellist = educationlevellist.ToList().Select(o => new lu_educationlevel { id = o.id, description = o.description, isselected = false }).ToList();
-                   model. lookingforlist = lookingforlist.ToList().Select(o => new lu_lookingfor { id = o.id, description = o.description, isselected = false }).ToList();
-                   model. employmentstatuslist = employmentstatuslist.ToList().Select(o => new lu_employmentstatus { id = o.id, description = o.description, isselected = false }).ToList();
-                   model. havekidslist = havekidslist.ToList().Select(o => new lu_havekids { id = o.id, description = o.description, isselected = false }).ToList();
-                   model. incomelevellist = incomelevellist.ToList().Select(o => new lu_incomelevel { id = o.id, description = o.description, isselected = false }).ToList();
-                   model. livingsituationlist = livingsituationlist.ToList().Select(o => new lu_livingsituation { id = o.id, description = o.description, isselected = false }).ToList();
-                   model.maritalstatuslist = maritialstatuslist.ToList().Select(o => new lu_maritalstatus { id = o.id, description = o.description, isselected = false }).ToList();
-                   model. professionlist = professionlist.ToList().Select(o => new lu_profession { id = o.id, description = o.description, isselected = false }).ToList();
-                   model.wantskidslist = wantkidslist.ToList().Select(o => new lu_wantskids { id = o.id, description = o.description, isselected = false }).ToList();
+                model.educationlevellist = educationlevellist.ToList().Select(o => new lu_educationlevel { id = o.id, description = o.description, selected = false }).ToList();
+                   model. lookingforlist = lookingforlist.ToList().Select(o => new lu_lookingfor { id = o.id, description = o.description, selected = false }).ToList();
+                   model. employmentstatuslist = employmentstatuslist.ToList().Select(o => new lu_employmentstatus { id = o.id, description = o.description, selected = false }).ToList();
+                   model. havekidslist = havekidslist.ToList().Select(o => new lu_havekids { id = o.id, description = o.description, selected = false }).ToList();
+                   model. incomelevellist = incomelevellist.ToList().Select(o => new lu_incomelevel { id = o.id, description = o.description, selected = false }).ToList();
+                   model. livingsituationlist = livingsituationlist.ToList().Select(o => new lu_livingsituation { id = o.id, description = o.description, selected = false }).ToList();
+                   model.maritalstatuslist = maritialstatuslist.ToList().Select(o => new lu_maritalstatus { id = o.id, description = o.description, selected = false }).ToList();
+                   model. professionlist = professionlist.ToList().Select(o => new lu_profession { id = o.id, description = o.description, selected = false }).ToList();
+                   model.wantskidslist = wantkidslist.ToList().Select(o => new lu_wantskids { id = o.id, description = o.description, selected = false }).ToList();
 
 
                 //update the list with the items that are selected.
                 foreach (lu_educationlevel educationlevel in educationlevellist.Where(c => p.searchsetting_educationlevel.Any(f => f.educationlevel_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.educationlevellist.First(d => d.id == educationlevel.id).isselected = true;
+                    model.educationlevellist.First(d => d.id == educationlevel.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_lookingfor lookingfor in lookingforlist.Where(c => p.searchsetting_lookingfor.Any(f => f.lookingfor_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.lookingforlist.First(d => d.id == lookingfor.id).isselected = true;
+                    model.lookingforlist.First(d => d.id == lookingfor.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_employmentstatus employmentstatus in employmentstatuslist.Where(c => p.searchsetting_employmentstatus.Any(f => f.employmentstatus_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.employmentstatuslist.First(d => d.id == employmentstatus.id).isselected = true;
+                    model.employmentstatuslist.First(d => d.id == employmentstatus.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_incomelevel incomelevel in incomelevellist.Where(c => p.searchsetting_incomelevel.Any(f => f.incomelevel_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.incomelevellist.First(d => d.id == incomelevel.id).isselected = true;
+                    model.incomelevellist.First(d => d.id == incomelevel.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_livingsituation livingsituation in livingsituationlist.Where(c => p.searchsetting_livingstituation.Any(f => f.livingsituation_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.livingsituationlist.First(d => d.id == livingsituation.id).isselected = true;
+                    model.livingsituationlist.First(d => d.id == livingsituation.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_maritalstatus maritialstatus in maritialstatuslist.Where(c => p.searchsetting_maritalstatus.Any(f => f.maritalstatus_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.maritalstatuslist.First(d => d.id == maritialstatus.id).isselected = true;
+                    model.maritalstatuslist.First(d => d.id == maritialstatus.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_profession profession in professionlist.Where(c => p.searchsetting_profession.Any(f => f.profession_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.professionlist.First(d => d.id == profession.id).isselected = true;
+                    model.professionlist.First(d => d.id == profession.id).selected = true;
                 }
 
                 //update the list with the items that are selected.
                 foreach (lu_wantskids wantkids in wantkidslist.Where(c => p.searchsetting_wantkids.Any(f => f.wantskids_id == c.id)))
                 {
                     //update the value as checked here on the list
-                    model.wantskidslist.First(d => d.id == wantkids.id).isselected = true;
+                    model.wantskidslist.First(d => d.id == wantkids.id).selected = true;
 
                 }
 

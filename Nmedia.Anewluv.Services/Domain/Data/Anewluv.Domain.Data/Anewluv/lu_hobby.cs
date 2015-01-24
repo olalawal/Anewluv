@@ -15,7 +15,7 @@ namespace Anewluv.Domain.Data
 
         [DataMember]   public int id { get; set; }
         [NotMapped, DataMember]
-        public bool? isselected { get; set; }
+        public bool selected { get; set; }
         [DataMember]   public string description { get; set; }
      public virtual ICollection<profiledata_hobby> profiledata_hobby { get; set; }
         public virtual ICollection<searchsetting_hobby> searchsetting_hobby { get; set; }

@@ -13,7 +13,7 @@ namespace Anewluv.Domain.Data
         }
 
         public int id { get; set; }
-        [NotMapped, DataMember] public bool? isselected { get; set; }
+        [NotMapped, DataMember] public bool selected { get; set; }
         public string description { get; set; }
         public virtual ICollection<photo> photos { get; set; }
     }
