@@ -31,9 +31,9 @@ namespace Nmedia.Infrastructure.DependencyResolution.Ninject.Modules
             // var webApiEFRepository = kernel.Get<IRepository<Entity>>("WebApiEFRepository");
             //  this.Unbind(typeof(IUnitOfWork));
             //Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
-            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<ApiKeyContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Nmedia.Services.ApikeyAuthorization.ApikeyService")).InScope(c => OperationContext.Current); ;
+            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<ApiKeyContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Nmedia.Services.Authorization.ApikeyService")).InScope(c => OperationContext.Current); ;
             // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<ApiKeyContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Nmedia.Services.ApikeyAuthorization.ApikeyService")).InScope(c => OperationContext.Current); ;
+            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<ApiKeyContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Nmedia.Services.Authorization.ApikeyService")).InScope(c => OperationContext.Current); ;
 
             //the Unit of work module should already be loaded by now
             this.Bind<IApikeyService>().ToSelf().InRequestScope();

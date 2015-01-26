@@ -18,7 +18,7 @@ using Nmedia.Infrastructure;
 using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain;
 using Nmedia.Infrastructure.Domain.Data;
-//using Nmedia.Services.ApikeyAuthorization;
+//using Nmedia.Services.Authorization;
 using Anewluv.Domain;
 using Anewluv.Domain.Data.ViewModels;
 using System.Threading.Tasks;

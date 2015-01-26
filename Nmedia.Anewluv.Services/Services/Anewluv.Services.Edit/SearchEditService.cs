@@ -659,7 +659,7 @@ namespace Anewluv.Services.Edit
                     var sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(db);
 
                     model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
-                    model.mygenderid = p.profilemetadata.profiledatas.First().gender_id.GetValueOrDefault();
+                    model.mygenderid =  p.profilemetadata != null? p.profilemetadata.profiledatas.First().gender_id.GetValueOrDefault():1;
                     model.agemax = p.agemax == null ? 99 : p.agemax.GetValueOrDefault();
                     model.creationdate = p.creationdate == null ? (DateTime?)null : p.creationdate.GetValueOrDefault();                 
                     model.distancefromme=  p.distancefromme == null ? 500 : p.distancefromme.GetValueOrDefault();

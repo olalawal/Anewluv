@@ -88,10 +88,6 @@
       <Project>{2322c931-607a-46d5-bc71-be6b25288b14}</Project>
       <Name>Nmedia.Infrastructure.Services.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\Nmedia.Services.ApikeyAuthorization\Nmedia.Services.ApikeyAuthorization.csproj">
-      <Project>{086ce7ec-c6bf-49d0-88bd-f5c86624c289}</Project>
-      <Name>Nmedia.Services.ApikeyAuthorization</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
