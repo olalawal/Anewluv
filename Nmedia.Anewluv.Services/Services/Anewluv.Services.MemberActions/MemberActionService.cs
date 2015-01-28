@@ -24,6 +24,7 @@ using Anewluv.Domain;
 using Anewluv.Services.Members;
 using Anewluv.Services.Mapping;
 using Nmedia.Infrastructure.Domain.Data;
+using System.Threading.Tasks;
 
 namespace Anewluv.Services.MemberActions
 {
@@ -75,7 +76,7 @@ namespace Anewluv.Services.MemberActions
 
 
         //TO DO come back to this
-        public List<MemberSearchViewModel> getmyrelationshipsfiltered(string profileid, List<profilefiltertypeEnum> types)
+        public async Task<List<MemberSearchViewModel>> getmyrelationshipsfiltered(ProfileModel model, List<profilefiltertypeEnum> types)
         {
 
             _unitOfWork.DisableProxyCreation = true;
@@ -84,8 +85,17 @@ namespace Anewluv.Services.MemberActions
                 try
                 {
 
-                    //return _memberactionsrepository.getmyrelationshipsfiltered(Convert.ToInt32(profileid), types);
-                    return null;
+                  
+                    var task = Task.Factory.StartNew(() =>
+                    {
+
+                        //return _memberactionsrepository.getmyrelationshipsfiltered(Convert.ToInt32(model.profileid), types);
+                        return new List<MemberSearchViewModel>();
+
+                    });
+
+                    return await task.ConfigureAwait(false);
+
 
                 }
                 catch (Exception ex)
@@ -93,7 +103,7 @@ namespace Anewluv.Services.MemberActions
                     logger = new  Logging(applicationEnum.MemberActionsService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
 
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(profileid)); logger.Dispose();
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid)); logger.Dispose();
                     
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
@@ -114,7 +124,7 @@ namespace Anewluv.Services.MemberActions
         //        {
         //            IRepository<block> repo = db.GetRepository<block>();
         //            //filter out blocked profiles 
-        //            return repo.Find().OfType<block>().Where(p => p.profile_id == id && p.removedate != null);
+        //            return repo.Find().OfType<block>().Where(p =>p.profile_id == model.profileid && p.removedate != null);
         //        }
         //        catch (Exception ex)
         //        {
@@ -138,7 +148,7 @@ namespace Anewluv.Services.MemberActions
         // {
         //     try
         //     {
-        //         return (from p in  db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == id & p.deletedbymemberdate == null)
+        //         return (from p in  db.GetRepository<interest>().Find().Where(p =>p.interestprofile_id == model.profileid & p.deletedbymemberdate == null)
         //                 join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
         //                 join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
         //                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
@@ -157,7 +167,7 @@ namespace Anewluv.Services.MemberActions
         //     {
 
         //           new  Logging(applicationEnum.MemberActionsService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -183,7 +193,7 @@ namespace Anewluv.Services.MemberActions
         //           //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
         //        //rematerialize on the back end.
         //        //final query to send back only the profile datatas of the interests we want
-        //        return (from p in  db.GetRepository<interest>().Find().Where(p => p.profile_id == id & p.deletedbymemberdate == null)
+        //        return (from p in  db.GetRepository<interest>().Find().Where(p =>p.profile_id == model.profileid & p.deletedbymemberdate == null)
         //                join f in  db.GetRepository<profiledata>().Find() on p.interestprofile_id equals f.profile_id
         //                join z in  db.GetRepository<profile>().Find() on p.interestprofile_id equals z.id
         //                where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
@@ -199,7 +209,7 @@ namespace Anewluv.Services.MemberActions
         //     {
 
         //           new  Logging(applicationEnum.MemberActionsService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -223,7 +233,7 @@ namespace Anewluv.Services.MemberActions
         //         //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
         //         //rematerialize on the back end.
         //         //final query to send back only the profile datatas of the interests we want
-        //         return (from p in  db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == id && p.deletedbymemberdate == null)
+        //         return (from p in  db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == model.profileid && p.deletedbymemberdate == null)
         //                 join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
         //                 join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
         //                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
@@ -239,7 +249,7 @@ namespace Anewluv.Services.MemberActions
         //     {
 
         //           new  Logging(applicationEnum.MemberActionsService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -267,7 +277,7 @@ namespace Anewluv.Services.MemberActions
         //         //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
         //         //rematerialize on the back end.
         //         //final query to send back only the profile datatas of the interests we want
-        //         return (from p in  db.GetRepository<peek>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
+        //         return (from p in  db.GetRepository<peek>().Find().Where(p =>p.profile_id == model.profileid && p.deletedbymemberdate == null)
         //                 join f in  db.GetRepository<profiledata>().Find() on p.peekprofile_id equals f.profile_id
         //                 join z in  db.GetRepository<profile>().Find() on p.peekprofile_id equals z.id
         //                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
@@ -282,7 +292,7 @@ namespace Anewluv.Services.MemberActions
         //     {
 
         //           new  Logging(applicationEnum.MemberActionsService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -304,7 +314,7 @@ namespace Anewluv.Services.MemberActions
         // {
         //     try
         //     {
-        //         return (from p in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
+        //         return (from p in  db.GetRepository<block>().Find().Where(p =>p.profile_id == model.profileid && p.removedate == null)
         //                 join f in  db.GetRepository<profiledata>().Find() on p.blockprofile_id equals f.profile_id
         //                 join z in  db.GetRepository<profile>().Find() on p.blockprofile_id equals z.id
         //                 where (f.profile.status.id < 3)
@@ -321,7 +331,7 @@ namespace Anewluv.Services.MemberActions
         //     {
 
         //           new  Logging(applicationEnum.MemberActionsService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -345,7 +355,7 @@ namespace Anewluv.Services.MemberActions
         //         //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
         //         //rematerialize on the back end.
         //         //final query to send back only the profile datatas of the interests we want
-        //         return (from p in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == id && p.deletedbylikedate == null)
+        //         return (from p in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == model.profileid && p.deletedbylikedate == null)
         //                 join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
         //                 join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
         //                 where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
@@ -361,7 +371,7 @@ namespace Anewluv.Services.MemberActions
         //     {
 
         //           new  Logging(applicationEnum.MemberActionsService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -386,7 +396,7 @@ namespace Anewluv.Services.MemberActions
         //         //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
         //         //rematerialize on the back end.
         //         //final query to send back only the profile datatas of the interests we want
-        //         return (from p in  db.GetRepository<like>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
+        //         return (from p in  db.GetRepository<like>().Find().Where(p =>p.profile_id == model.profileid && p.deletedbymemberdate == null)
         //                 join f in  db.GetRepository<profiledata>().Find() on p.likeprofile_id equals f.profile_id
         //                 join z in  db.GetRepository<profile>().Find() on p.likeprofile_id equals z.id
         //                 where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
@@ -403,7 +413,7 @@ namespace Anewluv.Services.MemberActions
         //     {
 
         //           new  Logging(applicationEnum.MemberActionsService);
-        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+        //            logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
         //            //can parse the error to build a more custom error mssage and populate fualt faultreason
         //            FaultReason faultreason = new FaultReason("Error in member actions service");
         //            string ErrorMessage = "";
@@ -444,7 +454,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public int getwhoiaminterestedincount(string profileid)
+        public async Task<int> getwhoiaminterestedincount(ProfileModel model)
         {
           
                _unitOfWork.DisableProxyCreation = true;
@@ -452,25 +462,34 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-                 int? count = null;
-                 int defaultvalue = 0;
-                 var id = Convert.ToInt32(profileid);
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
-                 count = (
-            from f in db.GetRepository<interest>().Find()
-            where (f.profile_id ==   id && f.deletedbymemberdate == null)
-            select f).Count();
-                 // ?? operator example.
-                 // y = x, unless x is null, in which case y = -1.
-                 defaultvalue = count ?? 0;
-                 return defaultvalue;
+                     int? count = null;
+                     int defaultvalue = 0;
+
+
+                     count = (
+                from f in db.GetRepository<interest>().Find()
+                where (f.profile_id == model.profileid && f.deletedbymemberdate == null)
+                select f).Count();
+                     // ?? operator example.
+                     // y = x, unless x is null, in which case y = -1.
+                     defaultvalue = count ?? 0;
+                     return defaultvalue;
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+                
 
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -487,7 +506,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public int getwhoisinterestedinmecount(string profileid)
+        public async Task<int> getwhoisinterestedinmecount(ProfileModel model)
         {
 
                _unitOfWork.DisableProxyCreation = true;
@@ -495,38 +514,51 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-                 int? count = null;
-                 int defaultvalue = 0;
-                 var id = Convert.ToInt32(profileid);
 
-                 //filter out blocked profiles 
-                 var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate != null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
-
-                 count = (
-                    from p in  db.GetRepository<interest>().Find()
-                    where (p.interestprofile_id == id)
-                    join f in  db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                    select f).Count();
-
-                 // ?? operator example.
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
 
-                 // y = x, unless x is null, in which case y = -1.
-                 defaultvalue = count ?? 0;
+                     int? count = null;
+                     int defaultvalue = 0;
+                
 
-                 return defaultvalue;
+
+                     //filter out blocked profiles 
+                     var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+                                          select new
+                                          {
+                                              ProfilesBlockedId = c.blockprofile_id
+                                          };
+
+                     count = (
+                        from p in db.GetRepository<interest>().Find()
+                        where (p.interestprofile_id == model.profileid)
+                        join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
+                        where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                        select f).Count();
+
+                     // ?? operator example.
+
+
+                     // y = x, unless x is null, in which case y = -1.
+                     defaultvalue = count ?? 0;
+
+                     return defaultvalue;
+
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+                
 
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -543,7 +575,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public int getwhoisinterestedinmenewcount(string profileid)
+        public async Task<int> getwhoisinterestedinmenewcount(ProfileModel model)
         {
 
                _unitOfWork.DisableProxyCreation = true;
@@ -551,38 +583,48 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-                 int? count = null;
-                 int defaultvalue = 0;
-                 var id = Convert.ToInt32(profileid);
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
-                 //filter out blocked profiles 
-                 var MyActiveblocks = from c in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate != null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
-
-                 count = (
-                    from p in  db.GetRepository<interest>().Find()
-                    where (p.interestprofile_id == id && p.viewdate == null)
-                    join f in  db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                    select f).Count();
-
-                 // ?? operator example.
+                     int? count = null;
+                     int defaultvalue = 0;
 
 
-                 // y = x, unless x is null, in which case y = -1.
-                 defaultvalue = count ?? 0;
+                     //filter out blocked profiles 
+                     var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+                                          select new
+                                          {
+                                              ProfilesBlockedId = c.blockprofile_id
+                                          };
 
-                 return defaultvalue;
+                     count = (
+                        from p in db.GetRepository<interest>().Find()
+                        where (p.interestprofile_id == model.profileid && p.viewdate == null)
+                        join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
+                        where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                        select f).Count();
 
+                     // ?? operator example.
+
+
+                     // y = x, unless x is null, in which case y = -1.
+                     defaultvalue = count ?? 0;
+
+                     return defaultvalue;
+
+
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+             ;
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -601,14 +643,12 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets list of all the profiles I am interested in
         /// </summary 
-        public List<MemberSearchViewModel> getwhoiaminterestedin(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwhoiaminterestedin(ProfileModel model)
         {
 
 
 
 
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
 
             _unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
@@ -616,54 +656,67 @@ namespace Anewluv.Services.MemberActions
 
                 try
                 {
-
-                    int id = Convert.ToInt32(profileid);
-
-                    var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                          select new
-                                          {
-                                              ProfilesBlockedId = c.blockprofile_id
-                                          }).ToList();
-
-                    //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-                    //rematerialize on the back end.
-                    //final query to send back only the profile datatas of the interests we want
-                    var interests = (from f in db.GetRepository<interest>().Find().OfType<interest>().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
-                                     where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
-                                     select new MemberSearchViewModel
-                                     {
-                                         interestdate = f.creationdate,
-                                        id = f.profilemetadata1.profile_id 
-                                         // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                     }).ToList();
-                    // var dd2 = 0;
-                    //var dd = 2 /  dd2;
-
-                    int? pageint = Convert.ToInt32(page);
-                    int?  numberperpageint =  Convert.ToInt32(numberperpage);
-
-                    bool allowpaging = (interests.Count >= (pageint * numberperpageint) ? true : false);
-                    var pageData = pageint > 1 & allowpaging ?
-                        new PaginatedList<MemberSearchViewModel>().GetCurrentPages(interests, pageint ?? 1, numberperpageint ?? 4) : interests.Take(numberperpageint.GetValueOrDefault());
-                    //this.AddRange(pageData.ToList());
-                    // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
-
-                    //return interests.ToList();
-                    List<MemberSearchViewModel> results;
-                    AnewluvContext AnewluvContext  = new AnewluvContext();
-                    using (var tempdb = AnewluvContext)
+                    var task = Task.Factory.StartNew(() =>
                     {
-                        MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                        results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                    }
-                    // return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
-                    //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
-                    return results;
+
+                        if (model.page == null | model.page == 0) model.page = 1;
+                        if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
+
+                      //  int id = Convert.ToInt32(model.profileid);
+
+                        var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                              select new
+                                              {
+                                                  ProfilesBlockedId = c.blockprofile_id
+                                              }).ToList();
+
+                        //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                        //rematerialize on the back end.
+                        //final query to send back only the profile datatas of the interests we want
+                        var interests = (from f in db.GetRepository<interest>().Find().OfType<interest>().Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
+                                         where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                         select new MemberSearchViewModel
+                                         {
+                                             interestdate = f.creationdate,
+                                             id = f.profilemetadata1.profile_id
+                                             // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                         }).ToList();
+                        // var dd2 = 0;
+                        //var dd = 2 /  dd2;
+
+                        int? pageint = model.page;
+                        int? numberperpageint = model.numberperpage;
+
+                        bool allowpaging = (interests.Count >= (pageint * numberperpageint) ? true : false);
+                        var pageData = pageint > 1 & allowpaging ?
+                            new PaginatedList<MemberSearchViewModel>().GetCurrentPages(interests, pageint ?? 1, numberperpageint ?? 4) : interests.Take(numberperpageint.GetValueOrDefault());
+                        //this.AddRange(pageData.ToList());
+                        // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                        //return interests.ToList();
+                        List<MemberSearchViewModel> results;
+                        AnewluvContext AnewluvContext = new AnewluvContext();
+                        using (var tempdb = AnewluvContext)
+                        {
+                            MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                            results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                        }
+                        // return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
+                        //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
+                        return results;
+
+
+                    });
+
+                   return await task.ConfigureAwait(false);
+
+
+
                 }
                 catch (Exception ex)
                 {
                     //instantiate logger here so it does not break anything else.
-                    new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid), null);
+                    new  Logging(applicationEnum.MemberActionsService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid), null);
                     //logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, profileid, null);
                     //log error mesasge
                     //handle logging here
@@ -690,64 +743,73 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who are interested in me
         /// </summary 
-        public List<MemberSearchViewModel> getwhoisinterestedinme(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwhoisinterestedinme(ProfileModel model)
         {
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+       
+       
 
           _unitOfWork.DisableProxyCreation = true;
          using (var db = _unitOfWork)
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
-
-                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                       select new
-                                       {
-                                           ProfilesBlockedId = c.blockprofile_id
-                                       }).ToList();
-
-
-                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-                 //rematerialize on the back end.
-                 //final query to send back only the profile datatas of the interests we want
-                 var whoisinterestedinme = (from f in db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == id && p.deletedbymemberdate == null)
-                                            //join f in db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                           // join z in db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                            where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
-                                            select new MemberSearchViewModel
-                                            {
-                                                interestdate = f.creationdate,
-                                                id = f.profilemetadata1.profile_id
-                                                // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                            }).ToList();
-
-                 int? pageint = Convert.ToInt32(page);
-                 int? numberperpageint = Convert.ToInt32(numberperpage);
-
-                 bool allowpaging = (whoisinterestedinme.Count >= (pageint * numberperpageint) ? true : false);
-                 var pageData = pageint > 1 & allowpaging ?
-                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinme, pageint ?? 1, numberperpageint ?? 4) : whoisinterestedinme.Take(numberperpageint.GetValueOrDefault());
-                 //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
-
-                 //return interests.ToList();
-                 List<MemberSearchViewModel> results;
-                 AnewluvContext AnewluvContext = new AnewluvContext();
-                 using (var tempdb = AnewluvContext)
+                 var task = Task.Factory.StartNew(() =>
                  {
-                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                    results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                 }
 
-                 return results;
+                     if (model.page == null | model.page == 0) model.page = 1;
+                     if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
+
+                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                           select new
+                                           {
+                                               ProfilesBlockedId = c.blockprofile_id
+                                           }).ToList();
+
+
+                     //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                     //rematerialize on the back end.
+                     //final query to send back only the profile datatas of the interests we want
+                     var whoisinterestedinme = (from f in db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == model.profileid && p.deletedbymemberdate == null)
+                                                //join f in db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
+                                                // join z in db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                                                where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                                select new MemberSearchViewModel
+                                                {
+                                                    interestdate = f.creationdate,
+                                                    id = f.profilemetadata1.profile_id
+                                                    // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                                }).ToList();
+
+                     int? pageint = Convert.ToInt32(model.page);
+                     int? numberperpageint = Convert.ToInt32(model.numberperpage);
+
+                     bool allowpaging = (whoisinterestedinme.Count >= (pageint * numberperpageint) ? true : false);
+                     var pageData = pageint > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinme, pageint ?? 1, numberperpageint ?? 4) : whoisinterestedinme.Take(numberperpageint.GetValueOrDefault());
+                     //this.AddRange(pageData.ToList());
+                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                     //return interests.ToList();
+                     List<MemberSearchViewModel> results;
+                     AnewluvContext AnewluvContext = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     }
+                     return results;
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+
              }
              catch (Exception ex)
              {
 
                 new  Logging(applicationEnum.MemberActionsService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -769,52 +831,64 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who are interested in me, that ive not viewd yet
         /// </summary 
-        public List<MemberSearchViewModel> getwhoisinterestedinmenew(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwhoisinterestedinmenew(ProfileModel model)
         {
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+            
 
                _unitOfWork.DisableProxyCreation = true;
          using (var db = _unitOfWork)
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
 
-                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                       select new
-                                       {
-                                           ProfilesBlockedId = c.blockprofile_id
-                                       }).ToList();
+                 var task = Task.Factory.StartNew(() =>
+                 {
+                     if (model.page == null | model.page == 0) model.page = 1;
+                     if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-                 //rematerialize on the back end.
-                 //final query to send back only the profile datatas of the interests we want
-                 var whoisinterestedinmenew = (from f in  db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == id && p.viewdate == null)
-                                               where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))                
-                                               select new MemberSearchViewModel
-                                               {
-                                                   interestdate = f.creationdate,
-                                                  id = f.profilemetadata1.profile_id 
-                                                   // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                               }).ToList();
 
-                 int? pageint = Convert.ToInt32(page);
-                 int? numberperpageint = Convert.ToInt32(numberperpage);
+                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                           select new
+                                           {
+                                               ProfilesBlockedId = c.blockprofile_id
+                                           }).ToList();
 
-                 bool allowpaging = (whoisinterestedinmenew.Count >= (pageint * numberperpageint) ? true : false);
-                 var pageData = pageint > 1 & allowpaging ?
-                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinmenew, pageint ?? 1, numberperpageint ?? 4) : whoisinterestedinmenew.Take(numberperpageint.GetValueOrDefault());
-                 //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                     //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                     //rematerialize on the back end.
+                     //final query to send back only the profile datatas of the interests we want
+                     var whoisinterestedinmenew = (from f in db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == model.profileid && p.viewdate == null)
+                                                   where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))                
+                                                   select new MemberSearchViewModel
+                                                   {
+                                                       interestdate = f.creationdate,
+                                                       id = f.profilemetadata1.profile_id
+                                                       // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                                   }).ToList();
 
-                 //return interests.ToList();
-                   AnewluvContext AnewluvContext = new AnewluvContext();
-                   using (var tempdb = AnewluvContext)
-                   {
-                       MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                       return MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                   }
+                     int? pageint = model.page;
+                     int? numberperpageint = model.numberperpage;
+
+                     bool allowpaging = (whoisinterestedinmenew.Count >= (pageint * numberperpageint) ? true : false);
+                     var pageData = pageint > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoisinterestedinmenew, pageint ?? 1, numberperpageint ?? 4) : whoisinterestedinmenew.Take(numberperpageint.GetValueOrDefault());
+                     //this.AddRange(pageData.ToList());
+                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                     //return interests.ToList();
+                     List<MemberSearchViewModel> results;
+                     AnewluvContext AnewluvContext = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     }
+                     return results;
+
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
 
 
              }
@@ -822,7 +896,7 @@ namespace Anewluv.Services.MemberActions
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -849,7 +923,7 @@ namespace Anewluv.Services.MemberActions
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutualinterests(string profileid, string targetprofileid)
+        public async Task<List<MemberSearchViewModel>> getmutualinterests(ProfileModel model)
         {
 
                _unitOfWork.DisableProxyCreation = true;
@@ -857,15 +931,26 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-                 IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
-                 return mutualinterests.ToList();
+                 var task = Task.Factory.StartNew(() =>
+                 {
+
+
+                     IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
+                     return mutualinterests.ToList();
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+
+
 
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -881,7 +966,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //checks if you already sent and interest to the target profile
         /// </summary        
-        public bool checkinterest(string profileid, string targetprofileid)
+        public async Task<bool> checkinterest(ProfileModel model)
         {
 
                _unitOfWork.DisableProxyCreation = true;
@@ -889,16 +974,24 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
-                 var targetid = Convert.ToInt32(targetprofileid);
-                 return  db.GetRepository<interest>().Find().Any(r => r.profile_id == id && r.interestprofile_id == targetid);
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
+                     return db.GetRepository<interest>().Find().Any(r => r.profile_id == model.profileid && r.interestprofile_id == model.targetprofileid);
+
+
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+         
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -914,13 +1007,8 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// Adds a New interest
         /// </summary>
-        public bool addinterest(string profileid, string targetprofileid)
+        public async Task addinterest(ProfileModel model)
         {
-
-            //create new inetrest object
-            interest interest = new interest();
-            //make sure you are not trying to interest at yourself
-            if (profileid == targetprofileid) return false;
 
 
             //update method code
@@ -931,46 +1019,61 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+
+                            //create new inetrest object
+                            interest interest = new interest();
+                            //make sure you are not trying to interest at yourself
+                            if (model.profileid.GetValueOrDefault().ToString() == model.targetprofileid.ToString()) return ;
+
+
+                            //check  interest first  
+                            //if this was a interest being restored just do that part
+                            var existinginterest = db.GetRepository<interest>().FindSingle(r => r.profile_id == model.profileid && r.interestprofile_id == model.targetprofileid);
+
+                            //just  update it if we have one already
+                            if (existinginterest != null)
+                            {
+                                existinginterest.deletedbymemberdate = null; ;
+                                existinginterest.modificationdate = DateTime.Now;
+                                db.Update(existinginterest);
+
+                            }
+                            else
+                            {
+                                //interest = this. db.GetRepository<interest>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
+                                //update the profile status to 2
+                                interest.profile_id = model.profileid.GetValueOrDefault();
+                                interest.interestprofile_id = model.targetprofileid.GetValueOrDefault();
+                                interest.mutual = false;  // not dealing with this calulatin yet
+                                interest.creationdate = DateTime.Now;
+                                //handele the update using EF
+                                // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
+                                db.Add(interest);
+
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                          //  return true;
+
+
+                        });
+                        await task.ConfigureAwait(false);
+
                         
-                         var id = Convert.ToInt32(profileid);
-                         var targetid = Convert.ToInt32(targetprofileid);
+                       
 
-                       //check  interest first  
-                         //if this was a interest being restored just do that part
-                        var existinginterest = db.GetRepository<interest>().FindSingle(r => r.profile_id == id && r.interestprofile_id == targetid);
-
-                        //just  update it if we have one already
-                        if (existinginterest != null)
-                        {
-                            existinginterest.deletedbymemberdate = null; ;
-                            existinginterest.modificationdate = DateTime.Now;
-                            db.Update(existinginterest);
-
-                        }
-                        else
-                        {
-                            //interest = this. db.GetRepository<interest>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
-                            //update the profile status to 2
-                            interest.profile_id = id;
-                            interest.interestprofile_id = targetid;
-                            interest.mutual = false;  // not dealing with this calulatin yet
-                            interest.creationdate = DateTime.Now;
-                            //handele the update using EF
-                            // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
-                            db.Add(interest);
-                            
-                        }
-
-                        int i = db.Commit();
-                        transaction.Commit();
-
-                        return true;
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -992,11 +1095,11 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool removeinterestbyprofileid(string profileid, string interestprofile_id)
+        public async Task removeinterestbyprofileid(ProfileModel model)
         {
 
 
-            //update method code
+            //update method code  return awa
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
@@ -1004,28 +1107,36 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(interestprofile_id);
 
-                        var interest = db.GetRepository<interest>().Find().Where(p => p.profile_id == id && p.interestprofile_id == targetid).FirstOrDefault();
-                        //update the profile status to 2
 
-                        interest.deletedbymemberdate = DateTime.Now;
-                        interest.modificationdate = DateTime.Now;
-                        db.Update(interest);
+                         //   var targetid = Convert.ToInt32(interestprofile_id);
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            var interest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.profileid && p.interestprofile_id == model.targetprofileid).FirstOrDefault();
+                            //update the profile status to 2
 
-                        return true;
+                            interest.deletedbymemberdate = DateTime.Now;
+                            interest.modificationdate = DateTime.Now;
+                            db.Update(interest);
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+
+                     
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1044,7 +1155,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool removeinterestbyinterestprofileid(string interestprofile_id, string profileid)
+         public async Task removeinterestbyinterestprofileid(ProfileModel model)
         {
 
 
@@ -1056,27 +1167,37 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(interestprofile_id);
 
-                       var interest = db.GetRepository<interest>().Find().Where(p => p.profile_id == targetid && p.interestprofile_id == id).FirstOrDefault();
-                        //update the profile status to 2
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        interest.deletedbyinterestdate = DateTime.Now;
-                        interest.modificationdate = DateTime.Now;
-                        db.Update(interest);
+                            //  var targetid = Convert.ToInt32(interestprofile_id);
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            var interest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.targetprofileid && p.interestprofile_id == model.profileid).FirstOrDefault();
+                            //update the profile status to 2
 
-                        return true;
+                            interest.deletedbyinterestdate = DateTime.Now;
+                            interest.modificationdate = DateTime.Now;
+                            db.Update(interest);
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                            return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
+                   
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1095,7 +1216,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreinterestbyprofileid(string profileid, string interestprofile_id)
+         public async Task restoreinterestbyprofileid(ProfileModel model)
         {
 
 
@@ -1107,26 +1228,36 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(interestprofile_id);
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                      var  interest =  db.GetRepository<interest>().Find().Where(p => p.profile_id == id && p.interestprofile_id == targetid).FirstOrDefault();
-                        //update the profile status to 2
 
-                        interest.deletedbymemberdate = null;
-                        interest.modificationdate = DateTime.Now;
-                        db.Update(interest);
+                           // var targetid = Convert.ToInt32(interestprofile_id);
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            var interest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.profileid && p.interestprofile_id == model.targetprofileid).FirstOrDefault();
+                            //update the profile status to 2
 
-                        return true;
+                            interest.deletedbymemberdate = null;
+                            interest.modificationdate = DateTime.Now;
+                            db.Update(interest);
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                           // return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+
+                     
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1145,7 +1276,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreinterestbyinterestprofileid(string interestprofile_id, string profileid)
+         public async Task restoreinterestbyinterestprofileid(ProfileModel model)
         {
 
 
@@ -1157,27 +1288,37 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(interestprofile_id);
 
-                       var interest =  db.GetRepository<interest>().Find().Where(p => p.profile_id == targetid && p.interestprofile_id == id).FirstOrDefault();
-                        //update the profile status to 2
-
-                        interest.deletedbyinterestdate = null;
-                        interest.modificationdate = DateTime.Now;
-                        db.Update(interest);
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                          //  var targetid = Convert.ToInt32(interestprofile_id);
 
-                        return true;
+                            var interest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.targetprofileid && p.interestprofile_id == model.profileid).FirstOrDefault();
+                            //update the profile status to 2
+
+                            interest.deletedbyinterestdate = null;
+                            interest.modificationdate = DateTime.Now;
+                            db.Update(interest);
+
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                            return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1196,7 +1337,7 @@ namespace Anewluv.Services.MemberActions
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removeinterestsbyprofileidandscreennames(string profileid, List<String> screennames)
+         public async Task removeinterestsbyprofileidandscreennames(ProfileModel model)
         {
 
             //update method code
@@ -1207,34 +1348,44 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        // interests = this. db.GetRepository<interest>().Find().Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
-                        //update the profile status to 2
-                        interest interest = new interest();
-                        foreach (string value in screennames)
+
+                        var task = Task.Factory.StartNew(() =>
                         {
 
-                          
-          
+                            // interests = this. db.GetRepository<interest>().Find().Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                            //update the profile status to 2
+                            interest interest = new interest();
+                            foreach (string value in model.targetscreennames)
+                            {
 
-                           int? interestprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                           var  currentinterest = db.GetRepository<interest>().Find().Where(p => p.profile_id == id && p.interestprofile_id == interestprofile_id).FirstOrDefault();
-                            interest.deletedbymemberdate = DateTime.Now;
-                            interest.modificationdate = DateTime.Now;
-                            db.Update(currentinterest);
-                           
-                        }
 
-                        int i = db.Commit();
-                        transaction.Commit();
 
-                        return true;
+
+                                int? interestprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentinterest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                                interest.deletedbymemberdate = DateTime.Now;
+                                interest.modificationdate = DateTime.Now;
+                                db.Update(currentinterest);
+
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                     
+
+                      //  return true;
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1252,7 +1403,7 @@ namespace Anewluv.Services.MemberActions
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restoreinterestsbyprofileidandscreennames(string profileid, List<String> screennames)
+         public async Task restoreinterestsbyprofileidandscreennames(ProfileModel model)
         {
 
             //update method code
@@ -1263,31 +1414,42 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        // interests = this. db.GetRepository<interest>().Find().Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
-                        //update the profile status to 2
-                        interest interest = new interest();
-                        foreach (string value in screennames)
+
+
+                        var task = Task.Factory.StartNew(() =>
                         {
-                            int? interestprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                            var currentinterest = db.GetRepository<interest>().Find().Where(p => p.profile_id == id && p.interestprofile_id == interestprofile_id).FirstOrDefault();
-                            interest.deletedbymemberdate = null;
-                            interest.modificationdate = DateTime.Now;
-                            db.Update(currentinterest);
 
-                        }
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            // interests = this. db.GetRepository<interest>().Find().Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                            //update the profile status to 2
+                            interest interest = new interest();
+                            foreach (string value in model.targetscreennames)
+                            {
+                                int? interestprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentinterest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                                interest.deletedbymemberdate = null;
+                                interest.modificationdate = DateTime.Now;
+                                db.Update(currentinterest);
 
-                        return true;
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                          //  return true;
+
+                        });
+
+                        await task.ConfigureAwait(false);
+
+                      
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1306,7 +1468,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         ///  Update interest with a view     
         /// </summary 
-        public bool updateinterestviewstatus(string profileid, string targetprofileid)
+         public async Task updateinterestviewstatus(ProfileModel model)
         {
             //update method code
             using (var db = _unitOfWork)
@@ -1317,27 +1479,35 @@ namespace Anewluv.Services.MemberActions
                     try
                     {
 
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(targetprofileid);
-
-                        var interest =  db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == targetid && p.profile_id == id).FirstOrDefault();
-                        //update the profile status to 2            
-                        if (interest.viewdate == null)
+                        var task = Task.Factory.StartNew(() =>
                         {
-                            interest.viewdate = DateTime.Now;
-                            interest.modificationdate = DateTime.Now;
-                            db.Update(interest);
 
-                            int i = db.Commit();
-                            transaction.Commit();
-                        }
-                        return true;
+
+                            var interest = db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
+                            //update the profile status to 2            
+                            if (interest.viewdate == null)
+                            {
+                                interest.viewdate = DateTime.Now;
+                                interest.modificationdate = DateTime.Now;
+                                db.Update(interest);
+
+                                int i = db.Commit();
+                                transaction.Commit();
+                            }
+                       //     return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+ 
+                      
+
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1368,7 +1538,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total peeks
         /// </summary>       
-        public int getwhoipeekedatcount(string profileid)
+        public async Task<int> getwhoipeekedatcount(ProfileModel model)
         {
 
                _unitOfWork.DisableProxyCreation = true;
@@ -1376,25 +1546,37 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-                 int? count = null;
-                 int defaultvalue = 0;
-                 var id = Convert.ToInt32(profileid);
 
-                 count = (
-            from f in db.GetRepository<peek>().Find()
-            where (f.profile_id == id && f.deletedbymemberdate == null)
-            select f).Count();
-                 // ?? operator example.
-                 // y = x, unless x is null, in which case y = -1.
-                 defaultvalue = count ?? 0;
-                 return defaultvalue;
+                 var task = Task.Factory.StartNew(() =>
+                 {
+
+                     int? count = null;
+                     int defaultvalue = 0;
+
+
+                     count = (
+                from f in db.GetRepository<peek>().Find()
+                where (f.profile_id == model.profileid && f.deletedbymemberdate == null)
+                select f).Count();
+                     // ?? operator example.
+                     // y = x, unless x is null, in which case y = -1.
+                     defaultvalue = count ?? 0;
+                     return defaultvalue;
+
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+                
+
 
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -1410,7 +1592,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total peeks
         /// </summary>       
-        public int getwhopeekedatmecount(string profileid)
+        public async Task<int> getwhopeekedatmecount(ProfileModel model)
         {
 
                _unitOfWork.DisableProxyCreation = true;
@@ -1418,37 +1600,48 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-                 int? count = null;
-                 int defaultvalue = 0;
-                 var id = Convert.ToInt32(profileid);
 
-                 //filter out blocked profiles 
-                 var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate != null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
-                 count = (
-                    from p in db.GetRepository<peek>().Find()
-                    where (p.peekprofile_id == id)
-                    join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                    select f).Count();
-
-                 // ?? operator example.
+                     int? count = null;
+                     int defaultvalue = 0;
 
 
-                 // y = x, unless x is null, in which case y = -1.
-                 defaultvalue = count ?? 0;
+                     //filter out blocked profiles 
+                     var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+                                          select new
+                                          {
+                                              ProfilesBlockedId = c.blockprofile_id
+                                          };
 
-                 return defaultvalue;
+                     count = (
+                        from p in db.GetRepository<peek>().Find()
+                        where (p.peekprofile_id == model.profileid)
+                        join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
+                        where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                        select f).Count();
+
+                     // ?? operator example.
+
+
+                     // y = x, unless x is null, in which case y = -1.
+                     defaultvalue = count ?? 0;
+
+                     return defaultvalue;
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+                
+               
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -1465,7 +1658,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total peeks
         /// </summary>       
-        public int getwhopeekedatmenewcount(string profileid)
+        public async Task<int> getwhopeekedatmenewcount(ProfileModel model)
         {
 
                _unitOfWork.DisableProxyCreation = true;
@@ -1473,37 +1666,48 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-                 int? count = null;
-                 int defaultvalue = 0;
-                 var id = Convert.ToInt32(profileid);
-
-                 //filter out blocked profiles 
-                 var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate != null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
-
-                 count = (
-                    from p in db.GetRepository<peek>().Find()
-                    where (p.peekprofile_id == id && p.viewdate == null)
-                    join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                    select f).Count();
-
-                 // ?? operator example.
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
 
-                 // y = x, unless x is null, in which case y = -1.
-                 defaultvalue = count ?? 0;
+                     int? count = null;
+                     int defaultvalue = 0;
 
-                 return defaultvalue;
+
+                     //filter out blocked profiles 
+                     var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+                                          select new
+                                          {
+                                              ProfilesBlockedId = c.blockprofile_id
+                                          };
+
+                     count = (
+                        from p in db.GetRepository<peek>().Find()
+                        where (p.peekprofile_id == model.profileid && p.viewdate == null)
+                        join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
+                        where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                        select f).Count();
+
+                     // ?? operator example.
+
+
+                     // y = x, unless x is null, in which case y = -1.
+                     defaultvalue = count ?? 0;
+
+                     return defaultvalue;
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+                
+
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -1523,60 +1727,73 @@ namespace Anewluv.Services.MemberActions
         /// //gets all the members who are interested in me
         /// //TODO add filtering for blocked members that you blocked and system blocked
         /// </summary 
-        public List<MemberSearchViewModel> getwhopeekedatme(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwhopeekedatme(ProfileModel model)
         {
 
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+          
 
                _unitOfWork.DisableProxyCreation = true;
          using (var db = _unitOfWork)
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
 
-                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                       select new
-                                       {
-                                           ProfilesBlockedId = c.blockprofile_id
-                                       }).ToList();
+                 var task = Task.Factory.StartNew(() =>
+                 {
+                     if (model.page == null | model.page == 0) model.page = 1;
+                     if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-                 //rematerialize on the back end.
-                 //final query to send back only the profile datatas of the interests we want
-                 var peeks = (from f in  db.GetRepository<peek>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
-                              where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
-                              select new MemberSearchViewModel
-                              {
-                                  peekdate = f.creationdate,
-                                 id = f.profilemetadata1.profile_id 
-                                  // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                              }).ToList();
+                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                           select new
+                                           {
+                                               ProfilesBlockedId = c.blockprofile_id
+                                           }).ToList();
 
-                 int? pageint = Convert.ToInt32(page);
-                 int? numberperpageint = Convert.ToInt32(numberperpage);
+                     //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                     //rematerialize on the back end.
+                     //final query to send back only the profile datatas of the interests we want
+                     var peeks = (from f in db.GetRepository<peek>().Find().Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
+                                  where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                  select new MemberSearchViewModel
+                                  {
+                                      peekdate = f.creationdate,
+                                      id = f.profilemetadata1.profile_id
+                                      // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                  }).ToList();
 
-                 bool allowpaging = (peeks.Count >= (pageint * numberperpageint) ? true : false);
-                 var pageData = pageint > 1 & allowpaging ?
-                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeks, pageint ?? 1, numberperpageint ?? 4) : peeks.Take(numberperpageint.GetValueOrDefault());
-                 //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                     int? pageint = model.page;
+                     int? numberperpageint = model.numberperpage;
 
-                 //return interests.ToList();
-                   AnewluvContext AnewluvContext = new AnewluvContext();
-                   using (var tempdb = AnewluvContext)
-                   {
-                       MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                       return MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     bool allowpaging = (peeks.Count >= (pageint * numberperpageint) ? true : false);
+                     var pageData = pageint > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeks, pageint ?? 1, numberperpageint ?? 4) : peeks.Take(numberperpageint.GetValueOrDefault());
+                     //this.AddRange(pageData.ToList());
+                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-                   }
+                     List<MemberSearchViewModel> results;
+                     //return interests.ToList();
+                     AnewluvContext AnewluvContext = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+                     }
+                     return results;
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+
+            
+      
              }
              catch (Exception ex)
              {
 
                 new  Logging(applicationEnum.MemberActionsService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -1596,62 +1813,72 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// return all  new  Peeks as an object
         /// </summary>
-        public List<MemberSearchViewModel> getwhopeekedatmenew(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwhopeekedatmenew(ProfileModel model)
         {
 
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
-
+          
                _unitOfWork.DisableProxyCreation = true;
          using (var db = _unitOfWork)
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
+                 var task = Task.Factory.StartNew(() =>
+                 {
+                     if (model.page == null | model.page == 0) model.page = 1;
+                     if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                       select new
-                                       {
-                                           ProfilesBlockedId = c.blockprofile_id
-                                       }).ToList();
+                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                           select new
+                                           {
+                                               ProfilesBlockedId = c.blockprofile_id
+                                           }).ToList();
 
-                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-                 //rematerialize on the back end.
-                 //final query to send back only the profile datatas of the interests we want
-                 var WhoPeekedAtMe = (from f in  db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == id && p.deletedbymemberdate == null)
-                                      where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
-                                      select new MemberSearchViewModel
-                                      {
-                                          peekdate = f.creationdate,
-                                         id = f.profilemetadata1.profile_id 
-                                          // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                      }).ToList();
+                     //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                     //rematerialize on the back end.
+                     //final query to send back only the profile datatas of the interests we want
+                     var WhoPeekedAtMe = (from f in db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == model.profileid && p.deletedbymemberdate == null)
+                                          where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                          select new MemberSearchViewModel
+                                          {
+                                              peekdate = f.creationdate,
+                                              id = f.profilemetadata1.profile_id
+                                              // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                          }).ToList();
 
-                 int? pageint = Convert.ToInt32(page);
-                 int? numberperpageint = Convert.ToInt32(numberperpage);
+                     int? pageint = model.page;
+                     int? numberperpageint = model.numberperpage;
 
-                 bool allowpaging = (WhoPeekedAtMe.Count >= (pageint * numberperpageint) ? true : false);
-                 var pageData = pageint > 1 & allowpaging ?
-                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(WhoPeekedAtMe, pageint ?? 1, numberperpageint ?? 4) : WhoPeekedAtMe.Take(numberperpageint.GetValueOrDefault());
-                 //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                     bool allowpaging = (WhoPeekedAtMe.Count >= (pageint * numberperpageint) ? true : false);
+                     var pageData = pageint > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(WhoPeekedAtMe, pageint ?? 1, numberperpageint ?? 4) : WhoPeekedAtMe.Take(numberperpageint.GetValueOrDefault());
+                     //this.AddRange(pageData.ToList());
+                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-                 //return interests.ToList();
-                  List<MemberSearchViewModel> results;
-                    AnewluvContext AnewluvContext  = new AnewluvContext();
-                    using (var tempdb = AnewluvContext)
-                    {
-                        MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                        results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                    }
-                    return results;
+                     //return interests.ToList();
+                     List<MemberSearchViewModel> results;
+                     AnewluvContext AnewluvContext = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     }
+                     return results;
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+
+            
+
+               
 
              }
              catch (Exception ex)
              {
 
                 new  Logging(applicationEnum.MemberActionsService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -1671,77 +1898,87 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets list of all the profiles I Peeked at in
         /// </summary 
-        public List<MemberSearchViewModel> getwhoipeekedat(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwhoipeekedat(ProfileModel model)
         {
 
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+        
 
               _unitOfWork.DisableProxyCreation = false;
          using (var db = _unitOfWork)
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
-                 // IEnumerable<MemberSearchViewModel> PeekNew = default(IEnumerable<MemberSearchViewModel>);
 
-                 //gets all  interestets from the interest table based on if the person's profiles are stil lvalid tho
-
-
-                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                                                      select new
-                                                                      {
-                                                                          ProfilesBlockedId = c.blockprofile_id
-                                                                      }).ToList();
-
-                 //if (MyActiveblocks.Count != 0 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == ))
-                // {
-                //     var test = "";
-                // }
-
-                 
-                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-                 //rematerialize on the back end.
-                 //final query to send back only the profile datatas of the interests we want
-                 var peeknew = (from f in  db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == id )
-                               // join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                              //  join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                where (f.profilemetadata1.profile.status_id < 3  && !(MyActiveblocks.Count !=0 && f.profilemetadata1 !=null ))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
-                                select new MemberSearchViewModel
-                                {
-                                    peekdate = f.creationdate,
-                                    id = f.profilemetadata1.profile_id //,
-                                    // profiledata = f.profilemetadata1.profile.profiledata
-                                    // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                }).ToList();
-
-
-                 int? pageint = Convert.ToInt32(page);
-                 int? numberperpageint = Convert.ToInt32(numberperpage);
-
-                 bool allowpaging = (peeknew.Count >= (pageint * numberperpageint) ? true : false);
-                 var pageData = pageint > 1 & allowpaging ?
-                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeknew, pageint ?? 1, numberperpageint ?? 4) : peeknew.Take(numberperpageint.GetValueOrDefault());
-                 //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
-
-                 //return interests.ToList();
-                 List<MemberSearchViewModel> results;
-                 //AnewluvContext AnewluvContext = new AnewluvContext();
-                 using (var tempdb = new AnewluvContext())
+                 var task = Task.Factory.StartNew(() =>
                  {
-                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                 }
-                 return results;
+                     if (model.page == null | model.page == 0) model.page = 1;
+                     if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
+
+                     // IEnumerable<MemberSearchViewModel> PeekNew = default(IEnumerable<MemberSearchViewModel>);
+
+                     //gets all  interestets from the interest table based on if the person's profiles are stil lvalid tho
+
+
+                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                           select new
+                                           {
+                                               ProfilesBlockedId = c.blockprofile_id
+                                           }).ToList();
+
+                     //if (MyActiveblocks.Count != 0 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == ))
+                     // {
+                     //     var test = "";
+                     // }
+
+
+                     //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                     //rematerialize on the back end.
+                     //final query to send back only the profile datatas of the interests we want
+                     var peeknew = (from f in db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == model.profileid)
+                                    // join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
+                                    //  join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                                    where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                    select new MemberSearchViewModel
+                                    {
+                                        peekdate = f.creationdate,
+                                        id = f.profilemetadata1.profile_id //,
+                                        // profiledata = f.profilemetadata1.profile.profiledata
+                                        // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                    }).ToList();
+
+
+                     int? pageint = model.page;
+                     int? numberperpageint = model.numberperpage;
+
+                     bool allowpaging = (peeknew.Count >= (pageint * numberperpageint) ? true : false);
+                     var pageData = pageint > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(peeknew, pageint ?? 1, numberperpageint ?? 4) : peeknew.Take(numberperpageint.GetValueOrDefault());
+                     //this.AddRange(pageData.ToList());
+                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                     //return interests.ToList();
+                     List<MemberSearchViewModel> results;
+                     //AnewluvContext AnewluvContext = new AnewluvContext();
+                     using (var tempdb = new AnewluvContext())
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     }
+                     return results;
                 
 
+                 });
+
+                return await task.ConfigureAwait(false);
+
+            
+                
              }
              catch (Exception ex)
              {
 
                 new  Logging(applicationEnum.MemberActionsService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -1770,7 +2007,7 @@ namespace Anewluv.Services.MemberActions
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutualpeeks(string profileid, string targetprofileid)
+        public async Task<List<MemberSearchViewModel>> getmutualpeeks(ProfileModel model)
         {
 
                  _unitOfWork.DisableProxyCreation = true;
@@ -1778,16 +2015,25 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
-                 IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
-                 return mutualinterests.ToList();
+                     IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
+                     return mutualinterests.ToList();
+
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+            
                  
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -1802,7 +2048,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //checks if you already sent and peek to the target profile
         /// </summary        
-        public bool checkpeek(string profileid, string targetprofileid)
+        public async Task<bool> checkpeek(ProfileModel model)
         {
 
                  _unitOfWork.DisableProxyCreation = true;
@@ -1811,16 +2057,25 @@ namespace Anewluv.Services.MemberActions
              try
              {
 
-                 var id = Convert.ToInt32(profileid);
-                 var targetid = Convert.ToInt32(targetprofileid);
-                 return  db.GetRepository<peek>().Find().Any(r => r.profile_id == id && r.peekprofile_id == targetid);
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
-             }
+
+
+                     return db.GetRepository<peek>().Find().Any(r => r.profile_id == model.profileid && r.peekprofile_id == model.targetprofileid);
+
+         
+
+                 });
+
+                return await task.ConfigureAwait(false);
+               
+    }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -1837,12 +2092,12 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// Adds a New peek
         /// </summary>
-        public bool addpeek(string profileid, string targetprofileid)
+        public async Task addpeek(ProfileModel model)
         {
             //create new inetrest object
             peek peek = new peek();
             //make sure you are not trying to peek at yourself
-            if (profileid == targetprofileid) return false;
+            if (model.profileid.ToString() == model.targetprofileid.ToString()) return ;
 
         
             //update method code
@@ -1853,96 +2108,114 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(targetprofileid);
-
-                        //check  peek first  
-                        //if this was a peek being restored just do that part
-                        var existingpeek = db.GetRepository<peek>().FindSingle(r => r.profile_id == id && r.peekprofile_id == targetid);
-
-                        //just  update it if we have one already
-                        if (existingpeek != null)
+                        var task = Task.Factory.StartNew(() =>
                         {
-                            existingpeek.deletedbymemberdate = null; ;
-                            existingpeek.modificationdate = DateTime.Now;
-                            db.Update(existingpeek);
 
-                        }
-                        else
+
+                            // var targetid = Convert.ToInt32(model.targetprofileid.ToString());
+
+                            //check  peek first  
+                            //if this was a peek being restored just do that part
+                            var existingpeek = db.GetRepository<peek>().FindSingle(r => r.profile_id == model.profileid && r.peekprofile_id == model.targetprofileid);
+
+                            //just  update it if we have one already
+                            if (existingpeek != null)
+                            {
+                                existingpeek.deletedbymemberdate = null; ;
+                                existingpeek.modificationdate = DateTime.Now;
+                                db.Update(existingpeek);
+
+                            }
+                            else
+                            {
+                                //peek = this. db.GetRepository<peek>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
+                                //update the profile status to 2
+                                peek.profile_id = model.profileid.GetValueOrDefault();
+                                peek.peekprofile_id = model.targetprofileid.GetValueOrDefault();
+                                peek.mutual = false;  // not dealing with this calulatin yet
+                                peek.creationdate = DateTime.Now;
+                                //handele the update using EF
+                                // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
+                                db.Add(peek);
+
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                            return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                       new  Logging(applicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in member actions service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+        
+
+        }
+
+        /// <summary>
+        ///  //Removes an peek i.e changes the peek to deleted so they do not shwo up to you anymore unless filtered in that person anymore
+        ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
+        ///  //not inmplemented
+        /// </summary 
+        public async Task removepeekbyprofileid(ProfileModel model)
+        {
+
+            //update method code
+            using (var db = _unitOfWork)
+            {
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                        var task = Task.Factory.StartNew(() =>
                         {
-                            //peek = this. db.GetRepository<peek>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
+
+
+                          //  var targetid = Convert.ToInt32(peekprofile_id);
+
+                            var peek = db.GetRepository<peek>().Find().Where(p => p.profile_id == model.profileid && p.peekprofile_id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
-                            peek.profile_id = id;
-                            peek.peekprofile_id = targetid;
-                            peek.mutual = false;  // not dealing with this calulatin yet
-                            peek.creationdate = DateTime.Now;
-                            //handele the update using EF
-                            // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
-                            db.Add(peek);
 
-                        }
+                            peek.deletedbymemberdate = DateTime.Now;
+                            peek.modificationdate = DateTime.Now;
+                            db.Update(peek);
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            int i = db.Commit();
+                            transaction.Commit();
 
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                       new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in member actions service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    }
+                            return true;
 
-                }
-            }
+                        });
 
-        
+                      await task.ConfigureAwait(false);
 
-        }
-
-        /// <summary>
-        ///  //Removes an peek i.e changes the peek to deleted so they do not shwo up to you anymore unless filtered in that person anymore
-        ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
-        ///  //not inmplemented
-        /// </summary 
-        public bool removepeekbyprofileid(string profileid, string peekprofile_id)
-        {
-
-            //update method code
-            using (var db = _unitOfWork)
-            {
-                db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(peekprofile_id);
-
-                        var peek = db.GetRepository<peek>().Find().Where(p => p.profile_id == id && p.peekprofile_id == targetid).FirstOrDefault();
-                        //update the profile status to 2
-
-                        peek.deletedbymemberdate = DateTime.Now;
-                        peek.modificationdate = DateTime.Now;
-                        db.Update(peek);
-
-                        int i = db.Commit();
-                        transaction.Commit();
-
-                        return true;
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -1962,7 +2235,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool removepeekbypeekprofileid(string peekprofile_id, string profileid)
+        public async Task removepeekbypeekprofileid(ProfileModel model)
         {
 
             //update method code
@@ -1973,27 +2246,37 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(peekprofile_id);
 
-                        var peek = db.GetRepository<peek>().Find().Where(p => p.profile_id == targetid && p.peekprofile_id == id).FirstOrDefault();
-                        //update the profile status to 2
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                         //   var targetid = Convert.ToInt32(peekprofile_id);
 
-                        peek.deletedbypeekdate = DateTime.Now;
-                        peek.modificationdate = DateTime.Now;
-                        db.Update(peek);
+                            var peek = db.GetRepository<peek>().Find().Where(p => p.profile_id == model.targetprofileid && p.peekprofile_id == model.profileid).FirstOrDefault();
+                            //update the profile status to 2
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            peek.deletedbypeekdate = DateTime.Now;
+                            peek.modificationdate = DateTime.Now;
+                            db.Update(peek);
 
-                        return true;
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                            return true;
+
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
+                     
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2012,7 +2295,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool restorepeekbyprofileid(string profileid, string peekprofile_id)
+        public async Task restorepeekbyprofileid(ProfileModel model)
         {
             //update method code
             using (var db = _unitOfWork)
@@ -2023,28 +2306,36 @@ namespace Anewluv.Services.MemberActions
                     try
                     {
 
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(peekprofile_id);
+                         //   var targetid = Convert.ToInt32(peekprofile_id);
 
-                        var peek = db.GetRepository<peek>().FindSingle(p => p.profile_id == id && p.peekprofile_id == targetid);
-                        //update the profile status to 2
+                            var peek = db.GetRepository<peek>().FindSingle(p => p.profile_id == model.profileid && p.peekprofile_id == model.targetprofileid);
+                            //update the profile status to 2
 
-                        peek.deletedbymemberdate = null;
-                        peek.modificationdate = DateTime.Now;
+                            peek.deletedbymemberdate = null;
+                            peek.modificationdate = DateTime.Now;
 
-                        db.Update(peek);
+                            db.Update(peek);
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            int i = db.Commit();
+                            transaction.Commit();
 
-                        return true;
+                            return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
+                      
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2065,7 +2356,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can peek u
         ///  //not inmplemented
         /// </summary 
-        public bool restorepeekbypeekprofileid(string peekprofile_id, string profileid)
+        public async Task restorepeekbypeekprofileid( ProfileModel model)
         {
             //update method code
             using (var db = _unitOfWork)
@@ -2075,30 +2366,39 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(peekprofile_id);
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        var peek = db.GetRepository<peek>().FindSingle(p => p.profile_id == targetid && p.peekprofile_id == id);
-                        //update the profile status to 2
-                        //update the profile status to 2
+                         //   var targetid = Convert.ToInt32(peekprofile_id);
+
+                            var peek = db.GetRepository<peek>().FindSingle(p => p.profile_id == model.targetprofileid && p.peekprofile_id == model.profileid);
+                            //update the profile status to 2
+                            //update the profile status to 2
 
 
-                        peek.deletedbypeekdate = null;
-                        peek.modificationdate = DateTime.Now;
+                            peek.deletedbypeekdate = null;
+                            peek.modificationdate = DateTime.Now;
 
-                        db.Update(peek);
+                            db.Update(peek);
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            int i = db.Commit();
+                            transaction.Commit();
 
-                        return true;
+                            return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
+                      
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2117,7 +2417,7 @@ namespace Anewluv.Services.MemberActions
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removepeeksbyprofileidandscreennames(string profileid, List<String> screennames)
+        public async Task removepeeksbyprofileidandscreennames(ProfileModel model)
         {
 
             //update method code
@@ -2128,31 +2428,40 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                              var id = Convert.ToInt32(profileid);
-                        // peeks = this. db.GetRepository<peek>().Find().Where(p => p.profileid == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
-                        //update the profile status to 2
-                        peek peek = new peek();
-                        foreach (string value in screennames)
+                        var task = Task.Factory.StartNew(() =>
                         {
 
-                           int? peekprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                           var  currentpeek = db.GetRepository<peek>().Find().Where(p => p.profile_id == id && p.peekprofile_id == peekprofile_id).FirstOrDefault();
-                           peek.deletedbymemberdate = null;
-                            peek.modificationdate = DateTime.Now;
-                            db.Update(currentpeek);
-                           
-                        }
+                            // peeks = this. db.GetRepository<peek>().Find().Where(p => p.profileid == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                            //update the profile status to 2
+                            peek peek = new peek();
+                            foreach (string value in model.targetscreennames)
+                            {
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                                int? peekprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentpeek = db.GetRepository<peek>().Find().Where(p => p.profile_id == model.profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                                peek.deletedbymemberdate = null;
+                                peek.modificationdate = DateTime.Now;
+                                db.Update(currentpeek);
 
-                        return true;
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                            return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                             
+                     
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2169,7 +2478,7 @@ namespace Anewluv.Services.MemberActions
         ///  //Removes a peek i.e makes is seem like you never peeeked at  anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restorepeeksbyprofileidandscreennames(string profileid, List<String> screennames)
+        public async Task restorepeeksbyprofileidandscreennames(ProfileModel model)
         {
 
             //update method code
@@ -2180,32 +2489,40 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-
-                        var id = Convert.ToInt32(profileid);
-                        // peeks = this. db.GetRepository<peek>().Find().Where(p => p.profileid == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
-                        //update the profile status to 2
-                        peek peek = new peek();
-                        foreach (string value in screennames)
+                        var task = Task.Factory.StartNew(() =>
                         {
 
-                            int? peekprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                            var currentpeek = db.GetRepository<peek>().Find().Where(p => p.profile_id == id && p.peekprofile_id == peekprofile_id).FirstOrDefault();
-                            peek.deletedbymemberdate = null;
-                            peek.modificationdate = DateTime.Now;
-                            db.Update(currentpeek);
 
-                        }
+                            // peeks = this. db.GetRepository<peek>().Find().Where(p => p.profileid == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                            //update the profile status to 2
+                            peek peek = new peek();
+                            foreach (string value in model.targetscreennames)
+                            {
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                                int? peekprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentpeek = db.GetRepository<peek>().Find().Where(p => p.profile_id == model.profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                                peek.deletedbymemberdate = null;
+                                peek.modificationdate = DateTime.Now;
+                                db.Update(currentpeek);
 
-                        return true;
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                            return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2221,7 +2538,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         ///  Update peek with a view     
         /// </summary 
-        public bool updatepeekviewstatus(string profileid, string targetprofileid)
+        public async Task updatepeekviewstatus(ProfileModel model)
         {
 
             //update method code
@@ -2232,27 +2549,36 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(targetprofileid);
 
-                        var peek = db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == targetid && p.profile_id == id).FirstOrDefault();
-                        //update the profile status to 2            
-                        if (peek.viewdate == null)
+                        var task = Task.Factory.StartNew(() =>
                         {
-                            peek.viewdate = DateTime.Now;
-                            peek.modificationdate = DateTime.Now;
-                            db.Update(peek);
 
-                            int i = db.Commit();
-                            transaction.Commit();
-                        }
-                        return true;
+
+
+                            var peek = db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
+                            //update the profile status to 2            
+                            if (peek.viewdate == null)
+                            {
+                                peek.viewdate = DateTime.Now;
+                                peek.modificationdate = DateTime.Now;
+                                db.Update(peek);
+
+                                int i = db.Commit();
+                                transaction.Commit();
+                            }
+                            return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                    
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2280,7 +2606,7 @@ namespace Anewluv.Services.MemberActions
         /// count all total blocks
         /// </summary>
 
-        public int getwhoiblockedcount(string profileid)
+        public async Task<int> getwhoiblockedcount(ProfileModel model)
         {
 
                 _unitOfWork.DisableProxyCreation = true;
@@ -2288,32 +2614,42 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
-                 int? count = null;
-                 int defaultvalue = 0;
-                 var id = Convert.ToInt32(profileid);
-
-                 count = (
-                   from f in  db.GetRepository<block>().Find()
-                   where (f.profile_id == id && f.removedate == null)
-                   select f).Count();
-
-                 // ?? operator example.
+                     int? count = null;
+                     int defaultvalue = 0;
 
 
-                 // y = x, unless x is null, in which case y = -1.
-                 defaultvalue = count ?? 0;
+                     count = (
+                       from f in db.GetRepository<block>().Find()
+                       where (f.profile_id == model.profileid && f.removedate == null)
+                       select f).Count();
+
+                     // ?? operator example.
+
+
+                     // y = x, unless x is null, in which case y = -1.
+                     defaultvalue = count ?? 0;
 
 
 
-                 return defaultvalue;
+                     return defaultvalue;
+
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+                
+
 
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -2329,54 +2665,65 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// return all    block as an object
         /// </summary>
-        public List<MemberSearchViewModel> getwhoiblocked(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwhoiblocked(ProfileModel model)
         {
 
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
 
                 _unitOfWork.DisableProxyCreation = true;
          using (var db = _unitOfWork)
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
-                 var blocknew = (from f in  db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                // join f in  db.GetRepository<profiledata>().Find() on p.blockprofile_id equals f.profile_id
-                               //  join z in  db.GetRepository<profile>().Find() on p.blockprofile_id equals z.id
-                                 where (f.profilemetadata1.profile.status_id < 3)
-                                 orderby (f.creationdate) descending
-                                 select new MemberSearchViewModel
-                                 {
-                                     blockdate = f.creationdate,
-                                    id = f.profilemetadata1.profile_id 
-                                     // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                 }).ToList();
 
-                 int? pageint = Convert.ToInt32(page);
-                 int? numberperpageint = Convert.ToInt32(numberperpage);
 
-                 bool allowpaging = (blocknew.Count >= (pageint * numberperpageint) ? true : false);
-                 var pageData = pageint > 1 & allowpaging ?
-                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(blocknew, pageint ?? 1, numberperpageint ?? 4) : blocknew.Take(numberperpageint.GetValueOrDefault());
-                 //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
-
-                 List<MemberSearchViewModel> results;
-                 AnewluvContext AnewluvContext = new AnewluvContext();
-                 using (var tempdb = AnewluvContext)
+                 var task = Task.Factory.StartNew(() =>
                  {
-                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                 }
-                 return results;
+
+                     if (model.page == null | model.page == 0) model.page = 1;
+                     if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
+
+
+                     var blocknew = (from f in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                     // join f in  db.GetRepository<profiledata>().Find() on p.blockprofile_id equals f.profile_id
+                                     //  join z in  db.GetRepository<profile>().Find() on p.blockprofile_id equals z.id
+                                     where (f.profilemetadata1.profile.status_id < 3)
+                                     orderby (f.creationdate) descending
+                                     select new MemberSearchViewModel
+                                     {
+                                         blockdate = f.creationdate,
+                                         id = f.profilemetadata1.profile_id
+                                         // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                     }).ToList();
+
+                     int? pageint = model.page;
+                     int? numberperpageint = model.numberperpage;
+
+                     bool allowpaging = (blocknew.Count >= (pageint * numberperpageint) ? true : false);
+                     var pageData = pageint > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(blocknew, pageint ?? 1, numberperpageint ?? 4) : blocknew.Take(numberperpageint.GetValueOrDefault());
+                     //this.AddRange(pageData.ToList());
+                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                     List<MemberSearchViewModel> results;
+                     AnewluvContext AnewluvContext = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     }
+                     return results;
+                 });
+
+                return await task.ConfigureAwait(false);
+
+            
 
              }
              catch (Exception ex)
              {
 
                 new  Logging(applicationEnum.MemberActionsService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -2397,54 +2744,62 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who areblocked in me
         /// </summary 
-        public List<MemberSearchViewModel> getwhoblockedme(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwhoblockedme(ProfileModel model)
         {
 
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+          
 
                 _unitOfWork.DisableProxyCreation = true;
          using (var db = _unitOfWork)
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
-
-                 var whoblockedme = (from f in  db.GetRepository<block>().Find().Where(p => p.blockprofile_id == id && p.removedate == null)
-                                   //  join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                    // join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                     where (f.profilemetadata1.profile.status_id < 3)
-                                     orderby (f.creationdate) descending
-                                     select new MemberSearchViewModel
-                                     {
-                                         blockdate =f.creationdate,
-                                        id = f.profilemetadata1.profile_id 
-                                         // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                     }).ToList();
-
-                 int? pageint = Convert.ToInt32(page);
-                 int? numberperpageint = Convert.ToInt32(numberperpage);
-
-                 bool allowpaging = (whoblockedme.Count >= (pageint * numberperpageint) ? true : false);
-                 var pageData = pageint > 1 & allowpaging ?
-                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoblockedme, pageint ?? 1, numberperpageint ?? 4) : whoblockedme.Take(numberperpageint.GetValueOrDefault());
-                 //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
-
-                 List<MemberSearchViewModel> results;
-                 AnewluvContext AnewluvContext = new AnewluvContext();
-                 using (var tempdb = AnewluvContext)
+                 var task = Task.Factory.StartNew(() =>
                  {
-                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                 }
-                 return results;
+                     if (model.page == null | model.page == 0) model.page = 1;
+                     if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
+
+                     var whoblockedme = (from f in db.GetRepository<block>().Find().Where(p => p.blockprofile_id == model.profileid && p.removedate == null)
+                                         //  join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
+                                         // join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                                         where (f.profilemetadata1.profile.status_id < 3)
+                                         orderby (f.creationdate) descending
+                                         select new MemberSearchViewModel
+                                         {
+                                             blockdate = f.creationdate,
+                                             id = f.profilemetadata1.profile_id
+                                             // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                         }).ToList();
+
+                     int? pageint = model.page;
+                     int? numberperpageint = model.numberperpage;
+
+                     bool allowpaging = (whoblockedme.Count >= (pageint * numberperpageint) ? true : false);
+                     var pageData = pageint > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoblockedme, pageint ?? 1, numberperpageint ?? 4) : whoblockedme.Take(numberperpageint.GetValueOrDefault());
+                     //this.AddRange(pageData.ToList());
+                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                     List<MemberSearchViewModel> results;
+                     AnewluvContext AnewluvContext = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     }
+                     return results;
+                 });
+
+                return await task.ConfigureAwait(false);
+
+
+            
              }
              catch (Exception ex)
              {
 
                 new  Logging(applicationEnum.MemberActionsService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -2469,7 +2824,7 @@ namespace Anewluv.Services.MemberActions
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutualblocks(string profileid, string targetprofileid)
+        public async Task<List<MemberSearchViewModel>> getmutualblocks(ProfileModel model)
         {
 
             //update method code
@@ -2481,17 +2836,25 @@ namespace Anewluv.Services.MemberActions
                     try
                     {
 
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        IEnumerable<MemberSearchViewModel> mutualblocks = default(IEnumerable<MemberSearchViewModel>);
-                        return mutualblocks.ToList();
 
+                            IEnumerable<MemberSearchViewModel> mutualblocks = default(IEnumerable<MemberSearchViewModel>);
+                            return mutualblocks.ToList();
+
+                        });
+
+                       return await task.ConfigureAwait(false);
+
+                   
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2506,7 +2869,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //checks if you already sent and block to the target profile
         /// </summary        
-        public bool checkblock(string profileid, string targetprofileid)
+        public async Task<bool> checkblock(ProfileModel model)
         {
 
 
@@ -2519,11 +2882,19 @@ namespace Anewluv.Services.MemberActions
                     try
                     {
 
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(targetprofileid);
 
-                        return db.GetRepository<block>().Find().Any(r => r.profile_id == id && r.blockprofile_id == targetid);
+
+                            return db.GetRepository<block>().Find().Any(r => r.profile_id == model.profileid && r.blockprofile_id == model.targetprofileid);
+
+                        });
+
+                       return await task.ConfigureAwait(false);
+
+
+                      
 
 
                     }
@@ -2531,7 +2902,7 @@ namespace Anewluv.Services.MemberActions
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2547,12 +2918,12 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// Adds a New block
         /// </summary>
-        public bool addblock(string profileid, string targetprofileid)
+        public async Task addblock(ProfileModel model)
         {
                 //create new inetrest object
             block block = new block();
             //make sure you are not trying to block at yourself
-            if (profileid == targetprofileid) return false;
+            if (model.profileid.ToString() == model.targetprofileid.ToString()) return ;
 
            
 
@@ -2564,47 +2935,57 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(targetprofileid);
 
-                        //check  block first  
-                        //if this was a block being restored just do that part
-                        var existingblock = db.GetRepository<block>().FindSingle(r => r.profile_id == id && r.blockprofile_id == targetid);
-
-                        //just  update it if we have one already
-                        if (existingblock != null)
+                        var task = Task.Factory.StartNew(() =>
                         {
-                            existingblock.removedate = null; ;
-                            existingblock.modificationdate = DateTime.Now;
-                            db.Update(existingblock);
 
-                        }
-                        else
-                        {
-                            //block = this. db.GetRepository<block>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
-                            //update the profile status to 2
-                            block.profile_id = id;
-                            block.blockprofile_id = targetid;
-                             // not dealing with this calulatin yet                           
-                            block.creationdate = DateTime.Now;
-                            //handele the update using EF
-                            // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
-                            db.Add(block);
+                            
 
-                        }
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                          //  var targetid = Convert.ToInt32(model.targetprofileid.ToString());
 
-                        return true;
+                            //check  block first  
+                            //if this was a block being restored just do that part
+                            var existingblock = db.GetRepository<block>().FindSingle(r => r.profile_id == model.profileid && r.blockprofile_id == model.targetprofileid);
 
+                            //just  update it if we have one already
+                            if (existingblock != null)
+                            {
+                                existingblock.removedate = null; ;
+                                existingblock.modificationdate = DateTime.Now;
+                                db.Update(existingblock);
+
+                            }
+                            else
+                            {
+                                //block = this. db.GetRepository<block>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
+                                //update the profile status to 2
+                                block.profile_id = model.profileid.GetValueOrDefault();
+                                block.blockprofile_id = model.targetprofileid.GetValueOrDefault();
+                                // not dealing with this calulatin yet                           
+                                block.creationdate = DateTime.Now;
+                                //handele the update using EF
+                                // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
+                                db.Add(block);
+
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                          //  return true;
+
+
+                        });
+
+                      await task.ConfigureAwait(false);
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2624,7 +3005,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can block u
         ///  //not inmplemented
         /// </summary 
-        public bool removeblock(string profileid, string blockprofile_id)
+        public async Task removeblock(ProfileModel model)
         {
             //update method code
             using (var db = _unitOfWork)
@@ -2634,27 +3015,37 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(blockprofile_id);
 
-                        var block = db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.blockprofile_id == targetid).FirstOrDefault();
-                        //update the profile status to 2
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                            //var targetid = Convert.ToInt32(blockprofile_id);
 
-                        block.removedate = DateTime.Now;
-                        block.modificationdate = DateTime.Now;
-                        db.Update(block);
+                            var block = db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.blockprofile_id == model.targetprofileid).FirstOrDefault();
+                            //update the profile status to 2
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            block.removedate = DateTime.Now;
+                            block.modificationdate = DateTime.Now;
+                            db.Update(block);
 
-                        return true;
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                         //   return true;
+
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
+                       
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2673,7 +3064,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can block u
         ///  //not inmplemented
         /// </summary 
-        public bool restoreblock(string profileid, string blockprofile_id)
+        public async Task restoreblock(ProfileModel model)
         {
 
             //update method code
@@ -2684,28 +3075,38 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(blockprofile_id);
 
-                        var block = db.GetRepository<block>().FindSingle(p => p.profile_id == id && p.blockprofile_id == targetid);
-                        //update the profile status to 2
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        block.removedate = null;
-                        block.modificationdate = DateTime.Now;
+                           // var targetid = Convert.ToInt32(blockprofile_id);
 
-                        db.Update(block);
+                            var block = db.GetRepository<block>().FindSingle(p => p.profile_id == model.profileid && p.blockprofile_id == model.targetprofileid);
+                            //update the profile status to 2
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            block.removedate = null;
+                            block.modificationdate = DateTime.Now;
 
-                        return true;
+                            db.Update(block);
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                         //   return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
+                     
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2723,7 +3124,7 @@ namespace Anewluv.Services.MemberActions
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removeblocksbyscreennames(string profileid, List<String> screennames)
+        public async Task removeblocksbyscreennames(ProfileModel model)
         {
 
             //update method code
@@ -2734,33 +3135,43 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        // blocks = this. db.GetRepository<block>().Find().Where(p => p.profileid == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
-                        //update the profile status to 2
-                        block block = new block();
-                        foreach (string value in screennames)
+                        var task = Task.Factory.StartNew(() =>
                         {
 
 
-                            int? blockprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                            var currentblock = db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.blockprofile_id == blockprofile_id).FirstOrDefault();
-                            block.removedate = null;
-                            block.modificationdate = DateTime.Now;
-                            db.Update(currentblock);
+                            // blocks = this. db.GetRepository<block>().Find().Where(p => p.profileid == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                            //update the profile status to 2
+                            block block = new block();
+                            foreach (string value in model.targetscreennames)
+                            {
 
-                        }
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                                int? blockprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentblock = db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                                block.removedate = null;
+                                block.modificationdate = DateTime.Now;
+                                db.Update(currentblock);
 
-                        return true;
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                          //  return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+
+                      
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2779,7 +3190,7 @@ namespace Anewluv.Services.MemberActions
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restoreblocksbyscreennames(string profileid, List<String> screennames)
+        public async Task restoreblocksbyscreennames(ProfileModel model)
         {
 
             //update method code
@@ -2790,31 +3201,41 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        // blocks = this. db.GetRepository<block>().Find().Where(p => p.profileid == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
-                        //update the profile status to 2
-                        block block = new block();
-                        foreach (string value in screennames)
+
+                        var task = Task.Factory.StartNew(() =>
                         {
-                            
-                            int? blockprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                            var currentblock = db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.blockprofile_id == blockprofile_id).FirstOrDefault();
-                            block.removedate = null;
-                            block.modificationdate = DateTime.Now;
-                            db.Update(currentblock);
 
-                        }
+                            // blocks = this. db.GetRepository<block>().Find().Where(p => p.profileid == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                            //update the profile status to 2
+                            block block = new block();
+                            foreach (string value in model.targetscreennames)
+                            {
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                                int? blockprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentblock = db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                                block.removedate = null;
+                                block.modificationdate = DateTime.Now;
+                                db.Update(currentblock);
 
-                        return true;
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                           // return true;
+
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                     
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2835,7 +3256,7 @@ namespace Anewluv.Services.MemberActions
         ///  Update block with a view     
         /// </summary 
         /// 
-        public bool updateblockreviewstatus(string profileid, string targetprofileid, string reviewerid)
+        public async Task updateblockreviewstatus(ProfileModel model)
         {
 
             //update method code
@@ -2846,29 +3267,37 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                      
 
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(targetprofileid);
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        var block = db.GetRepository<block>().Find().Where(p => p.blockprofile_id == targetid && p.profile_id == id).FirstOrDefault();
-                        //update the profile status to 2            
-                     
+                            var block = db.GetRepository<block>().Find().Where(p => p.blockprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
+                            //update the profile status to 2            
+
                             block.modificationdate = DateTime.Now;
-                          
+
                             db.Update(block);
 
                             int i = db.Commit();
                             transaction.Commit();
-                        
-                        return true;
+
+                           // return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
+                      
+
+                       
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -2895,7 +3324,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total likes
         /// </summary>       
-        public int getwhoilikecount(string profileid)
+        public async Task<int> getwhoilikecount(ProfileModel model)
         {
 
                 _unitOfWork.DisableProxyCreation = true;
@@ -2903,27 +3332,37 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-                 int? count = null;
-                 int defaultvalue = 0;
-                 var id = Convert.ToInt32(profileid);
 
-                 count = (
-            from f in db.GetRepository<like>().Find()
-            where (f.profile_id == id && f.deletedbymemberdate == null)
-            select f).Count();
-                 // ?? operator example.
-                 // y = x, unless x is null, in which case y = -1.
-                 defaultvalue = count ?? 0;
-                 return defaultvalue;
+                 var task = Task.Factory.StartNew(() =>
+                 {
+
+                     int? count = null;
+                     int defaultvalue = 0;
 
 
+                     count = (
+                from f in db.GetRepository<like>().Find()
+                where (f.profile_id == model.profileid && f.deletedbymemberdate == null)
+                select f).Count();
+                     // ?? operator example.
+                     // y = x, unless x is null, in which case y = -1.
+                     defaultvalue = count ?? 0;
+                     return defaultvalue;
+
+
+
+                 });
+                return await task.ConfigureAwait(false);
+
+
+              
 
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -2939,7 +3378,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total likes
         /// </summary>       
-        public int getwholikesmecount(string profileid)
+        public async Task<int> getwholikesmecount(ProfileModel model)
         {
 
                 _unitOfWork.DisableProxyCreation = true;
@@ -2947,39 +3386,48 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-
-                 int? count = null;
-                 int defaultvalue = 0;
-                 var id = Convert.ToInt32(profileid);
-
-                 //filter out blocked profiles 
-                 var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate != null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
-
-                 count = (
-                    from p in db.GetRepository<like>().Find()
-                    where (p.likeprofile_id == id)
-                    join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                    select f).Count();
-
-                 // ?? operator example.
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
 
-                 // y = x, unless x is null, in which case y = -1.
-                 defaultvalue = count ?? 0;
+                     int? count = null;
+                     int defaultvalue = 0;
 
-                 return defaultvalue;
+
+                     //filter out blocked profiles 
+                     var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+                                          select new
+                                          {
+                                              ProfilesBlockedId = c.blockprofile_id
+                                          };
+
+                     count = (
+                        from p in db.GetRepository<like>().Find()
+                        where (p.likeprofile_id == model.profileid)
+                        join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
+                        where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                        select f).Count();
+
+                     // ?? operator example.
+
+
+                     // y = x, unless x is null, in which case y = -1.
+                     defaultvalue = count ?? 0;
+
+                     return defaultvalue;
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+                
 
              }
              catch (Exception ex)
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -2996,7 +3444,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total likes
         /// </summary>       
-        public int getwhoislikesmenewcount(string profileid)
+        public async Task<int> getwhoislikesmenewcount(ProfileModel model)
         {
 
                 _unitOfWork.DisableProxyCreation = true;
@@ -3004,31 +3452,42 @@ namespace Anewluv.Services.MemberActions
          {
              try
              {
-                 int? count = null;
-                 int defaultvalue = 0;
-                 var id = Convert.ToInt32(profileid);
-
-                 //filter out blocked profiles 
-                 var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate != null)
-                                      select new
-                                      {
-                                          ProfilesBlockedId = c.blockprofile_id
-                                      };
-
-                 count = (
-                    from p in db.GetRepository<like>().Find()
-                    where (p.likeprofile_id == id && p.viewdate == null)
-                    join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
-                    where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                    select f).Count();
-
-                 // ?? operator example.
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
 
-                 // y = x, unless x is null, in which case y = -1.
-                 defaultvalue = count ?? 0;
+                     int? count = null;
+                     int defaultvalue = 0;
 
-                 return defaultvalue;
+
+                     //filter out blocked profiles 
+                     var MyActiveblocks = from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+                                          select new
+                                          {
+                                              ProfilesBlockedId = c.blockprofile_id
+                                          };
+
+                     count = (
+                        from p in db.GetRepository<like>().Find()
+                        where (p.likeprofile_id == model.profileid && p.viewdate == null)
+                        join f in db.GetRepository<profile>().Find() on p.profile_id equals f.id
+                        where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                        select f).Count();
+
+                     // ?? operator example.
+
+
+                     // y = x, unless x is null, in which case y = -1.
+                     defaultvalue = count ?? 0;
+
+                     return defaultvalue;
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+
+                
 
 
              }
@@ -3036,7 +3495,7 @@ namespace Anewluv.Services.MemberActions
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -3056,65 +3515,77 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// return all  new  likes as an object
         /// </summary>
-        public List<MemberSearchViewModel> getwholikesmenew(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwholikesmenew(ProfileModel model)
         {
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+         
 
                 _unitOfWork.DisableProxyCreation = true;
          using (var db = _unitOfWork)
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
 
-                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                       select new
-                                       {
-                                           ProfilesBlockedId = c.blockprofile_id
-                                       }).ToList();
-
-                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-                 //rematerialize on the back end.
-                 //final query to send back only the profile datatas of the interests we want
-                 var likenew = (from f in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == id && p.viewdate == null).ToList()
-                                //join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                //join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
-                                orderby (f.creationdate) descending
-                                select new MemberSearchViewModel
-                                {
-                                    likedate = f.creationdate,
-                                   id = f.profilemetadata1.profile_id 
-                                    // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                }).ToList();
-
-
-                 int? pageint = Convert.ToInt32(page);
-                 int? numberperpageint = Convert.ToInt32(numberperpage);
-
-                 bool allowpaging = (likenew.Count >= (pageint * numberperpageint) ? true : false);
-                 var pageData = pageint > 1 & allowpaging ?
-                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(likenew, pageint ?? 1, numberperpageint ?? 4) : likenew.Take(numberperpageint.GetValueOrDefault());
-                 //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
-
-                 //return interests.ToList();
-                 List<MemberSearchViewModel> results;
-                 AnewluvContext AnewluvContext = new AnewluvContext();
-                 using (var tempdb = AnewluvContext)
+                 var task = Task.Factory.StartNew(() =>
                  {
-                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                 }
-                 return results;
+
+                     if (model.page == null | model.page == 0) model.page = 1;
+                     if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
+
+                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                           select new
+                                           {
+                                               ProfilesBlockedId = c.blockprofile_id
+                                           }).ToList();
+
+                     //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                     //rematerialize on the back end.
+                     //final query to send back only the profile datatas of the interests we want
+                     var likenew = (from f in db.GetRepository<like>().Find().Where(p => p.likeprofile_id == model.profileid && p.viewdate == null).ToList()
+                                    //join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
+                                    //join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                                    where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                    orderby (f.creationdate) descending
+                                    select new MemberSearchViewModel
+                                    {
+                                        likedate = f.creationdate,
+                                        id = f.profilemetadata1.profile_id
+                                        // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                    }).ToList();
+
+
+                     int? pageint = model.page;
+                     int? numberperpageint = model.numberperpage;
+
+                     bool allowpaging = (likenew.Count >= (pageint * numberperpageint) ? true : false);
+                     var pageData = pageint > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(likenew, pageint ?? 1, numberperpageint ?? 4) : likenew.Take(numberperpageint.GetValueOrDefault());
+                     //this.AddRange(pageData.ToList());
+                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                     //return interests.ToList();
+                     List<MemberSearchViewModel> results;
+                     AnewluvContext AnewluvContext = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     }
+                     return results;
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+            
+
+                
 
              }
              catch (Exception ex)
              {
 
                 new  Logging(applicationEnum.MemberActionsService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -3135,65 +3606,74 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who Like Me
         /// </summary 
-        public List<MemberSearchViewModel> getwholikesme(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwholikesme(ProfileModel model)
         {
 
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
+           
 
                 _unitOfWork.DisableProxyCreation = true;
          using (var db = _unitOfWork)
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
+                 var task = Task.Factory.StartNew(() =>
+                 {
+                     if (model.page == null | model.page == 0) model.page = 1;
+                     if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                       select new
+                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                           select new
+                                           {
+                                               ProfilesBlockedId = c.blockprofile_id
+                                           }).ToList();
+
+                     //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                     //rematerialize on the back end.
+                     //final query to send back only the profile datatas of the interests we want
+                     var wholikesme = (from f in db.GetRepository<like>().Find().Where(p => p.likeprofile_id == model.profileid && p.deletedbylikedate == null)
+                                       // join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
+                                       // join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                                       where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                       orderby (f.creationdate) descending
+                                       select new MemberSearchViewModel
                                        {
-                                           ProfilesBlockedId = c.blockprofile_id
+                                           likedate = f.creationdate,
+                                           id = f.profilemetadata1.profile_id
+                                           // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
                                        }).ToList();
 
-                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-                 //rematerialize on the back end.
-                 //final query to send back only the profile datatas of the interests we want
-                 var wholikesme = (from f in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == id && p.deletedbylikedate == null)
-                                  // join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                  // join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
-                                   where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
-                                   orderby (f.creationdate) descending
-                                   select new MemberSearchViewModel
-                                   {
-                                       likedate = f.creationdate,
-                                      id = f.profilemetadata1.profile_id 
-                                       // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                   }).ToList();
+                     int? pageint = model.page;
+                     int? numberperpageint = model.numberperpage;
 
-                 int? pageint = Convert.ToInt32(page);
-                 int? numberperpageint = Convert.ToInt32(numberperpage);
+                     bool allowpaging = (wholikesme.Count >= (pageint * numberperpageint) ? true : false);
+                     var pageData = pageint > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(wholikesme, pageint ?? 1, numberperpageint ?? 4) : wholikesme.Take(numberperpageint.GetValueOrDefault());
+                     //this.AddRange(pageData.ToList());
+                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
-                 bool allowpaging = (wholikesme.Count >= (pageint * numberperpageint) ? true : false);
-                 var pageData = pageint > 1 & allowpaging ?
-                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(wholikesme, pageint ?? 1, numberperpageint ?? 4) : wholikesme.Take(numberperpageint.GetValueOrDefault());
-                 //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+                     //return interests.ToList();
+                     List<MemberSearchViewModel> results;
+                     AnewluvContext AnewluvContext = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     }
+                     return results;
+                 });
 
-                 //return interests.ToList();
-                 List<MemberSearchViewModel> results;
-                 AnewluvContext AnewluvContext = new AnewluvContext();
-                 using (var tempdb = AnewluvContext)
-                 {
-                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                 }
-                 return results;
+                return await task.ConfigureAwait(false);
+
+
+
+            
 
              }
              catch (Exception ex)
              {
 
                 new  Logging(applicationEnum.MemberActionsService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -3215,64 +3695,74 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who Like Me
         /// </summary 
-        public List<MemberSearchViewModel> getwhoilike(string profileid, string page, string numberperpage)
+        public async Task<List<MemberSearchViewModel>> getwhoilike(ProfileModel model)
         {
-            if (page == "" | page == "0") page = "1";
-            if (numberperpage == "" | numberperpage == "0") numberperpage = "4";
 
+            
                 _unitOfWork.DisableProxyCreation = true;
          using (var db = _unitOfWork)
          {
              try
              {
-                 var id = Convert.ToInt32(profileid);
-
-                 var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == id && p.removedate == null)
-                                       select new
-                                       {
-                                           ProfilesBlockedId = c.blockprofile_id
-                                       }).ToList();
-
-                 //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
-                 //rematerialize on the back end.
-                 //final query to send back only the profile datatas of the interests we want
-                 var whoilike = (from f in  db.GetRepository<like>().Find().Where(p => p.profile_id == id && p.deletedbymemberdate == null)
-                               //  join f in  db.GetRepository<profiledata>().Find() on p.likeprofile_id equals f.profile_id
-                               //  join z in  db.GetRepository<profile>().Find() on p.likeprofile_id equals z.id
-                                 where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
-                                 orderby (f.creationdate) descending
-                                 select new MemberSearchViewModel
-                                 {
-                                     likedate = f.creationdate,
-                                    id = f.profilemetadata1.profile_id 
-                                     // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                 }).ToList();
-
-                 int? pageint = Convert.ToInt32(page);
-                 int? numberperpageint = Convert.ToInt32(numberperpage);
-
-                 bool allowpaging = (whoilike.Count >= (pageint * numberperpageint) ? true : false);
-                 var pageData = pageint > 1 & allowpaging ?
-                     new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoilike, pageint ?? 1, numberperpageint ?? 4) : whoilike.Take(numberperpageint.GetValueOrDefault());
-                 //this.AddRange(pageData.ToList());
-                 // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
-
-                 //return interests.ToList();
-                 List<MemberSearchViewModel> results;
-                 AnewluvContext AnewluvContext = new AnewluvContext();
-                 using (var tempdb = AnewluvContext)
+                 var task = Task.Factory.StartNew(() =>
                  {
-                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                     results = MemberMapperService.mapmembersearchviewmodels(profileid, pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                 }
-                 return results;
+
+                     if (model.page == null | model.page == 0) model.page = 1;
+                     if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
+
+                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                           select new
+                                           {
+                                               ProfilesBlockedId = c.blockprofile_id
+                                           }).ToList();
+
+                     //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
+                     //rematerialize on the back end.
+                     //final query to send back only the profile datatas of the interests we want
+                     var whoilike = (from f in db.GetRepository<like>().Find().Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
+                                     //  join f in  db.GetRepository<profiledata>().Find() on p.likeprofile_id equals f.profile_id
+                                     //  join z in  db.GetRepository<profile>().Find() on p.likeprofile_id equals z.id
+                                     where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
+                                     orderby (f.creationdate) descending
+                                     select new MemberSearchViewModel
+                                     {
+                                         likedate = f.creationdate,
+                                         id = f.profilemetadata1.profile_id
+                                         // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
+                                     }).ToList();
+
+                     int? pageint = model.page;
+                     int? numberperpageint = model.numberperpage;
+
+                     bool allowpaging = (whoilike.Count >= (pageint * numberperpageint) ? true : false);
+                     var pageData = pageint > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(whoilike, pageint ?? 1, numberperpageint ?? 4) : whoilike.Take(numberperpageint.GetValueOrDefault());
+                     //this.AddRange(pageData.ToList());
+                     // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
+
+                     //return interests.ToList();
+                     List<MemberSearchViewModel> results;
+                     AnewluvContext AnewluvContext = new AnewluvContext();
+                     using (var tempdb = AnewluvContext)
+                     {
+                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     }
+                     return results;
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+
+            
 
              }
              catch (Exception ex)
              {
 
                 new  Logging(applicationEnum.MemberActionsService);
-                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                 logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                  //can parse the error to build a more custom error mssage and populate fualt faultreason
                  FaultReason faultreason = new FaultReason("Error in member actions service");
                  string ErrorMessage = "";
@@ -3299,15 +3789,25 @@ namespace Anewluv.Services.MemberActions
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public List<MemberSearchViewModel> getmutuallikes(string profileid, string targetprofileid)
+        public  async Task< List<MemberSearchViewModel>> getmutuallikes(ProfileModel model)
         {
                 _unitOfWork.DisableProxyCreation = true;
          using (var db = _unitOfWork)
          {
              try
              {
-                 IEnumerable<MemberSearchViewModel> mutuallikes = default(IEnumerable<MemberSearchViewModel>);
-                 return mutuallikes.ToList();
+                 var task = Task.Factory.StartNew(() =>
+                 {
+
+                     IEnumerable<MemberSearchViewModel> mutuallikes = default(IEnumerable<MemberSearchViewModel>);
+                     return mutuallikes.ToList();
+
+                 });
+
+                return await task.ConfigureAwait(false);
+
+
+            
 
 
              }
@@ -3315,7 +3815,7 @@ namespace Anewluv.Services.MemberActions
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -3331,7 +3831,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //checks if you already sent and like to the target profile
         /// </summary        
-        public bool checklike(string profileid, string targetprofileid)
+        public async Task<bool>  checklike(ProfileModel model)
         {
 
                 _unitOfWork.DisableProxyCreation = true;
@@ -3340,10 +3840,16 @@ namespace Anewluv.Services.MemberActions
              try
              {
 
-                 var id = Convert.ToInt32(profileid);
-                 var targetid = Convert.ToInt32(targetprofileid);
+                 var task = Task.Factory.StartNew(() =>
+                 {
 
-                 return db.GetRepository<like>().Find().Any(r => r.profile_id == id && r.likeprofile_id == targetid);
+                     return db.GetRepository<like>().Find().Any(r => r.profile_id == model.profileid && r.likeprofile_id == model.targetprofileid);
+
+                 });
+                return await task.ConfigureAwait(false);
+
+               
+
 
 
              }
@@ -3351,7 +3857,7 @@ namespace Anewluv.Services.MemberActions
              {
 
                    new  Logging(applicationEnum.MemberActionsService);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member actions service");
                     string ErrorMessage = "";
@@ -3367,13 +3873,11 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// Adds a New like
         /// </summary>
-        public bool addlike(string profileid, string targetprofileid)
+        public async Task addlike(ProfileModel model)
         {
 
-            //create new inetrest object
-            like like = new like();
-            //make sure you are not trying to like at yourself
-            if (profileid == targetprofileid) return false;
+
+          
 
 
             //update method code
@@ -3384,46 +3888,59 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(targetprofileid);
 
-                        //check  like first  
-                        //if this was a like being restored just do that part
-                        var existinglike = db.GetRepository<like>().FindSingle(r => r.profile_id == id && r.likeprofile_id == targetid);
-
-                        //just  update it if we have one already
-                        if (existinglike != null)
+                        var task = Task.Factory.StartNew(() =>
                         {
-                            existinglike.deletedbymemberdate = null; ;
-                            existinglike.modificationdate = DateTime.Now;
-                            db.Update(existinglike);
 
-                        }
-                        else
-                        {
-                            //like = this. db.GetRepository<like>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
-                            //update the profile status to 2
-                            like.profile_id = id;
-                            like.likeprofile_id = targetid;
-                            like.mutual = false;  // not dealing with this calulatin yet
-                            like.creationdate = DateTime.Now;
-                            //handele the update using EF
-                            // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
-                            db.Add(like);
+                            //create new inetrest object
+                            like like = new like();
+                            //make sure you are not trying to like at yourself
+                            if (model.profileid.ToString() == model.targetprofileid.ToString()) return;
 
-                        }
+                            //check  like first  
+                            //if this was a like being restored just do that part
+                            var existinglike = db.GetRepository<like>().FindSingle(r => r.profile_id == model.profileid && r.likeprofile_id == model.targetprofileid);
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            //just  update it if we have one already
+                            if (existinglike != null)
+                            {
+                                existinglike.deletedbymemberdate = null; ;
+                                existinglike.modificationdate = DateTime.Now;
+                                db.Update(existinglike);
 
-                        return true;
+                            }
+                            else
+                            {
+                                //like = this. db.GetRepository<like>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
+                                //update the profile status to 2
+                                like.profile_id = model.profileid.GetValueOrDefault();
+                                like.likeprofile_id = model.targetprofileid.GetValueOrDefault();
+                                like.mutual = false;  // not dealing with this calulatin yet
+                                like.creationdate = DateTime.Now;
+                                //handele the update using EF
+                                // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
+                                db.Add(like);
+
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                          //  return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+
+                     
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3444,7 +3961,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool removelikebyprofileid(string profileid, string likeprofile_id)
+        public async Task removelikebyprofileid(ProfileModel model)
         {
 
 
@@ -3456,27 +3973,37 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(likeprofile_id);
 
-                        var like = db.GetRepository<like>().Find().Where(p => p.profile_id == id && p.likeprofile_id == targetid).FirstOrDefault();
-                        //update the profile status to 2
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        like.deletedbymemberdate = DateTime.Now;
-                        like.modificationdate = DateTime.Now;
-                        db.Update(like);
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                           // var targetid = Convert.ToInt32(likeprofile_id);
 
-                        return true;
+                            var like = db.GetRepository<like>().Find().Where(p => p.profile_id == model.profileid && p.likeprofile_id == model.targetprofileid).FirstOrDefault();
+                            //update the profile status to 2
 
+                            like.deletedbymemberdate = DateTime.Now;
+                            like.modificationdate = DateTime.Now;
+                            db.Update(like);
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                          //  return true;
+
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3495,7 +4022,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool removelikebylikeprofileid(string likeprofile_id, string profileid)
+        public async Task removelikebylikeprofileid(ProfileModel model)
         {
 
 
@@ -3507,20 +4034,29 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(likeprofile_id);
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        var like = db.GetRepository<like>().Find().Where(p => p.profile_id == targetid && p.likeprofile_id == id).FirstOrDefault();
-                        //update the profile status to 2
 
-                        like.deletedbylikedate = DateTime.Now;
-                        like.modificationdate = DateTime.Now;
-                        db.Update(like);
+                          //  var targetid = Convert.ToInt32(likeprofile_id);
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            var like = db.GetRepository<like>().Find().Where(p => p.profile_id == model.targetprofileid && p.likeprofile_id == model.profileid).FirstOrDefault();
+                            //update the profile status to 2
 
-                        return true;
+                            like.deletedbylikedate = DateTime.Now;
+                            like.modificationdate = DateTime.Now;
+                            db.Update(like);
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                           // return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                     
 
 
                     }
@@ -3528,7 +4064,7 @@ namespace Anewluv.Services.MemberActions
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3547,7 +4083,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool restorelikebyprofileid(string profileid, string likeprofile_id)
+        public async Task restorelikebyprofileid(ProfileModel model)
         {
 
 
@@ -3559,28 +4095,37 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(likeprofile_id);
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
-                        var like = db.GetRepository<like>().FindSingle(p => p.profile_id == id && p.likeprofile_id == targetid);
-                        //update the profile status to 2
 
-                        like.deletedbymemberdate = null;
-                        like.modificationdate = DateTime.Now;
+                            //var targetid = Convert.ToInt32(likeprofile_id);
 
-                        db.Update(like);
+                            var like = db.GetRepository<like>().FindSingle(p => p.profile_id == model.profileid && p.likeprofile_id == model.targetprofileid);
+                            //update the profile status to 2
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            like.deletedbymemberdate = null;
+                            like.modificationdate = DateTime.Now;
 
-                        return true;
+                            db.Update(like);
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                           // return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                     
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3600,7 +4145,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can like u
         ///  //not inmplemented
         /// </summary 
-        public bool restorelikebylikeprofileid(string likeprofile_id, string profileid)
+        public async Task restorelikebylikeprofileid(ProfileModel model)
         {
 
             //update method code
@@ -3611,30 +4156,39 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(likeprofile_id);
-
-                        var like = db.GetRepository<like>().FindSingle(p => p.profile_id == targetid && p.likeprofile_id == id);
-                        //update the profile status to 2
-                        //update the profile status to 2
+                        var task = Task.Factory.StartNew(() =>
+                        {
 
 
-                        like.deletedbylikedate = null;
-                        like.modificationdate = DateTime.Now;
+                            //  var targetid = Convert.ToInt32(likeprofile_id);
 
-                        db.Update(like);
+                            var like = db.GetRepository<like>().FindSingle(p => p.profile_id == model.targetprofileid && p.likeprofile_id == model.profileid);
+                            //update the profile status to 2
+                            //update the profile status to 2
 
-                        int i = db.Commit();
-                        transaction.Commit();
 
-                        return true;
+                            like.deletedbylikedate = null;
+                            like.modificationdate = DateTime.Now;
+
+                            db.Update(like);
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                           // return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+
 
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3654,7 +4208,7 @@ namespace Anewluv.Services.MemberActions
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool removelikesbyprofileidandscreennames(string profileid, List<String> screennames)
+        public async Task removelikesbyprofileidandscreennames(ProfileModel model)
         {
 
 
@@ -3666,31 +4220,40 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        // likes = this. db.GetRepository<like>().Find().Where(p => p.profileid == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
-                        //update the profile status to 2
-                        like like = new like();
-                        foreach (string value in screennames)
+                        var task = Task.Factory.StartNew(() =>
                         {
 
-                            int? likeprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                            var currentlike = db.GetRepository<like>().Find().Where(p => p.profile_id == id && p.likeprofile_id == likeprofile_id).FirstOrDefault();
-                            like.deletedbymemberdate = null;
-                            like.modificationdate = DateTime.Now;
-                            db.Update(currentlike);
 
-                        }
+                            // likes = this. db.GetRepository<like>().Find().Where(p => p.profileid == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                            //update the profile status to 2
+                            like like = new like();
+                            foreach (string value in model.targetscreennames)
+                            {
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                                int? likeprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentlike = db.GetRepository<like>().Find().Where(p => p.profile_id == model.profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                                like.deletedbymemberdate = null;
+                                like.modificationdate = DateTime.Now;
+                                db.Update(currentlike);
 
-                        return true;
+                            }
+
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                          //  return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3709,7 +4272,7 @@ namespace Anewluv.Services.MemberActions
         ///  //Removes an iterest i.e makes you not interested in that person anymore
         ///  //removed multiples 
         /// </summary 
-        public bool restorelikesbyprofileidandscreennames(string profileid, List<String> screennames)
+        public async Task restorelikesbyprofileidandscreennames(ProfileModel model)
         {
 
 
@@ -3721,31 +4284,40 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        // likes = this. db.GetRepository<like>().Find().Where(p => p.profileid == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
-                        //update the profile status to 2
-                        like like = new like();
-                        foreach (string value in screennames)
+                        var task = Task.Factory.StartNew(() =>
                         {
 
-                            int? likeprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                            var currentlike = db.GetRepository<like>().Find().Where(p => p.profile_id == id && p.likeprofile_id == likeprofile_id).FirstOrDefault();
-                            like.deletedbymemberdate = null;
-                            like.modificationdate = DateTime.Now;
-                            db.Update(currentlike);
+                            // likes = this. db.GetRepository<like>().Find().Where(p => p.profileid == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                            //update the profile status to 2
+                            like like = new like();
+                            foreach (string value in model.targetscreennames)
+                            {
 
-                        }
+                                int? likeprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentlike = db.GetRepository<like>().Find().Where(p => p.profile_id == model.profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                                like.deletedbymemberdate = null;
+                                like.modificationdate = DateTime.Now;
+                                db.Update(currentlike);
 
-                        int i = db.Commit();
-                        transaction.Commit();
+                            }
 
-                        return true;
+                            int i = db.Commit();
+                            transaction.Commit();
+
+                           // return true;
+
+                        });
+
+                      await task.ConfigureAwait(false);
+
+                       
+                       
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";
@@ -3763,7 +4335,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         ///  Update like with a view     
         /// </summary 
-        public bool updatelikeviewstatus(string profileid, string targetprofileid)
+        public async Task updatelikeviewstatus(ProfileModel model)
         {
 
 
@@ -3775,28 +4347,36 @@ namespace Anewluv.Services.MemberActions
                 {
                     try
                     {
-                        var id = Convert.ToInt32(profileid);
-                        var targetid = Convert.ToInt32(targetprofileid);
 
-                        var like = db.GetRepository<like>().Find().Where(p => p.likeprofile_id == targetid && p.profile_id == id).FirstOrDefault();
-                        //update the profile status to 2            
-                        if (like.viewdate == null)
+                        var task = Task.Factory.StartNew(() =>
                         {
-                            like.viewdate = DateTime.Now;
-                            like.modificationdate = DateTime.Now;
-                            db.Update(like);
+                            //
+                            //var targetid = Convert.ToInt32(modeltargetprofileid);
 
-                            int i = db.Commit();
-                            transaction.Commit();
-                        }
-                        return true;
+                            var like = db.GetRepository<like>().Find().Where(p => p.likeprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
+                            //update the profile status to 2            
+                            if (like.viewdate == null)
+                            {
+                                like.viewdate = DateTime.Now;
+                                like.modificationdate = DateTime.Now;
+                                db.Update(like);
+
+                                int i = db.Commit();
+                                transaction.Commit();
+                            }
+
+                        });
+                      await task.ConfigureAwait(false);
+
+                       
+                     
               
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                       new  Logging(applicationEnum.MemberActionsService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(profileid));
+                        new  Logging(applicationEnum.MemberActionsService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member actions service");
                         string ErrorMessage = "";

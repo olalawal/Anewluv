@@ -73,37 +73,27 @@ namespace Anewluv.Services.Mapping
 
         }
 
-        #region "private mappers "
 
 
-        /// <summary>
-        /// viewer can be blank or null : simply means we will not look for distance between memebers and other comparaitibe fatures      
-        /// </summary>
-        /// <param name="veiwerpeofileid"></param>
-        /// <param name="viewingprofileid"></param>
-        /// <param name="allphotos"></param>
-        /// <param name="db"></param>
-        /// <returns></returns>
-        private MemberSearchViewModel mapmembersearchviewmodel(int? veiwerpeofileid, int viewingprofileid, bool allphotos, IUnitOfWork db)
+        public MemberSearchViewModel mapmembersearchviewmodel(string viewerprofileid, MemberSearchViewModel modeltomap, string allphotos)
         {
 
-
+            var db = _unitOfWork;
             db.DisableProxyCreation = false;
             try
             {
 
-                if (veiwerpeofileid != 0)
+                if (modeltomap.id != 0)
                 {
 
-                    //blank viewprofile simply means we will not look for distance between memebers and other comparaitibe fatures
                     profiledata viewerprofile = new profiledata();
-                    if (veiwerpeofileid != null) viewerprofile = db.GetRepository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = veiwerpeofileid });
+                    if (viewerprofileid != null) viewerprofile = db.GetRepository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = Convert.ToInt32(viewerprofileid) });
 
-                    MemberSearchViewModel model = new MemberSearchViewModel();
+                    MemberSearchViewModel model = modeltomap;
                     //TO DO change to use Ninject maybe
                     // DatingService db = new DatingService();
                     //  MembersRepository membersrepo=  new MembersRepository();
-                    profile profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt32(viewingprofileid) });
+                    profile profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id) });
                     // membersrepository.getprofilebyprofileid(new ProfileModel { profileid = modeltomap.id }); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
                     //  membereditRepository membereditRepository = new membereditRepository();
 
@@ -156,7 +146,7 @@ namespace Anewluv.Services.Mapping
                     // var Private = membereditRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
                     model.profilephotos = new PhotoViewModel();
                     int something = (int)photoformatEnum.Thumbnail;
-                    if (allphotos == true)
+                    if (allphotos == "true")
                     {
 
                         model.profilephotos.ProfilePhotosApproved = db.GetRepository<photoconversion>().getpagedphotomodelbyprofileidandstatus(
@@ -185,7 +175,7 @@ namespace Anewluv.Services.Mapping
                 //instantiate logger here so it does not break anything else.
                 logger = new Logging(applicationEnum.MemberService);
                 //int profileid = Convert.ToInt32(viewerprofileid);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(viewingprofileid));
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
                 //can parse the error to build a more custom error mssage and populate fualt faultreason
                 //FaultReason faultreason = new FaultReason("Error in member mapper service");
                 // string ErrorMessage = "";
@@ -196,29 +186,238 @@ namespace Anewluv.Services.Mapping
 
 
         }
-        // constructor
-        //4-12-2012 added screen name
-        //4-18-2012 added search settings
-        private ProfileCriteriaModel getprofilecriteriamodel(int profileid, IUnitOfWork db)
+        public List<MemberSearchViewModel> mapmembersearchviewmodels(string viewerprofileid, List<MemberSearchViewModel> modelstomap, string allphotos)
         {
 
             _unitOfWork.DisableProxyCreation = true;
-          
+            using (var db = _unitOfWork)
+            {
                 try
                 {
 
+                    List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+                    foreach (var item in modelstomap)
+                    {
+                        models.Add(mapmembersearchviewmodel(viewerprofileid, item, allphotos));
+
+                    }
+                    return models;
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+
+        }
+        public MemberSearchViewModel getmembersearchviewmodel(string viewerprofileid, string profileid, string allphotos)
+        {
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    if (profileid != null)
+                    {
+
+
+                        // List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+                        MemberSearchViewModel modeltomap = new MemberSearchViewModel();
+                        modeltomap.id = Convert.ToInt32(profileid);
+                        return (mapmembersearchviewmodel(viewerprofileid, modeltomap, allphotos));
+
+
+
+                    }
+                    return null;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+        }
+        public List<MemberSearchViewModel> getmembersearchviewmodels(string viewerprofileid, List<int> profileIds, string allphotos)
+        {
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
+                    MemberSearchViewModel modeltomap = new MemberSearchViewModel();
+                    foreach (var item in profileIds)
+                    {
+                        modeltomap = null;
+                        modeltomap.id = item;
+                        models.Add(mapmembersearchviewmodel(viewerprofileid, modeltomap, allphotos));
+
+                    }
+                    return models;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+        }
+        public ProfileBrowseModel getprofilebrowsemodel(string viewerprofileid, string profileid, string allphotos)
+        {
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    var NewProfileBrowseModel = new ProfileBrowseModel
+                    {
+                        //TO Do user a mapper instead of a contructur and map it from the service
+                        //Move all this to a service
+                        ViewerProfileDetails = getmembersearchviewmodel(null, viewerprofileid, allphotos),
+                        ProfileDetails = getmembersearchviewmodel(null, profileid, allphotos)
+                    };
+
+                    //add in the ProfileCritera
+                    NewProfileBrowseModel.ViewerProfileCriteria = getprofilecriteriamodel(viewerprofileid);
+                    NewProfileBrowseModel.ProfileCriteria = getprofilecriteriamodel(profileid);
+
+
+                    return NewProfileBrowseModel;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+        }
+        //returns a list of profile browsemodles for a given user
+        public List<ProfileBrowseModel> getprofilebrowsemodels(string viewerprofileid, List<int> profileids, string allphotos)
+        {
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    List<ProfileBrowseModel> BrowseModels = new List<ProfileBrowseModel>();
+
+                    foreach (var item in profileids)
+                    {
+                        var NewProfileBrowseModel = new ProfileBrowseModel
+                        {
+                            //TO Do user a mapper instead of a contructur and map it from the service
+                            //Move all this to a service
+                            ViewerProfileDetails = getmembersearchviewmodel(null, viewerprofileid, allphotos),
+                            ProfileDetails = getmembersearchviewmodel(null, item.ToString(), allphotos)
+
+
+
+                        };
+
+                        //add in the ProfileCritera
+                        NewProfileBrowseModel.ViewerProfileCriteria = getprofilecriteriamodel(viewerprofileid);
+                        NewProfileBrowseModel.ProfileCriteria = getprofilecriteriamodel(item.ToString());
+
+
+                        BrowseModels.Add(NewProfileBrowseModel);
+                    }
+
+                    return BrowseModels;
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+
+            }
+        }
+        // constructor
+        //4-12-2012 added screen name
+        //4-18-2012 added search settings
+        public ProfileCriteriaModel getprofilecriteriamodel(string profileid)
+        {
+
+            _unitOfWork.DisableProxyCreation = true;
+            using (var db = _unitOfWork)
+            {
+                try
+                {
+                    MemberSearchViewModel model = new MemberSearchViewModel();
+                    //TO DO change to use Ninject maybe
+                    // DatingService db = new DatingService();
+                    //  MembersRepository membersrepo=  new MembersRepository();
+                    profilemetadata metadata = db.GetRepository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = Convert.ToInt32(profileid) });
 
 
                     //load postaldata context
                     ProfileCriteriaModel CriteriaModel = new ProfileCriteriaModel();
                     if (profileid != null)
                     {
-
-                        MemberSearchViewModel model = new MemberSearchViewModel();
-                        //TO DO change to use Ninject maybe
-                        // DatingService db = new DatingService();
-                        //  MembersRepository membersrepo=  new MembersRepository();
-                        profilemetadata metadata = db.GetRepository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = profileid });
 
                         // IKernel kernel = new StandardKernel();
 
@@ -461,12 +660,12 @@ namespace Anewluv.Services.Mapping
                     //throw convertedexcption;
                 }
 
-            
+            }
 
         }
         //use an overload to return values if a user is not logged in i.e
         //no current profiledata exists to retrive
-        private ProfileCriteriaModel getprofilecriteriamodel()
+        public ProfileCriteriaModel getprofilecriteriamodel()
         {
 
             _unitOfWork.Dispose();
@@ -525,454 +724,6 @@ namespace Anewluv.Services.Mapping
 
 
         }
-
-        //functions not exposed via WCF or otherwise
-        private MembersViewModel mapmember(ProfileModel newmodel, IUnitOfWork db)
-        {
-
-            _unitOfWork.DisableProxyCreation = true;
-            // var db = _unitOfWork;
-
-
-            MembersViewModel model = new MembersViewModel();
-            profile profile = new profile();
-
-            // IEnumerable<CityStateProvince> CityStateProvince ;
-            // MailModelRepository mailrepository = new MailModelRepository();
-            //var myProfile = membersrepository.GetprofiledataByProfileID(ProfileID).profile;
-            // var perfectmatchsearchsettings = membersrepository.GetPerFectMatchSearchSettingsByProfileID(ProfileID);
-            // model.Profile = myProfile;
-            //Profile data will be on the include
-            profile = db.GetRepository<profile>().getprofilebyprofileid(newmodel);
-            //TO DO this should be a try cacth with exception handling
-
-            try
-            {
-                //TO DO do away with this since we already have the profile via include from the profile DATA
-                // model.Profile = model.profile;
-                model.profile_id = profile.id;
-                //   model.profile.profiledata.SearchSettings(perfectmatchsearchsettings);
-                //4-28-2012 added mapping for profile visiblity
-                model.profilevisiblity = profile.profiledata.visiblitysetting;
-
-                //on first load this should always be false
-                //to DO   DO  we still need this
-                model.profilestatusmessageshown = false;
-                model.mygenderid = profile.profiledata.gender_id.GetValueOrDefault();
-                //this should come from search settings eventually on the full blown model of this.
-                //create hase list of genders they are looking for, if it is null add the default
-                //TO DO change this to use membererepo
-                model.lookingforgendersid = (profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?
-                new HashSet<int>(profile.profilemetadata.searchsettings.FirstOrDefault().searchsetting_gender.Select(c => c.id)) : null;
-                if (model.lookingforgendersid != null)
-                {
-                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(profile.profiledata.gender_id.GetValueOrDefault()));
-                }
-
-                //set selected value
-                //model.Countries. =model.profile.profiledata.CountryID;
-                //geographical data poulated here 
-                //this is disabled when disconected ok
-#if DISCONECTED
-
-                model.mycountryname = "United States";// georepository.getcountrynamebycountryid(profile.profiledata.countryid);
-#else
-                //TO DO get this from appfabric ( get this list from there and use it from there)
-
-
-
-                PostalData2Context GeoContext = new PostalData2Context();
-                using (var tempdb = GeoContext)
-                {
-                    GeoService GeoService = new GeoService(tempdb);
-                    model.mycountryname = GeoService.getcountrynamebycountryid(new GeoModel { countryid = profile.profiledata.countryid.GetValueOrDefault().ToString() });
-                }
-#endif
-
-                model.mycountryid = profile.profiledata.countryid.GetValueOrDefault();
-                model.mycity = profile.profiledata.city;
-                //TO DO items need to be populated with real values, in this case change model to double for latt
-                model.mylatitude = profile.profiledata.latitude.ToString(); //model.Lattitude
-                model.mylongitude = profile.profiledata.longitude.ToString();
-                //update 9-21-2011 get fro search settings
-                model.maxdistancefromme = profile.profilemetadata.searchsettings.FirstOrDefault() != null ? profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
-
-                //11-29-2012 olawl move this chunk to ajax calls 
-                //mail counters
-                //model.mymailcount = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Sent, model.profile.id).ToString();
-                //model.whomailedme = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
-                //model.whomailedmenewcount = mailrepository.getnewmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
-
-                //model.WhoMailedMeNewCount =  
-                //interests
-                //TO DO move all these to ajax calls on client
-                //model.myintrestcount = memberactionsrepository.getwhoiaminterestedincount(model.profile.id).ToString();
-                //model.whoisinterestedinmecount = memberactionsrepository.getwhoisinterestedinmecount(model.profile.id).ToString();
-                //model.whoisinterestedinmenewcount = memberactionsrepository.getwhoisinterestedinmenewcount(model.profile.id).ToString();
-                ////peeks
-                //model.mypeekscount = memberactionsrepository.getwhoipeekedatcount(model.profile.id).ToString();
-                //model.whopeekededatmecount = memberactionsrepository.getwhopeekedatmecount(model.profile.id).ToString();
-                //model.whopeekedatmenewcount = memberactionsrepository.getwhopeekedatmenewcount(model.profile.id).ToString();
-                ////likes
-                //model.wholikesmenewcount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
-                //model.wholikesmecount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
-                //model.whoilikecount = memberactionsrepository.getwhoilikecount(model.profile.id).ToString();
-
-                //blocks
-                // model.myblockcount = memberactionsrepository.getwhoiblockedcount(model.profile.id).ToString();
-
-                //instantiate models for city state province and quick search
-                // get users search setttings
-                //model.MyQuickSearch = quicksearchmodel;
-
-
-
-                // now instantiate city state province
-                // model.MyQuickSearch.MySelectedCityStateProvince = CityStateProvince();
-                // model = membersrepository.getdefaultquicksearchsettingsmembers(model);
-
-                //added 5-10-2012
-                //we dont want to add search setttings to the members model?
-                //TO do remove profiledata at some point
-                //check if the user has a profile search settings value in stored DB if not add one and save it
-                if (profile.profilemetadata.searchsettings.Count == 0)
-                {
-                    //TO DO put into extention so no need to make new service call
-                    AnewluvContext AnewluvContext = new AnewluvContext();
-                    using (var tempdb = AnewluvContext)
-                    {
-                        MemberService MemberService = new MemberService(tempdb);
-                        MemberService.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = profile.id });
-                    }
-                    //update the profile data with the updated value
-                    //TO DO stop storing profiledata
-                    // model.profiledata = membersrepository.getprofiledata(profile.id);
-
-                }
-
-                //*** start binding collections here ******
-                //do this last since we need values populated first
-                // var pp = new PaginatedList<MemberSearchViewModel>();
-                //sets up the inital paging for your matches
-                //  var productPagedList = pp.GetPageableList(model.MyMatches, 1,4);
-                //   MyMatchesPaged.AsPagination(1, 4);
-                // model.MyMatches = productPagedList;  // set quick matches
-
-
-                return model;
-
-            }
-            catch (Exception ex)
-            {
-
-                //instantiate logger here so it does not break anything else.
-                logger = new Logging(applicationEnum.MemberService);
-                //int profileid = Convert.ToInt32(viewerprofileid);
-                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(newmodel.profileid.ToString()));
-                //can parse the error to build a more custom error mssage and populate fualt faultreason
-                FaultReason faultreason = new FaultReason("Error in member mapper service");
-                string ErrorMessage = "";
-                string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-                //throw convertedexcption;
-            }
-            finally
-            {
-
-                // Api.DisposeGeoService();
-                //  Api.DisposeMemberService();
-            }
-
-
-
-
-
-
-        }
-
-        ///// <summary>
-        ///// asumes modeltomap and profile id is populated
-        ///// </summary>
-        ///// <param name="model"></param>
-        ///// <returns></returns>
-        //private MemberSearchViewModel getmembersearchviewmodel(ProfileModel model, IUnitOfWork db)
-        //{
-
-        //    _unitOfWork.DisableProxyCreation = true;
-
-        //    try
-        //    {
-        //        if (model.profileid != null)
-        //        {
-
-
-        //            // List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
-        //            MemberSearchViewModel modeltomap = new MemberSearchViewModel();
-        //            // modeltomap.id = Convert.ToInt32(profileid);
-        //            return mapmembersearchviewmodel(model, db);
-
-
-        //        }
-        //        return null;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        //instantiate logger here so it does not break anything else.
-        //        logger = new Logging(applicationEnum.MemberService);
-        //        //int profileid = Convert.ToInt32(viewerprofileid);
-        //        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(viewerprofileid));
-        //        //can parse the error to build a more custom error mssage and populate fualt faultreason
-        //        FaultReason faultreason = new FaultReason("Error in member mapper service");
-        //        string ErrorMessage = "";
-        //        string ErrorDetail = "ErrorMessage: " + ex.Message;
-        //        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-        //        //throw convertedexcption;
-        //    }
-
-
-        //}     
-
-
-
-        #endregion
-
-        //public method that exposes mapper
-        /// <summary>
-        /// maps a single profile to another
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="allphotos"></param>
-        /// <returns></returns>
-        public MemberSearchViewModel mapmembersearchviewmodel(ProfileModel model)
-        {
-
-
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-
-                    return mapmembersearchviewmodel(model.profileid.GetValueOrDefault(),model.viewingprofileid.GetValueOrDefault(),model.allphotos,db);
-
-
-                }
-                catch (Exception ex)
-                {
-                    //instantiate logger here so it does not break anything else.
-                    logger = new Logging(applicationEnum.MemberService);
-                    //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    //FaultReason faultreason = new FaultReason("Error in member mapper service");
-                    // string ErrorMessage = "";
-                    //  string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    // throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    throw;
-                }
-            }
-
-
-        }
-
-        /// <summary>
-        ///  same as above but maps a single profile to a list of other profiles in the model.modelstomap variable
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="allphotos"></param>
-        /// <returns></returns>
-        public List<MemberSearchViewModel> mapmembersearchviewmodels(ProfileModel model, string allphotos)
-        {
-
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-
-                    List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
-                    ProfileModel tempmodel = model; //temp storage so we can modif it for use in iteration
-                    foreach (var item in model.modelstomap)
-                    {
-                        //set current model for mapping
-                        tempmodel.modeltomap = item;
-                        models.Add(mapmembersearchviewmodel(tempmodel, db));
-
-                    }
-                    return models;
-                }
-                catch (Exception ex)
-                {
-
-                    //instantiate logger here so it does not break anything else.
-                    logger = new Logging(applicationEnum.MemberService);
-                    //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in member mapper service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-                    //throw convertedexcption;
-                }
-
-            }
-
-        }
-
-
-
-        public List<MemberSearchViewModel> getmembersearchviewmodels(ProfileModel model)
-        {
-
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-                    List<MemberSearchViewModel> models = new List<MemberSearchViewModel>();
-                    MemberSearchViewModel modeltomap = new MemberSearchViewModel();
-                    ProfileModel tempmodel = model; //temp storage so we can modif it for use in iteration
-                    foreach (var item in model.profileids)
-                    {
-                        modeltomap = null;
-                        modeltomap.id = Convert.ToInt32(item);
-                        tempmodel.modeltomap = modeltomap;
-                        models.Add(mapmembersearchviewmodel(tempmodel, db));
-
-                    }
-                    return models;
-
-                }
-                catch (Exception ex)
-                {
-
-                    //instantiate logger here so it does not break anything else.
-                    logger = new Logging(applicationEnum.MemberService);
-                    //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in member mapper service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-                    //throw convertedexcption;
-                }
-
-            }
-        }
-
-        /// <summary>
-        /// profile detail that compares two users
-        /// the viewer is the profileid and the person being viewed is the viewing profileid
-        /// </summary>
-        /// <param name="viewerprofileid"></param>
-        /// <param name="profileid"></param>
-        /// <param name="allphotos"></param>
-        /// <returns></returns>
-        public ProfileBrowseModel getprofilebrowsemodel(ProfileModel model)
-        {
-
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-                    var NewProfileBrowseModel = new ProfileBrowseModel
-                    {
-                        //TO Do user a mapper instead of a contructur and map it from the service
-                        //Move all this to a service
-                        ViewerProfileDetails = mapmembersearchviewmodel(null, model.profileid.GetValueOrDefault(), model.allphotos, db),
-                        //profile of the person being viewed
-                        ProfileDetails = mapmembersearchviewmodel(model.profileid.GetValueOrDefault(),model.viewingprofileid.GetValueOrDefault(),  model.allphotos, db)
-                    };
-
-                    //add in the ProfileCritera
-                    NewProfileBrowseModel.ViewerProfileCriteria = getprofilecriteriamodel(model.profileid.GetValueOrDefault(),db);
-                    NewProfileBrowseModel.ProfileCriteria = getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(),db);
-
-
-                    return NewProfileBrowseModel;
-
-                }
-                catch (Exception ex)
-                {
-
-                    //instantiate logger here so it does not break anything else.
-                    logger = new Logging(applicationEnum.MemberService);
-                    //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.GetValueOrDefault()));
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in member mapper service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-                    //throw convertedexcption;
-                }
-
-            }
-        }
-        //returns a list of profile browsemodles for a given user
-        public List<ProfileBrowseModel> getprofilebrowsemodels(ProfileModel model)
-        {
-
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-                    List<ProfileBrowseModel> BrowseModels = new List<ProfileBrowseModel>();
-
-                    foreach (var item in model.profileids)
-                    {
-                        var NewProfileBrowseModel = new ProfileBrowseModel
-                        {
-                            //TO Do user a mapper instead of a contructur and map it from the service
-                            //Move all this to a service
-                            ViewerProfileDetails = mapmembersearchviewmodel(null, model.profileid.GetValueOrDefault(),model.allphotos,db),
-                            ProfileDetails = mapmembersearchviewmodel(model.profileid.GetValueOrDefault(), Convert.ToInt32(item), model.allphotos, db)
-
-
-
-                        };
-
-                        //add in the ProfileCritera
-                        NewProfileBrowseModel.ViewerProfileCriteria = getprofilecriteriamodel(model.profileid.GetValueOrDefault(),db);
-                        NewProfileBrowseModel.ProfileCriteria = getprofilecriteriamodel(Convert.ToInt32(item),db);
-
-
-                        BrowseModels.Add(NewProfileBrowseModel);
-                    }
-
-                    return BrowseModels;
-
-                }
-                catch (Exception ex)
-                {
-
-                    //instantiate logger here so it does not break anything else.
-                    logger = new Logging(applicationEnum.MemberService);
-                    //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.GetValueOrDefault()));
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in member mapper service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-                    //throw convertedexcption;
-                }
-
-            }
-        }
-     
         //gets search settings
         //TO DO this function is just setting temp values for now
         //9 -21- 2011 added code to get age at least from search settings , more values to follow
@@ -985,7 +736,7 @@ namespace Anewluv.Services.Mapping
                 try
                 {
                     quicksearchmodel quicksearchmodel = new quicksearchmodel();
-                    MembersViewModel model = this.mapmember(Model,db);
+                    MembersViewModel model = this.getmemberdata(Model.profileid.ToString());
                     // PostalDataService postaldataservicecontext = new PostalDataService().Initialize();
                     //set deafult paging or pull from DB
                     //quicksearchmodel.myse = 4;
@@ -1352,7 +1103,7 @@ namespace Anewluv.Services.Mapping
                     //return CachingFactory.MembersViewModelHelper.updatememberdata(model, this);
                     //remap the user data if cache is empty
                     //var mm = new ViewModelMapper();
-                    return this.mapmember(new ProfileModel { profileid = model.profile_id },db);
+                    return this.mapmember(model.profile_id.ToString());
 
 
                 }
@@ -1375,7 +1126,7 @@ namespace Anewluv.Services.Mapping
             }
         }
 
-        public MembersViewModel updatememberdatabyprofileid(ProfileModel newmodel)
+        public MembersViewModel updatememberdatabyprofileid(string profileid)
         {
             _unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
@@ -1384,7 +1135,7 @@ namespace Anewluv.Services.Mapping
                 {
                     //   return CachingFactory.MembersViewModelHelper.updatememberprofiledatabyprofile(profileid, this);
 
-                    var model = mapmember(newmodel,db);
+                    var model = mapmember(profileid);
                     model.profiledata = model.profile.profiledata;
                     return model;
 
@@ -1395,7 +1146,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(newmodel.profileid.GetValueOrDefault()));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(profileid.ToString()));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1506,7 +1257,7 @@ namespace Anewluv.Services.Mapping
 
         }
 
-        public MembersViewModel getmemberdata(ProfileModel newmodel)
+        public MembersViewModel getmemberdata(string profileid)
         {
 
 
@@ -1517,7 +1268,7 @@ namespace Anewluv.Services.Mapping
                 {
                     //    return CachingFactory.MembersViewModelHelper.getmemberdata(profileid, this);
 
-                    return this.mapmember(newmodel,db);
+                    return this.mapmember(profileid);
 
                 }
                 catch (Exception ex)
@@ -1526,7 +1277,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, newmodel.profileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(profileid.ToString()));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1540,7 +1291,170 @@ namespace Anewluv.Services.Mapping
 
         }
 
+        //functions not exposed via WCF or otherwise
+        public MembersViewModel mapmember(string profileid)
+        {
 
+            _unitOfWork.DisableProxyCreation = true;
+            var db = _unitOfWork;
+
+
+            MembersViewModel model = new MembersViewModel();
+            profile profile = new profile();
+
+            // IEnumerable<CityStateProvince> CityStateProvince ;
+            // MailModelRepository mailrepository = new MailModelRepository();
+            //var myProfile = membersrepository.GetprofiledataByProfileID(ProfileID).profile;
+            // var perfectmatchsearchsettings = membersrepository.GetPerFectMatchSearchSettingsByProfileID(ProfileID);
+            // model.Profile = myProfile;
+            //Profile data will be on the include
+            profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt32(profileid) });
+            //TO DO this should be a try cacth with exception handling
+
+            try
+            {
+                //TO DO do away with this since we already have the profile via include from the profile DATA
+                // model.Profile = model.profile;
+                model.profile_id = profile.id;
+                //   model.profile.profiledata.SearchSettings(perfectmatchsearchsettings);
+                //4-28-2012 added mapping for profile visiblity
+                model.profilevisiblity = profile.profiledata.visiblitysetting;
+
+                //on first load this should always be false
+                //to DO   DO  we still need this
+                model.profilestatusmessageshown = false;
+                model.mygenderid = profile.profiledata.gender_id.GetValueOrDefault();
+                //this should come from search settings eventually on the full blown model of this.
+                //create hase list of genders they are looking for, if it is null add the default
+                //TO DO change this to use membererepo
+                model.lookingforgendersid = (profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?
+                new HashSet<int>(profile.profilemetadata.searchsettings.FirstOrDefault().searchsetting_gender.Select(c => c.id)) : null;
+                if (model.lookingforgendersid != null)
+                {
+                    model.lookingforgendersid.Add(Extensions.GetLookingForGenderID(profile.profiledata.gender_id.GetValueOrDefault()));
+                }
+
+                //set selected value
+                //model.Countries. =model.profile.profiledata.CountryID;
+                //geographical data poulated here 
+                //this is disabled when disconected ok
+#if DISCONECTED
+
+                model.mycountryname = "United States";// georepository.getcountrynamebycountryid(profile.profiledata.countryid);
+#else
+                //TO DO get this from appfabric ( get this list from there and use it from there)
+
+
+
+                PostalData2Context GeoContext = new PostalData2Context();
+                using (var tempdb = GeoContext)
+                {
+                    GeoService GeoService = new GeoService(tempdb);
+                    model.mycountryname = GeoService.getcountrynamebycountryid(new GeoModel { countryid = profile.profiledata.countryid.GetValueOrDefault().ToString() });
+                }
+#endif
+
+                model.mycountryid = profile.profiledata.countryid.GetValueOrDefault();
+                model.mycity = profile.profiledata.city;
+                //TO DO items need to be populated with real values, in this case change model to double for latt
+                model.mylatitude = profile.profiledata.latitude.ToString(); //model.Lattitude
+                model.mylongitude = profile.profiledata.longitude.ToString();
+                //update 9-21-2011 get fro search settings
+                model.maxdistancefromme = profile.profilemetadata.searchsettings.FirstOrDefault() != null ? profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
+
+                //11-29-2012 olawl move this chunk to ajax calls 
+                //mail counters
+                //model.mymailcount = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Sent, model.profile.id).ToString();
+                //model.whomailedme = mailrepository.getallmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
+                //model.whomailedmenewcount = mailrepository.getnewmailcountbyfolderid((int)defaultmailboxfoldertypeEnum.Inbox, model.profile.id).ToString();
+
+                //model.WhoMailedMeNewCount =  
+                //interests
+                //TO DO move all these to ajax calls on client
+                //model.myintrestcount = memberactionsrepository.getwhoiaminterestedincount(model.profile.id).ToString();
+                //model.whoisinterestedinmecount = memberactionsrepository.getwhoisinterestedinmecount(model.profile.id).ToString();
+                //model.whoisinterestedinmenewcount = memberactionsrepository.getwhoisinterestedinmenewcount(model.profile.id).ToString();
+                ////peeks
+                //model.mypeekscount = memberactionsrepository.getwhoipeekedatcount(model.profile.id).ToString();
+                //model.whopeekededatmecount = memberactionsrepository.getwhopeekedatmecount(model.profile.id).ToString();
+                //model.whopeekedatmenewcount = memberactionsrepository.getwhopeekedatmenewcount(model.profile.id).ToString();
+                ////likes
+                //model.wholikesmenewcount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
+                //model.wholikesmecount = memberactionsrepository.getwholikesmecount(model.profile.id).ToString();
+                //model.whoilikecount = memberactionsrepository.getwhoilikecount(model.profile.id).ToString();
+
+                //blocks
+                // model.myblockcount = memberactionsrepository.getwhoiblockedcount(model.profile.id).ToString();
+
+                //instantiate models for city state province and quick search
+                // get users search setttings
+                //model.MyQuickSearch = quicksearchmodel;
+
+
+
+                // now instantiate city state province
+                // model.MyQuickSearch.MySelectedCityStateProvince = CityStateProvince();
+                // model = membersrepository.getdefaultquicksearchsettingsmembers(model);
+
+                //added 5-10-2012
+                //we dont want to add search setttings to the members model?
+                //TO do remove profiledata at some point
+                //check if the user has a profile search settings value in stored DB if not add one and save it
+                if (profile.profilemetadata.searchsettings.Count == 0)
+                {
+                    //TO DO put into extention so no need to make new service call
+                    AnewluvContext AnewluvContext = new AnewluvContext();
+                    using (var tempdb = AnewluvContext)
+                    {
+                        MemberService MemberService = new MemberService(tempdb);
+                        MemberService.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = profile.id });
+                    }
+                    //update the profile data with the updated value
+                    //TO DO stop storing profiledata
+                    // model.profiledata = membersrepository.getprofiledata(profile.id);
+
+                }
+
+                //*** start binding collections here ******
+                //do this last since we need values populated first
+                // var pp = new PaginatedList<MemberSearchViewModel>();
+                //sets up the inital paging for your matches
+                //  var productPagedList = pp.GetPageableList(model.MyMatches, 1,4);
+                //   MyMatchesPaged.AsPagination(1, 4);
+                // model.MyMatches = productPagedList;  // set quick matches
+
+
+                return model;
+
+            }
+            catch (Exception ex)
+            {
+
+                //instantiate logger here so it does not break anything else.
+                logger = new Logging(applicationEnum.MemberService);
+                //int profileid = Convert.ToInt32(viewerprofileid);
+                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(profileid.ToString()));
+                //can parse the error to build a more custom error mssage and populate fualt faultreason
+                FaultReason faultreason = new FaultReason("Error in member mapper service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                //throw convertedexcption;
+            }
+            finally
+            {
+
+                // Api.DisposeGeoService();
+                //  Api.DisposeMemberService();
+            }
+
+
+
+
+
+
+        }
 
         public MembersViewModel mapguest()
         {
@@ -1601,7 +1515,7 @@ namespace Anewluv.Services.Mapping
                         MemberService MemberService = new MemberService(tempdb);
                         perfectmatchsearchsettings = MemberService.getperfectmatchsearchsettingsbyprofileid(Model);   //model.profile.profilemetadata.searchsettings.FirstOrDefault();
                     }
-                    MembersViewModel model = mapmember(Model,db);
+                    MembersViewModel model = mapmember(Model.profileid.ToString());
 
                     //set default perfect match distance as 100 for now later as we get more members lower
                     //TO DO move this to a db setting or resourcer file
@@ -1802,7 +1716,7 @@ namespace Anewluv.Services.Mapping
                 {
                     profile profile = new profile();
                     profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (Model.profileid) });
-                    MembersViewModel model = mapmember(new ProfileModel { profileid = profile.id },db);
+                    MembersViewModel model = mapmember(Model.profileid.ToString());
 
 
                     model.profile = profile;
@@ -2223,7 +2137,7 @@ namespace Anewluv.Services.Mapping
                 profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (profilemodel.profileid) });
                 // MembersViewModel model = mapmember(profilemodel.profileid.ToString());
 
-                MembersViewModel model = this.mapmember(profilemodel,db);
+                MembersViewModel model = this.getmemberdata(profilemodel.profileid.ToString());
 
                 //get search sttings from DB
                 searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
