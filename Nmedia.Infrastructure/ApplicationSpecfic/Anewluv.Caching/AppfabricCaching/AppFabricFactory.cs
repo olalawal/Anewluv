@@ -551,8 +551,8 @@ namespace Anewluv.Caching
                              AnewluvContext AnewluvContext  = new AnewluvContext();
                              using (var tempdb = AnewluvContext)
                              {
-                                 MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                                 model = MemberMapperService.mapmember(profileid.ToString());
+                                // MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                               //  model = MemberMapperService.mapmember(profileid.ToString());
                              }
                             // Datings context = new modelContext();
                             // model =  context.GetRepository<models.Single(c => c.Id == id);
@@ -566,8 +566,8 @@ namespace Anewluv.Caching
                          AnewluvContext AnewluvContext  = new AnewluvContext();
                          using (var tempdb = AnewluvContext)
                          {
-                             MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                             model = MemberMapperService.mapmember(profileid.ToString());
+                            // MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                           //  model = MemberMapperService.mapmember(profileid.ToString());
                          }
                                                     //model =Api.MemberMapperService.mapguest();
 
@@ -627,8 +627,8 @@ namespace Anewluv.Caching
                          AnewluvContext AnewluvContext  = new AnewluvContext();
                          using (var tempdb = AnewluvContext)
                          {
-                             MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                             model = MemberMapperService.mapguest();
+                            // MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                           //  model = MemberMapperService.mapguest();
                          }
 
                         //poulate the model from the view model mapper
@@ -640,8 +640,8 @@ namespace Anewluv.Caching
                       AnewluvContext  = new AnewluvContext();
                      using (var tempdb = AnewluvContext)
                      {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         model.register = MemberMapperService.getregistermodeltest();
+                       //  MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                      //   model.register = MemberMapperService.getregistermodeltest();
                      }
                                                //model.Register = Mapper.MapRegistration();
 #else
@@ -743,8 +743,8 @@ namespace Anewluv.Caching
                          AnewluvContext AnewluvContext  = new AnewluvContext();
                          using (var tempdb = AnewluvContext)
                          {
-                             MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                             p = MemberMapperService.mapmember(p.profile.id.ToString());
+                            // MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                            // p = MemberMapperService.mapmember(p.profile.id.ToString());
                          }
 
                         }
@@ -803,8 +803,8 @@ namespace Anewluv.Caching
                  AnewluvContext AnewluvContext  = new AnewluvContext();
                  using (var tempdb = AnewluvContext)
                  {
-                     MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                     model = MemberMapperService.mapmember(profileid.ToString());
+                    // MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                   //  model = MemberMapperService.mapmember(profileid.ToString());
                  }
                 model.profiledata = model.profile.profiledata ;
 
@@ -865,8 +865,8 @@ namespace Anewluv.Caching
                         AnewluvContext AnewluvContext = new AnewluvContext();
                         using (var tempdb = AnewluvContext)
                         {
-                            MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                            p = MemberMapperService.mapguest();
+                          //  MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
+                         //   p = MemberMapperService.mapguest();
                         }
                     }
 

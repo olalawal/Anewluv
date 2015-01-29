@@ -38,6 +38,9 @@ namespace Anewluv.Apikey
     //http://stackoverflow.com/questions/11192610/inject-repository-into-serviceauthorizationmanager-using-unity
     public class ApikeyAuthorization : ServiceAuthorizationManager
     {
+
+        //TO do add this to web config as a key so each service that calls this can be granualry controlled.
+        int MaxBuffersize = 65536;
                  
         //public APIKeyAuthorization(IAPIkeyRepository apikeyrepository)
         //{
@@ -68,8 +71,9 @@ namespace Anewluv.Apikey
                 //if (OperationContext.Current.RequestContext  == "OPTIONS")
 
 
+                //TO do might need to raise this or set to a static value on the max buffer size for larger posts !
                 //store the message here so we can parse body for things like geodata profile id etc
-                MessageBuffer buffer = operationContext.RequestContext.RequestMessage.CreateBufferedCopy(8192);
+                MessageBuffer buffer = operationContext.RequestContext.RequestMessage.CreateBufferedCopy(MaxBuffersize);
                 message = buffer.CreateMessage();
                 Message internalCopy = buffer.CreateMessage();
                 buffer.Close();
@@ -107,6 +111,11 @@ namespace Anewluv.Apikey
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Logging");
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Notification");
                 nonauthenticatedURLS.Add("Nmedia.Infrastructure.Web.Services.Authorization");
+
+                //for testing non auth on this
+                nonauthenticatedURLS.Add("Anewluv.Web.Services.Members");
+                nonauthenticatedURLS.Add("Anewluv.Web.Services.MemberActions");
+
                 //these methods use internal rest calls so need to be excluded
                 //nonauthenticatedURLS.Add("updateuserlogintimebyprofileidandsessionid");  // do this this way until we determine how to add headers
                 //nonauthenticatedURLS.Add("validateuserandgettoken");  //internal call no auth required
@@ -121,6 +130,8 @@ namespace Anewluv.Apikey
                 apikeyonlyURLS.Add("Anewluv.Web.Services.Common");
                 apikeyonlyURLS.Add("Anewluv.Web.Services.Spatial");
                 apikeyonlyURLS.Add("/Anewluv.Web.Services.Media/PhotoService.svc/Rest/addphotos");  //everyone can call addphotos
+
+                
                 //added quick search to this apikey only to allow for quick search to 
                 //to bypass userid and password auth
                 apikeyonlyURLS.Add("/Anewluv.Web.Services.Members/MembersMapperService.svc/Rest/getquicksearch");

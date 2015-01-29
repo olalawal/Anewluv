@@ -103,7 +103,7 @@ namespace Anewluv.Services.Members
         
         }
 
-        public searchsetting getperfectmatchsearchsettingsbyprofileid(ProfileModel model)
+        public async Task<searchsetting> getperfectmatchsearchsettingsbyprofileid(ProfileModel model)
         {
             _unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
@@ -111,34 +111,16 @@ namespace Anewluv.Services.Members
                 try
                 {
 
-                    IQueryable<searchsetting> tmpsearchsettings = default(IQueryable<searchsetting>);
-                    //Dim ctx As New Entities()
-                    tmpsearchsettings = db.GetRepository<searchsetting>().Find().Where(p => p.profile_id == model.profileid && p.myperfectmatch == true);
-
-                    //End If
-                    if (tmpsearchsettings.Count() > 0)
+                    var task = Task.Factory.StartNew(() =>
                     {
-                        return tmpsearchsettings.FirstOrDefault();
-                    }
-                    else
-                    {
-                        //get the profileDta                    
 
-                        searchsetting Newsearchsettings = new searchsetting();
+                      return   profileextentionmethods.getperfectmatchsearchsettingsbyprofileid(model, db);
 
-                        Newsearchsettings = new searchsetting();
-                        Newsearchsettings.profile_id = model.profileid.GetValueOrDefault();
-                        Newsearchsettings.myperfectmatch = true;
-                        Newsearchsettings.searchname = "myperfectmatch";
-                        //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
-                        //   db.GetRepository<Country_PostalCode_List>().searchsettings.Add(Newsearchsettings);
-                        //   db.GetRepository<Country_PostalCode_List>().SaveChanges();
-                        //save the profile data with the search settings to the Initial Catalog= so we dont have to create it again
-                        return Newsearchsettings;
+                    });
+                   return await task.ConfigureAwait(false);
 
 
-
-                    }
+                   
                 }
                 catch (Exception ex)
                 {
@@ -160,7 +142,7 @@ namespace Anewluv.Services.Members
 
         }
 
-        public searchsetting createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model)
+        public async Task createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model)
         {
            
             _unitOfWork.DisableProxyCreation = true;
@@ -171,22 +153,15 @@ namespace Anewluv.Services.Members
                   {
                       try
                       {
-                          //get the profileDta                    
 
-                          searchsetting Newsearchsettings = new searchsetting();
+                          var task = Task.Factory.StartNew(() =>
+                          {
 
-                          Newsearchsettings = new searchsetting();
-                          Newsearchsettings.profile_id = model.profileid.GetValueOrDefault();
-                          Newsearchsettings.myperfectmatch = true;
-                          Newsearchsettings.searchname = "myperfectmatch";
-                          //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
-                           db.Add(Newsearchsettings);                        
-                           int i = db.Commit();
-                           transaction.Commit();
+                              profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(model,db);
 
+                          });
+                          await task.ConfigureAwait(false);
 
-                          //save the profile data with the search settings to the Initial Catalog= so we dont have to create it again
-                          return Newsearchsettings;
 
                       }
                       catch (Exception ex)

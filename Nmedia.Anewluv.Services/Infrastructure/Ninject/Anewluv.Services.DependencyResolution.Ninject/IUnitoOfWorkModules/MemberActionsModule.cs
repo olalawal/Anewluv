@@ -20,6 +20,9 @@ using Ninject.Web.Common;
 using Ninject;
 using System.Data.Entity;
 using Anewluv.Domain;
+using GeoData.Domain.Models;
+using Nmedia.Infrastructure.DependencyInjection;
+using Anewluv.Services.DependencyResolution.Ninject.predicates;
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
 
@@ -63,15 +66,40 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
             #endregion
 
             this.Bind<AnewluvContext>().ToSelf().InRequestScope();
+            this.Bind<PostalData2Context>().ToSelf().InRequestScope();
+
+
+
+
+
+            Bind<IUnitOfWork>().To<AnewluvContext>().WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
+            Bind<IUnitOfWork>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
+            // Bind<IUnitOfWork>().To<UnitOfWork>().WhenTargetHas<InVariosEntitiesScope>().InRequestScope();
+
+            // DataContexts: When any ancestor in the inheritance chain has been labeled with any of these attributes.
+            Bind<DbContext>().To<AnewluvContext>()
+                .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>).InRequestScope();
+
+            Bind<DbContext>().To<PostalData2Context>()
+                .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>).InRequestScope();
+
+
+
+
+
+
+
+
+
             //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToConstructor(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope ();
             //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToMethod(ctx => ctx.Kernel.Get<PromotionContext>());//).ToMethod()(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope();
 
             // var webApiEFRepository = kernel.Get<IRepository<Entity>>("WebApiEFRepository");
             //  this.Unbind(typeof(IUnitOfWork));
             //Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
-            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.MemberActions.MemberActionsService"));
+           // this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.MemberActions.MemberActionsService"));
             // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.MemberActions.MemberActionsService"));
+          //  this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.MemberActions.MemberActionsService"));
 
             //the Unit of work module should already be loaded by now
             this.Bind<IMemberActionsService>().ToSelf().InRequestScope();

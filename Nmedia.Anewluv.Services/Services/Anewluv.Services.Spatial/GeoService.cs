@@ -69,7 +69,7 @@ namespace Anewluv.Services.Spatial
 
 
 
-            public string getcountrynamebycountryid(GeoModel model)
+            public async Task<string> getcountrynamebycountryid(GeoModel model)
             {
                
                     string countryname = "";
@@ -78,24 +78,14 @@ namespace Anewluv.Services.Spatial
                     {
                        try                       
                        {
-                           //return (from p in _postalcontext.GetCountry_PostalCode_List()
-                           //where p.CountryID  == countryid
-                           //select p.CountryName ).FirstOrDefault();
-                           //return postaldataservicecontext.GetcountryNameBycountryID(profiledata.countryid);      
-                            db.SetIsolationToDefault = true;
-                            //TDocRecon loandetail2 = new TDocRecon();
-                            string query = "sp_GetCountryNameByCountryID";
-                            SqlParameter parameter = new SqlParameter("@CountryID", model.countryid);
-                            parameter.ParameterName = "@CountryID";
-                            parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                            parameter.Size = 40;
-                            //Procedure or function 'usp_GetHudFeeReviewLoanDetails' expects parameter '@LoanNbr', which was not supplied.
-                            //parameter.TypeName 
-                            var parameters = new object[] { parameter };
- 
-                            //object params                      
-                            countryname = db.ExecuteStoredProcedure<string>(query + " @CountryID ", parameters).FirstOrDefault();
-                            if (countryname != null) return countryname;
+                           var task = Task.Factory.StartNew(() =>
+                           {
+
+                               return spatialextentions.getcountrynamebycountryid(model, db);
+
+                           });
+                           return await task.ConfigureAwait(false);
+
                     
 
                         }
@@ -293,7 +283,7 @@ namespace Anewluv.Services.Spatial
             /// <summary>
             /// Gets the Status of weather this country has valid postal codes or just GeoCodes which are just id values identifying a city
             /// </summary>        
-            public bool getpostalcodestatusbycountryname(GeoModel model)
+            public async Task<bool> getpostalcodestatusbycountryname(GeoModel model)
 
             {
 
@@ -304,12 +294,14 @@ namespace Anewluv.Services.Spatial
                 {
                     try
                     {
-                             //  List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
-                            //Dim ctx As New Entities()
-                              var myQuery = db.GetRepository<Country_PostalCode_List>().Find().ToList().ToList().Where(p => p.CountryName == model.country).ToList();
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                         
+                          return  spatialextentions.getpostalcodestatusbycountryname(model, db);
 
-                            return (myQuery.Count > 0 ? true : false);
-                          //  return myQuery.FirstOrDefault().PostalCodes.Value
+                        });
+                        return await task.ConfigureAwait(false);
+
 
                     }
                     catch (Exception ex)

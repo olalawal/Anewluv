@@ -231,5 +231,97 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
+        public static searchsetting getperfectmatchsearchsettingsbyprofileid(ProfileModel model,IUnitOfWork db)
+        {
+           
+                try
+                {
+
+                    IQueryable<searchsetting> tmpsearchsettings = default(IQueryable<searchsetting>);
+                    //Dim ctx As New Entities()
+                    tmpsearchsettings = db.GetRepository<searchsetting>().Find().Where(p => p.profile_id == model.profileid && p.myperfectmatch == true);
+
+                    //End If
+                    if (tmpsearchsettings.Count() > 0)
+                    {
+                        return tmpsearchsettings.FirstOrDefault();
+                    }
+                    else
+                    {
+                        //get the profileDta                    
+
+                        searchsetting Newsearchsettings = new searchsetting();
+
+                        Newsearchsettings = new searchsetting();
+                        Newsearchsettings.profile_id = model.profileid.GetValueOrDefault();
+                        Newsearchsettings.myperfectmatch = true;
+                        Newsearchsettings.searchname = "myperfectmatch";
+                        //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
+                        //   db.GetRepository<Country_PostalCode_List>().searchsettings.Add(Newsearchsettings);
+                        //   db.GetRepository<Country_PostalCode_List>().SaveChanges();
+                        //save the profile data with the search settings to the Initial Catalog= so we dont have to create it again
+                        return Newsearchsettings;
+
+
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+
+                    //throw convertedexcption;
+                }
+
+            
+        }
+
+
+        public static void createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model,IUnitOfWork db)
+        {
+
+            db.DisableProxyCreation = true;
+         
+                db.IsAuditEnabled = false; //do not audit on adds
+                using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+                        //get the profileDta                    
+
+                        searchsetting Newsearchsettings = new searchsetting();
+
+                        Newsearchsettings = new searchsetting();
+                        Newsearchsettings.profile_id = model.profileid.GetValueOrDefault();
+                        Newsearchsettings.myperfectmatch = true;
+                        Newsearchsettings.searchname = "myperfectmatch";
+                        //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
+                        db.Add(Newsearchsettings);
+                        int i = db.Commit();
+                        transaction.Commit();
+
+
+                        //save the profile data with the search settings to the Initial Catalog= so we dont have to create it again
+                        //return Newsearchsettings;
+
+                    }
+                    catch (Exception ex)
+                    {
+                       throw;
+                        //throw convertedexcption;
+                    }
+
+
+
+                }
+         }
+
+        
+    
+    
+    
     }
+
+
+    
 }

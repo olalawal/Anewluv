@@ -1,5 +1,9 @@
-﻿using System;
+﻿using GeoData.Domain.Models;
+using GeoData.Domain.ViewModels;
+using Nmedia.DataAccess.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
@@ -13,7 +17,73 @@ namespace Anewluv.DataExtentionMethods
         #region "Spatial Functions"
 
 
+           public static string getcountrynamebycountryid(GeoModel model,IUnitOfWork geodb)
+        {
 
+            string countryname = "";
+            geodb.DisableProxyCreation = true;
+           
+                try
+                {
+                    //return (from p in _postalcontext.GetCountry_PostalCode_List()
+                    //where p.CountryID  == countryid
+                    //select p.CountryName ).FirstOrDefault();
+                    //return postaldataservicecontext.GetcountryNameBycountryID(profiledata.countryid);      
+                    geodb.SetIsolationToDefault = true;
+                    //TDocRecon loandetail2 = new TDocRecon();
+                    string query = "sp_GetCountryNameByCountryID";
+                    SqlParameter parameter = new SqlParameter("@CountryID", model.countryid);
+                    parameter.ParameterName = "@CountryID";
+                    parameter.SqlDbType = System.Data.SqlDbType.VarChar;
+                    parameter.Size = 40;
+                    //Procedure or function 'usp_GetHudFeeReviewLoanDetails' expects parameter '@LoanNbr', which was not supplied.
+                    //parameter.TypeName 
+                    var parameters = new object[] { parameter };
+
+                    //object params                      
+                    countryname = geodb.ExecuteStoredProcedure<string>(query + " @CountryID ", parameters).FirstOrDefault();
+                    if (countryname != null) return countryname;
+
+
+                }
+                catch (Exception ex)
+                {
+
+                  throw ex;
+                    //throw convertedexcption;
+                }
+              
+            return countryname;
+            }
+
+
+           public static bool getpostalcodestatusbycountryname(GeoModel model, IUnitOfWork geodb)
+           {
+
+               if (model.country == null) return false;
+
+                   geodb.DisableProxyCreation = true;             
+                   try
+                   {
+                       //  List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
+                       //Dim ctx As New Entities()
+                       var myQuery = geodb.GetRepository<Country_PostalCode_List>().Find().ToList().ToList().Where(p => p.CountryName == model.country).ToList();
+
+                       return (myQuery.Count > 0 ? true : false);
+                       //  return myQuery.FirstOrDefault().PostalCodes.Value
+
+                   }
+                   catch (Exception ex)
+                   {
+                       throw ex;
+                       //throw convertedexcption;
+                   }
+
+               
+
+
+           }
+        
 
 
         // probbaly won't use this, lets add lat long and other stuff to model

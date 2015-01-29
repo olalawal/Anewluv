@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="membermappingextentions.cs" />
     <Compile Include="mediaextentionmethods.cs" />
     <Compile Include="profileextentionmethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +61,10 @@
     <ProjectReference Include="..\..\Context\Anewluv.Domain\Anewluv.Domain.csproj">
       <Project>{a0b04284-784b-4322-a213-db178716efc1}</Project>
       <Name>Anewluv.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Context\GeoData.Domain\GeoData.Domain.csproj">
+      <Project>{01a79dcc-39ca-447e-a668-dd4206a8e5aa}</Project>
+      <Name>GeoData.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
       <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>

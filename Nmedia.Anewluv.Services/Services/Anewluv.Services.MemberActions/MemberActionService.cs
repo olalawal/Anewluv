@@ -25,6 +25,7 @@ using Anewluv.Services.Members;
 using Anewluv.Services.Mapping;
 using Nmedia.Infrastructure.Domain.Data;
 using System.Threading.Tasks;
+using Nmedia.Infrastructure.DependencyInjection;
 
 namespace Anewluv.Services.MemberActions
 {
@@ -38,12 +39,13 @@ namespace Anewluv.Services.MemberActions
         //private IPromotionRepository  promotionrepository;
 
         IUnitOfWork _unitOfWork;
+        IUnitOfWork _spatial_unitOfWork;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public MemberActionsService(IUnitOfWork unitOfWork)
+        public MemberActionsService([IAnewluvEntitesScope]IUnitOfWork unitOfWork, [InSpatialEntitesScope]IUnitOfWork spatial_unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -58,6 +60,7 @@ namespace Anewluv.Services.MemberActions
 
             //promotionrepository = _promotionrepository;
             _unitOfWork = unitOfWork;
+            _spatial_unitOfWork = spatial_unitOfWork;
             //disable proxy stuff by default
             //_unitOfWork.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
@@ -76,10 +79,10 @@ namespace Anewluv.Services.MemberActions
 
 
         //TO DO come back to this
-        public async Task<List<MemberSearchViewModel>> getmyrelationshipsfiltered(ProfileModel model, List<profilefiltertypeEnum> types)
+        public async Task<List<MemberSearchViewModel>> getmyrelationshipsfiltered(ProfileModel model)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
+              _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
             using (var db = _unitOfWork)
             {
                 try
@@ -143,7 +146,7 @@ namespace Anewluv.Services.MemberActions
         //{
 
 
-        //       _unitOfWork.DisableProxyCreation = true;
+        //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
         // using (var db = _unitOfWork)
         // {
         //     try
@@ -185,7 +188,7 @@ namespace Anewluv.Services.MemberActions
         //private List<MemberSearchViewModel> getunpagedwhoiaminsterestedin(int profileid, IQueryable<block> MyActiveblocks)
         //{
 
-        //       _unitOfWork.DisableProxyCreation = true;
+        //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
         // using (var db = _unitOfWork)
         // {
         //     try
@@ -225,7 +228,7 @@ namespace Anewluv.Services.MemberActions
         //private List<MemberSearchViewModel> getunpagedwhopeekedatme(int profileid, IQueryable<block> MyActiveblocks)
         //{
 
-        //       _unitOfWork.DisableProxyCreation = true;
+        //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
         // using (var db = _unitOfWork)
         // {
         //     try
@@ -268,7 +271,7 @@ namespace Anewluv.Services.MemberActions
         //private List<MemberSearchViewModel> getunpagedwhoipeekedat(int profileid, IQueryable<block> MyActiveblocks)
         //{
 
-        //       _unitOfWork.DisableProxyCreation = true;
+        //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
         // using (var db = _unitOfWork)
         // {
         //     try
@@ -309,7 +312,7 @@ namespace Anewluv.Services.MemberActions
         //private List<MemberSearchViewModel> getunpagedblocks(int profileid)
         //{
 
-        //       _unitOfWork.DisableProxyCreation = true;
+        //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
         // using (var db = _unitOfWork)
         // {
         //     try
@@ -347,7 +350,7 @@ namespace Anewluv.Services.MemberActions
         //private List<MemberSearchViewModel> getunpagedwholikesme(int profileid, IQueryable<block> MyActiveblocks)
         //{
 
-        //       _unitOfWork.DisableProxyCreation = true;
+        //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
         // using (var db = _unitOfWork)
         // {
         //     try
@@ -388,7 +391,7 @@ namespace Anewluv.Services.MemberActions
         //private List<MemberSearchViewModel> getunpagedwhoilike(int profileid, IQueryable<block> MyActiveblocks)
         //{
 
-        //       _unitOfWork.DisableProxyCreation = true;
+        //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
         // using (var db = _unitOfWork)
         // {
         //     try
@@ -457,7 +460,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoiaminterestedincount(ProfileModel model)
         {
           
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -509,7 +512,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoisinterestedinmecount(ProfileModel model)
         {
 
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -578,7 +581,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoisinterestedinmenewcount(ProfileModel model)
         {
 
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -650,7 +653,8 @@ namespace Anewluv.Services.MemberActions
 
 
 
-            _unitOfWork.DisableProxyCreation = true;
+              _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+            var geodb = _spatial_unitOfWork;
             using (var db = _unitOfWork)
             {
 
@@ -695,12 +699,11 @@ namespace Anewluv.Services.MemberActions
 
                         //return interests.ToList();
                         List<MemberSearchViewModel> results;
-                        AnewluvContext AnewluvContext = new AnewluvContext();
-                        using (var tempdb = AnewluvContext)
-                        {
-                            MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                            results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                        }
+
+
+
+                        results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                        
                         // return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
                         //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
                         return results;
@@ -748,7 +751,8 @@ namespace Anewluv.Services.MemberActions
        
        
 
-          _unitOfWork.DisableProxyCreation = true;
+            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+          var geodb = _spatial_unitOfWork;
          using (var db = _unitOfWork)
          {
              try
@@ -791,12 +795,8 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     AnewluvContext AnewluvContext = new AnewluvContext();
-                     using (var tempdb = AnewluvContext)
-                     {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     }
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     
                      return results;
 
                  });
@@ -835,7 +835,8 @@ namespace Anewluv.Services.MemberActions
         {
             
 
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+               var geodb = _spatial_unitOfWork;
          using (var db = _unitOfWork)
          {
              try
@@ -876,12 +877,8 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     AnewluvContext AnewluvContext = new AnewluvContext();
-                     using (var tempdb = AnewluvContext)
-                     {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     }
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     
                      return results;
 
 
@@ -926,7 +923,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<List<MemberSearchViewModel>> getmutualinterests(ProfileModel model)
         {
 
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -969,7 +966,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<bool> checkinterest(ProfileModel model)
         {
 
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -1541,7 +1538,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoipeekedatcount(ProfileModel model)
         {
 
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -1595,7 +1592,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhopeekedatmecount(ProfileModel model)
         {
 
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -1661,7 +1658,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhopeekedatmenewcount(ProfileModel model)
         {
 
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -1732,7 +1729,8 @@ namespace Anewluv.Services.MemberActions
 
           
 
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+               var geodb = _spatial_unitOfWork;
          using (var db = _unitOfWork)
          {
              try
@@ -1771,14 +1769,11 @@ namespace Anewluv.Services.MemberActions
                      // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                      List<MemberSearchViewModel> results;
-                     //return interests.ToList();
-                     AnewluvContext AnewluvContext = new AnewluvContext();
-                     using (var tempdb = AnewluvContext)
-                     {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                 
+                        
+                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
-                     }
+                     
                      return results;
 
                  });
@@ -1817,7 +1812,8 @@ namespace Anewluv.Services.MemberActions
         {
 
           
-               _unitOfWork.DisableProxyCreation = true;
+                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+               var geodb = _spatial_unitOfWork;
          using (var db = _unitOfWork)
          {
              try
@@ -1856,12 +1852,8 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     AnewluvContext AnewluvContext = new AnewluvContext();
-                     using (var tempdb = AnewluvContext)
-                     {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     }
+                    results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     
                      return results;
 
                  });
@@ -1903,9 +1895,11 @@ namespace Anewluv.Services.MemberActions
 
         
 
-              _unitOfWork.DisableProxyCreation = false;
-         using (var db = _unitOfWork)
-         {
+              _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+              var geodb = _spatial_unitOfWork;
+              var db = _unitOfWork;
+         //using (var db = _unitOfWork)
+         //{
              try
              {
 
@@ -1957,19 +1951,16 @@ namespace Anewluv.Services.MemberActions
                      // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                      //return interests.ToList();
-                     List<MemberSearchViewModel> results;
-                     //AnewluvContext AnewluvContext = new AnewluvContext();
-                     using (var tempdb = new AnewluvContext())
-                     {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     }
+                    
+                       var  results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+                       db.DisableProxyCreation = true;
                      return results;
                 
 
                  });
-
-                return await task.ConfigureAwait(false);
+                return await task.ConfigureAwait(true);
 
             
                 
@@ -1991,7 +1982,7 @@ namespace Anewluv.Services.MemberActions
              }
 
 
-         }
+     //    }
 
          
         }
@@ -2010,7 +2001,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<List<MemberSearchViewModel>> getmutualpeeks(ProfileModel model)
         {
 
-                 _unitOfWork.DisableProxyCreation = true;
+                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -2051,7 +2042,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<bool> checkpeek(ProfileModel model)
         {
 
-                 _unitOfWork.DisableProxyCreation = true;
+                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -2609,7 +2600,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoiblockedcount(ProfileModel model)
         {
 
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -2669,7 +2660,8 @@ namespace Anewluv.Services.MemberActions
         {
 
 
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+                var geodb = _spatial_unitOfWork;
          using (var db = _unitOfWork)
          {
              try
@@ -2705,12 +2697,11 @@ namespace Anewluv.Services.MemberActions
                      // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                      List<MemberSearchViewModel> results;
-                     AnewluvContext AnewluvContext = new AnewluvContext();
-                     using (var tempdb = AnewluvContext)
-                     {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     }
+                    
+                   
+                        
+                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                  
                      return results;
                  });
 
@@ -2749,7 +2740,8 @@ namespace Anewluv.Services.MemberActions
 
           
 
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+                var geodb = _spatial_unitOfWork;
          using (var db = _unitOfWork)
          {
              try
@@ -2781,12 +2773,9 @@ namespace Anewluv.Services.MemberActions
                      // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                      List<MemberSearchViewModel> results;
-                     AnewluvContext AnewluvContext = new AnewluvContext();
-                     using (var tempdb = AnewluvContext)
-                     {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     }
+                    
+                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     
                      return results;
                  });
 
@@ -3327,7 +3316,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoilikecount(ProfileModel model)
         {
 
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -3381,7 +3370,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwholikesmecount(ProfileModel model)
         {
 
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -3447,7 +3436,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoislikesmenewcount(ProfileModel model)
         {
 
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -3519,7 +3508,8 @@ namespace Anewluv.Services.MemberActions
         {
          
 
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+                var geodb = _spatial_unitOfWork;
          using (var db = _unitOfWork)
          {
              try
@@ -3564,12 +3554,9 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     AnewluvContext AnewluvContext = new AnewluvContext();
-                     using (var tempdb = AnewluvContext)
-                     {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     }
+                     
+                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     
                      return results;
 
                  });
@@ -3611,7 +3598,8 @@ namespace Anewluv.Services.MemberActions
 
            
 
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+                var geodb = _spatial_unitOfWork;
          using (var db = _unitOfWork)
          {
              try
@@ -3653,12 +3641,8 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     AnewluvContext AnewluvContext = new AnewluvContext();
-                     using (var tempdb = AnewluvContext)
-                     {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     }
+                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     
                      return results;
                  });
 
@@ -3699,7 +3683,8 @@ namespace Anewluv.Services.MemberActions
         {
 
             
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+                var geodb = _spatial_unitOfWork;
          using (var db = _unitOfWork)
          {
              try
@@ -3742,12 +3727,8 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     AnewluvContext AnewluvContext = new AnewluvContext();
-                     using (var tempdb = AnewluvContext)
-                     {
-                         MembersMapperService MemberMapperService = new MembersMapperService(tempdb);
-                         results = MemberMapperService.mapmembersearchviewmodels(model.profileid.ToString(), pageData.ToList(), "false").OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     }
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                    
                      return results;
 
                  });
@@ -3772,6 +3753,7 @@ namespace Anewluv.Services.MemberActions
              finally
              {
                 // Api.DisposeMemberMapperService();
+                 geodb.Dispose();
              }
 
 
@@ -3791,7 +3773,7 @@ namespace Anewluv.Services.MemberActions
         //work on this later
         public  async Task< List<MemberSearchViewModel>> getmutuallikes(ProfileModel model)
         {
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try
@@ -3834,7 +3816,7 @@ namespace Anewluv.Services.MemberActions
         public async Task<bool>  checklike(ProfileModel model)
         {
 
-                _unitOfWork.DisableProxyCreation = true;
+                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
          using (var db = _unitOfWork)
          {
              try

@@ -17,6 +17,7 @@ namespace Anewluv.Web.Services.Members.ServiceHostFactories
         {
             IKernel container = new StandardKernel();
             container.Load<NinjectModules.AnewLuvContextModule>();  //they both share the context so load it here and only once
+            container.Load<NinjectModules.PostalDataContextModule>(); //used by mapper and posibly members as well
             //TO do create one module combinding all                     
             container.Load<NinjectModules.MembersModule>();   
             container.Load<NinjectModules.MembersMapperModule>();
