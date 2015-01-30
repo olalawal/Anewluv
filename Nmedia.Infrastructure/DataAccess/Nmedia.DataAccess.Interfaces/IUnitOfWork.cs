@@ -49,7 +49,7 @@ namespace Nmedia.DataAccess.Interfaces
 
 
         DbTransaction BeginTransaction();
-        ObjectContext ObjectContext { get; }
+        ObjectContext ObjectContext { get; set; }
         int Commit();
 
       

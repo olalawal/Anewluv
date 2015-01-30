@@ -31,15 +31,15 @@ namespace Anewluv.Services.MemberActions
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MembersService" in both code and config file together.
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple )]
     public class MemberActionsService : IMemberActionsService
     {
 
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        IUnitOfWork _unitOfWork;
-        IUnitOfWork _spatial_unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _spatial_unitOfWork;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
@@ -83,7 +83,7 @@ namespace Anewluv.Services.MemberActions
         {
 
               _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 try
                 {
@@ -121,7 +121,7 @@ namespace Anewluv.Services.MemberActions
         //private IQueryable<block> activeblocksbyprofileid(int profileid)
         //{
         //    //_unitOfWork.DisableProxyCreation = true;
-        //    using (var db = _unitOfWork)
+        //     var db = _unitOfWork;
         //    {
         //        try
         //        {
@@ -147,7 +147,7 @@ namespace Anewluv.Services.MemberActions
 
 
         //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-        // using (var db = _unitOfWork)
+        //  var db = _unitOfWork;
         // {
         //     try
         //     {
@@ -189,7 +189,7 @@ namespace Anewluv.Services.MemberActions
         //{
 
         //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-        // using (var db = _unitOfWork)
+        //  var db = _unitOfWork;
         // {
         //     try
         //     {
@@ -229,7 +229,7 @@ namespace Anewluv.Services.MemberActions
         //{
 
         //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-        // using (var db = _unitOfWork)
+        //  var db = _unitOfWork;
         // {
         //     try
         //     {
@@ -272,7 +272,7 @@ namespace Anewluv.Services.MemberActions
         //{
 
         //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-        // using (var db = _unitOfWork)
+        //  var db = _unitOfWork;
         // {
         //     try
         //     {
@@ -313,7 +313,7 @@ namespace Anewluv.Services.MemberActions
         //{
 
         //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-        // using (var db = _unitOfWork)
+        //  var db = _unitOfWork;
         // {
         //     try
         //     {
@@ -351,7 +351,7 @@ namespace Anewluv.Services.MemberActions
         //{
 
         //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-        // using (var db = _unitOfWork)
+        //  var db = _unitOfWork;
         // {
         //     try
         //     {
@@ -392,7 +392,7 @@ namespace Anewluv.Services.MemberActions
         //{
 
         //         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-        // using (var db = _unitOfWork)
+        //  var db = _unitOfWork;
         // {
         //     try
         //     {
@@ -461,7 +461,7 @@ namespace Anewluv.Services.MemberActions
         {
           
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -513,7 +513,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -582,7 +582,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -655,7 +655,7 @@ namespace Anewluv.Services.MemberActions
 
               _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
             var geodb = _spatial_unitOfWork;
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
 
                 try
@@ -753,7 +753,7 @@ namespace Anewluv.Services.MemberActions
 
             _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
           var geodb = _spatial_unitOfWork;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -837,7 +837,7 @@ namespace Anewluv.Services.MemberActions
 
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
                var geodb = _spatial_unitOfWork;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -924,7 +924,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -967,7 +967,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -1009,7 +1009,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -1097,7 +1097,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code  return awa
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -1157,7 +1157,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -1218,7 +1218,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -1278,7 +1278,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -1338,7 +1338,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -1404,7 +1404,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -1468,7 +1468,7 @@ namespace Anewluv.Services.MemberActions
          public async Task updateinterestviewstatus(ProfileModel model)
         {
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -1539,7 +1539,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -1593,7 +1593,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -1659,7 +1659,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -1731,7 +1731,7 @@ namespace Anewluv.Services.MemberActions
 
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
                var geodb = _spatial_unitOfWork;
-         using (var db = _unitOfWork)
+               var db = _unitOfWork;
          {
              try
              {
@@ -1814,7 +1814,7 @@ namespace Anewluv.Services.MemberActions
           
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
                var geodb = _spatial_unitOfWork;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -1960,7 +1960,7 @@ namespace Anewluv.Services.MemberActions
                 
 
                  });
-                return await task.ConfigureAwait(true);
+                return await task.ConfigureAwait(false);
 
             
                 
@@ -2002,7 +2002,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                    _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -2043,7 +2043,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                    _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -2092,7 +2092,7 @@ namespace Anewluv.Services.MemberActions
 
         
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2171,7 +2171,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2230,7 +2230,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2289,7 +2289,7 @@ namespace Anewluv.Services.MemberActions
         public async Task restorepeekbyprofileid(ProfileModel model)
         {
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2350,7 +2350,7 @@ namespace Anewluv.Services.MemberActions
         public async Task restorepeekbypeekprofileid( ProfileModel model)
         {
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2412,7 +2412,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2473,7 +2473,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2533,7 +2533,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2601,7 +2601,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -2662,7 +2662,7 @@ namespace Anewluv.Services.MemberActions
 
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
                 var geodb = _spatial_unitOfWork;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -2742,7 +2742,7 @@ namespace Anewluv.Services.MemberActions
 
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
                 var geodb = _spatial_unitOfWork;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -2817,7 +2817,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2863,7 +2863,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2917,7 +2917,7 @@ namespace Anewluv.Services.MemberActions
            
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -2997,7 +2997,7 @@ namespace Anewluv.Services.MemberActions
         public async Task removeblock(ProfileModel model)
         {
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -3057,7 +3057,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -3117,7 +3117,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -3183,7 +3183,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -3249,7 +3249,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -3317,7 +3317,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -3371,7 +3371,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -3437,7 +3437,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -3510,7 +3510,7 @@ namespace Anewluv.Services.MemberActions
 
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
                 var geodb = _spatial_unitOfWork;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -3600,7 +3600,7 @@ namespace Anewluv.Services.MemberActions
 
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
                 var geodb = _spatial_unitOfWork;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -3685,7 +3685,7 @@ namespace Anewluv.Services.MemberActions
             
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
                 var geodb = _spatial_unitOfWork;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -3774,7 +3774,7 @@ namespace Anewluv.Services.MemberActions
         public  async Task< List<MemberSearchViewModel>> getmutuallikes(ProfileModel model)
         {
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -3817,7 +3817,7 @@ namespace Anewluv.Services.MemberActions
         {
 
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-         using (var db = _unitOfWork)
+          var db = _unitOfWork;
          {
              try
              {
@@ -3863,7 +3863,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -3948,7 +3948,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -4009,7 +4009,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -4070,7 +4070,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -4131,7 +4131,7 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -4195,7 +4195,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -4259,7 +4259,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())
@@ -4322,7 +4322,7 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-            using (var db = _unitOfWork)
+             var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 using (var transaction = db.BeginTransaction())

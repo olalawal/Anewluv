@@ -13,44 +13,53 @@ namespace Anewluv.DataExtentionMethods
 {
     public static class profileextentionmethods
     {
+ 
+        //sample using nested query to get sub items of a include seeh here
+        //after the first , come the inclues and they can be nested as well
+        //var query = context.Customers
+        //           .IncludeMultiple(
+        //               c => c.Address,
+        //               c => c.Orders.Select(o => o.OrderItems));
+        //http://stackoverflow.com/questions/5376421/ef-including-other-entities-generic-repository-pattern
+        
 
-         //example using eager loading of profile metadata -- too slow right now 
-        // return repo.Find(p => p.id == model.profileid,p=>p.profilemetadata).FirstOrDefault();
 
         public static profiledata getprofiledatabyprofileid(this IRepository<profiledata> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profiledata>().Where(p => p.profile_id == model.profileid).FirstOrDefault();
+
+            return repo.Find(p => p.profile_id == model.profileid,a=>a.profile,z=>z.profilemetadata).FirstOrDefault();
         }
 
         public static profiledata getprofiledatabyscreenname(this IRepository<profiledata> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profiledata>().Where(p => p.profile.screenname == model.screenname).FirstOrDefault();
+            return repo.Find(p => p.profile.screenname == model.screenname,p=>p.profile,p=>p.profilemetadata).FirstOrDefault();
         }
 
         public static profilemetadata getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profilemetadata>().Where(p => p.profile_id == model.profileid).FirstOrDefault();
+          var dd=    repo.Find(p => p.profile_id == model.profileid, a => a.profile,z => z.profiledatas.Where(p=>p.profile_id == model.profileid)).FirstOrDefault();
+            return dd;
         }
 
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)
         {
-          
-            return repo.Find(p => p.id == model.profileid).FirstOrDefault();
+            var dd= repo.Find(p => p.id == model.profileid, z => z.profiledata, p => p.profilemetadata).FirstOrDefault();
+            return dd;
         }
 
         public static profile getprofilebyscreenname(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profile>().Where(p => p.screenname == model.screenname).FirstOrDefault();
+            return repo.Find(p => p.screenname == model.screenname, a => a.profiledata, z => z.profilemetadata).FirstOrDefault();
         }
 
         public static profile getprofilebyemailaddress(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profile>().Where(p => p.emailaddress == model.email).FirstOrDefault();
+            return repo.Find(p => p.emailaddress == model.email, a => a.profiledata, z => z.profilemetadata).FirstOrDefault();
         }
 
         public static profile getprofilebyusername(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profile>().Where(p => p.username == model.username).FirstOrDefault();
+            return repo.Find(p => p.username == model.username, a => a.profiledata, z => z.profilemetadata).FirstOrDefault();
         }
 
         public static profile getprofileidbyopenid(this IRepository<profile> repo, ProfileModel model)
@@ -58,7 +67,7 @@ namespace Anewluv.DataExtentionMethods
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
             //lazy loading needed
-            var profile = repo.Find().OfType<profile>().Where(p => p.emailaddress == model.email).FirstOrDefault();
+            var profile = repo.Find(p => p.emailaddress == model.email, a => a.profiledata, z => z.profilemetadata,b=>b.openids).FirstOrDefault();
 
 
             //if we have an active cache we store the current value 
@@ -96,7 +105,7 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
-            return (repo.Find().OfType<profile>().Where(p => p.username == model.username & p.status_id != 1).FirstOrDefault() != null);
+            return (repo.Find(p => p.username == model.username & p.status_id != 1).FirstOrDefault() != null);
 
         }
 
@@ -105,7 +114,7 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
-            return (repo.Find().OfType<profile>().Where(p => p.activationcode == model.activationcode & p.username == model.username).FirstOrDefault() != null);
+            return (repo.Find(p => p.activationcode == model.activationcode & p.username == model.username).FirstOrDefault() != null);
 
         }
 
@@ -198,7 +207,7 @@ namespace Anewluv.DataExtentionMethods
         {
             try
             {
-                var profile = repo.Find().Where(p => p.id == 1).FirstOrDefault();
+                var profile = repo.Find(p => p.id == 1).FirstOrDefault();
                 var logtimes = profile.userlogtimes;
 
                 if (logtimes.Count > 0)
@@ -214,7 +223,7 @@ namespace Anewluv.DataExtentionMethods
                 // IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
 
                 // var  myQuery = repo.Find().OfType<userlogtime>().Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime).ToList();
-                var myQuery = repo.Find().Where(p => p.id == model.profileid && !(p.userlogtimes != null && p.userlogtimes.Any(z => z.offline == false))).FirstOrDefault() != null;
+                var myQuery = repo.Find(p => p.id == model.profileid && !(p.userlogtimes != null && p.userlogtimes.Any(z => z.offline == false))).FirstOrDefault() != null;
                 return myQuery;
                 //            var queryB =
                 //                (from o in db.Orders
@@ -242,7 +251,7 @@ namespace Anewluv.DataExtentionMethods
 
                     IQueryable<searchsetting> tmpsearchsettings = default(IQueryable<searchsetting>);
                     //Dim ctx As New Entities()
-                    tmpsearchsettings = db.GetRepository<searchsetting>().Find().Where(p => p.profile_id == model.profileid && p.myperfectmatch == true);
+                    tmpsearchsettings = db.GetRepository<searchsetting>().Find(p => p.profile_id == model.profileid && p.myperfectmatch == true);
 
                     //End If
                     if (tmpsearchsettings.Count() > 0)

@@ -15,10 +15,12 @@ namespace Nmedia.DataAccess
 {
     public class ContextBase : DbContext, IUnitOfWork
     {
+        string connectionstring = "";
 
         public ContextBase(string nameOrConnectionString) :
             base(nameOrConnectionString)
         {
+            this.connectionstring = nameOrConnectionString;
             //defaults for the base, can be overidded on the induvidual contets
             this.Configuration.ProxyCreationEnabled = true;
             this.Configuration.AutoDetectChangesEnabled = true;
@@ -63,6 +65,10 @@ namespace Nmedia.DataAccess
             get
             {
                 return (this as IObjectContextAdapter).ObjectContext;
+            }
+            set {
+
+                new ObjectContext(this.connectionstring);
             }
         }
 

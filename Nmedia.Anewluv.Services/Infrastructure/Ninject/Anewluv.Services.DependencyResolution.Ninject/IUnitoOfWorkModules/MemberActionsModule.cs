@@ -65,8 +65,8 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 
             #endregion
 
-            this.Bind<AnewluvContext>().ToSelf().InRequestScope();
-            this.Bind<PostalData2Context>().ToSelf().InRequestScope();
+          //  this.Bind<AnewluvContext>().ToSelf();
+           // this.Bind<PostalData2Context>().ToSelf();
 
 
 
@@ -74,14 +74,17 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 
             Bind<IUnitOfWork>().To<AnewluvContext>().WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
             Bind<IUnitOfWork>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
-            // Bind<IUnitOfWork>().To<UnitOfWork>().WhenTargetHas<InVariosEntitiesScope>().InRequestScope();
+            
 
             // DataContexts: When any ancestor in the inheritance chain has been labeled with any of these attributes.
-            Bind<DbContext>().To<AnewluvContext>()
-                .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>).InRequestScope();
+            Bind<DbContext>().ToMethod(c => c.Kernel.Get<AnewluvContext>())
+               .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>);
 
-            Bind<DbContext>().To<PostalData2Context>()
-                .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>).InRequestScope();
+
+
+
+            Bind<DbContext>().ToMethod(c => c.Kernel.Get<PostalData2Context>())
+             .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>);
 
 
 
@@ -102,7 +105,7 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
           //  this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.MemberActions.MemberActionsService"));
 
             //the Unit of work module should already be loaded by now
-            this.Bind<IMemberActionsService>().ToSelf().InRequestScope();
+          //  this.Bind<IMemberActionsService>().ToSelf().InRequestScope();
 
 
         }

@@ -16,12 +16,12 @@ namespace Nmedia.DataAccess
         /// <summary>
         /// This is set in the constructor and provides access to the underlying EntityFramework methods
         /// </summary>
-        private DbSet<T> dbSet;
+        private readonly DbSet<T> dbSet;
 
         /// <summary>
         /// The context for working with the EntityFramework. This is set in the constructor.
         /// </summary>
-        private DbContext Context;
+        private readonly DbContext Context;
 
 
         /// <summary>
@@ -46,8 +46,8 @@ namespace Nmedia.DataAccess
         {
 
             // _dataContext = Context.;
-            Context = _Context;
-            dbSet = this.Context.Set<T>();
+            this.Context = _Context;
+            this.dbSet = this.Context.Set<T>();
 
         }
 
@@ -94,6 +94,8 @@ namespace Nmedia.DataAccess
         //    return query;
         //} 
 
+
+
         public IQueryable<T> FindIncluding(params System.Linq.Expressions.Expression<Func<T, object>>[] includeProperties)
         {
             var set = dbSet; // this.Context.GetEntitySet<T>();
@@ -102,7 +104,10 @@ namespace Nmedia.DataAccess
             {
                 foreach (var include in includeProperties)
                 {
-                    set.Include(include);
+                    //Includes only work with the Load extention and are too slow right now
+                    //for some reason lazy loading seems faster so use that for now till we figure out the dispose on context bug
+                    //test the asqueryable part
+                    set.Include(include).AsQueryable().Load();
                 }
             }
             return set.AsQueryable();
@@ -170,10 +175,11 @@ namespace Nmedia.DataAccess
                     //6-10-2013 big line missing here forgot to clear repos 
                     repos.Clear();
                     // Dispose managed resources.
+                   
                     if (Context != null)
                     {
                         Context.Dispose();
-                        Context = null;
+                       // Context = null;
                     }
                     if (_transaction != null)
                     {
