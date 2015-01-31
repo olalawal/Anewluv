@@ -1372,13 +1372,14 @@ namespace Anewluv.Services.Authentication
                         //}
                         //return result;
 
-                        _unitOfWork.DisableProxyCreation = true;
-                        _unitOfWork.DisableLazyLoading = true;
-                        using (var db = _unitOfWork)
-                        {
+                        _unitOfWork.DisableProxyCreation = false;
+                        _unitOfWork.DisableLazyLoading = false;
+                        var db = _unitOfWork;
+                       // using (var db = _unitOfWork)
+                    //    {
                             // IQueryable<profile> myQuery = default(IQueryable<profile>);
-                            result = db.GetRepository<profile>().checkifusernamealreadyexists(model);    
-                        }
+                            result = db.GetRepository<profile>().Find(z=>z.username == model.username).FirstOrDefault() != null ;    
+                    //    }
 
                         //using (var db = new AnewluvContext())
                         // {

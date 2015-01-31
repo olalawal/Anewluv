@@ -67,11 +67,11 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
        // Bind<IUnitOfWork>().To<UnitOfWork>().WhenTargetHas<InVariosEntitiesScope>().InSingletonScope();
 
         // DataContexts: When any ancestor in the inheritance chain has been labeled with any of these attributes.
-        Bind<DbContext>().To<AnewluvContext>()
-            .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>).InRequestScope();
+            Bind<DbContext>().ToMethod(c => c.Kernel.Get<AnewluvContext>())
+            .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>);
 
-        Bind<DbContext>().To<PostalData2Context>()
-            .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>).InRequestScope();
+            Bind<DbContext>().ToMethod(c => c.Kernel.Get<PostalData2Context>())
+            .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>);
 
        // Bind<IDataContext>().To<VariosEntities>()
        //     .WhenAnyAncestorMatches(Predicates.TargetHas<InVariosEntitiesScope>).InSingletonScope();
@@ -80,7 +80,7 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 
 
          
-        this.Bind<IMembersMapperService>().ToSelf().InRequestScope();
+        //this.Bind<IMembersMapperService>().ToSelf().InRequestScope();
 
          
         }

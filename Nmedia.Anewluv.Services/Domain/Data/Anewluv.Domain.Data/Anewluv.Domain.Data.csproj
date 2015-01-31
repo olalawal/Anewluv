@@ -234,6 +234,7 @@
     <Compile Include="Anewluv\ViewModels\Account\LogonViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\LostAccountInfoModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\LostActivationCodeModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Actions\MembeActionsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Activity\ActivityModel.cs" />
     <Compile Include="Anewluv\ViewModels\Search\ProfileModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\RegisterExternalLoginModel.cs" />

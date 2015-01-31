@@ -1,0 +1,192 @@
+﻿
+*** misc SQL for deleting all rows and clearing the identity seed"
+
+delete from   [Promotions].[dbo].[lu_promoter]
+ 
+ DBCC CHECKIDENT ('[Promotions].[dbo].[lu_promoter]', RESEED, 0)
+ *** end of misc sql ****
+
+
+to migrate changes to the model open up package manager console and run the following command 
+
+
+if only one contex:
+run only once !
+-base option 1
+PM>Enable-Migrations -v  
+option 2 more contexts  in separate databes
+ Enable-Migrations -ContextTypeName "LoggingContext"
+-option 3 mutiple contexts in the same project and same Initial Catalog=
+enable-migrations  -ContextTypeName "NotificationContext" -MigrationsDirectory:NotificationMigrations
+-option 4 multiple contexts in different projects but same Initial Catalog=
+enable-migrations  -ProjectName:DataLayer.CasinoModel  -ContextTypeName  "NotificationContext" -MigrationsDirectory:NotificationMigrations
+-option 5 (current) 2 or more contexts in separate Initial Catalog=s and configuration for migration in seprartae folders 
+Enable-Migrations -ContextTypeName "LoggingContext" -MigrationsDirectory:Logging\Migrations -f
+Enable-Migrations -ContextTypeName "NotificationContext" -MigrationsDirectory:Notification\Migrations -f
+
+then you want to have EF code first scafolt your up-down changes for the balank Initial Catalog= into the current migration file
+
+type 1 - single tentant
+PM>Add-Migration InitialMigrations -f -ConfigurationTypeName "Configuration" -verbose
+type 2 mutiple contexts  use the full namespace of the config (use the namespace of the conifguration file)
+examples
+Add-Migration first -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Notification.Migrations.Configuration"
+Add-Migration first -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Logging.Migrations.Configuration"
+Add-Migration first -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Logging.Migrations.Configuration"
+
+
+adding another migration sample after this :
+
+Add-Migration MigrationFromJohn -f -ConfigurationTypeName "Configuration" -verbose
+
+The Designer Code for this migration file includes a snapshot of your current Code First model.
+This snapshot is used to calculate the changes to your model when you scaffold the next migration. 
+If you make additional changes to your model that you want to include in this migration, then you can re-scaffold it 
+by running 'Add-Migration InitialMigrations' again.
+
+1)
+after you make changes to the data model you can update the Initial Catalog= using the command :
+PM>   Update-database -f -verbose -ConfigurationTypeName "Configuration"
+multiple context examples :
+PM>  Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Notification.Migrations.Configuration"
+PM>   Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Logging.Migrations.Configuration"
+2)
+to run a specific migration 
+PM>  Update-database -TargetMigration "201306051636172_InitialMigrations" -ConfigurationTypeName "Configuration"
+or
+Update-Initial Catalog= -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "Configurationlog"
+
+3) more multi tentant with diff dirs use the fully qualfied namespace
+ Update-database -TargetMigration "201407131935192_first" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Notification.Migrations.Configuration"
+ Update-database -TargetMigration "201407132217320_first" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Data.Apikey.Migrations.Configuration" 
+
+if you dont care about datalosss or dropped tables use this command first
+from following blog:
+http://stackoverflow.com/questions/13238203/automatic-migrations-for-asp-net-simplemembershipprovider
+
+Add-Migration InitialMigrations -IgnoreChanges -f
+
+then run :
+
+update-Initial Catalog= -verbose  -f
+
+
+***************** other way with all databsease in one databse /context
+
+
+
+
+if only one contex:
+run only once !
+-base option 1
+PM>Enable-Migrations -v  
+option 2 more contexts  in separate databes
+ Enable-Migrations -ContextTypeName "LoggingContext"
+-option 3 mutiple contexts in the same project and same Initial Catalog=
+enable-migrations  -ContextTypeName "NotificationContext" -MigrationsDirectory:NotificationMigrations
+-option 4 multiple contexts in different projects but same Initial Catalog=
+enable-migrations  -ProjectName:DataLayer.CasinoModel  -ContextTypeName  "NotificationContext" -MigrationsDirectory:NotificationMigrations
+
+
+then you want to have EF code first scafolt your up-down changes for the balank Initial Catalog= into the current migration file
+
+type 1 - single tentant
+PM>Add-Migration InitialMigrations -f -ConfigurationTypeName "Configuration" -verbose
+type 2 mutiple contexts  use the full namespace of the config
+Add-Migration ffff -ConfigurationTypeName "Nmedia.Infrastructure.Domain.ApikeyMigrations.Configuration" 
+
+
+adding another migration sample after this :
+
+Add-Migration MigrationFromJohn -f -ConfigurationTypeName "Configuration" -verbose
+
+
+
+
+
+
+The Designer Code for this migration file includes a snapshot of your current Code First model.
+This snapshot is used to calculate the changes to your model when you scaffold the next migration. 
+If you make additional changes to your model that you want to include in this migration, then you can re-scaffold it 
+by running 'Add-Migration InitialMigrations' again.
+
+1)
+after you make changes to the data model you can update the Initial Catalog= using the command :
+PM>  Update-Initial Catalog= -f -verbose -ConfigurationTypeName "Configuration"
+
+2)
+to run a specific migration 
+PM> Update-Initial Catalog= -TargetMigration "201306051636172_InitialMigrations" -ConfigurationTypeName "Configuration"
+or
+Update-Initial Catalog= -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "Configurationlog"
+
+3) more multi tentant with diff dirs use the fully qualfied namespace
+Update-Initial Catalog= -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "Nmedia.Infrastructure.Domain.ApikeyMigrations.Configuration" 
+
+if you dont care about datalosss or dropped tables use this command first
+from following blog:
+http://stackoverflow.com/questions/13238203/automatic-migrations-for-asp-net-simplemembershipprovider
+
+Add-Migration InitialMigrations -IgnoreChanges -f
+
+then run :
+
+update-Initial Catalog= -verbose  -f
+
+
+
+OLD docs
+
+
+
+Stetp one after the model and context files are created run this in PMconsole
+
+ PM> Enable-Migrations  
+
+ Update-Initial Catalog= -StartUpProjectName "Nmedia.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel" -verbose –force
+Update-Initial Catalog= -StartUpProjectName "Nmedia.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose –force
+ Update-Initial Catalog= -StartUpProjectName "Nmedia.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationApiKeyModel" -verbose 
+
+
+Automatic migration was not applied because it would result in data loss.
+
+I am going through all the new modles and properly naming the lookup tables and their primary keys , just a quick update here.
+
+So I looked into the scheme deal and you can make sure db objects are mapped to a named scheme using this fluent syntax called in the onmodelcreating method
+
+    modelBuilder.Entity(Of log)().ToTable("logs", schemaName:="Logging")
+    modelBuilder.Entity(Of lu_application)().ToTable("lu_application", schemaName:="Logging")
+    modelBuilder.Entity(Of lu_logSeverity)().ToTable("lu_logSeverity", schemaName:="Logging")
+
+or you can decorate the entiies as follows 
+   <Table("log", Schema:="Logging")> _
+
+And thwy will be automatically renamed or mapped to the correct schema.
+
+ Below is the commad to create/modify the Initial Catalog= from visual studio and the generated script is listed for your intrest.
+I like how it checks for the schema to exist and if it does’nt creates a new one which is cool.
+
+
+Sample migraation command.
+
+PM> Update-Initial Catalog= -StartUpProjectName "Nmedia.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel" -verbose 
+
+
+if you dont care if any data is deleted use the -force flag. and If you are having problems with previous migrations you can delete the migrations
+table that is created in SQL
+
+Update-Initial Catalog= -StartUpProjectName "Nmedia.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel" -verbose –force
+Update-Initial Catalog= -StartUpProjectName "Nmedia.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose –force
+ Update-Initial Catalog= -StartUpProjectName "Nmedia.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationApiKeyModel" -verbose 
+
+check the model updating model for custom Initial Catalog= migration settings i.e schema and object relationships
+ 
+
+ added this code to configure migrations to be constally updated on db changes automatically
+ add-Migration -StartUpProjectName "Nmedia.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" ConfigurationNotificationModelInitial
+ add-Migration  -StartUpProjectName "Nmedia.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationCustomlogModel"  ConfigurationCustomlogModelInitial
+ Update-Initial Catalog= -StartUpProjectName "Nmedia.Infrastructure.Entities" -ConfigurationTypeName "ConfigurationNotificationModel" -verbose
+
+
+ other docs 
+

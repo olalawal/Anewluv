@@ -42,16 +42,27 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
             //  this.Unbind(typeof(IUnitOfWork));
             //Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
 
-            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Members.MemberService")).InScope(c => OperationContext.Current); ;
+          //  this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Members.MemberService")).InScope(c => OperationContext.Current); ;
             // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Members.MemberService")).InScope(c => OperationContext.Current); 
-                ;
+          //  this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Members.MemberService")).InScope(c => OperationContext.Current); 
+            //    ;
 
             //the Unit of work module should already be loaded by now
            // this.Bind<IMemberService>().ToSelf();
-                Bind<IMemberService>().ToSelf().InRequestScope();
+               // Bind<IMemberService>().ToSelf().InRequestScope();
 
             //Bind<IMemberService, MemberService>().To<MemberService>().InRequestScope();
+
+
+            Bind<IUnitOfWork>().To<AnewluvContext>().InRequestScope();
+           // Bind<IUnitOfWork>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
+
+
+            // DataContexts: When any ancestor in the inheritance chain has been labeled with any of these attributes.
+            Bind<DbContext>().ToMethod(c => c.Kernel.Get<AnewluvContext>()).InRequestScope(); ;
+
+           // Bind<DbContext>().ToMethod(c => c.Kernel.Get<PostalData2Context>())
+            // .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>).InRequestScope(); ;
 
 
          

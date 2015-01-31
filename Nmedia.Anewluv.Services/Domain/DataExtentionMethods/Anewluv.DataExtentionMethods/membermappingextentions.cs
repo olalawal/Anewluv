@@ -503,8 +503,18 @@ namespace Anewluv.DataExtentionMethods
             db.DisableLazyLoading = false;
             MembersViewModel model = new MembersViewModel();
             profile profile = new profile();
-            profile = db.GetRepository<profile>().getprofilebyprofileid(newmodel);
+
+    
+
+            profile = db.GetRepository<profile>().FindSingle(p=>p.id== newmodel.profileid); //  .getprofilebyprofileid(newmodel);
+           
+            //handles failues in lazy loading
             //TO DO this should be a try cacth with exception handling
+            if (profile.profilemetadata == null)
+            {
+                profile.profiledata = db.GetRepository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = model.profile_id });
+                profile.profilemetadata = db.GetRepository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = model.profile_id });
+            }
 
             try
             {
@@ -513,6 +523,8 @@ namespace Anewluv.DataExtentionMethods
                 model.profile_id = profile.id;
                 //4-28-2012 added mapping for profile visiblity
                 model.profilevisiblity = profile.profiledata.visiblitysetting;
+                model.profile = profile;
+               
                 //on first load this should always be false
                 //to DO   DO  we still need this
                 model.profilestatusmessageshown = false;
@@ -540,10 +552,10 @@ namespace Anewluv.DataExtentionMethods
                 model.mylatitude = profile.profiledata.latitude.ToString(); //model.Lattitude
                 model.mylongitude = profile.profiledata.longitude.ToString();
                 //update 9-21-2011 get fro search settings
-                model.maxdistancefromme = profile.profilemetadata.searchsettings.FirstOrDefault() != null ? profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
+                model.maxdistancefromme = profile.profilemetadata.searchsettings != null ? profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
 
 
-                if (profile.profilemetadata.searchsettings.Count == 0)
+                if (profile.profilemetadata.searchsettings == null || profile.profilemetadata.searchsettings.Count == 0)
                 {
                     profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = profile.id }, db);
                 }

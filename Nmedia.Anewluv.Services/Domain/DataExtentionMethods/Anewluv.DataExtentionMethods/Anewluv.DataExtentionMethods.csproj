@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="mailextentions.cs" />
+    <Compile Include="memberactionsextentions.cs" />
     <Compile Include="membermappingextentions.cs" />
     <Compile Include="mediaextentionmethods.cs" />
     <Compile Include="profileextentionmethods.cs" />

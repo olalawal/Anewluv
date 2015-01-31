@@ -78,13 +78,10 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 
             // DataContexts: When any ancestor in the inheritance chain has been labeled with any of these attributes.
             Bind<DbContext>().ToMethod(c => c.Kernel.Get<AnewluvContext>())
-               .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>);
-
-
-
+               .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>).InRequestScope(); ;
 
             Bind<DbContext>().ToMethod(c => c.Kernel.Get<PostalData2Context>())
-             .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>);
+             .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>).InRequestScope(); ;
 
 
 
