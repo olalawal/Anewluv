@@ -186,6 +186,12 @@ namespace Anewluv.Services.Authentication
             return ValidateUser(profile.email, profile.openididentifier, profile.openidprovider);
         }
 
+        /// <summary>
+        /// depreciated for the new method 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public override bool ValidateUser(string username, string password)
         {
 
@@ -1948,7 +1954,7 @@ namespace Anewluv.Services.Authentication
 
         private void updateuserlogintime(int profileid, IUnitOfWork db)
         {
-            MemberService MemberService = new MemberService(db);
+          //  MemberService MemberService = new MemberService(db);
             try
             {
                 //log the user logtime here so it is common to silverlight and MVC
@@ -1956,13 +1962,14 @@ namespace Anewluv.Services.Authentication
                 {
                     //Just for testing that it worked
                     //TO DO remove when in prod                           
-                   
-                    MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = profileid, sessionid = HttpContext.Current.Session.SessionID });
+                    Api.AsyncCalls.updateuserlogintimebyprofileidandsessionidasync(new ProfileModel { profileid = profileid, sessionid = HttpContext.Current.Session.SessionID });
+                  //  MemberService.
                 }
                 else
                 {
                   
-                    MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = profileid });
+                  //  MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = profileid });
+                    Api.AsyncCalls.updateuserlogintimeasync(new ProfileModel { profileid = profileid });
                 }
             }
             catch (Exception ex)

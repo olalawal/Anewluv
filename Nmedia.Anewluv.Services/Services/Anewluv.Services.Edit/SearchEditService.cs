@@ -195,6 +195,9 @@ namespace Anewluv.Services.Edit
                     {
 
                         searchsetting p = filtersearchsettings(searchmodel, db);
+
+                      
+
                         return this.getbasicsearchsettings(p, db);
                        
                     });

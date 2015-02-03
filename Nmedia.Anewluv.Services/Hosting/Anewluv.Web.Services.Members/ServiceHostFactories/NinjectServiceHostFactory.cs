@@ -41,7 +41,7 @@ namespace Anewluv.Web.Services.Members
           //  kernel.Bind<IDummyDependency>().To<DummyDepencency>();
 
           // kernel.Load<NinjectModules.MemberActionsModule>();
-          // kernel.Load<NinjectModules.MembersModule>();
+          kernel.Load<NinjectModules.MembersModule>();
            kernel.Load<NinjectModules.MembersMapperModule>();
         }
 

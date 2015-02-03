@@ -280,7 +280,7 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
-        public static void createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model,IUnitOfWork db)
+        public static searchsetting createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model, IUnitOfWork db)
         {
 
             db.DisableProxyCreation = true;
@@ -303,6 +303,8 @@ namespace Anewluv.DataExtentionMethods
                         int i = db.Commit();
                         transaction.Commit();
 
+                        return Newsearchsettings;
+
 
                         //save the profile data with the search settings to the Initial Catalog= so we dont have to create it again
                         //return Newsearchsettings;
@@ -310,6 +312,7 @@ namespace Anewluv.DataExtentionMethods
                     }
                     catch (Exception ex)
                     {
+                        transaction.Rollback();
                        throw;
                         //throw convertedexcption;
                     }

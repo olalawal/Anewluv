@@ -555,10 +555,6 @@ namespace Anewluv.DataExtentionMethods
                 model.maxdistancefromme = profile.profilemetadata.searchsettings != null ? profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
 
 
-                if (profile.profilemetadata.searchsettings == null || profile.profilemetadata.searchsettings.Count == 0)
-                {
-                    profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = profile.id }, db);
-                }
 
                 return model;
 

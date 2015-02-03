@@ -981,6 +981,13 @@ namespace Anewluv.Services.Mapping
 
                         searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
 
+                        //TO do handle empty perfect match settings here
+                        if (perfectmatchsearchsettings == null )
+                        {
+                          perfectmatchsearchsettings=  profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = Model.profileid }, db);
+                        }
+
+
                         //set default perfect match distance as 100 for now later as we get more members lower
                         //TO DO move this to a db setting or resourcer file
                         if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
@@ -1175,9 +1182,19 @@ namespace Anewluv.Services.Mapping
                         
                         MembersViewModel model = membermappingextentions.mapmember(new ProfileModel { profileid = profile.id }, db, geodb);
 
+
+
+
                        // model.profile = profile;
                         //get search sttings from DB
                         searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
+
+                        //TO do handle empty perfect match settings here
+                        if (perfectmatchsearchsettings == null)
+                        {
+                            perfectmatchsearchsettings = profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = Model.profileid }, db);
+                        }
+
                         //set default perfect match distance as 100 for now later as we get more members lower
                         //TO DO move this to a _datingcontext setting or resourcer file
                         if (perfectmatchsearchsettings.distancefromme == null | perfectmatchsearchsettings.distancefromme == 0)
@@ -1654,7 +1671,7 @@ namespace Anewluv.Services.Mapping
             // int? totalrecordcount = MemberSearchViewmodels.Count;
             //handle zero and null paging values
             if (page == null || page == 0) page = 1;
-            if (pagesize == null || pagesize == 0) pagesize = 1;
+            if (pagesize == null || pagesize == 0) pagesize = 4;
 
             bool allowpaging = (source.Count() >= (page * pagesize) ? true : false);
             var pageData = page > 1 & allowpaging ?

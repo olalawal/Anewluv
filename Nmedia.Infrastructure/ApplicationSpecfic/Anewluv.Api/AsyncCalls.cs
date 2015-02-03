@@ -149,6 +149,24 @@ namespace Anewluv.Api
             Task.Run(() => Api.MemberService.addprofileactvity(activitymodel));
         }
 
+        public static void updateuserlogintimeasync(ProfileModel model)
+        {
+            // Api.MemberService.addprofileactvity(activity);
+            //  result = await returnedTaskTResult;
+            // IsApiKeyValid = await 
+            //  return result;
+
+            Task.Run(() => Api.MemberService.updateuserlogintimebyprofileid(model));
+        }
+
+        public static void updateuserlogintimebyprofileidandsessionidasync(ProfileModel model)
+        {
+
+            Task.Run(() => Api.MemberService.updateuserlogintimebyprofileidandsessionid(model));
+        
+        }
+
+
         //public static void addprofileactvitygeodata(profileactivitygeodata profileactivitygeodata)
         //{
         //    //Api.MemberService.addprofileactvitygeodata(profileactivitygeodata);
