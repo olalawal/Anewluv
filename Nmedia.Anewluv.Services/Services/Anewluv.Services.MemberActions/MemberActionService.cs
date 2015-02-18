@@ -79,7 +79,7 @@ namespace Anewluv.Services.MemberActions
 
 
         //TO DO come back to this
-        public async Task<List<MemberSearchViewModel>> getmyrelationshipsfiltered(ProfileModel model)
+        public async Task<SearchResultsViewModel> getmyrelationshipsfiltered(ProfileModel model)
         {
 
               _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
@@ -93,7 +93,7 @@ namespace Anewluv.Services.MemberActions
                     {
 
                         //return _memberactionsrepository.getmyrelationshipsfiltered(Convert.ToInt32(model.profileid), types);
-                        return new List<MemberSearchViewModel>();
+                        return new SearchResultsViewModel();
 
                     });
 
@@ -266,7 +266,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets list of all the profiles I am interested in
         /// </summary 
-        public async Task<List<MemberSearchViewModel>> getwhoiaminterestedin(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwhoiaminterestedin(ProfileModel model)
         {
 
 
@@ -326,7 +326,9 @@ namespace Anewluv.Services.MemberActions
                         
                         // return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
                         //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
-                        return results;
+
+                        return new SearchResultsViewModel { results = results, totalresults = interests.Count() };
+                      //  return results;
 
 
                     });
@@ -366,7 +368,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who are interested in me
         /// </summary 
-        public async Task<List<MemberSearchViewModel>> getwhoisinterestedinme(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwhoisinterestedinme(ProfileModel model)
         {
        
        
@@ -416,8 +418,8 @@ namespace Anewluv.Services.MemberActions
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
                      results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     
-                     return results;
+
+                     return new SearchResultsViewModel { results = results, totalresults = whoisinterestedinme.Count() };
 
                  });
 
@@ -451,7 +453,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who are interested in me, that ive not viewd yet
         /// </summary 
-        public async Task<List<MemberSearchViewModel>> getwhoisinterestedinmenew(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwhoisinterestedinmenew(ProfileModel model)
         {
             
 
@@ -498,8 +500,8 @@ namespace Anewluv.Services.MemberActions
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
                      results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     
-                     return results;
+
+                     return new SearchResultsViewModel { results = results, totalresults = whoisinterestedinmenew.Count() };
 
 
                  });
@@ -540,7 +542,7 @@ namespace Anewluv.Services.MemberActions
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public async Task<List<MemberSearchViewModel>> getmutualinterests(ProfileModel model)
+        public async Task<SearchResultsViewModel> getmutualinterests(ProfileModel model)
         {
 
                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
@@ -552,8 +554,19 @@ namespace Anewluv.Services.MemberActions
                  {
 
 
-                     IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
-                     return mutualinterests.ToList();
+                     IEnumerable<MemberSearchViewModel> source = default(IEnumerable<MemberSearchViewModel>);
+                  
+                     if (model.page == null || model.page == 0) model.page = 1;
+                     if (model.numberperpage == null || model.numberperpage == 0) model.numberperpage = 4;
+
+                     bool allowpaging = (source.Count() >= (model.page * model.numberperpage) ? true : false);
+                     var pageData = model.page > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(source.ToList(), model.page ?? 1, model.numberperpage ?? 20) : source.Take(model.numberperpage.GetValueOrDefault());
+
+                     //TO do pagge this
+                     return new SearchResultsViewModel { results = source.ToList(), totalresults = source.Count() };
+                     // return mutualblocks.ToList();
+
 
                  });
 
@@ -1285,7 +1298,7 @@ namespace Anewluv.Services.MemberActions
         /// //gets all the members who are interested in me
         /// //TODO add filtering for blocked members that you blocked and system blocked
         /// </summary 
-        public async Task<List<MemberSearchViewModel>> getwhopeekedatme(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwhopeekedatme(ProfileModel model)
         {
 
           
@@ -1335,7 +1348,7 @@ namespace Anewluv.Services.MemberActions
                          results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                      
-                     return results;
+                      return new SearchResultsViewModel { results = results, totalresults = peeks.Count() };
 
                  });
 
@@ -1369,7 +1382,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// return all  new  Peeks as an object
         /// </summary>
-        public async Task<List<MemberSearchViewModel>> getwhopeekedatmenew(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwhopeekedatmenew(ProfileModel model)
         {
 
           
@@ -1414,8 +1427,8 @@ namespace Anewluv.Services.MemberActions
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     
-                     return results;
+
+                    return new SearchResultsViewModel { results = results, totalresults = WhoPeekedAtMe.Count() };
 
                  });
 
@@ -1451,7 +1464,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets list of all the profiles I Peeked at in
         /// </summary 
-        public async Task<List<MemberSearchViewModel>> getwhoipeekedat(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwhoipeekedat(ProfileModel model)
         {
 
         
@@ -1517,7 +1530,7 @@ namespace Anewluv.Services.MemberActions
 
 
                        db.DisableProxyCreation = true;
-                     return results;
+                      return new SearchResultsViewModel { results = results, totalresults = peeknew.Count() };
                 
 
                  });
@@ -1559,7 +1572,7 @@ namespace Anewluv.Services.MemberActions
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public async Task<List<MemberSearchViewModel>> getmutualpeeks(ProfileModel model)
+        public async Task<SearchResultsViewModel> getmutualpeeks(ProfileModel model)
         {
 
                    _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
@@ -1570,8 +1583,17 @@ namespace Anewluv.Services.MemberActions
                  var task = Task.Factory.StartNew(() =>
                  {
 
-                     IEnumerable<MemberSearchViewModel> mutualinterests = default(IEnumerable<MemberSearchViewModel>);
-                     return mutualinterests.ToList();
+                     IEnumerable<MemberSearchViewModel> source = default(IEnumerable<MemberSearchViewModel>);
+                     if (model.page == null || model.page == 0) model.page = 1;
+                     if (model.numberperpage == null || model.numberperpage == 0) model.numberperpage = 4;
+
+                     bool allowpaging = (source.Count() >= (model.page * model.numberperpage) ? true : false);
+                     var pageData = model.page > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(source.ToList(), model.page ?? 1, model.numberperpage ?? 20) : source.Take(model.numberperpage.GetValueOrDefault());
+
+                     //TO do pagge this
+                     return new SearchResultsViewModel { results = source.ToList(), totalresults = source.Count() };
+                     // return mutualblocks.ToList();
 
 
                  });
@@ -2204,7 +2226,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// return all    block as an object
         /// </summary>
-        public async Task<List<MemberSearchViewModel>> getwhoiblocked(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwhoiblocked(ProfileModel model)
         {
 
 
@@ -2250,7 +2272,7 @@ namespace Anewluv.Services.MemberActions
                         
                          results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
                   
-                     return results;
+                      return new SearchResultsViewModel { results = results, totalresults = blocknew.Count() };
                  });
 
                 return await task.ConfigureAwait(false);
@@ -2283,7 +2305,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who areblocked in me
         /// </summary 
-        public async Task<List<MemberSearchViewModel>> getwhoblockedme(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwhoblockedme(ProfileModel model)
         {
 
           
@@ -2323,8 +2345,8 @@ namespace Anewluv.Services.MemberActions
                      List<MemberSearchViewModel> results;
                     
                          results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     
-                     return results;
+
+                         return new SearchResultsViewModel { results = results, totalresults = whoblockedme.Count() };
                  });
 
                 return await task.ConfigureAwait(false);
@@ -2361,7 +2383,7 @@ namespace Anewluv.Services.MemberActions
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public async Task<List<MemberSearchViewModel>> getmutualblocks(ProfileModel model)
+        public async Task<SearchResultsViewModel> getmutualblocks(ProfileModel model)
         {
 
             //update method code
@@ -2377,8 +2399,18 @@ namespace Anewluv.Services.MemberActions
                         {
 
 
-                            IEnumerable<MemberSearchViewModel> mutualblocks = default(IEnumerable<MemberSearchViewModel>);
-                            return mutualblocks.ToList();
+                            IEnumerable<MemberSearchViewModel> source = default(IEnumerable<MemberSearchViewModel>);
+
+                            if (model.page == null || model.page == 0) model.page = 1;
+                            if (model.numberperpage == null || model.numberperpage == 0) model.numberperpage = 4;
+
+                            bool allowpaging = (source.Count() >= (model.page * model.numberperpage) ? true : false);
+                            var pageData = model.page > 1 & allowpaging ?
+                                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(source.ToList(), model.page ?? 1, model.numberperpage ?? 20) : source.Take(model.numberperpage.GetValueOrDefault());
+
+                            //TO do pagge this
+                            return new SearchResultsViewModel { results = source.ToList(), totalresults = source.Count() };
+                           // return mutualblocks.ToList();
 
                         });
 
@@ -2988,7 +3020,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// return all  new  likes as an object
         /// </summary>
-        public async Task<List<MemberSearchViewModel>> getwholikesmenew(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwholikesmenew(ProfileModel model)
         {
          
 
@@ -3040,8 +3072,8 @@ namespace Anewluv.Services.MemberActions
                      List<MemberSearchViewModel> results;
                      
                          results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     
-                     return results;
+
+                         return new SearchResultsViewModel { results = results, totalresults = likenew.Count() };
 
                  });
 
@@ -3077,7 +3109,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who Like Me
         /// </summary 
-        public async Task<List<MemberSearchViewModel>> getwholikesme(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwholikesme(ProfileModel model)
         {
 
            
@@ -3126,8 +3158,8 @@ namespace Anewluv.Services.MemberActions
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
                          results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                     
-                     return results;
+
+                         return new SearchResultsViewModel { results = results, totalresults = wholikesme.Count() };
                  });
 
                 return await task.ConfigureAwait(false);
@@ -3163,7 +3195,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who Like Me
         /// </summary 
-        public async Task<List<MemberSearchViewModel>> getwhoilike(ProfileModel model)
+        public async Task<SearchResultsViewModel> getwhoilike(ProfileModel model)
         {
 
             
@@ -3212,8 +3244,8 @@ namespace Anewluv.Services.MemberActions
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
                      results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
-                    
-                     return results;
+
+                     return new SearchResultsViewModel { results = results, totalresults = whoilike.Count() };
 
                  });
 
@@ -3255,7 +3287,7 @@ namespace Anewluv.Services.MemberActions
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public  async Task< List<MemberSearchViewModel>> getmutuallikes(ProfileModel model)
+        public async Task<SearchResultsViewModel> getmutuallikes(ProfileModel model)
         {
                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
           var db = _unitOfWork;
@@ -3265,8 +3297,18 @@ namespace Anewluv.Services.MemberActions
                  var task = Task.Factory.StartNew(() =>
                  {
 
-                     IEnumerable<MemberSearchViewModel> mutuallikes = default(IEnumerable<MemberSearchViewModel>);
-                     return mutuallikes.ToList();
+                     IEnumerable<MemberSearchViewModel> source = default(IEnumerable<MemberSearchViewModel>);
+                     
+                     if (model.page == null || model.page == 0) model.page = 1;
+                     if (model.numberperpage == null || model.numberperpage == 0) model.numberperpage = 4;
+
+                     bool allowpaging = (source.Count() >= (model.page * model.numberperpage) ? true : false);
+                     var pageData = model.page > 1 & allowpaging ?
+                         new PaginatedList<MemberSearchViewModel>().GetCurrentPages(source.ToList(), model.page ?? 1, model.numberperpage ?? 20) : source.Take(model.numberperpage.GetValueOrDefault());
+
+                     //TO do pagge this
+                     return new SearchResultsViewModel { results = source.ToList(), totalresults = source.Count() };
+                     // return mutualblocks.ToList();
 
                  });
 

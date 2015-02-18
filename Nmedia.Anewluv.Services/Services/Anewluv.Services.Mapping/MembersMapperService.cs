@@ -1665,17 +1665,17 @@ namespace Anewluv.Services.Mapping
             }
         }
 
-        internal SearchResultsViewModel GenerateSearchSearchResults(IEnumerable<MemberSearchViewModel> source, int? page, int? pagesize,IUnitOfWork db)
+        internal SearchResultsViewModel GenerateSearchSearchResults(IEnumerable<MemberSearchViewModel> source, int? page, int? numberperpage, IUnitOfWork db)
         {
 
             // int? totalrecordcount = MemberSearchViewmodels.Count;
             //handle zero and null paging values
             if (page == null || page == 0) page = 1;
-            if (pagesize == null || pagesize == 0) pagesize = 4;
+            if (numberperpage == null || numberperpage == 0) numberperpage = 4;
 
-            bool allowpaging = (source.Count() >= (page * pagesize) ? true : false);
+            bool allowpaging = (source.Count() >= (page * numberperpage) ? true : false);
             var pageData = page > 1 & allowpaging ?
-                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(source.ToList(), page ?? 1, pagesize ?? 20) : source.Take(pagesize.GetValueOrDefault());
+                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
 
 
             //do any conversions and calcs here
