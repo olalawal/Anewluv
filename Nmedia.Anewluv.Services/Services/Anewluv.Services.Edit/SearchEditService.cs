@@ -659,8 +659,9 @@ namespace Anewluv.Services.Edit
                     //get all the showmes so we can deterimine which are checked and which are not
                     var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(db);
                     var genderlist = CachingFactory.SharedObjectHelper.getgenderlist(db);
-                    var sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(db);
-
+                      var sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(db);
+                var agelist = CachingFactory.SharedObjectHelper.getagelist();
+                       
                     model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
                     model.mygenderid =  p.profilemetadata != null? p.profilemetadata.profiledatas.First().gender_id.GetValueOrDefault():1;
                     model.agemax = p.agemax == null ? 99 : p.agemax.GetValueOrDefault();
@@ -675,7 +676,7 @@ namespace Anewluv.Services.Edit
                     model.showmelist =  showmelist.ToList().Select(o => new listitem { id = o.id, description= o.description }).ToList();                  
                     model.genderlist = genderlist.ToList().Select(o => new lu_gender { id = o.id, description= o.description, selected = false }).ToList();
                     model.sortbylist = sortbylist.ToList().Select(o => new lu_sortbytype  {  id = o.id, description= o.description, selected = false }).ToList();
-            
+                    model.agelist = agelist;  //TO do have it use desction and IC as well instead of age object
                 
                     //update the list with the items that are selected.
                     foreach (lu_showme showme in showmelist.Where(c => p.searchsetting_showme.Any(f => f.showme_id == c.id))) {

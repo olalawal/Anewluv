@@ -49,6 +49,8 @@ namespace Anewluv.Domain.Data.ViewModels
         public List<lu_gender> genderlist { get; set; }
       [DataMember]
         public List<lu_sortbytype> sortbylist { get; set; }
+       [DataMember]
+       public List<age> agelist { get; set; }
     [DataMember]
         public List<searchsetting_location> locationlist { get; set; }
     }
