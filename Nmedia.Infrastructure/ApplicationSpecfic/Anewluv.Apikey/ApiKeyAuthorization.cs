@@ -199,10 +199,15 @@ namespace Anewluv.Apikey
                            if (ProfileModel.profileid != null)
                            {
                                validrequest = Anewluv.Api.AsyncCalls.isvalidapikeyanduserasync(new
-                               apikey { application = new lu_application { id = (int)applicationenum.anewluv }, keyvalue = apiKey, user = new user { useridentifier = ProfileModel.profileid.GetValueOrDefault() } }).Result;                                   
+                               apikey { application_id = (int)applicationenum.anewluv, keyvalue = apiKey, user = new user { useridentifier = ProfileModel.profileid.GetValueOrDefault() } }).Result;
                                //  (key, (int)applicationenum.anewluv, );
                                //log activity and geodata if it exists
                                Utilities.LogProfileActivity(ProfileModel, path, apiKey);
+                           }
+                           else
+                           {
+                               //invlaid request if we have no profile id
+                               validrequest = false; 
                            }
 
 

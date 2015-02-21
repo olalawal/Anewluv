@@ -101,7 +101,7 @@ namespace Anewluv.Apikey
                     ipaddress = Utilities.GetRequestIP(OperationContext.Current),
                     useragent = Utilities.GetUserAgent(OperationContext.Current),
                     //TO do have an index of enums that parses the acity type by url
-                    activitytype_id = (int)activitytypeEnum.NotSet,
+                    activitytype_id = (int)activitytypeEnum.login,
                     apikey = apiKey,
                 };
 

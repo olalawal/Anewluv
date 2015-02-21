@@ -133,8 +133,10 @@ namespace Nmedia.Services.Authorization
                 {             
                     using (var db = _unitOfWork)
                     {
+                       db.DisableLazyLoading = false;
+
                         var result = db.GetRepository<apikey>().FindSingle(p => p.keyvalue == model.keyvalue && p.application_id == model.application_id & p.active == true);
-                        if (result != null &&  result.user !=null && model.user.useridentifier == model.user.useridentifier )
+                        if (result != null &&  result.user !=null && result.user.useridentifier == model.user.useridentifier )
                         {
                             return true;
                         }                        

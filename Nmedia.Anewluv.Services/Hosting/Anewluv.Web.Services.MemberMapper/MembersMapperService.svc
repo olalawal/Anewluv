@@ -1,0 +1,3 @@
+﻿<%@ ServiceHost Factory="Anewluv.Web.Services.MemberMapper.ServiceHostFactories.NinjectServiceHostFactory"  Service="Anewluv.Services.Mapping.MembersMapperService"  %>
+
+

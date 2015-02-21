@@ -9,17 +9,16 @@ using Ninject;
 using NinjectModules = Anewluv.Services.DependencyResolution.Ninject.Modules;
 
 
-namespace Anewluv.Web.Services.Members.ServiceHostFactories
+namespace Anewluv.Web.Services.MemberMapper.ServiceHostFactories
 {
-    public class NinjectServiceHostFactory2 : InjectedServiceHostFactory<IKernel>
+    public class NinjectServiceHostFactory : InjectedServiceHostFactory<IKernel>
     {
         protected override IKernel CreateContainer()
         {
             IKernel container = new StandardKernel();
             //container.Load<NinjectModules.AnewLuvContextModule>();  //they both share the context so load it here and only once
             //container.Load<NinjectModules.PostalDataContextModule>(); //used by mapper and posibly members as well
-            //TO do create one module combinding all                     
-            container.Load<NinjectModules.MembersModule>();   
+            //TO do create one module combinding all   
             container.Load<NinjectModules.MembersMapperModule>();
             //container.Load<NinjectModules.GeoModule>();
           //  //to do just add this mapping peice to data I think not sure if we need to decouple it like this

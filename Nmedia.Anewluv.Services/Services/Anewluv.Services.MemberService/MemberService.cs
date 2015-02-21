@@ -1021,25 +1021,23 @@ namespace Anewluv.Services.Members
             //  DateTime currenttime = DateTime.Now;
 
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+                //using (var transaction = db.BeginTransaction())
                 {
 
                     try
                     {
                         //update all other sessions that were not properly logged out
                         // var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
-
-
-                      
+                                              
                             db.Add(model);
                             //save all changes bro
                             int i = db.Commit();
-                            transaction.Commit();
+                        //    transaction.Commit();
                             return model.id;
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
                         logger = new Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);

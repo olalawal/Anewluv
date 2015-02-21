@@ -1193,7 +1193,7 @@ namespace Anewluv.Services.Authentication
                 Boolean result = false;
                 try
                 {
-
+                    if (model == null | model.username == null) return false;
                     var task = Task.Factory.StartNew(() =>
                     {
 
@@ -1270,6 +1270,7 @@ namespace Anewluv.Services.Authentication
                 db.DisableProxyCreation = true;
                 try
                 {
+                    if (model == null | model.username == null) return false;
                     var task = Task.Factory.StartNew(() =>
                     {
                         //Dim ctx As New Entities()
@@ -1309,7 +1310,7 @@ namespace Anewluv.Services.Authentication
             using (var db = new AnewluvContext())
             {
                 db.DisableProxyCreation = true;
-            
+                if (model == null | model.username == null) return false;
                 try
                 {
                     var task = Task.Factory.StartNew(() =>
@@ -1355,12 +1356,16 @@ namespace Anewluv.Services.Authentication
         {
             
             Boolean result = false;
+            using (var db = new AnewluvContext())
+            {
+                db.DisableProxyCreation = false;
+                db.DisableLazyLoading = false;
                 try
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
 
-
+                        if (model == null | model.username == null) return false;
 
                         //using (AnewluvContext db = new AnewluvContext())
                         //{
@@ -1378,14 +1383,14 @@ namespace Anewluv.Services.Authentication
                         //}
                         //return result;
 
-                        _unitOfWork.DisableProxyCreation = false;
-                        _unitOfWork.DisableLazyLoading = false;
-                        var db = _unitOfWork;
-                       // using (var db = _unitOfWork)
-                    //    {
-                            // IQueryable<profile> myQuery = default(IQueryable<profile>);
-                            result = db.GetRepository<profile>().Find(z=>z.username == model.username).FirstOrDefault() != null ;    
-                    //    }
+                     //   _unitOfWork.DisableProxyCreation = false;
+                       // _unitOfWork.DisableLazyLoading = false;
+                     //   var db = _unitOfWork;
+                        // using (var db = _unitOfWork)
+                        //    {
+                        // IQueryable<profile> myQuery = default(IQueryable<profile>);
+                        result = db.GetRepository<profile>().checkifusernamealreadyexists(model);
+                        //    }
 
                         //using (var db = new AnewluvContext())
                         // {
@@ -1401,7 +1406,7 @@ namespace Anewluv.Services.Authentication
                 catch (Exception ex)
                 {
 
-                    using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
+                    using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                     {
                         logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     }
@@ -1413,7 +1418,7 @@ namespace Anewluv.Services.Authentication
 
                     //throw convertedexcption;
                 }
-
+            }
 
         }
 
@@ -1786,7 +1791,7 @@ namespace Anewluv.Services.Authentication
 
             var myQuery = new profile();
             var currenttoken = new NmediaToken();
-
+            if (profile == null | profile.username == null) return currenttoken;
             _unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
             {

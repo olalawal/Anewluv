@@ -148,7 +148,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52073</DevelopmentServerPort>
+          <DevelopmentServerPort>1944</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/Anewluv.Web.Services.Edit</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

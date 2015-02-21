@@ -26,15 +26,18 @@ namespace Nmedia.Infrastructure.Domain.Data.Apikey
             [DataMember]
             public DateTime? timestamp { get; set; }
             [DataMember]
-            public int application_id { get; set; }   
-            public virtual lu_application  application { get; set; }
+            public int application_id { get; set; }
             [DataMember]
-            public int accesslevel_id { get; set; }  
-            public virtual lu_accesslevel  accesslevel { get; set; }
+            public virtual lu_application application { get; set; }
+            [DataMember]
+            public int accesslevel_id { get; set; }
+            [DataMember]
+            public virtual lu_accesslevel accesslevel { get; set; }
             [DataMember]
             public string externalapplicationname { get; set; }
             [DataMember]
-            public int? user_id { get; set; }  
+            public int? user_id { get; set; }
+            [DataMember]
             public virtual user user { get; set; }
             [DataMember]
             public Guid keyvalue { get; set; }
