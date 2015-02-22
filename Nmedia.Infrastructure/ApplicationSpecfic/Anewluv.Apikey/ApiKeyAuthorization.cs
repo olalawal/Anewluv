@@ -198,7 +198,8 @@ namespace Anewluv.Apikey
 
                            if (ProfileModel.profileid != null)
                            {
-                               validrequest = Anewluv.Api.AsyncCalls.isvalidapikeyanduserasync(new
+                               //check if the passed apikey matches the profile ID that was passed in and is also active on the apikservice side of things.
+                               validrequest = Api.AsyncCalls.isvalidapikeyanduserasync(new
                                apikey { application_id = (int)applicationenum.anewluv, keyvalue = apiKey, user = new user { useridentifier = ProfileModel.profileid.GetValueOrDefault() } }).Result;
                                //  (key, (int)applicationenum.anewluv, );
                                //log activity and geodata if it exists
@@ -217,7 +218,7 @@ namespace Anewluv.Apikey
                        {
                            //just validate the api key
                           // var dd = Api.ApiKeyService.IsValidAPIKey(new apikey { key = apiKey }).Result;
-                           validrequest = Anewluv.Api.AsyncCalls.isvalidapikeyasync(new apikey { keyvalue = apiKey, application_id = (int)applicationenum.anewluv }).Result;//; Utilities.ValidateApiKey(key).Result;
+                           validrequest = Api.AsyncCalls.isvalidapikeyasync(new apikey { keyvalue = apiKey, application_id = (int)applicationenum.anewluv }).Result;//; Utilities.ValidateApiKey(key).Result;
                        }
                         //Api.DisposeApiKeyService();
                         //   return validrequest;                        

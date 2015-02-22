@@ -1858,7 +1858,8 @@ namespace Anewluv.Services.Authentication
                         //check if decrypted string macthed username to upper  + secret
                         if (actualpasswordstring == decryptedPassword)
                         {
-                            updateuserlogintime(myQuery.id, db);
+                            //login time updated here
+                            updateuserlogintime(myQuery.id);
                            //No need to log this since its used the APIkey inspector on checkascccesscore
                             currenttoken.id = myQuery.id;
                             currenttoken.timestamp = DateTime.Now;
@@ -1957,7 +1958,7 @@ namespace Anewluv.Services.Authentication
                     }
        }
 
-        private void updateuserlogintime(int profileid, IUnitOfWork db)
+        private void updateuserlogintime(int profileid)
         {
           //  MemberService MemberService = new MemberService(db);
             try
