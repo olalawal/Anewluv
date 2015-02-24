@@ -149,7 +149,7 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
                   db.IsAuditEnabled = false; //do not audit on adds
-                  using (var transaction = db.BeginTransaction())
+               //   using (var transaction = db.BeginTransaction())
                   {
                       try
                       {
@@ -166,7 +166,7 @@ namespace Anewluv.Services.Members
                       }
                       catch (Exception ex)
                       {
-                          transaction.Rollback();
+                         // transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
                           logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
@@ -242,7 +242,7 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
                    db.IsAuditEnabled = false; //do not audit on adds
-                   using (var transaction = db.BeginTransaction())
+                //   using (var transaction = db.BeginTransaction())
                    {
                        try
                        {
@@ -264,13 +264,13 @@ namespace Anewluv.Services.Members
                           
                            db.Update(myProfile);
                            int i = db.Commit();
-                           transaction.Commit();
+                          // transaction.Commit();
 
                            return true;
                        }
                        catch (Exception ex)
                        {
-                           transaction.Rollback();
+                          // transaction.Rollback();
                            //instantiate logger here so it does not break anything else.
                            logger = new  Logging(applicationEnum.MemberService);
                            //int profileid = Convert.ToInt32(viewerprofileid);
@@ -296,7 +296,7 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
                   db.IsAuditEnabled = false; //do not audit on adds
-                  using (var transaction = db.BeginTransaction())
+               //   using (var transaction = db.BeginTransaction())
                   {
 
                       try
@@ -334,7 +334,7 @@ namespace Anewluv.Services.Members
                                   }
                                   db.Add(p);
                                   int z = db.Commit();
-                                  transaction.Commit();
+                                 // transaction.Commit();
 
                                //   return true;
                               }
@@ -345,7 +345,7 @@ namespace Anewluv.Services.Members
                       }
                       catch (Exception ex)
                       {
-                          transaction.Rollback();
+                         // transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
                           logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
@@ -371,7 +371,7 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
                   db.IsAuditEnabled = false; //do not audit on adds
-                  using (var transaction = db.BeginTransaction())
+               //   using (var transaction = db.BeginTransaction())
                   {
 
                       try
@@ -387,7 +387,7 @@ namespace Anewluv.Services.Members
                                   //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                                   db.Update(myProfile);
                                   int i = db.Commit();
-                                  transaction.Commit();
+                                 // transaction.Commit();
 
                                   return true;
                               });
@@ -397,7 +397,7 @@ namespace Anewluv.Services.Members
                           }
                           catch (Exception ex)
                           {
-                              transaction.Rollback();
+                             // transaction.Rollback();
                               //instantiate logger here so it does not break anything else.
                               logger = new Logging(applicationEnum.MemberService);
                               //int profileid = Convert.ToInt32(viewerprofileid);
@@ -424,7 +424,7 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
                   db.IsAuditEnabled = false; //do not audit on adds
-                  using (var transaction = db.BeginTransaction())
+               //   using (var transaction = db.BeginTransaction())
                   {
                       try
                       {
@@ -435,13 +435,13 @@ namespace Anewluv.Services.Members
                           //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                           db.Update(myProfile);
                           int i = db.Commit();
-                          transaction.Commit();
+                         // transaction.Commit();
 
                           return true;
                       }
                       catch (Exception ex)
                       {
-                          transaction.Rollback();
+                         // transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
                           logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
@@ -466,7 +466,7 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
                   db.IsAuditEnabled = false; //do not audit on adds
-                  using (var transaction = db.BeginTransaction())
+               //   using (var transaction = db.BeginTransaction())
                   {
                       try
                       {
@@ -481,13 +481,13 @@ namespace Anewluv.Services.Members
                           //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                           db.Update(myProfile);
                           int i = db.Commit();
-                          transaction.Commit();
+                         // transaction.Commit();
 
                           return true;
                       }
                       catch (Exception ex)
                       {
-                          transaction.Rollback();
+                         // transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
                           logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
@@ -511,7 +511,7 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
                   db.IsAuditEnabled = false; //do not audit on adds
-                  using (var transaction = db.BeginTransaction())
+               //   using (var transaction = db.BeginTransaction())
                   {
                       try
                       {
@@ -526,13 +526,13 @@ namespace Anewluv.Services.Members
                           };
                            db.Add(profileOpenIDStore);
                            int i = db.Commit();
-                           transaction.Commit();
+                          // transaction.Commit();
 
                            return true;
                       }
                       catch (Exception ex)
                       {
-                          transaction.Rollback();
+                         // transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
                           logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
@@ -698,7 +698,7 @@ namespace Anewluv.Services.Members
             {
                
                   db.IsAuditEnabled = false; //do not audit on adds
-                  using (var transaction = db.BeginTransaction())
+               //   using (var transaction = db.BeginTransaction())
                   {
                     
                       try
@@ -733,7 +733,7 @@ namespace Anewluv.Services.Members
                               db.Add(myLogtime);
                               //save all changes bro                         
                               int i = db.Commit();
-                              transaction.Commit();
+                             // transaction.Commit();
 
                              // return true;
                           });
@@ -743,7 +743,7 @@ namespace Anewluv.Services.Members
                       }
                       catch (Exception ex)
                       {
-                          transaction.Rollback();
+                         // transaction.Rollback();
                           //instantiate logger here so it does not break anything else.
                           logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
@@ -773,7 +773,7 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
                  db.IsAuditEnabled = false; //do not audit on adds
-                  using (var transaction = db.BeginTransaction())
+               //   using (var transaction = db.BeginTransaction())
                   {
                 try
                 {
@@ -792,7 +792,7 @@ namespace Anewluv.Services.Members
                         }
 
                         int i = db.Commit();
-                        transaction.Commit();
+                       // transaction.Commit();
 
                    //     return true;
                     });
@@ -802,7 +802,7 @@ namespace Anewluv.Services.Members
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
+                   // transaction.Rollback();
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
@@ -830,7 +830,7 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -864,7 +864,7 @@ namespace Anewluv.Services.Members
                         db.Add(myLogtime);
                         //save all changes bro                         
                         int i = db.Commit();
-                        transaction.Commit();
+                       // transaction.Commit();
 
                         // return true;
 
@@ -875,7 +875,7 @@ namespace Anewluv.Services.Members
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
                         logger = new  Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);
@@ -908,7 +908,7 @@ namespace Anewluv.Services.Members
             {
 
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
 
                     try
@@ -922,7 +922,9 @@ namespace Anewluv.Services.Members
                              var id = addprofileactvity(model.activitybase,db); 
                              //get the ID and save geodata if there is data for it
                              model.activitygeodata.activity_id =id;
-                             if (id!=0 && ( model.activitygeodata.countryname != null | model.activitygeodata.lattitude != null)) addprofileactvitygeodata(model.activitygeodata,db);
+                             
+                             if (id!=0 && ( model.activitygeodata.countryname != null | ( model.activitygeodata.lattitude != 0 & model.activitygeodata.longitude !=0)) )
+                             addprofileactvitygeodata(model.activitygeodata,db);
                    
                            });
                     await task.ConfigureAwait(false);
@@ -932,7 +934,7 @@ namespace Anewluv.Services.Members
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
                         logger = new  Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);
@@ -968,8 +970,8 @@ namespace Anewluv.Services.Members
             {
 
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
-                {
+            // //   using (var transaction = db.BeginTransaction())
+              //  {
 
                     try
                     {
@@ -991,7 +993,7 @@ namespace Anewluv.Services.Members
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                     //  // transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
                         logger = new Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);
@@ -1005,7 +1007,7 @@ namespace Anewluv.Services.Members
                         //throw convertedexcption;
                     }
                 }
-            }
+          // }
 
         }
 
@@ -1032,12 +1034,12 @@ namespace Anewluv.Services.Members
                             db.Add(model);
                             //save all changes bro
                             int i = db.Commit();
-                        //    transaction.Commit();
+                        //   // transaction.Commit();
                             return model.id;
                     }
                     catch (Exception ex)
                     {
-                       // transaction.Rollback();
+                       //// transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
                         logger = new Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);
@@ -1059,7 +1061,7 @@ namespace Anewluv.Services.Members
         {
 
             db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
 
                     try
@@ -1072,7 +1074,7 @@ namespace Anewluv.Services.Members
                             db.Add(model);
                             //save all changes bro
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                            return model.id;
 
@@ -1080,7 +1082,7 @@ namespace Anewluv.Services.Members
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
                         logger = new Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);

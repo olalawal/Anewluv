@@ -375,8 +375,8 @@ namespace Nmedia.Services.Authorization
         private int  AddAPIKeyUser(string username, int useridentifier,string registringapplication, IUnitOfWork db)
         {
             
-                using (var transaction = db.BeginTransaction())
-                {
+             ////   using (var transaction = db.BeginTransaction())
+             //   {
 
                     try
                     {
@@ -391,7 +391,7 @@ namespace Nmedia.Services.Authorization
                             db.Add(user);
                             //save all changes bro
                             int i = db.Commit();
-                            transaction.Commit();
+                          // // transaction.Commit();
 
                             return user.id;
 
@@ -399,7 +399,7 @@ namespace Nmedia.Services.Authorization
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                      // // transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
                         logger = new Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);
@@ -413,7 +413,7 @@ namespace Nmedia.Services.Authorization
                         //throw convertedexcption;
                     }
                 
-            }
+         //   }
 
         }
         

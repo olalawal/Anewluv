@@ -667,7 +667,7 @@ namespace Anewluv.Services.Authentication
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -763,7 +763,7 @@ namespace Anewluv.Services.Authentication
 
 
                         int i = db.Commit();
-                        transaction.Commit();
+                       // transaction.Commit();
 
 
                         //populate the object to send back so we do not have to requery from athe service side
@@ -776,7 +776,7 @@ namespace Anewluv.Services.Authentication
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
 
                         using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                         {
@@ -842,7 +842,7 @@ namespace Anewluv.Services.Authentication
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -907,7 +907,7 @@ namespace Anewluv.Services.Authentication
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1009,12 +1009,12 @@ namespace Anewluv.Services.Authentication
                         db.Update(objprofileDateEntity);
                         //save all changes bro                         
                         int i = db.Commit();
-                        transaction.Commit();
+                       // transaction.Commit();
 
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                         {
 
@@ -1307,7 +1307,8 @@ namespace Anewluv.Services.Authentication
         //check if profile is activated 
         public async Task<bool> checkifprofileisactivated(ProfileModel model)
         {
-            using (var db = new AnewluvContext())
+            //BAEntities Context
+            using (AnewluvContext db = new AnewluvContext())
             {
                 db.DisableProxyCreation = true;
                 if (model == null | model.username == null) return false;
@@ -1490,7 +1491,7 @@ namespace Anewluv.Services.Authentication
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             ////   using (var transaction = db.BeginTransaction())
                 {
 
                     try
@@ -1642,7 +1643,7 @@ namespace Anewluv.Services.Authentication
                         }
                         catch (Exception ex)
                         {
-                            transaction.Rollback();
+                          // // transaction.Rollback();
                             using (var logger = new Logging(applicationEnum.UserAuthorizationService))
                             {
                                 logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
@@ -1665,7 +1666,7 @@ namespace Anewluv.Services.Authentication
                    
 
 
-                }
+             }
             }
 
 
@@ -1684,7 +1685,7 @@ namespace Anewluv.Services.Authentication
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1760,7 +1761,7 @@ namespace Anewluv.Services.Authentication
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         //instantiate logger here so it does not break anything else.
                         using (var logger = new  Logging(applicationEnum.UserAuthorizationService))
                         {

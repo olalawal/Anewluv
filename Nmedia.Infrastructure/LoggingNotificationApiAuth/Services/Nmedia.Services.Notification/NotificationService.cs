@@ -88,7 +88,7 @@ namespace Nmedia.Services.Notification
                         }
                         catch (Exception ex)
                         {
-                            // transaction.Rollback();
+                            //// transaction.Rollback();
                             //can parse the error to build a more custom error mssage and populate fualt faultreason
                             FaultReason faultreason = new FaultReason("Generic Error");
                             string ErrorMessage = "";
@@ -124,7 +124,7 @@ namespace Nmedia.Services.Notification
                     }
                     catch (Exception ex)
                     {
-                        // transaction.Rollback();
+                        //// transaction.Rollback();
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Generic Error");
                         string ErrorMessage = "";
@@ -160,7 +160,7 @@ namespace Nmedia.Services.Notification
                     }
                     catch (Exception ex)
                     {
-                        // transaction.Rollback();
+                        //// transaction.Rollback();
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Generic Error");
                         string ErrorMessage = "";
@@ -200,7 +200,7 @@ namespace Nmedia.Services.Notification
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 //db.DisableProxyCreation = true;
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -252,7 +252,7 @@ namespace Nmedia.Services.Notification
                         message.sendattempts = message.body != null ? 1 : 0;
                         db.Add(message);
                         int j = db.Commit();
-                        transaction.Commit();
+                       // transaction.Commit();
                         });
                        // return task ;
 
@@ -260,7 +260,7 @@ namespace Nmedia.Services.Notification
                     }
                     catch (Exception ex)
                     {
-                        // transaction.Rollback();
+                        //// transaction.Rollback();
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Generic Error");
                         string ErrorMessage = "";
@@ -290,7 +290,7 @@ namespace Nmedia.Services.Notification
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 //db.DisableProxyCreation = true;
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -352,7 +352,7 @@ namespace Nmedia.Services.Notification
                             message.sendattempts = message.body != null ? 1 : 0;
                             db.Add(message);
                             int j = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                           
 
@@ -364,7 +364,7 @@ namespace Nmedia.Services.Notification
                     }
                     catch (Exception ex)
                     {
-                        // transaction.Rollback();
+                        //// transaction.Rollback();
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Generic Error");
                         string ErrorMessage = "";
@@ -395,7 +395,7 @@ namespace Nmedia.Services.Notification
         //    {
         //        db.IsAuditEnabled = false; //do not audit on adds
         //        //db.DisableProxyCreation = true;
-        //        using (var transaction = db.BeginTransaction())
+        //     //   using (var transaction = db.BeginTransaction())
         //        {
 
         //            try
@@ -471,13 +471,13 @@ namespace Nmedia.Services.Notification
         //                message.sendattempts = message.body != null ? 1 : 0;
         //                db.Add(message);
         //                int j = db.Commit();
-        //                transaction.Commit();
+        //               // transaction.Commit();
         //                });
         //                // return new CompletedAsyncResult<EmailModel>(model);
         //            }
         //            catch (Exception ex)
         //            {
-        //                // transaction.Rollback();
+        //                //// transaction.Rollback();
         //                //can parse the error to build a more custom error mssage and populate fualt faultreason
         //                FaultReason faultreason = new FaultReason("Generic Error");
         //                //string ErrorMessage = "";
@@ -1335,7 +1335,7 @@ namespace Nmedia.Services.Notification
                 string ErrorMessage = ex.Message;
                 isEmailSendSuccessfully = false;
 
-                // transaction.Rollback();
+                //// transaction.Rollback();
                 //can parse the error to build a more custom error mssage and populate fualt faultreason
                 FaultReason faultreason = new FaultReason("Generic Error");
                 //string ErrorMessage = "";

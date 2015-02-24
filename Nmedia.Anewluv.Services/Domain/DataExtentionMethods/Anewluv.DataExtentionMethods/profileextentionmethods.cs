@@ -286,7 +286,7 @@ namespace Anewluv.DataExtentionMethods
             db.DisableProxyCreation = true;
          
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -301,7 +301,7 @@ namespace Anewluv.DataExtentionMethods
                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
                         db.Add(Newsearchsettings);
                         int i = db.Commit();
-                        transaction.Commit();
+                       // transaction.Commit();
 
                         return Newsearchsettings;
 
@@ -312,7 +312,7 @@ namespace Anewluv.DataExtentionMethods
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        throw;
                         //throw convertedexcption;
                     }

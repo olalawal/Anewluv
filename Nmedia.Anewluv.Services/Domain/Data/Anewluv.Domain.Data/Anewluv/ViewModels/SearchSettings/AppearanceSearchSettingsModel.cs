@@ -20,6 +20,8 @@ namespace Anewluv.Domain.Data.ViewModels
         public int? heightmax { get; set; }
         [DataMember]
         public int? heightmin { get; set; }
+        [DataMember]     
+        public List<metricheight> metricheightlist { get; set; } // = new List<string>();
        [DataMember]
        public List<lu_ethnicity> ethnicitylist { get; set; } // = new List<string>();
        [DataMember]

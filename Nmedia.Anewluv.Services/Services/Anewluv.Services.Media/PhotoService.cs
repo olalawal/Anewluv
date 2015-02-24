@@ -674,7 +674,7 @@ namespace Anewluv.Services.Media
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
 
                 
@@ -696,7 +696,7 @@ namespace Anewluv.Services.Media
                                 // Update database
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
                                 int i = db.Commit();
-                                transaction.Commit();
+                               // transaction.Commit();
                                 AnewluvMessages.messages.Add("photo deleted successfully");
                                 return AnewluvMessages;
                             });
@@ -708,7 +708,7 @@ namespace Anewluv.Services.Media
                         {
                             //TO DO track the transaction types only rollback on DB connections
                             //rollback transaction
-                            transaction.Rollback();
+                           // transaction.Rollback();
                             //instantiate logger here so it does not break anything else.
                             logger = new Logging(applicationEnum.MediaService);
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
@@ -734,7 +734,7 @@ namespace Anewluv.Services.Media
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                       try
                         {
@@ -765,7 +765,7 @@ namespace Anewluv.Services.Media
                                 // Update database
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
                                 int i = db.Commit();
-                                transaction.Commit();
+                               // transaction.Commit();
                                 AnewluvMessages.messages.Add("photo privacy added");
                                 return AnewluvMessages;
                            });
@@ -777,7 +777,7 @@ namespace Anewluv.Services.Media
                         {
                             //TO DO track the transaction types only rollback on DB connections
                             //rollback transaction
-                            transaction.Rollback();
+                           // transaction.Rollback();
                             //instantiate logger here so it does not break anything else.
                             logger = new Logging(applicationEnum.MediaService);
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
@@ -799,7 +799,7 @@ namespace Anewluv.Services.Media
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                  
                         try
@@ -819,7 +819,7 @@ namespace Anewluv.Services.Media
                                 // Update database
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
                                 int i = db.Commit();
-                                transaction.Commit();
+                               // transaction.Commit();
                                AnewluvMessages.messages.Add("photo privacy removed");
                                return AnewluvMessages;
 
@@ -832,7 +832,7 @@ namespace Anewluv.Services.Media
                         {
                             //TO DO track the transaction types only rollback on DB connections
                             //rollback transaction
-                            transaction.Rollback();
+                           // transaction.Rollback();
                             //instantiate logger here so it does not break anything else.
                             logger = new Logging(applicationEnum.MediaService);
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
@@ -876,7 +876,7 @@ namespace Anewluv.Services.Media
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 db.DisableProxyCreation = false;
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
 
                     try
@@ -941,7 +941,7 @@ namespace Anewluv.Services.Media
 
                                 if (photosaddedcount > 0)
                                 {
-                                    transaction.Commit();
+                                   // transaction.Commit();
                                 }
 
                                 return AnewluvMessage;
@@ -986,7 +986,7 @@ namespace Anewluv.Services.Media
             using (var db = new AnewluvContext())
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
@@ -1042,7 +1042,7 @@ namespace Anewluv.Services.Media
                                         db.Add(convertedphoto);
                                     }
                                     int i = db.Commit();
-                                    transaction.Commit();
+                                   // transaction.Commit();
                                 }
 
                                 message.messages.Add("photo added succesfully ");
@@ -1058,7 +1058,7 @@ namespace Anewluv.Services.Media
                         {
                             //TO DO track the transaction types only rollback on DB connections
                             //rollback transaction
-                            transaction.Rollback();
+                           // transaction.Rollback();
                             //instantiate logger here so it does not break anything else.
                             logger = new  Logging(applicationEnum.MediaService);
                             logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex);

@@ -645,7 +645,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -687,7 +687,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                           //  return true;
 
@@ -701,7 +701,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -733,7 +733,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -752,7 +752,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(interest);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                         });
 
@@ -764,7 +764,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -793,7 +793,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -811,7 +811,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(interest);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                             return true;
 
@@ -825,7 +825,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -854,7 +854,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -872,7 +872,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(interest);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                            // return true;
 
@@ -885,7 +885,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -914,7 +914,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -934,7 +934,7 @@ namespace Anewluv.Services.MemberActions
 
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                             return true;
 
@@ -946,7 +946,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -974,7 +974,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1000,7 +1000,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
 
                         });
@@ -1013,7 +1013,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1040,7 +1040,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1064,7 +1064,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                           //  return true;
 
@@ -1077,7 +1077,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1104,7 +1104,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1122,7 +1122,7 @@ namespace Anewluv.Services.MemberActions
                                 db.Update(interest);
 
                                 int i = db.Commit();
-                                transaction.Commit();
+                               // transaction.Commit();
                             }
                        //     return true;
 
@@ -1135,7 +1135,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1678,7 +1678,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1715,7 +1715,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                             return true;
 
@@ -1728,7 +1728,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1757,7 +1757,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1775,7 +1775,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(peek);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                             return true;
 
@@ -1787,7 +1787,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1816,7 +1816,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1833,7 +1833,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(peek);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                             return true;
 
@@ -1848,7 +1848,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1875,7 +1875,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1894,7 +1894,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(peek);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                             return true;
 
@@ -1907,7 +1907,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1936,7 +1936,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -1956,7 +1956,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(peek);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                             return true;
 
@@ -1970,7 +1970,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -1998,7 +1998,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2020,7 +2020,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                             return true;
 
@@ -2033,7 +2033,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2059,7 +2059,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2082,7 +2082,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                             return true;
 
@@ -2094,7 +2094,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2119,7 +2119,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2138,7 +2138,7 @@ namespace Anewluv.Services.MemberActions
                                 db.Update(peek);
 
                                 int i = db.Commit();
-                                transaction.Commit();
+                               // transaction.Commit();
                             }
                             return true;
 
@@ -2150,7 +2150,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2390,7 +2390,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2421,7 +2421,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2446,7 +2446,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2469,7 +2469,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2500,7 +2500,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2540,7 +2540,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                           //  return true;
 
@@ -2552,7 +2552,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2580,7 +2580,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2597,7 +2597,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(block);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                          //   return true;
 
@@ -2612,7 +2612,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2640,7 +2640,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2659,7 +2659,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(block);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                          //   return true;
 
@@ -2673,7 +2673,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2700,7 +2700,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2724,7 +2724,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                           //  return true;
 
@@ -2738,7 +2738,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2766,7 +2766,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2789,7 +2789,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                            // return true;
 
@@ -2802,7 +2802,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -2832,7 +2832,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -2848,7 +2848,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(block);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                            // return true;
 
@@ -2864,7 +2864,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -3392,7 +3392,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -3432,7 +3432,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                           //  return true;
 
@@ -3446,7 +3446,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -3477,7 +3477,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -3496,7 +3496,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(like);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                           //  return true;
 
@@ -3509,7 +3509,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -3538,7 +3538,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -3556,7 +3556,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(like);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                            // return true;
 
@@ -3570,7 +3570,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -3599,7 +3599,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -3618,7 +3618,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(like);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                            // return true;
 
@@ -3631,7 +3631,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -3660,7 +3660,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -3681,7 +3681,7 @@ namespace Anewluv.Services.MemberActions
                             db.Update(like);
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                            // return true;
 
@@ -3694,7 +3694,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -3724,7 +3724,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -3747,7 +3747,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                           //  return true;
 
@@ -3759,7 +3759,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -3788,7 +3788,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -3810,7 +3810,7 @@ namespace Anewluv.Services.MemberActions
                             }
 
                             int i = db.Commit();
-                            transaction.Commit();
+                           // transaction.Commit();
 
                            // return true;
 
@@ -3823,7 +3823,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                        new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
@@ -3851,7 +3851,7 @@ namespace Anewluv.Services.MemberActions
              var db = _unitOfWork;
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -3870,7 +3870,7 @@ namespace Anewluv.Services.MemberActions
                                 db.Update(like);
 
                                 int i = db.Commit();
-                                transaction.Commit();
+                               // transaction.Commit();
                             }
 
                         });
@@ -3882,7 +3882,7 @@ namespace Anewluv.Services.MemberActions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         new  Logging(applicationEnum.MemberActionsService);
                         logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason

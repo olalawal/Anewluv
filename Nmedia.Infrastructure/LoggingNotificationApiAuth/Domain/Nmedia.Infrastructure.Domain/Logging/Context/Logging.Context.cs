@@ -181,12 +181,12 @@ namespace Nmedia.Infrastructure.Domain
         ////            //IRepository<review> repository = Context.GetRepository<T>();
         ////            this.Add(entity);
         ////            int i = Context.Commit();
-        ////            transaction.Commit();
+        ////           // transaction.Commit();
         ////            return (i > 0);
         ////        }
         ////        catch (Exception)
         ////        {
-        ////            transaction.Rollback();
+        ////           // transaction.Rollback();
         ////            throw;
         ////        }
 
@@ -212,12 +212,12 @@ namespace Nmedia.Infrastructure.Domain
         //            //IRepository<review> repository = Context.GetRepository<T>();
         //            this.Update(entity);
         //            int i = this.Commit();
-        //            transaction.Commit();
+        //           // transaction.Commit();
         //            return (i > 0);
         //        }
         //        catch (Exception)
         //        {
-        //            transaction.Rollback();
+        //           // transaction.Rollback();
         //            throw;
         //        }
 
@@ -254,12 +254,12 @@ namespace Nmedia.Infrastructure.Domain
         //            //IRepository<review> repository = Context.GetRepository<T>();
         //            this.Remove(entity);
         //            int i = this.Commit();
-        //            transaction.Commit();
+        //           // transaction.Commit();
         //            return (i > 0);
         //        }
         //        catch (Exception)
         //        {
-        //            transaction.Rollback();
+        //           // transaction.Rollback();
         //            throw;
         //        }
 

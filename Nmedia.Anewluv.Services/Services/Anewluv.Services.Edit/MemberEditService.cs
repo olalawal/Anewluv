@@ -387,7 +387,7 @@ namespace Anewluv.Services.Edit
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -418,7 +418,7 @@ namespace Anewluv.Services.Edit
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         using (var logger = new Logging(applicationEnum.EditSearchService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
@@ -445,7 +445,7 @@ namespace Anewluv.Services.Edit
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -475,7 +475,7 @@ namespace Anewluv.Services.Edit
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         using (var logger = new  Logging(applicationEnum.EditMemberService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
@@ -498,7 +498,7 @@ namespace Anewluv.Services.Edit
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -531,7 +531,7 @@ namespace Anewluv.Services.Edit
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         using (var logger = new  Logging(applicationEnum.EditMemberService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
@@ -556,7 +556,7 @@ namespace Anewluv.Services.Edit
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -589,7 +589,7 @@ namespace Anewluv.Services.Edit
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         using (var logger = new Logging(applicationEnum.EditMemberService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));
@@ -615,7 +615,7 @@ namespace Anewluv.Services.Edit
             using (var db = _unitOfWork)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -645,7 +645,7 @@ namespace Anewluv.Services.Edit
                     }
                     catch (Exception ex)
                     {
-                        transaction.Rollback();
+                       // transaction.Rollback();
                         using (var logger = new  Logging(applicationEnum.EditMemberService))
                         {
                             logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(editprofilemodel.profileid));

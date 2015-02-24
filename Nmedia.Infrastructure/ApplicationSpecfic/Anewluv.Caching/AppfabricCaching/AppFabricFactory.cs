@@ -2138,6 +2138,7 @@ namespace Anewluv.Caching
                     heights = generatedlists.metricheights();
                     // Datings context = new modelContext();
                     // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    if (dataCache != null)                      
                     dataCache.Put("metricheightlist", heights);
 
                 } return heights;

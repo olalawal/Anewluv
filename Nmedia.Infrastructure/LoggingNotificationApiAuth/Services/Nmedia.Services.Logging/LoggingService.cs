@@ -59,7 +59,7 @@ namespace Nmedia.Services.Logging
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 db.DisableProxyCreation = true;
-                using (var transaction = db.BeginTransaction())
+             //   using (var transaction = db.BeginTransaction())
                 {
                     try
                     {
@@ -86,7 +86,7 @@ namespace Nmedia.Services.Logging
 
                         db.Add(logEntry);
                         int i = db.Commit();
-                        transaction.Commit();
+                       // transaction.Commit();
                         });
                          // await task;
 
@@ -95,7 +95,7 @@ namespace Nmedia.Services.Logging
                     }
                     catch (Exception generalexception)
                     {
-                        //  transaction.Rollback();
+                        // // transaction.Rollback();
 
                         //log to eventlog and notify
                         //TO DO notifiy
