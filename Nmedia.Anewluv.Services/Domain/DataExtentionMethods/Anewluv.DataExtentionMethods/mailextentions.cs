@@ -1,8 +1,9 @@
 ﻿using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
 using GeoData.Domain.ViewModels;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using Nmedia.Infrastructure;
+using Repository.Pattern.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Anewluv.DataExtentionMethods
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public  static int getmailcountbyfolderid(ProfileModel model, int mailboxfolderid, IUnitOfWork db)
+        public  static int getmailcountbyfolderid(ProfileModel model, int mailboxfolderid, IUnitOfWorkAsync db)
         {
 
 
@@ -41,8 +42,8 @@ namespace Anewluv.DataExtentionMethods
                 //get a model of the messages that match this mail type
 
                 //get a model of the messages that match this mail type
-                models = (from m in db.GetRepository<mailboxmessage>().Find(p=>p.profilemetadata.profile_id == model.profileid)
-                          join f in db.GetRepository<mailboxmessagefolder>().Find(u => u.mailboxfolder_id == mailboxfolderid
+                models = (from m in db.Repository<mailboxmessage>().Query(p=>p.profilemetadata.profile_id == model.profileid)
+                          join f in db.Repository<mailboxmessagefolder>().Query(u => u.mailboxfolder_id == mailboxfolderid
                               && u.mailboxfolder.profiled_id == model.profileid)
                           on m.id equals f.mailboxmessage_id
                           select new mailviewmodel
@@ -64,7 +65,7 @@ namespace Anewluv.DataExtentionMethods
 
         }
 
-        public static int getnewmailcountbyfolderid(ProfileModel model,int mailboxfolderid, IUnitOfWork db)
+        public static int getnewmailcountbyfolderid(ProfileModel model,int mailboxfolderid, IUnitOfWorkAsync db)
         {
 
 
@@ -73,8 +74,8 @@ namespace Anewluv.DataExtentionMethods
                 IEnumerable<mailviewmodel> models = null;
 
 
-                models = (from m in db.GetRepository<mailboxmessage>().Find(p => p.profilemetadata.profile_id == model.profileid )
-                          join f in db.GetRepository<mailboxmessagefolder>().Find(u => u.mailboxfolder_id == mailboxfolderid
+                models = (from m in db.Repository<mailboxmessage>().Query(p => p.profilemetadata.profile_id == model.profileid ).Select()
+                          join f in db.Repository<mailboxmessagefolder>().Query(u => u.mailboxfolder_id == mailboxfolderid
                               && u.readdate == null)
                           on m.id equals f.mailboxmessage_id
                           select new mailviewmodel

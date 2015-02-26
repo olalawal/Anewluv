@@ -1,7 +1,7 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using GeoData.Domain.Models.Mapping;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using System.Data.Entity.Core.Objects;
 
 using System;
@@ -11,17 +11,21 @@ using System.Text;
 
 using System.ComponentModel.DataAnnotations;
 
-using Nmedia.DataAccess;
+//using Nmedia.DataAccess;
 using System.Data.Common;
 using System.Data;
 using System.Data.Entity.Validation;
+using Repository.Pattern.Ef6;
 
 namespace GeoData.Domain.Models
 {
-    public partial class PostalData2Context : ContextBase
+    public partial class PostalData2Context : DataContext
     {
 
-        private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
+      
+
+     
+
 
 
 
@@ -33,17 +37,17 @@ namespace GeoData.Domain.Models
         public PostalData2Context()
             : base("Name=PostalData2Context")
         {
-            this.Configuration.ProxyCreationEnabled = true;
-            this.Configuration.AutoDetectChangesEnabled = true;
-            this.DisableLazyLoading = true;
+           // this.Configuration.ProxyCreationEnabled = true;
+          //  this.Configuration.AutoDetectChangesEnabled = true;
+           // this.DisableLazyLoading = true;
             //rebuild DB if schema is differnt
             //Initializer init = new Initializer();            
             // init.InitializeDatabase(this);
-            this.Configuration.ValidateOnSaveEnabled = false;
-            IsAuditEnabled = true;
+          //  this.Configuration.ValidateOnSaveEnabled = false;
+          //  IsAuditEnabled = true;
            // ObjectContext.SavingChanges += OnSavingChanges;
-            Database.SetInitializer(
-             new DropCreateDatabaseIfModelChanges<PostalData2Context>());
+         //   Database.SetInitializer(
+         //    new DropCreateDatabaseIfModelChanges<PostalData2Context>());
         }
 
 

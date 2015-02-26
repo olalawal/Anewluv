@@ -9,7 +9,7 @@ using System.Web;
 using System.Net;
 using System.ServiceModel.Activation;
 using Anewluv.Domain.Data;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using Anewluv.Caching;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data.log;

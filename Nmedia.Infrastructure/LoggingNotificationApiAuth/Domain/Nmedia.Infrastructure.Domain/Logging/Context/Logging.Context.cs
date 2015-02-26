@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 using Nmedia.Infrastructure.Domain.Data.log;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 
 using System.Data;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -12,7 +12,7 @@ using Nmedia.Infrastructure;
 
 
 using System.ServiceModel.Activation;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using LoggingLibrary;
 //using Nmedia.Infrastructure;.Domain.log;
 using Anewluv.DataExtentionMethods;

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
+using Repository.Pattern.Repositories;
 
 
 
@@ -15,42 +16,42 @@ namespace Anewluv.DataExtentionMethods
     {
 
          //example using eager loading of profile metadata -- too slow right now 
-        // return repo.Find(p => p.id == model.profileid,p=>p.profilemetadata).FirstOrDefault();
+        // return repo.Find(p => p.id == model.profileid,p=>p.profilemetadata).Select().FirstOrDefault();
 
         public static profiledata getprofiledatabyprofileid(this IRepository<profiledata> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profiledata>().Where(p => p.profile_id == model.profileid).FirstOrDefault();
+            return repo.Query(p => p.profile_id == model.profileid).Select().Select().FirstOrDefault();
         }
 
         public static profiledata getprofiledatabyscreenname(this IRepository<profiledata> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profiledata>().Where(p => p.profile.screenname == model.screenname).FirstOrDefault();
+            return repo.Query(p => p.profile.screenname == model.screenname).Select().FirstOrDefault();
         }
 
         public static profilemetadata getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profilemetadata>().Where(p => p.profile_id == model.profileid).FirstOrDefault();
+            return repo.Query.OfType<profilemetadata>().Where(p => p.profile_id == model.profileid).Select().FirstOrDefault();
         }
 
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)
         {
           
-            return repo.Find(p => p.id == model.profileid).FirstOrDefault();
+            return repo.Find(p => p.id == model.profileid).Select().FirstOrDefault();
         }
 
         public static profile getprofilebyscreenname(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profile>().Where(p => p.screenname == model.screenname).FirstOrDefault();
+            return repo.Query.OfType<profile>().Where(p => p.screenname == model.screenname).Select().FirstOrDefault();
         }
 
         public static profile getprofilebyemailaddress(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profile>().Where(p => p.emailaddress == model.email).FirstOrDefault();
+            return repo.Query.OfType<profile>().Where(p => p.emailaddress == model.email).Select().FirstOrDefault();
         }
 
         public static profile getprofilebyusername(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Find().OfType<profile>().Where(p => p.username == model.username).FirstOrDefault();
+            return repo.Query.OfType<profile>().Where(p => p.username == model.username).Select().FirstOrDefault();
         }
 
         public static profile getprofileidbyopenid(this IRepository<profile> repo, ProfileModel model)
@@ -58,7 +59,7 @@ namespace Anewluv.DataExtentionMethods
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
             //lazy loading needed
-            var profile = repo.Find().OfType<profile>().Where(p => p.emailaddress == model.email).FirstOrDefault();
+            var profile = repo.Query.OfType<profile>().Where(p => p.emailaddress == model.email).Select().FirstOrDefault();
 
 
             //if we have an active cache we store the current value 
@@ -96,7 +97,7 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
-            return (repo.Find().OfType<profile>().Where(p => p.username == model.username & p.status_id != 1).FirstOrDefault() != null);
+            return (repo.Query.OfType<profile>().Where(p => p.username == model.username & p.status_id != 1).FirstOrDefault() != null);
 
         }
 
@@ -105,14 +106,14 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
-            return (repo.Find().OfType<profile>().Where(p => p.activationcode == model.activationcode & p.username == model.username).FirstOrDefault() != null);
+            return (repo.Query.OfType<profile>().Where(p => p.activationcode == model.activationcode & p.username == model.username).FirstOrDefault() != null);
 
         }
 
 
         public static visiblitysetting getvisibilitysettingsbyprofileid(this IRepository<visiblitysetting> repo, ProfileModel model)
         {
-            return repo.Find().OfType<visiblitysetting>().Where(p => p.profile_id == model.profileid).FirstOrDefault();
+            return repo.Query.OfType<visiblitysetting>().Where(p => p.profile_id == model.profileid).Select().FirstOrDefault();
         }
 
         //TO DO move the generic infratructure extentions
@@ -198,7 +199,7 @@ namespace Anewluv.DataExtentionMethods
         {
             try
             {
-                var profile = repo.Find().Where(p => p.id == 1).FirstOrDefault();
+                var profile = repo.Query.Where(p => p.id == 1).Select().FirstOrDefault();
                 var logtimes = profile.userlogtimes;
 
                 if (logtimes.Count > 0)
@@ -213,8 +214,8 @@ namespace Anewluv.DataExtentionMethods
                 //profile myProfile;
                 // IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
 
-                // var  myQuery = repo.Find().OfType<userlogtime>().Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime).ToList();
-                var myQuery = repo.Find().Where(p => p.id == model.profileid && !(p.userlogtimes != null && p.userlogtimes.Any(z => z.offline == false))).FirstOrDefault() != null;
+                // var  myQuery = repo.Query.OfType<userlogtime>().Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime).ToList();
+                var myQuery = repo.Query.Where(p => p.id == model.profileid && !(p.userlogtimes != null && p.userlogtimes.Any(z => z.offline == false))).FirstOrDefault() != null;
                 return myQuery;
                 //            var queryB =
                 //                (from o in db.Orders
@@ -234,7 +235,7 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
-        public static searchsetting getperfectmatchsearchsettingsbyprofileid(ProfileModel model,IUnitOfWork db)
+        public static searchsetting getperfectmatchsearchsettingsbyprofileid(ProfileModel model,IUnitOfWorkAsync db)
         {
            
                 try
@@ -242,7 +243,7 @@ namespace Anewluv.DataExtentionMethods
 
                     IQueryable<searchsetting> tmpsearchsettings = default(IQueryable<searchsetting>);
                     //Dim ctx As New Entities()
-                    tmpsearchsettings = db.GetRepository<searchsetting>().Find().Where(p => p.profile_id == model.profileid && p.myperfectmatch == true);
+                    tmpsearchsettings = db.Repository<searchsetting>().Find().Where(p => p.profile_id == model.profileid && p.myperfectmatch == true);
 
                     //End If
                     if (tmpsearchsettings.Count() > 0)
@@ -260,8 +261,8 @@ namespace Anewluv.DataExtentionMethods
                         Newsearchsettings.myperfectmatch = true;
                         Newsearchsettings.searchname = "myperfectmatch";
                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
-                        //   db.GetRepository<Country_PostalCode_List>().searchsettings.Add(Newsearchsettings);
-                        //   db.GetRepository<Country_PostalCode_List>().SaveChanges();
+                        //   db.Repository<Country_PostalCode_List>().searchsettings.Add(Newsearchsettings);
+                        //   db.Repository<Country_PostalCode_List>().SaveChanges();
                         //save the profile data with the search settings to the Initial Catalog= so we dont have to create it again
                         return Newsearchsettings;
 
@@ -280,10 +281,10 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
-        public static searchsetting createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model, IUnitOfWork db)
+        public static searchsetting createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model, IUnitOfWorkAsync db)
         {
 
-            db.DisableProxyCreation = true;
+            // db.DisableProxyCreation = true;
          
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())

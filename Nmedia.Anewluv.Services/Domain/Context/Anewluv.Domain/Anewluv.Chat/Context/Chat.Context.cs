@@ -6,21 +6,23 @@ using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
-using Nmedia.DataAccess.Interfaces;
-using Nmedia.DataAccess;
+////using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess;
 using System.Data.Common;
 using System.Data;
 using System.Data.Entity.Validation;
 using Anewluv.Domain.Data.Chat;
+//using Nmedia.DataAccess.Test;
+using Repository.Pattern.Ef6;
 
 
 namespace Anewluv.Domain.Chat
 {
-    public partial class ChatContext :ContextBase
+    public partial class ChatContext : DataContext
     {
 
 
-        private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
+     //   private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
 
 
         public ChatContext()
@@ -32,7 +34,7 @@ namespace Anewluv.Domain.Chat
             //Initializer init = new Initializer();            
             // init.InitializeDatabase(this);
            // this.Configuration.ValidateOnSaveEnabled = false;
-            IsAuditEnabled = true;
+           // IsAuditEnabled = true;
            // ObjectContext.SavingChanges += OnSavingChanges;
             Database.SetInitializer(
                 new DropCreateDatabaseIfModelChanges<ChatContext>());

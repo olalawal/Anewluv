@@ -94,23 +94,23 @@
   <ItemGroup>
     <Compile Include="Extentions\NinjectExtentions.cs" />
     <Compile Include="Infrastructure\NinjectSignalRDependencyResolver.cs" />
-    <Compile Include="IUnitoOfWorkModules\CommonModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\ChatModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\MemberEditModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\SearchEditModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\LookupModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\MemberActionsModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\RepositoryModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\ContextModules\AnewluvContextModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\ContextModules\ChatContextModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\ContextModules\PostalDataContextModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\AuthenticationModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\GeoModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\MembersMapperModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\MembersModule.cs" />
-    <Compile Include="IUnitoOfWorkModules\PhotoServiceModule.cs" />
     <Compile Include="predicates\predicates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestModules\AuthenticationModule.cs" />
+    <Compile Include="TestModules\ChatModule.cs" />
+    <Compile Include="TestModules\CommonModule.cs" />
+    <Compile Include="TestModules\ContextModules\AnewluvContextModule.cs" />
+    <Compile Include="TestModules\ContextModules\ChatContextModule.cs" />
+    <Compile Include="TestModules\ContextModules\PostalDataContextModule.cs" />
+    <Compile Include="TestModules\GeoModule.cs" />
+    <Compile Include="TestModules\LookupModule.cs" />
+    <Compile Include="TestModules\MemberActionsModule.cs" />
+    <Compile Include="TestModules\MemberEditModule.cs" />
+    <Compile Include="TestModules\MembersMapperModule.cs" />
+    <Compile Include="TestModules\MembersModule.cs" />
+    <Compile Include="TestModules\PhotoServiceModule.cs" />
+    <Compile Include="TestModules\RepositoryModule.cs" />
+    <Compile Include="TestModules\SearchEditModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -133,6 +133,10 @@
     <ProjectReference Include="..\..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
       <Project>{c4c10e84-8c87-43d3-aef3-9c0a03a2f7db}</Project>
       <Name>Nmedia.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAcess.Test\Nmedia.DataAcess.Test.csproj">
+      <Project>{0f66c95c-2bd0-428c-b081-cb5ecb68e9b0}</Project>
+      <Name>Nmedia.DataAcess.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Domain\Context\Anewluv.Domain\Anewluv.Domain.csproj">
       <Project>{A0B04284-784B-4322-A213-DB178716EFC1}</Project>

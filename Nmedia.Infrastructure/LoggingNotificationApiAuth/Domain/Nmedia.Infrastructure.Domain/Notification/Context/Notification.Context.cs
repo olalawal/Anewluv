@@ -13,7 +13,7 @@ using System.Data.Common;
 using System.Data.Entity.Core.Objects;
 
 
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using Nmedia.DataAccess;
 
 namespace Nmedia.Infrastructure.Domain

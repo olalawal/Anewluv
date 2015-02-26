@@ -8,7 +8,7 @@ using System.Text;
 
 using System.ServiceModel.Activation;
 using Nmedia.Services.Contracts;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data.Notification;
 

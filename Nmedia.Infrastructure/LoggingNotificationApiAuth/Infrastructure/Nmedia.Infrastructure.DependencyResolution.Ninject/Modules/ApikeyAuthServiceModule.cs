@@ -9,7 +9,7 @@ using Ninject.Web.Common;
 using Ninject.Activation;
 using Ninject;
 using Nmedia.Infrastructure.Domain;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using Nmedia.Services.Contracts;
 
 using System.ServiceModel;

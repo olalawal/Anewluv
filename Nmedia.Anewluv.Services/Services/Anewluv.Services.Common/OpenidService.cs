@@ -1,6 +1,6 @@
 ﻿using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Services.Contracts;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;

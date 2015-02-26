@@ -17,11 +17,11 @@ namespace Nmedia.DataAccess.Interfaces
         bool DisableProxyCreation { get; set; }
         bool DisableLazyLoading { set; }
         bool SetIsolationToDefault { set; }
-        IDbSet<T> GetEntitySet<T>() where T : class;
-        IDbSet<TEntity> Set<TEntity>() where TEntity : class;
-        void ChangeState<T>(T entity, EntityState state) where T : class;
-        DbTransaction BeginTransaction();
-        ObjectContext ObjectContext { get; }
-        int Commit();
+        //IDbSet<T> GetEntitySet<T>() where T : class;
+        //IDbSet<TEntity> Set<TEntity>() where TEntity : class;
+        //void ChangeState<T>(T entity, EntityState state) where T : class;
+        //DbTransaction BeginTransaction();
+        //ObjectContext ObjectContext { get; }
+        //int Commit();
     }
 }

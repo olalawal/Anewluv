@@ -2,6 +2,7 @@
 using Anewluv.Domain.Data.Anewluv.ViewModels;
 using Anewluv.Domain.Data.ViewModels;
 using GeoData.Domain.Models.ViewModels;
+using GeoData.Domain.ViewModels;
 using Nmedia.Infrastructure.Domain.Data.Apikey;
 using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
 using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
@@ -81,6 +82,21 @@ namespace Anewluv.Api
 
 
         }
+
+     
+
+         public static async Task<int> getcountryidbycountryname(string countryname)
+                {
+
+                    Task<int> returnedTaskTResult = Api.GeoService.getcountryidbycountryname(new GeoModel {  country = countryname} );
+                    int result = await returnedTaskTResult;
+
+                    return result;
+
+                    // IsApiKeyValid = await 
+
+
+                }
         #endregion
 
         #region "Media API asyc calls"

@@ -16,7 +16,7 @@ using System.Net;
 using System.ServiceModel.Activation;
 using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data;

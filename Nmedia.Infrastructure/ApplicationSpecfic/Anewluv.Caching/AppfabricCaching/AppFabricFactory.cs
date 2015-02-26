@@ -23,7 +23,7 @@ using Anewluv.Services.Mapping;
 using Anewluv.Domain.Data.ViewModels;
 using GeoData.Domain.Models;
 using Anewluv.Services.Spatial;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Infrastructure.ExceptionHandling;
 using Nmedia.Infrastructure.Helpers;

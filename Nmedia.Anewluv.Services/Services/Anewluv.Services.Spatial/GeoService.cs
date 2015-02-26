@@ -7,7 +7,7 @@ using System.Text;
 using System.Web;
 using System.Net;
 using System.ServiceModel.Activation;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using System.Data.SqlClient;
 using GeoData.Domain.Models;
 using GeoData.Domain.Models.ViewModels;
@@ -323,30 +323,36 @@ namespace Anewluv.Services.Spatial
                
             }
 
-            public int getcountryidbycountryname(GeoModel model)
+            public async Task<int> getcountryidbycountryname(GeoModel model)
             {
 
 
                 _unitOfWork.DisableProxyCreation = true;
                 using (var db = _unitOfWork)
                 {
+
                     try
                     {
-                        if (model.country == null ) return 0;
-
-                        List<Country_PostalCode_List> countryCodeQuery = default(List<Country_PostalCode_List>);
-                        //3-18-2013 olawal added code to remove the the spaces when we test
-                        countryCodeQuery = db.GetRepository<Country_PostalCode_List>().Find().ToList().Where(p => p.CountryName.Replace(" ", "") == model.country).ToList();
-
-                        if (countryCodeQuery.Count() > 0)
+                            var task = Task.Factory.StartNew(() =>
                         {
-                            return countryCodeQuery.FirstOrDefault().CountryID;
 
-                        }
-                        else
-                        {
-                            return 0;
-                        }
+                            if (model.country == null ) return 0;
+
+                            List<Country_PostalCode_List> countryCodeQuery = default(List<Country_PostalCode_List>);
+                            //3-18-2013 olawal added code to remove the the spaces when we test
+                            countryCodeQuery = db.GetRepository<Country_PostalCode_List>().Find().ToList().Where(p => p.CountryName.Replace(" ", "") == model.country).ToList();
+
+                            if (countryCodeQuery.Count() > 0)
+                            {
+                                return countryCodeQuery.FirstOrDefault().CountryID;
+
+                            }
+                            else
+                            {
+                                return 0;
+                            }
+                        });
+                            return await task.ConfigureAwait(false);
 
 
                     }

@@ -17,7 +17,7 @@ using Anewluv.Services.Contracts.ServiceResponse;
 using Nmedia.Infrastructure.Helpers;
 using System.IO;
 using ImageResizer;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using System.Drawing;
 
 using Nmedia.Infrastructure.Domain.Data.log;

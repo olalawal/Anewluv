@@ -14,7 +14,7 @@ using System.Net;
 
 
 using System.ServiceModel.Activation;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data.log;

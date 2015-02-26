@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Anewluv.Domain.Data;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using Anewluv.Domain.Data.ViewModels;
 using Nmedia.Infrastructure.Helpers;
+using Repository.Pattern.Repositories;
 
 
 namespace Anewluv.DataExtentionMethods
@@ -15,21 +16,21 @@ namespace Anewluv.DataExtentionMethods
 
         public static List<photo> getallphotosbyusername(this IRepository<photo> repo, ProfileModel model)
         {
-            return repo.Find().OfType<photo>().Where(o => o.profilemetadata.profile.username == model.username
+            return repo.Query(o => o.profilemetadata.profile.username == model.username
                                     && o.lu_photoapprovalstatus.id != (int)photoapprovalstatusEnum.Rejected && o.lu_photoapprovalstatus.id
-                                    != (int)photoapprovalstatusEnum.RequiresFurtherInformation).ToList();
+                                    != (int)photoapprovalstatusEnum.RequiresFurtherInformation).Select().ToList();
 
         }
 
         public static photo getphotobyphotoid(this IRepository<photo> repo, ProfileModel model)
         {
-            return repo.Find().OfType<photo>().Single(o => o.id == model.photoid.GetValueOrDefault());
+            return repo.Query(o => o.id == model.photoid.GetValueOrDefault()).Select().FirstOrDefault();
                                     
 
             //If above does not work
         //   _gender = (from x in (_datingcontext.photos.Where(f => f.id == model.photoid))
           //             join f in _datingcontext.profiledata on x.profile_id equals f.profile_id
-           //            select f.gender).FirstOrDefault();
+           //            select f.gender).Select().FirstOrDefault();
 
         }
 
@@ -45,34 +46,34 @@ namespace Anewluv.DataExtentionMethods
                     var converedtedphotoformat = Convert.ToInt16(format);
                     //var format = 
 
-                  return  (from p in
-                               (from r in repo.Find().Where(a => a.lu_photoformat.id ==converedtedphotoformat && (a.photo.profile_id == convertedprofileid & a.photo.lu_photostatus.id == (int)photostatusEnum.Gallery))
-                                             select new
-                                             {
-                                                 photoid = r.photo.id,
-                                                 profileid = r.photo.profile_id,
-                                                 screenname = r.photo.profilemetadata.profile.screenname,
-                                                 photo = r.image,
-                                                 photoformat = r.lu_photoformat,
-                                                 convertedsize = r.size,
-                                                 orginalsize = r.photo.size,
-                                                 imagecaption = r.photo.imagecaption,
-                                                 creationdate = r.photo.creationdate,
+                    return (from p in
+                                (from r in repo.Query(a => a.lu_photoformat.id == converedtedphotoformat && (a.photo.profile_id == convertedprofileid & a.photo.lu_photostatus.id == (int)photostatusEnum.Gallery))
+                                 select new
+                                 {
+                                     photoid = r.photo.id,
+                                     profileid = r.photo.profile_id,
+                                     screenname = r.photo.profilemetadata.profile.screenname,
+                                     photo = r.image,
+                                     photoformat = r.lu_photoformat,
+                                     convertedsize = r.size,
+                                     orginalsize = r.photo.size,
+                                     imagecaption = r.photo.imagecaption,
+                                     creationdate = r.photo.creationdate,
 
-                                             }).ToList()
-                                        select new PhotoModel
-                                        {
-                                            photoid = p.photoid,
-                                            profileid = p.profileid,
-                                            screenname = p.screenname,
-                                            photo = b64Converters.ByteArraytob64string(p.photo),
-                                            photoformat = p.photoformat,
-                                            convertedsize = p.convertedsize,
-                                            orginalsize = p.orginalsize,
-                                            imagecaption = p.imagecaption,
-                                            creationdate = p.creationdate,
+                                 }).ToList()
+                            select new PhotoModel
+                            {
+                                photoid = p.photoid,
+                                profileid = p.profileid,
+                                screenname = p.screenname,
+                                photo = b64Converters.ByteArraytob64string(p.photo),
+                                photoformat = p.photoformat,
+                                convertedsize = p.convertedsize,
+                                orginalsize = p.orginalsize,
+                                imagecaption = p.imagecaption,
+                                creationdate = p.creationdate,
 
-                                        }).FirstOrDefault();
+                            }).FirstOrDefault();
 
                     // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
 
@@ -98,8 +99,8 @@ namespace Anewluv.DataExtentionMethods
         
             try
             {
-             var model = (from p in repo.Find().Where(a => a.formattype_id ==  Convert.ToInt16(format) && a.photo.profile_id ==  Convert.ToInt16(profileid) && a.photo.profile_id ==  Convert.ToInt32(profileid) && (
-                                                     a.photo.photostatus_id  != null && a.photo.photostatus_id == Convert.ToInt16(status))).ToList()
+             var model = (from p in repo.Query(a => a.formattype_id ==  Convert.ToInt16(format) && a.photo.profile_id ==  Convert.ToInt16(profileid) && a.photo.profile_id ==  Convert.ToInt32(profileid) && (
+                                                     a.photo.photostatus_id  != null && a.photo.photostatus_id == Convert.ToInt16(status))).Select().ToList()
                                  select new PhotoModel
                                  {
                                      photoid = p.photo.id,

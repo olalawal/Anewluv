@@ -15,7 +15,7 @@ using System.ServiceModel.Activation;
 using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Domain.Data;
 using Anewluv.Services.Contracts;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using System.Threading.Tasks;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data;
@@ -153,7 +153,7 @@ namespace Anewluv.Services.Edit
                       
                         searchmodel.basicsearchsettings = this.getbasicsearchsettings(p, db);
                         searchmodel.lifestylesearchsettings = this.getlifestylesearchsettings(p, db);
-                        searchmodel.appearancesearchsettings = this.getappearancesearchsettings(p, db);
+                        searchmodel. = this.getappearancesearchsettings(p, db);
                         searchmodel.charactersearchsettings = this.getcharactersearchsettings(p, db);
 
 
@@ -346,7 +346,7 @@ namespace Anewluv.Services.Edit
                             //AnewluvMessages messages = new AnewluvMessages();
                             searchsetting p = this.filtersearchsettings(model, db);
                             messages = (updatebasicsearchsettings(model.basicsearchsettings,p, messages, db));
-                            messages = (updateappearancesearchsettings(model.appearancesearchsettings, p, messages, db));
+                            messages = (updateappearancesearchsettings(model., p, messages, db));
                             messages = (updatecharactersearchsettings(model.charactersearchsettings, p, messages, db));
                             messages = (updatelifestylesearchsettings(model.lifestylesearchsettings, p, messages, db));
                            
@@ -456,7 +456,7 @@ namespace Anewluv.Services.Edit
                             AnewluvMessages messages = new AnewluvMessages();
 
                             searchsetting p = this.filtersearchsettings(model, db);                       
-                            messages = (updateappearancesearchsettings(model.appearancesearchsettings, p, messages, db));                          
+                            messages = (updateappearancesearchsettings(model., p, messages, db));                          
 
                             if (messages.errormessages.Count > 0)
                             {

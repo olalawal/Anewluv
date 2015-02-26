@@ -12,7 +12,7 @@ using System.Net;
 
 using Anewluv.Domain.Data;
 using System.ServiceModel.Activation;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using LoggingLibrary;
 //using Nmedia.Infrastructure;.Domain.log;
 using Anewluv.Domain.Data.ViewModels;

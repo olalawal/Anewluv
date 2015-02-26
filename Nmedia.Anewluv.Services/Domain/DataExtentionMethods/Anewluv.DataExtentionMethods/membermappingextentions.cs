@@ -1,8 +1,9 @@
 ﻿using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
 using GeoData.Domain.ViewModels;
-using Nmedia.DataAccess.Interfaces;
+//using Nmedia.DataAccess.Interfaces;
 using Nmedia.Infrastructure;
+using Repository.Pattern.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,11 +33,12 @@ namespace Anewluv.DataExtentionMethods
         /// <param name="db"></param>
         /// <returns></returns>
         // use this function to get distance at the same time, add it to the model
-        public static MemberSearchViewModel mapmembersearchviewmodel(int? veiwerpeofileid,MemberSearchViewModel modeltomap, bool allphotos, IUnitOfWork db,IUnitOfWork geodb)
+        public static MemberSearchViewModel mapmembersearchviewmodel(int? veiwerpeofileid, MemberSearchViewModel modeltomap, bool allphotos, IUnitOfWorkAsync db, IUnitOfWorkAsync geodb)
         {
+            
             //we need lazy loading and proxy stuff
-            db.DisableProxyCreation = false;
-            db.DisableLazyLoading = false;
+            // db.DisableProxyCreation = false;
+          //  db.DisableLazyLoading = false;
             try
             {
 
@@ -45,15 +47,15 @@ namespace Anewluv.DataExtentionMethods
 
                     //blank viewprofile simply means we will not look for distance between memebers and other comparaitibe fatures
                     profiledata viewerprofile = new profiledata();
-                    if (veiwerpeofileid != null) viewerprofile = db.GetRepository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = veiwerpeofileid });
+                    if (veiwerpeofileid != null) viewerprofile = db.Repository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = veiwerpeofileid });
 
                     //since it alrady has some feilds we dont want to overidte with nulls
                     MemberSearchViewModel model = modeltomap; //new MemberSearchViewModel();
                     //TO DO change to use Ninject maybe
                     // DatingService db = new DatingService();
                     //  MembersRepository membersrepo=  new MembersRepository();
-                    profile profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id) });
-                    // membersrepository.getprofilebyprofileid(new ProfileModel { profileid = modeltomap.id }); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).FirstOrDefault();
+                    profile profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id) });
+                    // membersrepository.getprofilebyprofileid(new ProfileModel { profileid = modeltomap.id }); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).Select().FirstOrDefault();
                     //  membereditRepository membereditRepository = new membereditRepository();
 
                     //TO DO work around this hack by fixing includes extentions
@@ -62,8 +64,8 @@ namespace Anewluv.DataExtentionMethods
                 //http://damieng.com/blog/2010/05/21/include-for-linq-to-sql-and-maybe-other-providers
                     if (profile.profilemetadata == null)
                     {
-                        profile.profiledata = db.GetRepository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id) });
-                         profile.profilemetadata = db.GetRepository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id)});
+                        profile.profiledata = db.Repository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id) });
+                         profile.profilemetadata = db.Repository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id)});
                     }
                     //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
                     if (viewerprofile.latitude != null &&
@@ -100,8 +102,8 @@ namespace Anewluv.DataExtentionMethods
                     //   membersrepository.getlastloggedinstring(model.lastlogindate.GetValueOrDefault());
                     model.mycatchyintroline = profile.profiledata.mycatchyintroLine;
                     model.aboutme = profile.profiledata.aboutme;
-                    model.online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = profile.id });
-                    model.perfectmatchsettings = profile.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault();
+                    model.online = db.Repository<profile>().getuseronlinestatus(new ProfileModel { profileid = profile.id });
+                    model.perfectmatchsettings = profile.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).Select().FirstOrDefault();
                     // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
                     //DistanceFromMe = 0  get distance from somwhere else
                     //to do do something with the unaproved photos so it is a nullable value , private photos are linked too here
@@ -118,14 +120,14 @@ namespace Anewluv.DataExtentionMethods
                     if (allphotos == true)
                     {
 
-                        model.profilephotos.ProfilePhotosApproved = db.GetRepository<photoconversion>().getpagedphotomodelbyprofileidandstatus(
+                        model.profilephotos.ProfilePhotosApproved = db.Repository<photoconversion>().getpagedphotomodelbyprofileidandstatus(
                             profile.id.ToString(),
                             photoapprovalstatusEnum.Approved.ToString(), ((int)photoformatEnum.Thumbnail).ToString(), page.ToString(), ps.ToString());   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
                     }// approvedphotos = photorepository.
                     else
                     {
                         // model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
-                        model.galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString());
+                        model.galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString());
                     }
 
                     // Api.DisposeGeoService();
@@ -148,7 +150,7 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
-        public static List<MemberSearchViewModel> mapmembersearchviewmodels(ProfileModel model, IUnitOfWork db, IUnitOfWork geodb)
+        public static List<MemberSearchViewModel> mapmembersearchviewmodels(ProfileModel model, IUnitOfWorkAsync db, IUnitOfWorkAsync geodb)
         {
 
                    try
@@ -186,11 +188,11 @@ namespace Anewluv.DataExtentionMethods
         //constructor
         //4-12-2012 added screen name
         //4-18-2012 added search settings
-        public static ProfileCriteriaModel getprofilecriteriamodel(int profileid, IUnitOfWork db)
+        public static ProfileCriteriaModel getprofilecriteriamodel(int profileid, IUnitOfWorkAsync db)
         {
 
-            db.DisableProxyCreation = false;
-            db.DisableLazyLoading = false;
+            // db.DisableProxyCreation = false;
+          //  db.DisableLazyLoading = false;
             try
             {
 
@@ -205,7 +207,7 @@ namespace Anewluv.DataExtentionMethods
                     //TO DO change to use Ninject maybe
                     // DatingService db = new DatingService();
                     //  MembersRepository membersrepo=  new MembersRepository();
-                    profilemetadata metadata = db.GetRepository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = profileid });
+                    profilemetadata metadata = db.Repository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = profileid });
 
                     // IKernel kernel = new StandardKernel();
 
@@ -496,24 +498,24 @@ namespace Anewluv.DataExtentionMethods
         }
 
         //functions not exposed via WCF or otherwise
-        public static MembersViewModel mapmember(ProfileModel newmodel, IUnitOfWork db, IUnitOfWork geodb)
+        public static MembersViewModel mapmember(ProfileModel newmodel, IUnitOfWorkAsync db, IUnitOfWorkAsync geodb)
         {
 
-            db.DisableProxyCreation = false;
-            db.DisableLazyLoading = false;
+            // db.DisableProxyCreation = false;
+          //  db.DisableLazyLoading = false;
             MembersViewModel model = new MembersViewModel();
             profile profile = new profile();
 
     
 
-            profile = db.GetRepository<profile>().FindSingle(p=>p.id== newmodel.profileid); //  .getprofilebyprofileid(newmodel);
+            profile = db.Repository<profile>().FindSingle(p=>p.id== newmodel.profileid); //  .getprofilebyprofileid(newmodel);
            
             //handles failues in lazy loading
             //TO DO this should be a try cacth with exception handling
             if (profile.profilemetadata == null)
             {
-                profile.profiledata = db.GetRepository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = model.profile_id });
-                profile.profilemetadata = db.GetRepository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = model.profile_id });
+                profile.profiledata = db.Repository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = model.profile_id });
+                profile.profilemetadata = db.Repository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = model.profile_id });
             }
 
             try
