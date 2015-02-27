@@ -1,9 +1,10 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class peek
+    public partial class peek : Entity
     {
         public int id { get; set; }
         public int profile_id { get; set; }

@@ -1,9 +1,10 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 
 namespace GeoData.Domain.Models
 {
-    public partial class Country_PostalCode_List
+    public partial class Country_PostalCode_List :Entity
     {
         public byte CountryID { get; set; }
         public string Country_Code { get; set; }

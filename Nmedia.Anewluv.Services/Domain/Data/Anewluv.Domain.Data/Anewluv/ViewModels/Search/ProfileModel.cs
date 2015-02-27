@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using Repository.Pattern.Ef6;
 
 namespace Anewluv.Domain.Data.ViewModels
 {
 
     [DataContract]
-    public class ProfileModel
+    public class ProfileModel :Entity
     {
         [DataMember]
         public string email { get; set; }

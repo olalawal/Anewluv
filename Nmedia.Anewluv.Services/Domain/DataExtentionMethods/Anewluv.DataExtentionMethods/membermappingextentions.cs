@@ -1,5 +1,6 @@
 ﻿using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
+using GeoData.Domain.Models;
 using GeoData.Domain.ViewModels;
 //using Nmedia.DataAccess.Interfaces;
 using Nmedia.Infrastructure;
@@ -498,7 +499,7 @@ namespace Anewluv.DataExtentionMethods
         }
 
         //functions not exposed via WCF or otherwise
-        public static MembersViewModel mapmember(ProfileModel newmodel, IUnitOfWorkAsync db, IUnitOfWorkAsync geodb)
+        public static MembersViewModel mapmember(ProfileModel newmodel, IUnitOfWorkAsync db, IGeoDataStoredProcedures geodb)
         {
 
             // db.DisableProxyCreation = false;
@@ -508,7 +509,7 @@ namespace Anewluv.DataExtentionMethods
 
     
 
-            profile = db.Repository<profile>().FindSingle(p=>p.id== newmodel.profileid); //  .getprofilebyprofileid(newmodel);
+            profile = db.Repository<profile>().Query(p=>p.id== newmodel.profileid).Select().FirstOrDefault(); //  .getprofilebyprofileid(newmodel);
            
             //handles failues in lazy loading
             //TO DO this should be a try cacth with exception handling

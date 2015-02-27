@@ -1,5 +1,6 @@
 ﻿using GeoData.Domain.Models;
 using GeoData.Domain.ViewModels;
+using Repository.Pattern.UnitOfWork;
 //using Nmedia.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,31 +18,20 @@ namespace Anewluv.DataExtentionMethods
         #region "Spatial Functions"
 
 
-           public static string getcountrynamebycountryid(GeoModel model,IUnitOfWorkAsync geodb)
+           public static string getcountrynamebycountryid(GeoModel model,IGeoDataStoredProcedures _storedProcedures)
         {
 
             string countryname = "";
-            geodb.DisableProxyCreation = true;
+            //geodb.DisableProxyCreation = true;
            
                 try
                 {
-                    //return (from p in _postalcontext.GetCountry_PostalCode_List()
-                    //where p.CountryID  == countryid
-                    //select p.CountryName ).Select().FirstOrDefault();
-                    //return postaldataservicecontext.GetcountryNameBycountryID(profiledata.countryid);      
-                    geodb.SetIsolationToDefault = true;
-                    //TDocRecon loandetail2 = new TDocRecon();
-                    string query = "sp_GetCountryNameByCountryID";
-                    SqlParameter parameter = new SqlParameter("@CountryID", model.countryid);
-                    parameter.ParameterName = "@CountryID";
-                    parameter.SqlDbType = System.Data.SqlDbType.VarChar;
-                    parameter.Size = 40;
-                    //Procedure or function 'usp_GetHudFeeReviewLoanDetails' expects parameter '@LoanNbr', which was not supplied.
-                    //parameter.TypeName 
-                    var parameters = new object[] { parameter };
+                    //  List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
+                    //Dim ctx As New Entities()
+                    var countryname = _storedProcedures.GetCountryNameByCountryID(model.countryid);
 
                     //object params                      
-                    countryname = geodb.ExecuteStoredProcedure<string>(query + " @CountryID ", parameters).Select().FirstOrDefault();
+                   // countryname = geodb.ExecuteStoredProcedure<string>(query + " @CountryID ", parameters).Select().FirstOrDefault();
                     if (countryname != null) return countryname;
 
 
@@ -62,12 +52,12 @@ namespace Anewluv.DataExtentionMethods
 
                if (model.country == null) return false;
 
-                   geodb.DisableProxyCreation = true;             
+                  // geodb.DisableProxyCreation = true;             
                    try
                    {
                        //  List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
                        //Dim ctx As New Entities()
-                       var myQuery = geodb.Repository<Country_PostalCode_List>().Find().ToList().ToList().Where(p => p.CountryName == model.country).ToList();
+                       var myQuery = geodb.Repository<Country_PostalCode_List>().Query(p => p.CountryName == model.country).Select().ToList();
 
                        return (myQuery.Count > 0 ? true : false);
                        //  return myQuery.FirstOrDefault().PostalCodes.Value

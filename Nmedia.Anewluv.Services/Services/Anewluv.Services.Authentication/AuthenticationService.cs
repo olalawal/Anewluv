@@ -914,7 +914,7 @@ namespace Anewluv.Services.Authentication
             AnewLuvMembershipUser u = (AnewLuvMembershipUser)user;
           //  using (var db = _unitOfWorkAsync)
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+                //db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -922,8 +922,8 @@ namespace Anewluv.Services.Authentication
 
 
                         //get profile and profile datas
-                        profile ObjProfileEntity =  _unitOfWorkAsync.Repository<profile>().Query(p => p.id == Convert.ToInt16(u.profileid);
-                        profiledata objprofileDateEntity = _unitOfWorkAsync.Repository<profiledata>().Query(p => p.profile_id == Convert.ToInt16(u.profileid));
+                        profile ObjProfileEntity =  _unitOfWorkAsync.Repository<profile>().Query(p => p.id == Convert.ToInt16(u.profileid)).Select().FirstOrDefault();
+                        profiledata objprofileDateEntity = _unitOfWorkAsync.Repository<profiledata>().Query(p => p.profile_id == Convert.ToInt16(u.profileid)).Select().FirstOrDefault();
 
                         // new gpsdata;
 

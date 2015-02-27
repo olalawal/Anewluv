@@ -33,17 +33,40 @@ namespace Anewluv.DataExtentionMethods
 
 
 
+
                 int? count = null;
                 int defaultvalue = 0;
 
+                var blocks = db.Repository<block>().Queryable();
+                var interests = db.Repository<interest>().Queryable();
+                var profiles = db.Repository<profile>().Queryable();
 
-                count =          db.Repository<interest>().Count(f => f.profile_id == model.profileid && f.deletedbymemberdate == null);
-          
+
+                //filter out blocked profiles 
+                var MyActiveblocks = from c in blocks.Where(p => p.profile_id == model.profileid && p.removedate != null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
+
+                var query =
+                     from p in interests.Where(p=>p.profile_id == model.profileid && p.deletedbymemberdate == null)          
+                     join f in profiles on new { a = p.profile_id } equals new { a = f.id }
+                     where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                     select f;
                 // ?? operator example.
+                count = query.Count();
+
+
+
                 // y = x, unless x is null, in which case y = -1.
                 defaultvalue = count ?? 0;
+
                 return defaultvalue;
 
+               // count =          db.Repository<interest>().Count(f => f.profile_id == model.profileid && f.deletedbymemberdate == null);
+          
+          
 
 
 
@@ -66,26 +89,35 @@ namespace Anewluv.DataExtentionMethods
         {
             try
             {
+
                 int? count = null;
                 int defaultvalue = 0;
+
+                var blocks = db.Repository<block>().Queryable();
+                var interests = db.Repository<interest>().Queryable();
+                var profiles = db.Repository<profile>().Queryable();
+
+
                 //filter out blocked profiles 
-                var MyActiveblocks = from c in db.Repository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+                var MyActiveblocks = from c in blocks.Where(p => p.profile_id == model.profileid && p.removedate != null)
                                      select new
                                      {
                                          ProfilesBlockedId = c.blockprofile_id
                                      };
 
-                count = (
-                   from p in db.Repository<interest>().Find()
-                   where (p.interestprofile_id == model.profileid)
-                   join f in db.Repository<profile>().Find() on p.profile_id equals f.id
-                   where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                   select f).Count();
-
+                var query =
+                     from p in interests.Where(p => p.interestprofile_id == model.profileid && p.deletedbymemberdate == null)
+                     join f in profiles on new { a = p.profile_id } equals new { a = f.id }
+                     where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                     select f;
                 // ?? operator example.
+                count = query.Count();
+
+
 
                 // y = x, unless x is null, in which case y = -1.
                 defaultvalue = count ?? 0;
+
                 return defaultvalue;
 
             }
@@ -109,27 +141,26 @@ namespace Anewluv.DataExtentionMethods
             try
             {
 
-
-
                 int? count = null;
                 int defaultvalue = 0;
 
+                var blocks = db.Repository<block>().Queryable();
+                var interests = db.Repository<interest>().Queryable();
+                var profiles = db.Repository<profile>().Queryable();
+
 
                 //filter out blocked profiles 
-                var MyActiveblocks = from c in db.Repository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+               var MyActiveblocks = from c in blocks.Where(p => p.profile_id == model.profileid && p.removedate != null)
                                      select new
                                      {
                                          ProfilesBlockedId = c.blockprofile_id
                                      };
 
-                count = (
-                   from p in db.Repository<interest>().Find()
-                   where (p.interestprofile_id == model.profileid && p.viewdate == null)
-                   join f in db.Repository<profile>().Find() on p.profile_id equals f.id
-                   where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                   select f).Count();
-
-                // ?? operator example.
+                var query =
+                     from p in interests.Where(p => p.interestprofile_id == model.profileid && p.viewdate == null)
+                     join f in profiles on new { a = p.profile_id } equals new { a = f.id }
+                     where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                     select f;
 
 
                 // y = x, unless x is null, in which case y = -1.
@@ -160,21 +191,35 @@ namespace Anewluv.DataExtentionMethods
             try
             {
 
-
-
-                int? count = null;
+                int? count = null;             
                 int defaultvalue = 0;
 
+                var blocks = db.Repository<block>().Queryable();
+                var peeks = db.Repository<peek>().Queryable();
+                var profiles = db.Repository<profile>().Queryable();
 
-                count = (
-           from f in db.Repository<peek>().Find()
-           where (f.profile_id == model.profileid && f.deletedbymemberdate == null)
-           select f).Count();
+
+                //filter out blocked profiles 
+                var MyActiveblocks = from c in blocks.Where(p => p.profile_id == model.profileid && p.removedate != null)
+                                     select new
+                                     {
+                                         ProfilesBlockedId = c.blockprofile_id
+                                     };
+
+                var query =
+                     from p in peeks.Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
+                     join f in profiles on new { a = p.profile_id } equals new { a = f.id }
+                     where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                     select f;
                 // ?? operator example.
+                count = query.Count();
+
+
+
                 // y = x, unless x is null, in which case y = -1.
                 defaultvalue = count ?? 0;
-                return defaultvalue;
 
+                return defaultvalue;
 
             }
             catch (Exception ex)
@@ -191,32 +236,33 @@ namespace Anewluv.DataExtentionMethods
         /// </summary>       
      public static int getwhopeekedatmecount(ProfileModel model, IUnitOfWorkAsync db)
         {
-
-
-
+         
 
             try
             {
-
                 int? count = null;
                 int defaultvalue = 0;
 
+                var blocks = db.Repository<block>().Queryable();
+                var peeks = db.Repository<peek>().Queryable();
+                var profiles = db.Repository<profile>().Queryable();
+
 
                 //filter out blocked profiles 
-                var MyActiveblocks = from c in db.Repository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+                var MyActiveblocks = from c in blocks.Where(p => p.profile_id == model.profileid && p.removedate != null)
                                      select new
                                      {
                                          ProfilesBlockedId = c.blockprofile_id
                                      };
 
-                count = (
-                   from p in db.Repository<peek>().Find()
-                   where (p.peekprofile_id == model.profileid)
-                   join f in db.Repository<profile>().Find() on p.profile_id equals f.id
-                   where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                   select f).Count();
-
+                var query =
+                     from p in peeks.Where(p => p.peekprofile_id == model.profileid && p.deletedbymemberdate == null)
+                     join f in profiles on new { a = p.profile_id } equals new { a = f.id }
+                     where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                     select f;
                 // ?? operator example.
+                count = query.Count();
+
 
 
                 // y = x, unless x is null, in which case y = -1.
@@ -244,22 +290,23 @@ namespace Anewluv.DataExtentionMethods
                 int? count = null;
                 int defaultvalue = 0;
 
+                var blocks = db.Repository<block>().Queryable();
+                var interests = db.Repository<interest>().Queryable();
+                var profiles = db.Repository<profile>().Queryable();
+
 
                 //filter out blocked profiles 
-                var MyActiveblocks = from c in db.Repository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+                var MyActiveblocks = from c in blocks.Where(p => p.profile_id == model.profileid && p.removedate != null)
                                      select new
                                      {
                                          ProfilesBlockedId = c.blockprofile_id
                                      };
 
-                count = (
-                   from p in db.Repository<peek>().Find()
-                   where (p.peekprofile_id == model.profileid && p.viewdate == null)
-                   join f in db.Repository<profile>().Find() on p.profile_id equals f.id
-                   where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                   select f).Count();
-
-                // ?? operator example.
+                var query =
+                     from p in interests.Where(p => p.interestprofile_id == model.profileid && p.viewdate == null)
+                     join f in profiles on new { a = p.profile_id } equals new { a = f.id }
+                     where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                     select f;
 
 
                 // y = x, unless x is null, in which case y = -1.
@@ -287,12 +334,20 @@ namespace Anewluv.DataExtentionMethods
                 int? count = null;
                 int defaultvalue = 0;
 
+                var blocks = db.Repository<block>().Queryable();               
+                var profiles = db.Repository<profile>().Queryable();
 
-                count = (
-                  from f in db.Repository<block>().Find()
-                  where (f.profile_id == model.profileid && f.removedate == null)
-                  select f).Count();
 
+
+                var query =
+                     from p in blocks.Where(f => f.profile_id == model.profileid && f.removedate == null)
+                     join f in profiles on new { a = p.profile_id } equals new { a = f.id }
+                     where (f.status_id < 3) //filter out banned profiles or deleted profiles            
+                     select f;
+
+
+                // ?? operator example.
+                count = query.Count();
                 // ?? operator example.
                 // y = x, unless x is null, in which case y = -1.
                 defaultvalue = count ?? 0;
@@ -310,23 +365,29 @@ namespace Anewluv.DataExtentionMethods
         /// <summary>
         /// count all total likes
         /// </summary>       
-     public static int getwhoilikecount(ProfileModel model, IUnitOfWorkAsync db)
+       public static int getwhoilikecount(ProfileModel model, IUnitOfWorkAsync db)
         {
-
-
 
             try
             {
-
-
                 int? count = null;
                 int defaultvalue = 0;
 
+                var blocks = db.Repository<block>().Queryable();
+                var likes = db.Repository<like>().Queryable();
+                var profiles = db.Repository<profile>().Queryable();
 
-                count = (
-           from f in db.Repository<like>().Find()
-           where (f.profile_id == model.profileid && f.deletedbymemberdate == null)
-           select f).Count();
+
+
+                var query =
+                     from p in likes.Where(f=>f.profile_id == model.profileid && f.deletedbymemberdate == null)
+                     join f in profiles on new { a = p.profile_id } equals new { a = f.id }
+                     where (f.status_id < 3 ) //filter out banned profiles or deleted profiles            
+                     select f;
+
+
+                // ?? operator example.
+                count = query.Count();
                 // ?? operator example.
                 // y = x, unless x is null, in which case y = -1.
                 defaultvalue = count ?? 0;
@@ -348,26 +409,26 @@ namespace Anewluv.DataExtentionMethods
         {
             try
             {
-
                 int? count = null;
                 int defaultvalue = 0;
 
+                var blocks = db.Repository<block>().Queryable();
+                var likes = db.Repository<like>().Queryable();
+                var profiles = db.Repository<profile>().Queryable();
+
 
                 //filter out blocked profiles 
-                var MyActiveblocks = from c in db.Repository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate != null)
+                var MyActiveblocks = from c in blocks.Where(p => p.profile_id == model.profileid && p.removedate != null)
                                      select new
                                      {
                                          ProfilesBlockedId = c.blockprofile_id
                                      };
 
-                count = (
-                   from p in db.Repository<like>().Find()
-                   where (p.likeprofile_id == model.profileid)
-                   join f in db.Repository<profile>().Find() on p.profile_id equals f.id
-                   where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                   select f).Count();
-
-                // ?? operator example.
+                var query =
+                     from p in likes.Where(p => p.likeprofile_id == model.profileid && p.viewdate == null)
+                     join f in profiles on new { a = p.profile_id } equals new { a = f.id }
+                     where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                     select f;
 
 
                 // y = x, unless x is null, in which case y = -1.
@@ -392,51 +453,50 @@ namespace Anewluv.DataExtentionMethods
      public static int getwhoislikesmenewcount(ProfileModel model, IUnitOfWorkAsync db)
         {
 
-
-
-
             try
             {
+               // Sample
+                //var customers = repository.GetRepository<Customer>().Queryable();
+                //var orders = repository.GetRepository<Order>().Queryable();
 
-                Sample
-                var customers = repository.GetRepository<Customer>().Queryable();
-                var orders = repository.GetRepository<Order>().Queryable();
+                //var query2 = from c in customers
+                //            join o in orders on new { a = c.CustomerID, b = c.Country }
+                //                equals new { a = o.CustomerID, b = country }
+                //            select new CustomerOrder
+                //            {
+                //                CustomerId = c.CustomerID,
+                //                ContactName = c.ContactName,
+                //                OrderId = o.OrderID,
+                //                OrderDate = o.OrderDate
+                //            };
 
-                var query = from c in customers
-                            join o in orders on new { a = c.CustomerID, b = c.Country }
-                                equals new { a = o.CustomerID, b = country }
-                            select new CustomerOrder
-                            {
-                                CustomerId = c.CustomerID,
-                                ContactName = c.ContactName,
-                                OrderId = o.OrderID,
-                                OrderDate = o.OrderDate
-                            };
-
-                return query.AsEnumerable();
+                //return query.AsEnumerable();
 
 
 
                 int? count = null;
                 int defaultvalue = 0;
 
+                var blocks = db.Repository<block>().Queryable();
+                var likes =  db.Repository<like>().Queryable();
+                var profiles = db.Repository<profile>().Queryable();
 
 
                 //filter out blocked profiles 
-                var MyActiveblocks = from c in db.Repository<block>().Query(p => p.profile_id == model.profileid && p.removedate != null)
+               var MyActiveblocks = from c in blocks.Where(p => p.profile_id == model.profileid && p.removedate != null)
                                      select new
                                      {
                                          ProfilesBlockedId = c.blockprofile_id
                                      };
 
-                count = (
-                   from p in db.Repository<like>().Query(p=>p.likeprofile_id == model.profileid && p.viewdate == null).Select().ToList()
-                   join f in db.Repository<profile>().Find() on p.profile_id equals f.id
-                   where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
-                   select f).Count();
+                var query =
+                     from p in likes.Where(z=>z.viewdate == null)
+                     join f in profiles on new { a = p.profile_id } equals new { a = f.id }
+                     where (f.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.id)) //filter out banned profiles or deleted profiles            
+                     select f;
 
-                // ?? operator example.
-
+                 // ?? operator example.
+                 count= query.Count();
 
                 // y = x, unless x is null, in which case y = -1.
                 defaultvalue = count ?? 0;

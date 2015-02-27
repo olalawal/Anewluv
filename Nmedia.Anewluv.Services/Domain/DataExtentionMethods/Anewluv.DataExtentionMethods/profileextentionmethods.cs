@@ -7,6 +7,7 @@ using System.Text;
 using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
 using Repository.Pattern.Repositories;
+using Repository.Pattern.UnitOfWork;
 
 
 
@@ -20,7 +21,7 @@ namespace Anewluv.DataExtentionMethods
 
         public static profiledata getprofiledatabyprofileid(this IRepository<profiledata> repo, ProfileModel model)
         {
-            return repo.Query(p => p.profile_id == model.profileid).Select().Select().FirstOrDefault();
+            return repo.Query(p => p.profile_id == model.profileid).Select().FirstOrDefault();
         }
 
         public static profiledata getprofiledatabyscreenname(this IRepository<profiledata> repo, ProfileModel model)
@@ -74,7 +75,7 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
-            return (repo.FindSingle(p => p.emailaddress == model.email) != null);
+            return (repo.Query(p => p.emailaddress == model.email) != null);
 
 
         }
@@ -83,13 +84,13 @@ namespace Anewluv.DataExtentionMethods
         {
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
-            return (repo.FindSingle(p => p.screenname == model.screenname) != null);
+            return (repo.Query(p => p.screenname == model.screenname) != null);
 
         }
 
         public static bool checkifusernamealreadyexists(this IRepository<profile> repo, ProfileModel model)
         {
-            return (repo.FindSingle(p => p.username == model.username) != null);
+            return (repo.Query(p => p.username == model.username) != null);
         }
 
         //TO DO need enum for stats
@@ -243,7 +244,7 @@ namespace Anewluv.DataExtentionMethods
 
                     IQueryable<searchsetting> tmpsearchsettings = default(IQueryable<searchsetting>);
                     //Dim ctx As New Entities()
-                    tmpsearchsettings = db.Repository<searchsetting>().Find().Where(p => p.profile_id == model.profileid && p.myperfectmatch == true);
+                    tmpsearchsettings = db.Repository<searchsetting>().Query(p => p.profile_id == model.profileid && p.myperfectmatch == true).Select().FirstOrDefault();
 
                     //End If
                     if (tmpsearchsettings.Count() > 0)

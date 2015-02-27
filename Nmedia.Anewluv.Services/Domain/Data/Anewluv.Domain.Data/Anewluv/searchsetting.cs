@@ -1,9 +1,10 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class searchsetting
+    public partial class searchsetting  : Entity
     {
         public searchsetting()
         {

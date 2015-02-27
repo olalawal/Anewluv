@@ -73,10 +73,6 @@
       <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
       <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
-      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
-      <Name>Nmedia.DataAccess.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
       <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>
       <Name>Nmedia.Infrastructure.Domain.Data</Name>
@@ -104,6 +100,14 @@
     <ProjectReference Include="..\..\Domain\Data\GeoData.Domain.Data\GeoData.Domain.Data.csproj">
       <Project>{a7d35636-9574-4344-a761-138c3ff171bc}</Project>
       <Name>GeoData.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
+      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
+      <Name>Repository.Pattern.Ef6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Frameworks\GenericUnitOfWork\Repository.Pattern\Repository.Pattern.csproj">
+      <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
+      <Name>Repository.Pattern</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
