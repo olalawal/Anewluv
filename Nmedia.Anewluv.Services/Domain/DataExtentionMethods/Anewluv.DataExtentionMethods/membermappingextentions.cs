@@ -50,12 +50,19 @@ namespace Anewluv.DataExtentionMethods
                     profiledata viewerprofile = new profiledata();
                     if (veiwerpeofileid != null) viewerprofile = db.Repository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = veiwerpeofileid });
 
+
+                  
+                    
                     //since it alrady has some feilds we dont want to overidte with nulls
                     MemberSearchViewModel model = modeltomap; //new MemberSearchViewModel();
                     //TO DO change to use Ninject maybe
                     // DatingService db = new DatingService();
                     //  MembersRepository membersrepo=  new MembersRepository();
                     profile profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id) });
+
+
+
+
                     // membersrepository.getprofilebyprofileid(new ProfileModel { profileid = modeltomap.id }); //db.profiledatas.Include("profile").Include("SearchSettings").Where(p=>p.ProfileID == ProfileId).Select().FirstOrDefault();
                     //  membereditRepository membereditRepository = new membereditRepository();
 
@@ -509,7 +516,7 @@ namespace Anewluv.DataExtentionMethods
 
     
 
-            profile = db.Repository<profile>().Query(p=>p.id== newmodel.profileid).Select().FirstOrDefault(); //  .getprofilebyprofileid(newmodel);
+            profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = newmodel.profileid}); //  .getprofilebyprofileid(newmodel);
            
             //handles failues in lazy loading
             //TO DO this should be a try cacth with exception handling

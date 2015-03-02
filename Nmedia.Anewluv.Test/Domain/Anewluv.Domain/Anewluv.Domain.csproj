@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A0B04284-784B-4322-A213-DB178716EFC1}</ProjectGuid>
+    <ProjectGuid>{512C7FB1-921B-4980-B452-9CA32E9BBDD9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Anewluv.Domain</RootNamespace>
@@ -217,11 +217,11 @@
     <Content Include="Migrations\Documentation\Migration Instructions.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
       <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
       <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+    <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Domain\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
       <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>
       <Name>Anewluv.Domain.Data</Name>
     </ProjectReference>

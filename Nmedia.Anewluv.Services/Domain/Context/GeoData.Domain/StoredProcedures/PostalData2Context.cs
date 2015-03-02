@@ -16,7 +16,7 @@ namespace GeoData.Domain.Models
 
 {
 
-public string GetCountryNameByCountryID(string countryid)
+     public string GetCountryNameByCountryID(string countryid)
     {
         string query = "sp_GetCountryNameByCountryID";
         SqlParameter parameter = new SqlParameter("@CountryID", countryid);
@@ -31,11 +31,13 @@ public string GetCountryNameByCountryID(string countryid)
       //  countryname = geodb.ExecuteStoredProcedure<string>().Select().FirstOrDefault();
 
 
-        var myquery = Database.SqlQuery<string>(query + " @CountryID ", parameters);
+       // var dd = Database.SqlQuery(query + " @countryCode" + " ", parameters);
+
+        return Database.SqlQuery<string>(query + " @CountryID ", parameters).FirstAsync().Result;
     
-        var data = myquery.ToListAsync();
+      //  var data = myquery.ToListAsync();
       //  return data.First();
-        return data.Result.ToString();
+        //return data.Result.ToString();
 
 
     }

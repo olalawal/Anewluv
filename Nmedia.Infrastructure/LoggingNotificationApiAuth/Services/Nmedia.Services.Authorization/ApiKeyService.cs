@@ -137,11 +137,24 @@ namespace Nmedia.Services.Authorization
                 var task = Task.Factory.StartNew(() =>
                 {             
                   //    using (var db = _unitOfWork)
+                    //var apikeys = _unitOfWorkAsync.Repository<apikey>().Queryable();
+                    //var users = _unitOfWorkAsync.Repository<user>().Queryable();
+
                    
                        
-                        // .DisableLazyLoading = false;
+                    //    // .DisableLazyLoading = false;
+                    //var result = (from c in apikeys
+                    //            join o in users on new { a = c.user_id.GetValueOrDefault()}
+                    //            equals new { a = o.id }
+                    //            where (c.keyvalue == model.keyvalue && c.application_id == model.application_id & c.active == true)                                    
+                    //            select new apikey
+                    //            { 
+                    //                user = o
+                                  
+                    //            }).FirstOrDefault();
 
-                        var result = _unitOfWorkAsync.Repository<apikey>().Queryable().Where(p => p.keyvalue == model.keyvalue && p.application_id == model.application_id & p.active == true).FirstOrDefault();
+                   
+                        var result = _unitOfWorkAsync.Repository<apikey>().Query(p => p.keyvalue == model.keyvalue && p.application_id == model.application_id & p.active == true).Include(x=>x.user).Select().FirstOrDefault();
                         if (result != null &&  result.user !=null && result.user.useridentifier == model.user.useridentifier )
                         {
                             return true;

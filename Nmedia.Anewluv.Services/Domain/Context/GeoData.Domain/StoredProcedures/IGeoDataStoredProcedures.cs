@@ -7,7 +7,7 @@ namespace GeoData.Domain.Models
 public interface IGeoDataStoredProcedures
 {
 
-      string GetCountryNameByCountryID(string countryid);
+    string GetCountryNameByCountryID(string countryid);
 
      IEnumerable<CityList> CityListbycountryNamePostalcodeandCity(string countryname, string filter, string PostalCodeList);
    

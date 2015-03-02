@@ -31,28 +31,28 @@ namespace Anewluv.DataExtentionMethods
 
         public static profilemetadata getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
         {
-            return repo.Queryable().Where(p => p.profile_id == model.profileid).FirstOrDefault();
+            return repo.Query(p => p.profile_id == model.profileid).Include(x=>x.profile).Select().FirstOrDefault();
         }
 
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)
         {
 
-            return repo.Query(p => p.id == model.profileid).Select().FirstOrDefault();
+            return repo.Query(p => p.id == model.profileid).Include(x => x.profiledata).Include(z=>z.profilemetadata).Select().FirstOrDefault();
         }
 
         public static profile getprofilebyscreenname(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Query(p => p.screenname == model.screenname).Select().FirstOrDefault();
+            return repo.Query(p => p.screenname == model.screenname).Include(x => x.profiledata).Include(z=>z.profilemetadata).Select().FirstOrDefault();
         }
 
         public static profile getprofilebyemailaddress(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Query(p => p.emailaddress == model.email).Select().FirstOrDefault();
+            return repo.Query(p => p.emailaddress == model.email).Include(x => x.profiledata).Include(z=>z.profilemetadata).Select().FirstOrDefault();
         }
 
         public static profile getprofilebyusername(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Query(p => p.username == model.username).Select().FirstOrDefault();
+            return repo.Query(p => p.username == model.username).Include(x => x.profiledata).Include(z=>z.profilemetadata).Select().FirstOrDefault();
         }
 
         public static profile getprofileidbyopenid(this IRepository<profile> repo, ProfileModel model)
@@ -60,7 +60,7 @@ namespace Anewluv.DataExtentionMethods
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
             //lazy loading needed
-            var profile = repo.Query(p => p.emailaddress == model.email).Select().FirstOrDefault();
+            var profile = repo.Query(p => p.emailaddress == model.email).Include(x => x.profiledata).Include(z=>z.profilemetadata).Select().FirstOrDefault();
 
 
             //if we have an active cache we store the current value 

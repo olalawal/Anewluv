@@ -38,7 +38,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public bool? myperfectmatch { get; set; }
         [DataMember]
-        public bool? savedsearch { get; set; }      
+        public bool? savedsearch { get; set; }
         [DataMember]
         public int? searchrank { get; set; }
         [DataMember]
@@ -47,11 +47,11 @@ namespace Anewluv.Domain.Data.ViewModels
         public List<listitem> showmelist { get; set; }
         [DataMember]
         public List<lu_gender> genderlist { get; set; }
-      [DataMember]
+        [DataMember]
         public List<lu_sortbytype> sortbylist { get; set; }
-       [DataMember]
-       public List<age> agelist { get; set; }
-    [DataMember]
+        [DataMember]
+        public List<age> agelist { get; set; }
+        [DataMember]
         public List<searchsetting_location> locationlist { get; set; }
     }
 }
