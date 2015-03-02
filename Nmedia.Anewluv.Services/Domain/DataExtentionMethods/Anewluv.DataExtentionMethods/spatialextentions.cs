@@ -1,4 +1,5 @@
 ﻿using GeoData.Domain.Models;
+using GeoData.Domain.Models.ViewModels;
 using GeoData.Domain.ViewModels;
 using Repository.Pattern.UnitOfWork;
 //using Nmedia.DataAccess.Interfaces;
@@ -28,7 +29,7 @@ namespace Anewluv.DataExtentionMethods
                 {
                     //  List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
                     //Dim ctx As New Entities()
-                    var countryname = _storedProcedures.GetCountryNameByCountryID(model.countryid);
+                     countryname = _storedProcedures.GetCountryNameByCountryID(model.countryid);
 
                     //object params                      
                    // countryname = geodb.ExecuteStoredProcedure<string>(query + " @CountryID ", parameters).Select().FirstOrDefault();
@@ -47,7 +48,7 @@ namespace Anewluv.DataExtentionMethods
             }
 
 
-           public static bool getpostalcodestatusbycountryname(GeoModel model, IUnitOfWorkAsync geodb)
+           public static bool getpostalcodestatusbycountryname(GeoModel model, IGeoDataStoredProcedures geodb)
            {
 
                if (model.country == null) return false;
@@ -57,9 +58,11 @@ namespace Anewluv.DataExtentionMethods
                    {
                        //  List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
                        //Dim ctx As New Entities()
-                       var myQuery = geodb.Repository<Country_PostalCode_List>().Query(p => p.CountryName == model.country).Select().ToList();
+                       var result = geodb.GetPostalCodeStatusBycountryName(model.country);
+                       return result;
 
-                       return (myQuery.Count > 0 ? true : false);
+
+                    //   return (myQuery.Count > 0 ? true : false);
                        //  return myQuery.FirstOrDefault().PostalCodes.Value
 
                    }
@@ -73,7 +76,48 @@ namespace Anewluv.DataExtentionMethods
 
 
            }
-        
+
+         
+
+           public static gpsdata getgpsdatabycitycountrypostalcode(GeoModel model, IGeoDataStoredProcedures _storedProcedures)
+           {
+
+               //_unitOfWorkAsync.DisableProxyCreation = true;
+               //  //using (var db = _unitOfWorkAsync)
+               //  {
+               try
+               {
+
+
+                   if (model.country == null | model.city == null) return null;
+
+                   //   IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
+
+                   List<gpsdata> _GpsData = new List<gpsdata>();
+                   model.country = string.Format(model.country.Replace(" ", ""));
+                   // fix country names if theres a space
+                   // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
+
+
+                   var gpsdata = _storedProcedures.GetGPSDatasByPostalCodeandCity(model.country, model.city, model.postalcode);
+                   return gpsdata.ToList().FirstOrDefault();
+                   //var s = _postalcontext.GetGpsDataSingleByCityCountryAndPostalCode(countryname, postalcode, city);
+                   //if (gpsdata != null)
+                   //{
+                   //    return new gpsdata { lattitude = s.Latitude, longitude = s.Longitude, stateprovince = s.State_Province };
+                   //}
+                   //return gpsdata;
+
+               }
+               catch (Exception ex)
+               {
+
+                   throw ex;
+
+                   //throw convertedexcption;
+               }
+           
+           }
 
 
         // probbaly won't use this, lets add lat long and other stuff to model

@@ -1,3 +1,4 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -5,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    [DataContract] public partial class lu_gender
+    [DataContract] public partial class lu_gender : Entity
     {
         public lu_gender()
         {

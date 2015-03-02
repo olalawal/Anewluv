@@ -15,12 +15,15 @@ using Ninject;
 
 //to do do away with this when we go to code first , we would pull this from entities 
 
-using Anewluv.Services.Contracts;
+//using Anewluv.Services.Contracts;
 using Anewluv.Domain;
 using System.Data.Entity;
 using System.ServiceModel;
-using Nmedia.DataAcess.Test;
-using Nmedia.DataAccess.Test;
+using Repository.Pattern.DataContext;
+using Repository.Pattern.UnitOfWork;
+using Repository.Pattern.Ef6;
+
+
 //using Anewluv.Services.Members;
 
 
@@ -41,22 +44,19 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
             //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToMethod(ctx => ctx.Kernel.Get<PromotionContext>());//).ToMethod()(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope();
 
             // var webApiEFRepository = kernel.Get<IRepository<Entity>>("WebApiEFRepository");
-            //  this.Unbind(typeof(IUnitOfWork));
-            //Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
+            //  this.Unbind(typeof(IUnitOfWorkAsync));
+            //Kernel.Bind<IUnitOfWorkAsync>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
 
-           
-            //new binding .. repositories will be handled by the unitof work for now, if this falis we will use generic repo
-            this.Bind<AnewluvContext>().ToSelf().InRequestScope();
-            this.Bind<IUnitOfWork<AnewluvContext>>().To<UnitOfWork<AnewluvContext>>();
+       
 
 
-           
 
 
-           // this.Bind<UnitOfWork>().ToConstructor(x => new AnewluvContext());//.When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Members.MemberService"));
-           
-           //  this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Members.MemberService")); 
-                ;
+
+          //  this.Bind<UnitOfWork>().ToConstructor(x => new AnewluvContext());//.When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Members.MemberService"));
+
+           // this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Members.MemberService"));
+            ;
 
             //the Unit of work module should already be loaded by now
            // Bind<IMemberService>().ToSelf().InRequestScope();
@@ -67,8 +67,8 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
           
 
 
-           // Bind<IUnitOfWork>().To<AnewluvContext>().InRequestScope();
-           //// Bind<IUnitOfWork>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
+           // Bind<IUnitOfWorkAsync>().To<AnewluvContext>().InRequestScope();
+           //// Bind<IUnitOfWorkAsync>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
 
 
            // // DataContexts: When any ancestor in the inheritance chain has been labeled with any of these attributes.
@@ -77,7 +77,8 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
            // Bind<DbContext>().ToMethod(c => c.Kernel.Get<PostalData2Context>())
             // .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>).InRequestScope(); ;
 
-
+            this.Bind<IDataContextAsync>().To<AnewluvContext>().InRequestScope();
+            this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().InRequestScope();
          
       }
 	}

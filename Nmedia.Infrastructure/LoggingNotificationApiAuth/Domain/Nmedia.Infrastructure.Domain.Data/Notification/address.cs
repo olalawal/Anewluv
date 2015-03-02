@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using Repository.Pattern.Ef6;
 
 namespace Nmedia.Infrastructure.Domain.Data.Notification
 {
     [DataContract(Namespace = "")]
-    public class address
+    public class address :Entity
     {
 
         public address()

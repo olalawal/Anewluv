@@ -1,9 +1,10 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class mailboxmessagefolder
+    public partial class mailboxmessagefolder :Entity
     {
         public int mailboxfolder_id { get; set; }
         public int mailboxmessage_id { get; set; }

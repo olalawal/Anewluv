@@ -82,9 +82,13 @@
       <Project>{9b837d01-53fa-4af3-a6c3-fc854a75c6db}</Project>
       <Name>Nmedia.Infrastructure.Mvc</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
-      <Project>{DD605C08-413D-4A1E-AF62-8FAB15C47E55}</Project>
-      <Name>Nmedia.DataAccess.Interfaces</Name>
+    <ProjectReference Include="..\..\..\..\Nmedia.Anewluv.Services\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
+      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
+      <Name>Repository.Pattern.Ef6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Nmedia.Anewluv.Services\Frameworks\GenericUnitOfWork\Repository.Pattern\Repository.Pattern.csproj">
+      <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
+      <Name>Repository.Pattern</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\WCF\Nmedia.WCFHelpers\Nmedia.WCFHelpers.csproj">
       <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>

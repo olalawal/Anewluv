@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
+using Repository.Pattern.Ef6;
 
 namespace Nmedia.Infrastructure.Domain.Data.Apikey
 {
     [DataContract(Namespace = "")]
-     public class user
+     public class user :Entity
     {
 
 

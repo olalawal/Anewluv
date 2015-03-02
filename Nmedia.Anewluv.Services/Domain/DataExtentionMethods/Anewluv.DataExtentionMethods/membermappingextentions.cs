@@ -34,7 +34,7 @@ namespace Anewluv.DataExtentionMethods
         /// <param name="db"></param>
         /// <returns></returns>
         // use this function to get distance at the same time, add it to the model
-        public static MemberSearchViewModel mapmembersearchviewmodel(int? veiwerpeofileid, MemberSearchViewModel modeltomap, bool allphotos, IUnitOfWorkAsync db, IUnitOfWorkAsync geodb)
+        public static MemberSearchViewModel mapmembersearchviewmodel(int? veiwerpeofileid, MemberSearchViewModel modeltomap, bool allphotos, IUnitOfWorkAsync db, IGeoDataStoredProcedures _storedProcedures)
         {
             
             //we need lazy loading and proxy stuff
@@ -88,7 +88,7 @@ namespace Anewluv.DataExtentionMethods
                     model.stateprovince = profile.profiledata.stateprovince;
                     model.postalcode = profile.profiledata.postalcode;
                     model.countryid = profile.profiledata.countryid;
-                    model.countryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = model.countryid.ToString() },geodb);
+                    model.countryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = model.countryid.ToString() }, _storedProcedures);
                     model.genderid = profile.profiledata.gender_id;
                     model.birthdate = profile.profiledata.birthdate;
                     // modelprofile = profile.profile;
@@ -104,7 +104,7 @@ namespace Anewluv.DataExtentionMethods
                     model.mycatchyintroline = profile.profiledata.mycatchyintroLine;
                     model.aboutme = profile.profiledata.aboutme;
                     model.online = db.Repository<profile>().getuseronlinestatus(new ProfileModel { profileid = profile.id });
-                    model.perfectmatchsettings = profile.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).Select().FirstOrDefault();
+                    model.perfectmatchsettings = profile.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault();
                     // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
                     //DistanceFromMe = 0  get distance from somwhere else
                     //to do do something with the unaproved photos so it is a nullable value , private photos are linked too here
@@ -151,7 +151,7 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
-        public static List<MemberSearchViewModel> mapmembersearchviewmodels(ProfileModel model, IUnitOfWorkAsync db, IUnitOfWorkAsync geodb)
+        public static List<MemberSearchViewModel> mapmembersearchviewmodels(ProfileModel model, IUnitOfWorkAsync db, IGeoDataStoredProcedures geodb)
         {
 
                    try
@@ -449,7 +449,7 @@ namespace Anewluv.DataExtentionMethods
         public static ProfileCriteriaModel getprofilecriteriamodel()
         {
 
-            // _unitOfWork.Dispose();
+            // _unitOfWorkAsync.Dispose();
 
             try
             {

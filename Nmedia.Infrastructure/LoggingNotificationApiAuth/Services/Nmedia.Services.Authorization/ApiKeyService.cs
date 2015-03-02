@@ -22,6 +22,8 @@ using Nmedia.Infrastructure.Domain.Data;
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain;
 using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
+using Repository.Pattern.UnitOfWork;
+using Nmedia.Infrastructure.ExceptionHandling;
 //using Nmedia.Infrastructure.WCF;
 //using Anewluv.Lib;
 //using Anewluv.Lib;
@@ -39,11 +41,12 @@ namespace Nmedia.Services.Authorization
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        //  private static  IUnitOfWork _unitOfWork;
-        private IUnitOfWork _unitOfWork;
+        //  private static    private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        private   readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        private readonly IApiKeyStoredProcedures _storedProcedures;
         private Logging logger;
 
-        public ApikeyService(IUnitOfWork unitOfWork)
+        public ApikeyService(IUnitOfWorkAsync unitOfWork, IApiKeyStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)
@@ -57,7 +60,8 @@ namespace Nmedia.Services.Authorization
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
+             _unitOfWorkAsync = unitOfWork;
+             _storedProcedures = storedProcedures;
             //disable proxy stuff by default
             //_unitOfWork.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
@@ -86,11 +90,12 @@ namespace Nmedia.Services.Authorization
 
                 var task = Task.Factory.StartNew(() =>
                 {
-                    _unitOfWork.DisableProxyCreation = true;
-                    _unitOfWork.DisableLazyLoading = true;
-                    using (var db = _unitOfWork)
+
+                   // .DisableProxyCreation = true;
+                   // _unitOfWork.DisableLazyLoading = true;
+                  //    using (var db = _unitOfWork)
                     {
-                        result = db.GetRepository<apikey>().Find().Any(p => p.keyvalue == model.keyvalue & p.application_id == model.application_id & p.active == true);
+                        result = _unitOfWorkAsync.Repository<apikey>().Queryable().Any(p => p.keyvalue == model.keyvalue & p.application_id == model.application_id & p.active == true);
                     }
                     return result;
                 });
@@ -131,17 +136,18 @@ namespace Nmedia.Services.Authorization
             {
                 var task = Task.Factory.StartNew(() =>
                 {             
-                    using (var db = _unitOfWork)
-                    {
-                       db.DisableLazyLoading = false;
+                  //    using (var db = _unitOfWork)
+                   
+                       
+                        // .DisableLazyLoading = false;
 
-                        var result = db.GetRepository<apikey>().FindSingle(p => p.keyvalue == model.keyvalue && p.application_id == model.application_id & p.active == true);
+                        var result = _unitOfWorkAsync.Repository<apikey>().Queryable().Where(p => p.keyvalue == model.keyvalue && p.application_id == model.application_id & p.active == true).FirstOrDefault();
                         if (result != null &&  result.user !=null && result.user.useridentifier == model.user.useridentifier )
                         {
                             return true;
                         }                        
-                    }
-                    return false;
+                    
+                        return false;
                 });
                 return await task.ConfigureAwait(false);
             }
@@ -175,14 +181,14 @@ namespace Nmedia.Services.Authorization
                 
                 var task = Task.Factory.StartNew(() =>
                 {
-                    _unitOfWork.DisableProxyCreation = false;
-                    _unitOfWork.DisableLazyLoading = false;
-                    using (var db = _unitOfWork)
+                   // _unitOfWork.DisableProxyCreation = false;
+                   // _unitOfWork.DisableLazyLoading = false;
+                  //    using (var db = _unitOfWork)
                     {
-                        var result = db.GetRepository<apikey>().FindSingle(p => p.keyvalue == model.keyvalue & p.active == true);
+                        var result = _unitOfWorkAsync.Repository<apikey>().Queryable().Where(p => p.keyvalue == model.keyvalue & p.active == true).FirstOrDefault();
                        if (result == null) 
                        {
-                        var newKey=   GenerateUserAPIkey(model, db);
+                        var newKey=   GenerateUserAPIkey(model,_unitOfWorkAsync);
                         model.keyvalue = newKey;            
 
                         return newKey;
@@ -219,7 +225,7 @@ namespace Nmedia.Services.Authorization
         /// invalidate all other API keys , its part of the retival of a new key so its not asycn, should be fast becuase its a store cammand in any case
         /// </summary>
         /// <param name="model"></param>
-        private  void InValidateApiKeysByUserIdentifierAndKeyAndApplication(int userid,Guid keyvalue, int application_id, IUnitOfWork db)
+        private  void InValidateApiKeysByUserIdentifierAndKeyAndApplication(int userid,Guid keyvalue, int application_id, IUnitOfWorkAsync db)
         {
 
             try
@@ -231,8 +237,8 @@ namespace Nmedia.Services.Authorization
                
                 
              //   var task = Task.Factory.StartNew(() =>
-              //  {                        
-                db.ExecuteStoreCommand("UPDATE Apikeys SET active = 'false' WHERE user_id = {0} and keyvalue <> {1} and application_id = {2} ", userid,keyvalue, application_id);
+              //  {      
+                _storedProcedures.ResetApiKeys(userid.ToString(),keyvalue.ToString(), application_id.ToString());
                         //return result.key;
 
               //  });
@@ -260,14 +266,14 @@ namespace Nmedia.Services.Authorization
         {
             apikey newkey = new apikey();
 
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+         //   _unitOfWork.DisableProxyCreation = false;
+          //    using (var db = _unitOfWork)
             {
                 try
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
-                        return GenerateUserAPIkey(model, db);
+                        return GenerateUserAPIkey(model,_unitOfWorkAsync);
                     });
                     return await task.ConfigureAwait(false);
 
@@ -301,7 +307,7 @@ namespace Nmedia.Services.Authorization
         /// <param name="model"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        private Guid GenerateUserAPIkey(ApiKeyValidationModel model,IUnitOfWork db)
+        private Guid GenerateUserAPIkey(ApiKeyValidationModel model,IUnitOfWorkAsync db)
         {
             apikey newkey = new apikey();
 
@@ -313,19 +319,25 @@ namespace Nmedia.Services.Authorization
                         newkey.timestamp = DateTime.Now;
                         int applicationid = model.application_id.GetValueOrDefault();
                         //use this for the application descritipoin
-                        var application = db.GetRepository<lu_application>().FindSingle(p => p.id == applicationid );
+                        var application = _unitOfWorkAsync.Repository<lu_application>().Queryable().Where(p => p.id == applicationid ).FirstOrDefault();
                         newkey.application_id = applicationid;
                         newkey.accesslevel_id = (int)accesslevelsenum.user;
                         //user handling   
                         //check for existing user that is tied to this application, search the apikey table
-                        var existinguser = db.GetRepository<user>().FindSingle
-                            (p => p.username.ToUpper() == model.username.ToUpper() && p.useridentifier == model.useridentifier && p.apikeys.Any(z=>z.application_id == model.application_id));
+                        var existinguser = _unitOfWorkAsync.Repository<user>().Queryable().Where
+                            (p => p.username.ToUpper() == model.username.ToUpper() && p.useridentifier == model.useridentifier && p.apikeys.Any(z=>z.application_id == model.application_id)).FirstOrDefault();
 
 
-                        if (existinguser == null)
+                        if (existinguser == null  && application !=null)
                         {
                             //generate a new user and assign the id                            
                             userid = AddAPIKeyUser(model.username, model.useridentifier, application.description, db);
+                        }
+                        else if (application == null)
+                        {
+
+                            throw new CustomExceptionTypes("Invalid application id");
+                        
                         }
                         else
                         {
@@ -338,8 +350,8 @@ namespace Nmedia.Services.Authorization
                         newkey.active = true;
                         newkey.lastaccesstime = DateTime.Now;
 //return newkey.key;
-                        db.Add(newkey);
-                        int i = db.Commit();
+                        _unitOfWorkAsync.Repository<apikey>().Insert(newkey);
+                        var j = _unitOfWorkAsync.SaveChanges();
                        
                         //disable all other keys for this user since we have made a new one
                         //async call
@@ -372,7 +384,7 @@ namespace Nmedia.Services.Authorization
         /// <param name="useridentifier"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        private int  AddAPIKeyUser(string username, int useridentifier,string registringapplication, IUnitOfWork db)
+        private int  AddAPIKeyUser(string username, int useridentifier,string registringapplication, IUnitOfWorkAsync db)
         {
             
              ////   using (var transaction = db.BeginTransaction())
@@ -386,11 +398,12 @@ namespace Nmedia.Services.Authorization
                            user.username = username;
                            user.active = true;
                            user.registeringapplication = registringapplication;
-                          
 
-                            db.Add(user);
+                           _unitOfWorkAsync.Repository<user>().Insert(user);
+                           var j = _unitOfWorkAsync.Commit();
+                          //  db.Add(user);
                             //save all changes bro
-                            int i = db.Commit();
+                           // int i = db.Commit();
                           // // transaction.Commit();
 
                             return user.id;

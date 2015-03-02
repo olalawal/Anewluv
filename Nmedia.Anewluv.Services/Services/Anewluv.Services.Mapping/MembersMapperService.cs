@@ -22,15 +22,16 @@ using Anewluv.Domain.Data;
 
 using Nmedia.Infrastructure.Domain.Data.log;
 using GeoData.Domain.Models;
-using Anewluv.Services.Spatial;
+
 using Anewluv.Domain;
-using Anewluv.Services.Media;
-using Anewluv.Services.Members;
+
+
 using GeoData.Domain.ViewModels;
 using Nmedia.Infrastructure.Domain.Data;
 using System.Threading.Tasks;
 using Anewluv.Api;
 using Nmedia.Infrastructure.DependencyInjection;
+using Repository.Pattern.UnitOfWork;
 
 
 
@@ -50,8 +51,9 @@ namespace Anewluv.Services.Mapping
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IUnitOfWork _spatial_unitOfWork;
+        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+      //  private readonly IUnitOfWorkAsync _geodatastoredProcedures;
+        private readonly IGeoDataStoredProcedures _geodatastoredProcedures;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
@@ -59,7 +61,7 @@ namespace Anewluv.Services.Mapping
 
 
 
-        public MembersMapperService([IAnewluvEntitesScope]IUnitOfWork unitOfWork, [InSpatialEntitesScope]IUnitOfWork spatial_unitOfWork)
+        public MembersMapperService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork,[InSpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)
@@ -73,11 +75,11 @@ namespace Anewluv.Services.Mapping
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
-            _spatial_unitOfWork = spatial_unitOfWork;
+            _unitOfWorkAsync = unitOfWork;
+            _geodatastoredProcedures = storedProcedures; ;
 
             //disable proxy stuff by default
-            //_unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+            //_unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
 
@@ -95,9 +97,9 @@ namespace Anewluv.Services.Mapping
         {
 
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            var geodb = _spatial_unitOfWork;
-            var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var geodb = _geodatastoredProcedures;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -140,9 +142,9 @@ namespace Anewluv.Services.Mapping
         public async  Task<SearchResultsViewModel> getmembersearchviewmodels(ProfileModel model)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            var geodb = _spatial_unitOfWork;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var geodb = _geodatastoredProcedures;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -205,9 +207,9 @@ namespace Anewluv.Services.Mapping
         public async Task<ProfileBrowseModel> getprofilebrowsemodel(ProfileModel model)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            var geodb = _spatial_unitOfWork;
-            var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var geodb = _geodatastoredProcedures;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -263,9 +265,9 @@ namespace Anewluv.Services.Mapping
         public async Task<List<ProfileBrowseModel>> getprofilebrowsemodels(ProfileModel model)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            var geodb = _spatial_unitOfWork;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var geodb = _geodatastoredProcedures;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -331,9 +333,9 @@ namespace Anewluv.Services.Mapping
         public async Task<MembersViewModel> getdefaultquicksearchsettingsmembers(ProfileModel Model)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-              var geodb = _spatial_unitOfWork;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+              var geodb = _geodatastoredProcedures;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -362,7 +364,8 @@ namespace Anewluv.Services.Mapping
                         quicksearchmodel.myselectedseekinggenderid = Extensions.GetLookingForGenderID(model.profile.profiledata.gender_id.GetValueOrDefault());
                         quicksearchmodel.myselectedcountryname = model.mycountryname; //use same country for now
                         //add the postal code status here as well
-                       quicksearchmodel.myselectedpostalcodestatus =  spatialextentions.getpostalcodestatusbycountryname(new GeoModel { country = model.mycountryname },geodb);
+                        
+                        quicksearchmodel.myselectedpostalcodestatus =  spatialextentions.getpostalcodestatusbycountryname(new GeoModel { country = model.mycountryname },geodb);
                    
                         //TO do get this from search settings
                         //default for has photos only get this from the 
@@ -407,8 +410,8 @@ namespace Anewluv.Services.Mapping
         public MembersViewModel getdefaultsearchsettingsguest(ProfileModel Model)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -430,12 +433,13 @@ namespace Anewluv.Services.Mapping
                     if (Model.Countryname != "")
                     {
 
-                        PostalData2Context GeoContext = new PostalData2Context();
-                        using (var tempdb = GeoContext)
-                        {
-                            GeoService GeoService = new GeoService(tempdb);
-                            model.myquicksearch.myselectedcountryname = GeoService.getcountryidbycountryname(new GeoModel { country = Model.Countryname }) == 0 ? "United States" : Model.Countryname; //use same country for now
-                        }
+                        //PostalData2Context GeoContext = new PostalData2Context();
+                      //  using (var tempdb = GeoContext)
+                      //  {
+                           // GeoService GeoService = new GeoService(tempdb);
+                                                                         
+                            model.myquicksearch.myselectedcountryname =   spatialextentions.getcountrynamebycountryid(new GeoModel { country = Model.Countryname },_geodatastoredProcedures) == "" ? "United States" : Model.Countryname; //use same country for now
+                       // }
                     }
                     else
                     {
@@ -472,8 +476,8 @@ namespace Anewluv.Services.Mapping
         public registermodel getregistermodel(MembersViewModel membersmodel)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            _unitOfWork.Dispose();
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            _unitOfWorkAsync.Dispose();
             try
             {
                 registermodel model = new registermodel();
@@ -515,8 +519,8 @@ namespace Anewluv.Services.Mapping
         public registermodel getregistermodelopenid(MembersViewModel membersmodel)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -585,7 +589,7 @@ namespace Anewluv.Services.Mapping
                         photobeinguploaded.imageb64string = returnedTaskTResult.Result;
 
                         //    }
-                        photobeinguploaded.imagetypeid = db.GetRepository<lu_photoimagetype>().Find().Where(p => p.id == (int)photoimagetypeEnum.Jpeg).FirstOrDefault().id;
+                        photobeinguploaded.imagetypeid = db.Repository<lu_photoimagetype>().Queryable().Where(p => p.id == (int)photoimagetypeEnum.Jpeg).FirstOrDefault().id;
                         photobeinguploaded.creationdate = DateTime.Now;
                         photobeinguploaded.caption = membersmodel.rpxmodel.preferredusername;
                         //TO DO rename this to upload image from URL ?
@@ -644,8 +648,8 @@ namespace Anewluv.Services.Mapping
         {
 
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            _unitOfWork.Dispose();
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            _unitOfWorkAsync.Dispose();
             try
             {
                 registermodel model = new registermodel();
@@ -707,8 +711,8 @@ namespace Anewluv.Services.Mapping
         public MembersViewModel updatememberdata(MembersViewModel model)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -741,9 +745,9 @@ namespace Anewluv.Services.Mapping
 
         public async Task<MembersViewModel> updatememberdatabyprofileid(ProfileModel newmodel)
         {
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            var geodb = _spatial_unitOfWork;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var geodb = _geodatastoredProcedures;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -788,8 +792,8 @@ namespace Anewluv.Services.Mapping
         public bool updateguestdata(MembersViewModel model)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -821,8 +825,8 @@ namespace Anewluv.Services.Mapping
         public bool removeguestdata(string sessionid)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -853,8 +857,8 @@ namespace Anewluv.Services.Mapping
         public MembersViewModel getguestdata(string sessionid)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -888,8 +892,8 @@ namespace Anewluv.Services.Mapping
         {
 
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -922,8 +926,8 @@ namespace Anewluv.Services.Mapping
         public MembersViewModel mapguest()
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            _unitOfWork.Dispose();
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            _unitOfWorkAsync.Dispose();
 
             try
             {
@@ -964,9 +968,9 @@ namespace Anewluv.Services.Mapping
         {
 
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;            
-            var geodb = _spatial_unitOfWork;
-           var db = _unitOfWork;
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;            
+            var geodb = _geodatastoredProcedures;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -1059,7 +1063,7 @@ namespace Anewluv.Services.Mapping
 
                         //****** end of visiblity test settings *****************************************
 
-                        var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
+                        var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
                               p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).ToList()
 
                                             //** visiblity settings still needs testing           
@@ -1076,7 +1080,7 @@ namespace Anewluv.Services.Mapping
                                                           //TO DO add the rest of the filitering here 
                                                           //Appearance filtering                         
                                          .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for                         
-                                                      join f in db.GetRepository<profile>().Find() on x.profile_id equals f.id
+                                                      join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                                       select new MemberSearchViewModel
                                                       {
                                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
@@ -1090,7 +1094,7 @@ namespace Anewluv.Services.Mapping
                                                           screenname = f.screenname,
                                                           longitude = x.longitude ?? 0,
                                                           latitude = x.latitude ?? 0,
-                                                          hasgalleryphoto = (db.GetRepository<photo>().Find().Where(i => i.profile_id == f.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null) ? true : false,
+                                                          hasgalleryphoto = (db.Repository<photo>().Queryable().Where(i => i.profile_id == f.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null) ? true : false,
                                                           creationdate = f.creationdate,
                                                           // city = db.fnTruncateString(x.city, 11),
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
@@ -1165,9 +1169,9 @@ namespace Anewluv.Services.Mapping
         public async Task<SearchResultsViewModel> getemailmatches(ProfileModel Model)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-            var geodb = _spatial_unitOfWork;
-           var db = _unitOfWork;
+//            _unitOfWorkAsync.DisableProxyCreation = false;
+            var geodb = _geodatastoredProcedures;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -1178,7 +1182,7 @@ namespace Anewluv.Services.Mapping
 
 
                         profile profile = new profile();
-                       // profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (Model.profileid) });
+                       // profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (Model.profileid) });
                         
                         MembersViewModel model = membermappingextentions.mapmember(new ProfileModel { profileid = profile.id }, db, geodb);
 
@@ -1255,7 +1259,7 @@ namespace Anewluv.Services.Mapping
 
                         //add more values as we get more members 
                         //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
-                        var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
+                        var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
                               p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).ToList()
                                         .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.lu_gender.id)).ToList() //using whereIF predicate function 
                                         .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.lu_gender.id)).ToList()
@@ -1263,7 +1267,7 @@ namespace Anewluv.Services.Mapping
                                         .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for 
                                                       //we have to filter on the back end now since we cant use UDFs
                                                       // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
-                                                      join f in db.GetRepository<profile>().Find() on x.profile_id equals f.id
+                                                      join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                                       select new MemberSearchViewModel
                                                       {
                                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
@@ -1277,7 +1281,7 @@ namespace Anewluv.Services.Mapping
                                                           screenname = f.screenname,
                                                           longitude = x.longitude ?? 0,
                                                           latitude = x.latitude ?? 0,
-                                                          hasgalleryphoto = (db.GetRepository<photo>().Find().Where(i => i.profile_id == f.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null) ? true : false,
+                                                          hasgalleryphoto = (db.Repository<photo>().Queryable().Where(i => i.profile_id == f.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null) ? true : false,
                                                           creationdate = f.creationdate,
                                                           // city = db.fnTruncateString(x.city, 11),
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
@@ -1358,8 +1362,8 @@ namespace Anewluv.Services.Mapping
         public async Task<SearchResultsViewModel> getquicksearch(quicksearchmodel Model)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-           var db = _unitOfWork;
+//            _unitOfWorkAsync.DisableProxyCreation = false;
+           var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -1436,7 +1440,7 @@ namespace Anewluv.Services.Mapping
 
                         //add more values as we get more members 
                         //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
-                        var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
+                        var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
                          p.countryid == countryid && p.city == city && p.stateprovince == stateprovince)
                                         .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.lu_gender.id)).ToList() //using whereIF predicate function  
 
@@ -1444,7 +1448,7 @@ namespace Anewluv.Services.Mapping
                                                       //Only evealuate if the user searching actually has height values they look for 
                                                       //we have to filter on the back end now since we cant use UDFs
                                                       // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
-                                                      join f in db.GetRepository<profile>().Find() on x.profile_id equals f.id
+                                                      join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                                       select new MemberSearchViewModel
                                                       {
                                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
@@ -1538,11 +1542,11 @@ namespace Anewluv.Services.Mapping
         }
 
         //TO DO clean up and just use gener and newest
-        internal SearchResultsViewModel getquickmatcheswhenquickmatchesempty(MembersViewModel model,int? page, int? numberperpage, IUnitOfWork db,IUnitOfWork geodb)
+        internal SearchResultsViewModel getquickmatcheswhenquickmatchesempty(MembersViewModel model,int? page, int? numberperpage, IUnitOfWorkAsync db,IGeoDataStoredProcedures geodb)
         {
 
         
-            _unitOfWork.DisableProxyCreation = false;
+//            _unitOfWorkAsync.DisableProxyCreation = false;
             try
             {
 
@@ -1550,7 +1554,7 @@ namespace Anewluv.Services.Mapping
                 //get search sttings from DB
 
                 profile profile = model.profile;
-              //  profile = db.GetRepository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (profilemodel.profileid) });
+              //  profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = (profilemodel.profileid) });
                 // MembersViewModel model = mapmember(profilemodel.profileid.ToString());
 
                // MembersViewModel model = membermappingextentions.mapmember(profilemodel,db,geodb);
@@ -1593,12 +1597,12 @@ namespace Anewluv.Services.Mapping
 
                 //  where (LookingForGenderValues.Count !=null || LookingForGenderValues.Contains(x.GenderID)) 
                 //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
-                var MemberSearchViewmodels = (from x in db.GetRepository<profiledata>().Find().Where(p => p.birthdate > min && p.birthdate <= max &&
+                var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
                     p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).ToList()
                                 .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender_id.GetValueOrDefault())).ToList() //using whereIF predicate function 
                                 .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.lu_gender.id)).ToList()
 
-                                              join f in db.GetRepository<profile>().Find() on x.profile_id equals f.id
+                                              join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                               select new MemberSearchViewModel
                                               {
                                                   // MyCatchyIntroLineQuickSearch = x.AboutMe,
@@ -1665,7 +1669,7 @@ namespace Anewluv.Services.Mapping
             }
         }
 
-        internal SearchResultsViewModel GenerateSearchSearchResults(IEnumerable<MemberSearchViewModel> source, int? page, int? numberperpage, IUnitOfWork db)
+        internal SearchResultsViewModel GenerateSearchSearchResults(IEnumerable<MemberSearchViewModel> source, int? page, int? numberperpage, IUnitOfWorkAsync db)
         {
 
             // int? totalrecordcount = MemberSearchViewmodels.Count;
@@ -1692,16 +1696,16 @@ namespace Anewluv.Services.Mapping
                 screenname = x.screenname,
                 longitude = x.longitude ?? 0,
                 latitude = x.latitude ?? 0,
-                hasgalleryphoto = db.GetRepository<photo>().Find().Where(i => i.profile_id == x.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false,
+                hasgalleryphoto = db.Repository<photo>().Queryable().Where(i => i.profile_id == x.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false,
                 creationdate = x.creationdate,
                 city = Extensions.Chop(x.city, 11),
                 lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                 lastlogindate = x.lastlogindate,
                 distancefromme = x.distancefromme,
-                galleryphoto = db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString()),
+                galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString()),
                 lookingforagefrom = x.lookingforagefrom,
                 lookingForageto = x.lookingForageto,
-                online = db.GetRepository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
+                online = db.Repository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
 
 
             }).ToList();
@@ -1723,10 +1727,10 @@ namespace Anewluv.Services.Mapping
 ///// </summary>
 ///// <param name="model"></param>
 ///// <returns></returns>
-//private MemberSearchViewModel getmembersearchviewmodel(ProfileModel model, IUnitOfWork db)
+//private MemberSearchViewModel getmembersearchviewmodel(ProfileModel model, IUnitOfWorkAsync db)
 //{
 
-//    _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
+//  //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
 
 //    try
 //    {
@@ -1778,9 +1782,9 @@ namespace Anewluv.Services.Mapping
 //        public async Task<List<MemberSearchViewModel>> mapmembersearchviewmodels(ProfileModel model)
 //        {
 
-//            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-//            var geodb = _spatial_unitOfWork;
-//           var db = _unitOfWork;
+//          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+//            var geodb = _geodatastoredProcedures;
+//           var db = _unitOfWorkAsync;
 //            {
 //                try
 //                {

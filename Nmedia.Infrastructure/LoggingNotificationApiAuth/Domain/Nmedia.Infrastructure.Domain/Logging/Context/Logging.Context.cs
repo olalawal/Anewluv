@@ -12,12 +12,13 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Data.Common;
 using System.Data.Entity.Core.Objects;
+using Repository.Pattern.Ef6;
 
-using Nmedia.DataAccess;
+//using Nmedia.DataAccess;
 
 namespace Nmedia.Infrastructure.Domain
 {
-    public partial class LoggingContext : ContextBase
+    public partial class LoggingContext : DataContext
     {
 
 
@@ -29,7 +30,7 @@ namespace Nmedia.Infrastructure.Domain
             : base("name=LoggingContext")
         {
             this.Configuration.ValidateOnSaveEnabled = false;
-            IsAuditEnabled = true;
+           // IsAuditEnabled = true;
           //  ObjectContext.SavingChanges += OnSavingChanges;
             Database.SetInitializer(
                 new DropCreateDatabaseIfModelChanges<LoggingContext>());

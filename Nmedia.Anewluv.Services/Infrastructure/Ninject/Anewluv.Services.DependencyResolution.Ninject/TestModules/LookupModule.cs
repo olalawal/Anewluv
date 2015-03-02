@@ -15,10 +15,13 @@ using Ninject;
 
 //to do do away with this when we go to code first , we would pull this from entities 
 
-using Anewluv.Services.Contracts;
+//using Anewluv.Services.Contracts;
 using Anewluv.Domain;
 using System.Data.Entity;
 using System.ServiceModel;
+using Repository.Pattern.DataContext;
+using Repository.Pattern.UnitOfWork;
+using Repository.Pattern.Ef6;
 //using Anewluv.Services.Members;
 
 
@@ -36,12 +39,15 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
             // IKernel kernel = new StandardKernel();
            // this.Bind<AnewluvContext>().ToSelf().InRequestScope();
 
-            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Common.LookupService")).InScope(c => OperationContext.Current); ;
-            // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Common.LookupService")).InScope(c => OperationContext.Current); 
-                ;
+            //this.Bind<IUnitOfWorkAsync>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Common.LookupService")).InScope(c => OperationContext.Current); ;
+            //// this.Unbind(typeof(DbContext));
+            //this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Common.LookupService")).InScope(c => OperationContext.Current); 
+            //    ;
 
-            Bind<ILookupService>().ToSelf().InRequestScope();
+            //Bind<ILookupService>().ToSelf().InRequestScope();
+
+            this.Bind<IDataContextAsync>().To<AnewluvContext>().InRequestScope();
+            this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().InRequestScope();
 
 
          

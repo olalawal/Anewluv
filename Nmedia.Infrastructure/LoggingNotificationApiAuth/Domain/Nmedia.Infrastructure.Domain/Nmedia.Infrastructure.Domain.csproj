@@ -64,6 +64,8 @@
     <Compile Include="ApiKey\Migrations\Configuration.cs" />
     <Compile Include="ApiKey\ModelBuilder\ApikeyModelbuilder.cs" />
     <Compile Include="ApiKey\Migrations\SeedMethods.cs" />
+    <Compile Include="ApiKey\StoredProcedures\IApiKeyStoredProcedures.cs" />
+    <Compile Include="ApiKey\StoredProcedures\ApiKeyContext.cs" />
     <Compile Include="Logging\Context\Logging.Context.cs" />
     <Compile Include="Logging\Context\Logging.Context.Lookups.cs" />
     <Compile Include="Logging\Migrations\201407131902027_first.cs" />
@@ -101,13 +103,13 @@
       <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
       <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
-      <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
-      <Name>Nmedia.DataAccess.Interfaces</Name>
+    <ProjectReference Include="..\..\..\..\Nmedia.Anewluv.Services\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
+      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
+      <Name>Repository.Pattern.Ef6</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
-      <Project>{c4c10e84-8c87-43d3-aef3-9c0a03a2f7db}</Project>
-      <Name>Nmedia.DataAccess</Name>
+    <ProjectReference Include="..\..\..\..\Nmedia.Anewluv.Services\Frameworks\GenericUnitOfWork\Repository.Pattern\Repository.Pattern.csproj">
+      <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
+      <Name>Repository.Pattern</Name>
     </ProjectReference>
     <ProjectReference Include="..\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
       <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>

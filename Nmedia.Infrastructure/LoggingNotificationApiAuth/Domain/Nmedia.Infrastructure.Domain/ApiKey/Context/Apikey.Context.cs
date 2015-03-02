@@ -14,7 +14,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Core.Objects;
 
 using Nmedia.Infrastructure.Domain.Data.Apikey;
-using Nmedia.DataAccess;
+using Repository.Pattern.Ef6;
+//using Nmedia.DataAccess;
 
 namespace Nmedia.Infrastructure.Domain
 {
@@ -23,7 +24,7 @@ namespace Nmedia.Infrastructure.Domain
     // PM> add-migration -startupproject NotificationModel ddsd
     // Update-Database -startupproject NotificationModel -verbose
 
-    public class ApiKeyContext : ContextBase
+    public partial class ApiKeyContext : DataContext
     {
         private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
 
@@ -36,7 +37,7 @@ namespace Nmedia.Infrastructure.Domain
             //Initializer init = new Initializer();            
             // init.InitializeDatabase(this);
             this.Configuration.ValidateOnSaveEnabled = false;
-            IsAuditEnabled = true;
+            //IsAuditEnabled = true;
             
             Database.SetInitializer(
              new DropCreateDatabaseIfModelChanges<ApiKeyContext>());

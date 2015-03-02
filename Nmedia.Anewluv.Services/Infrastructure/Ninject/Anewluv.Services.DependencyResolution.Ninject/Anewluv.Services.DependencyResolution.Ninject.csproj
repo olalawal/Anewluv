@@ -99,9 +99,6 @@
     <Compile Include="TestModules\AuthenticationModule.cs" />
     <Compile Include="TestModules\ChatModule.cs" />
     <Compile Include="TestModules\CommonModule.cs" />
-    <Compile Include="TestModules\ContextModules\AnewluvContextModule.cs" />
-    <Compile Include="TestModules\ContextModules\ChatContextModule.cs" />
-    <Compile Include="TestModules\ContextModules\PostalDataContextModule.cs" />
     <Compile Include="TestModules\GeoModule.cs" />
     <Compile Include="TestModules\LookupModule.cs" />
     <Compile Include="TestModules\MemberActionsModule.cs" />
@@ -109,7 +106,6 @@
     <Compile Include="TestModules\MembersMapperModule.cs" />
     <Compile Include="TestModules\MembersModule.cs" />
     <Compile Include="TestModules\PhotoServiceModule.cs" />
-    <Compile Include="TestModules\RepositoryModule.cs" />
     <Compile Include="TestModules\SearchEditModule.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,25 +114,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\NET\ServiceContracts\Anewluv.Services.Contracts\Anewluv.Services.Contracts.csproj">
-      <Project>{efc502ae-dd76-4278-8738-dd0b1f55a724}</Project>
-      <Name>Anewluv.Services.Contracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
       <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
       <Name>Nmedia.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
-      <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
-      <Name>Nmedia.DataAccess.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
-      <Project>{c4c10e84-8c87-43d3-aef3-9c0a03a2f7db}</Project>
-      <Name>Nmedia.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAcess.Test\Nmedia.DataAcess.Test.csproj">
-      <Project>{0f66c95c-2bd0-428c-b081-cb5ecb68e9b0}</Project>
-      <Name>Nmedia.DataAcess.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Domain\Context\Anewluv.Domain\Anewluv.Domain.csproj">
       <Project>{A0B04284-784B-4322-A213-DB178716EFC1}</Project>
@@ -146,9 +126,18 @@
       <Project>{01A79DCC-39CA-447E-A668-DD4206A8E5AA}</Project>
       <Name>GeoData.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
+      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
+      <Name>Repository.Pattern.Ef6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Frameworks\GenericUnitOfWork\Repository.Pattern\Repository.Pattern.csproj">
+      <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
+      <Name>Repository.Pattern</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\" />
+    <Folder Include="TestModules\ContextModules\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

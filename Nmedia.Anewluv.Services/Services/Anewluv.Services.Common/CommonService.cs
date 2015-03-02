@@ -32,13 +32,13 @@ namespace Anewluv.Services.Common
 
 
        
-        IUnitOfWork _unitOfWork;
+        IUnitOfWorkAsync _unitOfWorkAsync;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public CommonService(IUnitOfWork unitOfWork)
+        public CommonService(IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -52,9 +52,9 @@ namespace Anewluv.Services.Common
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
+            _unitOfWorkAsync = unitOfWork;
             //disable proxy stuff by default
-            //_unitOfWork.DisableProxyCreation = true;
+            //_unitOfWorkAsync.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
 

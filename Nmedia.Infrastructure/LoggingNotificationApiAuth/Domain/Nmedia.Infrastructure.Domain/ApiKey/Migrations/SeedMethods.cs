@@ -83,8 +83,8 @@ namespace Nmedia.Infrastructure.Domain
               };
              //);
 
-              context.Add(apikey1);
-              context.Add(apikey2);
+              context.apikeys.Add(apikey1);
+              context.apikeys.Add(apikey2);
 
 
 

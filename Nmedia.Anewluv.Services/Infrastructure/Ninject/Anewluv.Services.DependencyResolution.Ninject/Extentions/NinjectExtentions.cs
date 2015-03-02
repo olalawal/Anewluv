@@ -17,7 +17,7 @@ namespace Ninject.Activation
         /// <returns></returns>
         public static bool IsInjectingToRepositoryDataSourceOfNamespace(this IRequest request, string entityNamespace)
         {
-            if (request.Service.FullName == "Nmedia.DataAccess.Interfaces.IUnitOfWork" | request.Service.FullName == "")
+            if (request.Service.FullName == "Nmedia.DataAccess.Interfaces.IUnitOfWorkAsync" | request.Service.FullName == "")
             {
                 var ns = request.ParentRequest.Service.FullName;
                 return ns == entityNamespace;
@@ -26,15 +26,15 @@ namespace Ninject.Activation
             return false;
         }
 
-        public static string IsInjectingToRepositoryDataSourceOfNamespace(this IRequest request)
-        {
-            if (request.ParentRequest.Service.GetGenericTypeDefinition() == typeof(Nmedia.DataAccess.Interfaces.IContext))
-            {
-                return request.ParentRequest.Service.GetGenericArguments().First().Namespace;
+        //public static string IsInjectingToRepositoryDataSourceOfNamespace(this IRequest request)
+        //{
+        //    if (request.ParentRequest.Service.GetGenericTypeDefinition() == typeof(Nmedia.DataAccess.Interfaces.IContext))
+        //    {
+        //        return request.ParentRequest.Service.GetGenericArguments().First().Namespace;
 
-            }
+        //    }
 
-            return "";
-        }
+        //    return "";
+        //}
     }
 }

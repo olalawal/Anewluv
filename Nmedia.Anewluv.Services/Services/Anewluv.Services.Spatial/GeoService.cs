@@ -157,7 +157,7 @@ namespace Anewluv.Services.Spatial
                               //  geomodel.postalcode = model.ziporpostalcode;
                               //  gpsData = this.getgpsdatabycitycountrypostalcode(geomodel, db);
 
-                                gpsData =  this.getgpsdatabycitycountrypostalcode(geomodel, _unitOfWorkAsync);
+                                gpsData =  spatialextentions.getgpsdatabycitycountrypostalcode(geomodel, _storedProcedures);
                             }
 
                             //this.getpostalcodesbycountrynamecity(new GeoModel { country = model.country, city = tempcityAndStateProvince[0] })
@@ -329,7 +329,7 @@ namespace Anewluv.Services.Spatial
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            return spatialextentions.getpostalcodestatusbycountryname(model, _unitOfWorkAsync);
+                            return spatialextentions.getpostalcodestatusbycountryname(model, _storedProcedures);
 
                         });
                         return await task.ConfigureAwait(false);
@@ -425,28 +425,28 @@ namespace Anewluv.Services.Spatial
                         {
 
 
+                            if (model.country == null | model.filter == null | model.postalcode == null) return null;
+
+
+                            List<CityList> _CityList = new List<CityList>();
+                            model.postalcode = string.Format("{0}%", model.postalcode.Replace("'", "''"));
+                            // fix country names if theres a space
+                            model.country = string.Format(model.country.Replace(" ", ""));
+                            //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
+                            //for cites as well so its a 1 to 1 search no spaces on input and on db side
+                            model.filter = string.Format("{0}%", model.filter.Replace(" ", ""));
+                            //11/13/2009 addded wild ca
+
+
+                            var citylist = _storedProcedures.CityListbycountryNamePostalcodeandCity(model.country, model.filter);
+
+                            int index = 0;
+                            return ((from s in citylist.ToList() select new citystateprovince { citystateprovincevalue = s.City + "," + s.State_Province }).ToList());
+         
 
                         });
                         return await task.ConfigureAwait(false);
 
-                        if (model.country == null | model.filter == null | model.postalcode == null) return null;
-
-
-                        List<CityList> _CityList = new List<CityList>();
-                        model.postalcode = string.Format("{0}%", model.postalcode.Replace("'", "''"));
-                        // fix country names if theres a space
-                        model.country = string.Format(model.country.Replace(" ", ""));
-                        //test this as well for added 2/28/2011 - trimming spaces in search text since i am removing spaces in sql script
-                        //for cites as well so its a 1 to 1 search no spaces on input and on db side
-                        model.filter = string.Format("{0}%", model.filter.Replace(" ", ""));
-                        //11/13/2009 addded wild ca
-
-             
-                        var citylist = _storedProcedures.CityListbycountryNamePostalcodeandCity(model.country,model.filter);                      
-                        
-                        int index = 0;
-                        return ((from s in citylist.ToList() select new citystateprovince { citystateprovincevalue = s.City + "," + s.State_Province }).ToList());
-         
 
                     }
                     catch (Exception ex)
@@ -577,8 +577,8 @@ namespace Anewluv.Services.Spatial
 
                         var task = Task.Factory.StartNew(() =>
                         {
-
-                            return this.getgpsdatabycitycountrypostalcode(model, _unitOfWorkAsync);
+                            
+                            return   spatialextentions.getgpsdatabycitycountrypostalcode(model,_storedProcedures);
                 
 
                         });
@@ -1178,54 +1178,7 @@ namespace Anewluv.Services.Spatial
 
             #region "private shared functions"
 
-            private  gpsdata getgpsdatabycitycountrypostalcode(GeoModel model, IUnitOfWorkAsync db)
-                        {
-
-                            //_unitOfWorkAsync.DisableProxyCreation = true;
-                          //  //using (var db = _unitOfWorkAsync)
-                          //  {
-                                try
-                                {
-
-
-                                    if (model.country == null | model.city == null ) return null;
-
-                                    //   IQueryable<GpsData> functionReturnValue = default(IQueryable<GpsData>);
-
-                                    List<gpsdata> _GpsData = new List<gpsdata>();
-                                    model.country = string.Format(model.country.Replace(" ", ""));
-                                    // fix country names if theres a space
-                                    // strCity = String.Format("{0}%", strCity) '11/13/2009 addded wild ca
-
-                      
-                                      var gpsdata = _storedProcedures.GetGPSDatasByPostalCodeandCity(model.country, model.city, model.postalcode);
-                                    return gpsdata.ToList().FirstOrDefault();
-                                    //var s = _postalcontext.GetGpsDataSingleByCityCountryAndPostalCode(countryname, postalcode, city);
-                                    //if (gpsdata != null)
-                                    //{
-                                    //    return new gpsdata { lattitude = s.Latitude, longitude = s.Longitude, stateprovince = s.State_Province };
-                                    //}
-                                    //return gpsdata;
-
-                                }
-                                catch (Exception ex)
-                                {
-
-                                    Exception convertedexcption = new CustomExceptionTypes.GeoLocationException(model.country, "", "", ex.Message, ex.InnerException);
-                                     new  Logging(applicationEnum.GeoLocationService).WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, convertedexcption);
-                                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                                    FaultReason faultreason = new FaultReason("Error in GeoService service");
-                                    string ErrorMessage = "";
-                                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-                                    //throw convertedexcption;
-                                }
-
-                           // }
-               
-             
-                        }
+         
 
             private gpsdata getgpsdatabycountrycity(GeoModel model, IUnitOfWorkAsync db)
                         {
@@ -1280,10 +1233,14 @@ namespace Anewluv.Services.Spatial
 
 
             // use this function to get distance at the same time, add it to the model
-            public double? getdistancebetweenmembers(GeoModel model)
+            public async Task<double?> getdistancebetweenmembers(GeoModel model)
             {
+                var task = Task.Factory.StartNew(() =>
+                {
                 return spatialextentions.getdistancebetweenmembers(Convert.ToDouble(model.lattitude), Convert.ToDouble(model.longitude), Convert.ToDouble(model.lattitude2), Convert.ToDouble(model.longitude2), model.unit);
-               
+                         });
+                        return await task.ConfigureAwait(false);
+
             }
 
           

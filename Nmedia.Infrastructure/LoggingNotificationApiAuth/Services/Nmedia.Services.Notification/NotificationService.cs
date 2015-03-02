@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Infrastructure.Mvc;
+using Repository.Pattern.UnitOfWork;
 
 
 
@@ -40,10 +41,10 @@ namespace Nmedia.Services.Notification
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        IUnitOfWork _unitOfWork;
+          private readonly IUnitOfWorkAsync _unitOfWorkAsync;
 
 
-        public NotificationService(IUnitOfWork unitOfWork)
+        public NotificationService(IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -57,7 +58,7 @@ namespace Nmedia.Services.Notification
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
+            _unitOfWorkAsync = unitOfWork;
             //disable proxy stuff by default
             //_unitOfWork.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
@@ -77,14 +78,14 @@ namespace Nmedia.Services.Notification
             var task = Task.Factory.StartNew(() =>
             {
                 var list = new List<lu_template>();
-                using (var db = _unitOfWork)
+              //    using (var db = _unitOfWork)
                 {
-                    db.IsAuditEnabled = false; //do not audit on adds
-                    db.DisableProxyCreation = true;
+                   // db.IsAuditEnabled = false; //do not audit on adds
+                  //   db.DisableProxyCreation = true;
                    
                         try
                         {
-                            list = db.GetRepository<lu_template>().Find().OrderBy(x => x.id).ToList();
+                            list = _unitOfWorkAsync.Repository<lu_template>().Queryable().OrderBy(x => x.id).ToList();
                         }
                         catch (Exception ex)
                         {
@@ -113,14 +114,14 @@ namespace Nmedia.Services.Notification
             var task = Task.Factory.StartNew(() =>
             {
                 var list = new List<systemaddress>();
-                using (var db = _unitOfWork)
+              //    using (var db = _unitOfWork)
                 {
-                    db.IsAuditEnabled = false; //do not audit on adds
-                    db.DisableProxyCreation = true;
+                   // db.IsAuditEnabled = false; //do not audit on adds
+                  //   db.DisableProxyCreation = true;
 
                     try
                     {
-                        list = db.GetRepository<systemaddress>().Find().OrderBy(x => x.id).ToList();
+                        list = _unitOfWorkAsync.Repository<systemaddress>().Queryable().OrderBy(x => x.id).ToList();
                     }
                     catch (Exception ex)
                     {
@@ -149,14 +150,14 @@ namespace Nmedia.Services.Notification
             var task = Task.Factory.StartNew(() =>
             {
                 var list = new List<lu_messagetype>();
-                using (var db = _unitOfWork)
+              //    using (var db = _unitOfWork)
                 {
-                    db.IsAuditEnabled = false; //do not audit on adds
-                    db.DisableProxyCreation = true;
+                   // db.IsAuditEnabled = false; //do not audit on adds
+                  //   db.DisableProxyCreation = true;
 
                     try
                     {
-                        list = db.GetRepository<lu_messagetype>().Find().OrderBy(x => x.id).ToList();
+                        list = _unitOfWorkAsync.Repository<lu_messagetype>().Queryable().OrderBy(x => x.id).ToList();
                     }
                     catch (Exception ex)
                     {
@@ -196,9 +197,9 @@ namespace Nmedia.Services.Notification
 
             EmailModel emailmodels = new EmailModel();
 
-            using (var db = _unitOfWork)
+          //    using (var db = _unitOfWork)
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+               // db.IsAuditEnabled = false; //do not audit on adds
                 //db.DisableProxyCreation = true;
              //   using (var transaction = db.BeginTransaction())
                 {
@@ -212,15 +213,15 @@ namespace Nmedia.Services.Notification
 
                         var systemaddresstypeenum = (systemaddresstypeenum)Enum.Parse(typeof(systemaddresstypeenum), systemaddresstype);
                         //Id's messed up in DB use the first 
-                        dynamic systemsenderaddress = (from x in (db.GetRepository<systemaddress>().Find().ToList()) select x).First();
-                        lu_template template = (from x in (db.GetRepository<lu_template>().Find().ToList().Where(f => f.id == 1)) select x).First();
+                        dynamic systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList()) select x).First();
+                        lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == 1)) select x).First();
 
-                        lu_messagetype messagetype = (from x in (db.GetRepository<lu_messagetype>().Find().ToList().Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).First();
-                        var recipientemailaddresss = (from x in (db.GetRepository<address>().Find().ToList().Where(f => f.addresstype.id == (int)(addresstypeenum.Developer))) select x).ToList();
+                        lu_messagetype messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).First();
+                        var recipientemailaddresss = (from x in (_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(f => f.addresstype.id == (int)(addresstypeenum.Developer))) select x).ToList();
 
                         //build the recipient address objects
                         EmailModel returnmodel = new EmailModel();
-                        returnmodel = getemailbytemplateid(templateenum.GenericErrorMessage, db);
+                        returnmodel = getemailbytemplateid(templateenum.GenericErrorMessage, _unitOfWorkAsync);
                         //fill in the rest of the email model values 
                         returnmodel.subject = String.Format(returnmodel.subject, error.profileid);
                         returnmodel.body = String.Format(returnmodel.body, error.profileid, error.message);
@@ -250,8 +251,8 @@ namespace Nmedia.Services.Notification
 
                         message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
                         message.sendattempts = message.body != null ? 1 : 0;
-                        db.Add(message);
-                        int j = db.Commit();
+                        _unitOfWorkAsync.Repository<message>().Insert(message);
+                        var j = _unitOfWorkAsync.Commit();
                        // transaction.Commit();
                         });
                        // return task ;
@@ -286,9 +287,9 @@ namespace Nmedia.Services.Notification
 
             EmailViewModel viewmodel = new EmailViewModel();
 
-            using (var db = _unitOfWork)
+          //    using (var db = _unitOfWork)
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+               // db.IsAuditEnabled = false; //do not audit on adds
                 //db.DisableProxyCreation = true;
              //   using (var transaction = db.BeginTransaction())
                 {
@@ -305,17 +306,17 @@ namespace Nmedia.Services.Notification
 
                             var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
                             //Id's messed up in DB use the first 
-                            dynamic systemsenderaddress = (from x in (db.GetRepository<systemaddress>().Find().ToList()) select x).First();
-                            lu_template template = (from x in (db.GetRepository<lu_template>().Find().ToList().Where(f => f.id == (int)templateenum)) select x).First();                            
-                            lu_messagetype messagetype = (from x in (db.GetRepository<lu_messagetype>().Find().ToList().Where(f => f.id == (int)templateenum)) select x).First();
-                            //var recipientemailaddresss = (from x in (db.GetRepository<address>().Find().ToList().Where(f => f.addresstype.id == (int)(addresstypeenum.Developer))) select x).ToList();
+                            dynamic systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList()) select x).First();
+                            lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == (int)templateenum)) select x).First();                            
+                            lu_messagetype messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == (int)templateenum)) select x).First();
+                            //var recipientemailaddresss = (from x in (_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(f => f.addresstype.id == (int)(addresstypeenum.Developer))) select x).ToList();
 
                             //build the recipient address objects
                            // EmailModel returnmodel = new EmailModel();
-                            model = getemailbytemplateid(templateenum, db);
+                            model = getemailbytemplateid(templateenum, _unitOfWorkAsync);
                             //fill in the rest of the email model values 
                              ICollection<address> addresses = new List<address>();
-                            addresses.Add(getorcreateaddaddress(viewmodel,db));
+                            addresses.Add(getorcreateaddaddress(viewmodel,_unitOfWorkAsync));
 
 
                             //TO DO put in special code for the matches and the searches 
@@ -350,8 +351,11 @@ namespace Nmedia.Services.Notification
 
                             message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
                             message.sendattempts = message.body != null ? 1 : 0;
-                            db.Add(message);
-                            int j = db.Commit();
+                          //  db.Add(message);
+                           // int j = db.Commit();
+
+                            _unitOfWorkAsync.Repository<message>().Insert(message);
+                            var j = _unitOfWorkAsync.Commit();
                            // transaction.Commit();
 
                           
@@ -393,7 +397,7 @@ namespace Nmedia.Services.Notification
 
         //    using (var db = new NotificationContext())
         //    {
-        //        db.IsAuditEnabled = false; //do not audit on adds
+        //       // db.IsAuditEnabled = false; //do not audit on adds
         //        //db.DisableProxyCreation = true;
         //     //   using (var transaction = db.BeginTransaction())
         //        {
@@ -410,19 +414,19 @@ namespace Nmedia.Services.Notification
         //                //parse the address type
         //                var systemaddresstypeenum = (systemaddresstypeenum)Enum.Parse(typeof(systemaddresstypeenum), systemaddresstype);
         //                int value = (int)systemaddresstypeenum;
-        //                // var list = db.GetRepository<systemaddress>().Find().ToList();
-        //                var addresstypes = db.GetRepository<systemaddress>().Find().ToList();
+        //                // var list = _unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList();
+        //                var addresstypes = _unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList();
 
-        //                //  dynamic systemsenderaddress = (from x in (db.GetRepository<systemaddress>().Find().ToList()) select x).First();
+        //                //  dynamic systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList()) select x).First();
 
-        //                systemaddress systemsenderaddress = (from x in (db.GetRepository<systemaddress>().Find().ToList().Where(f => f.systemaddresstype_id == value)) select x).FirstOrDefault();
-        //                lu_template template = (from x in (db.GetRepository<lu_template>().Find().ToList().Where(f => f.id == (int)(model.template.id))) select x).First();
+        //                systemaddress systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList().Where(f => f.systemaddresstype_id == value)) select x).FirstOrDefault();
+        //                lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == (int)(model.template.id))) select x).First();
         //                //verify message type, if meessage type is empty just send the user update
-        //                var messagetype = model.messagetype != null ? (from x in (db.GetRepository<lu_messagetype>().Find().ToList().Where(f => f.id == model.messagetype.id)) select x).First() :
-        //                                                          (from x in (db.GetRepository<lu_messagetype>().Find().ToList().Where(f => f.id == (int)(messagetypeenum.UserUpdate))) select x).First();
+        //                var messagetype = model.messagetype != null ? (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == model.messagetype.id)) select x).First() :
+        //                                                          (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == (int)(messagetypeenum.UserUpdate))) select x).First();
         //                //check to see if the recipeint address already exists if not add i
         //                //took out filtering for now , if an email address was passed we will just send it , trusting the sending app.
-        //                address current = db.GetRepository<address>().Find().ToList().Where(p => p.emailaddress.ToUpper() == model.userEmailViewModel.to.ToUpper()).FirstOrDefault(); //&& (p.addresstype_id == (int)addresstypeenum.PromotionUser | p.addresstype.description.ToUpper() == "DEVELOPER")  ).FirstOrDefault();
+        //                address current = _unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(p => p.emailaddress.ToUpper() == model.userEmailViewModel.to.ToUpper()).FirstOrDefault(); //&& (p.addresstype_id == (int)addresstypeenum.PromotionUser | p.addresstype.description.ToUpper() == "DEVELOPER")  ).FirstOrDefault();
 
         //                if (current == null)
         //                {
@@ -441,7 +445,7 @@ namespace Nmedia.Services.Notification
         //                }
 
         //                //get the ID since it is required either way , got to be a betetr way to do this than to query twice
-        //                // var currentaddress = db.GetRepository<address>().Find().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
+        //                // var currentaddress = _unitOfWorkAsync.Repository<address>().Queryable().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
 
         //                ICollection<address> addresses = new List<address>();
         //                //add the address 
@@ -1355,14 +1359,14 @@ namespace Nmedia.Services.Notification
       
        
        //TO do might want to be able to send multiple emails at once instead instead of verifiying each 
-       private address getorcreateaddaddress(EmailViewModel Model, IUnitOfWork db)
+       private address getorcreateaddaddress(EmailViewModel Model, IUnitOfWorkAsync db)
        {
        
          //check to see if the recipeint address already exists if not add i
                         address current =
-                        db.GetRepository<address>().Find().ToList()
+                        _unitOfWorkAsync.Repository<address>().Queryable().ToList()
                         .Where(p => p.emailaddress.ToUpper() == Model.userEmailViewModel.emailaddress && p.addresstype_id == (int)Model.userEmailViewModel.addresstype).FirstOrDefault();
-                            //db.GetRepository<address>().Find().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
+                            //_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
 
                          
                         if (current == null)
@@ -1376,12 +1380,12 @@ namespace Nmedia.Services.Notification
                             current.emailaddress = Model.userEmailViewModel.emailaddress;  //IsToAddress == true? Model.EmailModel.to:Model.EmailModel.from;
                             current.active = true;
                             current.creationdate = DateTime.Now;
-                            db.Add(current); 
-                            int i = db.Commit();
+                            _unitOfWorkAsync.Repository<address>().Insert(current); 
+                            var i = db.Commit();
                         }
                       
                         //get the ID since it is required either way , got to be a betetr way to do this than to query twice
-                       // var currentaddress = db.GetRepository<address>().Find().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
+                       // var currentaddress = _unitOfWorkAsync.Repository<address>().Queryable().Where(p => p.emailaddress.ToUpper() == model.to.ToUpper() && p.addresstype_id == (int)addresstypeenum.PromotionUser).FirstOrDefault();
 
                        //ICollection<address> addresses = new List<address>();
                         //add the address 
@@ -1394,14 +1398,14 @@ namespace Nmedia.Services.Notification
        }
        
        
-       private EmailModel getemailbytemplateid(templateenum template, IUnitOfWork db)
+       private EmailModel getemailbytemplateid(templateenum template, IUnitOfWorkAsync db)
         {
             EmailModel emaildetail = new EmailModel();
 
             try
             {
-                emaildetail.body = db.GetRepository<lu_template>().Find().ToList().Where(p => p.id == (int)template).FirstOrDefault().body.description;
-                emaildetail.subject = db.GetRepository<lu_template>().Find().ToList().Where(p => p.id == (int)template).FirstOrDefault().subject.description;
+                emaildetail.body = _unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(p => p.id == (int)template).FirstOrDefault().body.description;
+                emaildetail.subject = _unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(p => p.id == (int)template).FirstOrDefault().subject.description;
                 //TO DO figure out if we will populate other values here
                 return emaildetail;
             }
@@ -1419,14 +1423,14 @@ namespace Nmedia.Services.Notification
         }
 
         //Private reusable internal functions  
-        private message sendemailtemplateinfo(templateenum template, IUnitOfWork db)
+        private message sendemailtemplateinfo(templateenum template, IUnitOfWorkAsync db)
         {
             message newmessagedetail = new message();
 
 
             try
             {
-                newmessagedetail.template = db.GetRepository<lu_template>().Find().ToList().Where(p => p.id == (int)template).FirstOrDefault();
+                newmessagedetail.template = _unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(p => p.id == (int)template).FirstOrDefault();
                 newmessagedetail.body = newmessagedetail.template.body.description;
                 newmessagedetail.subject = newmessagedetail.template.subject.description;
                 return newmessagedetail;

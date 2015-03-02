@@ -13,6 +13,7 @@ using Nmedia.Infrastructure.Domain.Data.log;
 
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.Domain;
+using Repository.Pattern.UnitOfWork;
 
 
 namespace Nmedia.Services.Logging
@@ -28,10 +29,10 @@ namespace Nmedia.Services.Logging
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        IUnitOfWork _unitOfWork;
+          private readonly IUnitOfWorkAsync _unitOfWorkAsync;
 
 
-        public LoggingService(IUnitOfWork unitOfWork)
+        public LoggingService(IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -45,7 +46,7 @@ namespace Nmedia.Services.Logging
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
+             _unitOfWorkAsync = unitOfWork;
             //disable proxy stuff by default
             //_unitOfWork.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
@@ -55,10 +56,10 @@ namespace Nmedia.Services.Logging
 
         public  async Task WriteCompleteLogEntry(log logEntry)
         {
-            using (var db = _unitOfWork)
+          //    using (var db = _unitOfWork)
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-                db.DisableProxyCreation = true;
+               // db.IsAuditEnabled = false; //do not audit on adds
+              //   db.DisableProxyCreation = true;
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -66,26 +67,29 @@ namespace Nmedia.Services.Logging
                         await Task.Factory.StartNew (() =>                        
                         {
 
-                            IRepository<lu_logapplication> applicationrepo = db.GetRepository<lu_logapplication>();
-                            IRepository<lu_logseverity> logseverityrepo = db.GetRepository<lu_logseverity>();
-                            IRepository<lu_logenviroment> logenviromentrepo = db.GetRepository<lu_logenviroment>();
+                        //    IRepository<lu_logapplication> applicationrepo =
+                            var applicationrepo = _unitOfWorkAsync.Repository<lu_logapplication>().Queryable();
+                          //  IRepository<lu_logseverity> logseverityrepo = 
+                            var logseverityrepo = _unitOfWorkAsync.Repository<lu_logseverity>().Queryable();
+                           // IRepository<lu_logenviroment> logenviromentrepo =
+                            var logenviromentrepo = _unitOfWorkAsync.Repository<lu_logenviroment>().Queryable();
 
                             //make sure we valid desc and log severites so we are not adding new ones
-                            lu_logapplication application = applicationrepo.FindSingle(p => p.id == logEntry.application.id);
-                            lu_logseverity logseverity = logseverityrepo.FindSingle(p => p.id == logEntry.logseverity.id);
-                            lu_logenviroment enviroment = logenviromentrepo.FindSingle(p => p.id == logEntry.enviroment.id);
+                            lu_logapplication application = applicationrepo.Where(p => p.id == logEntry.application.id).FirstOrDefault();
+                            lu_logseverity logseverity = logseverityrepo.Where(p => p.id == logEntry.logseverity.id).FirstOrDefault();
+                            lu_logenviroment enviroment = logenviromentrepo.Where(p => p.id == logEntry.enviroment.id).FirstOrDefault();
 
                             //set as default error messages if blank
                             //logEntry.application = application != null ? application : applicationrepo.FindSingle(p => p.id == (int)applicationEnum.misc);
-                            logEntry.logseverity = logseverity != null ? logseverity : logseverityrepo.FindSingle(p => p.id == (int)logseverityEnum.Warning);
+                            logEntry.logseverity = logseverity != null ? logseverity : logseverityrepo.Where(p => p.id == (int)logseverityEnum.Warning).FirstOrDefault();
                             //logEntry.enviroment = enviroment != null ? enviroment : logenviromentrepo.FindSingle(p => p.id == (int)LogenviromentEnum.dev);                     
 
                             logEntry.application = application;
                             logEntry.logseverity = logseverity;
                             logEntry.enviroment = enviroment;
 
-                        db.Add(logEntry);
-                        int i = db.Commit();
+                            _unitOfWorkAsync.Repository<log>().Insert(logEntry);
+                            var i = _unitOfWorkAsync.Commit();
                        // transaction.Commit();
                         });
                          // await task;

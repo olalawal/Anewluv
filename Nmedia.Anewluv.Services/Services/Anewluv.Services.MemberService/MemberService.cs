@@ -40,13 +40,13 @@ namespace Anewluv.Services.Members
     {
 
 
-        IUnitOfWork _unitOfWork;
+        IUnitOfWorkAsync _unitOfWork;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public MemberService(IUnitOfWork unitOfWork)
+        public MemberService(IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -263,7 +263,7 @@ namespace Anewluv.Services.Members
                            myProfile.dailysentemailquota = myProfile.dailysentemailquota == null ? 1 : myProfile.dailysentemailquota + 1;
                           
                            db.Update(myProfile);
-                           int i = db.Commit();
+                         var i  =db.SaveChanges();
                           // transaction.Commit();
 
                            return true;
@@ -333,7 +333,7 @@ namespace Anewluv.Services.Members
                                           break;
                                   }
                                   db.Add(p);
-                                  int z = db.Commit();
+                                  int z =db.SaveChanges();
                                  // transaction.Commit();
 
                                //   return true;
@@ -386,7 +386,7 @@ namespace Anewluv.Services.Members
                                   //handele the update using EF
                                   //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                                   db.Update(myProfile);
-                                  int i = db.Commit();
+                                var i  =db.SaveChanges();
                                  // transaction.Commit();
 
                                   return true;
@@ -434,7 +434,7 @@ namespace Anewluv.Services.Members
                           //handele the update using EF
                           //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                           db.Update(myProfile);
-                          int i = db.Commit();
+                        var i  =db.SaveChanges();
                          // transaction.Commit();
 
                           return true;
@@ -480,7 +480,7 @@ namespace Anewluv.Services.Members
                           //handele the update using EF
                           //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                           db.Update(myProfile);
-                          int i = db.Commit();
+                        var i  =db.SaveChanges();
                          // transaction.Commit();
 
                           return true;
@@ -525,7 +525,7 @@ namespace Anewluv.Services.Members
                               openididentifier = model.openididentifier
                           };
                            db.Add(profileOpenIDStore);
-                           int i = db.Commit();
+                         var i  =db.SaveChanges();
                           // transaction.Commit();
 
                            return true;
@@ -732,7 +732,7 @@ namespace Anewluv.Services.Members
                               myLogtime.logintime = DateTime.Now;
                               db.Add(myLogtime);
                               //save all changes bro                         
-                              int i = db.Commit();
+                            var i  =db.SaveChanges();
                              // transaction.Commit();
 
                              // return true;
@@ -791,7 +791,7 @@ namespace Anewluv.Services.Members
                             db.Update(p);
                         }
 
-                        int i = db.Commit();
+                      var i  =db.SaveChanges();
                        // transaction.Commit();
 
                    //     return true;
@@ -863,7 +863,7 @@ namespace Anewluv.Services.Members
                         myLogtime.logintime = DateTime.Now;
                         db.Add(myLogtime);
                         //save all changes bro                         
-                        int i = db.Commit();
+                      var i  =db.SaveChanges();
                        // transaction.Commit();
 
                         // return true;
@@ -1013,7 +1013,7 @@ namespace Anewluv.Services.Members
 
         #region "private methods for actvity"
     
-        public int addprofileactvity(profileactivity model,IUnitOfWork db)
+        public int addprofileactvity(profileactivity model,IUnitOfWorkAsync db)
         {
             //get the profile
             //profile myProfile;
@@ -1033,7 +1033,7 @@ namespace Anewluv.Services.Members
                                               
                             db.Add(model);
                             //save all changes bro
-                            int i = db.Commit();
+                          var i  =db.SaveChanges();
                         //   // transaction.Commit();
                             return model.id;
                     }
@@ -1057,7 +1057,7 @@ namespace Anewluv.Services.Members
 
         }
 
-        private int addprofileactvitygeodata(profileactivitygeodata model,IUnitOfWork db)
+        private int addprofileactvitygeodata(profileactivitygeodata model,IUnitOfWorkAsync db)
         {
 
             db.IsAuditEnabled = false; //do not audit on adds
@@ -1073,7 +1073,7 @@ namespace Anewluv.Services.Members
                       
                             db.Add(model);
                             //save all changes bro
-                            int i = db.Commit();
+                          var i  =db.SaveChanges();
                            // transaction.Commit();
 
                            return model.id;

@@ -8,7 +8,7 @@ using Ninject.Modules;
 
 //using Shell.MVC2.Services.Authentication; 
 //to do do away with this when we go to code first , we would pull this from entities 
-using Anewluv.Services.Contracts;
+//using Anewluv.Services.Contracts;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
@@ -19,6 +19,9 @@ using Anewluv.Domain;
 //using Nmedia.DataAccess.Interfaces;
 using System.Data.Entity;
 using System.ServiceModel;
+using Repository.Pattern.DataContext;
+using Repository.Pattern.UnitOfWork;
+using Repository.Pattern.Ef6;
 //using Anewluv.Services.Edit;
 
 
@@ -32,16 +35,19 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 
             // IKernel kernel = new StandardKernel();
 
-            this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Edit.SearchEditService")).InScope(c => OperationContext.Current); 
+           // this.Bind<IUnitOfWorkAsync>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Edit.SearchEditService")).InScope(c => OperationContext.Current); 
             // this.Unbind(typeof(DbContext));
-            this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Edit.SearchEditService")).InScope(c => OperationContext.Current); 
+          //  this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Edit.SearchEditService")).InScope(c => OperationContext.Current); 
 
             //the Unit of work module should already be loaded by now
            // this.Bind<ISearchEditService>().ToSelf().InScope(c => OperationContext.Current);
             //Bind<ISearchEditService,SearchEditService>().To<SearchEditService>().InRequestScope();
 
             //the Unit of work module should already be loaded by now
-            this.Bind<ISearchEditService>().ToSelf().InRequestScope();
+            //this.Bind<ISearchEditService>().ToSelf().InRequestScope();
+
+            this.Bind<IDataContextAsync>().To<AnewluvContext>().InRequestScope();
+            this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().InRequestScope();
          
       }
 	}

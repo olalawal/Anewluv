@@ -32,6 +32,10 @@ public interface IGeoDataStoredProcedures
      IEnumerable<CityList> CityListbycountryIDCityFilter(string countryid,string filter);
 
      IEnumerable<PostalCodeList> GetPostalCodesByCountryIDCityandPrefix(string countryid,string cityname,string filter);
+
+     bool GetPostalCodeStatusByCountryID(string countryid);
+
+     bool  GetPostalCodeStatusBycountryName(string countryname);
    
 }
 }

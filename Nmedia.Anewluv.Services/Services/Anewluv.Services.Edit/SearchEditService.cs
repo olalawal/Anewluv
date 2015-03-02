@@ -34,14 +34,14 @@ namespace Anewluv.Services.Edit
 
 
       
-        IUnitOfWork _unitOfWork;
+        IUnitOfWorkAsync _unitOfWorkAsync;
        // private Logging logger;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _searchsettingsactionsrepository;
         // private string _apikey;
 
-        public SearchEditService(IUnitOfWork unitOfWork)
+        public SearchEditService(IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -55,9 +55,9 @@ namespace Anewluv.Services.Edit
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
+            _unitOfWorkAsync = unitOfWork;
             //disable proxy stuff by default
-            //_unitOfWork.DisableProxyCreation = true;
+            //_unitOfWorkAsync.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
 
@@ -66,8 +66,8 @@ namespace Anewluv.Services.Edit
         #region "search getter methods"
         public async Task<searchsetting> getsearchsettings(SearchSettingsModel model)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
 
@@ -100,8 +100,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<List<searchsetting>> getallsearchsettingsbyprofileid(SearchSettingsModel searchmodel)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
 
@@ -134,8 +134,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<SearchSettingsModel> getsearchsettingsviewmodel(SearchSettingsModel searchmodel)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
 
@@ -184,8 +184,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<BasicSearchSettingsModel> getbasicsearchsettings(SearchSettingsModel searchmodel)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
                 //if (searchmodel.profileid == 0) return null;
 
@@ -221,8 +221,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<AppearanceSearchSettingsModel> getappearancesearchsettings(SearchSettingsModel searchmodel)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
 
@@ -255,8 +255,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<CharacterSearchSettingsModel> getcharactersearchsettings(SearchSettingsModel searchmodel)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
 
@@ -289,8 +289,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<LifeStyleSearchSettingsModel> getlifestylesearchsettings(SearchSettingsModel searchmodel)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -327,7 +327,7 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditallsettings(SearchSettingsModel model)
         {
 
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
@@ -387,7 +387,7 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditbasicsettings(SearchSettingsModel model)
         {
 
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
@@ -442,7 +442,7 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditappearancesettings(SearchSettingsModel model)
         {
 
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
@@ -494,7 +494,7 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditcharactersettings(SearchSettingsModel model)
         {
 
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
@@ -548,7 +548,7 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditlifestylesettings(SearchSettingsModel model)
         {
            
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
@@ -604,7 +604,7 @@ namespace Anewluv.Services.Edit
         #region "private get methods for reuses"
 
         //generic filtering function we can reuse
-        private searchsetting filtersearchsettings (SearchSettingsModel searchmodel,IUnitOfWork db)
+        private searchsetting filtersearchsettings (SearchSettingsModel searchmodel,IUnitOfWorkAsync db)
         {
 
             try
@@ -635,7 +635,7 @@ namespace Anewluv.Services.Edit
             { throw ex; }
         }
 
-       private BasicSearchSettingsModel getbasicsearchsettings(searchsetting p,IUnitOfWork db)
+       private BasicSearchSettingsModel getbasicsearchsettings(searchsetting p,IUnitOfWorkAsync db)
         {
             try
             {
@@ -729,7 +729,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        private AppearanceSearchSettingsModel getappearancesearchsettings(searchsetting p, IUnitOfWork db)
+        private AppearanceSearchSettingsModel getappearancesearchsettings(searchsetting p, IUnitOfWorkAsync db)
         {
             try
             {
@@ -820,7 +820,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        private CharacterSearchSettingsModel getcharactersearchsettings(searchsetting p, IUnitOfWork db)
+        private CharacterSearchSettingsModel getcharactersearchsettings(searchsetting p, IUnitOfWorkAsync db)
         {
             try
             {
@@ -950,7 +950,7 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        private LifeStyleSearchSettingsModel getlifestylesearchsettings(searchsetting p, IUnitOfWork db)
+        private LifeStyleSearchSettingsModel getlifestylesearchsettings(searchsetting p, IUnitOfWorkAsync db)
         {
             try
             {
@@ -1066,7 +1066,7 @@ namespace Anewluv.Services.Edit
         #region "private update methods for reuse so we can also combine in one call"
 
         //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-        private AnewluvMessages updatebasicsearchsettings(BasicSearchSettingsModel model,searchsetting p, AnewluvMessages messages, IUnitOfWork db)
+        private AnewluvMessages updatebasicsearchsettings(BasicSearchSettingsModel model,searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync db)
         {
 
                 bool nothingupdated = true;
@@ -1103,7 +1103,7 @@ namespace Anewluv.Services.Edit
 
 
                         db.Update(p);
-                        int i = db.Commit();
+                      var i  =db.SaveChanges();
 
                        // return messages;
 
@@ -1125,7 +1125,7 @@ namespace Anewluv.Services.Edit
         }
         //TO DO add validation and pass back via messages 
 
-        private AnewluvMessages updateappearancesearchsettings(AppearanceSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWork db)
+        private AnewluvMessages updateappearancesearchsettings(AppearanceSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync db)
         {
 
             try
@@ -1153,7 +1153,7 @@ namespace Anewluv.Services.Edit
                         updatesearchsettingshotfeature(p.searchsetting_hotfeature.ToList(), p, db);
 
                     db.Update(p);
-                    int i = db.Commit();
+                  var i  =db.SaveChanges();
 
                   //  return messages;
             }
@@ -1168,7 +1168,7 @@ namespace Anewluv.Services.Edit
 
         }
 
-        private AnewluvMessages updatecharactersearchsettings(CharacterSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWork db)
+        private AnewluvMessages updatecharactersearchsettings(CharacterSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync db)
         {
          
                 try
@@ -1219,7 +1219,7 @@ namespace Anewluv.Services.Edit
 
 
 
-                        int i = db.Commit();
+                      var i  =db.SaveChanges();
 
 
                
@@ -1238,7 +1238,7 @@ namespace Anewluv.Services.Edit
 
         }
 
-        private AnewluvMessages updatelifestylesearchsettings(LifeStyleSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWork db)
+        private AnewluvMessages updatelifestylesearchsettings(LifeStyleSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync db)
         {
            
                 try
@@ -1284,7 +1284,7 @@ namespace Anewluv.Services.Edit
                             updatesearchsettingswantskids(p.searchsetting_wantkids.ToList(), p, db);
 
 
-                        int i = db.Commit();
+                      var i  =db.SaveChanges();
 
 
 
@@ -1311,7 +1311,7 @@ namespace Anewluv.Services.Edit
         //Basic Checkbox settings updates
         //APPEARANCE checkboxes start  /////////////////////////
         //profiledata gender
-        private void updatesearchsettingsgender(List<searchsetting_gender> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsgender(List<searchsetting_gender> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1346,7 +1346,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata showme
-        private void updatesearchsettingsshowme(List<searchsetting_showme> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsshowme(List<searchsetting_showme> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1381,7 +1381,7 @@ namespace Anewluv.Services.Edit
 
         }     
         //profiledata sortby
-        private void updatesearchsettingssortby(List<searchsetting_sortbytype> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingssortby(List<searchsetting_sortbytype> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1416,7 +1416,7 @@ namespace Anewluv.Services.Edit
 
         }     
         //profiledata location
-        private void updatesearchsettingslocation(List<searchsetting_location> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingslocation(List<searchsetting_location> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1457,7 +1457,7 @@ namespace Anewluv.Services.Edit
 
         //APPEARANCE checkboxes start  /////////////////////////
         //profiledata ethnicity
-        private void updatesearchsettingsethnicity(List<searchsetting_ethnicity> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsethnicity(List<searchsetting_ethnicity> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1492,7 +1492,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata bodytypes
-        private void updatesearchsettingsbodytypes(List<searchsetting_bodytype> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsbodytypes(List<searchsetting_bodytype> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1527,7 +1527,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata eyecolor
-        private void updatesearchsettingseyecolor(List<searchsetting_eyecolor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingseyecolor(List<searchsetting_eyecolor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1562,7 +1562,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata haircolor
-        private void updatesearchsettingshaircolor(List<searchsetting_haircolor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingshaircolor(List<searchsetting_haircolor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1597,7 +1597,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata hotfeature
-        private void updatesearchsettingshotfeature(List<searchsetting_hotfeature> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingshotfeature(List<searchsetting_hotfeature> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1636,7 +1636,7 @@ namespace Anewluv.Services.Edit
         
         //Lifesatyle settings start //////////////////
         //profiledata educationlevel
-        private void updatesearchsettingseducationlevel(List<searchsetting_educationlevel> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingseducationlevel(List<searchsetting_educationlevel> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1671,7 +1671,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata lookingfor
-        private void updatesearchsettingslookingfor(List<searchsetting_lookingfor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingslookingfor(List<searchsetting_lookingfor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1706,7 +1706,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata employmentstatus
-        private void updatesearchsettingsemploymentstatus(List<searchsetting_employmentstatus> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsemploymentstatus(List<searchsetting_employmentstatus> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1741,7 +1741,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata havekids
-        private void updatesearchsettingshavekids(List<searchsetting_havekids> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingshavekids(List<searchsetting_havekids> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1776,7 +1776,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata incomelevel
-        private void updatesearchsettingsincomelevel(List<searchsetting_incomelevel> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsincomelevel(List<searchsetting_incomelevel> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1811,7 +1811,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata livingsituation
-        private void updatesearchsettingslivingsituation(List<searchsetting_livingstituation> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingslivingsituation(List<searchsetting_livingstituation> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1846,7 +1846,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata maritalstatus
-        private void updatesearchsettingsmaritalstatus(List<searchsetting_maritalstatus> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsmaritalstatus(List<searchsetting_maritalstatus> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1881,7 +1881,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata profession
-        private void updatesearchsettingsprofession(List<searchsetting_profession> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsprofession(List<searchsetting_profession> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1916,7 +1916,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata wantskids
-        private void updatesearchsettingswantskids(List<searchsetting_wantkids> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingswantskids(List<searchsetting_wantkids> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1956,7 +1956,7 @@ namespace Anewluv.Services.Edit
         //// Start of Character Search settings ////
 
         //profiledata diet
-        private void updatesearchsettingsdiet(List<searchsetting_diet> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsdiet(List<searchsetting_diet> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -1991,7 +1991,7 @@ namespace Anewluv.Services.Edit
 
         }        
         //profiledata humor
-        private void updatesearchsettingshumor(List<searchsetting_humor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingshumor(List<searchsetting_humor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -2026,7 +2026,7 @@ namespace Anewluv.Services.Edit
 
         }        
         //profiledata hobby
-        private void updatesearchsettingshobby(List<searchsetting_hobby> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingshobby(List<searchsetting_hobby> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -2061,7 +2061,7 @@ namespace Anewluv.Services.Edit
 
         }       
         //profiledata drinks
-        private void updatesearchsettingsdrinks(List<searchsetting_drink> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsdrinks(List<searchsetting_drink> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -2096,7 +2096,7 @@ namespace Anewluv.Services.Edit
 
         }        
         //profiledata exercise
-        private void updatesearchsettingsexercise(List<searchsetting_exercise> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsexercise(List<searchsetting_exercise> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -2131,7 +2131,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata smokes
-        private void updatesearchsettingssmokes(List<searchsetting_smokes> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingssmokes(List<searchsetting_smokes> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -2166,7 +2166,7 @@ namespace Anewluv.Services.Edit
 
         }        
         //profiledata sign
-        private void updatesearchsettingssign(List<searchsetting_sign> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingssign(List<searchsetting_sign> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -2201,7 +2201,7 @@ namespace Anewluv.Services.Edit
 
         }        
         //profiledata politicalview
-        private void updatesearchsettingspoliticalview(List<searchsetting_politicalview> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingspoliticalview(List<searchsetting_politicalview> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -2236,7 +2236,7 @@ namespace Anewluv.Services.Edit
 
         }       
         //profiledata religion
-        private void updatesearchsettingsreligion(List<searchsetting_religion> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsreligion(List<searchsetting_religion> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -2271,7 +2271,7 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata religiousattendance
-        private void updatesearchsettingsreligiousattendance(List<searchsetting_religiousattendance> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWork db)
+        private void updatesearchsettingsreligiousattendance(List<searchsetting_religiousattendance> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {

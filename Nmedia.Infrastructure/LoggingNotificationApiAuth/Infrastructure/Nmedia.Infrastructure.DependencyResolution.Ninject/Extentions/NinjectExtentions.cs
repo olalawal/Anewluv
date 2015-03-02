@@ -26,15 +26,15 @@ namespace Ninject.Activation
             return false;
         }
 
-        public static string IsInjectingToRepositoryDataSourceOfNamespace(this IRequest request)
-        {
-            if (request.ParentRequest.Service.GetGenericTypeDefinition() == typeof(Nmedia.DataAccess.Interfaces.IContext))
-            {
-                return request.ParentRequest.Service.GetGenericArguments().First().Namespace;
+        //public static string IsInjectingToRepositoryDataSourceOfNamespace(this IRequest request)
+        //{
+        //    if (request.ParentRequest.Service.GetGenericTypeDefinition() == typeof(Nmedia.DataAccess.Interfaces.IContext))
+        //    {
+        //        return request.ParentRequest.Service.GetGenericArguments().First().Namespace;
 
-            }
+        //    }
 
-            return "";
-        }
+        //    return "";
+        //}
     }
 }

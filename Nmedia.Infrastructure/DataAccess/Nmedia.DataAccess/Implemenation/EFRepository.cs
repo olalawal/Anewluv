@@ -7,6 +7,7 @@ using System.Text;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data.Entity.Core.Objects;
+using Nmedia.DataAccess.Interfaces;
 
 namespace Nmedia.DataAccess
 {

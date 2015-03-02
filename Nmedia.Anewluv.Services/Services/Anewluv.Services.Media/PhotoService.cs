@@ -39,13 +39,13 @@ namespace Anewluv.Services.Media
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        IUnitOfWork _unitOfWork;
+        IUnitOfWorkAsync _unitOfWorkAsync;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public PhotoService(IUnitOfWork unitOfWork)
+        public PhotoService(IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -59,9 +59,9 @@ namespace Anewluv.Services.Media
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
+            _unitOfWorkAsync = unitOfWork;
             //disable proxy stuff by default
-            //_unitOfWork.DisableProxyCreation = true;
+            //_unitOfWorkAsync.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
 
@@ -99,7 +99,7 @@ namespace Anewluv.Services.Media
 
                 try
                 {
-                   //var db = _unitOfWork;
+                   //var db = _unitOfWorkAsync;
                     var test = db.GetRepository<lu_photoformat>().Find().OfType<lu_photoformat>().ToList();
                     foreach (lu_photoformat currentformat in db.GetRepository<lu_photoformat>().Find().OfType<lu_photoformat>().ToList())
                     {
@@ -180,8 +180,8 @@ namespace Anewluv.Services.Media
 
         public async Task<PhotoModel> getphotomodelbyphotoid(string photoid, string format)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
              
                     try
@@ -258,8 +258,8 @@ namespace Anewluv.Services.Media
         public async Task<PhotoModel> getgalleryphotomodelbyprofileid(string profileid, string format)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
               
                     try
@@ -295,8 +295,8 @@ namespace Anewluv.Services.Media
         public async Task<List<PhotoModel>> getphotomodelsbyprofileidandstatus(string profileid, string status, string format)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
              
@@ -361,8 +361,8 @@ namespace Anewluv.Services.Media
        public async Task<List<PhotoModel>> getpagedphotomodelbyprofileidandstatus(string profileid, string status, string format, string page, string pagesize)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
               
                     try
@@ -399,8 +399,8 @@ namespace Anewluv.Services.Media
         //TO DO not implemented
         public async Task <PhotoViewModel> getpagedphotoviewmodelbyprofileid(string profileid, string format, string page, string pagesize)
         {
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                
@@ -441,8 +441,8 @@ namespace Anewluv.Services.Media
 
         public async Task<photoeditmodel> getphotoeditmodelbyphotoid(string photoid, string format)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
              
@@ -498,8 +498,8 @@ namespace Anewluv.Services.Media
 
         public async Task<List<photoeditmodel>> getphotoeditmodelsbyprofileidandstatus(string profile_id, string status, string format)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
               
                     try
@@ -555,8 +555,8 @@ namespace Anewluv.Services.Media
                                                               string page, string pagesize)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
               
                     try
@@ -619,8 +619,8 @@ namespace Anewluv.Services.Media
         //12-10-2012 this also filters the format
         public  async Task<PhotoEditViewModel> getpagededitphotoviewmodelbyprofileidandformat(string profileid, string format, string page, string pagesize)
         {
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
              
                 try
@@ -670,7 +670,7 @@ namespace Anewluv.Services.Media
         public async Task<AnewluvMessages> deleteuserphoto(string photoid)
         {
 
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
@@ -695,7 +695,7 @@ namespace Anewluv.Services.Media
                                 db.Update(PhotoModify);
                                 // Update database
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                                int i = db.Commit();
+                              var i  =db.SaveChanges();
                                // transaction.Commit();
                                 AnewluvMessages.messages.Add("photo deleted successfully");
                                 return AnewluvMessages;
@@ -730,7 +730,7 @@ namespace Anewluv.Services.Media
 
         public async Task<AnewluvMessages> makeuserphoto_private(string photoid)
         {
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
@@ -764,7 +764,7 @@ namespace Anewluv.Services.Media
                                 db.Update(PhotoModify);
                                 // Update database
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                                int i = db.Commit();
+                              var i  =db.SaveChanges();
                                // transaction.Commit();
                                 AnewluvMessages.messages.Add("photo privacy added");
                                 return AnewluvMessages;
@@ -795,7 +795,7 @@ namespace Anewluv.Services.Media
 
         public async Task<AnewluvMessages> makeuserphoto_public(string photoid)
         {
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
@@ -818,7 +818,7 @@ namespace Anewluv.Services.Media
                                 db.Update(PhotoModify);
                                 // Update database
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                                int i = db.Commit();
+                              var i  =db.SaveChanges();
                                // transaction.Commit();
                                AnewluvMessages.messages.Add("photo privacy removed");
                                return AnewluvMessages;
@@ -872,7 +872,7 @@ namespace Anewluv.Services.Media
             //update method code
             //Test this with unit oof work as ut for now...
            using (var db = new AnewluvContext())  
-          //  using (var db = _unitOfWork)  
+          //  using (var db = _unitOfWorkAsync)  
             {
                 db.IsAuditEnabled = false; //do not audit on adds
                 db.DisableProxyCreation = false;
@@ -918,7 +918,7 @@ namespace Anewluv.Services.Media
                                             AnewluvMessage.messages.Add("<br/>" + "photo with name " + NewPhoto.imagecaption + "Has been uploaded");
                                             //allow saving of new photo 
                                             db.Add(NewPhoto);
-                                            int i2 = db.Commit();
+                                            int i2 =db.SaveChanges();
                                             photosaddedcount = +1;
 
                                             foreach (photoconversion convertedphoto in temp)
@@ -926,7 +926,7 @@ namespace Anewluv.Services.Media
                                                 //if this does not recognise the photo object we might need to save that and delete it later
                                                 db.Add(convertedphoto);
                                                 //commit if no errors                               
-                                                int i = db.Commit();      
+                                              var i  =db.SaveChanges();      
                                             }
                                         }
                                     }
@@ -1034,14 +1034,14 @@ namespace Anewluv.Services.Media
                                 {
                                     //allow saving of new photo 
                                     db.Add(NewPhoto);
-                                    int i2 = db.Commit();
+                                    int i2 =db.SaveChanges();
                                     // _datingcontext.SaveChanges();
                                     foreach (photoconversion convertedphoto in temp)
                                     {
                                         //if this does not recognise the photo object we might need to save that and delete it later
                                         db.Add(convertedphoto);
                                     }
-                                    int i = db.Commit();
+                                  var i  =db.SaveChanges();
                                    // transaction.Commit();
                                 }
 
@@ -1085,8 +1085,8 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkvalidjpggif(byte[] image)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
                
@@ -1132,8 +1132,8 @@ namespace Anewluv.Services.Media
         public async Task<string> getgalleryphotobyscreenname(string strscreenname, string format)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
                  try
@@ -1183,8 +1183,8 @@ namespace Anewluv.Services.Media
         public async Task<string> getgalleryimagebyphotoid(string photoid, string format)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
               
@@ -1235,8 +1235,8 @@ namespace Anewluv.Services.Media
        
        public async Task<string> getgalleryphotobyprofileid(string profileid, string format)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
               
@@ -1289,8 +1289,8 @@ namespace Anewluv.Services.Media
         public async Task<string> getgalleryimagebynormalizedscreenname(string strScreenName, string format)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
              
@@ -1345,8 +1345,8 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkifphotocaptionalreadyexists(string profileid, string strPhotoCaption)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
 
                
@@ -1396,8 +1396,8 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkforgalleryphotobyprofileid(string profileid)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {                
                       
                             try
@@ -1442,8 +1442,8 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkforuploadedphotobyprofileid(string profileid)
         {
 
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
                                     
                         try
@@ -1495,8 +1495,8 @@ namespace Anewluv.Services.Media
         /// <returns></returns>
         public async Task<string> getimageb64stringfromurl(string imageUrl, string source)
         {
-            _unitOfWork.DisableProxyCreation = false;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = false;
+            using (var db = _unitOfWorkAsync)
             {
                 try
                     {

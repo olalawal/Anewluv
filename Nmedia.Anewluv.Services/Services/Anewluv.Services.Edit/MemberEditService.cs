@@ -34,13 +34,13 @@ namespace Anewluv.Services.Edit
     {
 
 
-        IUnitOfWork _unitOfWork;
+        IUnitOfWorkAsync _unitOfWorkAsync;
        // private Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public MemberEditService(IUnitOfWork unitOfWork)
+        public MemberEditService(IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -54,9 +54,9 @@ namespace Anewluv.Services.Edit
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
+            _unitOfWorkAsync = unitOfWork;
             //disable proxy stuff by default
-            //_unitOfWork.DisableProxyCreation = true;
+            //_unitOfWorkAsync.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
 
@@ -91,8 +91,8 @@ namespace Anewluv.Services.Edit
         public async Task<BasicSettingsModel> getbasicsettingsmodel(EditProfileModel editprofilemodel)
         {
 
-              _unitOfWork.DisableProxyCreation = true;
-         using (var db = _unitOfWork)
+              _unitOfWorkAsync.DisableProxyCreation = true;
+         using (var db = _unitOfWorkAsync)
          {
              try
              {
@@ -154,8 +154,8 @@ namespace Anewluv.Services.Edit
         {
 
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
                 try
                 {
@@ -235,8 +235,8 @@ namespace Anewluv.Services.Edit
         public async Task<CharacterSettingsModel> getcharactersettingsmodel(EditProfileModel editprofilemodel)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
                 try
                 {
@@ -305,8 +305,8 @@ namespace Anewluv.Services.Edit
         public async Task<LifeStyleSettingsModel> getlifestylesettingsmodel(EditProfileModel editprofilemodel)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
                 try
                 {
@@ -384,7 +384,7 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> membereditallsettings(EditProfileModel editprofilemodel)
         {
 
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
@@ -441,8 +441,8 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> membereditbasicsettings(EditProfileModel editprofilemodel)
         {
 
-          //  _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+          //  _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
@@ -495,7 +495,7 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> membereditappearancesettings(EditProfileModel editprofilemodel)
         {
 
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
@@ -553,7 +553,7 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> membereditcharactersettings(EditProfileModel editprofilemodel)
         {
 
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
@@ -612,7 +612,7 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> membereditlifestylesettings(EditProfileModel editprofilemodel)
         {
 
-            using (var db = _unitOfWork)
+            using (var db = _unitOfWorkAsync)
             {
                 db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
@@ -671,7 +671,7 @@ namespace Anewluv.Services.Edit
         #region "Private update methods that can be re-used"
 
         //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-        private AnewluvMessages updatememberbasicsettings(BasicSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWork db)
+        private AnewluvMessages updatememberbasicsettings(BasicSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync db)
         {
 
             try
@@ -721,7 +721,7 @@ namespace Anewluv.Services.Edit
         //TO DO add validation and pass back via messages 
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatememberappearancesettings(AppearanceSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWork db)
+        private AnewluvMessages updatememberappearancesettings(AppearanceSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync db)
         {
             bool nothingupdated = true;
 
@@ -762,7 +762,7 @@ namespace Anewluv.Services.Edit
 
                 //db.Entry(profiledata).State = EntityState.Modified;
                 db.Update(p);
-                db.Commit();
+               db.SaveChanges();
 
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
@@ -787,7 +787,7 @@ namespace Anewluv.Services.Edit
         }
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatemembercharactersettings(CharacterSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWork db)
+        private AnewluvMessages updatemembercharactersettings(CharacterSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync db)
         {
             bool nothingupdated = true;
 
@@ -833,7 +833,7 @@ namespace Anewluv.Services.Edit
                 //db.Entry(profiledata).State = EntityState.Modified;
                 // int changes = db.SaveChanges();
                 db.Update(p);
-                db.Commit();
+               db.SaveChanges();
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //update session too just in case
@@ -859,7 +859,7 @@ namespace Anewluv.Services.Edit
 
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatememberlifestylesettings(LifeStyleSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWork db)
+        private AnewluvMessages updatememberlifestylesettings(LifeStyleSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync db)
         {
             bool nothingupdated = true;
 
@@ -905,7 +905,7 @@ namespace Anewluv.Services.Edit
                 //db.Entry(profiledata).State = EntityState.Modified;
                 // int changes = db.SaveChanges();
                 db.Update(p);
-                db.Commit();
+               db.SaveChanges();
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //update session too just in case
@@ -935,7 +935,7 @@ namespace Anewluv.Services.Edit
 
 
         //profiledata ethnicity
-        private void updatemembermetatdataethnicity(List<lu_ethnicity> slectedethnicities, profilemetadata currentprofilemetadata,IUnitOfWork db)
+        private void updatemembermetatdataethnicity(List<lu_ethnicity> slectedethnicities, profilemetadata currentprofilemetadata,IUnitOfWorkAsync db)
         {
             if (slectedethnicities == null)
             {
@@ -975,7 +975,7 @@ namespace Anewluv.Services.Edit
           
         }
         //profiledata hotfeature
-        private void updatemembermetatdatahotfeature(List<lu_hotfeature> selectedhotfeature, profilemetadata currentprofilemetadata,IUnitOfWork db)
+        private void updatemembermetatdatahotfeature(List<lu_hotfeature> selectedhotfeature, profilemetadata currentprofilemetadata,IUnitOfWorkAsync db)
         {
             if (selectedhotfeature == null)
             {
@@ -1018,7 +1018,7 @@ namespace Anewluv.Services.Edit
             }
         }
         //profiledata hobby
-        private void updatemembermetatdatahobby(List<lu_hobby> selectedhobby, profilemetadata currentprofilemetadata,IUnitOfWork db)
+        private void updatemembermetatdatahobby(List<lu_hobby> selectedhobby, profilemetadata currentprofilemetadata,IUnitOfWorkAsync db)
         {
             if (selectedhobby == null)
             {
@@ -1061,7 +1061,7 @@ namespace Anewluv.Services.Edit
             }
         }
         //profiledata lookingfor
-        private void updatemembermetatdatalookingfor(List<lu_lookingfor> selectedlookingfor, profilemetadata currentprofilemetadata, IUnitOfWork db)
+        private void updatemembermetatdatalookingfor(List<lu_lookingfor> selectedlookingfor, profilemetadata currentprofilemetadata, IUnitOfWorkAsync db)
         {
             if (selectedlookingfor == null)
             {

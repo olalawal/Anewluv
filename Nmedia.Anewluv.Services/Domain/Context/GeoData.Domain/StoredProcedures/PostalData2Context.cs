@@ -32,7 +32,7 @@ public string GetCountryNameByCountryID(string countryid)
 
 
         var myquery = Database.SqlQuery<string>(query + " @CountryID ", parameters);
-
+    
         var data = myquery.ToListAsync();
       //  return data.First();
         return data.Result.ToString();
@@ -160,7 +160,7 @@ public string GetCountryNameByCountryID(string countryid)
 
         var parameters = new object[] { parameter, parameter2 };
 
-        //var postalcodelist = _unitOfWork.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity", parameters).ToList();
+        //var postalcodelist = _unitOfWorkAsync.ExecuteStoredProcedure<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity", parameters).ToList();
 
         return Database.SqlQuery<PostalCodeList>(query + " @StrcountryDatabaseName,@StrCity", parameters);
     }
@@ -341,6 +341,59 @@ public string GetCountryNameByCountryID(string countryid)
         return Database.SqlQuery<PostalCodeList>(query + " @StrcountryID,@StrCity,@StrPrefixText" + " ", parameters);
     }
 
+    public bool GetPostalCodeStatusByCountryID(string countryid)
+    {
+
+        string query = "sp_GetPostalCodeStatusByCountryID";
+
+        SqlParameter parameter = new SqlParameter("@countryCode", Convert.ToInt32(countryid));
+        parameter.ParameterName = "@countryCode";
+        parameter.SqlDbType = System.Data.SqlDbType.Int;
+        //parameter.Size = 50;
+
+       
+
+        var parameters = new object[] { parameter };
+
+       // var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>().ToList();
+
+
+        var dd =  Database.ExecuteSqlCommand(query + " @countryCode" + " ", parameters);
+        if (dd == 1)
+            return true;
+
+        return false;
+    }
+
+    public bool GetPostalCodeStatusBycountryName(string countryname)
+    {
+
+        string query = "sp_GetPostalCodeStatusByCountryName";
+
+        SqlParameter parameter = new SqlParameter("@countryName", Convert.ToInt32(countryname));
+        parameter.ParameterName = "@countryName";
+        parameter.SqlDbType = System.Data.SqlDbType.Int;
+        //parameter.Size = 50;
+
+
+
+        var parameters = new object[] { parameter };
+
+        // var postalcodes = db.ExecuteStoredProcedure<PostalCodeList>().ToList();
+
+
+        var dd = Database.ExecuteSqlCommand(query + " @countryName" + " ", parameters);
+        if (dd == 1)
+            return true;
+
+        return false;
+    }
+
+
+	
+	
+	
+	
 
 
 }

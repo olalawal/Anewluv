@@ -28,13 +28,13 @@ namespace Anewluv.Services.Common
   //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        IUnitOfWork _unitOfWork;
+        IUnitOfWorkAsync _unitOfWorkAsync;
        // private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public LookupService(IUnitOfWork unitOfWork)
+        public LookupService(IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -48,9 +48,9 @@ namespace Anewluv.Services.Common
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
+            _unitOfWorkAsync = unitOfWork;
             //disable proxy stuff by default
-            //_unitOfWork.DisableProxyCreation = true;
+            //_unitOfWorkAsync.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
 
@@ -65,8 +65,8 @@ namespace Anewluv.Services.Common
         {
 
 
-                _unitOfWork.DisableProxyCreation = true;
-                using (var db = _unitOfWork)
+                _unitOfWorkAsync.DisableProxyCreation = true;
+                using (var db = _unitOfWorkAsync)
                {
                   
                    try
@@ -110,8 +110,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -155,8 +155,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -204,8 +204,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -249,8 +249,8 @@ namespace Anewluv.Services.Common
 
         public List<lu_photoimagetype> getphotoimagetypeslist()
         {
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -294,8 +294,8 @@ namespace Anewluv.Services.Common
         public List<lu_photostatusdescription> getphotostatusdescriptionlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -341,8 +341,8 @@ namespace Anewluv.Services.Common
         public List<lu_abusetype> getabusetypelist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -386,8 +386,8 @@ namespace Anewluv.Services.Common
 
         public List<lu_photoImagersizerformat> getphotoImagersizerformatlist()
         {
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -430,8 +430,8 @@ namespace Anewluv.Services.Common
         public List<lu_profilestatus> getprofilestatuslist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -479,8 +479,8 @@ namespace Anewluv.Services.Common
         public List<lu_role> getrolelist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -525,8 +525,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -571,8 +571,8 @@ namespace Anewluv.Services.Common
         public List<lu_showme> getshowmelist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -617,8 +617,8 @@ namespace Anewluv.Services.Common
         public List<lu_sortbytype> getsortbytypelist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -662,8 +662,8 @@ namespace Anewluv.Services.Common
         public List<lu_securityquestion> getsecurityquestionlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -707,8 +707,8 @@ namespace Anewluv.Services.Common
         public List<lu_flagyesno> getflagyesnolist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -753,8 +753,8 @@ namespace Anewluv.Services.Common
         public List<lu_profilefiltertype> getprofilefiltertypelist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -806,8 +806,8 @@ namespace Anewluv.Services.Common
 
             List<systempagesetting> temp = new List<systempagesetting>();
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -854,8 +854,8 @@ namespace Anewluv.Services.Common
 
         public string getbodycssbypagename(string pagename)
         {
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -896,8 +896,8 @@ namespace Anewluv.Services.Common
 
         public List<lu_gender> getgenderlist()
         {
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -942,8 +942,8 @@ namespace Anewluv.Services.Common
         public List<age> getageslist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -980,8 +980,8 @@ namespace Anewluv.Services.Common
         public List<metricheight> getmetricheightlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1024,8 +1024,8 @@ namespace Anewluv.Services.Common
         public List<lu_bodytype> getbodytypelist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1071,8 +1071,8 @@ namespace Anewluv.Services.Common
         public List<lu_ethnicity> getethnicitylist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1117,8 +1117,8 @@ namespace Anewluv.Services.Common
         public List<lu_eyecolor> geteyecolorlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1163,8 +1163,8 @@ namespace Anewluv.Services.Common
         public List<lu_haircolor> gethaircolorlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1208,8 +1208,8 @@ namespace Anewluv.Services.Common
         public List<lu_hotfeature> gethotfeaturelist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1258,8 +1258,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1307,8 +1307,8 @@ namespace Anewluv.Services.Common
         public List<lu_drinks> getdrinkslist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1354,8 +1354,8 @@ namespace Anewluv.Services.Common
         public List<lu_exercise> getexerciselist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1399,8 +1399,8 @@ namespace Anewluv.Services.Common
         public List<lu_hobby> gethobbylist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1446,8 +1446,8 @@ namespace Anewluv.Services.Common
         public List<lu_humor> gethumorlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1493,8 +1493,8 @@ namespace Anewluv.Services.Common
         public List<lu_politicalview> getpoliticalviewlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1538,8 +1538,8 @@ namespace Anewluv.Services.Common
         public List<lu_religion> getreligionlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1584,8 +1584,8 @@ namespace Anewluv.Services.Common
         public List<lu_religiousattendance> getreligiousattendancelist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1629,8 +1629,8 @@ namespace Anewluv.Services.Common
         public List<lu_sign> getsignlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1676,8 +1676,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1725,8 +1725,8 @@ namespace Anewluv.Services.Common
         public List<lu_educationlevel> geteducationlevellist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1771,8 +1771,8 @@ namespace Anewluv.Services.Common
         public List<lu_employmentstatus> getemploymentstatuslist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1817,8 +1817,8 @@ namespace Anewluv.Services.Common
         public List<lu_havekids> gethavekidslist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1862,8 +1862,8 @@ namespace Anewluv.Services.Common
         public List<lu_incomelevel> getincomelevellist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1910,8 +1910,8 @@ namespace Anewluv.Services.Common
         public List<lu_livingsituation> getlivingsituationlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -1954,8 +1954,8 @@ namespace Anewluv.Services.Common
         public List<lu_lookingfor> getlookingforlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -2000,8 +2000,8 @@ namespace Anewluv.Services.Common
         public List<lu_maritalstatus> getmaritalstatuslist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -2046,8 +2046,8 @@ namespace Anewluv.Services.Common
         public List<lu_profession> getprofessionlist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try
@@ -2092,8 +2092,8 @@ namespace Anewluv.Services.Common
         public List<lu_wantskids> getwantskidslist()
         {
 
-            _unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            _unitOfWorkAsync.DisableProxyCreation = true;
+            using (var db = _unitOfWorkAsync)
             {
 
                 try

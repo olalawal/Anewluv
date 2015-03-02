@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
+using Repository.Pattern.Ef6;
 
 namespace Nmedia.Infrastructure.Domain.Data.log
 {
 
     [DataContract(Namespace = "")]
-     public class log
+     public class log : Entity
     {
 
 

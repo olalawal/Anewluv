@@ -117,14 +117,6 @@
       <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
       <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess.Interfaces\Nmedia.DataAccess.Interfaces.csproj">
-      <Project>{dd605c08-413d-4a1e-af62-8fab15c47e55}</Project>
-      <Name>Nmedia.DataAccess.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\DataAccess\Nmedia.DataAccess\Nmedia.DataAccess.csproj">
-      <Project>{c4c10e84-8c87-43d3-aef3-9c0a03a2f7db}</Project>
-      <Name>Nmedia.DataAccess</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
       <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>
       <Name>Nmedia.Infrastructure.Domain.Data</Name>
@@ -148,6 +140,14 @@
     <ProjectReference Include="..\..\Domain\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
       <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>
       <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
+      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
+      <Name>Repository.Pattern.Ef6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Frameworks\GenericUnitOfWork\Repository.Pattern\Repository.Pattern.csproj">
+      <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
+      <Name>Repository.Pattern</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

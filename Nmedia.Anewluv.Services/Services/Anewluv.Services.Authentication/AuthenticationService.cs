@@ -16,7 +16,7 @@ using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Domain.Data;
 using System.Web;
 using Anewluv.Domain;
-using Anewluv.Services.Members;
+
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data;
@@ -24,10 +24,10 @@ using GeoData.Domain.Models;
 using GeoData.Domain.ViewModels;
 using GeoData.Domain.Models.ViewModels;
 using Anewluv.Services.Contracts.ServiceResponse;
-using Anewluv.Services.Media;
+
 
 using Anewluv.DataExtentionMethods;
-using Anewluv.Services.Spatial;
+
 using System.Threading.Tasks;
 
 using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
@@ -47,7 +47,8 @@ namespace Anewluv.Services.Authentication
     {
 
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
-        //private  IUnitOfWork _unitOfWorkAsync;
+        private readonly IGeoDataStoredProcedures _storedProcedures;
+        //private  IUnitOfWorkAsync _unitOfWorkAsync;
         //private LoggingLibrary.Logging logger;
         //constant strings for reseting passwords
         const String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; const String LOWER = "abcdefghijklmnopqrstuvwxyz"; const String NUMBERS = "1234567890"; const String SPECIAL = "*$-+?&=!%/";
@@ -55,7 +56,7 @@ namespace Anewluv.Services.Authentication
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public AuthenticationService(IUnitOfWorkAsync unitOfWork)
+        public AuthenticationService(IUnitOfWorkAsync unitOfWork, IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)
@@ -70,7 +71,7 @@ namespace Anewluv.Services.Authentication
 
             //promotionrepository = _promotionrepository;
             _unitOfWorkAsync = unitOfWork;
-
+            _storedProcedures = storedProcedures;
 
         }
 
@@ -466,7 +467,7 @@ namespace Anewluv.Services.Authentication
                 
 
                     //get the openid providoer
-                    lu_openidprovider provider = _unitOfWorkAsync.Repository<lu_openidprovider>().Query(p => (p.description).ToUpper() == openidProvidername.ToUpper());
+                    lu_openidprovider provider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().Where(p => (p.description).ToUpper() == openidProvidername.ToUpper()).FirstOrDefault();
                     if (provider == null) return false;
 
 
@@ -670,7 +671,7 @@ namespace Anewluv.Services.Authentication
 
           //  using (var db = _unitOfWorkAsync)
             {
-               // db.IsAuditEnabled = false; //do not audit on adds
+               //// db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -678,14 +679,16 @@ namespace Anewluv.Services.Authentication
 
 
                         //4/12/2013 OLAWAL  added code to make sure that dupe email,username is not allowed is now allowed
-
+                        //get profile and profile datas
+                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
+                        var profiledatarepo = _unitOfWorkAsync.Repository<profiledata>();
                       
-                        if ( _unitOfWorkAsync.Repository<profile>().Query().checkifemailalreadyexists(new ProfileModel { email = email }) == true)
+                        if ( _unitOfWorkAsync.Repository<profile>().checkifemailalreadyexists(new ProfileModel { email = email }) == true)
                         {
                             status = MembershipCreateStatus.DuplicateEmail;
                             return membershipprovider;
                         }
-                        if ( _unitOfWorkAsync.Repository<profile>().Query().checkifusernamealreadyexists(new ProfileModel { username = username }) == true)
+                        if ( _unitOfWorkAsync.Repository<profile>().checkifusernamealreadyexists(new ProfileModel { username = username }) == true)
                         {
                             status = MembershipCreateStatus.DuplicateUserName;
                             return membershipprovider;
@@ -754,7 +757,7 @@ namespace Anewluv.Services.Authentication
 
                         objprofileDataEntity.countryid = countryID;
                         objprofileDataEntity.postalcode = zippostalcode;
-                        objprofileDataEntity.lu_gender = _unitOfWorkAsync.Repository<lu_gender>().Query(p => p.description == gender);
+                        objprofileDataEntity.lu_gender = _unitOfWorkAsync.Repository<lu_gender>().Query(p => p.description == gender).Select().FirstOrDefault();
 
 
                         //  =  Int32.Parse(gender): objprofileDataEntity.gender.GenderName  = gender;
@@ -766,16 +769,18 @@ namespace Anewluv.Services.Authentication
 
                         //TOD DO add open ID identifier as well Profider type to ssoProvider table 
 
-                        db.Add(ObjProfileEntity);
-                        db.Add(objprofileDataEntity);
+                         //get profile and profile datas
+                      
+                        profilerepo.Insert(ObjProfileEntity);
+                        profiledatarepo.Insert(objprofileDataEntity);
 
-
-                        int i = db.Commit();
+                        //_unitOfWorkAsync
+                        var i =  _unitOfWorkAsync.Commit();
                        // transaction.Commit();
 
 
                         //populate the object to send back so we do not have to requery from athe service side
-                        profile profile =  _unitOfWorkAsync.Repository<profile>().Query.getprofilebyusername(new ProfileModel { username = username });
+                        profile profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = username });
                         membershipprovider.profileid = profile.id;
                         membershipprovider.Email = email;
 
@@ -849,7 +854,7 @@ namespace Anewluv.Services.Authentication
 
           //  using (var db = _unitOfWorkAsync)
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+                //db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -857,19 +862,23 @@ namespace Anewluv.Services.Authentication
                         //  if (securityquestionID == null) return "";
 
                         // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
-                        var username =  _unitOfWorkAsync.Repository<profile>().Query.getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt16(profileid) }).username;
+                        var username =  _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt16(profileid) }).username;
                         var generatedpassword = "";
                         if (username != "")
                         {
                             //we have the generated password now update the user's account with new password
 
                             generatedpassword = GeneratePassword();
-                            AnewluvContext AnewluvContext  = new AnewluvContext();
-                            using (var tempdb = AnewluvContext)
-                            {
-                                MemberService MemberService = new MemberService(tempdb);
-                                MemberService.updatepassword(new ProfileModel { profileid = Convert.ToInt16(profileid) }, Encryption.encryptString(generatedpassword));
-                            }
+                            //AnewluvContext AnewluvContext  = new AnewluvContext();
+
+                            //TO DO add method to 
+                          //  using (var tempdb = AnewluvContext)
+                            //{
+                              //  MemberService MemberService = new MemberService(tempdb);
+                              //  MemberService.updatepassword(new ProfileModel { profileid = Convert.ToInt16(profileid) }, Encryption.encryptString(generatedpassword));
+                          //  }
+
+                           bool dd=  updatepassword(new ProfileModel { profileid = Convert.ToInt16(profileid) }, Encryption.encryptString(generatedpassword));
 
                             //'reset the password 
                             return generatedpassword;
@@ -901,6 +910,44 @@ namespace Anewluv.Services.Authentication
             }
         }
 
+        //updates the profile with a password that is presumed to be already encyrpted
+        private bool updatepassword(ProfileModel model, string encryptedpassword)
+        {
+            
+          ////    using (var db = _unitOfWorkAsync)
+            {
+                // // db.IsAuditEnabled = false; //do not audit on adds
+                //   using (var transaction = db.BeginTransaction())
+                  {
+                      try
+                      {
+                          var profilerepo = _unitOfWorkAsync.Repository<profile>();
+                          var myProfile = profilerepo.getprofilebyprofileid(model); 
+                          //update the profile status to 2
+                          myProfile.password = encryptedpassword;
+                          myProfile.modificationdate = DateTime.Now;
+                          myProfile.passwordChangeddate = DateTime.Now;
+                          myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
+                          //handele the update using EF
+                          //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                          profilerepo.Update(myProfile);
+                          var i = _unitOfWorkAsync.Commit();
+                         // transaction.Commit();
+
+                          return true;
+                      }
+                      catch (Exception ex)
+                      {
+
+                          throw ex;
+
+                          //throw convertedexcption;
+                      }
+                  }
+            }
+
+         }
+
         public string resetpassword(string profileid, string answer)
         {
             return ResetPassword(profileid, answer);
@@ -922,6 +969,9 @@ namespace Anewluv.Services.Authentication
 
 
                         //get profile and profile datas
+                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
+                        var profiledatarepo = _unitOfWorkAsync.Repository<profiledata>();
+
                         profile ObjProfileEntity =  _unitOfWorkAsync.Repository<profile>().Query(p => p.id == Convert.ToInt16(u.profileid)).Select().FirstOrDefault();
                         profiledata objprofileDateEntity = _unitOfWorkAsync.Repository<profiledata>().Query(p => p.profile_id == Convert.ToInt16(u.profileid)).Select().FirstOrDefault();
 
@@ -940,17 +990,17 @@ namespace Anewluv.Services.Authentication
 
                         //conver the unquiqe coountry Name to an ID
                         //store country ID for use later 
-                        PostalData2Context GeoContext = new PostalData2Context();
-                        using (var tempdb = GeoContext)
-                        {
-                            GeoService GeoService = new GeoService(tempdb);
+                       // PostalData2Context GeoContext = new PostalData2Context();
+                    //    using (var tempdb = GeoContext)
+                       // {
+                           // GeoService GeoService = new GeoService(tempdb);
                           //  countryID = GeoService.getcountryidbycountryname(country);
 
-                            GeoService.getcountryidbycountryname(new GeoModel { country = u.country });
+                         var value = spatialextentions.getcountrynamebycountryid(new GeoModel { country = u.country },_storedProcedures);
 
                             //get the longidtue and latttude 
-                            GeoService.getgpsdatabycitycountrypostalcode(new GeoModel { country = u.country, city = tempCityAndStateProvince[0], postalcode = u.ziporpostalcode });
-                        }
+                            _GpsData = spatialextentions.getgpsdatabycitycountrypostalcode(new GeoModel { country = u.country, city = tempCityAndStateProvince[0], postalcode = u.ziporpostalcode },_storedProcedures);
+                      //  }
 
                       //  int countryID = Api.GeoService.getcountryidbycountryname(u.country);
 
@@ -1013,10 +1063,11 @@ namespace Anewluv.Services.Authentication
 
                         //dbContext.AddToprofiledatas(objprofileDateEntity);
                         // dbContext.AddToprofiles(ObjProfileEntity);
-                        db.Update(ObjProfileEntity);
-                        db.Update(objprofileDateEntity);
+                        profilerepo.Update(ObjProfileEntity);
+                         profiledatarepo.Update(objprofileDateEntity);
                         //save all changes bro                         
-                        int i = db.Commit();
+//                        _unitOfWorkAsync
+                        var i = _unitOfWorkAsync.Commit();
                        // transaction.Commit();
 
                     }
@@ -1080,7 +1131,7 @@ namespace Anewluv.Services.Authentication
             {
                 try
                 {
-                    u =  _unitOfWorkAsync.Repository<profile>().Query.getprofilebyusername(new ProfileModel { username = username });
+                    u =  _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { username = username });
 
 
                     if (u == null)
@@ -1211,8 +1262,8 @@ namespace Anewluv.Services.Authentication
                                 //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
                                 //{
 
-                                    db.DisableProxyCreation = true;
-                                    db.DisableLazyLoading = true;
+                                  // db.DisableProxyCreation = true;;
+                                    //db.DisableLazyLoading = true;
                                     result = ((db.profiles.Where(p => p.emailaddress == model.email).FirstOrDefault()) != null);
                                         
                                       //   _unitOfWorkAsync.Repository<profile>().Query.checkifscreennamealreadyexists(model);
@@ -1235,7 +1286,7 @@ namespace Anewluv.Services.Authentication
 
                         // using (var db = new AnewluvContext())
                         // {
-                        //    db.DisableProxyCreation = true;
+                        //  // db.DisableProxyCreation = true;;
                         //    db.DisableLazyLoading = true;
                         //    result =  _unitOfWorkAsync.Repository<profile>().Query.checkifemailalreadyexists(model);
                                            
@@ -1275,14 +1326,14 @@ namespace Anewluv.Services.Authentication
         {
             using (var db = new AnewluvContext())
             {
-                db.DisableProxyCreation = true;
+              // db.DisableProxyCreation = true;;
                 try
                 {
                     if (model == null | model.username == null) return false;
                     var task = Task.Factory.StartNew(() =>
                     {
                         //Dim ctx As New Entities()
-                        var dd =   _unitOfWorkAsync.Repository<profile>().Query.checkifactivationcodeisvalid(model);
+                        var dd =   _unitOfWorkAsync.Repository<profile>().checkifactivationcodeisvalid(model);
 
                         return dd;
 
@@ -1318,13 +1369,13 @@ namespace Anewluv.Services.Authentication
             //BAEntities Context
             using (AnewluvContext db = new AnewluvContext())
             {
-                db.DisableProxyCreation = true;
+              // db.DisableProxyCreation = true;;
                 if (model == null | model.username == null) return false;
                 try
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var dd =   _unitOfWorkAsync.Repository<profile>().Query.checkifprofileisactivated(model);
+                        var dd =   _unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(model);
                         return dd;
                     });
                     return await task.ConfigureAwait(false);
@@ -1367,8 +1418,8 @@ namespace Anewluv.Services.Authentication
             Boolean result = false;
             using (var db = new AnewluvContext())
             {
-                db.DisableProxyCreation = false;
-                db.DisableLazyLoading = false;
+              //  db.DisableProxyCreation = false;
+              //  db.DisableLazyLoading = false;
                 try
                 {
                     var task = Task.Factory.StartNew(() =>
@@ -1381,7 +1432,7 @@ namespace Anewluv.Services.Authentication
                         //    //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
                         //    //{
 
-                        //    db.DisableProxyCreation = true;
+                        //  // db.DisableProxyCreation = true;;
                         //    db.DisableLazyLoading = true;
                         //    // IQueryable<profile> myQuery = default(IQueryable<profile>);
                         //    result =  _unitOfWorkAsync.Repository<profile>().Query.checkifusernamealreadyexists(model);  
@@ -1398,12 +1449,12 @@ namespace Anewluv.Services.Authentication
                         // using (var db = _unitOfWorkAsync)
                         //    {
                         // IQueryable<profile> myQuery = default(IQueryable<profile>);
-                        result =  _unitOfWorkAsync.Repository<profile>().Query.checkifusernamealreadyexists(model);
+                        result =  _unitOfWorkAsync.Repository<profile>().checkifusernamealreadyexists(model);
                         //    }
 
                         //using (var db = new AnewluvContext())
                         // {
-                        //    db.DisableProxyCreation = true;
+                        //  // db.DisableProxyCreation = true;;
                         //    db.DisableLazyLoading = true;
                         //    // IQueryable<profile> myQuery = default(IQueryable<profile>);
                         //   result =   _unitOfWorkAsync.Repository<profile>().Query.checkifusernamealreadyexists(model);                        
@@ -1445,8 +1496,8 @@ namespace Anewluv.Services.Authentication
                                 //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
                                 //{
 
-                                    db.DisableProxyCreation = true;
-                                    db.DisableLazyLoading = true;
+                                  // db.DisableProxyCreation = true;;
+                                    //db.DisableLazyLoading = true;
                                     result = ((db.profiles.Where(p => p.screenname == model.screenname).FirstOrDefault()) != null);
                                         
                                       //   _unitOfWorkAsync.Repository<profile>().Query.checkifscreennamealreadyexists(model);
@@ -1498,7 +1549,7 @@ namespace Anewluv.Services.Authentication
 
           //  using (var db = _unitOfWorkAsync)
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+                //db.IsAuditEnabled = false; //do not audit on adds
              ////   using (var transaction = db.BeginTransaction())
                 {
 
@@ -1517,11 +1568,11 @@ namespace Anewluv.Services.Authentication
                                 //get the macthcing member data using the profile ID/email entered
                                 if (model.emailaddress != "")
                                 {
-                                    profile =  _unitOfWorkAsync.Repository<profile>().Query.getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
+                                    profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
                                 }
                                 else if (model.username != null && model.username != "")
                                 {
-                                    profile =  _unitOfWorkAsync.Repository<profile>().Query.getprofilebyusername(new ProfileModel { email = model.username });
+                                    profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyusername(new ProfileModel { email = model.username });
                              
                                 }
                                 else { profile = null;
@@ -1533,14 +1584,14 @@ namespace Anewluv.Services.Authentication
 
                                 //verify that user entered correct email before doing anything
                                 //TO DO add these error messages to resource files
-                                if (profile == null |  _unitOfWorkAsync.Repository<profile>().Query.checkifemailalreadyexists(new ProfileModel { email = profile.emailaddress }) == false)
+                                if (profile == null |  _unitOfWorkAsync.Repository<profile>().checkifemailalreadyexists(new ProfileModel { email = profile.emailaddress }) == false)
                                 {
                                     messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
                                     //hide the photo view in thsi case
                                     // model.photostatus = true;
                                     // return messages;
                                 }
-                                else if ( _unitOfWorkAsync.Repository<profile>().Query.checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true)
+                                else if ( _unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true)
                                 {
                                     messages.errormessages.Add("Your Profile has already been activated");
                                     //hide the photo view in thsi case
@@ -1692,7 +1743,7 @@ namespace Anewluv.Services.Authentication
 
           //  using (var db = _unitOfWorkAsync)
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+             //  // db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1710,12 +1761,12 @@ namespace Anewluv.Services.Authentication
                         //also create a members view model to store pertinent data i.e persist photos profile ID etc
                         var membersmodel = new MembersViewModel();
                         //get the macthcing member data using the profile ID/email entered
-                        profile =  _unitOfWorkAsync.Repository<profile>().Query.getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
+                        profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = model.emailaddress });
                         //  membersmodel =  _m .GetMemberData( model.activateprofilemodel.profileid);
 
                         //verify that user entered correct email before doing anything
                         //TO DO add these error messages to resource files
-                        if (profile == null |  _unitOfWorkAsync.Repository<profile>().Query.checkifemailalreadyexists(new ProfileModel { email = profile.emailaddress }) == false)
+                        if (profile == null |  _unitOfWorkAsync.Repository<profile>().checkifemailalreadyexists(new ProfileModel { email = profile.emailaddress }) == false)
                         {
                             messages.errormessages.Add("There is no registered account with the email address: " + model.emailaddress + " on AnewLuv.com, please either register for a new account or use the contact us link to get help");
                             //hide the photo view in thsi case
@@ -1729,7 +1780,7 @@ namespace Anewluv.Services.Authentication
                           //  using (var tempdb = AnewluvContext)
                           //  {
                              //  MemberService MemberService = new MemberService(tempdb);
-                              isprofileactivated = ( _unitOfWorkAsync.Repository<profile>().Query.checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true);
+                              isprofileactivated = ( _unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(new ProfileModel { profileid = profile.id }) == true);
                            // }
 
                             if (isprofileactivated == true)                            
@@ -1827,7 +1878,7 @@ namespace Anewluv.Services.Authentication
 
                         //Dim ctx As New Entities()
                         //added profile status ID validation as well i.e 2 for activated and is not banned 
-                        myQuery =  _unitOfWorkAsync.Repository<profile>().Query.Find(p => p.username == profile.username && p.status_id == 2).FirstOrDefault();
+                        myQuery =  _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.username == profile.username && p.status_id == 2).FirstOrDefault();
 
 
 
@@ -1929,15 +1980,15 @@ namespace Anewluv.Services.Authentication
 
         #region "private methods for reuse or other async calls"
 
-        private Guid? getcurrentapikeybyprofileid(int profileid,IUnitOfWork db)
+        private Guid? getcurrentapikeybyprofileid(int profileid,IUnitOfWorkAsync db)
         {      
 
-                    db.IsAuditEnabled = false; //do not audit on adds               
+                   //// db.IsAuditEnabled = false; //do not audit on adds               
                     try
                     {
                         //get the last current activity 
                         //dont worry about user logtime here and session ID's since user is re-validating we are starting over with this user anyways                        
-                        var  myQuery = _unitOfWorkAsync.Repository<profileactivity>().Find().Where(p => p.profile_id == profileid && p.apikey != null).OrderByDescending(p=>p.creationdate).FirstOrDefault();
+                        var  myQuery = _unitOfWorkAsync.Repository<profileactivity>().Queryable().Where(p => p.profile_id == profileid && p.apikey != null).OrderByDescending(p=>p.creationdate).FirstOrDefault();
 
                         if (myQuery != null && myQuery.apikey != null)
                         {

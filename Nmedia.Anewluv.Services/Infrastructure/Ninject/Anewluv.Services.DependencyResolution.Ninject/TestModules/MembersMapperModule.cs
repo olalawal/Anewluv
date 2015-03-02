@@ -15,7 +15,7 @@ using Ninject.Modules;
 
 //using CommonInstanceFactory.Sample.Interfaces;
 //using CommonInstanceFactory.Sample.Services;
-using Anewluv.Services.Contracts;
+//using Anewluv.Services.Contracts;
 
 
 
@@ -30,6 +30,9 @@ using System.Data.Entity;
 using GeoData.Domain.Models;
 using Nmedia.Infrastructure.DependencyInjection;
 using Anewluv.Services.DependencyResolution.Ninject.predicates;
+using Repository.Pattern.DataContext;
+using Repository.Pattern.UnitOfWork;
+using Repository.Pattern.Ef6;
 
 namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 {
@@ -48,9 +51,9 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
         //this.Bind<WellsFargo.DataAccess.Interfaces.IContext>().ToMethod(ctx => ctx.Kernel.Get<PromotionContext>());//).ToMethod()(x => new PromotionContext()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("WellsFargo.Promotion.Services.PromotionService")).InTransientScope();
 
         // var webApiEFRepository = kernel.Get<IRepository<Entity>>("WebApiEFRepository");
-        //  this.Unbind(typeof(IUnitOfWork));
-        //Kernel.Bind<IUnitOfWork>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
-       // this.Bind<IUnitOfWork>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Mapping.MembersMapperService")).InRequestScope(); ;
+        //  this.Unbind(typeof(IUnitOfWorkAsync));
+        //Kernel.Bind<IUnitOfWorkAsync>().ToConstructor(ctorArg => new EFUnitOfWork(ctorArg.Inject<WellsFargo.DataAccess.Interfaces.IContext>())).InTransientScope();
+       // this.Bind<IUnitOfWorkAsync>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Mapping.MembersMapperService")).InRequestScope(); ;
         // this.Unbind(typeof(DbContext));
       //  this.Bind<DbContext>().ToMethod(ctx => ctx.Kernel.Get<AnewluvContext>()).When(t => t.IsInjectingToRepositoryDataSourceOfNamespace("Anewluv.Services.Mapping.MembersMapperService")).InRequestScope(); ;
 
@@ -58,29 +61,38 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 
             //probbaly can get away with this since the mapping service does not do any writes 
             //so so chance of conufsing anewluv contexts with the members sevice which is hosted in the same service.
+            // Unit of Work & Generic Repository Patterns.
 
 
-               // Unit of Work & Generic Repository Patterns.
 
-            Bind<IUnitOfWork>().To<AnewluvContext>().WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
-            Bind<IUnitOfWork>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
-       // Bind<IUnitOfWork>().To<UnitOfWork>().WhenTargetHas<InVariosEntitiesScope>().InSingletonScope();
+          //  Bind<IUnitOfWorkAsync>().To<AnewluvContext>().WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
+           // Bind<IUnitOfWorkAsync>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
+       // Bind<IUnitOfWorkAsync>().To<UnitOfWork>().WhenTargetHas<InVariosEntitiesScope>().InSingletonScope();
 
         // DataContexts: When any ancestor in the inheritance chain has been labeled with any of these attributes.
-            Bind<DbContext>().ToMethod(c => c.Kernel.Get<AnewluvContext>())
-            .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>);
+         //   Bind<DbContext>().ToMethod(c => c.Kernel.Get<AnewluvContext>())
+         //   .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>);
 
-            Bind<DbContext>().ToMethod(c => c.Kernel.Get<PostalData2Context>())
-            .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>);
+         //   Bind<DbContext>().ToMethod(c => c.Kernel.Get<PostalData2Context>())
+         //   .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>);
 
        // Bind<IDataContext>().To<VariosEntities>()
-       //     .WhenAnyAncestorMatches(Predicates.TargetHas<InVariosEntitiesScope>).InSingletonScope();
-    
+       //     .WhenAnyAncestorMatches(Predicates.TargetHas<InVariosEntitiesScope>).InSingletonScope();         
+        //this.Bind<IMembersMapperService>().ToSelf().InRequestScope();
 
 
+            Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<AnewluvContext>())
+            .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>).InRequestScope();
+
+            Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<PostalData2Context>())
+            .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>).InRequestScope();
+
+           // this.Bind<IDataContextAsync>().To<AnewluvContext>().WhenTargetHas<IAnewluvEntitesScope>().InRequestScope();
+           // this.Bind<IDataContextAsync>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();
+            this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().InRequestScope();
+            this.Bind<IGeoDataStoredProcedures>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope();;
 
          
-        //this.Bind<IMembersMapperService>().ToSelf().InRequestScope();
 
          
         }

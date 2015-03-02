@@ -1,9 +1,10 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_openidprovider
+    public partial class lu_openidprovider : Entity
     {
         public lu_openidprovider()
         {

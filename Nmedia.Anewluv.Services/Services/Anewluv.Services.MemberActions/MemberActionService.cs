@@ -21,11 +21,13 @@ using Nmedia.Infrastructure;
 using Anewluv.DataExtentionMethods;
 using Nmedia.Infrastructure.Domain.Data.log;
 using Anewluv.Domain;
-using Anewluv.Services.Members;
+
 using Anewluv.Services.Mapping;
 using Nmedia.Infrastructure.Domain.Data;
 using System.Threading.Tasks;
 using Nmedia.Infrastructure.DependencyInjection;
+using Repository.Pattern.UnitOfWork;
+using GeoData.Domain.Models;
 
 namespace Anewluv.Services.MemberActions
 {
@@ -38,14 +40,16 @@ namespace Anewluv.Services.MemberActions
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IUnitOfWork _spatial_unitOfWork;
+        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        private readonly IUnitOfWorkAsync _spatial_unitOfWorkAsync;
+        private readonly IGeoDataStoredProcedures _storedProcedures;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public MemberActionsService([IAnewluvEntitesScope]IUnitOfWork unitOfWork, [InSpatialEntitesScope]IUnitOfWork spatial_unitOfWork)
+        public MemberActionsService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork,
+            [InSpatialEntitesScope]IUnitOfWorkAsync spatial_unitOfWork, IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)
@@ -59,10 +63,11 @@ namespace Anewluv.Services.MemberActions
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
-            _spatial_unitOfWork = spatial_unitOfWork;
+            _unitOfWorkAsync = unitOfWork;
+            _spatial_unitOfWorkAsync = spatial_unitOfWork;
+            _storedProcedures = storedProcedures;
             //disable proxy stuff by default
-            //_unitOfWork.DisableProxyCreation = true;
+            //_unitOfWorkAsync.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
             //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
 
@@ -82,8 +87,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<SearchResultsViewModel> getmyrelationshipsfiltered(ProfileModel model)
         {
 
-              _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-             var db = _unitOfWork;
+            ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+             var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -142,8 +147,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoiaminterestedincount(ProfileModel model)
         {
           
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -183,8 +188,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoisinterestedinmecount(ProfileModel model)
         {
 
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -227,8 +232,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoisinterestedinmenewcount(ProfileModel model)
         {
 
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -273,9 +278,9 @@ namespace Anewluv.Services.MemberActions
 
 
 
-              _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            var geodb = _spatial_unitOfWork;
-             var db = _unitOfWork;
+            ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var geodb = _spatial_unitOfWorkAsync;
+             var db = _unitOfWorkAsync;
             {
 
                 try
@@ -288,7 +293,7 @@ namespace Anewluv.Services.MemberActions
 
                       //  int id = Convert.ToInt32(model.profileid);
 
-                        var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                        var MyActiveblocks = (from c in db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.removedate == null)
                                               select new
                                               {
                                                   ProfilesBlockedId = c.blockprofile_id
@@ -297,7 +302,7 @@ namespace Anewluv.Services.MemberActions
                         //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                         //rematerialize on the back end.
                         //final query to send back only the profile datatas of the interests we want
-                        var interests = (from f in db.GetRepository<interest>().Find().OfType<interest>().Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
+                        var interests = (from f in db.Repository<interest>().Queryable().OfType<interest>().Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
                                          where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                          select new MemberSearchViewModel
                                          {
@@ -322,7 +327,7 @@ namespace Anewluv.Services.MemberActions
 
 
 
-                        results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                        results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
                         
                         // return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
                         //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
@@ -373,9 +378,9 @@ namespace Anewluv.Services.MemberActions
        
        
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var geodb = _spatial_unitOfWork;
-          var db = _unitOfWork;
+          ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var geodb = _spatial_unitOfWorkAsync;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -385,7 +390,7 @@ namespace Anewluv.Services.MemberActions
                      if (model.page == null | model.page == 0) model.page = 1;
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                     var MyActiveblocks = (from c in db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.removedate == null)
                                            select new
                                            {
                                                ProfilesBlockedId = c.blockprofile_id
@@ -395,9 +400,9 @@ namespace Anewluv.Services.MemberActions
                      //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                      //rematerialize on the back end.
                      //final query to send back only the profile datatas of the interests we want
-                     var whoisinterestedinme = (from f in db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == model.profileid && p.deletedbymemberdate == null)
-                                                //join f in db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                                // join z in db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                     var whoisinterestedinme = (from f in db.Repository<interest>().Queryable().Where(p => p.interestprofile_id == model.profileid && p.deletedbymemberdate == null)
+                                                //join f in db.Repository<profiledata>().Queryable() on p.profile_id equals f.profile_id
+                                                // join z in db.Repository<profile>().Queryable() on p.profile_id equals z.id
                                                 where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                                 select new MemberSearchViewModel
                                                 {
@@ -417,7 +422,7 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                      return new SearchResultsViewModel { results = results, totalresults = whoisinterestedinme.Count() };
 
@@ -457,9 +462,9 @@ namespace Anewluv.Services.MemberActions
         {
             
 
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-               var geodb = _spatial_unitOfWork;
-          var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+               var geodb = _spatial_unitOfWorkAsync;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -470,7 +475,7 @@ namespace Anewluv.Services.MemberActions
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
 
-                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                     var MyActiveblocks = (from c in db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.removedate == null)
                                            select new
                                            {
                                                ProfilesBlockedId = c.blockprofile_id
@@ -479,7 +484,7 @@ namespace Anewluv.Services.MemberActions
                      //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                      //rematerialize on the back end.
                      //final query to send back only the profile datatas of the interests we want
-                     var whoisinterestedinmenew = (from f in db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == model.profileid && p.viewdate == null)
+                     var whoisinterestedinmenew = (from f in db.Repository<interest>().Queryable().Where(p => p.interestprofile_id == model.profileid && p.viewdate == null)
                                                    where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))                
                                                    select new MemberSearchViewModel
                                                    {
@@ -499,7 +504,7 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                      return new SearchResultsViewModel { results = results, totalresults = whoisinterestedinmenew.Count() };
 
@@ -545,8 +550,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<SearchResultsViewModel> getmutualinterests(ProfileModel model)
         {
 
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -599,15 +604,15 @@ namespace Anewluv.Services.MemberActions
         public async Task<bool> checkinterest(ProfileModel model)
         {
 
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
                  var task = Task.Factory.StartNew(() =>
                  {
 
-                     return db.GetRepository<interest>().Find().Any(r => r.profile_id == model.profileid && r.interestprofile_id == model.targetprofileid);
+                     return db.Repository<interest>().Queryable().Any(r => r.profile_id == model.profileid && r.interestprofile_id == model.targetprofileid);
 
 
 
@@ -642,9 +647,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -662,31 +667,31 @@ namespace Anewluv.Services.MemberActions
 
                             //check  interest first  
                             //if this was a interest being restored just do that part
-                            var existinginterest = db.GetRepository<interest>().FindSingle(r => r.profile_id == model.profileid && r.interestprofile_id == model.targetprofileid);
+                            var existinginterest = db.Repository<interest>().Queryable().Where (r => r.profile_id == model.profileid && r.interestprofile_id == model.targetprofileid).FirstOrDefault();
 
                             //just  update it if we have one already
                             if (existinginterest != null)
                             {
                                 existinginterest.deletedbymemberdate = null; ;
                                 existinginterest.modificationdate = DateTime.Now;
-                                db.Update(existinginterest);
+                                db.Repository<interest>().Update(existinginterest);
 
                             }
                             else
                             {
-                                //interest = this. db.GetRepository<interest>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
+                                //interest = this. db.Repository<interest>().Queryable().Where(p => p.profileid == profileid).FirstOrDefault();
                                 //update the profile status to 2
                                 interest.profile_id = model.profileid.GetValueOrDefault();
                                 interest.interestprofile_id = model.targetprofileid.GetValueOrDefault();
                                 interest.mutual = false;  // not dealing with this calulatin yet
                                 interest.creationdate = DateTime.Now;
                                 //handele the update using EF
-                                // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
-                                db.Add(interest);
+                                // this. db.Repository<profile>().Queryable().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
+                                db.Repository<interest>().Insert(interest);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                           //  return true;
@@ -730,9 +735,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code  return awa
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -744,14 +749,14 @@ namespace Anewluv.Services.MemberActions
 
                          //   var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.profileid && p.interestprofile_id == model.targetprofileid).FirstOrDefault();
+                            var interest = db.Repository<interest>().Queryable().Where(p => p.profile_id == model.profileid && p.interestprofile_id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             interest.deletedbymemberdate = DateTime.Now;
                             interest.modificationdate = DateTime.Now;
-                            db.Update(interest);
+                           db.Repository<interest>().Update(interest);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                         });
@@ -790,9 +795,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -803,14 +808,14 @@ namespace Anewluv.Services.MemberActions
 
                             //  var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.targetprofileid && p.interestprofile_id == model.profileid).FirstOrDefault();
+                            var interest = db.Repository<interest>().Queryable().Where(p => p.profile_id == model.targetprofileid && p.interestprofile_id == model.profileid).FirstOrDefault();
                             //update the profile status to 2
 
                             interest.deletedbyinterestdate = DateTime.Now;
                             interest.modificationdate = DateTime.Now;
-                            db.Update(interest);
+                            db.Repository<interest>().Update(interest);
 
-                            int i = db.Commit();
+                           var i =db.SaveChanges();
                            // transaction.Commit();
 
                             return true;
@@ -851,9 +856,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -864,14 +869,14 @@ namespace Anewluv.Services.MemberActions
 
                            // var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.profileid && p.interestprofile_id == model.targetprofileid).FirstOrDefault();
+                            var interest = db.Repository<interest>().Queryable().Where(p => p.profile_id == model.profileid && p.interestprofile_id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             interest.deletedbymemberdate = null;
                             interest.modificationdate = DateTime.Now;
-                            db.Update(interest);
+                           db.Repository<interest>().Update(interest);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                            // return true;
@@ -911,9 +916,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -925,15 +930,15 @@ namespace Anewluv.Services.MemberActions
 
                           //  var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.targetprofileid && p.interestprofile_id == model.profileid).FirstOrDefault();
+                            var interest = db.Repository<interest>().Queryable().Where(p => p.profile_id == model.targetprofileid && p.interestprofile_id == model.profileid).FirstOrDefault();
                             //update the profile status to 2
 
                             interest.deletedbyinterestdate = null;
                             interest.modificationdate = DateTime.Now;
-                            db.Update(interest);
+                           db.Repository<interest>().Update(interest);
 
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                             return true;
@@ -971,9 +976,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -982,7 +987,7 @@ namespace Anewluv.Services.MemberActions
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            // interests = this. db.GetRepository<interest>().Find().Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                            // interests = this. db.Repository<interest>().Queryable().Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                             //update the profile status to 2
                             interest interest = new interest();
                             foreach (string value in model.targetscreennames)
@@ -991,15 +996,15 @@ namespace Anewluv.Services.MemberActions
 
 
 
-                                int? interestprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                                var currentinterest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                                int? interestprofile_id = db.Repository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentinterest = db.Repository<interest>().Queryable().Where(p => p.profile_id == model.profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                                 interest.deletedbymemberdate = DateTime.Now;
                                 interest.modificationdate = DateTime.Now;
-                                db.Update(currentinterest);
+                               db.Repository<interest>().Update(currentinterest);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
 
@@ -1037,9 +1042,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1050,20 +1055,20 @@ namespace Anewluv.Services.MemberActions
                         {
 
 
-                            // interests = this. db.GetRepository<interest>().Find().Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                            // interests = this. db.Repository<interest>().Queryable().Where(p => p.profileid == profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                             //update the profile status to 2
                             interest interest = new interest();
                             foreach (string value in model.targetscreennames)
                             {
-                                int? interestprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                                var currentinterest = db.GetRepository<interest>().Find().Where(p => p.profile_id == model.profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
+                                int? interestprofile_id = db.Repository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentinterest = db.Repository<interest>().Queryable().Where(p => p.profile_id == model.profileid && p.interestprofile_id == interestprofile_id).FirstOrDefault();
                                 interest.deletedbymemberdate = null;
                                 interest.modificationdate = DateTime.Now;
-                                db.Update(currentinterest);
+                               db.Repository<interest>().Update(currentinterest);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                           //  return true;
@@ -1101,9 +1106,9 @@ namespace Anewluv.Services.MemberActions
          public async Task updateinterestviewstatus(ProfileModel model)
         {
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1113,15 +1118,15 @@ namespace Anewluv.Services.MemberActions
                         {
 
 
-                            var interest = db.GetRepository<interest>().Find().Where(p => p.interestprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
+                            var interest = db.Repository<interest>().Queryable().Where(p => p.interestprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
                             //update the profile status to 2            
                             if (interest.viewdate == null)
                             {
                                 interest.viewdate = DateTime.Now;
                                 interest.modificationdate = DateTime.Now;
-                                db.Update(interest);
+                               db.Repository<interest>().Update(interest);
 
-                                int i = db.Commit();
+                              var i =db.SaveChanges();
                                // transaction.Commit();
                             }
                        //     return true;
@@ -1171,8 +1176,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoipeekedatcount(ProfileModel model)
         {
 
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -1214,8 +1219,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhopeekedatmecount(ProfileModel model)
         {
 
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -1256,8 +1261,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhopeekedatmenewcount(ProfileModel model)
         {
 
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -1303,9 +1308,9 @@ namespace Anewluv.Services.MemberActions
 
           
 
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-               var geodb = _spatial_unitOfWork;
-               var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+               var geodb = _spatial_unitOfWorkAsync;
+               var db = _unitOfWorkAsync;
          {
              try
              {
@@ -1315,7 +1320,7 @@ namespace Anewluv.Services.MemberActions
                      if (model.page == null | model.page == 0) model.page = 1;
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                     var MyActiveblocks = (from c in db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.removedate == null)
                                            select new
                                            {
                                                ProfilesBlockedId = c.blockprofile_id
@@ -1324,7 +1329,7 @@ namespace Anewluv.Services.MemberActions
                      //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                      //rematerialize on the back end.
                      //final query to send back only the profile datatas of the interests we want
-                     var peeks = (from f in db.GetRepository<peek>().Find().Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
+                     var peeks = (from f in db.Repository<peek>().Queryable().Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
                                   where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                   select new MemberSearchViewModel
                                   {
@@ -1343,9 +1348,9 @@ namespace Anewluv.Services.MemberActions
                      // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                      List<MemberSearchViewModel> results;
-                 
-                        
-                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                      
                       return new SearchResultsViewModel { results = results, totalresults = peeks.Count() };
@@ -1386,9 +1391,9 @@ namespace Anewluv.Services.MemberActions
         {
 
           
-                 _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-               var geodb = _spatial_unitOfWork;
-          var db = _unitOfWork;
+               ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+               var geodb = _spatial_unitOfWorkAsync;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -1397,7 +1402,7 @@ namespace Anewluv.Services.MemberActions
                      if (model.page == null | model.page == 0) model.page = 1;
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                     var MyActiveblocks = (from c in db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.removedate == null)
                                            select new
                                            {
                                                ProfilesBlockedId = c.blockprofile_id
@@ -1406,7 +1411,7 @@ namespace Anewluv.Services.MemberActions
                      //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                      //rematerialize on the back end.
                      //final query to send back only the profile datatas of the interests we want
-                     var WhoPeekedAtMe = (from f in db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == model.profileid && p.deletedbymemberdate == null)
+                     var WhoPeekedAtMe = (from f in db.Repository<peek>().Queryable().Where(p => p.peekprofile_id == model.profileid && p.deletedbymemberdate == null)
                                           where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                           select new MemberSearchViewModel
                                           {
@@ -1426,7 +1431,7 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                    results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                     return new SearchResultsViewModel { results = results, totalresults = WhoPeekedAtMe.Count() };
 
@@ -1469,10 +1474,10 @@ namespace Anewluv.Services.MemberActions
 
         
 
-              _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-              var geodb = _spatial_unitOfWork;
-              var db = _unitOfWork;
-         //using (var db = _unitOfWork)
+            ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+              var geodb = _spatial_unitOfWorkAsync;
+              var db = _unitOfWorkAsync;
+         //using (var db = _unitOfWorkAsync)
          //{
              try
              {
@@ -1487,7 +1492,7 @@ namespace Anewluv.Services.MemberActions
                      //gets all  interestets from the interest table based on if the person's profiles are stil lvalid tho
 
 
-                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                     var MyActiveblocks = (from c in db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.removedate == null)
                                            select new
                                            {
                                                ProfilesBlockedId = c.blockprofile_id
@@ -1502,9 +1507,9 @@ namespace Anewluv.Services.MemberActions
                      //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                      //rematerialize on the back end.
                      //final query to send back only the profile datatas of the interests we want
-                     var peeknew = (from f in db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == model.profileid)
-                                    // join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                    //  join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                     var peeknew = (from f in db.Repository<peek>().Queryable().Where(p => p.peekprofile_id == model.profileid)
+                                    // join f in  db.Repository<profiledata>().Queryable() on p.profile_id equals f.profile_id
+                                    //  join z in  db.Repository<profile>().Queryable() on p.profile_id equals z.id
                                     where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                     select new MemberSearchViewModel
                                     {
@@ -1525,11 +1530,11 @@ namespace Anewluv.Services.MemberActions
                      // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                      //return interests.ToList();
-                    
-                       var  results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+                     var results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.peekdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
 
-                       db.DisableProxyCreation = true;
+                      // db.DisableProxyCreation = true;
                       return new SearchResultsViewModel { results = results, totalresults = peeknew.Count() };
                 
 
@@ -1575,8 +1580,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<SearchResultsViewModel> getmutualpeeks(ProfileModel model)
         {
 
-                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+                 ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -1625,8 +1630,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<bool> checkpeek(ProfileModel model)
         {
 
-                   _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+                 ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -1636,7 +1641,7 @@ namespace Anewluv.Services.MemberActions
 
 
 
-                     return db.GetRepository<peek>().Find().Any(r => r.profile_id == model.profileid && r.peekprofile_id == model.targetprofileid);
+                     return db.Repository<peek>().Queryable().Any(r => r.profile_id == model.profileid && r.peekprofile_id == model.targetprofileid);
 
          
 
@@ -1675,9 +1680,9 @@ namespace Anewluv.Services.MemberActions
 
         
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1690,31 +1695,31 @@ namespace Anewluv.Services.MemberActions
 
                             //check  peek first  
                             //if this was a peek being restored just do that part
-                            var existingpeek = db.GetRepository<peek>().FindSingle(r => r.profile_id == model.profileid && r.peekprofile_id == model.targetprofileid);
+                            var existingpeek = db.Repository<peek>().Queryable().Where(r => r.profile_id == model.profileid && r.peekprofile_id == model.targetprofileid).FirstOrDefault();
 
                             //just  update it if we have one already
                             if (existingpeek != null)
                             {
                                 existingpeek.deletedbymemberdate = null; ;
                                 existingpeek.modificationdate = DateTime.Now;
-                                db.Update(existingpeek);
+                               db.Repository<peek>().Update(existingpeek);
 
                             }
                             else
                             {
-                                //peek = this. db.GetRepository<peek>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
+                                //peek = this. db.Repository<peek>().Queryable().Where(p => p.profileid == profileid).FirstOrDefault();
                                 //update the profile status to 2
                                 peek.profile_id = model.profileid.GetValueOrDefault();
                                 peek.peekprofile_id = model.targetprofileid.GetValueOrDefault();
                                 peek.mutual = false;  // not dealing with this calulatin yet
                                 peek.creationdate = DateTime.Now;
                                 //handele the update using EF
-                                // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
-                                db.Add(peek);
+                                // this. db.Repository<profile>().Queryable().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
+                               db.Repository<peek>().Insert(peek);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                             return true;
@@ -1754,9 +1759,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1767,14 +1772,14 @@ namespace Anewluv.Services.MemberActions
 
                           //  var targetid = Convert.ToInt32(peekprofile_id);
 
-                            var peek = db.GetRepository<peek>().Find().Where(p => p.profile_id == model.profileid && p.peekprofile_id == model.targetprofileid).FirstOrDefault();
+                            var peek = db.Repository<peek>().Queryable().Where(p => p.profile_id == model.profileid && p.peekprofile_id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             peek.deletedbymemberdate = DateTime.Now;
                             peek.modificationdate = DateTime.Now;
-                            db.Update(peek);
+                           db.Repository<peek>().Update(peek);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                             return true;
@@ -1813,9 +1818,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1825,14 +1830,14 @@ namespace Anewluv.Services.MemberActions
                         {
                          //   var targetid = Convert.ToInt32(peekprofile_id);
 
-                            var peek = db.GetRepository<peek>().Find().Where(p => p.profile_id == model.targetprofileid && p.peekprofile_id == model.profileid).FirstOrDefault();
+                            var peek = db.Repository<peek>().Queryable().Where(p => p.profile_id == model.targetprofileid && p.peekprofile_id == model.profileid).FirstOrDefault();
                             //update the profile status to 2
 
                             peek.deletedbypeekdate = DateTime.Now;
                             peek.modificationdate = DateTime.Now;
-                            db.Update(peek);
+                           db.Repository<peek>().Update(peek);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                             return true;
@@ -1872,9 +1877,9 @@ namespace Anewluv.Services.MemberActions
         public async Task restorepeekbyprofileid(ProfileModel model)
         {
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1885,15 +1890,15 @@ namespace Anewluv.Services.MemberActions
 
                          //   var targetid = Convert.ToInt32(peekprofile_id);
 
-                            var peek = db.GetRepository<peek>().FindSingle(p => p.profile_id == model.profileid && p.peekprofile_id == model.targetprofileid);
+                            var peek = db.Repository<peek>().Queryable().Where(p => p.profile_id == model.profileid && p.peekprofile_id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             peek.deletedbymemberdate = null;
                             peek.modificationdate = DateTime.Now;
 
-                            db.Update(peek);
+                           db.Repository<peek>().Update(peek);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                             return true;
@@ -1933,9 +1938,9 @@ namespace Anewluv.Services.MemberActions
         public async Task restorepeekbypeekprofileid( ProfileModel model)
         {
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1945,7 +1950,7 @@ namespace Anewluv.Services.MemberActions
 
                          //   var targetid = Convert.ToInt32(peekprofile_id);
 
-                            var peek = db.GetRepository<peek>().FindSingle(p => p.profile_id == model.targetprofileid && p.peekprofile_id == model.profileid);
+                            var peek = db.Repository<peek>().Queryable().Where(p => p.profile_id == model.targetprofileid && p.peekprofile_id == model.profileid).FirstOrDefault();
                             //update the profile status to 2
                             //update the profile status to 2
 
@@ -1953,9 +1958,9 @@ namespace Anewluv.Services.MemberActions
                             peek.deletedbypeekdate = null;
                             peek.modificationdate = DateTime.Now;
 
-                            db.Update(peek);
+                           db.Repository<peek>().Update(peek);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                             return true;
@@ -1995,9 +2000,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2005,21 +2010,21 @@ namespace Anewluv.Services.MemberActions
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            // peeks = this. db.GetRepository<peek>().Find().Where(p => p.profileid == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                            // peeks = this. db.Repository<peek>().Queryable().Where(p => p.profileid == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
                             //update the profile status to 2
                             peek peek = new peek();
                             foreach (string value in model.targetscreennames)
                             {
 
-                                int? peekprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                                var currentpeek = db.GetRepository<peek>().Find().Where(p => p.profile_id == model.profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                                int? peekprofile_id = db.Repository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentpeek = db.Repository<peek>().Queryable().Where(p => p.profile_id == model.profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
                                 peek.deletedbymemberdate = null;
                                 peek.modificationdate = DateTime.Now;
-                                db.Update(currentpeek);
+                               db.Repository<peek>().Update(currentpeek);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                             return true;
@@ -2056,9 +2061,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2067,21 +2072,21 @@ namespace Anewluv.Services.MemberActions
                         {
 
 
-                            // peeks = this. db.GetRepository<peek>().Find().Where(p => p.profileid == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                            // peeks = this. db.Repository<peek>().Queryable().Where(p => p.profileid == profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
                             //update the profile status to 2
                             peek peek = new peek();
                             foreach (string value in model.targetscreennames)
                             {
 
-                                int? peekprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                                var currentpeek = db.GetRepository<peek>().Find().Where(p => p.profile_id == model.profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
+                                int? peekprofile_id = db.Repository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentpeek = db.Repository<peek>().Queryable().Where(p => p.profile_id == model.profileid && p.peekprofile_id == peekprofile_id).FirstOrDefault();
                                 peek.deletedbymemberdate = null;
                                 peek.modificationdate = DateTime.Now;
-                                db.Update(currentpeek);
+                               db.Repository<peek>().Update(currentpeek);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                             return true;
@@ -2116,9 +2121,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2129,15 +2134,15 @@ namespace Anewluv.Services.MemberActions
 
 
 
-                            var peek = db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
+                            var peek = db.Repository<peek>().Queryable().Where(p => p.peekprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
                             //update the profile status to 2            
                             if (peek.viewdate == null)
                             {
                                 peek.viewdate = DateTime.Now;
                                 peek.modificationdate = DateTime.Now;
-                                db.Update(peek);
+                               db.Repository<peek>().Update(peek);
 
-                                int i = db.Commit();
+                              var i =db.SaveChanges();
                                // transaction.Commit();
                             }
                             return true;
@@ -2186,8 +2191,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoiblockedcount(ProfileModel model)
         {
 
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            var db = _unitOfWork;
+          ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -2230,9 +2235,9 @@ namespace Anewluv.Services.MemberActions
         {
 
 
-                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-                var geodb = _spatial_unitOfWork;
-          var db = _unitOfWork;
+                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+                var geodb = _spatial_unitOfWorkAsync;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -2245,9 +2250,9 @@ namespace Anewluv.Services.MemberActions
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
 
-                     var blocknew = (from f in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
-                                     // join f in  db.GetRepository<profiledata>().Find() on p.blockprofile_id equals f.profile_id
-                                     //  join z in  db.GetRepository<profile>().Find() on p.blockprofile_id equals z.id
+                     var blocknew = (from f in db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                                     // join f in  db.Repository<profiledata>().Queryable() on p.blockprofile_id equals f.profile_id
+                                     //  join z in  db.Repository<profile>().Queryable() on p.blockprofile_id equals z.id
                                      where (f.profilemetadata1.profile.status_id < 3)
                                      orderby (f.creationdate) descending
                                      select new MemberSearchViewModel
@@ -2270,7 +2275,7 @@ namespace Anewluv.Services.MemberActions
                     
                    
                         
-                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,_storedProcedures).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
                   
                       return new SearchResultsViewModel { results = results, totalresults = blocknew.Count() };
                  });
@@ -2310,9 +2315,9 @@ namespace Anewluv.Services.MemberActions
 
           
 
-                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-                var geodb = _spatial_unitOfWork;
-          var db = _unitOfWork;
+                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+                var geodb = _spatial_unitOfWorkAsync;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -2321,9 +2326,9 @@ namespace Anewluv.Services.MemberActions
                      if (model.page == null | model.page == 0) model.page = 1;
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                     var whoblockedme = (from f in db.GetRepository<block>().Find().Where(p => p.blockprofile_id == model.profileid && p.removedate == null)
-                                         //  join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                         // join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                     var whoblockedme = (from f in db.Repository<block>().Queryable().Where(p => p.blockprofile_id == model.profileid && p.removedate == null)
+                                         //  join f in  db.Repository<profiledata>().Queryable() on p.profile_id equals f.profile_id
+                                         // join z in  db.Repository<profile>().Queryable() on p.profile_id equals z.id
                                          where (f.profilemetadata1.profile.status_id < 3)
                                          orderby (f.creationdate) descending
                                          select new MemberSearchViewModel
@@ -2343,8 +2348,8 @@ namespace Anewluv.Services.MemberActions
                      // var pagedinterests = interests.OrderByDescending(f => f.interestdate.Value).Skip((Page ?? 1 - 1) * NumberPerPage ?? 4).Take(NumberPerPage ?? 4).ToList();
 
                      List<MemberSearchViewModel> results;
-                    
-                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.blockdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                          return new SearchResultsViewModel { results = results, totalresults = whoblockedme.Count() };
                  });
@@ -2387,9 +2392,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2443,9 +2448,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2456,7 +2461,7 @@ namespace Anewluv.Services.MemberActions
 
 
 
-                            return db.GetRepository<block>().Find().Any(r => r.profile_id == model.profileid && r.blockprofile_id == model.targetprofileid);
+                            return db.Repository<block>().Queryable().Any(r => r.profile_id == model.profileid && r.blockprofile_id == model.targetprofileid);
 
                         });
 
@@ -2497,9 +2502,9 @@ namespace Anewluv.Services.MemberActions
            
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2515,31 +2520,31 @@ namespace Anewluv.Services.MemberActions
 
                             //check  block first  
                             //if this was a block being restored just do that part
-                            var existingblock = db.GetRepository<block>().FindSingle(r => r.profile_id == model.profileid && r.blockprofile_id == model.targetprofileid);
+                            var existingblock = db.Repository<block>().Queryable().Where(r => r.profile_id == model.profileid && r.blockprofile_id == model.targetprofileid).FirstOrDefault();
 
                             //just  update it if we have one already
                             if (existingblock != null)
                             {
                                 existingblock.removedate = null; ;
                                 existingblock.modificationdate = DateTime.Now;
-                                db.Update(existingblock);
+                               db.Repository<block>().Update(existingblock);
 
                             }
                             else
                             {
-                                //block = this. db.GetRepository<block>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
+                                //block = this. db.Repository<block>().Queryable().Where(p => p.profileid == profileid).FirstOrDefault();
                                 //update the profile status to 2
                                 block.profile_id = model.profileid.GetValueOrDefault();
                                 block.blockprofile_id = model.targetprofileid.GetValueOrDefault();
                                 // not dealing with this calulatin yet                           
                                 block.creationdate = DateTime.Now;
                                 //handele the update using EF
-                                // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
-                                db.Add(block);
+                                // this. db.Repository<profile>().Queryable().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
+                               db.Repository<block>().Insert(block);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                           //  return true;
@@ -2577,9 +2582,9 @@ namespace Anewluv.Services.MemberActions
         public async Task removeblock(ProfileModel model)
         {
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2589,14 +2594,14 @@ namespace Anewluv.Services.MemberActions
                         {
                             //var targetid = Convert.ToInt32(blockprofile_id);
 
-                            var block = db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.blockprofile_id == model.targetprofileid).FirstOrDefault();
+                            var block = db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.blockprofile_id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             block.removedate = DateTime.Now;
                             block.modificationdate = DateTime.Now;
-                            db.Update(block);
+                           db.Repository<block>().Update(block);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                          //   return true;
@@ -2637,9 +2642,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2650,15 +2655,15 @@ namespace Anewluv.Services.MemberActions
 
                            // var targetid = Convert.ToInt32(blockprofile_id);
 
-                            var block = db.GetRepository<block>().FindSingle(p => p.profile_id == model.profileid && p.blockprofile_id == model.targetprofileid);
+                            var block = db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.blockprofile_id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             block.removedate = null;
                             block.modificationdate = DateTime.Now;
 
-                            db.Update(block);
+                           db.Repository<block>().Update(block);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                          //   return true;
@@ -2697,9 +2702,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2708,22 +2713,22 @@ namespace Anewluv.Services.MemberActions
                         {
 
 
-                            // blocks = this. db.GetRepository<block>().Find().Where(p => p.profileid == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                            // blocks = this. db.Repository<block>().Queryable().Where(p => p.profileid == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
                             //update the profile status to 2
                             block block = new block();
                             foreach (string value in model.targetscreennames)
                             {
 
 
-                                int? blockprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                                var currentblock = db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                                int? blockprofile_id = db.Repository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentblock = db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
                                 block.removedate = null;
                                 block.modificationdate = DateTime.Now;
-                                db.Update(currentblock);
+                               db.Repository<block>().Update(currentblock);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                           //  return true;
@@ -2763,9 +2768,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2774,21 +2779,21 @@ namespace Anewluv.Services.MemberActions
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            // blocks = this. db.GetRepository<block>().Find().Where(p => p.profileid == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                            // blocks = this. db.Repository<block>().Queryable().Where(p => p.profileid == profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
                             //update the profile status to 2
                             block block = new block();
                             foreach (string value in model.targetscreennames)
                             {
 
-                                int? blockprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                                var currentblock = db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
+                                int? blockprofile_id = db.Repository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentblock = db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.blockprofile_id == blockprofile_id).FirstOrDefault();
                                 block.removedate = null;
                                 block.modificationdate = DateTime.Now;
-                                db.Update(currentblock);
+                               db.Repository<block>().Update(currentblock);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                            // return true;
@@ -2829,9 +2834,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2840,14 +2845,14 @@ namespace Anewluv.Services.MemberActions
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            var block = db.GetRepository<block>().Find().Where(p => p.blockprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
+                            var block = db.Repository<block>().Queryable().Where(p => p.blockprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
                             //update the profile status to 2            
 
                             block.modificationdate = DateTime.Now;
 
-                            db.Update(block);
+                           db.Repository<block>().Update(block);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                            // return true;
@@ -2896,8 +2901,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoilikecount(ProfileModel model)
         {
 
-                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -2936,8 +2941,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwholikesmecount(ProfileModel model)
         {
 
-                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -2977,8 +2982,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<int> getwhoislikesmenewcount(ProfileModel model)
         {
 
-                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -3024,9 +3029,9 @@ namespace Anewluv.Services.MemberActions
         {
          
 
-                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-                var geodb = _spatial_unitOfWork;
-          var db = _unitOfWork;
+                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+                var geodb = _spatial_unitOfWorkAsync;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -3037,7 +3042,7 @@ namespace Anewluv.Services.MemberActions
                      if (model.page == null | model.page == 0) model.page = 1;
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                     var MyActiveblocks = (from c in db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.removedate == null)
                                            select new
                                            {
                                                ProfilesBlockedId = c.blockprofile_id
@@ -3046,9 +3051,9 @@ namespace Anewluv.Services.MemberActions
                      //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                      //rematerialize on the back end.
                      //final query to send back only the profile datatas of the interests we want
-                     var likenew = (from f in db.GetRepository<like>().Find().Where(p => p.likeprofile_id == model.profileid && p.viewdate == null).ToList()
-                                    //join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                    //join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                     var likenew = (from f in db.Repository<like>().Queryable().Where(p => p.likeprofile_id == model.profileid && p.viewdate == null).ToList()
+                                    //join f in  db.Repository<profiledata>().Queryable() on p.profile_id equals f.profile_id
+                                    //join z in  db.Repository<profile>().Queryable() on p.profile_id equals z.id
                                     where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                     orderby (f.creationdate) descending
                                     select new MemberSearchViewModel
@@ -3070,8 +3075,8 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     
-                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                          return new SearchResultsViewModel { results = results, totalresults = likenew.Count() };
 
@@ -3114,9 +3119,9 @@ namespace Anewluv.Services.MemberActions
 
            
 
-                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-                var geodb = _spatial_unitOfWork;
-          var db = _unitOfWork;
+                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+                var geodb = _spatial_unitOfWorkAsync;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -3125,7 +3130,7 @@ namespace Anewluv.Services.MemberActions
                      if (model.page == null | model.page == 0) model.page = 1;
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                     var MyActiveblocks = (from c in db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.removedate == null)
                                            select new
                                            {
                                                ProfilesBlockedId = c.blockprofile_id
@@ -3134,9 +3139,9 @@ namespace Anewluv.Services.MemberActions
                      //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                      //rematerialize on the back end.
                      //final query to send back only the profile datatas of the interests we want
-                     var wholikesme = (from f in db.GetRepository<like>().Find().Where(p => p.likeprofile_id == model.profileid && p.deletedbylikedate == null)
-                                       // join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-                                       // join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+                     var wholikesme = (from f in db.Repository<like>().Queryable().Where(p => p.likeprofile_id == model.profileid && p.deletedbylikedate == null)
+                                       // join f in  db.Repository<profiledata>().Queryable() on p.profile_id equals f.profile_id
+                                       // join z in  db.Repository<profile>().Queryable() on p.profile_id equals z.id
                                        where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                        orderby (f.creationdate) descending
                                        select new MemberSearchViewModel
@@ -3157,7 +3162,7 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                         results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                          return new SearchResultsViewModel { results = results, totalresults = wholikesme.Count() };
                  });
@@ -3199,9 +3204,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             
-                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-                var geodb = _spatial_unitOfWork;
-          var db = _unitOfWork;
+                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+                var geodb = _spatial_unitOfWorkAsync;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -3211,7 +3216,7 @@ namespace Anewluv.Services.MemberActions
                      if (model.page == null | model.page == 0) model.page = 1;
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
-                     var MyActiveblocks = (from c in db.GetRepository<block>().Find().Where(p => p.profile_id == model.profileid && p.removedate == null)
+                     var MyActiveblocks = (from c in db.Repository<block>().Queryable().Where(p => p.profile_id == model.profileid && p.removedate == null)
                                            select new
                                            {
                                                ProfilesBlockedId = c.blockprofile_id
@@ -3220,9 +3225,9 @@ namespace Anewluv.Services.MemberActions
                      //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                      //rematerialize on the back end.
                      //final query to send back only the profile datatas of the interests we want
-                     var whoilike = (from f in db.GetRepository<like>().Find().Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
-                                     //  join f in  db.GetRepository<profiledata>().Find() on p.likeprofile_id equals f.profile_id
-                                     //  join z in  db.GetRepository<profile>().Find() on p.likeprofile_id equals z.id
+                     var whoilike = (from f in db.Repository<like>().Queryable().Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
+                                     //  join f in  db.Repository<profiledata>().Queryable() on p.likeprofile_id equals f.profile_id
+                                     //  join z in  db.Repository<profile>().Queryable() on p.likeprofile_id equals z.id
                                      where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
                                      orderby (f.creationdate) descending
                                      select new MemberSearchViewModel
@@ -3243,7 +3248,7 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,geodb).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false },db,_storedProcedures).OrderByDescending(f => f.likedate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                      return new SearchResultsViewModel { results = results, totalresults = whoilike.Count() };
 
@@ -3289,8 +3294,8 @@ namespace Anewluv.Services.MemberActions
         //work on this later
         public async Task<SearchResultsViewModel> getmutuallikes(ProfileModel model)
         {
-                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -3342,8 +3347,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<bool>  checklike(ProfileModel model)
         {
 
-                  _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-          var db = _unitOfWork;
+                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+          var db = _unitOfWorkAsync;
          {
              try
              {
@@ -3351,7 +3356,7 @@ namespace Anewluv.Services.MemberActions
                  var task = Task.Factory.StartNew(() =>
                  {
 
-                     return db.GetRepository<like>().Find().Any(r => r.profile_id == model.profileid && r.likeprofile_id == model.targetprofileid);
+                     return db.Repository<like>().Queryable().Any(r => r.profile_id == model.profileid && r.likeprofile_id == model.targetprofileid);
 
                  });
                 return await task.ConfigureAwait(false);
@@ -3389,9 +3394,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3407,31 +3412,31 @@ namespace Anewluv.Services.MemberActions
 
                             //check  like first  
                             //if this was a like being restored just do that part
-                            var existinglike = db.GetRepository<like>().FindSingle(r => r.profile_id == model.profileid && r.likeprofile_id == model.targetprofileid);
+                            var existinglike = db.Repository<like>().Queryable().Where(r => r.profile_id == model.profileid && r.likeprofile_id == model.targetprofileid).FirstOrDefault();
 
                             //just  update it if we have one already
                             if (existinglike != null)
                             {
                                 existinglike.deletedbymemberdate = null; ;
                                 existinglike.modificationdate = DateTime.Now;
-                                db.Update(existinglike);
+                               db.Repository<like>().Update(existinglike);
 
                             }
                             else
                             {
-                                //like = this. db.GetRepository<like>().Find().Where(p => p.profileid == profileid).FirstOrDefault();
+                                //like = this. db.Repository<like>().Queryable().Where(p => p.profileid == profileid).FirstOrDefault();
                                 //update the profile status to 2
                                 like.profile_id = model.profileid.GetValueOrDefault();
                                 like.likeprofile_id = model.targetprofileid.GetValueOrDefault();
                                 like.mutual = false;  // not dealing with this calulatin yet
                                 like.creationdate = DateTime.Now;
                                 //handele the update using EF
-                                // this. db.GetRepository<profile>().Find().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
-                                db.Add(like);
+                                // this. db.Repository<profile>().Queryable().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
+                               db.Repository<like>().Insert(like);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                           //  return true;
@@ -3474,9 +3479,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3488,14 +3493,14 @@ namespace Anewluv.Services.MemberActions
 
                            // var targetid = Convert.ToInt32(likeprofile_id);
 
-                            var like = db.GetRepository<like>().Find().Where(p => p.profile_id == model.profileid && p.likeprofile_id == model.targetprofileid).FirstOrDefault();
+                            var like = db.Repository<like>().Queryable().Where(p => p.profile_id == model.profileid && p.likeprofile_id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             like.deletedbymemberdate = DateTime.Now;
                             like.modificationdate = DateTime.Now;
-                            db.Update(like);
+                           db.Repository<like>().Update(like);
 
-                            int i = db.Commit();
+                          var i = db.SaveChanges();
                            // transaction.Commit();
 
                           //  return true;
@@ -3535,9 +3540,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3548,14 +3553,14 @@ namespace Anewluv.Services.MemberActions
 
                           //  var targetid = Convert.ToInt32(likeprofile_id);
 
-                            var like = db.GetRepository<like>().Find().Where(p => p.profile_id == model.targetprofileid && p.likeprofile_id == model.profileid).FirstOrDefault();
+                            var like = db.Repository<like>().Queryable().Where(p => p.profile_id == model.targetprofileid && p.likeprofile_id == model.profileid).FirstOrDefault();
                             //update the profile status to 2
 
                             like.deletedbylikedate = DateTime.Now;
                             like.modificationdate = DateTime.Now;
-                            db.Update(like);
+                           db.Repository<like>().Update(like);
 
-                            int i = db.Commit();
+                          var i = db.SaveChanges();
                            // transaction.Commit();
 
                            // return true;
@@ -3596,9 +3601,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3609,15 +3614,15 @@ namespace Anewluv.Services.MemberActions
 
                             //var targetid = Convert.ToInt32(likeprofile_id);
 
-                            var like = db.GetRepository<like>().FindSingle(p => p.profile_id == model.profileid && p.likeprofile_id == model.targetprofileid);
+                            var like = db.Repository<like>().Queryable().Where(p => p.profile_id == model.profileid && p.likeprofile_id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             like.deletedbymemberdate = null;
                             like.modificationdate = DateTime.Now;
 
-                            db.Update(like);
+                           db.Repository<like>().Update(like);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                            // return true;
@@ -3657,9 +3662,9 @@ namespace Anewluv.Services.MemberActions
         {
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3670,7 +3675,7 @@ namespace Anewluv.Services.MemberActions
 
                             //  var targetid = Convert.ToInt32(likeprofile_id);
 
-                            var like = db.GetRepository<like>().FindSingle(p => p.profile_id == model.targetprofileid && p.likeprofile_id == model.profileid);
+                            var like = db.Repository<like>().Queryable().Where(p => p.profile_id == model.targetprofileid && p.likeprofile_id == model.profileid).FirstOrDefault();
                             //update the profile status to 2
                             //update the profile status to 2
 
@@ -3678,9 +3683,9 @@ namespace Anewluv.Services.MemberActions
                             like.deletedbylikedate = null;
                             like.modificationdate = DateTime.Now;
 
-                            db.Update(like);
+                           db.Repository<like>().Update(like);
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                            // return true;
@@ -3721,9 +3726,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3732,21 +3737,21 @@ namespace Anewluv.Services.MemberActions
                         {
 
 
-                            // likes = this. db.GetRepository<like>().Find().Where(p => p.profileid == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                            // likes = this. db.Repository<like>().Queryable().Where(p => p.profileid == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
                             //update the profile status to 2
                             like like = new like();
                             foreach (string value in model.targetscreennames)
                             {
 
-                                int? likeprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                                var currentlike = db.GetRepository<like>().Find().Where(p => p.profile_id == model.profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                                int? likeprofile_id = db.Repository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentlike = db.Repository<like>().Queryable().Where(p => p.profile_id == model.profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
                                 like.deletedbymemberdate = null;
                                 like.modificationdate = DateTime.Now;
-                                db.Update(currentlike);
+                               db.Repository<like>().Update(currentlike);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                           //  return true;
@@ -3785,9 +3790,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3795,21 +3800,21 @@ namespace Anewluv.Services.MemberActions
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            // likes = this. db.GetRepository<like>().Find().Where(p => p.profileid == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                            // likes = this. db.Repository<like>().Queryable().Where(p => p.profileid == profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
                             //update the profile status to 2
                             like like = new like();
                             foreach (string value in model.targetscreennames)
                             {
 
-                                int? likeprofile_id = db.GetRepository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
-                                var currentlike = db.GetRepository<like>().Find().Where(p => p.profile_id == model.profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
+                                int? likeprofile_id = db.Repository<profile>().getprofilebyscreenname(new ProfileModel { screenname = value }).id;
+                                var currentlike = db.Repository<like>().Queryable().Where(p => p.profile_id == model.profileid && p.likeprofile_id == likeprofile_id).FirstOrDefault();
                                 like.deletedbymemberdate = null;
                                 like.modificationdate = DateTime.Now;
-                                db.Update(currentlike);
+                               db.Repository<like>().Update(currentlike);
 
                             }
 
-                            int i = db.Commit();
+                          var i =db.SaveChanges();
                            // transaction.Commit();
 
                            // return true;
@@ -3848,9 +3853,9 @@ namespace Anewluv.Services.MemberActions
 
 
             //update method code
-             var db = _unitOfWork;
+             var db = _unitOfWorkAsync;
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+              //  db.IsAuditEnabled = false; //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3861,15 +3866,15 @@ namespace Anewluv.Services.MemberActions
                             //
                             //var targetid = Convert.ToInt32(modeltargetprofileid);
 
-                            var like = db.GetRepository<like>().Find().Where(p => p.likeprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
+                            var like = db.Repository<like>().Queryable().Where(p => p.likeprofile_id == model.targetprofileid && p.profile_id == model.profileid).FirstOrDefault();
                             //update the profile status to 2            
                             if (like.viewdate == null)
                             {
                                 like.viewdate = DateTime.Now;
                                 like.modificationdate = DateTime.Now;
-                                db.Update(like);
+                               db.Repository<like>().Update(like);
 
-                                int i = db.Commit();
+                              var i =db.SaveChanges();
                                // transaction.Commit();
                             }
 
@@ -3910,8 +3915,8 @@ namespace Anewluv.Services.MemberActions
         public async Task<MemberActionsModel> getmemberactionsbyprofileid(ProfileModel model)
         {
             var MemberActions = new MemberActionsModel();
-            _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-            var db = _unitOfWork;
+          ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var db = _unitOfWorkAsync;
             {
                 try
                 {
@@ -3991,14 +3996,14 @@ namespace Anewluv.Services.MemberActions
 //#region "Private methods used internally to this repo"
 //private IQueryable<block> activeblocksbyprofileid(int profileid)
 //{
-//    //_unitOfWork.DisableProxyCreation = true;
-//     var db = _unitOfWork;
+//    //_unitOfWorkAsync.DisableProxyCreation = true;
+//     var db = _unitOfWorkAsync;
 //    {
 //        try
 //        {
-//            IRepository<block> repo = db.GetRepository<block>();
+//            IRepository<block> repo = db.Repository<block>();
 //            //filter out blocked profiles 
-//            return repo.Find().OfType<block>().Where(p =>p.profile_id == model.profileid && p.removedate != null);
+//            return repo.Queryable().OfType<block>().Where(p =>p.profile_id == model.profileid && p.removedate != null);
 //        }
 //        catch (Exception ex)
 //        {
@@ -4017,14 +4022,14 @@ namespace Anewluv.Services.MemberActions
 //{
 
 
-//         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-//  var db = _unitOfWork;
+//       ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+//  var db = _unitOfWorkAsync;
 // {
 //     try
 //     {
-//         return (from p in  db.GetRepository<interest>().Find().Where(p =>p.interestprofile_id == model.profileid & p.deletedbymemberdate == null)
-//                 join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-//                 join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+//         return (from p in  db.Repository<interest>().Queryable().Where(p =>p.interestprofile_id == model.profileid & p.deletedbymemberdate == null)
+//                 join f in  db.Repository<profiledata>().Queryable() on p.profile_id equals f.profile_id
+//                 join z in  db.Repository<profile>().Queryable() on p.profile_id equals z.id
 //                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
 //                 select new MemberSearchViewModel
 //                 {
@@ -4059,17 +4064,17 @@ namespace Anewluv.Services.MemberActions
 //private List<MemberSearchViewModel> getunpagedwhoiaminsterestedin(int profileid, IQueryable<block> MyActiveblocks)
 //{
 
-//         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-//  var db = _unitOfWork;
+//       ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+//  var db = _unitOfWorkAsync;
 // {
 //     try
 //     {
 //           //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
 //        //rematerialize on the back end.
 //        //final query to send back only the profile datatas of the interests we want
-//        return (from p in  db.GetRepository<interest>().Find().Where(p =>p.profile_id == model.profileid & p.deletedbymemberdate == null)
-//                join f in  db.GetRepository<profiledata>().Find() on p.interestprofile_id equals f.profile_id
-//                join z in  db.GetRepository<profile>().Find() on p.interestprofile_id equals z.id
+//        return (from p in  db.Repository<interest>().Queryable().Where(p =>p.profile_id == model.profileid & p.deletedbymemberdate == null)
+//                join f in  db.Repository<profiledata>().Queryable() on p.interestprofile_id equals f.profile_id
+//                join z in  db.Repository<profile>().Queryable() on p.interestprofile_id equals z.id
 //                where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
 //                select new MemberSearchViewModel
 //                {
@@ -4099,17 +4104,17 @@ namespace Anewluv.Services.MemberActions
 //private List<MemberSearchViewModel> getunpagedwhopeekedatme(int profileid, IQueryable<block> MyActiveblocks)
 //{
 
-//         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-//  var db = _unitOfWork;
+//       ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+//  var db = _unitOfWorkAsync;
 // {
 //     try
 //     {
 //         //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
 //         //rematerialize on the back end.
 //         //final query to send back only the profile datatas of the interests we want
-//         return (from p in  db.GetRepository<peek>().Find().Where(p => p.peekprofile_id == model.profileid && p.deletedbymemberdate == null)
-//                 join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-//                 join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+//         return (from p in  db.Repository<peek>().Queryable().Where(p => p.peekprofile_id == model.profileid && p.deletedbymemberdate == null)
+//                 join f in  db.Repository<profiledata>().Queryable() on p.profile_id equals f.profile_id
+//                 join z in  db.Repository<profile>().Queryable() on p.profile_id equals z.id
 //                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
 //                 select new MemberSearchViewModel
 //                 {
@@ -4142,8 +4147,8 @@ namespace Anewluv.Services.MemberActions
 //private List<MemberSearchViewModel> getunpagedwhoipeekedat(int profileid, IQueryable<block> MyActiveblocks)
 //{
 
-//         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-//  var db = _unitOfWork;
+//       ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+//  var db = _unitOfWorkAsync;
 // {
 //     try
 //     {
@@ -4151,9 +4156,9 @@ namespace Anewluv.Services.MemberActions
 //         //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
 //         //rematerialize on the back end.
 //         //final query to send back only the profile datatas of the interests we want
-//         return (from p in  db.GetRepository<peek>().Find().Where(p =>p.profile_id == model.profileid && p.deletedbymemberdate == null)
-//                 join f in  db.GetRepository<profiledata>().Find() on p.peekprofile_id equals f.profile_id
-//                 join z in  db.GetRepository<profile>().Find() on p.peekprofile_id equals z.id
+//         return (from p in  db.Repository<peek>().Queryable().Where(p =>p.profile_id == model.profileid && p.deletedbymemberdate == null)
+//                 join f in  db.Repository<profiledata>().Queryable() on p.peekprofile_id equals f.profile_id
+//                 join z in  db.Repository<profile>().Queryable() on p.peekprofile_id equals z.id
 //                 where (f.profile.status.id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
 //                 select new MemberSearchViewModel
 //                 {
@@ -4183,14 +4188,14 @@ namespace Anewluv.Services.MemberActions
 //private List<MemberSearchViewModel> getunpagedblocks(int profileid)
 //{
 
-//         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-//  var db = _unitOfWork;
+//       ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+//  var db = _unitOfWorkAsync;
 // {
 //     try
 //     {
-//         return (from p in  db.GetRepository<block>().Find().Where(p =>p.profile_id == model.profileid && p.removedate == null)
-//                 join f in  db.GetRepository<profiledata>().Find() on p.blockprofile_id equals f.profile_id
-//                 join z in  db.GetRepository<profile>().Find() on p.blockprofile_id equals z.id
+//         return (from p in  db.Repository<block>().Queryable().Where(p =>p.profile_id == model.profileid && p.removedate == null)
+//                 join f in  db.Repository<profiledata>().Queryable() on p.blockprofile_id equals f.profile_id
+//                 join z in  db.Repository<profile>().Queryable() on p.blockprofile_id equals z.id
 //                 where (f.profile.status.id < 3)
 //                 orderby (p.creationdate) descending
 //                 select new MemberSearchViewModel
@@ -4221,17 +4226,17 @@ namespace Anewluv.Services.MemberActions
 //private List<MemberSearchViewModel> getunpagedwholikesme(int profileid, IQueryable<block> MyActiveblocks)
 //{
 
-//         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-//  var db = _unitOfWork;
+//       ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+//  var db = _unitOfWorkAsync;
 // {
 //     try
 //     {
 //         //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
 //         //rematerialize on the back end.
 //         //final query to send back only the profile datatas of the interests we want
-//         return (from p in  db.GetRepository<like>().Find().Where(p => p.likeprofile_id == model.profileid && p.deletedbylikedate == null)
-//                 join f in  db.GetRepository<profiledata>().Find() on p.profile_id equals f.profile_id
-//                 join z in  db.GetRepository<profile>().Find() on p.profile_id equals z.id
+//         return (from p in  db.Repository<like>().Queryable().Where(p => p.likeprofile_id == model.profileid && p.deletedbylikedate == null)
+//                 join f in  db.Repository<profiledata>().Queryable() on p.profile_id equals f.profile_id
+//                 join z in  db.Repository<profile>().Queryable() on p.profile_id equals z.id
 //                 where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
 //                 orderby (p.creationdate) descending
 //                 select new MemberSearchViewModel
@@ -4262,17 +4267,17 @@ namespace Anewluv.Services.MemberActions
 //private List<MemberSearchViewModel> getunpagedwhoilike(int profileid, IQueryable<block> MyActiveblocks)
 //{
 
-//         _unitOfWork.DisableProxyCreation = false; _unitOfWork.DisableLazyLoading = false;
-//  var db = _unitOfWork;
+//       ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+//  var db = _unitOfWorkAsync;
 // {
 //     try
 //     {
 //         //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
 //         //rematerialize on the back end.
 //         //final query to send back only the profile datatas of the interests we want
-//         return (from p in  db.GetRepository<like>().Find().Where(p =>p.profile_id == model.profileid && p.deletedbymemberdate == null)
-//                 join f in  db.GetRepository<profiledata>().Find() on p.likeprofile_id equals f.profile_id
-//                 join z in  db.GetRepository<profile>().Find() on p.likeprofile_id equals z.id
+//         return (from p in  db.Repository<like>().Queryable().Where(p =>p.profile_id == model.profileid && p.deletedbymemberdate == null)
+//                 join f in  db.Repository<profiledata>().Queryable() on p.likeprofile_id equals f.profile_id
+//                 join z in  db.Repository<profile>().Queryable() on p.likeprofile_id equals z.id
 //                 where (f.profile.status_id < 3 && !MyActiveblocks.Any(b => b.blockprofile_id == f.profile_id))
 //                 orderby (p.creationdate) descending
 //                 select new MemberSearchViewModel

@@ -12,11 +12,12 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
 using  Nmedia.Infrastructure.Domain.Data.log;
+using Repository.Pattern.Ef6;
 
 namespace Nmedia.Infrastructure.Domain.Data.log
 {
     [DataContract(Namespace = "")]
-    public class lu_logseverity
+    public class lu_logseverity :Entity
     {
         //we generate this manually from enums for now
        [Key]

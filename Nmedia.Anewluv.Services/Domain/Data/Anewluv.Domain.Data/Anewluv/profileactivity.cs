@@ -1,3 +1,4 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -6,7 +7,7 @@ namespace Anewluv.Domain.Data
 {
     //added guid tracking
    [DataContract]
-    public partial class profileactivity
+    public partial class profileactivity : Entity
     {
         [DataMember]
         public int id { get; set; }
