@@ -26,6 +26,7 @@ using Anewluv.DataExtentionMethods;
 using Nmedia.Infrastructure.ExceptionHandling;
 using System.Threading.Tasks;
 using Anewluv.Domain;
+using Repository.Pattern.UnitOfWork;
 
 namespace Anewluv.Services.Media
 {
@@ -39,7 +40,7 @@ namespace Anewluv.Services.Media
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        IUnitOfWorkAsync _unitOfWorkAsync;
+        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
@@ -100,8 +101,8 @@ namespace Anewluv.Services.Media
                 try
                 {
                    //var db = _unitOfWorkAsync;
-                    var test = db.GetRepository<lu_photoformat>().Find().OfType<lu_photoformat>().ToList();
-                    foreach (lu_photoformat currentformat in db.GetRepository<lu_photoformat>().Find().OfType<lu_photoformat>().ToList())
+                    var test = _unitOfWorkAsync.Repository<lu_photoformat>().Queryable().OfType<lu_photoformat>().ToList();
+                    foreach (lu_photoformat currentformat in _unitOfWorkAsync.Repository<lu_photoformat>().Queryable().OfType<lu_photoformat>().ToList())
                     {
 
 
@@ -180,8 +181,8 @@ namespace Anewluv.Services.Media
 
         public async Task<PhotoModel> getphotomodelbyphotoid(string photoid, string format)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
              
                     try
@@ -193,7 +194,7 @@ namespace Anewluv.Services.Media
                         var convertedphotoid = Guid.Parse(photoid);
 
                         PhotoModel model = (from p in
-                                                (from r in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == convertedformat && (a.photo.id == convertedphotoid)).ToList()
+                                                (from r in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id == convertedformat && (a.photo.id == convertedphotoid)).ToList()
                                                  select new
                                                  {
                                                      photoid = r.photo.id,
@@ -258,8 +259,8 @@ namespace Anewluv.Services.Media
         public async Task<PhotoModel> getgalleryphotomodelbyprofileid(string profileid, string format)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+         
+         
             {
               
                     try
@@ -267,7 +268,7 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            return db.GetRepository<photoconversion>().getgalleryphotomodelbyprofileid(profileid, format);
+                            return _unitOfWorkAsync.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profileid, format);
                         });
                         return await task.ConfigureAwait(false);
 
@@ -295,8 +296,8 @@ namespace Anewluv.Services.Media
         public async Task<List<PhotoModel>> getphotomodelsbyprofileidandstatus(string profileid, string status, string format)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
              
@@ -317,7 +318,7 @@ namespace Anewluv.Services.Media
                             // Retrieve All User's Approved Photo's that are not Private and approved.
                             //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
-                            var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == convertedformat && a.photo.profile_id == convertedprofileid &&
+                            var model = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id == convertedformat && a.photo.profile_id == convertedprofileid &&
                                 ((a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id == convertedstatus))).ToList()
                                          select new PhotoModel
                                          {
@@ -361,8 +362,8 @@ namespace Anewluv.Services.Media
        public async Task<List<PhotoModel>> getpagedphotomodelbyprofileidandstatus(string profileid, string status, string format, string page, string pagesize)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+         
+         
             {
               
                     try
@@ -370,7 +371,7 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            return db.GetRepository<photoconversion>().getpagedphotomodelbyprofileidandstatus(profileid, status, format, page, pagesize);
+                            return _unitOfWorkAsync.Repository<photoconversion>().getpagedphotomodelbyprofileidandstatus(profileid, status, format, page, pagesize);
                         });
                         return await task.ConfigureAwait(false);
                        
@@ -399,8 +400,8 @@ namespace Anewluv.Services.Media
         //TO DO not implemented
         public async Task <PhotoViewModel> getpagedphotoviewmodelbyprofileid(string profileid, string format, string page, string pagesize)
         {
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                
@@ -441,8 +442,8 @@ namespace Anewluv.Services.Media
 
         public async Task<photoeditmodel> getphotoeditmodelbyphotoid(string photoid, string format)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
              
@@ -457,7 +458,7 @@ namespace Anewluv.Services.Media
                             // var convertedprofileid = Convert.ToInt32(profileid);
                             // var convertedstatus = Convert.ToInt16(status);
 
-                            photoeditmodel model = (from p in db.GetRepository<photoconversion>().Find().Where(p => p.formattype_id == convertedformat && p.photo.id == convertedphotoid).ToList()
+                            photoeditmodel model = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(p => p.formattype_id == convertedformat && p.photo.id == convertedphotoid).ToList()
                                                     select new photoeditmodel
                                                     {
                                                         photoid = p.photo.id,
@@ -498,8 +499,8 @@ namespace Anewluv.Services.Media
 
         public async Task<List<photoeditmodel>> getphotoeditmodelsbyprofileidandstatus(string profile_id, string status, string format)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
               
                     try
@@ -511,7 +512,7 @@ namespace Anewluv.Services.Media
                             var convertedformat = Convert.ToInt16(format);
                             var convertedstatus = Convert.ToInt16(status);
 
-                            var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == convertedformat
+                            var model = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id == convertedformat
                                 && a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id == convertedstatus).ToList()
                                          select new photoeditmodel
                                          {
@@ -555,8 +556,8 @@ namespace Anewluv.Services.Media
                                                               string page, string pagesize)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
               
                     try
@@ -574,7 +575,7 @@ namespace Anewluv.Services.Media
                         // Retrieve All User's Approved Photo's that are not Private and approved.
                         //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
-                        var model = (from p in db.GetRepository<photoconversion>().Find().Where(a => a.formattype_id == convertedformat && a.photo.lu_photoapprovalstatus != null
+                        var model = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id == convertedformat && a.photo.lu_photoapprovalstatus != null
                             && a.photo.approvalstatus_id == convertedstatus).ToList()
                                      select new photoeditmodel
                                      {
@@ -619,8 +620,8 @@ namespace Anewluv.Services.Media
         //12-10-2012 this also filters the format
         public  async Task<PhotoEditViewModel> getpagededitphotoviewmodelbyprofileidandformat(string profileid, string format, string page, string pagesize)
         {
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+            
+         
             {
              
                 try
@@ -634,7 +635,7 @@ namespace Anewluv.Services.Media
                             var convertedprofileid = Convert.ToInt32(profileid);
                             //  var convertedstatus = Convert.ToInt16(status);
 
-                            var myPhotos = db.GetRepository<photoconversion>().Find().Where(z => z.formattype_id == convertedformat && z.photo.profile_id == convertedprofileid).ToList();
+                            var myPhotos = _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(z => z.formattype_id == convertedformat && z.photo.profile_id == convertedprofileid).ToList();
                             var ApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, Convert.ToInt16(page), Convert.ToInt16(pagesize)).ToList();
                             var NotApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, Convert.ToInt16(page), Convert.ToInt16(pagesize));
                             //TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
@@ -670,11 +671,11 @@ namespace Anewluv.Services.Media
         public async Task<AnewluvMessages> deleteuserphoto(string photoid)
         {
 
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+               //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
-             //   using (var transaction = db.BeginTransaction())
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
 
                 
@@ -690,12 +691,12 @@ namespace Anewluv.Services.Media
                                 // var convertedstatus = Convert.ToInt16(status);
 
                                 // Retrieve single value from photos table
-                                photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id == convertedphotoid);
+                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == convertedphotoid).FirstOrDefault();
                                 PhotoModify.photostatus_id = (int)photostatusEnum.deletedbyuser;
-                                db.Update(PhotoModify);
+                                _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
                                 // Update database
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                              var i  =db.SaveChanges();
+                              var i  =_unitOfWorkAsync.SaveChanges();
                                // transaction.Commit();
                                 AnewluvMessages.messages.Add("photo deleted successfully");
                                 return AnewluvMessages;
@@ -730,11 +731,11 @@ namespace Anewluv.Services.Media
 
         public async Task<AnewluvMessages> makeuserphoto_private(string photoid)
         {
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+               //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
-             //   using (var transaction = db.BeginTransaction())
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                       try
                         {
@@ -748,7 +749,7 @@ namespace Anewluv.Services.Media
                                 // var convertedstatus = Convert.ToInt16(status);
 
                                 // Retrieve single value from photos table
-                                photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id == convertedphotoid);
+                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == convertedphotoid).FirstOrDefault();
                                 PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
 
                                 if (PhotoModify.photo_securitylevel.Any(z => z.id != (int)securityleveltypeEnum.Private))
@@ -756,15 +757,15 @@ namespace Anewluv.Services.Media
                                     PhotoModify.photo_securitylevel.Add(new photo_securitylevel
                                     {
                                         photo_id = convertedphotoid,
-                                        lu_securityleveltype = db.GetRepository<lu_securityleveltype>().FindSingle(p => p.id == (int)securityleveltypeEnum.Private)
+                                        lu_securityleveltype = _unitOfWorkAsync.Repository<lu_securityleveltype>().Queryable().Where(p => p.id == (int)securityleveltypeEnum.Private).FirstOrDefault()
                                     });
                                     // newsecurity.id = (int)securityleveltypeEnum.Private;
                                 }
 
-                                db.Update(PhotoModify);
+                                _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
                                 // Update database
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                              var i  =db.SaveChanges();
+                                var i  =_unitOfWorkAsync.SaveChanges();
                                // transaction.Commit();
                                 AnewluvMessages.messages.Add("photo privacy added");
                                 return AnewluvMessages;
@@ -795,11 +796,11 @@ namespace Anewluv.Services.Media
 
         public async Task<AnewluvMessages> makeuserphoto_public(string photoid)
         {
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+               //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
-             //   using (var transaction = db.BeginTransaction())
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                  
                         try
@@ -813,12 +814,12 @@ namespace Anewluv.Services.Media
                                 // var convertedstatus = Convert.ToInt16(status);
 
                                 // Retrieve single value from photos table
-                                photo PhotoModify = db.GetRepository<photo>().FindSingle(u => u.id == convertedphotoid);
+                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == convertedphotoid).FirstOrDefault();
                                 PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
-                                db.Update(PhotoModify);
+                                _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
                                 // Update database
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                              var i  =db.SaveChanges();
+                              var i  =_unitOfWorkAsync.SaveChanges();
                                // transaction.Commit();
                                AnewluvMessages.messages.Add("photo privacy removed");
                                return AnewluvMessages;
@@ -874,9 +875,9 @@ namespace Anewluv.Services.Media
            using (var db = new AnewluvContext())  
           //  using (var db = _unitOfWorkAsync)  
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-                db.DisableProxyCreation = false;
-             //   using (var transaction = db.BeginTransaction())
+               //do not audit on adds
+               
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
 
                     try
@@ -898,16 +899,16 @@ namespace Anewluv.Services.Media
                                     NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
                                     // NewPhoto.size = item.size.GetValueOrDefault();                        
                                     //set the rest of the information as needed i.e approval status refecttion etc
-                                    NewPhoto.lu_photoimagetype = (item.imagetypeid != null) ? db.GetRepository<lu_photoimagetype>().Find().ToList().Where(p => p.id == item.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
-                                    NewPhoto.lu_photoapprovalstatus = (item.approvalstatusid != null) ? db.GetRepository<lu_photoapprovalstatus>().Find().ToList().Where(p => p.id == item.approvalstatusid).FirstOrDefault() : null;
-                                    NewPhoto.lu_photorejectionreason = (item.rejectionreasonid != null) ? db.GetRepository<lu_photorejectionreason>().Find().ToList().Where(p => p.id == item.rejectionreasonid).FirstOrDefault() : null;
-                                    NewPhoto.lu_photostatus = (item.photostatusid != null) ? db.GetRepository<lu_photostatus>().Find().ToList().Where(p => p.id == item.photostatusid).FirstOrDefault() : null;
+                                    NewPhoto.lu_photoimagetype = (item.imagetypeid != null) ? _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.id == item.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
+                                    NewPhoto.lu_photoapprovalstatus = (item.approvalstatusid != null) ? _unitOfWorkAsync.Repository<lu_photoapprovalstatus>().Queryable().ToList().Where(p => p.id == item.approvalstatusid).FirstOrDefault() : null;
+                                    NewPhoto.lu_photorejectionreason = (item.rejectionreasonid != null) ? _unitOfWorkAsync.Repository<lu_photorejectionreason>().Queryable().ToList().Where(p => p.id == item.rejectionreasonid).FirstOrDefault() : null;
+                                    NewPhoto.lu_photostatus = (item.photostatusid != null) ? _unitOfWorkAsync.Repository<lu_photostatus>().Queryable().ToList().Where(p => p.id == item.photostatusid).FirstOrDefault() : null;
 
                                     var temp = addphotoconverionsb64string(NewPhoto, item, db);
                                     if (temp.Count > 0)
                                     {
                                         //existing conversions to compare with new one : 
-                                        var existingthumbnailconversion = db.GetRepository<photoconversion>().Find().Where(z => z.photo.profile_id == model.profileid & z.lu_photoformat.id == (int)photoformatEnum.Thumbnail).ToList();
+                                        var existingthumbnailconversion = _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(z => z.photo.profile_id == model.profileid & z.lu_photoformat.id == (int)photoformatEnum.Thumbnail).ToList();
                                         var newphotothumbnailconversion = temp.Where(p => p.lu_photoformat.id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
                                         if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
                                         {
@@ -917,16 +918,16 @@ namespace Anewluv.Services.Media
                                         {
                                             AnewluvMessage.messages.Add("<br/>" + "photo with name " + NewPhoto.imagecaption + "Has been uploaded");
                                             //allow saving of new photo 
-                                            db.Add(NewPhoto);
-                                            int i2 =db.SaveChanges();
+                                            _unitOfWorkAsync.Repository<photo>().Insert(NewPhoto);
+                                            int i2 =_unitOfWorkAsync.SaveChanges();
                                             photosaddedcount = +1;
 
                                             foreach (photoconversion convertedphoto in temp)
                                             {
                                                 //if this does not recognise the photo object we might need to save that and delete it later
-                                                db.Add(convertedphoto);
+                                                _unitOfWorkAsync.Repository<photoconversion>().Insert(convertedphoto);
                                                 //commit if no errors                               
-                                              var i  =db.SaveChanges();      
+                                              var i  =_unitOfWorkAsync.SaveChanges();      
                                             }
                                         }
                                     }
@@ -985,8 +986,8 @@ namespace Anewluv.Services.Media
             //update method code
             using (var db = new AnewluvContext())
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+               //do not audit on adds
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
@@ -1015,16 +1016,16 @@ namespace Anewluv.Services.Media
                             NewPhoto.imagename = newphoto.imagename; //11-26-2012 olawal added the name for comparisons 
                             NewPhoto.size = newphoto.legacysize.GetValueOrDefault();
                             //set the rest of the information as needed i.e approval status refecttion etc
-                            NewPhoto.lu_photoimagetype = (newphoto.imagetypeid != null) ? db.GetRepository<lu_photoimagetype>().Find().ToList().Where(p => p.id == newphoto.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
-                            NewPhoto.lu_photoapprovalstatus = (newphoto.approvalstatusid != null) ? db.GetRepository<lu_photoapprovalstatus>().Find().ToList().Where(p => p.id == newphoto.approvalstatusid).FirstOrDefault() : null;
-                            NewPhoto.lu_photorejectionreason = (newphoto.rejectionreasonid != null) ? db.GetRepository<lu_photorejectionreason>().Find().ToList().Where(p => p.id == newphoto.rejectionreasonid).FirstOrDefault() : null;
-                            NewPhoto.lu_photostatus = (newphoto.photostatusid != null) ? db.GetRepository<lu_photostatus>().Find().ToList().Where(p => p.id == newphoto.photostatusid).FirstOrDefault() : null;
+                            NewPhoto.lu_photoimagetype = (newphoto.imagetypeid != null) ? _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.id == newphoto.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
+                            NewPhoto.lu_photoapprovalstatus = (newphoto.approvalstatusid != null) ? _unitOfWorkAsync.Repository<lu_photoapprovalstatus>().Queryable().ToList().Where(p => p.id == newphoto.approvalstatusid).FirstOrDefault() : null;
+                            NewPhoto.lu_photorejectionreason = (newphoto.rejectionreasonid != null) ? _unitOfWorkAsync.Repository<lu_photorejectionreason>().Queryable().ToList().Where(p => p.id == newphoto.rejectionreasonid).FirstOrDefault() : null;
+                            NewPhoto.lu_photostatus = (newphoto.photostatusid != null) ? _unitOfWorkAsync.Repository<lu_photostatus>().Queryable().ToList().Where(p => p.id == newphoto.photostatusid).FirstOrDefault() : null;
 
                             var temp = addphotoconverionsb64string(NewPhoto, newphoto,db);
                             if (temp.Count > 0)
                             {
                                 //existing conversions to compare with new one : 
-                                var existingthumbnailconversion = db.GetRepository<photoconversion>().Find().Where(z => z.photo.profile_id == convertedprofileid & z.formattype_id == (int)photoformatEnum.Thumbnail).ToList();
+                                var existingthumbnailconversion = _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(z => z.photo.profile_id == convertedprofileid & z.formattype_id == (int)photoformatEnum.Thumbnail).ToList();
                                 var newphotothumbnailconversion = temp.Where(p => p.formattype_id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
                                 if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
                                 {
@@ -1033,15 +1034,15 @@ namespace Anewluv.Services.Media
                                 else
                                 {
                                     //allow saving of new photo 
-                                    db.Add(NewPhoto);
-                                    int i2 =db.SaveChanges();
+                                    _unitOfWorkAsync.Repository<photo>().Insert(NewPhoto);
+                                    int i2 =_unitOfWorkAsync.SaveChanges();
                                     // _datingcontext.SaveChanges();
                                     foreach (photoconversion convertedphoto in temp)
                                     {
                                         //if this does not recognise the photo object we might need to save that and delete it later
-                                        db.Add(convertedphoto);
+                                        _unitOfWorkAsync.Repository<photoconversion>().Insert(convertedphoto);
                                     }
-                                  var i  =db.SaveChanges();
+                                  var i  =_unitOfWorkAsync.SaveChanges();
                                    // transaction.Commit();
                                 }
 
@@ -1085,8 +1086,8 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkvalidjpggif(byte[] image)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                
@@ -1132,8 +1133,8 @@ namespace Anewluv.Services.Media
         public async Task<string> getgalleryphotobyscreenname(string strscreenname, string format)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                  try
@@ -1146,8 +1147,8 @@ namespace Anewluv.Services.Media
                             //  var convertedphotoid = Guid.Parse(photoid);
                             //  var convertedprofileid = Convert.ToInt32(profileid);
                             // var convertedstatus = Convert.ToInt16(status);
-                            var GalleryPhoto = (from p in db.GetRepository<profile>().Find().Where(p => p.screenname == strscreenname).ToList()
-                                                join f in db.GetRepository<photoconversion>().Find() on p.id equals f.photo.profile_id
+                            var GalleryPhoto = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.screenname == strscreenname).ToList()
+                                                join f in _unitOfWorkAsync.Repository<photoconversion>().Queryable() on p.id equals f.photo.profile_id
                                                 where (f.formattype_id == (int)convertedformat && f.photo.lu_photoapprovalstatus != null &&
                                                 f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
                                                 f.photo.imagetype_id == (int)photostatusEnum.Gallery)
@@ -1183,8 +1184,8 @@ namespace Anewluv.Services.Media
         public async Task<string> getgalleryimagebyphotoid(string photoid, string format)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
               
@@ -1198,7 +1199,7 @@ namespace Anewluv.Services.Media
                             //var convertedprofileid = Convert.ToInt32(profileid);
                             // var convertedstatus = Convert.ToInt16(status);
 
-                            var GalleryPhoto = (from f in db.GetRepository<photoconversion>().Find().Where(f => f.photo.id == (convertedphotoid) &&
+                            var GalleryPhoto = (from f in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(f => f.photo.id == (convertedphotoid) &&
                              f.formattype_id == (int)convertedformat && f.photo.lu_photoapprovalstatus != null &&
                              f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
                              f.photo.imagetype_id == (int)photostatusEnum.Gallery).ToList()
@@ -1235,8 +1236,8 @@ namespace Anewluv.Services.Media
        
        public async Task<string> getgalleryphotobyprofileid(string profileid, string format)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
               
@@ -1249,8 +1250,8 @@ namespace Anewluv.Services.Media
                             var convertedprofileid = Convert.ToInt32(profileid);
 
 
-                            var GalleryPhoto = (from p in db.GetRepository<profile>().Find().Where(p => p.id == convertedprofileid).ToList()
-                                                join f in db.GetRepository<photoconversion>().Find() on p.id equals f.photo.profile_id
+                            var GalleryPhoto = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.id == convertedprofileid).ToList()
+                                                join f in _unitOfWorkAsync.Repository<photoconversion>().Queryable() on p.id equals f.photo.profile_id
                                                 where (f.formattype_id == (int)Convert.ToInt32(format) && f.photo.lu_photoapprovalstatus != null &&
                                                 f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
                                                 f.photo.imagetype_id == (int)photostatusEnum.Gallery)
@@ -1289,8 +1290,8 @@ namespace Anewluv.Services.Media
         public async Task<string> getgalleryimagebynormalizedscreenname(string strScreenName, string format)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
              
@@ -1301,8 +1302,8 @@ namespace Anewluv.Services.Media
                         {
                             var test = "";
                             // string strProfileID = this.getprofileidbyscreenname(strScreenName);
-                            var GalleryPhoto = (from p in db.GetRepository<profile>().Find().Where(p => p.screenname.Replace(" ", "") == strScreenName).ToList()
-                                                join f in db.GetRepository<photoconversion>().Find() on p.id equals f.photo.profile_id
+                            var GalleryPhoto = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.screenname.Replace(" ", "") == strScreenName).ToList()
+                                                join f in _unitOfWorkAsync.Repository<photoconversion>().Queryable() on p.id equals f.photo.profile_id
                                                 where (f.formattype_id == (int)Convert.ToInt32(format) && f.photo.lu_photoapprovalstatus != null &&
                                                     f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
                                                     f.photo.imagetype_id == (int)photostatusEnum.Gallery)
@@ -1345,8 +1346,8 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkifphotocaptionalreadyexists(string profileid, string strPhotoCaption)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                
@@ -1356,7 +1357,7 @@ namespace Anewluv.Services.Media
                     var task = Task.Factory.StartNew(() =>
                     {
                                 var convertedprofileid = Convert.ToInt32(profileid);
-                                var myPhotoList = db.GetRepository<photo>().Find().Where(p => p.profile_id == convertedprofileid && p.imagecaption == strPhotoCaption).FirstOrDefault();
+                                var myPhotoList = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == convertedprofileid && p.imagecaption == strPhotoCaption).FirstOrDefault();
                                 if (myPhotoList != null)
                                 {
                                     return true;
@@ -1396,8 +1397,8 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkforgalleryphotobyprofileid(string profileid)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {                
                       
                             try
@@ -1406,7 +1407,7 @@ namespace Anewluv.Services.Media
                                 var task = Task.Factory.StartNew(() =>
                                 {
                                     var convertedprofileid = Convert.ToInt32(profileid);
-                                    var GalleryPhoto = db.GetRepository<photo>().Find().Where(p => p.profile_id == convertedprofileid &&
+                                    var GalleryPhoto = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == convertedprofileid &&
                                     p.lu_photoapprovalstatus != null && p.approvalstatus_id == (int)photoapprovalstatusEnum.Approved && p.imagetype_id == (int)photostatusEnum.Gallery).FirstOrDefault();
 
                                     if (GalleryPhoto != null)
@@ -1442,8 +1443,8 @@ namespace Anewluv.Services.Media
         public async Task<bool> checkforuploadedphotobyprofileid(string profileid)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
                                     
                         try
@@ -1454,7 +1455,7 @@ namespace Anewluv.Services.Media
                                 var convertedprofileid = Convert.ToInt32(profileid);
                                 IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
                                 //Dim ctx As New Entities()
-                                GalleryPhoto = db.GetRepository<photo>().Find().Where(p => p.profile_id == convertedprofileid);
+                                GalleryPhoto = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == convertedprofileid);
 
                                 if (GalleryPhoto.Count() > 0)
                                 {
@@ -1495,8 +1496,8 @@ namespace Anewluv.Services.Media
         /// <returns></returns>
         public async Task<string> getimageb64stringfromurl(string imageUrl, string source)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
                 try
                     {

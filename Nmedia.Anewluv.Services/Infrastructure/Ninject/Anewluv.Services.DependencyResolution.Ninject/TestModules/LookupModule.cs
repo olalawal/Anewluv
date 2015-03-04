@@ -22,6 +22,7 @@ using System.ServiceModel;
 using Repository.Pattern.DataContext;
 using Repository.Pattern.UnitOfWork;
 using Repository.Pattern.Ef6;
+using GeoData.Domain.Models;
 //using Anewluv.Services.Members;
 
 
@@ -46,9 +47,8 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 
             //Bind<ILookupService>().ToSelf().InRequestScope();
 
-            this.Bind<IDataContextAsync>().To<AnewluvContext>().InRequestScope();
-            this.Bind<IUnitOfWorkAsync>().To<UnitOfWork>().InRequestScope();
-
+         
+            
 
          
       }

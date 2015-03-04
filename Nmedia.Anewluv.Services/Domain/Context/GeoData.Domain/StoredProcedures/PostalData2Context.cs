@@ -16,6 +16,18 @@ namespace GeoData.Domain.Models
 
 {
 
+
+      public  IEnumerable<Country_PostalCode_List> GetCountryPostalCodeList()
+        {
+
+            var Query = Database.SqlQuery<Country_PostalCode_List>("Select * from Country_PostalCode_List").ToListAsync().Result;
+                
+                //_unitOfWorkAsync.Repository<Country_PostalCode_List>().Query(p => p.CountryName != "").Select().ToList().OrderBy(p => p.CountryName);
+
+            return Query;
+        
+        }
+
      public string GetCountryNameByCountryID(string countryid)
     {
         string query = "sp_GetCountryNameByCountryID";

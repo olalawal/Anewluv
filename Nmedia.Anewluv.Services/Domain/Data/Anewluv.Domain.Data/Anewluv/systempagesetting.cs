@@ -1,3 +1,4 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -5,7 +6,7 @@ using System.Runtime.Serialization;
 namespace Anewluv.Domain.Data
 {
     [DataContract]
-    public partial class systempagesetting
+    public partial class systempagesetting :Entity
     {
         [DataMember]   public int id { get; set; }
         [DataMember]

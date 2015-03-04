@@ -1,9 +1,10 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class userlogtime
+    public partial class userlogtime :Entity
     {
         public int id { get; set; }
         public Nullable<System.DateTime> logintime { get; set; }

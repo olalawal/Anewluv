@@ -5,7 +5,8 @@ using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    [DataContract] public partial class lu_photostatusdescription
+    [DataContract]
+    public partial class lu_photostatusdescription : Repository.Pattern.Ef6.Entity
     {
         [DataMember]   public int id { get; set; }
         [NotMapped, DataMember] public bool selected { get; set; }

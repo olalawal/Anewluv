@@ -16,12 +16,11 @@ namespace Anewluv.Web.Services.Edit.ServiceHostFactories
         protected override IKernel CreateContainer()
         {
             IKernel container = new StandardKernel();
-           // container.Load<NinjectModules.ApiKeyContextModule>();
-           // container.Load<NinjectModules.AnewLuvContextModule>();
-           // container.Load<NinjectModules.MembershipModule>();
+          
             container.Load<NinjectModules.AnewLuvContextModule>();
-            container.Load<NinjectModules.MemberEditModule>();
-           container.Load<NinjectModules.SearchEditModule>(); 
+            container.Load<NinjectModules.PostalDataContextModule>();
+            container.Load<NinjectModules.UnitOfWorkAsyncModule>();
+           
             return container;
         }
 

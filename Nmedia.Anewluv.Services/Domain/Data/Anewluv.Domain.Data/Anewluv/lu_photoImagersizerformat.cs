@@ -4,8 +4,9 @@ using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    
-    [DataContract] public partial class lu_photoImagersizerformat
+
+    [DataContract]
+    public partial class lu_photoImagersizerformat : Repository.Pattern.Ef6.Entity
     {
         public lu_photoImagersizerformat()
         {

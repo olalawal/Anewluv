@@ -1,9 +1,10 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class openid
+    public partial class openid :Entity
     {
         public int id { get; set; }
         public Nullable<bool> active { get; set; }

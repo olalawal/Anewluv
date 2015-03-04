@@ -1,5 +1,6 @@
 ﻿using Anewluv.Domain.Data.ViewModels;
 using Anewluv.Services.Contracts;
+using Repository.Pattern.UnitOfWork;
 //using Nmedia.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -27,13 +28,13 @@ namespace Anewluv.Services.Common
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
         // private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public OpenidService(IUnitOfWork unitOfWork)
+        public OpenidService(IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -47,7 +48,7 @@ namespace Anewluv.Services.Common
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
+            _unitOfWorkAsync = unitOfWork;
             //disable proxy stuff by default
             //_unitOfWork.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];

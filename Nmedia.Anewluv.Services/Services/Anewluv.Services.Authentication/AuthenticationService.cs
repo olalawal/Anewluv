@@ -671,7 +671,7 @@ namespace Anewluv.Services.Authentication
 
           //  using (var db = _unitOfWorkAsync)
             {
-               //// db.IsAuditEnabled = false; //do not audit on adds
+               //////do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -914,9 +914,9 @@ namespace Anewluv.Services.Authentication
         private bool updatepassword(ProfileModel model, string encryptedpassword)
         {
             
-          ////    using (var db = _unitOfWorkAsync)
+          //// 
             {
-                // // db.IsAuditEnabled = false; //do not audit on adds
+                // ////do not audit on adds
                 //   using (var transaction = db.BeginTransaction())
                   {
                       try
@@ -1743,7 +1743,7 @@ namespace Anewluv.Services.Authentication
 
           //  using (var db = _unitOfWorkAsync)
             {
-             //  // db.IsAuditEnabled = false; //do not audit on adds
+             //  ////do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1983,7 +1983,7 @@ namespace Anewluv.Services.Authentication
         private Guid? getcurrentapikeybyprofileid(int profileid,IUnitOfWorkAsync db)
         {      
 
-                   //// db.IsAuditEnabled = false; //do not audit on adds               
+                   //////do not audit on adds               
                     try
                     {
                         //get the last current activity 

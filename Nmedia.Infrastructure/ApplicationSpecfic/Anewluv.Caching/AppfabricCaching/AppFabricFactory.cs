@@ -27,6 +27,8 @@ using Anewluv.Services.Spatial;
 using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Infrastructure.ExceptionHandling;
 using Nmedia.Infrastructure.Helpers;
+using Repository.Pattern.UnitOfWork;
+using Anewluv.DataExtentionMethods;
 
 
 
@@ -304,7 +306,7 @@ namespace Anewluv.Caching
         //TO do dpreciate this and test using the Session ID as in below
         //TO Do combine both these functions to rturn a string array of profileID and screenName
         //sowe can pick?
-        public static int? getprofileidbyusername(string username, IUnitOfWork context)
+        public static int? getprofileidbyusername(string username, IUnitOfWorkAsync context)
         {
 
             try
@@ -328,7 +330,7 @@ namespace Anewluv.Caching
                 {
                     //MembersRepository membersrepository = new MembersRepository();
                     //get the correct value from DB
-                    var profile = context.GetRepository<profile>().Find().Where(p => p.username == username).FirstOrDefault();
+                    var profile = context.Repository<profile>().Queryable().Where(p => p.username == username).FirstOrDefault();
                     _profileid = (profile != null) ? profile.id : 0;
                     //if we have an active cache we store the current value 
                     if (dataCache != null && _profileid != 0)
@@ -363,7 +365,7 @@ namespace Anewluv.Caching
 
         }
         //TO do dpreciate this and test using the Session ID as in below
-        public static int? getprofileidbyscreenname(string screenname, IUnitOfWork context)
+        public static int? getprofileidbyscreenname(string screenname, IUnitOfWorkAsync context)
         {
 
             try
@@ -387,7 +389,7 @@ namespace Anewluv.Caching
                 {
                     //MembersRepository membersrepository = new MembersRepository();
                     //get the correct value from DB
-                     var profile = context.GetRepository<profile>().Find().Where(p => p.screenname == screenname).FirstOrDefault();
+                     var profile = context.Repository<profile>().Queryable().Where(p => p.screenname == screenname).FirstOrDefault();
                     _profileid = (profile != null)? profile.id : 0  ;
 
                     //if we have an active cache we store the current value 
@@ -420,7 +422,7 @@ namespace Anewluv.Caching
         }
 
         //TO do dpreciate this and test using the Session ID as in below
-        public static int? getprofileidbyopenid(ProfileModel model, IUnitOfWork context)
+        public static int? getprofileidbyopenid(ProfileModel model, IUnitOfWorkAsync context)
         {
 
             try
@@ -444,7 +446,7 @@ namespace Anewluv.Caching
                 {
                     //MembersRepository membersrepository = new MembersRepository();
                     //get the correct value from DB
-                    var profile = context.GetRepository<profile>().Find().Where(p => p.emailaddress  == model.email).FirstOrDefault();
+                    var profile = context.Repository<profile>().Queryable().Where(p => p.emailaddress  == model.email).FirstOrDefault();
                     _profileid = (profile != null) ? profile.id : 0;
 
                     //if we have an active cache we store the current value 
@@ -555,7 +557,7 @@ namespace Anewluv.Caching
                                //  model = MemberMapperService.mapmember(profileid.ToString());
                              }
                             // Datings context = new modelContext();
-                            // model =  context.GetRepository<models.Single(c => c.Id == id);
+                            // model =  context.Repository<models.Single(c => c.Id == id);
                             dataCache.Put("membersviewmodel" + profileid, model);
                         }
                         else
@@ -657,7 +659,7 @@ namespace Anewluv.Caching
                     } return model;
 
                 }
-                // try { if (dataCache != null)  model = dataCache.Get("membersviewmodel" +  context.GetRepository<Session.SessionID, "Guests") as MembersViewModel; }
+                // try { if (dataCache != null)  model = dataCache.Get("membersviewmodel" +  context.Repository<Session.SessionID, "Guests") as MembersViewModel; }
 
                catch (DataCacheException ex)
                 {
@@ -845,7 +847,7 @@ namespace Anewluv.Caching
                 try
                 {
                     //MembersViewModel oldMembersViewModel = null;
-                    // try { oldMembersViewModel = dataCache.Get("membersviewmodel" +  context.GetRepository<Session.SessionID, "Guests") as MembersViewModel; }
+                    // try { oldMembersViewModel = dataCache.Get("membersviewmodel" +  context.Repository<Session.SessionID, "Guests") as MembersViewModel; }
                     //catch (DataCacheException)
                     //{
                     //    //Log error
@@ -884,7 +886,7 @@ namespace Anewluv.Caching
                     //oldMembersViewModel.Register = p.Register;
 
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     dataCache.Put("membersviewmodel" + p.sessionid, p, "Guests");
 
                     return true;
@@ -959,7 +961,7 @@ namespace Anewluv.Caching
                     //return memberactionsrepository.
                     //No need to put empty data
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     // dataCache.Put("profilebrowsemodel" + ProfileID, model);
 
 
@@ -998,7 +1000,7 @@ namespace Anewluv.Caching
 
                     //No need to put empty data
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     // dataCache.Put("profilebrowsemodel" + ProfileID, model);
                 } return model;
 
@@ -1129,7 +1131,7 @@ namespace Anewluv.Caching
         public static class CssStyleSelector
         {
 
-            public static string getbodycssbypagename(string pagename,IUnitOfWork context)
+            public static string getbodycssbypagename(string pagename,IUnitOfWorkAsync context)
             {
 
 
@@ -1153,9 +1155,9 @@ namespace Anewluv.Caching
                     {
                         //context context = new context();
                         //remafill the ages list from the repositry and exit
-                        // Ages =  context.GetRepository<AgesSelectList;
+                        // Ages =  context.Repository<AgesSelectList;
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
                         //if we still have no datacahe no need to do the put
                         // if (dataCache == null) return Ages;
@@ -1197,7 +1199,7 @@ namespace Anewluv.Caching
 
             }
 
-            public static List<systempagesetting> getsystempagesettingslist(IUnitOfWork context)
+            public static List<systempagesetting> getsystempagesettingslist(IUnitOfWorkAsync context)
             {
 
 
@@ -1221,13 +1223,13 @@ namespace Anewluv.Caching
                     {
                         //context context = new context();
                         //remafill the ages list from the repositry and exit
-                        // Ages =  context.GetRepository<AgesSelectList;
+                        // Ages =  context.Repository<AgesSelectList;
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
                         //if we still have no datacahe no need to do the put
                         // if (dataCache == null) return Ages;
-                        pages =  context.GetRepository<systempagesetting>().Find().Where(p => p.bodycssstylename != "").ToList();
+                        pages =  context.Repository<systempagesetting>().Queryable().Where(p => p.bodycssstylename != "").ToList();
                         if (dataCache != null)
                             dataCache.Put("SystemPageSettingsList", pages);
                     }
@@ -1261,7 +1263,7 @@ namespace Anewluv.Caching
         public static class SharedObjectHelper
         {
             //Photo based functions 
-            public static List<lu_photoformat> getphotoformatlist(IUnitOfWork context)
+            public static List<lu_photoformat> getphotoformatlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1287,9 +1289,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        photoformat =  context.GetRepository<lu_photoformat>().Find().OrderBy(x => x.description).ToList();
+                        photoformat =  context.Repository<lu_photoformat>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1310,7 +1312,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_photoapprovalstatus> getphotoapprovalstatuslist(IUnitOfWork context)
+            public static List<lu_photoapprovalstatus> getphotoapprovalstatuslist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1336,9 +1338,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        photoapprovalstatus =  context.GetRepository<lu_photoapprovalstatus>().Find().OrderBy(x => x.description).ToList();
+                        photoapprovalstatus =  context.Repository<lu_photoapprovalstatus>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1359,7 +1361,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_photorejectionreason> getphotorejectionreasonlist(IUnitOfWork context)
+            public static List<lu_photorejectionreason> getphotorejectionreasonlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1385,9 +1387,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        photorejectionreason =  context.GetRepository<lu_photorejectionreason>().Find().OrderBy(x => x.description).ToList();
+                        photorejectionreason =  context.Repository<lu_photorejectionreason>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1408,7 +1410,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_photostatus> getphotostatuslist(IUnitOfWork context)
+            public static List<lu_photostatus> getphotostatuslist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1434,9 +1436,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        photostatus =  context.GetRepository<lu_photostatus>().Find().OrderBy(x => x.description).ToList();
+                        photostatus =  context.Repository<lu_photostatus>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1457,7 +1459,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_photoimagetype> getphotoimagetypelist(IUnitOfWork context)
+            public static List<lu_photoimagetype> getphotoimagetypelist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1483,9 +1485,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        photoimagetype =  context.GetRepository<lu_photoimagetype>().Find().OrderBy(x => x.description).ToList();
+                        photoimagetype =  context.Repository<lu_photoimagetype>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1508,7 +1510,7 @@ namespace Anewluv.Caching
             }
 
             //olawal 3-13-2013 other functions added after fact
-            public static List<lu_photostatusdescription> getphotostatusdescriptionlist(IUnitOfWork context)
+            public static List<lu_photostatusdescription> getphotostatusdescriptionlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1534,9 +1536,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        photostatusdescription =  context.GetRepository<lu_photostatusdescription>().Find().OrderBy(x => x.description).ToList();
+                        photostatusdescription =  context.Repository<lu_photostatusdescription>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1557,7 +1559,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_abusetype> getabusetypelist(IUnitOfWork context)
+            public static List<lu_abusetype> getabusetypelist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1583,9 +1585,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        abusetype =  context.GetRepository<lu_abusetype>().Find().OrderBy(x => x.description).ToList();
+                        abusetype =  context.Repository<lu_abusetype>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1606,7 +1608,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_profilestatus> getprofilestatuslist(IUnitOfWork context)
+            public static List<lu_profilestatus> getprofilestatuslist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1632,9 +1634,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        profilestatus =  context.GetRepository<lu_profilestatus>().Find().OrderBy(x => x.description).ToList();
+                        profilestatus =  context.Repository<lu_profilestatus>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1655,7 +1657,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_photoImagersizerformat> getphotoImagersizerformatlist(IUnitOfWork context)
+            public static List<lu_photoImagersizerformat> getphotoImagersizerformatlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1681,9 +1683,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        photoImagersizerformat =  context.GetRepository<lu_photoImagersizerformat>().Find().OrderBy(x => x.description).ToList();
+                        photoImagersizerformat =  context.Repository<lu_photoImagersizerformat>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1704,7 +1706,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_role> getrolelist(IUnitOfWork context)
+            public static List<lu_role> getrolelist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1730,9 +1732,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        role =  context.GetRepository<lu_role>().Find().OrderBy(x => x.description).ToList();
+                        role =  context.Repository<lu_role>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1753,7 +1755,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_securityleveltype> getsecurityleveltypelist(IUnitOfWork context)
+            public static List<lu_securityleveltype> getsecurityleveltypelist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1779,9 +1781,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        securityleveltype =  context.GetRepository<lu_securityleveltype>().Find().OrderBy(x => x.description).ToList();
+                        securityleveltype =  context.Repository<lu_securityleveltype>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1802,7 +1804,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_showme> getshowmelist(IUnitOfWork context)
+            public static List<lu_showme> getshowmelist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1828,9 +1830,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        showme =  context.GetRepository<lu_showme>().Find().OrderBy(x => x.description).ToList();
+                        showme =  context.Repository<lu_showme>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1851,7 +1853,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_sortbytype> getsortbytypelist(IUnitOfWork context)
+            public static List<lu_sortbytype> getsortbytypelist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1877,9 +1879,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        sortbytype =  context.GetRepository<lu_sortbytype>().Find().OrderBy(x => x.description).ToList();
+                        sortbytype =  context.Repository<lu_sortbytype>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1900,7 +1902,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_securityquestion> getsecurityquestionlist(IUnitOfWork context)
+            public static List<lu_securityquestion> getsecurityquestionlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1926,9 +1928,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        securityquestion =  context.GetRepository<lu_securityquestion>().Find().OrderBy(x => x.description).ToList();
+                        securityquestion =  context.Repository<lu_securityquestion>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1949,7 +1951,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_flagyesno> getflagyesnolist(IUnitOfWork context)
+            public static List<lu_flagyesno> getflagyesnolist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -1975,9 +1977,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        flagyesno =  context.GetRepository<lu_flagyesno>().Find().OrderBy(x => x.description).ToList();
+                        flagyesno =  context.Repository<lu_flagyesno>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -1998,7 +2000,7 @@ namespace Anewluv.Caching
                 }
 
             }
-            public static List<lu_profilefiltertype> getprofilefiltertypelist(IUnitOfWork context)
+            public static List<lu_profilefiltertype> getprofilefiltertypelist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2024,9 +2026,9 @@ namespace Anewluv.Caching
                     {
                         // context context = new context();
                         //remafill the Genders list from the repositry and exit
-                        profilefiltertype =  context.GetRepository<lu_profilefiltertype>().Find().OrderBy(x => x.description).ToList();
+                        profilefiltertype =  context.Repository<lu_profilefiltertype>().Queryable().OrderBy(x => x.description).ToList();
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                         //if we still have no datacahe do tis
@@ -2050,7 +2052,7 @@ namespace Anewluv.Caching
 
 
             //generic functions
-            public static List<lu_gender> getgenderlist(IUnitOfWork context)
+            public static List<lu_gender> getgenderlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2071,9 +2073,9 @@ namespace Anewluv.Caching
                 {
                     // context context = new context();
                     //remafill the Genders list from the repositry and exit
-                    genders =  context.GetRepository<lu_gender>().Find().OrderBy(x => x.description).ToList();
+                    genders =  context.Repository<lu_gender>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
 
 
                     //if we still have no datacahe do tis
@@ -2137,7 +2139,7 @@ namespace Anewluv.Caching
                     //remafill the ages list from the repositry and exit
                     heights = generatedlists.metricheights();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null)                      
                     dataCache.Put("metricheightlist", heights);
 
@@ -2147,7 +2149,7 @@ namespace Anewluv.Caching
 
             #region "Creiteria Apperance lists cached here"
 
-            public static List<lu_bodytype> getbodytypelist(IUnitOfWork context)
+            public static List<lu_bodytype> getbodytypelist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2168,7 +2170,7 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    bodytype  =  context.GetRepository<lu_bodytype>().Find().OrderBy(x => x.description).ToList();
+                    bodytype  =  context.Repository<lu_bodytype>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
                     
                     //put this into the cache since it was not in here already 
@@ -2177,7 +2179,7 @@ namespace Anewluv.Caching
 
                 } return bodytype;
             }
-            public static List<lu_ethnicity> getethnicitylist(IUnitOfWork context)
+            public static List<lu_ethnicity> getethnicitylist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2198,15 +2200,15 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    ethnicity =  context.GetRepository<lu_ethnicity>().Find().OrderBy(x => x.description).ToList();
+                    ethnicity =  context.Repository<lu_ethnicity>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null)
                     dataCache.Put("ethnicitylist", ethnicity);
 
                 } return ethnicity;
             }
-            public static List<lu_eyecolor> geteyecolorlist(IUnitOfWork context)
+            public static List<lu_eyecolor> geteyecolorlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2227,14 +2229,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    eyecolor =  context.GetRepository<lu_eyecolor>().Find().OrderBy(x => x.description).ToList();
+                    eyecolor =  context.Repository<lu_eyecolor>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("eyecolorlist", eyecolor);
 
                 } return eyecolor;
             }
-            public static List<lu_haircolor> gethaircolorlist(IUnitOfWork context)
+            public static List<lu_haircolor> gethaircolorlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2255,14 +2257,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    haircolor =  context.GetRepository<lu_haircolor>().Find().OrderBy(x => x.description).ToList();
+                    haircolor =  context.Repository<lu_haircolor>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("haircolorlist", haircolor);
 
                 } return haircolor;
             }
-            public static List<lu_hotfeature> gethotfeaturelist(IUnitOfWork context)
+            public static List<lu_hotfeature> gethotfeaturelist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2283,9 +2285,9 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    hotfeature = context.GetRepository<lu_hotfeature>().Find().OrderBy(x => x.description).ToList();
+                    hotfeature = context.Repository<lu_hotfeature>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("hotfeaturelist", hotfeature);
 
                 } return hotfeature;
@@ -2294,7 +2296,7 @@ namespace Anewluv.Caching
             #endregion
 
             #region "CriteriaCharacter lists cached here"
-            public static List<lu_diet> getdietlist(IUnitOfWork context)
+            public static List<lu_diet> getdietlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2315,14 +2317,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    diet =  context.GetRepository<lu_diet>().Find().OrderBy(x => x.description).ToList();
+                    diet =  context.Repository<lu_diet>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("dietlist", diet);
 
                 } return diet;
             }
-            public static List<lu_drinks> getdrinkslist(IUnitOfWork context)
+            public static List<lu_drinks> getdrinkslist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2343,14 +2345,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    drinks =  context.GetRepository<lu_drinks>().Find().OrderBy(x => x.description).ToList();
+                    drinks =  context.Repository<lu_drinks>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("drinkslist", drinks);
 
                 } return drinks;
             }
-            public static List<lu_exercise> getexerciselist(IUnitOfWork context)
+            public static List<lu_exercise> getexerciselist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2371,14 +2373,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    exercise =  context.GetRepository<lu_exercise>().Find().OrderBy(x => x.description).ToList();
+                    exercise =  context.Repository<lu_exercise>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("exerciselist", exercise);
 
                 } return exercise;
             }
-            public static List<lu_hobby> gethobbylist(IUnitOfWork context)
+            public static List<lu_hobby> gethobbylist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2399,14 +2401,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    hobby =  context.GetRepository<lu_hobby>().Find().OrderBy(x => x.description).ToList();
+                    hobby =  context.Repository<lu_hobby>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("hobbylist", hobby);
 
                 } return hobby;
             }
-            public static List<lu_humor> gethumorlist(IUnitOfWork context)
+            public static List<lu_humor> gethumorlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2427,14 +2429,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    humor =  context.GetRepository<lu_humor>().Find().OrderBy(x => x.description).ToList();
+                    humor =  context.Repository<lu_humor>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null)  dataCache.Put("humorlist", humor);
 
                 } return humor;
             }
-            public static List<lu_politicalview> getpoliticalviewlist(IUnitOfWork context)
+            public static List<lu_politicalview> getpoliticalviewlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2455,14 +2457,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    politicalview =  context.GetRepository<lu_politicalview>().Find().OrderBy(x => x.description).ToList();
+                    politicalview =  context.Repository<lu_politicalview>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null)  dataCache.Put("politicalviewlist", politicalview);
 
                 } return politicalview;
             }
-            public static List<lu_religion> getreligionlist(IUnitOfWork context)
+            public static List<lu_religion> getreligionlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2483,14 +2485,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    religion =  context.GetRepository<lu_religion>().Find().OrderBy(x => x.description).ToList();
+                    religion =  context.Repository<lu_religion>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("religionlist", religion);
 
                 } return religion;
             }
-            public static List<lu_religiousattendance> getreligiousattendancelist(IUnitOfWork context)
+            public static List<lu_religiousattendance> getreligiousattendancelist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2511,14 +2513,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    religiousattendance =  context.GetRepository<lu_religiousattendance>().Find().OrderBy(x => x.description).ToList();
+                    religiousattendance =  context.Repository<lu_religiousattendance>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("religiousattendancelist", religiousattendance);
 
                 } return religiousattendance;
             }
-            public static List<lu_sign> getsignlist(IUnitOfWork context)
+            public static List<lu_sign> getsignlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2539,14 +2541,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    sign =  context.GetRepository<lu_sign>().Find().OrderBy(x => x.description).ToList();
+                    sign =  context.Repository<lu_sign>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null)  dataCache.Put("signlist", sign);
 
                 } return sign;
             }
-            public static List<lu_smokes> getsmokeslist(IUnitOfWork context)
+            public static List<lu_smokes> getsmokeslist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2567,9 +2569,9 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    smokes =  context.GetRepository<lu_smokes>().Find().OrderBy(x => x.description).ToList();
+                    smokes =  context.Repository<lu_smokes>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("smokeslist", smokes);
 
                 } return smokes;
@@ -2579,7 +2581,7 @@ namespace Anewluv.Caching
 
             #region "Criteria Lifestyle lists cached here"
 
-            public static List<lu_educationlevel> geteducationlevellist(IUnitOfWork context)
+            public static List<lu_educationlevel> geteducationlevellist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2600,14 +2602,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    educationlevel =  context.GetRepository<lu_educationlevel>().Find().OrderBy(x => x.description).ToList();
+                    educationlevel =  context.Repository<lu_educationlevel>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("educationlevellist", educationlevel);
 
                 } return educationlevel;
             }
-            public static List<lu_employmentstatus> getemploymentstatuslist(IUnitOfWork context)
+            public static List<lu_employmentstatus> getemploymentstatuslist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2628,14 +2630,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    employmentstatus =  context.GetRepository<lu_employmentstatus>().Find().OrderBy(x => x.description).ToList();
+                    employmentstatus =  context.Repository<lu_employmentstatus>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("employmentstatuslist", employmentstatus);
 
                 } return employmentstatus;
             }
-            public static List<lu_havekids> gethavekidslist(IUnitOfWork context)
+            public static List<lu_havekids> gethavekidslist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2656,14 +2658,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    havekids =  context.GetRepository<lu_havekids>().Find().OrderBy(x => x.description).ToList();
+                    havekids =  context.Repository<lu_havekids>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("havekidslist", havekids);
 
                 } return havekids;
             }
-            public static List<lu_incomelevel> getincomelevellist(IUnitOfWork context)
+            public static List<lu_incomelevel> getincomelevellist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2684,14 +2686,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    incomelevel =  context.GetRepository<lu_incomelevel>().Find().OrderBy(x => x.description).ToList();
+                    incomelevel =  context.Repository<lu_incomelevel>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("incomelevellist", incomelevel);
 
                 } return incomelevel;
             }
-            public static List<lu_livingsituation> getlivingsituationlist(IUnitOfWork context)
+            public static List<lu_livingsituation> getlivingsituationlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2712,14 +2714,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    livingsituation =  context.GetRepository<lu_livingsituation>().Find().OrderBy(x => x.description).ToList();
+                    livingsituation =  context.Repository<lu_livingsituation>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null)  dataCache.Put("livingsituationlist", livingsituation);
 
                 } return livingsituation;
             }
-            public static List<lu_lookingfor> getlookingforlist(IUnitOfWork context)
+            public static List<lu_lookingfor> getlookingforlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2740,14 +2742,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    lookingfor =  context.GetRepository<lu_lookingfor>().Find().OrderBy(x => x.description).ToList();
+                    lookingfor =  context.Repository<lu_lookingfor>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("lookingforlist", lookingfor);
 
                 } return lookingfor;
             }
-            public static List<lu_maritalstatus> getmaritalstatuslist(IUnitOfWork context)
+            public static List<lu_maritalstatus> getmaritalstatuslist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2768,14 +2770,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    maritalstatus =  context.GetRepository<lu_maritalstatus>().Find().OrderBy(x => x.description).ToList();
+                    maritalstatus =  context.Repository<lu_maritalstatus>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null)  dataCache.Put("maritalstatuslist", maritalstatus);
 
                 } return maritalstatus;
             }
-            public static List<lu_profession> getprofessionlist(IUnitOfWork context)
+            public static List<lu_profession> getprofessionlist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2796,14 +2798,14 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    profession =  context.GetRepository<lu_profession>().Find().OrderBy(x => x.description).ToList();
+                    profession =  context.Repository<lu_profession>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("professionlist", profession);
 
                 } return profession;
             }
-            public static List<lu_wantskids> getwantskidslist(IUnitOfWork context)
+            public static List<lu_wantskids> getwantskidslist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2824,9 +2826,9 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    wantskids =  context.GetRepository<lu_wantskids>().Find().OrderBy(x => x.description).ToList();
+                    wantskids =  context.Repository<lu_wantskids>().Queryable().OrderBy(x => x.description).ToList();
                     // Datings context = new modelContext();
-                    // model =  context.GetRepository<models.Single(c => c.Id == id);
+                    // model =  context.Repository<models.Single(c => c.Id == id);
                     if (dataCache != null) dataCache.Put("wantskidslist", wantskids);
 
                 } return wantskids;
@@ -2838,7 +2840,7 @@ namespace Anewluv.Caching
 
             #region "Geodata lists"
 
-            public static List<country> getcountrylist(IUnitOfWork context)
+            public static List<country> getcountrylist(IUnitOfWorkAsync context)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2878,7 +2880,7 @@ namespace Anewluv.Caching
                             }
                         
 
-                        //foreach (Country_PostalCode_List item in _postal context.GetRepository<GetCountry_PostalCode_List().ToList().OrderBy(p => p.CountryName))
+                        //foreach (Country_PostalCode_List item in _postal context.Repository<GetCountry_PostalCode_List().ToList().OrderBy(p => p.CountryName))
                         //{
                         //    var currentcountry = new country { id = item.CountryID.ToString(), name = item.CountryName  };
                         //    countrys.Add(currentcountry);
@@ -2888,7 +2890,7 @@ namespace Anewluv.Caching
                         //if we still have no datacahe do tis
 
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
                         if (dataCache != null)
                             dataCache.Put("countrieslist", countrys);
 
@@ -2906,7 +2908,7 @@ namespace Anewluv.Caching
                 }
             }
 
-            public static List<countrypostalcode> getcountryandpostalcodestatuslist(IUnitOfWork  context)
+            public static List<countrypostalcode> getcountryandpostalcodestatuslist(IGeoDataStoredProcedures  _storedProcedures)
             {
                 DataCache dataCache;
                 //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -2934,17 +2936,19 @@ namespace Anewluv.Caching
 
 
                        // List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
-                       // myQuery = _postal context.GetRepository<GetCountry_PostalCode_List().ToList().Where(p => p.CountryName != "").OrderBy(p => p.CountryName).ToList();
+                       // myQuery = _postal context.Repository<GetCountry_PostalCode_List().ToList().Where(p => p.CountryName != "").OrderBy(p => p.CountryName).ToList();
 
-                        PostalData2Context PostalDataContext = new PostalData2Context();
-                        using (var tempdb = PostalDataContext)
-                        {
-                            GeoService GeoService = new GeoService(tempdb);
-                            var results = Api.AsyncCalls.getcountryandpostalcodestatuslistasync().Result.Where(p => p.name != "").OrderBy(p => p.name);
+                       // PostalData2Context PostalDataContext = new PostalData2Context();
+                       // using (var tempdb = PostalDataContext)
+                      //  {
+                          //  GeoService GeoService = new GeoService(tempdb);
+                     
+                           return  spatialextentions.getcountryandpostalcodestatuslist(_storedProcedures);
 
-                            countryandpostalcodes = results.ToList();
 
-                        }
+                          
+
+                     //   }
 
 
                         
@@ -2954,7 +2958,7 @@ namespace Anewluv.Caching
                         //if we still have no datacahe do tis
 
                         // Datings context = new modelContext();
-                        // model =  context.GetRepository<models.Single(c => c.Id == id);
+                        // model =  context.Repository<models.Single(c => c.Id == id);
                         if (dataCache != null)
                             dataCache.Put("countryandpostalcodestatuslist", countryandpostalcodes);
 
@@ -3030,7 +3034,7 @@ namespace Anewluv.Caching
             //these shoul just be regular lookups
             #region "lists for visibily settings that can be used else where"
 
-            //public static List<visiblitysetting> getvisibilitymailsettingslist(IUnitOfWork context)
+            //public static List<visiblitysetting> getvisibilitymailsettingslist(IUnitOfWorkAsync context)
             //{
             //    DataCache dataCache;
             //    //DataCacheFactory dataCacheFactory = new DataCacheFactory();
@@ -3046,9 +3050,9 @@ namespace Anewluv.Caching
             //    {
             //        //context context = new context();
             //        //remafill the ages list from the repositry and exit
-            //        visibilitymailsettings =  context.GetRepository<visibilitysettings.Where(p=>p.OrderBy(x => x.description).ToList();
+            //        visibilitymailsettings =  context.Repository<visibilitysettings.Where(p=>p.OrderBy(x => x.description).ToList();
             //        // Datings context = new modelContext();
-            //        // model =  context.GetRepository<models.Single(c => c.Id == id);
+            //        // model =  context.Repository<models.Single(c => c.Id == id);
             //        if (dataCache != null)
             //            dataCache.Put("visibilitymailsettingslist", visibilitymailsettings);
 
@@ -3070,9 +3074,9 @@ namespace Anewluv.Caching
             //    {
             //        context context = new context();
             //        //remafill the ages list from the repositry and exit
-            //        VisibilityStealthSettings =  context.GetRepository<VisibilityStealthSettingsList;
+            //        VisibilityStealthSettings =  context.Repository<VisibilityStealthSettingsList;
             //        // Datings context = new modelContext();
-            //        // model =  context.GetRepository<models.Single(c => c.Id == id);
+            //        // model =  context.Repository<models.Single(c => c.Id == id);
             //        if (dataCache != null)
             //            dataCache.Put("VisibilityStealthSettingsList", VisibilityStealthSettings);
 

@@ -16,10 +16,10 @@ namespace Anewluv.Web.Services.Common.ServiceHostFactories
         protected override IKernel CreateContainer()
         {
             IKernel container = new StandardKernel();
-            //container.Load<NinjectModules.ApiKeyContextModule>();
             container.Load<NinjectModules.AnewLuvContextModule>();
-            container.Load<NinjectModules.LookupModule>();
-            container.Load<NinjectModules.CommonModule>(); 
+            container.Load<NinjectModules.PostalDataContextModule>();
+            container.Load<NinjectModules.UnitOfWorkAsyncModule>();
+           
             return container;
         }
 

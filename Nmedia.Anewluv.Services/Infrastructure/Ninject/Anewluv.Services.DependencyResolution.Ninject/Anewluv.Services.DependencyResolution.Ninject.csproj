@@ -99,6 +99,11 @@
     <Compile Include="TestModules\AuthenticationModule.cs" />
     <Compile Include="TestModules\ChatModule.cs" />
     <Compile Include="TestModules\CommonModule.cs" />
+    <Compile Include="TestModules\ContextModules\AnewluvContextModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestModules\ContextModules\PostalDataContextModule.cs" />
+    <Compile Include="TestModules\ContextModules\UnitOfWorkAsyncModule.cs" />
     <Compile Include="TestModules\GeoModule.cs" />
     <Compile Include="TestModules\LookupModule.cs" />
     <Compile Include="TestModules\MemberActionsModule.cs" />
@@ -137,7 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\" />
-    <Folder Include="TestModules\ContextModules\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

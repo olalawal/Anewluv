@@ -11,6 +11,12 @@ using GeoData.Domain.Context;
 using GeoData.Domain.Models;
 using Ninject.Web.Common;
 
+
+
+using Ninject.Activation;
+using Ninject;
+using Repository.Pattern.DataContext;
+
 namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 {
     public class PostalDataContextModule : NinjectModule
@@ -18,8 +24,9 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 		public override void Load()
 		{
 
-            this.Bind<PostalData2Context>().ToConstructor(x => new PostalData2Context()).InRequestScope();;
-                      
+            this.Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<PostalData2Context>()).InRequestScope();
+            this.Bind<IGeoDataStoredProcedures>().To<PostalData2Context>().InRequestScope(); 
+         
 		}
 	}
 }

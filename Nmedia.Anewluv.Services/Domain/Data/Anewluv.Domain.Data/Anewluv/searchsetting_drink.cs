@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class searchsetting_drink
+    public partial class searchsetting_drink : Repository.Pattern.Ef6.Entity
     {
         public int id { get; set; }
         public Nullable<int> drink_id { get; set; }

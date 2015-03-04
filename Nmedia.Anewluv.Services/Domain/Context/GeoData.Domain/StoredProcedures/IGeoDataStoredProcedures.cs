@@ -9,6 +9,9 @@ public interface IGeoDataStoredProcedures
 
     string GetCountryNameByCountryID(string countryid);
 
+    IEnumerable<Country_PostalCode_List> GetCountryPostalCodeList();
+
+
      IEnumerable<CityList> CityListbycountryNamePostalcodeandCity(string countryname, string filter, string PostalCodeList);
    
       IEnumerable<gpsdata> GetGPSDatasByPostalCodeandCity(string countryname,string cityname, string PostalCode );

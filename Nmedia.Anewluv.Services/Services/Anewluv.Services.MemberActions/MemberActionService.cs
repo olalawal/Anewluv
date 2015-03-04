@@ -649,7 +649,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -737,7 +737,7 @@ namespace Anewluv.Services.MemberActions
             //update method code  return awa
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -797,7 +797,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -858,7 +858,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -918,7 +918,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -978,7 +978,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1044,7 +1044,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1108,7 +1108,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1682,7 +1682,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1761,7 +1761,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1820,7 +1820,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1879,7 +1879,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -1940,7 +1940,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2002,7 +2002,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2063,7 +2063,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2123,7 +2123,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2394,7 +2394,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2450,7 +2450,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2504,7 +2504,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2584,7 +2584,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2644,7 +2644,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2704,7 +2704,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2770,7 +2770,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -2836,7 +2836,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3396,7 +3396,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3481,7 +3481,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3542,7 +3542,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3603,7 +3603,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3664,7 +3664,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3728,7 +3728,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3792,7 +3792,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -3855,7 +3855,7 @@ namespace Anewluv.Services.MemberActions
             //update method code
              var db = _unitOfWorkAsync;
             {
-              //  db.IsAuditEnabled = false; //do not audit on adds
+              // //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try

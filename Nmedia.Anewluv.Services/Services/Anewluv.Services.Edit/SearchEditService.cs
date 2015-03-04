@@ -22,6 +22,7 @@ using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Infrastructure.Domain.Data.log;
 using Anewluv.Caching;
 using Nmedia.Infrastructure.DTOs;
+using Repository.Pattern.UnitOfWork;
 
 
 namespace Anewluv.Services.Edit
@@ -33,8 +34,8 @@ namespace Anewluv.Services.Edit
     {
 
 
-      
-        IUnitOfWorkAsync _unitOfWorkAsync;
+
+        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
        // private Logging logger;
         private LoggingLibrary.Logging logger;
 
@@ -66,8 +67,8 @@ namespace Anewluv.Services.Edit
         #region "search getter methods"
         public async Task<searchsetting> getsearchsettings(SearchSettingsModel model)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
 
@@ -77,7 +78,7 @@ namespace Anewluv.Services.Edit
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                        searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid && z.searchname == model.searchname).FirstOrDefault();
+                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.id == model.searchid || z.profile_id == model.profileid && z.searchname == model.searchname).FirstOrDefault();
                         return p;
                     });
                     return await task.ConfigureAwait(false);
@@ -100,8 +101,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<List<searchsetting>> getallsearchsettingsbyprofileid(SearchSettingsModel searchmodel)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
 
@@ -111,7 +112,7 @@ namespace Anewluv.Services.Edit
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                        var p = db.GetRepository<searchsetting>().Find().Where(z => z.profile_id == searchmodel.profileid).ToList();
+                        var p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.profile_id == searchmodel.profileid).ToList();
                         return p;
                     });
                     return await task.ConfigureAwait(false);
@@ -134,8 +135,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<SearchSettingsModel> getsearchsettingsviewmodel(SearchSettingsModel searchmodel)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
 
@@ -145,16 +146,16 @@ namespace Anewluv.Services.Edit
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                      //  searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid && z.searchname == model.searchname).FirstOrDefault();
+                      //  searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.id == model.searchid || z.profile_id == model.profileid && z.searchname == model.searchname).FirstOrDefault();
 
 
 
-                        searchsetting p = filtersearchsettings(searchmodel, db);
+                        searchsetting p = filtersearchsettings(searchmodel, _unitOfWorkAsync);
                       
-                        searchmodel.basicsearchsettings = this.getbasicsearchsettings(p, db);
-                        searchmodel.lifestylesearchsettings = this.getlifestylesearchsettings(p, db);
-                        searchmodel. = this.getappearancesearchsettings(p, db);
-                        searchmodel.charactersearchsettings = this.getcharactersearchsettings(p, db);
+                        searchmodel.basicsearchsettings = this.getbasicsearchsettings(p, _unitOfWorkAsync);
+                        searchmodel.lifestylesearchsettings = this.getlifestylesearchsettings(p, _unitOfWorkAsync);
+                        searchmodel.appearancesearchsettings = this.getappearancesearchsettings(p, _unitOfWorkAsync);
+                        searchmodel.charactersearchsettings = this.getcharactersearchsettings(p, _unitOfWorkAsync);
 
 
                         //TO DO add rest of searches.
@@ -184,8 +185,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<BasicSearchSettingsModel> getbasicsearchsettings(SearchSettingsModel searchmodel)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
                 //if (searchmodel.profileid == 0) return null;
 
@@ -194,11 +195,11 @@ namespace Anewluv.Services.Edit
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                        searchsetting p = filtersearchsettings(searchmodel, db);
+                        searchsetting p = filtersearchsettings(searchmodel, _unitOfWorkAsync);
 
                       
 
-                        return this.getbasicsearchsettings(p, db);
+                        return this.getbasicsearchsettings(p, _unitOfWorkAsync);
                        
                     });
                     return await task.ConfigureAwait(false);
@@ -221,8 +222,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<AppearanceSearchSettingsModel> getappearancesearchsettings(SearchSettingsModel searchmodel)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
 
@@ -231,8 +232,8 @@ namespace Anewluv.Services.Edit
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        searchsetting p = filtersearchsettings(searchmodel, db);
-                        return this.getappearancesearchsettings(p, db);
+                        searchsetting p = filtersearchsettings(searchmodel, _unitOfWorkAsync);
+                        return this.getappearancesearchsettings(p, _unitOfWorkAsync);
 
                     });
                     return await task.ConfigureAwait(false);
@@ -255,8 +256,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<CharacterSearchSettingsModel> getcharactersearchsettings(SearchSettingsModel searchmodel)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
 
@@ -265,8 +266,8 @@ namespace Anewluv.Services.Edit
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        searchsetting p = filtersearchsettings(searchmodel, db);
-                        return this.getcharactersearchsettings(p, db);
+                        searchsetting p = filtersearchsettings(searchmodel, _unitOfWorkAsync);
+                        return this.getcharactersearchsettings(p, _unitOfWorkAsync);
 
                     });
                     return await task.ConfigureAwait(false);
@@ -289,8 +290,8 @@ namespace Anewluv.Services.Edit
 
         public async Task<LifeStyleSearchSettingsModel> getlifestylesearchsettings(SearchSettingsModel searchmodel)
         {
-            _unitOfWorkAsync.DisableProxyCreation = false;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -298,8 +299,8 @@ namespace Anewluv.Services.Edit
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        searchsetting p = filtersearchsettings(searchmodel, db);
-                        return this.getlifestylesearchsettings(p, db);
+                        searchsetting p = filtersearchsettings(searchmodel, _unitOfWorkAsync);
+                        return this.getlifestylesearchsettings(p, _unitOfWorkAsync);
 
                     });
                     return await task.ConfigureAwait(false);
@@ -327,10 +328,10 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditallsettings(SearchSettingsModel model)
         {
 
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+              
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
@@ -344,11 +345,11 @@ namespace Anewluv.Services.Edit
 
                             //get the profile details :
                             //AnewluvMessages messages = new AnewluvMessages();
-                            searchsetting p = this.filtersearchsettings(model, db);
-                            messages = (updatebasicsearchsettings(model.basicsearchsettings,p, messages, db));
-                            messages = (updateappearancesearchsettings(model., p, messages, db));
-                            messages = (updatecharactersearchsettings(model.charactersearchsettings, p, messages, db));
-                            messages = (updatelifestylesearchsettings(model.lifestylesearchsettings, p, messages, db));
+                            searchsetting p = this.filtersearchsettings(model, _unitOfWorkAsync);
+                            messages = (updatebasicsearchsettings(model.basicsearchsettings,p, messages, _unitOfWorkAsync));
+                            messages = (updateappearancesearchsettings(model.appearancesearchsettings, p, messages, _unitOfWorkAsync));
+                            messages = (updatecharactersearchsettings(model.charactersearchsettings, p, messages, _unitOfWorkAsync));
+                            messages = (updatelifestylesearchsettings(model.lifestylesearchsettings, p, messages, _unitOfWorkAsync));
                            
 
                             if (messages.errormessages.Count > 0)
@@ -387,10 +388,10 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditbasicsettings(SearchSettingsModel model)
         {
 
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+              
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
@@ -402,8 +403,8 @@ namespace Anewluv.Services.Edit
                             AnewluvMessages messages = new AnewluvMessages();
 
 
-                            searchsetting p = this.filtersearchsettings(model, db);
-                            messages = (updatebasicsearchsettings(model.basicsearchsettings, p, messages, db));
+                            searchsetting p = this.filtersearchsettings(model, _unitOfWorkAsync);
+                            messages = (updatebasicsearchsettings(model.basicsearchsettings, p, messages, _unitOfWorkAsync));
                            
 
                             if (messages.errormessages.Count > 0)
@@ -442,10 +443,10 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditappearancesettings(SearchSettingsModel model)
         {
 
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+              
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
@@ -455,8 +456,8 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
 
-                            searchsetting p = this.filtersearchsettings(model, db);                       
-                            messages = (updateappearancesearchsettings(model., p, messages, db));                          
+                            searchsetting p = this.filtersearchsettings(model, _unitOfWorkAsync);                       
+                            messages = (updateappearancesearchsettings(model.appearancesearchsettings, p, messages, _unitOfWorkAsync));                          
 
                             if (messages.errormessages.Count > 0)
                             {
@@ -494,10 +495,10 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditcharactersettings(SearchSettingsModel model)
         {
 
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+              
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
@@ -508,8 +509,8 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
 
-                            searchsetting p = this.filtersearchsettings(model, db);                         
-                            messages = (updatecharactersearchsettings(model.charactersearchsettings, p, messages, db));
+                            searchsetting p = this.filtersearchsettings(model, _unitOfWorkAsync);                         
+                            messages = (updatecharactersearchsettings(model.charactersearchsettings, p, messages, _unitOfWorkAsync));
                           
 
                             if (messages.errormessages.Count > 0)
@@ -548,10 +549,10 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> searcheditlifestylesettings(SearchSettingsModel model)
         {
            
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+              
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
@@ -561,8 +562,8 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
                             //get the profile details :
-                            searchsetting p = this.filtersearchsettings(model, db);                          
-                            messages = (updatelifestylesearchsettings(model.lifestylesearchsettings, p, messages, db));
+                            searchsetting p = this.filtersearchsettings(model, _unitOfWorkAsync);                          
+                            messages = (updatelifestylesearchsettings(model.lifestylesearchsettings, p, messages, _unitOfWorkAsync));
 
                             if (messages.errormessages.Count > 0)
                             {
@@ -604,7 +605,7 @@ namespace Anewluv.Services.Edit
         #region "private get methods for reuses"
 
         //generic filtering function we can reuse
-        private searchsetting filtersearchsettings (SearchSettingsModel searchmodel,IUnitOfWorkAsync db)
+        private searchsetting filtersearchsettings (SearchSettingsModel searchmodel,IUnitOfWorkAsync _unitOfWorkAsync)
         {
 
             try
@@ -616,9 +617,41 @@ namespace Anewluv.Services.Edit
                 //default handling for empty profile ID and other search data
                 if (searchmodel == null) return p;
 
-                allsearchsettings = db.GetRepository<searchsetting>().Find().Where
+                allsearchsettings = _unitOfWorkAsync.Repository<searchsetting>().Query
                 (z => (searchmodel.searchid != 0 && z.id == searchmodel.searchid) ||
-                (searchmodel.profileid != 0 && (z.profile_id == searchmodel.profileid))).ToList();
+                (searchmodel.profileid != 0 && (z.profile_id == searchmodel.profileid)))
+                .Include(x=>x.profilemetadata)
+                .Include(y=>y.searchsetting_bodytype)
+                .Include(y => y.searchsetting_diet)
+                .Include(y => y.searchsetting_drink)
+                .Include(y => y.searchsetting_educationlevel)
+                .Include(y => y.searchsetting_employmentstatus)
+                .Include(y => y.searchsetting_ethnicity)
+                .Include(y => y.searchsetting_exercise)
+                .Include(y => y.searchsetting_eyecolor)
+                .Include(y => y.searchsetting_gender)
+                .Include(y => y.searchsetting_haircolor)
+                .Include(y => y.searchsetting_havekids)
+                .Include(y => y.searchsetting_hobby)
+                .Include(y => y.searchsetting_hotfeature)
+                .Include(y => y.searchsetting_humor)
+                .Include(y => y.searchsetting_incomelevel)
+                .Include(y => y.searchsetting_livingstituation)
+                .Include(y => y.searchsetting_location)
+                .Include(y => y.searchsetting_lookingfor)
+                .Include(y => y.searchsetting_maritalstatus)
+                .Include(y => y.searchsetting_politicalview)
+                .Include(y => y.searchsetting_profession)
+                .Include(y => y.searchsetting_religion)
+                .Include(y => y.searchsetting_religiousattendance)
+                .Include(y => y.searchsetting_showme)
+                .Include(y => y.searchsetting_sign)
+                .Include(y => y.searchsetting_smokes)
+                .Include(y => y.searchsetting_sortbytype)
+                .Include(y => y.searchsetting_wantkids)
+                .Include(y => y.systemmatch)               
+                
+                .Select().ToList();
 
                 if (allsearchsettings.Count() > 0 & searchmodel.searchname != null )//|searchmodel.searchname != ""  )
                 {
@@ -635,7 +668,7 @@ namespace Anewluv.Services.Edit
             { throw ex; }
         }
 
-       private BasicSearchSettingsModel getbasicsearchsettings(searchsetting p,IUnitOfWorkAsync db)
+       private BasicSearchSettingsModel getbasicsearchsettings(searchsetting p,IUnitOfWorkAsync _unitOfWorkAsync)
         {
             try
             {
@@ -657,9 +690,9 @@ namespace Anewluv.Services.Edit
                     
 
                     //get all the showmes so we can deterimine which are checked and which are not
-                    var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(db);
-                    var genderlist = CachingFactory.SharedObjectHelper.getgenderlist(db);
-                      var sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(db);
+                    var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
+                    var genderlist = CachingFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
+                      var sortbylist = CachingFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
                 var agelist = CachingFactory.SharedObjectHelper.getagelist();
                        
                     model.agemin = p.agemin == null ? 18 : p.agemin.GetValueOrDefault();
@@ -729,11 +762,11 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        private AppearanceSearchSettingsModel getappearancesearchsettings(searchsetting p, IUnitOfWorkAsync db)
+        private AppearanceSearchSettingsModel getappearancesearchsettings(searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             try
             {
-                //searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
+                //searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
 
                 AppearanceSearchSettingsModel model = new AppearanceSearchSettingsModel();
 
@@ -742,14 +775,14 @@ namespace Anewluv.Services.Edit
 
 
                 //get all the showmes so we can deterimine which are checked and which are not
-                var ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(db);
-                var bodytypelist = CachingFactory.SharedObjectHelper.getbodytypelist(db);
-                var eyecolorlist = CachingFactory.SharedObjectHelper.geteyecolorlist(db);
-                var haircolorlist = CachingFactory.SharedObjectHelper.gethaircolorlist(db);
-                var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(db);
+                var ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
+                var bodytypelist = CachingFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
+                var eyecolorlist = CachingFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
+                var haircolorlist = CachingFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
+                var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
                 var metricheightlist = CachingFactory.SharedObjectHelper.getmetricheightlist();
              
-                var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(db);
+                var showmelist = CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
 
                 model.heightmax = p.heightmax == null ? 210 : p.heightmax;
                 model.heightmin = p.heightmin == null ? 100 : p.heightmin;
@@ -764,7 +797,7 @@ namespace Anewluv.Services.Edit
 
                 //pilot how to show the rest of the values 
                 //sample of doing string values
-                // var allhotfeature = db.lu_hotfeature;
+                // var allhotfeature = _unitOfWorkAsync.lu_hotfeature;
                 //model.hotfeaturelist =  p.profilemetadata.hotfeatures.ToList();
                 //update the list with the items that are selected.
                 foreach (lu_ethnicity ethnicity in ethnicitylist.Where(c => p.searchsetting_ethnicity.Any(f => f.ethnicity_id == c.id)))
@@ -820,27 +853,27 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        private CharacterSearchSettingsModel getcharactersearchsettings(searchsetting p, IUnitOfWorkAsync db)
+        private CharacterSearchSettingsModel getcharactersearchsettings(searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             try
             {
-                //searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
+                //searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
 
                 CharacterSearchSettingsModel model = new CharacterSearchSettingsModel();
 
                 //populate values here ok ?
                // if (p == null) return null;
 
-                var humorlist = CachingFactory.SharedObjectHelper.gethumorlist(db);
-                var dietlist = CachingFactory.SharedObjectHelper.getdietlist(db);
-                var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(db);
-                var drinklist = CachingFactory.SharedObjectHelper.getdrinkslist(db);
-                var exerciselist = CachingFactory.SharedObjectHelper.getexerciselist(db);
-                var smokeslist = CachingFactory.SharedObjectHelper.getsmokeslist(db);
-                var signlist = CachingFactory.SharedObjectHelper.getsignlist(db);
-                var politicalviewlist = CachingFactory.SharedObjectHelper.getpoliticalviewlist(db);
-                var religionlist = CachingFactory.SharedObjectHelper.getreligionlist(db);
-                var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(db);
+                var humorlist = CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
+                var dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
+                var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
+                var drinklist = CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
+                var exerciselist = CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
+                var smokeslist = CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
+                var signlist = CachingFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
+                var politicalviewlist = CachingFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
+                var religionlist = CachingFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
+                var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
 
                 model.humorlist = humorlist.ToList().Select(o => new lu_humor { id = o.id, description = o.description, selected = false }).ToList();
                 model.dietlist = dietlist.ToList().Select(o => new lu_diet { id = o.id, description = o.description, selected = false }).ToList();
@@ -950,26 +983,26 @@ namespace Anewluv.Services.Edit
             }
         }
 
-        private LifeStyleSearchSettingsModel getlifestylesearchsettings(searchsetting p, IUnitOfWorkAsync db)
+        private LifeStyleSearchSettingsModel getlifestylesearchsettings(searchsetting p, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             try
             {
-               // searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
+               // searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.id == searchmodel.searchid || z.profile_id == searchmodel.profileid && (searchmodel.searchname == "" ? "Default" : searchmodel.searchname) == z.searchname).FirstOrDefault();
 
                 LifeStyleSearchSettingsModel model = new LifeStyleSearchSettingsModel();
 
                 //populate values here ok ?
                // if (p == null) return null;
 
-                var educationlevellist = CachingFactory.SharedObjectHelper.geteducationlevellist(db);
-                var lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(db);
-                var employmentstatuslist = CachingFactory.SharedObjectHelper.getemploymentstatuslist(db);
-                var havekidslist = CachingFactory.SharedObjectHelper.gethavekidslist(db);
-                var incomelevellist = CachingFactory.SharedObjectHelper.getincomelevellist(db);
-                var livingsituationlist = CachingFactory.SharedObjectHelper.getlivingsituationlist(db);
-                var maritialstatuslist = CachingFactory.SharedObjectHelper.getmaritalstatuslist(db); 
-                var professionlist = CachingFactory.SharedObjectHelper.getprofessionlist(db);
-                var wantkidslist = CachingFactory.SharedObjectHelper.getwantskidslist(db);
+                var educationlevellist = CachingFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);
+                var lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
+                var employmentstatuslist = CachingFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
+                var havekidslist = CachingFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
+                var incomelevellist = CachingFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
+                var livingsituationlist = CachingFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
+                var maritialstatuslist = CachingFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync); 
+                var professionlist = CachingFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
+                var wantkidslist = CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
 
 
                 model.educationlevellist = educationlevellist.ToList().Select(o => new lu_educationlevel { id = o.id, description = o.description, selected = false }).ToList();
@@ -1066,7 +1099,7 @@ namespace Anewluv.Services.Edit
         #region "private update methods for reuse so we can also combine in one call"
 
         //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-        private AnewluvMessages updatebasicsearchsettings(BasicSearchSettingsModel model,searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync db)
+        private AnewluvMessages updatebasicsearchsettings(BasicSearchSettingsModel model,searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync _unitOfWorkAsync)
         {
 
                 bool nothingupdated = true;
@@ -1093,17 +1126,17 @@ namespace Anewluv.Services.Edit
 
                         //checkbos item updates 
                         if (p.searchsetting_gender.Count > 0)
-                            updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, db);
+                            updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, _unitOfWorkAsync);
                         if (p.searchsetting_showme.Count > 0)
-                            updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, db);
+                            updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, _unitOfWorkAsync);
                         if (p.searchsetting_showme.Count > 0)
-                            updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, db);
+                            updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, _unitOfWorkAsync);
                         if (p.searchsetting_location.Count > 0)
-                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, _unitOfWorkAsync);
 
 
-                        db.Update(p);
-                      var i  =db.SaveChanges();
+                        _unitOfWorkAsync.Repository<searchsetting>().Update(p);
+                      var i  =_unitOfWorkAsync.SaveChanges();
 
                        // return messages;
 
@@ -1125,12 +1158,12 @@ namespace Anewluv.Services.Edit
         }
         //TO DO add validation and pass back via messages 
 
-        private AnewluvMessages updateappearancesearchsettings(AppearanceSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync db)
+        private AnewluvMessages updateappearancesearchsettings(AppearanceSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync _unitOfWorkAsync)
         {
 
             try
             {
-                  //  searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
+                  //  searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
                     //create a new messages object
                     if (p == null)
                     {
@@ -1142,18 +1175,18 @@ namespace Anewluv.Services.Edit
                     p.heightmax = model.heightmax;
                     //checkbos item updates 
                     if (p.searchsetting_ethnicity.Count > 0)
-                        updatesearchsettingsethnicity(p.searchsetting_ethnicity.ToList(), p, db);
+                        updatesearchsettingsethnicity(p.searchsetting_ethnicity.ToList(), p, _unitOfWorkAsync);
                     if (p.searchsetting_bodytype.Count > 0)
-                        updatesearchsettingsbodytypes(p.searchsetting_bodytype.ToList(), p, db);
+                        updatesearchsettingsbodytypes(p.searchsetting_bodytype.ToList(), p, _unitOfWorkAsync);
                     if (p.searchsetting_eyecolor.Count > 0)
-                        updatesearchsettingseyecolor(p.searchsetting_eyecolor.ToList(), p, db);
+                        updatesearchsettingseyecolor(p.searchsetting_eyecolor.ToList(), p, _unitOfWorkAsync);
                     if (p.searchsetting_haircolor.Count > 0)
-                        updatesearchsettingshaircolor(p.searchsetting_haircolor.ToList(), p, db);
+                        updatesearchsettingshaircolor(p.searchsetting_haircolor.ToList(), p, _unitOfWorkAsync);
                     if (p.searchsetting_hotfeature.Count > 0)
-                        updatesearchsettingshotfeature(p.searchsetting_hotfeature.ToList(), p, db);
+                        updatesearchsettingshotfeature(p.searchsetting_hotfeature.ToList(), p, _unitOfWorkAsync);
 
-                    db.Update(p);
-                  var i  =db.SaveChanges();
+                    _unitOfWorkAsync.Repository<searchsetting>().Update(p);
+                  var i  =_unitOfWorkAsync.SaveChanges();
 
                   //  return messages;
             }
@@ -1168,7 +1201,7 @@ namespace Anewluv.Services.Edit
 
         }
 
-        private AnewluvMessages updatecharactersearchsettings(CharacterSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync db)
+        private AnewluvMessages updatecharactersearchsettings(CharacterSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync _unitOfWorkAsync)
         {
          
                 try
@@ -1176,7 +1209,7 @@ namespace Anewluv.Services.Edit
 
                    
                        // AnewluvMessages messages = new AnewluvMessages();
-                      //  searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
+                      //  searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
                         //create a new messages object
                         if (p == null)
                         {
@@ -1187,39 +1220,39 @@ namespace Anewluv.Services.Edit
 
                         //checkbos item updates 
                         if (p.searchsetting_diet.Count > 0)
-                            updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, db);
+                            updatesearchsettingsgender(p.searchsetting_gender.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_humor.Count > 0)
-                            updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, db);
+                            updatesearchsettingssortby(p.searchsetting_sortbytype.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_hobby.Count > 0)
-                            updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, db);
+                            updatesearchsettingsshowme(p.searchsetting_showme.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_drink.Count > 0)
-                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_exercise.Count > 0)
-                            updatesearchsettingsexercise(p.searchsetting_exercise.ToList(), p, db);
+                            updatesearchsettingsexercise(p.searchsetting_exercise.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_smokes.Count > 0)
-                            updatesearchsettingssmokes(p.searchsetting_smokes.ToList(), p, db);
+                            updatesearchsettingssmokes(p.searchsetting_smokes.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_sign.Count > 0)
-                            updatesearchsettingssign(p.searchsetting_sign.ToList(), p, db);
+                            updatesearchsettingssign(p.searchsetting_sign.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_politicalview.Count > 0)
-                            updatesearchsettingspoliticalview(p.searchsetting_politicalview.ToList(), p, db);
+                            updatesearchsettingspoliticalview(p.searchsetting_politicalview.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_religion.Count > 0)
-                            updatesearchsettingsreligion(p.searchsetting_religion.ToList(), p, db);
+                            updatesearchsettingsreligion(p.searchsetting_religion.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_religiousattendance.Count > 0)
-                            updatesearchsettingsreligiousattendance(p.searchsetting_religiousattendance.ToList(), p, db);
+                            updatesearchsettingsreligiousattendance(p.searchsetting_religiousattendance.ToList(), p, _unitOfWorkAsync);
 
 
 
 
-                      var i  =db.SaveChanges();
+                      var i  =_unitOfWorkAsync.SaveChanges();
 
 
                
@@ -1238,7 +1271,7 @@ namespace Anewluv.Services.Edit
 
         }
 
-        private AnewluvMessages updatelifestylesearchsettings(LifeStyleSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync db)
+        private AnewluvMessages updatelifestylesearchsettings(LifeStyleSearchSettingsModel model, searchsetting p, AnewluvMessages messages, IUnitOfWorkAsync _unitOfWorkAsync)
         {
            
                 try
@@ -1246,7 +1279,7 @@ namespace Anewluv.Services.Edit
 
                    
                        // AnewluvMessages messages = new AnewluvMessages();
-                        //searchsetting p = db.GetRepository<searchsetting>().Find().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
+                        //searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.id == model.searchid || z.profile_id == model.profileid || z.searchname == model.searchname).FirstOrDefault();
                         //create a new messages object
                         if (p == null)
                         {
@@ -1257,34 +1290,34 @@ namespace Anewluv.Services.Edit
 
                         //checkbos item updates 
                         if (p.searchsetting_educationlevel.Count > 0)
-                            updatesearchsettingseducationlevel(p.searchsetting_educationlevel.ToList(), p, db);
+                            updatesearchsettingseducationlevel(p.searchsetting_educationlevel.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_lookingfor.Count > 0)
-                            updatesearchsettingslookingfor(p.searchsetting_lookingfor.ToList(), p, db);
+                            updatesearchsettingslookingfor(p.searchsetting_lookingfor.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_havekids.Count > 0)
-                            updatesearchsettingshavekids(p.searchsetting_havekids.ToList(), p, db);
+                            updatesearchsettingshavekids(p.searchsetting_havekids.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_incomelevel.Count > 0)
-                            updatesearchsettingsincomelevel(p.searchsetting_incomelevel.ToList(), p, db);
+                            updatesearchsettingsincomelevel(p.searchsetting_incomelevel.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_livingstituation.Count > 0)
-                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, db);
+                            updatesearchsettingslocation(p.searchsetting_location.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_location.Count > 0)
-                            updatesearchsettingslivingsituation(p.searchsetting_livingstituation.ToList(), p, db);
+                            updatesearchsettingslivingsituation(p.searchsetting_livingstituation.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_maritalstatus.Count > 0)
-                            updatesearchsettingsmaritalstatus(p.searchsetting_maritalstatus.ToList(), p, db);
+                            updatesearchsettingsmaritalstatus(p.searchsetting_maritalstatus.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_profession.Count > 0)
-                            updatesearchsettingsprofession(p.searchsetting_profession.ToList(), p, db);
+                            updatesearchsettingsprofession(p.searchsetting_profession.ToList(), p, _unitOfWorkAsync);
 
                         if (p.searchsetting_wantkids.Count > 0)
-                            updatesearchsettingswantskids(p.searchsetting_wantkids.ToList(), p, db);
+                            updatesearchsettingswantskids(p.searchsetting_wantkids.ToList(), p, _unitOfWorkAsync);
 
 
-                      var i  =db.SaveChanges();
+                      var i  =_unitOfWorkAsync.SaveChanges();
 
 
 
@@ -1311,14 +1344,14 @@ namespace Anewluv.Services.Edit
         //Basic Checkbox settings updates
         //APPEARANCE checkboxes start  /////////////////////////
         //profiledata gender
-        private void updatesearchsettingsgender(List<searchsetting_gender> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsgender(List<searchsetting_gender> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var gender in db.GetRepository<searchsetting_gender>().Find().ToList())
+            foreach (var gender in _unitOfWorkAsync.Repository<searchsetting_gender>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_gender.Where(z => z.gender_id == gender.id).Any()))
@@ -1327,16 +1360,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_gender();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.gender_id = gender.id; //add the current gender value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_gender>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_gender>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.gender_id == gender.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_gender>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.gender_id == gender.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_gender>().Delete(temp);
                 }
 
 
@@ -1346,14 +1379,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata showme
-        private void updatesearchsettingsshowme(List<searchsetting_showme> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsshowme(List<searchsetting_showme> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var showme in db.GetRepository<searchsetting_showme>().Find().ToList())
+            foreach (var showme in _unitOfWorkAsync.Repository<searchsetting_showme>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_showme.Where(z => z.showme_id == showme.id).Any()))
@@ -1362,16 +1395,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_showme();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.showme_id = showme.id; //add the current showme value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_showme>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_showme>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.showme_id == showme.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_showme>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.showme_id == showme.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_showme>().Delete(temp);
                 }
 
 
@@ -1381,14 +1414,14 @@ namespace Anewluv.Services.Edit
 
         }     
         //profiledata sortby
-        private void updatesearchsettingssortby(List<searchsetting_sortbytype> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingssortby(List<searchsetting_sortbytype> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var sortby in db.GetRepository<searchsetting_sortbytype>().Find().ToList())
+            foreach (var sortby in _unitOfWorkAsync.Repository<searchsetting_sortbytype>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_sortbytype.Where(z => z.sortbytype_id == sortby.id).Any()))
@@ -1397,16 +1430,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_sortbytype();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.sortbytype_id = sortby.id; //add the current sortby value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_sortbytype>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_sortbytype>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.sortbytype_id == sortby.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_sortbytype>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.sortbytype_id == sortby.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_sortbytype>().Delete(temp);
                 }
 
 
@@ -1416,14 +1449,14 @@ namespace Anewluv.Services.Edit
 
         }     
         //profiledata location
-        private void updatesearchsettingslocation(List<searchsetting_location> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingslocation(List<searchsetting_location> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var location in db.GetRepository<searchsetting_location>().Find().ToList())
+            foreach (var location in _unitOfWorkAsync.Repository<searchsetting_location>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_location.Where(z => z.countryid == location.countryid & z.city == location.city & z.postalcode == location.postalcode).Any()))
@@ -1434,16 +1467,16 @@ namespace Anewluv.Services.Edit
                     temp.countryid = location.countryid; //add the current location value since its new.
                     temp.postalcode = location.postalcode;
                     temp.city = location.city;
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_location>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_location>().Find().Where(z => z.searchsetting_id == currentsearchsettings.id && z.countryid == location.countryid & z.city == location.city & z.postalcode == location.postalcode).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_location>().Queryable().Where(z => z.searchsetting_id == currentsearchsettings.id && z.countryid == location.countryid & z.city == location.city & z.postalcode == location.postalcode).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_location>().Delete(temp);
                 }
 
 
@@ -1457,14 +1490,14 @@ namespace Anewluv.Services.Edit
 
         //APPEARANCE checkboxes start  /////////////////////////
         //profiledata ethnicity
-        private void updatesearchsettingsethnicity(List<searchsetting_ethnicity> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsethnicity(List<searchsetting_ethnicity> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
            
-            foreach (var ethnicity in db.GetRepository<searchsetting_ethnicity>().Find().ToList())
+            foreach (var ethnicity in _unitOfWorkAsync.Repository<searchsetting_ethnicity>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_ethnicity.Where(z => z.ethnicity_id == ethnicity.id).Any()))
@@ -1473,16 +1506,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_ethnicity();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.ethnicity_id = ethnicity.id; //add the current ethnicity value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_ethnicity>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_ethnicity>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.ethnicity_id == ethnicity.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_ethnicity>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.ethnicity_id == ethnicity.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_ethnicity>().Delete(temp);
                 }
 
 
@@ -1492,14 +1525,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata bodytypes
-        private void updatesearchsettingsbodytypes(List<searchsetting_bodytype> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsbodytypes(List<searchsetting_bodytype> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var bodytypes in db.GetRepository<searchsetting_bodytype>().Find().ToList())
+            foreach (var bodytypes in _unitOfWorkAsync.Repository<searchsetting_bodytype>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_bodytype.Where(z => z.bodytype_id == bodytypes.id).Any()))
@@ -1508,16 +1541,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_bodytype();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.bodytype_id = bodytypes.id; //add the current bodytypes value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_bodytype>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_bodytype>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.bodytype_id == bodytypes.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_bodytype>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.bodytype_id == bodytypes.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_bodytype>().Delete(temp);
                 }
 
 
@@ -1527,14 +1560,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata eyecolor
-        private void updatesearchsettingseyecolor(List<searchsetting_eyecolor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingseyecolor(List<searchsetting_eyecolor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var eyecolor in db.GetRepository<searchsetting_eyecolor>().Find().ToList())
+            foreach (var eyecolor in _unitOfWorkAsync.Repository<searchsetting_eyecolor>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_eyecolor.Where(z => z.eyecolor_id == eyecolor.id).Any()))
@@ -1543,16 +1576,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_eyecolor();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.eyecolor_id = eyecolor.id; //add the current eyecolor value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_eyecolor>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_eyecolor>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.eyecolor_id == eyecolor.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_eyecolor>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.eyecolor_id == eyecolor.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_eyecolor>().Delete(temp);
                 }
 
 
@@ -1562,14 +1595,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata haircolor
-        private void updatesearchsettingshaircolor(List<searchsetting_haircolor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingshaircolor(List<searchsetting_haircolor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var haircolor in db.GetRepository<searchsetting_haircolor>().Find().ToList())
+            foreach (var haircolor in _unitOfWorkAsync.Repository<searchsetting_haircolor>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_haircolor.Where(z => z.haircolor_id == haircolor.id).Any()))
@@ -1578,16 +1611,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_haircolor();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.haircolor_id = haircolor.id; //add the current haircolor value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_haircolor>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_haircolor>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.haircolor_id == haircolor.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_haircolor>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.haircolor_id == haircolor.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_haircolor>().Delete(temp);
                 }
 
 
@@ -1597,14 +1630,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata hotfeature
-        private void updatesearchsettingshotfeature(List<searchsetting_hotfeature> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingshotfeature(List<searchsetting_hotfeature> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var hotfeature in db.GetRepository<searchsetting_hotfeature>().Find().ToList())
+            foreach (var hotfeature in _unitOfWorkAsync.Repository<searchsetting_hotfeature>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_hotfeature.Where(z => z.hotfeature_id == hotfeature.id).Any()))
@@ -1613,16 +1646,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_hotfeature();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.hotfeature_id = hotfeature.id; //add the current hotfeature value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_hotfeature>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_hotfeature>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.hotfeature_id == hotfeature.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_hotfeature>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.hotfeature_id == hotfeature.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_hotfeature>().Delete(temp);
                 }
 
 
@@ -1636,14 +1669,14 @@ namespace Anewluv.Services.Edit
         
         //Lifesatyle settings start //////////////////
         //profiledata educationlevel
-        private void updatesearchsettingseducationlevel(List<searchsetting_educationlevel> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingseducationlevel(List<searchsetting_educationlevel> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var educationlevel in db.GetRepository<searchsetting_educationlevel>().Find().ToList())
+            foreach (var educationlevel in _unitOfWorkAsync.Repository<searchsetting_educationlevel>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_educationlevel.Where(z => z.educationlevel_id == educationlevel.id).Any()))
@@ -1652,16 +1685,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_educationlevel();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.educationlevel_id = educationlevel.id; //add the current educationlevel value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_educationlevel>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_educationlevel>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.educationlevel_id == educationlevel.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_educationlevel>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.educationlevel_id == educationlevel.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_educationlevel>().Delete(temp);
                 }
 
 
@@ -1671,14 +1704,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata lookingfor
-        private void updatesearchsettingslookingfor(List<searchsetting_lookingfor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingslookingfor(List<searchsetting_lookingfor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var lookingfor in db.GetRepository<searchsetting_lookingfor>().Find().ToList())
+            foreach (var lookingfor in _unitOfWorkAsync.Repository<searchsetting_lookingfor>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_lookingfor.Where(z => z.lookingfor_id == lookingfor.id).Any()))
@@ -1687,16 +1720,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_lookingfor();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.lookingfor_id = lookingfor.id; //add the current lookingfor value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_lookingfor>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_lookingfor>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.lookingfor_id == lookingfor.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_lookingfor>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.lookingfor_id == lookingfor.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_lookingfor>().Delete(temp);
                 }
 
 
@@ -1706,14 +1739,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata employmentstatus
-        private void updatesearchsettingsemploymentstatus(List<searchsetting_employmentstatus> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsemploymentstatus(List<searchsetting_employmentstatus> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var employmentstatus in db.GetRepository<searchsetting_employmentstatus>().Find().ToList())
+            foreach (var employmentstatus in _unitOfWorkAsync.Repository<searchsetting_employmentstatus>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_employmentstatus.Where(z => z.employmentstatus_id == employmentstatus.id).Any()))
@@ -1722,16 +1755,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_employmentstatus();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.employmentstatus_id = employmentstatus.id; //add the current employmentstatus value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_employmentstatus>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_employmentstatus>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.employmentstatus_id == employmentstatus.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_employmentstatus>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.employmentstatus_id == employmentstatus.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_employmentstatus>().Delete(temp);
                 }
 
 
@@ -1741,14 +1774,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata havekids
-        private void updatesearchsettingshavekids(List<searchsetting_havekids> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingshavekids(List<searchsetting_havekids> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var havekids in db.GetRepository<searchsetting_havekids>().Find().ToList())
+            foreach (var havekids in _unitOfWorkAsync.Repository<searchsetting_havekids>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_havekids.Where(z => z.havekids_id == havekids.id).Any()))
@@ -1757,16 +1790,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_havekids();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.havekids_id = havekids.id; //add the current havekids value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_havekids>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_havekids>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.havekids_id == havekids.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_havekids>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.havekids_id == havekids.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_havekids>().Delete(temp);
                 }
 
 
@@ -1776,14 +1809,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata incomelevel
-        private void updatesearchsettingsincomelevel(List<searchsetting_incomelevel> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsincomelevel(List<searchsetting_incomelevel> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var incomelevel in db.GetRepository<searchsetting_incomelevel>().Find().ToList())
+            foreach (var incomelevel in _unitOfWorkAsync.Repository<searchsetting_incomelevel>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_incomelevel.Where(z => z.incomelevel_id == incomelevel.id).Any()))
@@ -1792,16 +1825,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_incomelevel();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.incomelevel_id = incomelevel.id; //add the current incomelevel value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_incomelevel>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_incomelevel>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.incomelevel_id == incomelevel.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_incomelevel>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.incomelevel_id == incomelevel.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_incomelevel>().Delete(temp);
                 }
 
 
@@ -1811,14 +1844,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata livingsituation
-        private void updatesearchsettingslivingsituation(List<searchsetting_livingstituation> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingslivingsituation(List<searchsetting_livingstituation> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var livingsituation in db.GetRepository<searchsetting_livingstituation>().Find().ToList())
+            foreach (var livingsituation in _unitOfWorkAsync.Repository<searchsetting_livingstituation>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_livingstituation.Where(z => z.livingsituation_id == livingsituation.id).Any()))
@@ -1827,16 +1860,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_livingstituation();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.livingsituation_id = livingsituation.id; //add the current livingsituation value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_livingstituation>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_livingstituation>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.livingsituation_id == livingsituation.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_livingstituation>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.livingsituation_id == livingsituation.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_livingstituation>().Delete(temp);
                 }
 
 
@@ -1846,14 +1879,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata maritalstatus
-        private void updatesearchsettingsmaritalstatus(List<searchsetting_maritalstatus> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsmaritalstatus(List<searchsetting_maritalstatus> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var maritalstatus in db.GetRepository<searchsetting_maritalstatus>().Find().ToList())
+            foreach (var maritalstatus in _unitOfWorkAsync.Repository<searchsetting_maritalstatus>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_maritalstatus.Where(z => z.maritalstatus_id == maritalstatus.id).Any()))
@@ -1862,16 +1895,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_maritalstatus();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.maritalstatus_id = maritalstatus.id; //add the current maritalstatus value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_maritalstatus>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_maritalstatus>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.maritalstatus_id == maritalstatus.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_maritalstatus>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.maritalstatus_id == maritalstatus.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_maritalstatus>().Delete(temp);
                 }
 
 
@@ -1881,14 +1914,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata profession
-        private void updatesearchsettingsprofession(List<searchsetting_profession> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsprofession(List<searchsetting_profession> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var profession in db.GetRepository<searchsetting_profession>().Find().ToList())
+            foreach (var profession in _unitOfWorkAsync.Repository<searchsetting_profession>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_profession.Where(z => z.profession_id == profession.id).Any()))
@@ -1897,16 +1930,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_profession();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.profession_id = profession.id; //add the current profession value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_profession>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_profession>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.profession_id == profession.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_profession>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.profession_id == profession.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_profession>().Delete(temp);
                 }
 
 
@@ -1916,14 +1949,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata wantskids
-        private void updatesearchsettingswantskids(List<searchsetting_wantkids> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingswantskids(List<searchsetting_wantkids> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var wantskids in db.GetRepository<searchsetting_wantkids>().Find().ToList())
+            foreach (var wantskids in _unitOfWorkAsync.Repository<searchsetting_wantkids>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_wantkids.Where(z => z.wantskids_id == wantskids.id).Any()))
@@ -1932,16 +1965,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_wantkids();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.wantskids_id = wantskids.id; //add the current wantskids value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_wantkids>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_wantkids>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.wantskids_id == wantskids.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_wantkids>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.wantskids_id == wantskids.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_wantkids>().Delete(temp);
                 }
 
 
@@ -1956,14 +1989,14 @@ namespace Anewluv.Services.Edit
         //// Start of Character Search settings ////
 
         //profiledata diet
-        private void updatesearchsettingsdiet(List<searchsetting_diet> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsdiet(List<searchsetting_diet> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var diet in db.GetRepository<searchsetting_diet>().Find().ToList())
+            foreach (var diet in _unitOfWorkAsync.Repository<searchsetting_diet>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_diet.Where(z => z.diet_id == diet.id).Any()))
@@ -1972,16 +2005,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_diet();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.diet_id = diet.id; //add the current diet value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_diet>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_diet>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.diet_id == diet.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_diet>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.diet_id == diet.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_diet>().Delete(temp);
                 }
 
 
@@ -1991,14 +2024,14 @@ namespace Anewluv.Services.Edit
 
         }        
         //profiledata humor
-        private void updatesearchsettingshumor(List<searchsetting_humor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingshumor(List<searchsetting_humor> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var humor in db.GetRepository<searchsetting_humor>().Find().ToList())
+            foreach (var humor in _unitOfWorkAsync.Repository<searchsetting_humor>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_humor.Where(z => z.humor_id == humor.id).Any()))
@@ -2007,16 +2040,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_humor();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.humor_id = humor.id; //add the current humor value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_humor>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_humor>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.humor_id == humor.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_humor>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.humor_id == humor.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_humor>().Delete(temp);
                 }
 
 
@@ -2026,14 +2059,14 @@ namespace Anewluv.Services.Edit
 
         }        
         //profiledata hobby
-        private void updatesearchsettingshobby(List<searchsetting_hobby> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingshobby(List<searchsetting_hobby> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var hobby in db.GetRepository<searchsetting_hobby>().Find().ToList())
+            foreach (var hobby in _unitOfWorkAsync.Repository<searchsetting_hobby>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_hobby.Where(z => z.hobby_id == hobby.id).Any()))
@@ -2042,16 +2075,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_hobby();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.hobby_id = hobby.id; //add the current hobby value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_hobby>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_hobby>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.hobby_id == hobby.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_hobby>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.hobby_id == hobby.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_hobby>().Delete(temp);
                 }
 
 
@@ -2061,14 +2094,14 @@ namespace Anewluv.Services.Edit
 
         }       
         //profiledata drinks
-        private void updatesearchsettingsdrinks(List<searchsetting_drink> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsdrinks(List<searchsetting_drink> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var drinks in db.GetRepository<searchsetting_drink>().Find().ToList())
+            foreach (var drinks in _unitOfWorkAsync.Repository<searchsetting_drink>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_drink.Where(z => z.drink_id == drinks.id).Any()))
@@ -2077,16 +2110,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_drink();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.drink_id = drinks.id; //add the current drinks value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_drink>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_drink>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.drink_id == drinks.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_drink>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.drink_id == drinks.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_drink>().Delete(temp);
                 }
 
 
@@ -2096,14 +2129,14 @@ namespace Anewluv.Services.Edit
 
         }        
         //profiledata exercise
-        private void updatesearchsettingsexercise(List<searchsetting_exercise> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsexercise(List<searchsetting_exercise> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var exercise in db.GetRepository<searchsetting_exercise>().Find().ToList())
+            foreach (var exercise in _unitOfWorkAsync.Repository<searchsetting_exercise>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_exercise.Where(z => z.exercise_id == exercise.id).Any()))
@@ -2112,16 +2145,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_exercise();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.exercise_id = exercise.id; //add the current exercise value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_exercise>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_exercise>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.exercise_id == exercise.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_exercise>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.exercise_id == exercise.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_exercise>().Delete(temp);
                 }
 
 
@@ -2131,14 +2164,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata smokes
-        private void updatesearchsettingssmokes(List<searchsetting_smokes> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingssmokes(List<searchsetting_smokes> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var smokes in db.GetRepository<searchsetting_smokes>().Find().ToList())
+            foreach (var smokes in _unitOfWorkAsync.Repository<searchsetting_smokes>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_smokes.Where(z => z.smoke_id == smokes.id).Any()))
@@ -2147,16 +2180,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_smokes();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.smoke_id = smokes.id; //add the current smokes value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_smokes>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_smokes>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.smoke_id == smokes.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_smokes>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.smoke_id == smokes.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_smokes>().Delete(temp);
                 }
 
 
@@ -2166,14 +2199,14 @@ namespace Anewluv.Services.Edit
 
         }        
         //profiledata sign
-        private void updatesearchsettingssign(List<searchsetting_sign> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingssign(List<searchsetting_sign> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var sign in db.GetRepository<searchsetting_sign>().Find().ToList())
+            foreach (var sign in _unitOfWorkAsync.Repository<searchsetting_sign>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_sign.Where(z => z.sign_id == sign.id).Any()))
@@ -2182,16 +2215,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_sign();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.sign_id = sign.id; //add the current sign value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_sign>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_sign>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.sign_id == sign.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_sign>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.sign_id == sign.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_sign>().Delete(temp);
                 }
 
 
@@ -2201,14 +2234,14 @@ namespace Anewluv.Services.Edit
 
         }        
         //profiledata politicalview
-        private void updatesearchsettingspoliticalview(List<searchsetting_politicalview> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingspoliticalview(List<searchsetting_politicalview> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var politicalview in db.GetRepository<searchsetting_politicalview>().Find().ToList())
+            foreach (var politicalview in _unitOfWorkAsync.Repository<searchsetting_politicalview>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_politicalview.Where(z => z.politicalview_id == politicalview.id).Any()))
@@ -2217,16 +2250,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_politicalview();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.politicalview_id = politicalview.id; //add the current politicalview value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_politicalview>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_politicalview>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.politicalview_id == politicalview.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_politicalview>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.politicalview_id == politicalview.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_politicalview>().Delete(temp);
                 }
 
 
@@ -2236,14 +2269,14 @@ namespace Anewluv.Services.Edit
 
         }       
         //profiledata religion
-        private void updatesearchsettingsreligion(List<searchsetting_religion> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsreligion(List<searchsetting_religion> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var religion in db.GetRepository<searchsetting_religion>().Find().ToList())
+            foreach (var religion in _unitOfWorkAsync.Repository<searchsetting_religion>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_religion.Where(z => z.religion_id == religion.id).Any()))
@@ -2252,16 +2285,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_religion();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.religion_id = religion.id; //add the current religion value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_religion>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_religion>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.religion_id == religion.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_religion>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.religion_id == religion.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_religion>().Delete(temp);
                 }
 
 
@@ -2271,14 +2304,14 @@ namespace Anewluv.Services.Edit
 
         }
         //profiledata religiousattendance
-        private void updatesearchsettingsreligiousattendance(List<searchsetting_religiousattendance> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync db)
+        private void updatesearchsettingsreligiousattendance(List<searchsetting_religiousattendance> slectedethnicities, searchsetting currentsearchsettings, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
                 return;
             }
 
-            foreach (var religiousattendance in db.GetRepository<searchsetting_religiousattendance>().Find().ToList())
+            foreach (var religiousattendance in _unitOfWorkAsync.Repository<searchsetting_religiousattendance>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentsearchsettings.searchsetting_religiousattendance.Where(z => z.religiousattendance_id == religiousattendance.id).Any()))
@@ -2287,16 +2320,16 @@ namespace Anewluv.Services.Edit
                     var temp = new searchsetting_religiousattendance();
                     temp.searchsetting_id = currentsearchsettings.id;
                     temp.religiousattendance_id = religiousattendance.id; //add the current religiousattendance value since its new.
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<searchsetting_religiousattendance>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<searchsetting_religiousattendance>().Find().Where(p => p.searchsetting_id == currentsearchsettings.id && p.religiousattendance_id == religiousattendance.id).First();
+                    var temp = _unitOfWorkAsync.Repository<searchsetting_religiousattendance>().Queryable().Where(p => p.searchsetting_id == currentsearchsettings.id && p.religiousattendance_id == religiousattendance.id).First();
                     if (temp != null)
-                        db.Remove(temp);
+                        _unitOfWorkAsync.Repository<searchsetting_religiousattendance>().Delete(temp);
                 }
 
 

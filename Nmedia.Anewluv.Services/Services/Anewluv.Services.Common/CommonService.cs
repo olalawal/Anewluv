@@ -19,6 +19,7 @@ using Anewluv.Domain.Data.ViewModels;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data.log;
 using System.Threading.Tasks;
+using Repository.Pattern.UnitOfWork;
 
 
 namespace Anewluv.Services.Common

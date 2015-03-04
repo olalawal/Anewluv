@@ -19,6 +19,46 @@ namespace Anewluv.DataExtentionMethods
         #region "Spatial Functions"
 
 
+        public static List<countrypostalcode> getcountryandpostalcodestatuslist(IGeoDataStoredProcedures _storedProcedures)
+        {
+
+           // string countryname = "";
+            //geodb.DisableProxyCreation = true;
+
+            try
+            {
+                //  List<Country_PostalCode_List> myQuery = default(List<Country_PostalCode_List>);
+                //Dim ctx As New Entities()
+                 var results =  _storedProcedures.GetCountryPostalCodeList().ToList();
+
+
+                 return (from s in results
+                         select new countrypostalcode
+                         {
+                             name = s.CountryName,
+                             id = s.CountryID.ToString(),
+                             code = s.Country_Code,
+                             customregionid = s.CountryCustomRegionID,
+                             region = s.Country_Region,
+                             haspostalcode = Convert.ToBoolean(s.PostalCodes)
+                         }).ToList();
+
+                //object params                      
+                // countryname = geodb.ExecuteStoredProcedure<string>(query + " @CountryID ", parameters).Select().FirstOrDefault();
+//if (countryname != null) return countryname;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+                //throw convertedexcption;
+            }
+
+           
+        }
+
            public static string getcountrynamebycountryid(GeoModel model,IGeoDataStoredProcedures _storedProcedures)
         {
 
@@ -76,7 +116,6 @@ namespace Anewluv.DataExtentionMethods
 
 
            }
-
          
 
            public static gpsdata getgpsdatabycitycountrypostalcode(GeoModel model, IGeoDataStoredProcedures _storedProcedures)

@@ -14,6 +14,8 @@ using Anewluv.Caching;
 using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data;
+using Repository.Pattern.UnitOfWork;
+using GeoData.Domain.Models;
 
 namespace Anewluv.Services.Common
 {
@@ -29,12 +31,12 @@ namespace Anewluv.Services.Common
         //private IPromotionRepository  promotionrepository;
 
         IUnitOfWorkAsync _unitOfWorkAsync;
-       // private LoggingLibrary.Logging logger;
+        private readonly IGeoDataStoredProcedures _storedProcedures;
+        private LoggingLibrary.Logging logger;
 
-        //  private IMemberActionsRepository  _memberactionsrepository;
-        // private string _apikey;
+       
 
-        public LookupService(IUnitOfWorkAsync unitOfWork)
+        public LookupService(IUnitOfWorkAsync unitOfWork, IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)
@@ -49,6 +51,7 @@ namespace Anewluv.Services.Common
 
             //promotionrepository = _promotionrepository;
             _unitOfWorkAsync = unitOfWork;
+            _storedProcedures = storedProcedures;
             //disable proxy stuff by default
             //_unitOfWorkAsync.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
@@ -65,8 +68,8 @@ namespace Anewluv.Services.Common
         {
 
 
-                _unitOfWorkAsync.DisableProxyCreation = true;
-                using (var db = _unitOfWorkAsync)
+               
+             
                {
                   
                    try
@@ -80,7 +83,7 @@ namespace Anewluv.Services.Common
                                     return photoformatlist;
                 
                     #else
-                      return CachingFactory.SharedObjectHelper.getphotoformatlist(db);
+                      return CachingFactory.SharedObjectHelper.getphotoformatlist(_unitOfWorkAsync);
                 // return temp;
                    #endif
                    }               
@@ -110,8 +113,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -123,7 +126,7 @@ namespace Anewluv.Services.Common
                 return photoapprovalstatuslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotoapprovalstatuslist(db);
+                    return CachingFactory.SharedObjectHelper.getphotoapprovalstatuslist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -155,8 +158,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -168,7 +171,7 @@ namespace Anewluv.Services.Common
                 return photorejectionreasonlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotorejectionreasonlist(db);
+                    return CachingFactory.SharedObjectHelper.getphotorejectionreasonlist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -204,8 +207,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -217,7 +220,7 @@ namespace Anewluv.Services.Common
                 return photostatuslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotostatuslist(db);
+                    return CachingFactory.SharedObjectHelper.getphotostatuslist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -249,8 +252,8 @@ namespace Anewluv.Services.Common
 
         public List<lu_photoimagetype> getphotoimagetypeslist()
         {
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -262,7 +265,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotoimagetypelist(db);
+                    return CachingFactory.SharedObjectHelper.getphotoimagetypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -294,8 +297,8 @@ namespace Anewluv.Services.Common
         public List<lu_photostatusdescription> getphotostatusdescriptionlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -308,7 +311,7 @@ namespace Anewluv.Services.Common
                 return photostatusdescriptionlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotostatusdescriptionlist(db);
+                    return CachingFactory.SharedObjectHelper.getphotostatusdescriptionlist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -341,8 +344,8 @@ namespace Anewluv.Services.Common
         public List<lu_abusetype> getabusetypelist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -355,7 +358,7 @@ namespace Anewluv.Services.Common
                 return abusetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getabusetypelist(db);
+                    return CachingFactory.SharedObjectHelper.getabusetypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -386,8 +389,8 @@ namespace Anewluv.Services.Common
 
         public List<lu_photoImagersizerformat> getphotoImagersizerformatlist()
         {
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -399,7 +402,7 @@ namespace Anewluv.Services.Common
                 return getphotoImagersizerformatlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getphotoImagersizerformatlist(db);
+                    return CachingFactory.SharedObjectHelper.getphotoImagersizerformatlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -430,8 +433,8 @@ namespace Anewluv.Services.Common
         public List<lu_profilestatus> getprofilestatuslist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -444,7 +447,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getprofilestatuslist(db);
+                    return CachingFactory.SharedObjectHelper.getprofilestatuslist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -479,8 +482,8 @@ namespace Anewluv.Services.Common
         public List<lu_role> getrolelist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -492,7 +495,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getrolelist(db);
+                    return CachingFactory.SharedObjectHelper.getrolelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -525,8 +528,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -539,7 +542,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getsecurityleveltypelist(db);
+                    return CachingFactory.SharedObjectHelper.getsecurityleveltypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -571,8 +574,8 @@ namespace Anewluv.Services.Common
         public List<lu_showme> getshowmelist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -585,7 +588,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getshowmelist(db);
+                    return CachingFactory.SharedObjectHelper.getshowmelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -617,8 +620,8 @@ namespace Anewluv.Services.Common
         public List<lu_sortbytype> getsortbytypelist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -630,7 +633,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getsortbytypelist(db);
+                    return CachingFactory.SharedObjectHelper.getsortbytypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -662,8 +665,8 @@ namespace Anewluv.Services.Common
         public List<lu_securityquestion> getsecurityquestionlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -675,7 +678,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getsecurityquestionlist(db);
+                    return CachingFactory.SharedObjectHelper.getsecurityquestionlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -707,8 +710,8 @@ namespace Anewluv.Services.Common
         public List<lu_flagyesno> getflagyesnolist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -721,7 +724,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getflagyesnolist(db);
+                    return CachingFactory.SharedObjectHelper.getflagyesnolist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -753,8 +756,8 @@ namespace Anewluv.Services.Common
         public List<lu_profilefiltertype> getprofilefiltertypelist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -767,7 +770,7 @@ namespace Anewluv.Services.Common
                 return photoimagetypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getprofilefiltertypelist(db);
+                    return CachingFactory.SharedObjectHelper.getprofilefiltertypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -806,8 +809,8 @@ namespace Anewluv.Services.Common
 
             List<systempagesetting> temp = new List<systempagesetting>();
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -823,7 +826,7 @@ namespace Anewluv.Services.Common
                             return temp;
 
 #else  //load list from database
-                    temp = CachingFactory.CssStyleSelector.getsystempagesettingslist(db);
+                    temp = CachingFactory.CssStyleSelector.getsystempagesettingslist(_unitOfWorkAsync);
                     return temp;
 #endif
                 }
@@ -854,14 +857,14 @@ namespace Anewluv.Services.Common
 
         public string getbodycssbypagename(string pagename)
         {
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
                 {
 
-                    return CachingFactory.CssStyleSelector.getbodycssbypagename(pagename, db).ToString();
+                    return CachingFactory.CssStyleSelector.getbodycssbypagename(pagename, _unitOfWorkAsync).ToString();
 
 
                 }
@@ -896,8 +899,8 @@ namespace Anewluv.Services.Common
 
         public List<lu_gender> getgenderlist()
         {
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -908,7 +911,7 @@ namespace Anewluv.Services.Common
                 genderlist.Add(new lu_gender { description = "Female", id = 2, selected = false });
                 return genderlist;                
 #else
-                    return CachingFactory.SharedObjectHelper.getgenderlist(db);
+                    return CachingFactory.SharedObjectHelper.getgenderlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -942,8 +945,8 @@ namespace Anewluv.Services.Common
         public List<age> getageslist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -980,8 +983,8 @@ namespace Anewluv.Services.Common
         public List<metricheight> getmetricheightlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1024,8 +1027,8 @@ namespace Anewluv.Services.Common
         public List<lu_bodytype> getbodytypelist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1038,7 +1041,7 @@ namespace Anewluv.Services.Common
                 return bodytypelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getbodytypelist(db);
+                    return CachingFactory.SharedObjectHelper.getbodytypelist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -1071,8 +1074,8 @@ namespace Anewluv.Services.Common
         public List<lu_ethnicity> getethnicitylist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1085,7 +1088,7 @@ namespace Anewluv.Services.Common
             return ethnicitylist;
 
 #else
-                    return CachingFactory.SharedObjectHelper.getethnicitylist(db);
+                    return CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1117,8 +1120,8 @@ namespace Anewluv.Services.Common
         public List<lu_eyecolor> geteyecolorlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1131,7 +1134,7 @@ namespace Anewluv.Services.Common
                 return eyecolorlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.geteyecolorlist(db);
+                    return CachingFactory.SharedObjectHelper.geteyecolorlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1163,8 +1166,8 @@ namespace Anewluv.Services.Common
         public List<lu_haircolor> gethaircolorlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1177,7 +1180,7 @@ namespace Anewluv.Services.Common
                 return haircolorlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.gethaircolorlist(db);
+                    return CachingFactory.SharedObjectHelper.gethaircolorlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1208,8 +1211,8 @@ namespace Anewluv.Services.Common
         public List<lu_hotfeature> gethotfeaturelist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1222,7 +1225,7 @@ namespace Anewluv.Services.Common
                 return hotfeaturelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.gethotfeaturelist(db);
+                    return CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1258,8 +1261,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1271,8 +1274,8 @@ namespace Anewluv.Services.Common
                 return dietlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getdietlist(db);
-                    //  return db.lu_diet.OrderBy(x => x.description).ToList();
+                    return CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
+                    //  return _unitOfWorkAsync.lu_diet.OrderBy(x => x.description).ToList();
 
 
 
@@ -1307,8 +1310,8 @@ namespace Anewluv.Services.Common
         public List<lu_drinks> getdrinkslist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1320,7 +1323,7 @@ namespace Anewluv.Services.Common
                 return drinkslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getdrinkslist(db);
+                    return CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
 
 
 
@@ -1354,8 +1357,8 @@ namespace Anewluv.Services.Common
         public List<lu_exercise> getexerciselist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1367,7 +1370,7 @@ namespace Anewluv.Services.Common
                 return exerciselist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getexerciselist(db);
+                    return CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1399,8 +1402,8 @@ namespace Anewluv.Services.Common
         public List<lu_hobby> gethobbylist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1413,7 +1416,7 @@ namespace Anewluv.Services.Common
                 
 #else
 
-                    return CachingFactory.SharedObjectHelper.gethobbylist(db);
+                    return CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1446,8 +1449,8 @@ namespace Anewluv.Services.Common
         public List<lu_humor> gethumorlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1460,7 +1463,7 @@ namespace Anewluv.Services.Common
                 
 #else
 
-                    return CachingFactory.SharedObjectHelper.gethumorlist(db); ;
+                    return CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync); ;
 
                     // return temp;
 #endif
@@ -1493,8 +1496,8 @@ namespace Anewluv.Services.Common
         public List<lu_politicalview> getpoliticalviewlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1506,7 +1509,7 @@ namespace Anewluv.Services.Common
                 return politicalviewlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getpoliticalviewlist(db);
+                    return CachingFactory.SharedObjectHelper.getpoliticalviewlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1538,8 +1541,8 @@ namespace Anewluv.Services.Common
         public List<lu_religion> getreligionlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1552,7 +1555,7 @@ namespace Anewluv.Services.Common
                 return religionlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getreligionlist(db);
+                    return CachingFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
 
                     // return temp;
 #endif
@@ -1584,8 +1587,8 @@ namespace Anewluv.Services.Common
         public List<lu_religiousattendance> getreligiousattendancelist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1597,7 +1600,7 @@ namespace Anewluv.Services.Common
                 return religiousattendancelist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getreligiousattendancelist(db);
+                    return CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -1629,8 +1632,8 @@ namespace Anewluv.Services.Common
         public List<lu_sign> getsignlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1643,7 +1646,7 @@ namespace Anewluv.Services.Common
                 return signlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getsignlist(db);
+                    return CachingFactory.SharedObjectHelper.getsignlist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1676,8 +1679,8 @@ namespace Anewluv.Services.Common
         {
 
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1689,7 +1692,7 @@ namespace Anewluv.Services.Common
                 return smokeslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getsmokeslist(db);
+                    return CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
                     // return temp;
 #endif
                 }
@@ -1725,8 +1728,8 @@ namespace Anewluv.Services.Common
         public List<lu_educationlevel> geteducationlevellist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1738,7 +1741,7 @@ namespace Anewluv.Services.Common
                 return educationlevellist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.geteducationlevellist(db);
+                    return CachingFactory.SharedObjectHelper.geteducationlevellist(_unitOfWorkAsync);
                     // return temp;
 #endif
 
@@ -1771,8 +1774,8 @@ namespace Anewluv.Services.Common
         public List<lu_employmentstatus> getemploymentstatuslist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1785,7 +1788,7 @@ namespace Anewluv.Services.Common
                 return employmentstatuslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getemploymentstatuslist(db);
+                    return CachingFactory.SharedObjectHelper.getemploymentstatuslist(_unitOfWorkAsync);
 
 #endif
                 }
@@ -1817,8 +1820,8 @@ namespace Anewluv.Services.Common
         public List<lu_havekids> gethavekidslist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1831,7 +1834,7 @@ namespace Anewluv.Services.Common
                 return havekidslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.gethavekidslist(db);
+                    return CachingFactory.SharedObjectHelper.gethavekidslist(_unitOfWorkAsync);
 #endif
                 }
                 catch (Exception ex)
@@ -1862,8 +1865,8 @@ namespace Anewluv.Services.Common
         public List<lu_incomelevel> getincomelevellist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1877,7 +1880,7 @@ namespace Anewluv.Services.Common
                 
 #else
 
-                    return CachingFactory.SharedObjectHelper.getincomelevellist(db);
+                    return CachingFactory.SharedObjectHelper.getincomelevellist(_unitOfWorkAsync);
 #endif
 
                 }
@@ -1910,8 +1913,8 @@ namespace Anewluv.Services.Common
         public List<lu_livingsituation> getlivingsituationlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1923,7 +1926,7 @@ namespace Anewluv.Services.Common
                 return livingsituationlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getlivingsituationlist(db);
+                    return CachingFactory.SharedObjectHelper.getlivingsituationlist(_unitOfWorkAsync);
 #endif
                 }
                 catch (Exception ex)
@@ -1954,8 +1957,8 @@ namespace Anewluv.Services.Common
         public List<lu_lookingfor> getlookingforlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -1967,7 +1970,7 @@ namespace Anewluv.Services.Common
                 return lookingforlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getlookingforlist(db);
+                    return CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
 #endif
 
                 }
@@ -2000,8 +2003,8 @@ namespace Anewluv.Services.Common
         public List<lu_maritalstatus> getmaritalstatuslist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -2014,7 +2017,7 @@ namespace Anewluv.Services.Common
                 return maritalstatuslist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getmaritalstatuslist(db);
+                    return CachingFactory.SharedObjectHelper.getmaritalstatuslist(_unitOfWorkAsync);
 
 #endif
                 }
@@ -2046,8 +2049,8 @@ namespace Anewluv.Services.Common
         public List<lu_profession> getprofessionlist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -2060,7 +2063,7 @@ namespace Anewluv.Services.Common
                 return professionlist;
                 
 #else
-                    return CachingFactory.SharedObjectHelper.getprofessionlist(db);
+                    return CachingFactory.SharedObjectHelper.getprofessionlist(_unitOfWorkAsync);
 #endif
 
                 }
@@ -2092,8 +2095,8 @@ namespace Anewluv.Services.Common
         public List<lu_wantskids> getwantskidslist()
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+           
+         
             {
 
                 try
@@ -2106,7 +2109,7 @@ namespace Anewluv.Services.Common
                 
 #else
 
-                    return CachingFactory.SharedObjectHelper.getwantskidslist(db);
+                    return CachingFactory.SharedObjectHelper.getwantskidslist(_unitOfWorkAsync);
 
 #endif
 

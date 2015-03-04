@@ -1,9 +1,10 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class mailboxfolder
+    public partial class mailboxfolder :Entity
     {
         public mailboxfolder()
         {

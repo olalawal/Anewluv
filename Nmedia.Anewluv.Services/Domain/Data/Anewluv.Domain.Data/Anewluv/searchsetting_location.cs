@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Anewluv.Domain.Data
 {
     [DataContract]
-    public partial class searchsetting_location
+    public partial class searchsetting_location : Repository.Pattern.Ef6.Entity
     {
       [DataMember]  public int id { get; set; }
       [DataMember]

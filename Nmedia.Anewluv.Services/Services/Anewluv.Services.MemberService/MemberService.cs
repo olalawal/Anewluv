@@ -29,6 +29,7 @@ using Nmedia.Infrastructure.Domain.Data;
 using Anewluv.DataExtentionMethods;
 using System.Threading.Tasks;
 using Anewluv.Domain.Data.Anewluv.ViewModels;
+using Repository.Pattern.UnitOfWork;
 
 
 namespace Anewluv.Services.Members
@@ -40,7 +41,7 @@ namespace Anewluv.Services.Members
     {
 
 
-        IUnitOfWorkAsync _unitOfWork;
+        private readonly IUnitOfWorkAsync _unitOfWork;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
@@ -74,12 +75,12 @@ namespace Anewluv.Services.Members
 
         public profiledata getprofiledatabyprofileid(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
-                   return  db.GetRepository<profiledata>().getprofiledatabyprofileid(model);
+                   return  db.Repository<profiledata>().getprofiledatabyprofileid(model);
 
                 }
                 catch (Exception ex)
@@ -105,7 +106,7 @@ namespace Anewluv.Services.Members
 
         public async Task<searchsetting> getperfectmatchsearchsettingsbyprofileid(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
@@ -145,10 +146,10 @@ namespace Anewluv.Services.Members
         public async Task createmyperfectmatchsearchsettingsbyprofileid(ProfileModel model)
         {
            
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
-                  db.IsAuditEnabled = false; //do not audit on adds
+                 //do not audit on adds
                //   using (var transaction = db.BeginTransaction())
                   {
                       try
@@ -191,13 +192,13 @@ namespace Anewluv.Services.Members
         //*****************************************************
         public string getgenderbyphotoid(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = false;
+          
             using (var db = _unitOfWork)
             {
                 try
                 {
 
-                 return  db.GetRepository<profiledata>().Find().Single(p=>p.profilemetadata.photos.ToList().Any(z=>z.id == model.photoid)).lu_gender.description;
+                 return  db.Repository<profiledata>().Queryable().Single(p=>p.profilemetadata.photos.ToList().Any(z=>z.id == model.photoid)).lu_gender.description;
                    
                 }
                 catch (Exception ex)
@@ -238,21 +239,21 @@ namespace Anewluv.Services.Members
             //get the profileid from userID
             //ProfileModel model = GetProfileIdbyusername(username);
 
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
-                   db.IsAuditEnabled = false; //do not audit on adds
+                  //do not audit on adds
                 //   using (var transaction = db.BeginTransaction())
                    {
                        try
                        {
                            //get the profile
-                           myProfile = db.GetRepository<profile>().getprofilebyprofileid(model);
+                           myProfile = db.Repository<profile>().getprofilebyprofileid(model);
 
                            //update all other sessions that were not properly logged out   
                            //check if the user hit the count before updating that
                            int EmailDailyQuota = myProfile.dailsentmessagequota ?? 0;
-                           int EmailQuotaLimitWithNoRoleCheck = db.GetRepository<communicationquota>().Find().ToList().Where(p => p.id == 1).FirstOrDefault().quotavalue ?? 0;
+                           int EmailQuotaLimitWithNoRoleCheck = db.Repository<communicationquota>().Queryable().ToList().Where(p => p.id == 1).FirstOrDefault().quotavalue ?? 0;
                            //TO DO check qoute for correct role down the line
                            if (EmailDailyQuota != 0 && EmailDailyQuota >= EmailQuotaLimitWithNoRoleCheck)
                            {
@@ -261,8 +262,8 @@ namespace Anewluv.Services.Members
                            }
                            // update the count
                            myProfile.dailysentemailquota = myProfile.dailysentemailquota == null ? 1 : myProfile.dailysentemailquota + 1;
-                          
-                           db.Update(myProfile);
+
+                           db.Repository<profile>().Update(myProfile);
                          var i  =db.SaveChanges();
                           // transaction.Commit();
 
@@ -292,10 +293,10 @@ namespace Anewluv.Services.Members
         //update the Initial Catalog= i.e create folders and change profile status from guest to active ?!
         public async Task createmailboxfolders(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = false;
+          
             using (var db = _unitOfWork)
             {
-                  db.IsAuditEnabled = false; //do not audit on adds
+                 //do not audit on adds
                //   using (var transaction = db.BeginTransaction())
                   {
 
@@ -332,8 +333,8 @@ namespace Anewluv.Services.Members
                                           p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Deleted";
                                           break;
                                   }
-                                  db.Add(p);
-                                  int z =db.SaveChanges();
+                                  db.Repository<mailboxfolder>().Insert(p);
+                                  var z =db.SaveChanges();
                                  // transaction.Commit();
 
                                //   return true;
@@ -367,10 +368,10 @@ namespace Anewluv.Services.Members
       
         public async Task<bool> activateprofile(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = false;
+          
             using (var db = _unitOfWork)
             {
-                  db.IsAuditEnabled = false; //do not audit on adds
+                 //do not audit on adds
                //   using (var transaction = db.BeginTransaction())
                   {
 
@@ -379,13 +380,13 @@ namespace Anewluv.Services.Members
 
                               var task = Task.Run(() =>
                               {
-                                  var myProfile = db.GetRepository<profile>().getprofilebyprofileid(model);
+                                  var myProfile = db.Repository<profile>().getprofilebyprofileid(model);
                                   // if( myProfile == null ) return null;
                                   //update the profile status to 2
                                   myProfile.status_id = (int)profilestatusEnum.Activated;
                                   //handele the update using EF
-                                  //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                                  db.Update(myProfile);
+                                  //  db.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                                  db.Repository<profile>().Update(myProfile);
                                 var i  =db.SaveChanges();
                                  // transaction.Commit();
 
@@ -420,20 +421,20 @@ namespace Anewluv.Services.Members
 
         public bool deactivateprofile(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
-                  db.IsAuditEnabled = false; //do not audit on adds
+                 //do not audit on adds
                //   using (var transaction = db.BeginTransaction())
                   {
                       try
                       {
-                          var myProfile = db.GetRepository<profile>().getprofilebyprofileid(model); 
+                          var myProfile = db.Repository<profile>().getprofilebyprofileid(model); 
                           //update the profile status to 2
                           myProfile.status_id = (int)profilestatusEnum.Inactive;
                           //handele the update using EF
-                          //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                          db.Update(myProfile);
+                          //  db.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                          db.Repository<profile>().Update(myProfile);
                         var i  =db.SaveChanges();
                          // transaction.Commit();
 
@@ -465,21 +466,21 @@ namespace Anewluv.Services.Members
             
             using (var db = _unitOfWork)
             {
-                  db.IsAuditEnabled = false; //do not audit on adds
+                 //do not audit on adds
                //   using (var transaction = db.BeginTransaction())
                   {
                       try
                       {
 
-                          var myProfile = db.GetRepository<profile>().getprofilebyprofileid(model); 
+                          var myProfile = db.Repository<profile>().getprofilebyprofileid(model); 
                           //update the profile status to 2
                           myProfile.password = encryptedpassword;
                           myProfile.modificationdate = DateTime.Now;
                           myProfile.passwordChangeddate = DateTime.Now;
                           myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
                           //handele the update using EF
-                          //  db.GetRepository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                          db.Update(myProfile);
+                          //  db.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                          db.Repository<profile>().Update(myProfile);
                         var i  =db.SaveChanges();
                          // transaction.Commit();
 
@@ -510,7 +511,7 @@ namespace Anewluv.Services.Members
             
             using (var db = _unitOfWork)
             {
-                  db.IsAuditEnabled = false; //do not audit on adds
+                 //do not audit on adds
                //   using (var transaction = db.BeginTransaction())
                   {
                       try
@@ -521,10 +522,10 @@ namespace Anewluv.Services.Members
                               active = true,
                               creationdate = DateTime.UtcNow,
                               profile_id = model.profileid.GetValueOrDefault(),
-                               lu_openidprovider = db.GetRepository<lu_openidprovider>().Find().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
+                               lu_openidprovider = db.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
                               openididentifier = model.openididentifier
                           };
-                           db.Add(profileOpenIDStore);
+                          db.Repository<openid>().Insert(profileOpenIDStore);
                          var i  =db.SaveChanges();
                           // transaction.Commit();
 
@@ -554,7 +555,7 @@ namespace Anewluv.Services.Members
         //check if profile is activated 
         public async Task<bool> checkifprofileisactivated(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
 
@@ -564,7 +565,7 @@ namespace Anewluv.Services.Members
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            return db.GetRepository<profile>().checkifprofileisactivated(model);
+                            return db.Repository<profile>().checkifprofileisactivated(model);
                         });
                         return await task.ConfigureAwait(false);
                       
@@ -600,7 +601,7 @@ namespace Anewluv.Services.Members
         //check if mailbox folder exist
         public async Task<bool> checkifmailboxfoldersarecreated(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
 
@@ -611,7 +612,7 @@ namespace Anewluv.Services.Members
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        return (db.GetRepository<mailboxfolder>().Find().Where(p => p.profiled_id == model.profileid).FirstOrDefault() != null);
+                        return (db.Repository<mailboxfolder>().Queryable().Where(p => p.profiled_id == model.profileid).FirstOrDefault() != null);
                     });
                     return await task.ConfigureAwait(false);
                    
@@ -642,7 +643,7 @@ namespace Anewluv.Services.Members
         public async Task<DateTime?>  getmemberlastlogintimebyprofileid(ProfileModel model)
         {
 
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
 
@@ -652,7 +653,7 @@ namespace Anewluv.Services.Members
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
-                        return db.GetRepository<profile>().getprofilebyprofileid(model).logindate;
+                        return db.Repository<profile>().getprofilebyprofileid(model).logindate;
 
                     });
                     return await task.ConfigureAwait(false);
@@ -693,11 +694,11 @@ namespace Anewluv.Services.Members
            // IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
           
 
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                
-                  db.IsAuditEnabled = false; //do not audit on adds
+                 //do not audit on adds
                //   using (var transaction = db.BeginTransaction())
                   {
                     
@@ -708,20 +709,20 @@ namespace Anewluv.Services.Members
                           var task = Task.Factory.StartNew(() =>
                           {
                               //update all other sessions that were not properly logged out
-                              var myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                              var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
                               foreach (userlogtime p in myQuery)
                               {
                                   p.offline = true;
-                                  db.Update(p);
+                                  db.Repository<userlogtime>().Update(p);
                               }
 
 
                               //aloso update the profile table with current login date
-                              var myProfile = db.GetRepository<profile>().getprofilebyprofileid(model);
+                              var myProfile = db.Repository<profile>().getprofilebyprofileid(model);
                               //update the profile status to 2
                               myProfile.logindate = DateTime.Now;
-                              db.Update(myProfile);
+                              db.Repository<profile>().Update(myProfile);
 
 
                               //noew aslo update the logtime and then 
@@ -730,7 +731,7 @@ namespace Anewluv.Services.Members
                               myLogtime.offline = false;
                               myLogtime.sessionid = model.sessionid;
                               myLogtime.logintime = DateTime.Now;
-                              db.Add(myLogtime);
+                              db.Repository<userlogtime>().Insert(myLogtime);
                               //save all changes bro                         
                             var i  =db.SaveChanges();
                              // transaction.Commit();
@@ -772,7 +773,7 @@ namespace Anewluv.Services.Members
             //_unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
             {
-                 db.IsAuditEnabled = false; //do not audit on adds
+                //do not audit on adds
                //   using (var transaction = db.BeginTransaction())
                   {
                 try
@@ -782,13 +783,13 @@ namespace Anewluv.Services.Members
                     var task = Task.Factory.StartNew(() =>
                     {
                         //update all other sessions that were not properly logged out
-                        var myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                        var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
                         foreach (userlogtime p in myQuery)
                         {
                             p.offline = true;
                             p.logouttime = DateTime.Now;
-                            db.Update(p);
+                            db.Repository<userlogtime>().Update(p);
                         }
 
                       var i  =db.SaveChanges();
@@ -829,7 +830,7 @@ namespace Anewluv.Services.Members
             //_unitOfWork.DisableProxyCreation = true;
             using (var db = _unitOfWork)
             {
-                db.IsAuditEnabled = false; //do not audit on adds
+               //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
                     try
@@ -839,20 +840,20 @@ namespace Anewluv.Services.Members
                     var task = Task.Factory.StartNew(() =>
                     {
                          //update all other sessions that were not properly logged out
-                        var myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                        var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
                         foreach (userlogtime p in myQuery)
                         {
                             p.offline = true;
-                            db.Update(p);
+                            db.Repository<userlogtime>().Update(p);
                         }
 
 
                         //aloso update the profile table with current login date
-                        var myProfile = db.GetRepository<profile>().getprofilebyprofileid(model);
+                        var myProfile = db.Repository<profile>().getprofilebyprofileid(model);
                         //update the profile status to 2
                         myProfile.logindate = DateTime.Now;
-                        db.Update(myProfile);
+                        db.Repository<profile>().Update(myProfile);
 
 
                         //noew aslo update the logtime and then 
@@ -861,7 +862,7 @@ namespace Anewluv.Services.Members
                         myLogtime.offline = false;
                         myLogtime.sessionid = model.sessionid;
                         myLogtime.logintime = DateTime.Now;
-                        db.Add(myLogtime);
+                        db.Repository<userlogtime>().Insert(myLogtime);
                         //save all changes bro                         
                       var i  =db.SaveChanges();
                        // transaction.Commit();
@@ -907,14 +908,14 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
 
-                db.IsAuditEnabled = false; //do not audit on adds
+               //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
 
                     try
                     {
                         //update all other sessions that were not properly logged out
-                      // var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                      // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
                         
                     var task = Task.Factory.StartNew(() =>
@@ -969,14 +970,14 @@ namespace Anewluv.Services.Members
             using (var db = _unitOfWork)
             {
 
-                db.IsAuditEnabled = false; //do not audit on adds
+               //do not audit on adds
             // //   using (var transaction = db.BeginTransaction())
               //  {
 
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        // var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
 
                         var task = Task.Factory.StartNew(() =>
@@ -1022,16 +1023,16 @@ namespace Anewluv.Services.Members
             // userlogtime myLogtime = new userlogtime();
             //  DateTime currenttime = DateTime.Now;
 
-                db.IsAuditEnabled = false; //do not audit on adds
+               //do not audit on adds
                 //using (var transaction = db.BeginTransaction())
                 {
 
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        // var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
-                                              
-                            db.Add(model);
+                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+
+                        db.Repository<profileactivity>().Insert(model);
                             //save all changes bro
                           var i  =db.SaveChanges();
                         //   // transaction.Commit();
@@ -1060,18 +1061,18 @@ namespace Anewluv.Services.Members
         private int addprofileactvitygeodata(profileactivitygeodata model,IUnitOfWorkAsync db)
         {
 
-            db.IsAuditEnabled = false; //do not audit on adds
+           //do not audit on adds
              //   using (var transaction = db.BeginTransaction())
                 {
 
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        // var  myQuery = db.GetRepository<userlogtime>().Find().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
 
 
-                      
-                            db.Add(model);
+
+                        db.Repository<profileactivitygeodata>().Insert(model);
                             //save all changes bro
                           var i  =db.SaveChanges();
                            // transaction.Commit();
@@ -1109,7 +1110,7 @@ namespace Anewluv.Services.Members
 
         public string getlastloggedinstring(string logindate)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
@@ -1140,13 +1141,13 @@ namespace Anewluv.Services.Members
         //returns true if somone logged on
         public bool getuseronlinestatus(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
 
-                 return   db.GetRepository<profile>().getuseronlinestatus(model);
+                 return   db.Repository<profile>().getuseronlinestatus(model);
                 }
                 catch (Exception ex)
                 {
@@ -1175,14 +1176,14 @@ namespace Anewluv.Services.Members
         /// </summary>
         public bool checkifscreennamealreadyexists(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
 
                     //TO DO remove dd
-                 var dd =  db.GetRepository<profile>().checkifscreennamealreadyexists(model);
+                 var dd =  db.Repository<profile>().checkifscreennamealreadyexists(model);
                  return dd;
 
                 }
@@ -1217,13 +1218,13 @@ namespace Anewluv.Services.Members
 
         public bool checkifusernamealreadyexists(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
                     //IQueryable<profile> myQuery = default(IQueryable<profile>);
-                     return db.GetRepository<profile>().checkifusernamealreadyexists(model);
+                     return db.Repository<profile>().checkifusernamealreadyexists(model);
 
                   
                 }
@@ -1249,13 +1250,13 @@ namespace Anewluv.Services.Members
 
         public string validatesecurityansweriscorrect(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
                     IQueryable<profile> myQuery = default(IQueryable<profile>);
-                    myQuery =  db.GetRepository<profile>().Find().Where(p => p.id == model.profileid && p.securityanswer == model.securityanswer && p.lu_securityquestion.description == model.securityquestion);
+                    myQuery =  db.Repository<profile>().Queryable().Where(p => p.id == model.profileid && p.securityanswer == model.securityanswer && p.lu_securityquestion.description == model.securityquestion);
 
                     if (myQuery.Count() > 0)
                     {
@@ -1293,14 +1294,14 @@ namespace Anewluv.Services.Members
         /// </summary>
         public bool checkifactivationcodeisvalid(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
 
                     //Dim ctx As New Entities()
-                   return db.GetRepository<profile>().checkifactivationcodeisvalid(model);
+                   return db.Repository<profile>().checkifactivationcodeisvalid(model);
                    
                 }
                 catch (Exception ex)
@@ -1325,12 +1326,12 @@ namespace Anewluv.Services.Members
 
         public profile getprofilebyusername(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
-                    return db.GetRepository<profile>().getprofilebyusername(model);
+                    return db.Repository<profile>().getprofilebyusername(model);
                
 
                 }
@@ -1356,12 +1357,12 @@ namespace Anewluv.Services.Members
 
         public profile getprofilebyprofileid(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
-                    return db.GetRepository<profile>().getprofilebyprofileid(model);
+                    return db.Repository<profile>().getprofilebyprofileid(model);
 
                 }
                 catch (Exception ex)
@@ -1387,13 +1388,13 @@ namespace Anewluv.Services.Members
 
        public profile getprofilebyemailaddress(ProfileModel model)
        {
-           _unitOfWork.DisableProxyCreation = true;
+          
            using (var db = _unitOfWork)
            {
                try
                {
 
-                   return db.GetRepository<profile>().getprofilebyemailaddress(model);
+                   return db.Repository<profile>().getprofilebyemailaddress(model);
 
                }
                catch (Exception ex)
@@ -1423,12 +1424,12 @@ namespace Anewluv.Services.Members
         /// <returns></returns>
        public int? getprofileidbyusername(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
-                    return db.GetRepository<profile>().getprofilebyusername(model).id ;
+                    return db.Repository<profile>().getprofilebyusername(model).id ;
 
                 }
                 catch (Exception ex)
@@ -1453,13 +1454,13 @@ namespace Anewluv.Services.Members
 
         public int?  getprofileidbyopenid(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
 
-                    return db.GetRepository<profile>().getprofileidbyopenid(model).id ;
+                    return db.Repository<profile>().getprofileidbyopenid(model).id ;
                 }
                 catch (Exception ex)
                 {
@@ -1483,12 +1484,12 @@ namespace Anewluv.Services.Members
 
        public int? getprofileidbyscreenname(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
-                   return db.GetRepository<profile>().getprofilebyscreenname(model).id;
+                   return db.Repository<profile>().getprofilebyscreenname(model).id;
 
                 }
                 catch (Exception ex)
@@ -1513,7 +1514,7 @@ namespace Anewluv.Services.Members
 
        public int? getprofileidbyssessionid(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
@@ -1544,12 +1545,12 @@ namespace Anewluv.Services.Members
 
         public string getusernamebyprofileid(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
-                    return db.GetRepository<profile>().getprofilebyprofileid(model).username;
+                    return db.Repository<profile>().getprofilebyprofileid(model).username;
 
                 }
                 catch (Exception ex)
@@ -1575,13 +1576,13 @@ namespace Anewluv.Services.Members
 
         public string getscreennamebyprofileid(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
 
-                    return db.GetRepository<profile>().getprofilebyprofileid(model).screenname ;
+                    return db.Repository<profile>().getprofilebyprofileid(model).screenname ;
                 }
                 catch (Exception ex)
                 {
@@ -1606,12 +1607,12 @@ namespace Anewluv.Services.Members
 
         public string getscreennamebyusername(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
-                    return db.GetRepository<profile>().getprofilebyusername(model).screenname ;
+                    return db.Repository<profile>().getprofilebyusername(model).screenname ;
 
                 }
                 catch (Exception ex)
@@ -1638,12 +1639,12 @@ namespace Anewluv.Services.Members
 
         public bool checkifemailalreadyexists(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
-                  var dd = db.GetRepository<profile>().checkifemailalreadyexists(model);
+                  var dd = db.Repository<profile>().checkifemailalreadyexists(model);
 
                   return dd;
 
@@ -1672,12 +1673,12 @@ namespace Anewluv.Services.Members
         
         public string getgenderbyscreenname(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = false;
+          
             using (var db = _unitOfWork)
             {
                 try
                 {
-                    return db.GetRepository<profiledata>().getprofiledatabyscreenname(model).lu_gender.description;
+                    return db.Repository<profiledata>().getprofiledatabyscreenname(model).lu_gender.description;
                 }
                 catch (Exception ex)
                 {
@@ -1702,12 +1703,12 @@ namespace Anewluv.Services.Members
         
         public visiblitysetting getprofilevisibilitysettingsbyprofileid(ProfileModel model)
         {
-            _unitOfWork.DisableProxyCreation = true;
+           
             using (var db = _unitOfWork)
             {
                 try
                 {
-                   return  db.GetRepository<visiblitysetting>().getvisibilitysettingsbyprofileid(model);
+                   return  db.Repository<visiblitysetting>().getvisibilitysettingsbyprofileid(model);
                 }
                 catch (Exception ex)
                 {

@@ -23,6 +23,8 @@ using Nmedia.Infrastructure.Domain.Data;
 using Anewluv.Services.Contracts;
 using Anewluv.Caching;
 using System.Threading.Tasks;
+using Repository.Pattern.UnitOfWork;
+using Anewluv.DataExtentionMethods;
 
 
 namespace Anewluv.Services.Edit
@@ -34,8 +36,9 @@ namespace Anewluv.Services.Edit
     {
 
 
-        IUnitOfWorkAsync _unitOfWorkAsync;
-       // private Logging logger;
+        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        // private Logging logger;
+        private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
@@ -91,14 +94,14 @@ namespace Anewluv.Services.Edit
         public async Task<BasicSettingsModel> getbasicsettingsmodel(EditProfileModel editprofilemodel)
         {
 
-              _unitOfWorkAsync.DisableProxyCreation = true;
-         using (var db = _unitOfWorkAsync)
+            
+      
          {
              try
              {
                    var task = Task.Factory.StartNew(() =>
                     {
-                         profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
+                         profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
                          BasicSettingsModel model = new BasicSettingsModel();
 
                          //populate values here ok ?
@@ -154,21 +157,24 @@ namespace Anewluv.Services.Edit
         {
 
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+          
+         
             {
                 try
                 {
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
+
+                        profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
+
+                        //    .getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
 
                         AppearanceSettingsModel model = new AppearanceSettingsModel();
 
                         //12-26-2014 olawal added this to allow for multiple checkbox selections and checked etc
-                        var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(db);
-                        var ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(db);
+                        var hotfeaturelist = CachingFactory.SharedObjectHelper.gethotfeaturelist(_unitOfWorkAsync);
+                        var ethnicitylist = CachingFactory.SharedObjectHelper.getethnicitylist(_unitOfWorkAsync);
 
                         model.height = p.profiledata.height == null ? null : p.profiledata.height;
                         model.bodytype = p.profiledata.lu_bodytype == null ? null : p.profiledata.lu_bodytype;
@@ -185,7 +191,7 @@ namespace Anewluv.Services.Edit
                             //update the value as checked here on the list
                             model.ethnicitylist.First(d => d.id == ethnicity.id).selected = true;
                         }
-                       // model.hotfeaturelist = db.GetRepository<l>()
+                       // model.hotfeaturelist = _unitOfWorkAsync.Repository<l>()
                         //foreach (var item in model.hotfeaturelist)
                         //{
                         //    model.hotfeaturelist.Add(item);
@@ -235,8 +241,8 @@ namespace Anewluv.Services.Edit
         public async Task<CharacterSettingsModel> getcharactersettingsmodel(EditProfileModel editprofilemodel)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+          
+         
             {
                 try
                 {
@@ -244,14 +250,14 @@ namespace Anewluv.Services.Edit
                       var task = Task.Factory.StartNew(() =>
                     {
 
-                    profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
+                    profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
 
-                    //   profile p = db.profiles.Where(z => z.id == editprofilemodel.intprofileid).FirstOrDefault();
+                    //   profile p = _unitOfWorkAsync.profiles.Where(z => z.id == editprofilemodel.intprofileid).FirstOrDefault();
                     CharacterSettingsModel model = new CharacterSettingsModel();
 
                     model.diet = p.profiledata.lu_diet;
                     model.humor = p.profiledata.lu_humor;
-                    var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(db);
+                    var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
                     model.hobbylist = hobbylist;
 
                     //update the list with the items that are selected.
@@ -263,7 +269,7 @@ namespace Anewluv.Services.Edit
 
 
                     ////populiate the hobby list, remeber this comes from the metadata link so you have to drill down
-                    ////var allhobbies = db.lu_hobby;
+                    ////var allhobbies = _unitOfWorkAsync.lu_hobby;
                     //foreach (var item in model.hobbylist)
                     //{
                     //    model.hobbylist.Add(item);
@@ -305,16 +311,18 @@ namespace Anewluv.Services.Edit
         public async Task<LifeStyleSettingsModel> getlifestylesettingsmodel(EditProfileModel editprofilemodel)
         {
 
-            _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+          
+         
             {
                 try
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
-                    profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
+                    profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
+                        
+                    
 
-                    var lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(db);
+                    var lookingforlist = CachingFactory.SharedObjectHelper.getlookingforlist(_unitOfWorkAsync);
                     
                     LifeStyleSettingsModel model = new LifeStyleSettingsModel();
                     model.educationlevel = p.profiledata.lu_educationlevel;
@@ -384,10 +392,10 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> membereditallsettings(EditProfileModel editprofilemodel)
         {
 
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+               
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
@@ -395,15 +403,15 @@ namespace Anewluv.Services.Edit
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
+                            profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
 
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
 
-                            messages = (updatememberbasicsettings(editprofilemodel.basicsettings, p, messages, db));
-                            messages = (updatememberappearancesettings(editprofilemodel.appearancesettings, p, messages, db));
-                            messages = (updatemembercharactersettings (editprofilemodel.charactersettings, p, messages, db));
-                            messages = (updatememberlifestylesettings(editprofilemodel.lifestylesettings, p, messages, db));
+                            messages = (updatememberbasicsettings(editprofilemodel.basicsettings, p, messages,_unitOfWorkAsync));
+                            messages = (updatememberappearancesettings(editprofilemodel.appearancesettings, p, messages, _unitOfWorkAsync));
+                            messages = (updatemembercharactersettings (editprofilemodel.charactersettings, p, messages, _unitOfWorkAsync));
+                            messages = (updatememberlifestylesettings(editprofilemodel.lifestylesettings, p, messages, _unitOfWorkAsync));
 
                             if (messages.errormessages.Count > 0)
                             {
@@ -441,24 +449,24 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> membereditbasicsettings(EditProfileModel editprofilemodel)
         {
 
-          //  _unitOfWorkAsync.DisableProxyCreation = true;
-            using (var db = _unitOfWorkAsync)
+          //
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+               
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
                          var task = Task.Factory.StartNew(() =>
                     {
 
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).FirstOrDefault();
+                        profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
 
                         //create a new messages object
                         AnewluvMessages messages = new AnewluvMessages();
 
 
-                        messages = (updatememberbasicsettings(editprofilemodel.basicsettings, p, messages, db));
+                        messages = (updatememberbasicsettings(editprofilemodel.basicsettings, p, messages, _unitOfWorkAsync));
                         //  messages=(membereditBasicSettingsPage2Update(newmodel,profileid ,messages));
 
 
@@ -495,10 +503,10 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> membereditappearancesettings(EditProfileModel editprofilemodel)
         {
 
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+               
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
@@ -510,9 +518,9 @@ namespace Anewluv.Services.Edit
 
 
                         //get the profile details :
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).First();
+                        profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
 
-                        messages = (updatememberappearancesettings(editprofilemodel.appearancesettings, p, messages,db));
+                        messages = (updatememberappearancesettings(editprofilemodel.appearancesettings, p, messages,_unitOfWorkAsync));
                         // messages = (membereditAppearanceSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditAppearanceSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditAppearanceSettingsPage4Update(newmodel, profileid, messages));
@@ -553,10 +561,10 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> membereditcharactersettings(EditProfileModel editprofilemodel)
         {
 
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+               
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
@@ -569,9 +577,9 @@ namespace Anewluv.Services.Edit
 
 
                         //get the profile details :
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).First();
+                        profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid });
 
-                        messages = (updatemembercharactersettings(editprofilemodel.charactersettings, p, messages, db));
+                        messages = (updatemembercharactersettings(editprofilemodel.charactersettings, p, messages, _unitOfWorkAsync));
                         // messages = (membereditcharacterSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditcharacterSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditcharacterSettingsPage4Update(newmodel, profileid, messages));
@@ -612,10 +620,10 @@ namespace Anewluv.Services.Edit
         public async Task<AnewluvMessages> membereditlifestylesettings(EditProfileModel editprofilemodel)
         {
 
-            using (var db = _unitOfWorkAsync)
+         
             {
-                db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+               
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
@@ -625,10 +633,11 @@ namespace Anewluv.Services.Edit
                         //create a new messages object
                         AnewluvMessages messages = new AnewluvMessages();
                         //get the profile details :
-                        profile p = db.GetRepository<profile>().Find().Where(z => z.id == editprofilemodel.profileid).First();
+                        profile p = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = editprofilemodel.profileid});
+                          
 
 
-                        messages = (updatememberlifestylesettings(editprofilemodel.lifestylesettings, p, messages,db));
+                        messages = (updatememberlifestylesettings(editprofilemodel.lifestylesettings, p, messages,_unitOfWorkAsync));
                         // messages = (membereditlifestyleSettingsPage2Update(newmodel, profileid, messages));
                         // messages = (membereditlifestyleSettingsPage3Update(newmodel, profileid, messages));
                         //  messages = (membereditlifestyleSettingsPage4Update(newmodel, profileid, messages));
@@ -671,12 +680,12 @@ namespace Anewluv.Services.Edit
         #region "Private update methods that can be re-used"
 
         //TO DO add validation and pass back via messages , IE compare old settings to new i.e change nothing if nothing changed
-        private AnewluvMessages updatememberbasicsettings(BasicSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync db)
+        private AnewluvMessages updatememberbasicsettings(BasicSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync _unitOfWorkAsync)
         {
 
             try
             {
-                //  profile p = db.profiles.Where(z => z.id == profileid).First();
+                //  profile p = _unitOfWorkAsync.profiles.Where(z => z.id == profileid).First();
 
                 //TO DO
                 //Up here we will check to see if the values have not changed 
@@ -699,7 +708,7 @@ namespace Anewluv.Services.Edit
                 p.profiledata.birthdate = birthdate;
                 p.profiledata.mycatchyintroLine = MyCatchyIntroLine;
 
-                db.Update(p);
+             _unitOfWorkAsync.Repository<profile>().Update(p);
 
 
                 //TOD DO
@@ -721,13 +730,13 @@ namespace Anewluv.Services.Edit
         //TO DO add validation and pass back via messages 
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatememberappearancesettings(AppearanceSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync db)
+        private AnewluvMessages updatememberappearancesettings(AppearanceSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             bool nothingupdated = true;
 
             try
             {
-                //profile p = db.profiles.Where(z => z.id == profileid).First();
+                //profile p = _unitOfWorkAsync.profiles.Where(z => z.id == profileid).First();
                 //sample code for determining weather to edit an item or not or determin if a value changed'
                 //nothingupdated = (newmodel.height  == p.profiledata.lu_height) ? false : true;
 
@@ -755,14 +764,14 @@ namespace Anewluv.Services.Edit
                 //if (height.HasValue == true) p.profiledata.lu_height = height;
 
                 if (hotfeatures.Count > 0)
-                    updatemembermetatdatahotfeature(hotfeatures, p.profilemetadata, db);
+                    updatemembermetatdatahotfeature(hotfeatures, p.profilemetadata, _unitOfWorkAsync);
                 if (ethicities.Count > 0)
-                    updatemembermetatdataethnicity(ethicities, p.profilemetadata, db);
+                    updatemembermetatdataethnicity(ethicities, p.profilemetadata, _unitOfWorkAsync);
 
 
-                //db.Entry(profiledata).State = EntityState.Modified;
-                db.Update(p);
-               db.SaveChanges();
+                //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
+             _unitOfWorkAsync.Repository<profile>().Update(p);
+               _unitOfWorkAsync.SaveChanges();
 
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
@@ -787,13 +796,13 @@ namespace Anewluv.Services.Edit
         }
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatemembercharactersettings(CharacterSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync db)
+        private AnewluvMessages updatemembercharactersettings(CharacterSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             bool nothingupdated = true;
 
             try
             {
-                // profile p = db.profiles.Where(z => z.id == profileid).First();
+                // profile p = _unitOfWorkAsync.profiles.Where(z => z.id == profileid).First();
                 //sample code for determining weather to edit an item or not or determin if a value changed'
                 //nothingupdated = (newmodel.diet  == p.profiledata.lu_diet) ? false : true;
 
@@ -826,14 +835,14 @@ namespace Anewluv.Services.Edit
                 if (religion != null) p.profiledata.lu_religion = religion;
                 if (religiousattendance != null) p.profiledata.lu_religiousattendance = religiousattendance;
                 if (hobylist.Count > 0)
-                    updatemembermetatdatahobby(hobylist, p.profilemetadata, db);
+                    updatemembermetatdatahobby(hobylist, p.profilemetadata, _unitOfWorkAsync);
 
 
 
-                //db.Entry(profiledata).State = EntityState.Modified;
-                // int changes = db.SaveChanges();
-                db.Update(p);
-               db.SaveChanges();
+                //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
+                // int changes = _unitOfWorkAsync.SaveChanges();
+             _unitOfWorkAsync.Repository<profile>().Update(p);
+               _unitOfWorkAsync.SaveChanges();
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //update session too just in case
@@ -859,13 +868,13 @@ namespace Anewluv.Services.Edit
 
 
         //TO DO send back the messages on errors and when nothing is changed
-        private AnewluvMessages updatememberlifestylesettings(LifeStyleSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync db)
+        private AnewluvMessages updatememberlifestylesettings(LifeStyleSettingsModel newmodel, profile p, AnewluvMessages messages, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             bool nothingupdated = true;
 
             try
             {
-                // profile p = db.profiles.Where(z => z.id == profileid).First();
+                // profile p = _unitOfWorkAsync.profiles.Where(z => z.id == profileid).First();
                 //sample code for determining weather to edit an item or not or determin if a value changed'
                 //nothingupdated = (newmodel.educationlevel  == p.profiledata.lu_educationlevel) ? false : true;
 
@@ -898,14 +907,14 @@ namespace Anewluv.Services.Edit
 
                 //checkbos item updates 
                 if (lookingfors.Count > 0)
-                    updatemembermetatdatalookingfor(lookingfors, p.profilemetadata, db);
+                    updatemembermetatdatalookingfor(lookingfors, p.profilemetadata, _unitOfWorkAsync);
 
 
 
-                //db.Entry(profiledata).State = EntityState.Modified;
-                // int changes = db.SaveChanges();
-                db.Update(p);
-               db.SaveChanges();
+                //_unitOfWorkAsync.Entry(profiledata).State = EntityState.Modified;
+                // int changes = _unitOfWorkAsync.SaveChanges();
+             _unitOfWorkAsync.Repository<profile>().Update(p);
+               _unitOfWorkAsync.SaveChanges();
                 //TOD DO
                 //wes should probbaly re-generate the members matches as well here but it too much overhead , only do it once when the user re-logs in and add a manual button to update thier mathecs when edit is complete
                 //update session too just in case
@@ -935,7 +944,7 @@ namespace Anewluv.Services.Edit
 
 
         //profiledata ethnicity
-        private void updatemembermetatdataethnicity(List<lu_ethnicity> slectedethnicities, profilemetadata currentprofilemetadata,IUnitOfWorkAsync db)
+        private void updatemembermetatdataethnicity(List<lu_ethnicity> slectedethnicities, profilemetadata currentprofilemetadata,IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (slectedethnicities == null)
             {
@@ -944,10 +953,10 @@ namespace Anewluv.Services.Edit
             }
             //build the search settings gender object
             // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
-            //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+            //SearchSettings_showme CurrentSearchSettings_showme = _unitOfWorkAsync.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
-            foreach (var ethnicity in db.GetRepository<lu_ethnicity>().Find().ToList())
+            foreach (var ethnicity in _unitOfWorkAsync.Repository<lu_ethnicity>().Queryable().ToList())
             {
                 //new logic : if this item was selected and is not already in the search settings gender values add it 
                 if ((!currentprofilemetadata.profiledata_ethnicity.Where(z => z.ethnicty_id == ethnicity.id).Any()))
@@ -956,16 +965,16 @@ namespace Anewluv.Services.Edit
                     var temp = new profiledata_ethnicity();
                     temp.id = ethnicity.id;
                     temp.profile_id = currentprofilemetadata.profile_id;
-                    db.Add(temp);
+                    _unitOfWorkAsync.Repository<profiledata_ethnicity>().Insert(temp);
 
                 }
                 else
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = db.GetRepository<profiledata_ethnicity>().Find().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.ethnicty_id == ethnicity.id).First();
+                    var temp = _unitOfWorkAsync.Repository<profiledata_ethnicity>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.ethnicty_id == ethnicity.id).First();
                     if (temp != null)
-                        db.Remove(temp);                  
+                        _unitOfWorkAsync.Repository<profiledata_ethnicity>().Delete(temp);               
                 }
 
 
@@ -975,7 +984,7 @@ namespace Anewluv.Services.Edit
           
         }
         //profiledata hotfeature
-        private void updatemembermetatdatahotfeature(List<lu_hotfeature> selectedhotfeature, profilemetadata currentprofilemetadata,IUnitOfWorkAsync db)
+        private void updatemembermetatdatahotfeature(List<lu_hotfeature> selectedhotfeature, profilemetadata currentprofilemetadata,IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (selectedhotfeature == null)
             {
@@ -984,13 +993,13 @@ namespace Anewluv.Services.Edit
             }
             //build the search settings gender object
             // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
-            //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+            //SearchSettings_showme CurrentSearchSettings_showme = _unitOfWorkAsync.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
             // var selectedshowmeHS = new HashSet<int?>(selectedshowme);
             //get the values for this members searchsettings showme
             //var SearchSettingsshowme = new HashSet<int?>(currentsearchsetting.showme.Select(c => c.id));
-            foreach (var hotfeature in db.GetRepository<lu_hotfeature>().Find().ToList())
+            foreach (var hotfeature in _unitOfWorkAsync.Repository<lu_hotfeature>().Queryable().ToList())
             {
                 if (selectedhotfeature.Contains(hotfeature))
                 {
@@ -1002,7 +1011,7 @@ namespace Anewluv.Services.Edit
                         var temp = new profiledata_hotfeature();
                         temp.id = hotfeature.id;
                         temp.profile_id = currentprofilemetadata.profile_id;
-                        db.Add(temp);
+                        _unitOfWorkAsync.Repository<profiledata_hotfeature>().Insert(temp);
 
                     }
                 }
@@ -1010,15 +1019,15 @@ namespace Anewluv.Services.Edit
                 { //exists means we want to remove it
                     if (currentprofilemetadata.profiledata_hotfeature.Any(p => p.id == hotfeature.id))
                     {
-                        var temp = db.GetRepository<profiledata_hotfeature>().Find().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hotfeature_id == hotfeature.id).First();
-                        db.Remove(temp);
+                        var temp = _unitOfWorkAsync.Repository<profiledata_hotfeature>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hotfeature_id == hotfeature.id).First();
+                        _unitOfWorkAsync.Repository<profiledata_lookingfor>().Delete(temp);
 
                     }
                 }
             }
         }
         //profiledata hobby
-        private void updatemembermetatdatahobby(List<lu_hobby> selectedhobby, profilemetadata currentprofilemetadata,IUnitOfWorkAsync db)
+        private void updatemembermetatdatahobby(List<lu_hobby> selectedhobby, profilemetadata currentprofilemetadata,IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (selectedhobby == null)
             {
@@ -1027,13 +1036,13 @@ namespace Anewluv.Services.Edit
             }
             //build the search settings gender object
             // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
-            //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+            //SearchSettings_showme CurrentSearchSettings_showme = _unitOfWorkAsync.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
             // var selectedshowmeHS = new HashSet<int?>(selectedshowme);
             //get the values for this members searchsettings showme
             //var SearchSettingsshowme = new HashSet<int?>(currentsearchsetting.showme.Select(c => c.id));
-            foreach (var hobby in db.GetRepository<lu_hobby>().Find().ToList())
+            foreach (var hobby in _unitOfWorkAsync.Repository<lu_hobby>().Queryable().ToList())
             {
                 if (selectedhobby.Contains(hobby))
                 {
@@ -1045,7 +1054,7 @@ namespace Anewluv.Services.Edit
                         var temp = new profiledata_hobby();
                         temp.id = hobby.id;
                         temp.profile_id = currentprofilemetadata.profile_id;
-                        db.Add(temp);
+                        _unitOfWorkAsync.Repository<profiledata_hobby>().Insert(temp);
 
                     }
                 }
@@ -1053,15 +1062,15 @@ namespace Anewluv.Services.Edit
                 { //exists means we want to remove it
                     if (currentprofilemetadata.profiledata_hobby.Any(p => p.id == hobby.id))
                     {
-                        var temp =  db.GetRepository<profiledata_hobby>().Find().ToList().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hobby_id == hobby.id).First();
-                        db.Remove(temp);
+                        var temp =  _unitOfWorkAsync.Repository<profiledata_hobby>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hobby_id == hobby.id).First();
+                        _unitOfWorkAsync.Repository<profiledata_hobby>().Delete(temp);
 
                     }
                 }
             }
         }
         //profiledata lookingfor
-        private void updatemembermetatdatalookingfor(List<lu_lookingfor> selectedlookingfor, profilemetadata currentprofilemetadata, IUnitOfWorkAsync db)
+        private void updatemembermetatdatalookingfor(List<lu_lookingfor> selectedlookingfor, profilemetadata currentprofilemetadata, IUnitOfWorkAsync _unitOfWorkAsync)
         {
             if (selectedlookingfor == null)
             {
@@ -1070,13 +1079,13 @@ namespace Anewluv.Services.Edit
             }
             //build the search settings gender object
             // int SearchSettingsID = currentsearchsetting.id;//profiledata.searchsettings.FirstOrDefault().id;
-            //SearchSettings_showme CurrentSearchSettings_showme = db.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
+            //SearchSettings_showme CurrentSearchSettings_showme = _unitOfWorkAsync.SearchSettings_showme.Where(s => s.SearchSettingsID == SearchSettingsID).FirstOrDefault();
 
 
             // var selectedshowmeHS = new HashSet<int?>(selectedshowme);
             //get the values for this members searchsettings showme
             //var SearchSettingsshowme = new HashSet<int?>(currentsearchsetting.showme.Select(c => c.id));
-            foreach (var lookingfor in db.GetRepository<lu_lookingfor>().Find().ToList())
+            foreach (var lookingfor in _unitOfWorkAsync.Repository<lu_lookingfor>().Queryable().ToList())
             {
                 if (selectedlookingfor.Contains(lookingfor))
                 {
@@ -1088,7 +1097,7 @@ namespace Anewluv.Services.Edit
                         var temp = new profiledata_lookingfor();
                         temp.id = lookingfor.id;
                         temp.profile_id = currentprofilemetadata.profile_id;
-                        db.Add(temp);
+                        _unitOfWorkAsync.Repository < profiledata_lookingfor>().Insert(temp);
 
                     }
                 }
@@ -1096,8 +1105,8 @@ namespace Anewluv.Services.Edit
                 { //exists means we want to remove it
                     if (currentprofilemetadata.profiledata_lookingfor.Any(p => p.id == lookingfor.id))
                     {
-                        var temp = db.GetRepository<profiledata_lookingfor>().Find().ToList().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.lookingfor_id == lookingfor.id).First();
-                        db.Remove(temp);
+                        var temp = _unitOfWorkAsync.Repository<profiledata_lookingfor>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.lookingfor_id == lookingfor.id).First();
+                        _unitOfWorkAsync.Repository<profiledata_lookingfor>().Delete(temp);
 
                     }
                 }

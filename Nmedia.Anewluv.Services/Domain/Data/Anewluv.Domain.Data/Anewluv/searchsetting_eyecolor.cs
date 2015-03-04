@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class searchsetting_eyecolor
+    public partial class searchsetting_eyecolor : Repository.Pattern.Ef6.Entity
     {
         public int id { get; set; }
         public Nullable<int> eyecolor_id { get; set; }

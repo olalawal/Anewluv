@@ -5,7 +5,8 @@ using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-    [DataContract] public partial class lu_employmentstatus
+    [DataContract]
+    public partial class lu_employmentstatus : Repository.Pattern.Ef6.Entity
     {
         public lu_employmentstatus()
         {
