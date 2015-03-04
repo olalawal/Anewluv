@@ -89,7 +89,7 @@ namespace Nmedia.Services.Logging
                             logEntry.enviroment = enviroment;
 
                             _unitOfWorkAsync.Repository<log>().Insert(logEntry);
-                            var i = _unitOfWorkAsync.Commit();
+                            var i = _unitOfWorkAsync.SaveChanges();
                        // transaction.Commit();
                         });
                          // await task;

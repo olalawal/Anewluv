@@ -990,6 +990,11 @@ namespace Anewluv.Services.Mapping
                         {
                           perfectmatchsearchsettings=  profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(new ProfileModel { profileid = Model.profileid }, db);
                         }
+                        else
+                        {
+                            int searchid = model.profile.profilemetadata.searchsettings.FirstOrDefault().id;
+                            perfectmatchsearchsettings = profileextentionmethods.getsearchsettingsbysearchid(searchid, db);
+                        }
 
 
                         //set default perfect match distance as 100 for now later as we get more members lower
@@ -1022,7 +1027,6 @@ namespace Anewluv.Services.Mapping
                         DateTime today = DateTime.Today;
                         DateTime max = today.AddYears(-(intAgeFrom + 1));
                         DateTime min = today.AddYears(-intAgeTo);
-
 
 
                         //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
@@ -1116,7 +1120,7 @@ namespace Anewluv.Services.Mapping
                         //11/20/2011 handle case where  no profiles were found
                         if (MemberSearchViewmodels.Count() == 0)
                         {
-                            var dd = getquickmatcheswhenquickmatchesempty(model, Model.page, Model.numberperpage, db, geodb); //.Take(maxemailmatches).ToList();
+                            var dd = getquickmatcheswhenquickmatchesempty(model,perfectmatchsearchsettings, Model.page, Model.numberperpage, db, geodb); //.Take(maxemailmatches).ToList();
                             dd.results.Take(maxemailmatches);
                             return dd;
                         }
@@ -1302,7 +1306,7 @@ namespace Anewluv.Services.Mapping
                         //11/20/2011 handle case where  no profiles were found
                         if (MemberSearchViewmodels.Count() == 0)
                         {
-                            var dd = getquickmatcheswhenquickmatchesempty(model,Model.page,Model.numberperpage,db,geodb); //.Take(maxemailmatches).ToList();
+                            var dd = getquickmatcheswhenquickmatchesempty(model,perfectmatchsearchsettings,Model.page,Model.numberperpage,db,geodb); //.Take(maxemailmatches).ToList();
                             dd.results.Take(maxemailmatches);
                             return dd;
                         }
@@ -1729,7 +1733,7 @@ namespace Anewluv.Services.Mapping
         }
 
         //TO DO clean up and just use gener and newest
-        internal SearchResultsViewModel getquickmatcheswhenquickmatchesempty(MembersViewModel model,int? page, int? numberperpage, IUnitOfWorkAsync db,IGeoDataStoredProcedures geodb)
+        internal SearchResultsViewModel getquickmatcheswhenquickmatchesempty(MembersViewModel model,searchsetting perfectmatchsearchsettings,int? page, int? numberperpage, IUnitOfWorkAsync db,IGeoDataStoredProcedures geodb)
         {
 
         
@@ -1747,7 +1751,7 @@ namespace Anewluv.Services.Mapping
                // MembersViewModel model = membermappingextentions.mapmember(profilemodel,db,geodb);
 
                 //get search sttings from DB
-                searchsetting perfectmatchsearchsettings = model.profile.profilemetadata.searchsettings.FirstOrDefault();
+              
                 //set default perfect match distance as 100 for now later as we get more members lower
                 //TO DO move this to a _datingcontext setting or resourcer file
 
@@ -1780,12 +1784,14 @@ namespace Anewluv.Services.Mapping
                 //requery all the has tbls
                 HashSet<int> LookingForGenderValues = new HashSet<int>();
                 LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_gender.Select(c => c.id)) : LookingForGenderValues;
-
+              
+                
+                var repo = db.Repository<profiledata>().Query(p => p.birthdate > min && p.birthdate <= max &&
+                    p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).Select().ToList();
 
                 //  where (LookingForGenderValues.Count !=null || LookingForGenderValues.Contains(x.GenderID)) 
                 //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
-                var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
-                    p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).ToList()
+                var MemberSearchViewmodels = (from x in repo
                                 .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender_id.GetValueOrDefault())).ToList() //using whereIF predicate function 
                                 .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.lu_gender.id)).ToList()
 

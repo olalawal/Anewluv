@@ -41,15 +41,14 @@ namespace Anewluv.Services.MemberActions
         //private IPromotionRepository  promotionrepository;
 
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
-        private readonly IUnitOfWorkAsync _spatial_unitOfWorkAsync;
+       // private readonly IUnitOfWorkAsync _spatial_unitOfWorkAsync;
         private readonly IGeoDataStoredProcedures _storedProcedures;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public MemberActionsService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork,
-            [InSpatialEntitesScope]IUnitOfWorkAsync spatial_unitOfWork, IGeoDataStoredProcedures storedProcedures)
+        public MemberActionsService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork, [InSpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)
@@ -63,8 +62,7 @@ namespace Anewluv.Services.MemberActions
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWorkAsync = unitOfWork;
-            _spatial_unitOfWorkAsync = spatial_unitOfWork;
+            _unitOfWorkAsync = unitOfWork;           
             _storedProcedures = storedProcedures;
             //disable proxy stuff by default
             //_unitOfWorkAsync.DisableProxyCreation = true;
@@ -279,7 +277,7 @@ namespace Anewluv.Services.MemberActions
 
 
             ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-            var geodb = _spatial_unitOfWorkAsync;
+           
              var db = _unitOfWorkAsync;
             {
 
@@ -379,7 +377,7 @@ namespace Anewluv.Services.MemberActions
        
 
           ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-          var geodb = _spatial_unitOfWorkAsync;
+         
           var db = _unitOfWorkAsync;
          {
              try
@@ -463,7 +461,7 @@ namespace Anewluv.Services.MemberActions
             
 
                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-               var geodb = _spatial_unitOfWorkAsync;
+              
           var db = _unitOfWorkAsync;
          {
              try
@@ -1309,7 +1307,7 @@ namespace Anewluv.Services.MemberActions
           
 
                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-               var geodb = _spatial_unitOfWorkAsync;
+              
                var db = _unitOfWorkAsync;
          {
              try
@@ -1392,7 +1390,7 @@ namespace Anewluv.Services.MemberActions
 
           
                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-               var geodb = _spatial_unitOfWorkAsync;
+              
           var db = _unitOfWorkAsync;
          {
              try
@@ -1475,7 +1473,7 @@ namespace Anewluv.Services.MemberActions
         
 
             ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-              var geodb = _spatial_unitOfWorkAsync;
+             
               var db = _unitOfWorkAsync;
          //using (var db = _unitOfWorkAsync)
          //{
@@ -2236,7 +2234,7 @@ namespace Anewluv.Services.MemberActions
 
 
                 ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-                var geodb = _spatial_unitOfWorkAsync;
+               
           var db = _unitOfWorkAsync;
          {
              try
@@ -2316,7 +2314,7 @@ namespace Anewluv.Services.MemberActions
           
 
                 ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-                var geodb = _spatial_unitOfWorkAsync;
+               
           var db = _unitOfWorkAsync;
          {
              try
@@ -3030,7 +3028,7 @@ namespace Anewluv.Services.MemberActions
          
 
                 ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-                var geodb = _spatial_unitOfWorkAsync;
+               
           var db = _unitOfWorkAsync;
          {
              try
@@ -3120,7 +3118,7 @@ namespace Anewluv.Services.MemberActions
            
 
                 ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-                var geodb = _spatial_unitOfWorkAsync;
+               
           var db = _unitOfWorkAsync;
          {
              try
@@ -3205,7 +3203,7 @@ namespace Anewluv.Services.MemberActions
 
             
                 ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
-                var geodb = _spatial_unitOfWorkAsync;
+               
           var db = _unitOfWorkAsync;
          {
              try
@@ -3271,11 +3269,7 @@ namespace Anewluv.Services.MemberActions
                  string ErrorDetail = "ErrorMessage: " + ex.Message;
                  throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
              }
-             finally
-             {
-                // Api.DisposeMemberMapperService();
-                 geodb.Dispose();
-             }
+       
 
 
          }

@@ -252,7 +252,7 @@ namespace Nmedia.Services.Notification
                         message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
                         message.sendattempts = message.body != null ? 1 : 0;
                         _unitOfWorkAsync.Repository<message>().Insert(message);
-                        var j = _unitOfWorkAsync.Commit();
+                        var j = _unitOfWorkAsync.SaveChanges();
                        // transaction.Commit();
                         });
                        // return task ;
@@ -355,7 +355,7 @@ namespace Nmedia.Services.Notification
                            // int j = db.Commit();
 
                             _unitOfWorkAsync.Repository<message>().Insert(message);
-                            var j = _unitOfWorkAsync.Commit();
+                            var j = _unitOfWorkAsync.SaveChanges();
                            // transaction.Commit();
 
                           

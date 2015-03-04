@@ -124,7 +124,7 @@ namespace Anewluv.DataExtentionMethods
                     // var NotApproved = membereditRepository.GetApproved(MyPhotos, "No", page, ps);
                     // var Private = membereditRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
                     model.profilephotos = new PhotoViewModel();
-                    int something = (int)photoformatEnum.Thumbnail;
+                   // int something = (int)photoformatEnum.Thumbnail;
                     if (allphotos == true)
                     {
 
@@ -562,7 +562,7 @@ namespace Anewluv.DataExtentionMethods
                 model.mylatitude = profile.profiledata.latitude.ToString(); //model.Lattitude
                 model.mylongitude = profile.profiledata.longitude.ToString();
                 //update 9-21-2011 get fro search settings
-                model.maxdistancefromme = profile.profilemetadata.searchsettings != null ? profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
+               // model.maxdistancefromme = profile.profilemetadata.searchsettings != null ? profile.profilemetadata.searchsettings.FirstOrDefault().distancefromme.GetValueOrDefault() : 500;
 
 
 
