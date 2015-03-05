@@ -49,6 +49,7 @@
     <Compile Include="mediaextentionmethods.cs" />
     <Compile Include="profileextentionmethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="searchsettingsextentions.cs" />
     <Compile Include="spatialextentions.cs" />
   </ItemGroup>
   <ItemGroup>

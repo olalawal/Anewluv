@@ -23,6 +23,7 @@ using Nmedia.Infrastructure.Domain.Data.log;
 using Anewluv.Caching;
 using Nmedia.Infrastructure.DTOs;
 using Repository.Pattern.UnitOfWork;
+using Anewluv.DataExtentionMethods;
 
 
 namespace Anewluv.Services.Edit
@@ -149,8 +150,8 @@ namespace Anewluv.Services.Edit
                       //  searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().Queryable().Where(z => z.id == model.searchid || z.profile_id == model.profileid && z.searchname == model.searchname).FirstOrDefault();
 
 
-
-                        searchsetting p = filtersearchsettings(searchmodel, _unitOfWorkAsync);
+                       
+                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
                       
                         searchmodel.basicsearchsettings = this.getbasicsearchsettings(p, _unitOfWorkAsync);
                         searchmodel.lifestylesearchsettings = this.getlifestylesearchsettings(p, _unitOfWorkAsync);
@@ -195,7 +196,7 @@ namespace Anewluv.Services.Edit
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                        searchsetting p = filtersearchsettings(searchmodel, _unitOfWorkAsync);
+                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
 
                       
 
@@ -232,7 +233,7 @@ namespace Anewluv.Services.Edit
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        searchsetting p = filtersearchsettings(searchmodel, _unitOfWorkAsync);
+                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
                         return this.getappearancesearchsettings(p, _unitOfWorkAsync);
 
                     });
@@ -266,7 +267,7 @@ namespace Anewluv.Services.Edit
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        searchsetting p = filtersearchsettings(searchmodel, _unitOfWorkAsync);
+                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
                         return this.getcharactersearchsettings(p, _unitOfWorkAsync);
 
                     });
@@ -299,7 +300,7 @@ namespace Anewluv.Services.Edit
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        searchsetting p = filtersearchsettings(searchmodel, _unitOfWorkAsync);
+                        searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(searchmodel);
                         return this.getlifestylesearchsettings(p, _unitOfWorkAsync);
 
                     });
@@ -342,10 +343,11 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
 
+                            
 
                             //get the profile details :
                             //AnewluvMessages messages = new AnewluvMessages();
-                            searchsetting p = this.filtersearchsettings(model, _unitOfWorkAsync);
+                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(model);
                             messages = (updatebasicsearchsettings(model.basicsearchsettings,p, messages, _unitOfWorkAsync));
                             messages = (updateappearancesearchsettings(model.appearancesearchsettings, p, messages, _unitOfWorkAsync));
                             messages = (updatecharactersearchsettings(model.charactersearchsettings, p, messages, _unitOfWorkAsync));
@@ -403,7 +405,7 @@ namespace Anewluv.Services.Edit
                             AnewluvMessages messages = new AnewluvMessages();
 
 
-                            searchsetting p = this.filtersearchsettings(model, _unitOfWorkAsync);
+                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(model);
                             messages = (updatebasicsearchsettings(model.basicsearchsettings, p, messages, _unitOfWorkAsync));
                            
 
@@ -456,7 +458,7 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
 
-                            searchsetting p = this.filtersearchsettings(model, _unitOfWorkAsync);                       
+                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(model);                       
                             messages = (updateappearancesearchsettings(model.appearancesearchsettings, p, messages, _unitOfWorkAsync));                          
 
                             if (messages.errormessages.Count > 0)
@@ -509,7 +511,7 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
 
-                            searchsetting p = this.filtersearchsettings(model, _unitOfWorkAsync);                         
+                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(model);                         
                             messages = (updatecharactersearchsettings(model.charactersearchsettings, p, messages, _unitOfWorkAsync));
                           
 
@@ -562,7 +564,7 @@ namespace Anewluv.Services.Edit
                             //create a new messages object
                             AnewluvMessages messages = new AnewluvMessages();
                             //get the profile details :
-                            searchsetting p = this.filtersearchsettings(model, _unitOfWorkAsync);                          
+                            searchsetting p = _unitOfWorkAsync.Repository<searchsetting>().filtersearchsettings(model);                          
                             messages = (updatelifestylesearchsettings(model.lifestylesearchsettings, p, messages, _unitOfWorkAsync));
 
                             if (messages.errormessages.Count > 0)
@@ -604,69 +606,7 @@ namespace Anewluv.Services.Edit
 
         #region "private get methods for reuses"
 
-        //generic filtering function we can reuse
-        private searchsetting filtersearchsettings (SearchSettingsModel searchmodel,IUnitOfWorkAsync _unitOfWorkAsync)
-        {
-
-            try
-            {
-                //This query assumes that one search is always called default and cannot be deleted dont like that
-                List<searchsetting> allsearchsettings = new List<searchsetting>();
-                searchsetting p = new searchsetting();
-                
-                //default handling for empty profile ID and other search data
-                if (searchmodel == null) return p;
-
-                allsearchsettings = _unitOfWorkAsync.Repository<searchsetting>().Query
-                (z => (searchmodel.searchid != 0 && z.id == searchmodel.searchid) ||
-                (searchmodel.profileid != 0 && (z.profile_id == searchmodel.profileid)))
-                .Include(x=>x.profilemetadata)
-                .Include(y=>y.searchsetting_bodytype)
-                .Include(y => y.searchsetting_diet)
-                .Include(y => y.searchsetting_drink)
-                .Include(y => y.searchsetting_educationlevel)
-                .Include(y => y.searchsetting_employmentstatus)
-                .Include(y => y.searchsetting_ethnicity)
-                .Include(y => y.searchsetting_exercise)
-                .Include(y => y.searchsetting_eyecolor)
-                .Include(y => y.searchsetting_gender)
-                .Include(y => y.searchsetting_haircolor)
-                .Include(y => y.searchsetting_havekids)
-                .Include(y => y.searchsetting_hobby)
-                .Include(y => y.searchsetting_hotfeature)
-                .Include(y => y.searchsetting_humor)
-                .Include(y => y.searchsetting_incomelevel)
-                .Include(y => y.searchsetting_livingstituation)
-                .Include(y => y.searchsetting_location)
-                .Include(y => y.searchsetting_lookingfor)
-                .Include(y => y.searchsetting_maritalstatus)
-                .Include(y => y.searchsetting_politicalview)
-                .Include(y => y.searchsetting_profession)
-                .Include(y => y.searchsetting_religion)
-                .Include(y => y.searchsetting_religiousattendance)
-                .Include(y => y.searchsetting_showme)
-                .Include(y => y.searchsetting_sign)
-                .Include(y => y.searchsetting_smokes)
-                .Include(y => y.searchsetting_sortbytype)
-                .Include(y => y.searchsetting_wantkids)
-                .Include(y => y.systemmatch)               
-                
-                .Select().ToList();
-
-                if (allsearchsettings.Count() > 0 & searchmodel.searchname != null )//|searchmodel.searchname != ""  )
-                {
-                    p = allsearchsettings.Where(z => z.searchname == searchmodel.searchname).FirstOrDefault();
-                }
-                else if (allsearchsettings.Count() > 0)
-                {
-                    p = allsearchsettings.OrderByDescending(z => z.creationdate).FirstOrDefault();  //get the first one thats probbaly the default.
-                }
-
-                return p;
-            }
-            catch (Exception ex)
-            { throw ex; }
-        }
+   
 
        private BasicSearchSettingsModel getbasicsearchsettings(searchsetting p,IUnitOfWorkAsync _unitOfWorkAsync)
         {

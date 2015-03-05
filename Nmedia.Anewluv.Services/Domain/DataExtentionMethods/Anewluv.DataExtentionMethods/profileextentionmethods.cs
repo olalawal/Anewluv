@@ -17,56 +17,7 @@ namespace Anewluv.DataExtentionMethods
     {
 
 
-        //generic filtering function we can reuse
-        public static searchsetting getsearchsettingsbysearchid(int? searchid, IUnitOfWorkAsync _unitOfWorkAsync)
-        {
-
-            try
-            {
-                //This query assumes that one search is always called default and cannot be deleted dont like that
-                searchsetting  mysearchsettings = new searchsetting();
-              
-                //default handling for empty profile ID and other search data
-
-                mysearchsettings = _unitOfWorkAsync.Repository<searchsetting>().Query(z => z.id == searchid)
-                .Include(x => x.profilemetadata)
-                .Include(y => y.searchsetting_bodytype)
-                .Include(y => y.searchsetting_diet)
-                .Include(y => y.searchsetting_drink)
-                .Include(y => y.searchsetting_educationlevel)
-                .Include(y => y.searchsetting_employmentstatus)
-                .Include(y => y.searchsetting_ethnicity)
-                .Include(y => y.searchsetting_exercise)
-                .Include(y => y.searchsetting_eyecolor)
-                .Include(y => y.searchsetting_gender)
-                .Include(y => y.searchsetting_haircolor)
-                .Include(y => y.searchsetting_havekids)
-                .Include(y => y.searchsetting_hobby)
-                .Include(y => y.searchsetting_hotfeature)
-                .Include(y => y.searchsetting_humor)
-                .Include(y => y.searchsetting_incomelevel)
-                .Include(y => y.searchsetting_livingstituation)
-                .Include(y => y.searchsetting_location)
-                .Include(y => y.searchsetting_lookingfor)
-                .Include(y => y.searchsetting_maritalstatus)
-                .Include(y => y.searchsetting_politicalview)
-                .Include(y => y.searchsetting_profession)
-                .Include(y => y.searchsetting_religion)
-                .Include(y => y.searchsetting_religiousattendance)
-                .Include(y => y.searchsetting_showme)
-                .Include(y => y.searchsetting_sign)
-                .Include(y => y.searchsetting_smokes)
-                .Include(y => y.searchsetting_sortbytype)
-                .Include(y => y.searchsetting_wantkids)
-                .Select().FirstOrDefault();
-
-
-
-                return mysearchsettings;
-            }
-            catch (Exception ex)
-            { throw ex; }
-        }
+       
 
 
          //example using eager loading of profile metadata -- too slow right now 

@@ -539,6 +539,7 @@ namespace Anewluv.DataExtentionMethods
                 //to DO   DO  we still need this
                 model.profilestatusmessageshown = false;
                 model.mygenderid = profile.profiledata.gender_id.GetValueOrDefault();
+                //get the user's gender
                 model.lookingforgendersid = (profile.profilemetadata.searchsettings.FirstOrDefault() != null) ?
                 new HashSet<int>(profile.profilemetadata.searchsettings.FirstOrDefault().searchsetting_gender.Select(c => c.id)) : null;
                 if (model.lookingforgendersid != null)
@@ -575,9 +576,6 @@ namespace Anewluv.DataExtentionMethods
                 throw;
             }
         }
-
-
-
 
 
 

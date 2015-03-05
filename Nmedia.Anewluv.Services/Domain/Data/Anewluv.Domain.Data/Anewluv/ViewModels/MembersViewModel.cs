@@ -37,6 +37,12 @@ namespace Anewluv.Domain.Data.ViewModels
     public class MembersViewModel
     {
 
+
+        public MembersViewModel()
+        {
+            lookingforgendersid = new HashSet<int>();
+        }
+
         //Added session ID
         [DataMember]
         public string sessionid { get; set; }

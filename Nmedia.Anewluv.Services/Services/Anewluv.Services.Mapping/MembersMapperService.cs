@@ -993,7 +993,7 @@ namespace Anewluv.Services.Mapping
                         else
                         {
                             int searchid = model.profile.profilemetadata.searchsettings.FirstOrDefault().id;
-                            perfectmatchsearchsettings = profileextentionmethods.getsearchsettingsbysearchid(searchid, db);
+                            perfectmatchsearchsettings = db.Repository<searchsetting>().getsearchsettingsbysearchid( searchid);
                         }
 
 
@@ -1261,13 +1261,19 @@ namespace Anewluv.Services.Mapping
 
                         // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
 
-                        //add more values as we get more members 
-                        //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
-                        var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
-                              p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).ToList()
-                                        .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.lu_gender.id)).ToList() //using whereIF predicate function 
-                                        .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.lu_gender.id)).ToList()
-                                                          //Appearance filtering not implemented yet                        
+
+                        //basic search
+                        var repo = db.Repository<profiledata>().Query(p => p.birthdate > min && p.birthdate <= max &&
+                            p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).Select();
+
+                        var MemberSearchViewmodels = (from x in repo
+                            .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender_id.GetValueOrDefault())) //using whereIF predicate function                                         
+                                                          //if there are no genders selected in seach settigs since this is required handle the other case.. also handle the issue where no mapping was done
+                                                          //to create a default list of looking for geners and just use the opposite of the user searching i.e mapped user
+                            .WhereIf(LookingForGenderValues.Count == 0, z =>
+                                 (model.lookingforgendersid.Count > 0 && model.lookingforgendersid.Contains(z.gender_id.GetValueOrDefault())
+                                                                     || z.gender_id != model.mygenderid))
+             
                                         .WhereIf(blEvaluateHeights, z => z.height > intheightmin && z.height <= intheightmax).ToList() //Only evealuate if the user searching actually has height values they look for 
                                                       //we have to filter on the back end now since we cant use UDFs
                                                       // .WhereIf(model.maxdistancefromme  > 0, a => _datingcontext.fnGetDistance((double)a.latitude, (double)a.longitude, Convert.ToDouble(model.Mylattitude) ,Convert.ToDouble(model.MyLongitude), "Miles") <= model.maxdistancefromme)
@@ -1785,20 +1791,27 @@ namespace Anewluv.Services.Mapping
                 HashSet<int> LookingForGenderValues = new HashSet<int>();
                 LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_gender.Select(c => c.id)) : LookingForGenderValues;
               
-                
+                //basic search
                 var repo = db.Repository<profiledata>().Query(p => p.birthdate > min && p.birthdate <= max &&
-                    p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).Select().ToList();
+                    p.profile.profilemetadata.photos.Any(z => z.photostatus_id == (int)photostatusEnum.Gallery)).Select();
 
                 //  where (LookingForGenderValues.Count !=null || LookingForGenderValues.Contains(x.GenderID)) 
                 //  where (LookingForGenderValues.Count == null || x.GenderID == UserProfile.MyQuickSearch.MySelectedSeekingGenderID )   //this should not run if we have no gender in searchsettings
+                //add more values as we get more members 
+                //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
                 var MemberSearchViewmodels = (from x in repo
-                                .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender_id.GetValueOrDefault())).ToList() //using whereIF predicate function 
-                                .WhereIf(LookingForGenderValues.Count == 0, z => model.lookingforgendersid.Contains(z.lu_gender.id)).ToList()
+                                .WhereIf(LookingForGenderValues.Count > 0, z => LookingForGenderValues.Contains(z.gender_id.GetValueOrDefault())) //using whereIF predicate function                                         
+                                                  //if there are no genders selected in seach settigs since this is required handle the other case.. also handle the issue where no mapping was done
+                                                  //to create a default list of looking for geners and just use the opposite of the user searching i.e mapped user
+                                .WhereIf(LookingForGenderValues.Count == 0, z =>
+                                     (model.lookingforgendersid.Count > 0 && model.lookingforgendersid.Contains(z.gender_id.GetValueOrDefault())
+                                                                         || z.gender_id != model.mygenderid))
+
 
                                               join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                               select new MemberSearchViewModel
                                               {
-                                                  // MyCatchyIntroLineQuickSearch = x.AboutMe,
+                                                
                                                   id = x.profile_id,
                                                   stateprovince = x.stateprovince,
                                                   postalcode = x.postalcode,
@@ -1810,16 +1823,10 @@ namespace Anewluv.Services.Mapping
                                                   longitude = x.longitude ?? 0,
                                                   latitude = x.latitude ?? 0,
                                                   hasgalleryphoto = true,  //set inthe above query 
-                                                  creationdate = f.creationdate,
-                                                  // city = db.fnTruncateString(x.city, 11),
-                                                  // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
+                                                  creationdate = f.creationdate,                                                 
                                                   lastlogindate = f.logindate,
                                                   distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
-                                                  //TO DO look at this and explore
-                                                  //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
-                                                  //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
-                                                  //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
-
+                                             
 
                                               }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
