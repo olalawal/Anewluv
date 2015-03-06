@@ -27,8 +27,10 @@ namespace Anewluv.DataExtentionMethods
 
                 allsearchsettings = repo.Query
                 (z => (searchmodel.searchid != 0 && z.id == searchmodel.searchid) ||
-                (searchmodel.profileid != 0 && (z.profile_id == searchmodel.profileid)))
-                .Include(x => x.profilemetadata)
+                (searchmodel.profileid != 0 && (z.profile_id == searchmodel.profileid)))                 
+                 .Include(x => x.profilemetadata)
+                .Include(x => x.profilemetadata.profiledatas)
+                .Include(x => x.profilemetadata.profile)
                 .Include(y => y.searchsetting_bodytype)
                 .Include(y => y.searchsetting_diet)
                 .Include(y => y.searchsetting_drink)
@@ -57,7 +59,7 @@ namespace Anewluv.DataExtentionMethods
                 .Include(y => y.searchsetting_smokes)
                 .Include(y => y.searchsetting_sortbytype)
                 .Include(y => y.searchsetting_wantkids)
-                .Include(y => y.systemmatch)
+               
 
                 .Select().ToList();
 

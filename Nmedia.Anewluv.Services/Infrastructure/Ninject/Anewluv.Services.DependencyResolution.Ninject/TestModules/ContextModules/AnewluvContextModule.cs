@@ -17,6 +17,8 @@ using Repository.Pattern.DataContext;
 
 using Ninject.Activation;
 using Ninject;
+using Anewluv.Services.DependencyResolution.Ninject.predicates;
+using Nmedia.Infrastructure.DependencyInjection;
 
 namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 {
@@ -26,8 +28,9 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 		{
             //TO DO should be a separate service or something
             //bind the dbset context
-          
-            this.Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<AnewluvContext>()).InRequestScope();
+
+            Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<AnewluvContext>())
+            .WhenAnyAncestorMatches(Predicates.TargetHas<IAnewluvEntitesScope>).InRequestScope();
              
 		}
 	}

@@ -20,6 +20,7 @@ using LoggingLibrary;
 using Nmedia.Infrastructure.Domain.Data.log;
 using System.Threading.Tasks;
 using Repository.Pattern.UnitOfWork;
+using Nmedia.Infrastructure.DependencyInjection;
 
 
 namespace Anewluv.Services.Common
@@ -39,7 +40,7 @@ namespace Anewluv.Services.Common
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public CommonService(IUnitOfWorkAsync unitOfWork)
+        public CommonService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)

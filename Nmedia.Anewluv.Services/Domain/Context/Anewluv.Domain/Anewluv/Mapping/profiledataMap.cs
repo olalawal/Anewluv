@@ -15,7 +15,7 @@ namespace Anewluv.Domain.Data.Mapping
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             // Table & Column Mappings
-            this.ToTable("profiledatas");
+            this.ToTable("profiledatas"); //to do change to singular
             this.Property(t => t.profile_id).HasColumnName("profile_id");
             this.Property(t => t.age).HasColumnName("age");
             this.Property(t => t.birthdate).HasColumnName("birthdate");
@@ -53,6 +53,10 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.maritalstatus_id).HasColumnName("maritalstatus_id");
             this.Property(t => t.profession_id).HasColumnName("profession_id");
             this.Property(t => t.wantsKidstatus_id).HasColumnName("wantsKidstatus_id");
+
+            this.HasOptional(t => t.profilemetadata).WithRequired(z=>z.profiledatas);
+            //   .(t => t.profiledatas)
+            //    .HasForeignKey(d => d.profilemetadata_profile_id);
 
             // Relationships
             this.HasOptional(t => t.lu_bodytype)
@@ -118,9 +122,9 @@ namespace Anewluv.Domain.Data.Mapping
             this.HasOptional(t => t.lu_wantskids)
                 .WithMany(t => t.profiledatas)
                 .HasForeignKey(d => d.wantsKidstatus_id);
-            this.HasOptional(t => t.profilemetadata)
-                .WithMany(t => t.profiledatas)
-                .HasForeignKey(d => d.profilemetadata_profile_id);
+            //this.HasOptional(t => t.profilemetadata)
+            //    .WithMany(t => t.profiledatas)
+            //    .HasForeignKey(d => d.profilemetadata_profile_id);
             this.HasRequired(t => t.profile)
                 .WithOptional(t => t.profiledata);
             this.HasOptional(t => t.visiblitysetting)

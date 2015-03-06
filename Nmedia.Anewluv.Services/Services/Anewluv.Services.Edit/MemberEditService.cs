@@ -25,6 +25,7 @@ using Anewluv.Caching;
 using System.Threading.Tasks;
 using Repository.Pattern.UnitOfWork;
 using Anewluv.DataExtentionMethods;
+using Nmedia.Infrastructure.DependencyInjection;
 
 
 namespace Anewluv.Services.Edit
@@ -43,7 +44,7 @@ namespace Anewluv.Services.Edit
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public MemberEditService(IUnitOfWorkAsync unitOfWork)
+        public MemberEditService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)

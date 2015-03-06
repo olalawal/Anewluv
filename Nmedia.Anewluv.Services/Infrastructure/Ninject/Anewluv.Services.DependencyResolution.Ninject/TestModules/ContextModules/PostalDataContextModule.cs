@@ -16,6 +16,8 @@ using Ninject.Web.Common;
 using Ninject.Activation;
 using Ninject;
 using Repository.Pattern.DataContext;
+using Anewluv.Services.DependencyResolution.Ninject.predicates;
+using Nmedia.Infrastructure.DependencyInjection;
 
 namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 {
@@ -24,8 +26,9 @@ namespace Anewluv.Services.DependencyResolution.Ninject.Modules
 		public override void Load()
 		{
 
-            this.Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<PostalData2Context>()).InRequestScope();
-            this.Bind<IGeoDataStoredProcedures>().To<PostalData2Context>().InRequestScope(); 
+            Bind<IDataContextAsync>().ToMethod(c => c.Kernel.Get<PostalData2Context>())
+          .WhenAnyAncestorMatches(Predicates.TargetHas<InSpatialEntitesScope>).InRequestScope();
+            this.Bind<IGeoDataStoredProcedures>().To<PostalData2Context>().WhenTargetHas<InSpatialEntitesScope>().InRequestScope(); ;
          
 		}
 	}

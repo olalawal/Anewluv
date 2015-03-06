@@ -17,8 +17,7 @@ namespace Anewluv.Web.Services.Edit.ServiceHostFactories
         {
             IKernel container = new StandardKernel();
           
-            container.Load<NinjectModules.AnewLuvContextModule>();
-            container.Load<NinjectModules.PostalDataContextModule>();
+            container.Load<NinjectModules.AnewLuvContextModule>();           
             container.Load<NinjectModules.UnitOfWorkAsyncModule>();
            
             return container;

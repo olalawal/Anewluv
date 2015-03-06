@@ -16,6 +16,7 @@ using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data;
 using Repository.Pattern.UnitOfWork;
 using GeoData.Domain.Models;
+using Nmedia.Infrastructure.DependencyInjection;
 
 namespace Anewluv.Services.Common
 {
@@ -34,9 +35,9 @@ namespace Anewluv.Services.Common
         private readonly IGeoDataStoredProcedures _storedProcedures;
         private LoggingLibrary.Logging logger;
 
-       
 
-        public LookupService(IUnitOfWorkAsync unitOfWork, IGeoDataStoredProcedures storedProcedures)
+
+        public LookupService([IAnewluvEntitesScope]IUnitOfWorkAsync unitOfWork,[InSpatialEntitesScope]IGeoDataStoredProcedures storedProcedures)
         {
 
             if (unitOfWork == null)

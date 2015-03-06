@@ -267,12 +267,7 @@ namespace Anewluv.Services.Authentication
                             };
                             
                             
-                            AnewluvContext AnewluvContext  = new AnewluvContext();                            
-                            using (var tempdb = AnewluvContext)
-                            {
-                              //  MemberService MemberService = new MemberService(tempdb);
-                              //  MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID });
-                            }
+                          
                         }
                         else
                         {
@@ -286,14 +281,7 @@ namespace Anewluv.Services.Authentication
                                 //  MemberService.Endupdateuserlogintimebyprofileidandsessionid(result);
                             };
 
-                            //use anew  the same DB context
-                            AnewluvContext AnewluvContext  = new AnewluvContext();
-                            using (var tempdb = AnewluvContext)
-                            {
-                              // MemberService MemberService = new MemberService(tempdb);
-                            //   MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id });
-                           //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
-                             }
+                         
                         }
 
 
@@ -382,12 +370,7 @@ namespace Anewluv.Services.Authentication
                             };
                             
                             
-                            AnewluvContext AnewluvContext  = new AnewluvContext();                            
-                            using (var tempdb = AnewluvContext)
-                            {
-                              //  MemberService MemberService = new MemberService(tempdb);
-                             //   MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myQuery.id, sessionid = HttpContext.Current.Session.SessionID });
-                            }
+                         
                         }
                         else
                         {
@@ -402,13 +385,8 @@ namespace Anewluv.Services.Authentication
                             };
 
                             //use anew  the same DB context
-                            AnewluvContext AnewluvContext  = new AnewluvContext();
-                            using (var tempdb = AnewluvContext)
-                            {
-                             //  MemberService MemberService = new MemberService(tempdb);
-                            //   MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id });
-                           //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
-                             }
+                         
+                           
                         }
                         //TO DO get geodata from IP address down the line
                         //also update profile activity
@@ -479,12 +457,6 @@ namespace Anewluv.Services.Authentication
                     //add the openID provider if its a new one
                     {
 
-                        AnewluvContext AnewluvContext = new AnewluvContext();
-                        using (var tempdb = AnewluvContext)
-                        {
-                           // MemberService MemberService = new MemberService(tempdb);
-                           // MemberService.addnewopenidforprofile(new ProfileModel { profileid = myprofile.id });
-                        }
                         //MemberService.addnewopenidforprofile(new ProfileModel { profileid = myprofile.id });
                     }
 
@@ -511,12 +483,7 @@ namespace Anewluv.Services.Authentication
                             };
                             
                             
-                            AnewluvContext AnewluvContext  = new AnewluvContext();                            
-                            using (var tempdb = AnewluvContext)
-                            {
-                               // MemberService MemberService = new MemberService(tempdb);
-                              //  MemberService.updateuserlogintimebyprofileidandsessionid(new ProfileModel { profileid = myprofile.id, sessionid = HttpContext.Current.Session.SessionID });
-                            }
+                         
                         }
                         else
                         {
@@ -531,13 +498,7 @@ namespace Anewluv.Services.Authentication
                             };
 
                             //use anew  the same DB context
-                            AnewluvContext AnewluvContext  = new AnewluvContext();
-                            using (var tempdb = AnewluvContext)
-                            {
-                              // MemberService MemberService = new MemberService(tempdb);
-                              // MemberService.updateuserlogintimebyprofileid(new ProfileModel { profileid = myprofile.id });
-                                //MemberService.Beginupdateuserlogintimebyprofileid(new ProfileModel { profileid = myQuery.id }, callback, MemberService);
-                             }
+                         
                         }
                     //TO DO get geodata from IP address down the line
                     //also update profile activity
@@ -775,7 +736,7 @@ namespace Anewluv.Services.Authentication
                         profiledatarepo.Insert(objprofileDataEntity);
 
                         //_unitOfWorkAsync
-                        var i =  _unitOfWorkAsync.Commit();
+                        var i =  _unitOfWorkAsync.SaveChanges();
                        // transaction.Commit();
 
 
@@ -931,7 +892,7 @@ namespace Anewluv.Services.Authentication
                           //handele the update using EF
                           //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
                           profilerepo.Update(myProfile);
-                          var i = _unitOfWorkAsync.Commit();
+                          var i = _unitOfWorkAsync.SaveChanges();
                          // transaction.Commit();
 
                           return true;
@@ -1067,7 +1028,7 @@ namespace Anewluv.Services.Authentication
                          profiledatarepo.Update(objprofileDateEntity);
                         //save all changes bro                         
 //                        _unitOfWorkAsync
-                        var i = _unitOfWorkAsync.Commit();
+                        var i = _unitOfWorkAsync.SaveChanges();
                        // transaction.Commit();
 
                     }
@@ -1257,19 +1218,18 @@ namespace Anewluv.Services.Authentication
                     {
 
                        
-                        using (AnewluvContext db = new AnewluvContext())
-                            {
+                     
                                 //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
                                 //{
 
                                   // db.DisableProxyCreation = true;;
                                     //db.DisableLazyLoading = true;
-                                    result = ((db.profiles.Where(p => p.emailaddress == model.email).FirstOrDefault()) != null);
+                                    result = (( _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.emailaddress == model.email).FirstOrDefault()) != null);
                                         
                                       //   _unitOfWorkAsync.Repository<profile>().Query.checkifscreennamealreadyexists(model);
                                 //}
 
-                            }
+                           
                         return result;
 
                         //// _unitOfWorkAsync.DisableProxyCreation = true;
@@ -1291,8 +1251,8 @@ namespace Anewluv.Services.Authentication
                         //    result =  _unitOfWorkAsync.Repository<profile>().Query.checkifemailalreadyexists(model);
                                            
                         //}
-                        return result;
-                       
+                      //  return result;
+                     //  
                     });
                     return await task.ConfigureAwait(false);
                
@@ -1324,9 +1284,9 @@ namespace Anewluv.Services.Authentication
         /// </summary>
        public async Task<bool> checkifactivationcodeisvalid(ProfileModel model)
         {
-            using (var db = new AnewluvContext())
+            
             {
-              // db.DisableProxyCreation = true;;
+               
                 try
                 {
                     if (model == null | model.username == null) return false;
@@ -1367,7 +1327,7 @@ namespace Anewluv.Services.Authentication
         public async Task<bool> checkifprofileisactivated(ProfileModel model)
         {
             //BAEntities Context
-            using (AnewluvContext db = new AnewluvContext())
+           
             {
               // db.DisableProxyCreation = true;;
                 if (model == null | model.username == null) return false;
@@ -1416,7 +1376,7 @@ namespace Anewluv.Services.Authentication
         {
             
             Boolean result = false;
-            using (var db = new AnewluvContext())
+            
             {
               //  db.DisableProxyCreation = false;
               //  db.DisableLazyLoading = false;
@@ -1427,28 +1387,7 @@ namespace Anewluv.Services.Authentication
 
                         if (model == null | model.username == null) return false;
 
-                        //using (AnewluvContext db = new AnewluvContext())
-                        //{
-                        //    //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
-                        //    //{
-
-                        //  // db.DisableProxyCreation = true;;
-                        //    db.DisableLazyLoading = true;
-                        //    // IQueryable<profile> myQuery = default(IQueryable<profile>);
-                        //    result =  _unitOfWorkAsync.Repository<profile>().Query.checkifusernamealreadyexists(model);  
-
-                        //    //   _unitOfWorkAsync.Repository<profile>().Query.checkifscreennamealreadyexists(model);
-                        //    //}
-
-                        //}
-                        //return result;
-
-                     //   _unitOfWorkAsync.DisableProxyCreation = false;
-                       // _unitOfWorkAsync.DisableLazyLoading = false;
-                     //   var db = _unitOfWorkAsync;
-                        // using (var db = _unitOfWorkAsync)
-                        //    {
-                        // IQueryable<profile> myQuery = default(IQueryable<profile>);
+                     
                         result =  _unitOfWorkAsync.Repository<profile>().checkifusernamealreadyexists(model);
                         //    }
 
@@ -1491,14 +1430,10 @@ namespace Anewluv.Services.Authentication
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                        using (AnewluvContext db = new AnewluvContext())
+                    
                             {
-                                //while (db.ObjectContext.Connection.State  != System.Data.ConnectionState.Closed)
-                                //{
-
-                                  // db.DisableProxyCreation = true;;
-                                    //db.DisableLazyLoading = true;
-                                    result = ((db.profiles.Where(p => p.screenname == model.screenname).FirstOrDefault()) != null);
+                               
+                                result = ((_unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.screenname == model.screenname).FirstOrDefault()) != null);
                                         
                                       //   _unitOfWorkAsync.Repository<profile>().Query.checkifscreennamealreadyexists(model);
                                 //}
@@ -1547,10 +1482,9 @@ namespace Anewluv.Services.Authentication
 
             
 
-          //  using (var db = _unitOfWorkAsync)
+         
             {
-                //db.IsAuditEnabled = false; //do not audit on adds
-             ////   using (var transaction = db.BeginTransaction())
+
                 {
 
                     try

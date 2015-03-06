@@ -23,8 +23,8 @@ namespace Anewluv.Domain.Data
        [DataMember]
        public virtual ICollection<blocknote> blocknotes { get; set; }
        [DataMember]
-       public virtual profilemetadata profilemetadata { get; set; }
+       public virtual profilemetadata profilemetadatablocker { get; set; }
        [DataMember]
-       public virtual profilemetadata profilemetadata1 { get; set; }
+       public virtual profilemetadata profilemetadatablocked { get; set; }
     }
 }
