@@ -12,7 +12,7 @@ namespace Anewluv.Domain.Data
         public lu_bodytype()
         {
             this.profiledatas = new List<profiledata>();
-            this.searchsetting_bodytype = new List<searchsetting_bodytype>();
+           // this.searchsetting_bodytype = new List<searchsetting_bodytype>();
         }
 
       
@@ -20,6 +20,6 @@ namespace Anewluv.Domain.Data
         [NotMapped, DataMember] public bool selected { get; set; }
         [DataMember]   public string description { get; set; }    
         public virtual ICollection<profiledata> profiledatas { get; set; }     
-         public virtual ICollection<searchsetting_bodytype> searchsetting_bodytype { get; set; }
+        // public virtual ICollection<searchsetting_bodytype> searchsetting_bodytype { get; set; }
     }
 }

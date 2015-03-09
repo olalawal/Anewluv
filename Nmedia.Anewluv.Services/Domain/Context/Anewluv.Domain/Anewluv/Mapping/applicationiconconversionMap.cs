@@ -17,17 +17,19 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.application_id).HasColumnName("application_id");
             this.Property(t => t.creationdate).HasColumnName("creationdate");
             this.Property(t => t.image).HasColumnName("image");
-            this.Property(t => t.size).HasColumnName("size");
-            this.Property(t => t.application_id1).HasColumnName("application_id1");
+            this.Property(t => t.size).HasColumnName("size");          
             this.Property(t => t.iconformat_id).HasColumnName("iconformat_id");
 
             // Relationships
-            this.HasOptional(t => t.application)
-                .WithMany(t => t.applicationiconconversions)
-                .HasForeignKey(d => d.application_id1);
+           
             this.HasOptional(t => t.lu_iconformat)
                 .WithMany(t => t.applicationiconconversions)
                 .HasForeignKey(d => d.iconformat_id);
+
+            this.HasRequired(t => t.application)
+       .WithMany(t => t.applicationiconconversions)
+       .HasForeignKey(d => d.application_id);
+
 
         }
     }

@@ -21,12 +21,14 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.value).HasColumnName("value");
 
             // Relationships
-            this.HasRequired(t => t.profilemetadata)
-                .WithMany(t => t.ratingvalues)
+            this.HasRequired(t => t.raterprofilemetadata)
+                .WithMany(t => t.raterratingvalues)
                 .HasForeignKey(d => d.profile_id);
-            this.HasRequired(t => t.profilemetadata1)
-                .WithMany(t => t.ratingvalues1)
+          
+            this.HasRequired(t => t.rateeprofilemetadata)
+                .WithMany(t => t.rateeratingvalues)
                 .HasForeignKey(d => d.rateeprofile_id);
+
             this.HasRequired(t => t.rating)
                 .WithMany(t => t.ratingvalues)
                 .HasForeignKey(d => d.rating_id);

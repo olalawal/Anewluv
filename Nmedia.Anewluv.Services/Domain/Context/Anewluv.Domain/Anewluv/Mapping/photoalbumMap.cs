@@ -17,19 +17,21 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.description).HasColumnName("description");
             this.Property(t => t.profile_id).HasColumnName("profile_id");
 
-            // Relationships
-            this.HasMany(t => t.photos)
-                .WithMany(t => t.photoalbums)
-                .Map(m =>
-                    {
-                        m.ToTable("photophotoalbums");
-                        m.MapLeftKey("photoalbum_id");
-                        m.MapRightKey("photo_id");
-                    });
+            //// Relationships
+            //this.HasMany(t => t.photos)
+            //    .WithMany(t => t.photoalbums)
+            //    .Map(m =>
+            //        {
+            //            m.ToTable("photophotoalbums");
+            //            m.MapLeftKey("photoalbum_id");
+            //            m.MapRightKey("photo_id");
+            //        });
 
             this.HasRequired(t => t.profilemetadata)
                 .WithMany(t => t.photoalbums)
-                .HasForeignKey(d => d.profile_id);
+                .HasForeignKey(d => d.profile_id).WillCascadeOnDelete(false);
+
+            this.HasMany(t => t.photoalbum_securitylevel).WithRequired(z => z.photoalbum).HasForeignKey(z => z.photoalbum_id);
 
         }
     }

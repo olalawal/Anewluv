@@ -13,12 +13,14 @@ using System.Data.Entity.Migrations;
 //using LoggingLibrary;
 
 
-using Shell.MVC2.Services.Contracts;
+
 using System.ServiceModel.Web;
-using Dating.Server.Data.Models;
+
 using Anewluv.Domain;
 using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
+using AnewLuvFTS.DomainAndData.Models;
+using GeoData.Domain.Models;
 
 namespace Misc
 {
@@ -30,8 +32,8 @@ namespace Misc
         //once this is tested and working we want to move this code into migrations ins Domain.Entities
         public static void StartDebuggingTest()
         {
-            var olddb = new AnewluvFtsEntities();
-            var postaldb = new PostalData2Entities();
+            var olddb = new AnewluvFTSContext();
+            var postaldb = new PostalData2Context();
             var context = new AnewluvContext();
 
 
@@ -46,8 +48,8 @@ namespace Misc
         //once this is tested and working we want to move this code into migrations ins Domain.Entities
         public static void ConvertFlatProfileandprofiledata()
         {
-            var olddb = new AnewluvFtsEntities();
-            var postaldb = new PostalData2Entities();
+            var olddb = new AnewluvFTSContext();
+            var postaldb = new PostalData2Context();
             var context = new AnewluvContext();
 
             //code for simple type data swap
@@ -62,7 +64,7 @@ namespace Misc
             //convet abusers data
 
             int newprofileid = 1;
-            foreach (Dating.Server.Data.Models.profile item in olddb.profiles)
+            foreach (AnewLuvFTS.DomainAndData.Models.profile item in olddb.profiles)
             {
                 var myprofile = new Anewluv.Domain.Data.profile();
                 var myprofiledata = new Anewluv.Domain.Data.profiledata();
@@ -196,8 +198,8 @@ namespace Misc
 
         public static void ConvertProfileCollections()
         {
-            var olddb = new AnewluvFtsEntities();
-            var postaldb = new PostalData2Entities();
+            var olddb = new AnewluvFTSContext();
+            var postaldb = new PostalData2Context();
             var context = new AnewluvContext();
 
 
@@ -209,7 +211,7 @@ namespace Misc
 
 
                 //build  members in role data if it exists
-                foreach (Dating.Server.Data.Models.MembersInRole membersinroleitem in olddb.MembersInRoles)
+                foreach (AnewLuvFTS.DomainAndData.Models.MembersInRole membersinroleitem in olddb.MembersInRoles)
                 {
                     var membersinroleobject = new Anewluv.Domain.Data.membersinrole();
 
@@ -243,7 +245,7 @@ namespace Misc
 
 
                 //build  activitylog if it exists
-                foreach (Dating.Server.Data.Models.ProfileGeoDataLogger activitylogitem in olddb.ProfileGeoDataLoggers)
+                foreach (AnewLuvFTS.DomainAndData.Models.ProfileGeoDataLogger activitylogitem in olddb.ProfileGeoDataLoggers)
                 {
                     var activitylogobject = new Anewluv.Domain.Data.profileactivity();
 
@@ -291,7 +293,7 @@ namespace Misc
 
                 //add openID data
 
-                foreach (Dating.Server.Data.Models.profileOpenIDStore openiditem in olddb.profileOpenIDStores)
+                foreach (AnewLuvFTS.DomainAndData.Models.profileOpenIDStore openiditem in olddb.profileOpenIDStores)
                 {
                     var openidobject = new Anewluv.Domain.Data.openid();
                     Console.WriteLine("attempting to assign  a profile open id store value  for old profileid of    :" + openiditem.ProfileID);
@@ -318,7 +320,7 @@ namespace Misc
 
                 //add userlogtime
 
-                foreach (Dating.Server.Data.Models.User_Logtime userlogtimeitem in olddb.User_Logtime)
+                foreach (AnewLuvFTS.DomainAndData.Models.User_Logtime userlogtimeitem in olddb.User_Logtime)
                 {
                     var userlogtimeobject = new Anewluv.Domain.Data.userlogtime();
                     Console.WriteLine("attempting assign a user logtime for old profileid of    :" + userlogtimeitem.ProfileID);
@@ -357,8 +359,8 @@ namespace Misc
 
         public static void ConvertProfileMetaDataBasicCollections()
         {
-            var olddb = new AnewluvFtsEntities();
-            var postaldb = new PostalData2Entities();
+            var olddb = new AnewluvFTSContext();
+            var postaldb = new PostalData2Context();
             var context = new AnewluvContext();
 
 
@@ -370,13 +372,13 @@ namespace Misc
 
 
                 //handle favorites
-                foreach (Dating.Server.Data.Models.favorite favoritesitem in olddb.favorites)
+                foreach (AnewLuvFTS.DomainAndData.Models.favorite favoritesitem in olddb.favorites)
                 {
-                    var favoritesobject = new Anewluv.Domain.Data.favorite();
+                    var favoritesobject = new Anewluv.Domain.Data.favorites();
                     Console.WriteLine("attempting to add a favorite for the old profileid of    :" + favoritesitem.ProfileID);
                     //add the realted proflemetadatas 
-                    var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.ProfileID).FirstOrDefault();
-                    var matchedfavoriteprofilemetadata = context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.FavoriteID).FirstOrDefault();
+                    var matchedprofilemetatdata = context.profilemetadatas.Where(p => p.profile.emailaddress == favoritesitem.ProfileID).FirstOrDefault();
+                    var matchedfavoriteprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == favoritesitem.FavoriteID).FirstOrDefault();
                     if (matchedprofilemetatdata != null && matchedfavoriteprofilemetadata != null)
                     {
                         favoritesobject.profilemetadata = matchedprofilemetatdata; //context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.ProfileID).FirstOrDefault();
@@ -399,7 +401,7 @@ namespace Misc
                 Console.WriteLine("saving  favorites "); context.SaveChanges();
 
                 //handle friends
-                foreach (Dating.Server.Data.Models.Friend friendsitem in olddb.Friends)
+                foreach (AnewLuvFTS.DomainAndData.Models.Friend friendsitem in olddb.Friends)
                 {
                     var friendsobject = new Anewluv.Domain.Data.friend();
                     Console.WriteLine("attempting to assign friend request for the old profileid of    :" + friendsitem.ProfileID);
@@ -428,7 +430,7 @@ namespace Misc
                 Console.WriteLine("saving  friends "); context.SaveChanges();
 
                 //handle interests
-                foreach (Dating.Server.Data.Models.Interest Interestsitem in olddb.Interests)
+                foreach (AnewLuvFTS.DomainAndData.Models.Interest Interestsitem in olddb.Interests)
                 {
                     var Interestsobject = new Anewluv.Domain.Data.interest();
                     Console.WriteLine("attempting to assign Interest request for the old profileid of    :" + Interestsitem.ProfileID);
@@ -457,7 +459,7 @@ namespace Misc
                 Console.WriteLine("saving  Interests "); context.SaveChanges();
 
                 //handle likes
-                foreach (Dating.Server.Data.Models.Like likesitem in olddb.Likes)
+                foreach (AnewLuvFTS.DomainAndData.Models.Like likesitem in olddb.Likes)
                 {
                     var likesobject = new Anewluv.Domain.Data.like();
                     Console.WriteLine("attempting to assign like request for the old profileid of    :" + likesitem.ProfileID);
@@ -486,7 +488,7 @@ namespace Misc
 
                 //handle peeks
                 //Peeks is invierse with profileviewer being the opposit of profile
-                foreach (Dating.Server.Data.Models.ProfileView peeksitem in olddb.ProfileViews)
+                foreach (AnewLuvFTS.DomainAndData.Models.ProfileView peeksitem in olddb.ProfileViews)
                 {
                     var peeksobject = new Anewluv.Domain.Data.peek();
                     Console.WriteLine("attempting to assign peek request for the old profileid of    :" + peeksitem.ProfileID);
@@ -516,7 +518,7 @@ namespace Misc
 
 
                 //handle hotlists
-                foreach (Dating.Server.Data.Models.Hotlist hotlistsitem in olddb.Hotlists)
+                foreach (AnewLuvFTS.DomainAndData.Models.Hotlist hotlistsitem in olddb.Hotlists)
                 {
                     var hotlistsobject = new Anewluv.Domain.Data.hotlist();
                     Console.WriteLine("attempting to assign hotlist request for the old profileid of    :" + hotlistsitem.ProfileID);
@@ -546,7 +548,7 @@ namespace Misc
 
                 //custom work for blocks which was mailbox blocks
                 //no block notes for now since thye are optional
-                foreach (Dating.Server.Data.Models.Mailboxblock blocksitem in olddb.Mailboxblocks)
+                foreach (AnewLuvFTS.DomainAndData.Models.Mailboxblock blocksitem in olddb.Mailboxblocks)
                 {
                     var blocksobject = new Anewluv.Domain.Data.block();
 
@@ -577,7 +579,7 @@ namespace Misc
 
 
                 //handle ProfileData_Ethnicity
-                foreach (Dating.Server.Data.Models.ProfileData_Ethnicity profiledataethnicityitem in olddb.ProfileData_Ethnicity)
+                foreach (AnewLuvFTS.DomainAndData.Models.ProfileData_Ethnicity profiledataethnicityitem in olddb.ProfileData_Ethnicity)
                 {
                     var profiledataethnicityobject = new Anewluv.Domain.Data.profiledata_ethnicity();
 
@@ -605,7 +607,7 @@ namespace Misc
                 Console.WriteLine("saving  profiledata ethnicities"); context.SaveChanges();
 
                 //handle ProfileData_hobby
-                foreach (Dating.Server.Data.Models.ProfileData_Hobby profiledatahobbyitem in olddb.ProfileData_Hobby)
+                foreach (AnewLuvFTS.DomainAndData.Models.ProfileData_Hobby profiledatahobbyitem in olddb.ProfileData_Hobby)
                 {
                     var profiledatahobbyobject = new Anewluv.Domain.Data.profiledata_hobby();
                     if (profiledatahobbyitem != null)
@@ -632,7 +634,7 @@ namespace Misc
                 Console.WriteLine("saving  profiledata hobbies"); context.SaveChanges();
 
                 //handle ProfileData_hotfeature
-                foreach (Dating.Server.Data.Models.ProfileData_HotFeature profiledatahotfeatureitem in olddb.ProfileData_HotFeature)
+                foreach (AnewLuvFTS.DomainAndData.Models.ProfileData_HotFeature profiledatahotfeatureitem in olddb.ProfileData_HotFeature)
                 {
                     var profiledatahotfeatureobject = new Anewluv.Domain.Data.profiledata_hotfeature();
                     if (profiledatahotfeatureitem != null)
@@ -659,7 +661,7 @@ namespace Misc
                 Console.WriteLine("saving  profiledata hotfeatures"); context.SaveChanges();
 
                 //handle ProfileData_lookingfor
-                foreach (Dating.Server.Data.Models.ProfileData_LookingFor profiledatalookingforitem in olddb.ProfileData_LookingFor)
+                foreach (AnewLuvFTS.DomainAndData.Models.ProfileData_LookingFor profiledatalookingforitem in olddb.ProfileData_LookingFor)
                 {
                     var profiledatalookingforobject = new Anewluv.Domain.Data.profiledata_lookingfor();
                     if (profiledatalookingforitem != null)
@@ -704,8 +706,8 @@ namespace Misc
         //we will asl use the photo service to update the photo collections stuff
         public static void ConvertProfileDataMetadataCollectionsPhoto()
         {
-            var olddb = new AnewluvFtsEntities();
-            var postaldb = new PostalData2Entities();
+            var olddb = new AnewluvFTSContext();
+            var postaldb = new PostalData2Context();
             var context = new AnewluvContext();
 
           PhotoUploadModel uploadmodelfailed = new PhotoUploadModel();
@@ -720,7 +722,7 @@ namespace Misc
 
                 // populate photo object and create all the photo convenversions
                 //handle favorites
-                foreach (Dating.Server.Data.Models.photo photositem in olddb.photos)
+                foreach (AnewLuvFTS.DomainAndData.Models.photo photositem in olddb.photos)
                 {
                     var photosobject = new Anewluv.Domain.Data.photo();
 
@@ -740,7 +742,7 @@ namespace Misc
                         {
 
                             
-  PhotoUploadModel uploadmodel = new PhotoUploadModel();
+                            PhotoUploadModel uploadmodel = new PhotoUploadModel();
                             uploadmodel.caption = photositem.ImageCaption;
                             uploadmodel.legacysize = photositem.PhotoSize;
                             uploadmodel.creationdate = photositem.PhotoDate.GetValueOrDefault();
@@ -853,8 +855,8 @@ namespace Misc
 
         public static void ConvertProfileSearchSettingsCollections()
         {
-            var olddb = new AnewluvFtsEntities();
-            var postaldb = new PostalData2Entities();
+            var olddb = new AnewluvFTSContext();
+            var postaldb = new PostalData2Context();
             var context = new AnewluvContext();
             var counter = 0;
             var searchsettinggenderobjecttest = new Anewluv.Domain.Data.searchsetting_gender();
@@ -867,7 +869,7 @@ namespace Misc
 
                 //handle searchsetting
                 counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSetting searchsettingitem in olddb.SearchSettings)
+                foreach (AnewLuvFTS.DomainAndData.Models.SearchSetting searchsettingitem in olddb.SearchSettings)
                 {
                     var searchsettingobject = new Anewluv.Domain.Data.searchsetting();
                     Console.WriteLine("attempting a search setting for the old profileid of    :" + searchsettingitem.ProfileID);
@@ -914,7 +916,7 @@ namespace Misc
 
                 //bodytype
                 counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_BodyTypes searchsettingbodytypeitem in olddb.SearchSettings_BodyTypes)
+                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_BodyTypes searchsettingbodytypeitem in olddb.SearchSettings_BodyTypes)
                 {
                     Console.WriteLine("attempting a search setting bodytype for the old profileid of    :" + searchsettingbodytypeitem.SearchSetting.ProfileID);
                     var searchsettingbodytypeobject = new Anewluv.Domain.Data.searchsetting_bodytype();
@@ -940,476 +942,10 @@ namespace Misc
                 }
                 Console.WriteLine("saving  a total of : " + counter + " searchsettingbodytypes"); context.SaveChanges();
 
-                //diet
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Diet searchsettingdietitem in olddb.SearchSettings_Diet)
-                {
-                    Console.WriteLine("attempting a search setting diet for the old profileid of    :" + searchsettingdietitem.SearchSetting.ProfileID);
-                    var searchsettingdietobject = new Anewluv.Domain.Data.searchsetting_diet();
-
-                    if (context.searchsetting_diet.Any(p => p.diet.id == searchsettingdietitem.DietID ))
-                    {
-                        Console.WriteLine("skipping profile with email  :" + searchsettingdietitem.SearchSetting.ProfileID + "it alaready has search settings diet   ");
-                    }
-                    else
-                    {
-                        var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingdietitem.SearchSetting.ProfileID).FirstOrDefault();
-                        if (matchedsearchsetting != null)
-                        {
-                            searchsettingdietobject.searchsetting = matchedsearchsetting;
-                            searchsettingdietobject.diet = context.lu_diet.Where(p => p.id == searchsettingdietitem.DietID).FirstOrDefault();
-                            context.searchsetting_diet.Add(searchsettingdietobject);
-                            //save data one per row
-                            Console.WriteLine("added a search setting diet for the old profileid of    :" + searchsettingdietitem.SearchSetting.ProfileID);
-                            counter = counter + 1;
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingdiets"); context.SaveChanges();
-
-                //drink
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Drinks searchsettingdrinkitem in olddb.SearchSettings_Drinks)
-                {
-                    Console.WriteLine("attempting a search setting drink for the old profileid of    :" + searchsettingdrinkitem.SearchSetting.ProfileID);
-                    var searchsettingdrinkobject = new Anewluv.Domain.Data.searchsetting_drink();
-
-                    if (context.searchsetting_drink.Any(p => p.drink.id == searchsettingdrinkitem.DrinksID ))
-                    {
-                        Console.WriteLine("skipping profile with email  :" + searchsettingdrinkitem.SearchSetting.ProfileID + "it alaready has search settings drink   ");
-                    }
-                    else
-                    {
-                        var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingdrinkitem.SearchSetting.ProfileID).FirstOrDefault();
-                        if (matchedsearchsetting != null)
-                        {
-                            searchsettingdrinkobject.searchsetting = matchedsearchsetting;
-                            searchsettingdrinkobject.drink = context.lu_drinks.Where(p => p.id == searchsettingdrinkitem.DrinksID).FirstOrDefault();
-                            context.searchsetting_drink.Add(searchsettingdrinkobject);
-                            //save data one per row
-                            Console.WriteLine("added a search setting drink for the old profileid of    :" + searchsettingdrinkitem.SearchSetting.ProfileID);
-                            counter = counter + 1;
-                        }
-                    }
-                }
-                    
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingdrinks"); context.SaveChanges();
-
-
-                //educationlevel
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_EducationLevel searchsettingeducationlevelitem in olddb.SearchSettings_EducationLevel)
-                {
-                    Console.WriteLine("attempting a search setting educationlevel for the old profileid of    :" + searchsettingeducationlevelitem.SearchSetting.ProfileID);
-                    var searchsettingeducationlevelobject = new Anewluv.Domain.Data.searchsetting_educationlevel();
-
-                    if (context.searchsetting_educationlevel.Any(p => p.educationlevel.id == searchsettingeducationlevelitem.EducationLevelID ))
-                    {
-                        Console.WriteLine("skipping profile with email  :" + searchsettingeducationlevelitem.SearchSetting.ProfileID + "it alaready has search settings educationlevel   ");
-                    }
-                    else
-                    {
-                        var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingeducationlevelitem.SearchSetting.ProfileID).FirstOrDefault();
-                        if (matchedsearchsetting != null)
-                        {
-                            searchsettingeducationlevelobject.searchsetting = matchedsearchsetting;
-                            searchsettingeducationlevelobject.educationlevel = context.lu_educationlevel.Where(p => p.id == searchsettingeducationlevelitem.EducationLevelID).FirstOrDefault();
-                            context.searchsetting_educationlevel.Add(searchsettingeducationlevelobject);
-                            //save data one per row
-                            Console.WriteLine("added a search setting educationlevel for the old profileid of    :" + searchsettingeducationlevelitem.SearchSetting.ProfileID);
-                            counter = counter + 1;
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingeducationlevels"); context.SaveChanges();
-
-
-
-
-                //employmentstatus
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_EmploymentStatus searchsettingemploymentstatusitem in olddb.SearchSettings_EmploymentStatus)
-                {
-                    Console.WriteLine("attempting a search setting employmentstatus for the old profileid of    :" + searchsettingemploymentstatusitem.SearchSetting.ProfileID);
-                    var searchsettingemploymentstatusobject = new Anewluv.Domain.Data.searchsetting_employmentstatus();
-                  
-                    if (context.searchsetting_employmentstatus.Any(p => p.employmentstatus.id == searchsettingemploymentstatusitem.EmploymentStatusID ))
-                    {
-                        Console.WriteLine("skipping profile with email  :" + searchsettingemploymentstatusitem.SearchSetting.ProfileID + "it alaready has search settings employmentstatus   ");
-                    }
-                    else
-                    {
-
-                        var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingemploymentstatusitem.SearchSetting.ProfileID).FirstOrDefault();
-                        if (matchedsearchsetting != null)
-                        {
-                            searchsettingemploymentstatusobject.searchsetting = matchedsearchsetting;
-                            searchsettingemploymentstatusobject.employmentstatus = context.lu_employmentstatus.Where(p => p.id == searchsettingemploymentstatusitem.EmploymentStatusID).FirstOrDefault();
-                            context.searchsetting_employmentstatus.Add(searchsettingemploymentstatusobject);
-                            //save data one per row
-                            Console.WriteLine("added a search setting employmentstatus for the old profileid of    :" + searchsettingemploymentstatusitem.SearchSetting.ProfileID);
-                            counter = counter + 1;
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingemploymentstatuss"); context.SaveChanges();
-
-
-
-
-                //ethnicity
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Ethnicity searchsettingethnicityitem in olddb.SearchSettings_Ethnicity)
-                {
-                    Console.WriteLine("attempting a search setting ethnicity for the old profileid of    :" + searchsettingethnicityitem.SearchSetting.ProfileID);
-                    var searchsettingethnicityobject = new Anewluv.Domain.Data.searchsetting_ethnicity();
-                    if (context.searchsetting_ethnicity.Any(p => p.ethnicity.id == searchsettingethnicityitem.EthicityID ))
-                    {
-                        Console.WriteLine("skipping profile with email  :" + searchsettingethnicityitem.SearchSetting.ProfileID + "it alaready has search settings ethnicity   ");
-                    }
-                    else
-                    {
-                        var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingethnicityitem.SearchSetting.ProfileID).FirstOrDefault();
-                        if (matchedsearchsetting != null)
-                        {
-                            searchsettingethnicityobject.searchsetting = matchedsearchsetting;
-                            searchsettingethnicityobject.ethnicity = context.lu_ethnicity.Where(p => p.id == searchsettingethnicityitem.EthicityID).FirstOrDefault();
-                            context.searchsetting_ethnicity.Add(searchsettingethnicityobject);
-                            //save data one per row
-                            Console.WriteLine("added a search setting ethnicity for the old profileid of    :" + searchsettingethnicityitem.SearchSetting.ProfileID);
-                            counter = counter + 1;
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingethnicitys"); context.SaveChanges();
-
-
-
-
-                //exercise
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Exercise searchsettingexerciseitem in olddb.SearchSettings_Exercise)
-                {
-                    Console.WriteLine("attempting a search setting exercise for the old profileid of    :" + searchsettingexerciseitem.SearchSetting.ProfileID);
-                    var searchsettingexerciseobject = new Anewluv.Domain.Data.searchsetting_exercise();
-
-                    if (context.searchsetting_exercise.Any(p => p.exercise.id == searchsettingexerciseitem.ExerciseID ))
-                    {
-                        Console.WriteLine("skipping profile with email  :" + searchsettingexerciseitem.SearchSetting.ProfileID + "it alaready has search settings exercise   ");
-                    }
-                    else
-                    {
-                        var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingexerciseitem.SearchSetting.ProfileID).FirstOrDefault();
-                        if (matchedsearchsetting != null)
-                        {
-                            searchsettingexerciseobject.searchsetting = matchedsearchsetting;
-                            searchsettingexerciseobject.exercise = context.lu_exercise.Where(p => p.id == searchsettingexerciseitem.ExerciseID).FirstOrDefault();
-                            context.searchsetting_exercise.Add(searchsettingexerciseobject);
-                            //save data one per row
-                            Console.WriteLine("added a search setting exercise for the old profileid of    :" + searchsettingexerciseitem.SearchSetting.ProfileID);
-                            counter = counter + 1;
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingexercises"); context.SaveChanges();
-
-
-
-
-                //eyecolor
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_EyeColor searchsettingeyecoloritem in olddb.SearchSettings_EyeColor)
-                {
-                    Console.WriteLine("attempting a search setting eyecolor for the old profileid of    :" + searchsettingeyecoloritem.SearchSetting.ProfileID);
-                    var searchsettingeyecolorobject = new Anewluv.Domain.Data.searchsetting_eyecolor();
-                    if (context.searchsetting_eyecolor.Any(p => p.eyecolor.id == searchsettingeyecoloritem.EyeColorID ))
-                    {
-                        Console.WriteLine("skipping profile with email  :" + searchsettingeyecoloritem.SearchSetting.ProfileID + "it alaready has search settings eyecolor   ");
-                    }
-                    else
-                    {
-                        var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingeyecoloritem.SearchSetting.ProfileID).FirstOrDefault();
-                        if (matchedsearchsetting != null)
-                        {
-                            searchsettingeyecolorobject.searchsetting = matchedsearchsetting;
-                            searchsettingeyecolorobject.eyecolor = context.lu_eyecolor.Where(p => p.id == searchsettingeyecoloritem.EyeColorID).FirstOrDefault();
-                            context.searchsetting_eyecolor.Add(searchsettingeyecolorobject);
-                            //save data one per row
-                            Console.WriteLine("added a search setting eyecolor for the old profileid of    :" + searchsettingeyecoloritem.SearchSetting.ProfileID);
-                            counter = counter + 1;
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingeyecolors"); context.SaveChanges();
-
-
-
-
-                //gender
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Genders searchsettinggenderitem in olddb.SearchSettings_Genders)
-                {
-                    //if (counter == 127)
-                    //{
-                    //    var here =0;
-                    //}
-                    if (searchsettinggenderitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting gender for the old profileid of    :" + searchsettinggenderitem.SearchSetting.ProfileID);
-                        var searchsettinggenderobject = new Anewluv.Domain.Data.searchsetting_gender();
-                        if (context.searchsetting_gender.Any(p => p.gender.id == searchsettinggenderitem.GenderID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettinggenderitem.SearchSetting.ProfileID + "it alaready has search settings gender   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettinggenderitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettinggenderobject.searchsetting = matchedsearchsetting;
-                                searchsettinggenderobject.gender = context.lu_gender.Where(p => p.id == searchsettinggenderitem.GenderID).FirstOrDefault();
-                                context.searchsetting_gender.Add(searchsettinggenderobject);
-                                //save data one per row
-                                searchsettinggenderobjecttest = searchsettinggenderobject;
-                                Console.WriteLine("added a search setting gender for the old profileid of    :" + searchsettinggenderitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                                Console.WriteLine("saving  a total of : " + counter + " searchsettinggenders"); context.SaveChanges();
-                            }
-                        }
-                    }
-                }
-
-
-
-
-                //haircolor
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_HairColor searchsettinghaircoloritem in olddb.SearchSettings_HairColor)
-                {
-                    if (searchsettinghaircoloritem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting haircolor for the old profileid of    :" + searchsettinghaircoloritem.SearchSetting.ProfileID);
-                        var searchsettinghaircolorobject = new Anewluv.Domain.Data.searchsetting_haircolor();
-                        if (context.searchsetting_haircolor.Any(p => p.haircolor.id == searchsettinghaircoloritem.HairColorID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettinghaircoloritem.SearchSetting.ProfileID + "it alaready has search settings haircolor   ");
-                        }
-                        else
-                        {
-
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettinghaircoloritem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettinghaircolorobject.searchsetting = matchedsearchsetting;
-                                searchsettinghaircolorobject.haircolor = context.lu_haircolor.Where(p => p.id == searchsettinghaircoloritem.HairColorID).FirstOrDefault();
-                                context.searchsetting_haircolor.Add(searchsettinghaircolorobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting haircolor for the old profileid of    :" + searchsettinghaircoloritem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettinghaircolors"); context.SaveChanges();
-
-
-
-
-                //hotfeature
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_HotFeature searchsettinghotfeatureitem in olddb.SearchSettings_HotFeature)
-                {
-                    if (searchsettinghotfeatureitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting hotfeature for the old profileid of    :" + searchsettinghotfeatureitem.SearchSetting.ProfileID);
-                        var searchsettinghotfeatureobject = new Anewluv.Domain.Data.searchsetting_hotfeature();
-                        if (context.searchsetting_hotfeature.Any(p => p.hotfeature.id == searchsettinghotfeatureitem.HotFeatureID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettinghotfeatureitem.SearchSetting.ProfileID + "it alaready has search settings hotfeature   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettinghotfeatureitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettinghotfeatureobject.searchsetting = matchedsearchsetting;
-                                searchsettinghotfeatureobject.hotfeature = context.lu_hotfeature.Where(p => p.id == searchsettinghotfeatureitem.HotFeatureID).FirstOrDefault();
-                                context.searchsetting_hotfeature.Add(searchsettinghotfeatureobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting hotfeature for the old profileid of    :" + searchsettinghotfeatureitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettinghotfeatures"); context.SaveChanges();
-
-
-
-
-                //havekids
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_HaveKids searchsettinghavekidsitem in olddb.SearchSettings_HaveKids)
-                {
-                    if (searchsettinghavekidsitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting havekids for the old profileid of    :" + searchsettinghavekidsitem.SearchSetting.ProfileID);
-                        var searchsettinghavekidsobject = new Anewluv.Domain.Data.searchsetting_havekids();
-                        if (context.searchsetting_havekids.Any(p => p.havekids.id == searchsettinghavekidsitem.HaveKidsID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettinghavekidsitem.SearchSetting.ProfileID + "it alaready has search settings havekids   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettinghavekidsitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettinghavekidsobject.searchsetting = matchedsearchsetting;
-                                searchsettinghavekidsobject.havekids = context.lu_havekids.Where(p => p.id == searchsettinghavekidsitem.HaveKidsID).FirstOrDefault();
-                                context.searchsetting_havekids.Add(searchsettinghavekidsobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting havekids for the old profileid of    :" + searchsettinghavekidsitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettinghavekidss"); context.SaveChanges();
-
-
-
-
-                //hobby
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Hobby searchsettinghobbyitem in olddb.SearchSettings_Hobby)
-                {
-                    if (searchsettinghobbyitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting hobby for the old profileid of    :" + searchsettinghobbyitem.SearchSetting.ProfileID);
-                        var searchsettinghobbyobject = new Anewluv.Domain.Data.searchsetting_hobby();
-                        if (context.searchsetting_hobby.Any(p => p.hobby.id == searchsettinghobbyitem.HobbyID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettinghobbyitem.SearchSetting.ProfileID + "it alaready has search settings hobby   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettinghobbyitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettinghobbyobject.searchsetting = matchedsearchsetting;
-                                searchsettinghobbyobject.hobby = context.lu_hobby.Where(p => p.id == searchsettinghobbyitem.HobbyID).FirstOrDefault();
-                                context.searchsetting_hobby.Add(searchsettinghobbyobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting hobby for the old profileid of    :" + searchsettinghobbyitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettinghobbys"); context.SaveChanges();
-
-
-
-
-                //humor
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Humor searchsettinghumoritem in olddb.SearchSettings_Humor)
-                {
-                    if (searchsettinghumoritem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting humor for the old profileid of    :" + searchsettinghumoritem.SearchSetting.ProfileID);
-                        var searchsettinghumorobject = new Anewluv.Domain.Data.searchsetting_humor();
-                        if (context.searchsetting_humor.Any(p => p.humor.id == searchsettinghumoritem.HumorID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettinghumoritem.SearchSetting.ProfileID + "it alaready has search settings humor   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettinghumoritem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettinghumorobject.searchsetting = matchedsearchsetting;
-                                searchsettinghumorobject.humor = context.lu_humor.Where(p => p.id == searchsettinghumoritem.HumorID).FirstOrDefault();
-                                context.searchsetting_humor.Add(searchsettinghumorobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting humor for the old profileid of    :" + searchsettinghumoritem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettinghumors"); context.SaveChanges();
-
-
-
-
-                //incomelevel
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_IncomeLevel searchsettingincomelevelitem in olddb.SearchSettings_IncomeLevel)
-                {
-                    if (searchsettingincomelevelitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting incomelevel for the old profileid of    :" + searchsettingincomelevelitem.SearchSetting.ProfileID);
-                        var searchsettingincomelevelobject = new Anewluv.Domain.Data.searchsetting_incomelevel();
-                        if (context.searchsetting_incomelevel.Any(p => p.incomelevel.id == searchsettingincomelevelitem.ImcomeLevelID))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingincomelevelitem.SearchSetting.ProfileID + "it alaready has search settings incomelevel   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingincomelevelitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingincomelevelobject.searchsetting = matchedsearchsetting;
-                                searchsettingincomelevelobject.incomelevel = context.lu_incomelevel.Where(p => p.id == searchsettingincomelevelitem.ImcomeLevelID).FirstOrDefault();
-                                context.searchsetting_incomelevel.Add(searchsettingincomelevelobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting incomelevel for the old profileid of    :" + searchsettingincomelevelitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingincomelevels"); context.SaveChanges();
-
-
-
-
-                //livingstituation
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_LivingStituation searchsettinglivingstituationitem in olddb.SearchSettings_LivingStituation)
-                {
-                    if (searchsettinglivingstituationitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting livingstituation for the old profileid of    :" + searchsettinglivingstituationitem.SearchSetting.ProfileID);
-                        var searchsettinglivingstituationobject = new Anewluv.Domain.Data.searchsetting_livingstituation();
-                        if (context.searchsetting_livingstituation.Any(p => p.livingsituation .id == searchsettinglivingstituationitem.LivingStituationID))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettinglivingstituationitem.SearchSetting.ProfileID + "it alaready has search settings livingstituation   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettinglivingstituationitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettinglivingstituationobject.searchsetting = matchedsearchsetting;
-                                searchsettinglivingstituationobject.livingsituation = context.lu_livingsituation.Where(p => p.id == searchsettinglivingstituationitem.LivingStituationID).FirstOrDefault();
-                                context.searchsetting_livingstituation.Add(searchsettinglivingstituationobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting livingstituation for the old profileid of    :" + searchsettinglivingstituationitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettinglivingstituations"); context.SaveChanges();
-
-
-
-
+          
                 //location
                 counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Location searchsettinglocationitem in olddb.SearchSettings_Location)
+                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Location searchsettinglocationitem in olddb.SearchSettings_Location)
                 {
                     if (searchsettinglocationitem.SearchSetting != null)
                     {
@@ -1436,356 +972,6 @@ namespace Misc
                     }
                 }
                 Console.WriteLine("saving  a total of : " + counter + " searchsettinglocations"); context.SaveChanges();
-
-
-
-
-                //lookingfor
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_LookingFor searchsettinglookingforitem in olddb.SearchSettings_LookingFor)
-                {
-                    if (searchsettinglookingforitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting lookingfor for the old profileid of    :" + searchsettinglookingforitem.SearchSetting.ProfileID);
-                        var searchsettinglookingforobject = new Anewluv.Domain.Data.searchsetting_lookingfor();
-                        if (context.searchsetting_lookingfor .Any(p => p.lookingfor .id == searchsettinglookingforitem.LookingForID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettinglookingforitem.SearchSetting.ProfileID + "it alaready has search settings lookinfor   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettinglookingforitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettinglookingforobject.searchsetting = matchedsearchsetting;
-                                searchsettinglookingforobject.lookingfor = context.lu_lookingfor.Where(p => p.id == searchsettinglookingforitem.LookingForID).FirstOrDefault();
-                                context.searchsetting_lookingfor.Add(searchsettinglookingforobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting lookingfor for the old profileid of    :" + searchsettinglookingforitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettinglookingfors"); context.SaveChanges();
-
-
-
-
-                //maritalstatus
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_MaritalStatus searchsettingmaritalstatusitem in olddb.SearchSettings_MaritalStatus)
-                {
-                    if (searchsettingmaritalstatusitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting maritalstatus for the old profileid of    :" + searchsettingmaritalstatusitem.SearchSetting.ProfileID);
-                        var searchsettingmaritalstatusobject = new Anewluv.Domain.Data.searchsetting_maritalstatus();
-                        if (context.searchsetting_maritalstatus.Any(p => p.maritalstatus.id == searchsettingmaritalstatusitem.MaritalStatusID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingmaritalstatusitem.SearchSetting.ProfileID + "it alaready has search settings maritalstatus   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingmaritalstatusitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingmaritalstatusobject.searchsetting = matchedsearchsetting;
-                                searchsettingmaritalstatusobject.maritalstatus = context.lu_maritalstatus.Where(p => p.id == searchsettingmaritalstatusitem.MaritalStatusID).FirstOrDefault();
-                                context.searchsetting_maritalstatus.Add(searchsettingmaritalstatusobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting maritalstatus for the old profileid of    :" + searchsettingmaritalstatusitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingmaritalstatuss"); context.SaveChanges();
-
-
-
-
-                //politicalview
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_PoliticalView searchsettingpoliticalviewitem in olddb.SearchSettings_PoliticalView)
-                {
-                    if (searchsettingpoliticalviewitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting politicalview for the old profileid of    :" + searchsettingpoliticalviewitem.SearchSetting.ProfileID);
-                        var searchsettingpoliticalviewobject = new Anewluv.Domain.Data.searchsetting_politicalview();
-                        if (context.searchsetting_politicalview.Any(p => p.politicalview.id == searchsettingpoliticalviewitem.PoliticalViewID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingpoliticalviewitem.SearchSetting.ProfileID + "it alaready has search settings politicalview   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingpoliticalviewitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingpoliticalviewobject.searchsetting = matchedsearchsetting;
-                                searchsettingpoliticalviewobject.politicalview = context.lu_politicalview.Where(p => p.id == searchsettingpoliticalviewitem.PoliticalViewID).FirstOrDefault();
-                                context.searchsetting_politicalview.Add(searchsettingpoliticalviewobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting politicalview for the old profileid of    :" + searchsettingpoliticalviewitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingpoliticalviews"); context.SaveChanges();
-
-
-
-
-                //professsion
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Profession searchsettingprofesssionitem in olddb.SearchSettings_Profession)
-                {
-                    if (searchsettingprofesssionitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting professsion for the old profileid of    :" + searchsettingprofesssionitem.SearchSetting.ProfileID);
-                        var searchsettingprofesssionobject = new Anewluv.Domain.Data.searchsetting_profession();
-                        if (context.searchsetting_profession.Any(p => p.profession.id == searchsettingprofesssionitem.ProfessionID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingprofesssionitem.SearchSetting.ProfileID + "it alaready has search settings profession   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingprofesssionitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingprofesssionobject.searchsetting = matchedsearchsetting;
-                                searchsettingprofesssionobject.profession = context.lu_profession.Where(p => p.id == searchsettingprofesssionitem.ProfessionID).FirstOrDefault();
-                                context.searchsetting_profession.Add(searchsettingprofesssionobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting professsion for the old profileid of    :" + searchsettingprofesssionitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingprofesssions"); context.SaveChanges();
-
-
-
-
-                //religion
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Religion searchsettingreligionitem in olddb.SearchSettings_Religion)
-                {
-                    if (searchsettingreligionitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting religion for the old profileid of    :" + searchsettingreligionitem.SearchSetting.ProfileID);
-                        var searchsettingreligionobject = new Anewluv.Domain.Data.searchsetting_religion();
-                        if (context.searchsetting_religion.Any(p => p.religion.id == searchsettingreligionitem.ReligionID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingreligionitem.SearchSetting.ProfileID + "it alaready has search settings religion   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingreligionitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingreligionobject.searchsetting = matchedsearchsetting;
-                                searchsettingreligionobject.religion = context.lu_religion.Where(p => p.id == searchsettingreligionitem.ReligionID).FirstOrDefault();
-                                context.searchsetting_religion.Add(searchsettingreligionobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting religion for the old profileid of    :" + searchsettingreligionitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingreligions"); context.SaveChanges();
-
-
-
-                //religiousattendance
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_ReligiousAttendance searchsettingreligiousattendanceitem in olddb.SearchSettings_ReligiousAttendance)
-                {
-                    if (searchsettingreligiousattendanceitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting religiousattendance for the old profileid of    :" + searchsettingreligiousattendanceitem.SearchSetting.ProfileID);
-                        var searchsettingreligiousattendanceobject = new Anewluv.Domain.Data.searchsetting_religiousattendance();
-                        if (context.searchsetting_religiousattendance.Any(p => p.religiousattendance.id == searchsettingreligiousattendanceitem.ReligiousAttendanceID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingreligiousattendanceitem.SearchSetting.ProfileID + "it alaready has search settings religiousattendance   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingreligiousattendanceitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingreligiousattendanceobject.searchsetting = matchedsearchsetting;
-                                searchsettingreligiousattendanceobject.religiousattendance = context.lu_religiousattendance.Where(p => p.id == searchsettingreligiousattendanceitem.ReligiousAttendanceID).FirstOrDefault();
-                                context.searchsetting_religiousattendance.Add(searchsettingreligiousattendanceobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting religiousattendance for the old profileid of    :" + searchsettingreligiousattendanceitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingreligiousattendances"); context.SaveChanges();
-
-
-
-                //showme
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_ShowMe searchsettingshowmeitem in olddb.SearchSettings_ShowMe)
-                {
-                    if (searchsettingshowmeitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting showme for the old profileid of    :" + searchsettingshowmeitem.SearchSetting.ProfileID);
-                        var searchsettingshowmeobject = new Anewluv.Domain.Data.searchsetting_showme();
-                        if (context.searchsetting_showme.Any(p => p.showme.id == searchsettingshowmeitem.ShowMeID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingshowmeitem.SearchSetting.ProfileID + "it alaready has search settings showme   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingshowmeitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingshowmeobject.searchsetting = matchedsearchsetting;
-                                searchsettingshowmeobject.showme = context.lu_showme.Where(p => p.id == searchsettingshowmeitem.ShowMeID).FirstOrDefault();
-                                context.searchsetting_showme.Add(searchsettingshowmeobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting showme for the old profileid of    :" + searchsettingshowmeitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingshowmes"); context.SaveChanges();
-
-
-
-
-                //sign
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Sign searchsettingsignitem in olddb.SearchSettings_Sign)
-                {
-                    if (searchsettingsignitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting sign for the old profileid of    :" + searchsettingsignitem.SearchSetting.ProfileID);
-                        var searchsettingsignobject = new Anewluv.Domain.Data.searchsetting_sign();
-                        if (context.searchsetting_sign.Any(p => p.sign.id == searchsettingsignitem.SignID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingsignitem.SearchSetting.ProfileID + "it alaready has search settings sign   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingsignitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingsignobject.searchsetting = matchedsearchsetting;
-                                searchsettingsignobject.sign = context.lu_sign.Where(p => p.id == searchsettingsignitem.SignID).FirstOrDefault();
-                                context.searchsetting_sign.Add(searchsettingsignobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting sign for the old profileid of    :" + searchsettingsignitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingsigns"); context.SaveChanges();
-
-
-
-
-
-
-                //smokes
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_Smokes searchsettingsmokesitem in olddb.SearchSettings_Smokes)
-                {
-                    if (searchsettingsmokesitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting smokes for the old profileid of    :" + searchsettingsmokesitem.SearchSetting.ProfileID);
-                        var searchsettingsmokesobject = new Anewluv.Domain.Data.searchsetting_smokes();
-                        if (context.searchsetting_smokes.Any(p => p.smoke.id == searchsettingsmokesitem.SmokesID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingsmokesitem.SearchSetting.ProfileID + "it alaready has search settings smokes   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingsmokesitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingsmokesobject.searchsetting = matchedsearchsetting;
-                                searchsettingsmokesobject.smoke = context.lu_smokes.Where(p => p.id == searchsettingsmokesitem.SmokesID).FirstOrDefault();
-                                context.searchsetting_smokes.Add(searchsettingsmokesobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting smokes for the old profileid of    :" + searchsettingsmokesitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingsmokess"); context.SaveChanges();
-
-
-
-
-                //sortbytype
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_SortByType searchsettingsortbytypeitem in olddb.SearchSettings_SortByType)
-                {
-                    if (searchsettingsortbytypeitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting sortbytype for the old profileid of    :" + searchsettingsortbytypeitem.SearchSetting.ProfileID);
-                        var searchsettingsortbytypeobject = new Anewluv.Domain.Data.searchsetting_sortbytype();
-                        if (context.searchsetting_sortbytype.Any(p => p.sortbytype.id == searchsettingsortbytypeitem.SortByTypeID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingsortbytypeitem.SearchSetting.ProfileID + "it alaready has search settings sortbytype   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingsortbytypeitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingsortbytypeobject.searchsetting = matchedsearchsetting;
-                                searchsettingsortbytypeobject.sortbytype = context.lu_sortbytype.Where(p => p.id == searchsettingsortbytypeitem.SortByTypeID).FirstOrDefault();
-                                context.searchsetting_sortbytype.Add(searchsettingsortbytypeobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting sortbytype for the old profileid of    :" + searchsettingsortbytypeitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingsortbytypes"); context.SaveChanges();
-
-
-                //wantskids
-                counter = 0;
-                foreach (Dating.Server.Data.Models.SearchSettings_WantKids searchsettingwantskidsitem in olddb.SearchSettings_WantKids)
-                {
-                    if (searchsettingwantskidsitem.SearchSetting != null)
-                    {
-                        Console.WriteLine("attempting a search setting wantskids for the old profileid of    :" + searchsettingwantskidsitem.SearchSetting.ProfileID);
-                        var searchsettingwantskidsobject = new Anewluv.Domain.Data.searchsetting_wantkids();
-                        if (context.searchsetting_wantkids.Any(p => p.wantskids .id == searchsettingwantskidsitem.WantKidsID ))
-                        {
-                            Console.WriteLine("skipping profile with email  :" + searchsettingwantskidsitem.SearchSetting.ProfileID + "it alaready has search settings wantskids   ");
-                        }
-                        else
-                        {
-                            var matchedsearchsetting = context.searchsetting.Where(p => p.profilemetadata.profile.emailaddress == searchsettingwantskidsitem.SearchSetting.ProfileID).FirstOrDefault();
-                            if (matchedsearchsetting != null)
-                            {
-                                searchsettingwantskidsobject.searchsetting = matchedsearchsetting;
-                                searchsettingwantskidsobject.wantskids = context.lu_wantskids.Where(p => p.id == searchsettingwantskidsitem.WantKidsID).FirstOrDefault();
-                                context.searchsetting_wantkids.Add(searchsettingwantskidsobject);
-                                //save data one per row
-                                Console.WriteLine("added a search setting wantskids for the old profileid of    :" + searchsettingwantskidsitem.SearchSetting.ProfileID);
-                                counter = counter + 1;
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine("saving  a total of : " + counter + " searchsettingwantskidss"); context.SaveChanges();
 
 
 
@@ -1823,8 +1009,8 @@ namespace Misc
     //public static void FixBadUserGeoData()
     //{
     //    //var db =  //new Dating.Server.Data.Services.DatingService();
-    //    var datingentities = new AnewLuvFTSEntities();
-    //    var postaldataentities = new PostalData2Entities();
+    //    var datingentities = new AnewluvFTSContext();
+    //    var postaldataentities = new PostalData2Context();
     //    var postaldb= new PostalDataService();
     //    List<MembersViewModel> membersmodels = new List<MembersViewModel>();
     //    List<profiledata> profiledatas =  new List<profiledata>();

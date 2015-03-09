@@ -5,7 +5,8 @@ using System.Runtime.Serialization;
 
 namespace Anewluv.Domain.Data
 {
-   [DataContract] public partial class lu_activitytype
+    [DataContract]
+    public partial class lu_activitytype : Repository.Pattern.Ef6.Entity
     {
         public lu_activitytype()
         {

@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_applicationitemtransfertype
+    public partial class lu_applicationtransfertype : Repository.Pattern.Ef6.Entity
     {
-        public lu_applicationitemtransfertype()
+        public lu_applicationtransfertype()
         {
-            this.applicationitems = new List<applicationitem>();
+            this.applications = new List<application>();
         }
 
         public int id { get; set; }
         public string description { get; set; }
-        public virtual ICollection<applicationitem> applicationitems { get; set; }
+        public virtual ICollection<application> applications { get; set; }
     }
 }

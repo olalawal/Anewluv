@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Anewluv.Domain.Data.Mapping
@@ -32,6 +32,11 @@ namespace Anewluv.Domain.Data.Mapping
             this.HasRequired(t => t.profilemetadata)
                 .WithMany(t => t.searchsettings)
                 .HasForeignKey(d => d.profile_id);
+
+            this.HasMany(t => t.details).WithRequired(z => z.searchsetting).HasForeignKey(z => z.searchsetting_id);
+
+            this.HasMany(t => t.locations).WithRequired(z => z.searchsetting).HasForeignKey(z => z.searchsetting_id);
+
 
         }
     }

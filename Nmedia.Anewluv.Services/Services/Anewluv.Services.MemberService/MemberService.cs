@@ -313,7 +313,7 @@ namespace Anewluv.Services.Members
                               {
                                   mailboxfolder p = new mailboxfolder();
                                   p.foldertype_id = i;
-                                  p.profiled_id = model.profileid.GetValueOrDefault();
+                                  p.profile_id = model.profileid.GetValueOrDefault();
                                   //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
                                   switch (i)
                                   {
@@ -612,7 +612,7 @@ namespace Anewluv.Services.Members
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        return (db.Repository<mailboxfolder>().Queryable().Where(p => p.profiled_id == model.profileid).FirstOrDefault() != null);
+                        return (db.Repository<mailboxfolder>().Queryable().Where(p => p.profile_id == model.profileid).FirstOrDefault() != null);
                     });
                     return await task.ConfigureAwait(false);
                    

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_defaultmailboxfolder
+    public partial class lu_defaultmailboxfolder : Repository.Pattern.Ef6.Entity
     {
         public lu_defaultmailboxfolder()
         {

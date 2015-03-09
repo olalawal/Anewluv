@@ -532,7 +532,8 @@ namespace Anewluv.DataExtentionMethods
                 // model.Profile = model.profile;
                 model.profile_id = profile.id;
                 //4-28-2012 added mapping for profile visiblity
-                model.profilevisiblity = profile.profiledata.visiblitysetting;
+                
+                model.profilevisiblity = profile.profiledata.visiblitysettings.First();   //swict this to have flags 
                 model.profile = profile;
                
                 //on first load this should always be false

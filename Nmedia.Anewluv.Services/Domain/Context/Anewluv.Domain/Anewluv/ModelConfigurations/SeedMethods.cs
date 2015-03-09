@@ -8,6 +8,7 @@ using Anewluv.Domain;
 //using Nmedia.Infrastructure;
 using Anewluv.Domain.Data;
 using Nmedia.Infrastructure;
+using Repository.Pattern.Infrastructure;
 
 namespace Anewluv.Domain.Migrations
 {
@@ -16,6 +17,64 @@ namespace Anewluv.Domain.Migrations
 
         public static void seedgenerallookups(AnewluvContext context)
         {
+
+            //abusetypes
+            //filter an enum for not set since that is the zero value i.e  
+            var abusetypeqry = from abusetypeEnum value in Enum.GetValues(typeof(abusetypeEnum))
+                               where value != abusetypeEnum.NotSet
+                               orderby value // to sort by value; remove otherwise 
+                               select value;
+            abusetypeqry.ToList().ForEach(kvp => context.lu_abusetype.Add(new lu_abusetype()
+            {
+                id = (int)kvp,  ObjectState = ObjectState.Added,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+
+            //actiontypes
+            //filter an enum for not set since that is the zero value i.e  
+            var actiontypeqry = from actiontypeEnum value in Enum.GetValues(typeof(actiontypeEnum))                              
+                               orderby value // to sort by value; remove otherwise 
+                               select value;
+            actiontypeqry.ToList().ForEach(kvp => context.lu_actiontype.AddOrUpdate(new lu_actiontype()
+            {
+                id = (int)kvp,  ObjectState = ObjectState.Added,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+            context.SaveChanges();
+
+
+            //9-12-2012
+            //added for profile activity type
+            //activitytype
+            //filter an enum for not set since that is the zero value i.e  
+            var activitytypeqry = from activitytypeEnum value in Enum.GetValues(typeof(activitytypeEnum))
+                                  where value != activitytypeEnum.NotSet
+                                  orderby value // to sort by value; remove otherwise 
+                                  select value;
+            activitytypeqry.ToList().ForEach(kvp => context.lu_activitytype.AddOrUpdate(new lu_activitytype()
+            {
+                id = (int)kvp,  ObjectState = ObjectState.Added, 
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+      
+           
+            //  //applicationtransfertypes
+            ////filter an enum for not set since that is the zero value i.e  
+            //var applicationtransfertypeqry = from  value in Enum.GetValues(typeof(applicationtransfertypeEnum))
+            //                   where value != applicationtransfertypeEnum.NotSet
+            //                   orderby value // to sort by value; remove otherwise 
+            //                   select value;
+            //applicationtransfertypeqry.ToList().ForEach(kvp => context.lu_applicationtransfertype.AddOrUpdate(new lu_applicationtransfertype()
+            //{
+            //    id = (int)kvp,  ObjectState = ObjectState.Added,
+            //    description = EnumExtensionMethods.ToDescription(kvp)
+            //}));
+
+
+          
 
 
             //3-25-2013 olawal
@@ -27,46 +86,19 @@ namespace Anewluv.Domain.Migrations
                                   select value;
             openidproviderqry.ToList().ForEach(kvp => context.lu_openidprovider.AddOrUpdate(new lu_openidprovider()
             {
-                id = (int)kvp,
-                description = EnumExtensionMethods.ToDescription(kvp)
-            }));
-
-            //9-12-2012
-            //added for profile activity type
-            //activitytype
-            //filter an enum for not set since that is the zero value i.e  
-            var activitytypeqry = from activitytypeEnum value in Enum.GetValues(typeof(activitytypeEnum))
-                               where value != activitytypeEnum.NotSet
-                               orderby value // to sort by value; remove otherwise 
-                               select value;
-            activitytypeqry.ToList().ForEach(kvp => context.lu_activitytype.AddOrUpdate(new lu_activitytype()
-            {
-                id = (int)kvp,
-                description = EnumExtensionMethods.ToDescription(kvp)
-            }));
-
-            //abusetypes
-            //filter an enum for not set since that is the zero value i.e  
-            var abusetypeqry = from abusetypeEnum value in Enum.GetValues(typeof(abusetypeEnum))
-                               where value != abusetypeEnum.NotSet
-                               orderby value // to sort by value; remove otherwise 
-                               select value;       
-            abusetypeqry.ToList().ForEach(kvp => context.lu_abusetype.AddOrUpdate(new lu_abusetype()
-            {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
 
             //notetypes addded 9/11/2012
             //filter an enum for not set since that is the zero value i.e  
-            var notetypeqry = from notetypeEnum value in Enum.GetValues(typeof(notetypeEnum))
-                              where value != notetypeEnum.NotSet
+            var notetypeqry = from notetypeEnum value in Enum.GetValues(typeof(notetypeEnum))                          
                                orderby value // to sort by value; remove otherwise 
                                select value;
             notetypeqry.ToList().ForEach(kvp => context.lu_notetype.AddOrUpdate(new lu_notetype ()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -78,7 +110,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             defaultmailboxfoldertypeqry.ToList().ForEach(kvp => context.lu_defaultmailboxfolder.AddOrUpdate(new lu_defaultmailboxfolder()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -91,7 +123,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             genderqry.ToList().ForEach(kvp => context.lu_gender.AddOrUpdate(new lu_gender()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -106,7 +138,7 @@ namespace Anewluv.Domain.Migrations
                             select value;
             flagyesnoqry.ToList().ForEach(kvp => context.lu_flagyesno.AddOrUpdate(new lu_flagyesno()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -118,7 +150,7 @@ namespace Anewluv.Domain.Migrations
                                select value;       
             photoapprovalstatusqry.ToList().ForEach(kvp => context.lu_photoapprovalstatus.AddOrUpdate(new lu_photoapprovalstatus()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -181,7 +213,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             photosizeqry.ToList().ForEach(kvp => context.lu_photoImagersizerformat.AddOrUpdate(new lu_photoImagersizerformat()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -195,7 +227,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             photoformatqry.ToList().ForEach(kvp => context.lu_photoformat.AddOrUpdate(new lu_photoformat()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp),
                 photoImagersizerformat_id = (int)kvp  //this only works since these loookups have same order
 
@@ -212,7 +244,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             photostatusqry.ToList().ForEach(kvp => context.lu_photostatus.AddOrUpdate(new lu_photostatus()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -225,7 +257,7 @@ namespace Anewluv.Domain.Migrations
                                  select value;
             photoimagetypeqry.ToList().ForEach(kvp => context.lu_photoimagetype.AddOrUpdate(new lu_photoimagetype()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -238,7 +270,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             profilestatusqry.ToList().ForEach(kvp => context.lu_profilestatus.AddOrUpdate(new lu_profilestatus()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -251,7 +283,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             roleqry.ToList().ForEach(kvp => context.lu_role.AddOrUpdate(new lu_role()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -264,7 +296,20 @@ namespace Anewluv.Domain.Migrations
                                select value;
             securityleveltypeqry.ToList().ForEach(kvp => context.lu_securityleveltype.AddOrUpdate(new lu_securityleveltype()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
+                description = EnumExtensionMethods.ToDescription(kvp)
+            }));
+
+
+         
+            //ssearchsettingdetail
+            //filter an enum for not set since that is the zero value i.e  
+            var searchsettingdetailtypeqry = from searchsettingdetailtypeEnum value in Enum.GetValues(typeof(searchsettingdetailtypeEnum))                             
+                               orderby value // to sort by value; remove otherwise 
+                               select value;
+            searchsettingdetailtypeqry.ToList().ForEach(kvp => context.lu_searchsettingdetailtype.AddOrUpdate(new lu_searchsettingdetailtype()
+            {
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -276,7 +321,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             securityquestionqry.ToList().ForEach(kvp => context.lu_securityquestion.AddOrUpdate(new lu_securityquestion()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -290,7 +335,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             showmeqry.ToList().ForEach(kvp => context.lu_showme.AddOrUpdate(new lu_showme()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -302,7 +347,7 @@ namespace Anewluv.Domain.Migrations
                             select value;
             sortbytypeqry.ToList().ForEach(kvp => context.lu_sortbytype.AddOrUpdate(new lu_sortbytype()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
           
@@ -319,7 +364,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             bodytypeqry.ToList().ForEach(kvp => context.lu_bodytype.AddOrUpdate(new lu_bodytype()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -331,7 +376,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             dietqry.ToList().ForEach(kvp => context.lu_diet.AddOrUpdate(new lu_diet()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -343,7 +388,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             drinksqry.ToList().ForEach(kvp => context.lu_drinks.AddOrUpdate(new lu_drinks()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -355,7 +400,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             educationlevelqry.ToList().ForEach(kvp => context.lu_educationlevel.AddOrUpdate(new lu_educationlevel()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -367,7 +412,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             employmentstatusqry.ToList().ForEach(kvp => context.lu_employmentstatus.AddOrUpdate(new lu_employmentstatus()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -380,7 +425,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             ethnicityqry.ToList().ForEach(kvp => context.lu_ethnicity.AddOrUpdate(new lu_ethnicity()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -392,7 +437,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             exerciseqry.ToList().ForEach(kvp => context.lu_exercise.AddOrUpdate(new lu_exercise()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -404,7 +449,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             eyecolorqry.ToList().ForEach(kvp => context.lu_eyecolor.AddOrUpdate(new lu_eyecolor()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -416,7 +461,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             haircolorqry.ToList().ForEach(kvp => context.lu_haircolor.AddOrUpdate(new lu_haircolor()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -428,7 +473,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             havekidsqry.ToList().ForEach(kvp => context.lu_havekids.AddOrUpdate(new lu_havekids()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -441,7 +486,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             hobbyqry.ToList().ForEach(kvp => context.lu_hobby.AddOrUpdate(new lu_hobby()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -453,7 +498,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             hotfeatureqry.ToList().ForEach(kvp => context.lu_hotfeature.AddOrUpdate(new lu_hotfeature()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -465,7 +510,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             humorqry.ToList().ForEach(kvp => context.lu_humor.AddOrUpdate(new lu_humor()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -477,7 +522,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             incomelevelqry.ToList().ForEach(kvp => context.lu_incomelevel.AddOrUpdate(new lu_incomelevel()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -489,7 +534,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             livingsituationqry.ToList().ForEach(kvp => context.lu_livingsituation.AddOrUpdate(new lu_livingsituation()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -502,7 +547,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             lookingforqry.ToList().ForEach(kvp => context.lu_lookingfor.AddOrUpdate(new lu_lookingfor()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -515,7 +560,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             maritalstatusqry.ToList().ForEach(kvp => context.lu_maritalstatus.AddOrUpdate(new lu_maritalstatus()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -528,7 +573,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             professionqry.ToList().ForEach(kvp => context.lu_profession.AddOrUpdate(new lu_profession()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -540,7 +585,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             religionqry.ToList().ForEach(kvp => context.lu_religion.AddOrUpdate(new lu_religion()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -554,7 +599,7 @@ namespace Anewluv.Domain.Migrations
                               select value;
             politicalqry.ToList().ForEach(kvp => context.lu_politicalview.AddOrUpdate(new lu_politicalview()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -568,7 +613,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             religiousattendanceqry.ToList().ForEach(kvp => context.lu_religiousattendance.AddOrUpdate(new lu_religiousattendance()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -580,7 +625,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             signqry.ToList().ForEach(kvp => context.lu_sign.AddOrUpdate(new lu_sign()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -593,7 +638,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             smokesqry.ToList().ForEach(kvp => context.lu_smokes.AddOrUpdate(new lu_smokes()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -606,7 +651,7 @@ namespace Anewluv.Domain.Migrations
                                 select value;
             wantskidsqry.ToList().ForEach(kvp => context.lu_wantskids.AddOrUpdate(new lu_wantskids()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -619,7 +664,7 @@ namespace Anewluv.Domain.Migrations
                                select value;
             profilefiltertypeqry.ToList().ForEach(kvp => context.lu_profilefiltertype.AddOrUpdate(new lu_profilefiltertype()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -638,7 +683,7 @@ namespace Anewluv.Domain.Migrations
                                  select value;
             iconformatqry.ToList().ForEach(kvp => context.lu_iconformat.AddOrUpdate(new lu_iconformat()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp),
                 iconImagersizerformat_id = (int)kvp  //this only works since these loookups have same order
 
@@ -653,9 +698,9 @@ namespace Anewluv.Domain.Migrations
                                             where value != applicationpaymenttypeEnum.NotSet
                                orderby value // to sort by value; remove otherwise 
                                select value;
-            applicationpaymenttypeqry.ToList().ForEach(kvp => context.lu_applicationitempaymenttype.AddOrUpdate(new lu_applicationitempaymenttype()
+            applicationpaymenttypeqry.ToList().ForEach(kvp => context.lu_applicationpaymenttype.AddOrUpdate(new lu_applicationpaymenttype()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -663,12 +708,12 @@ namespace Anewluv.Domain.Migrations
             //applicationitemtransfertype
             //filter an enum for not set since that is the zero value i.e  
             var applicationitemtransfertypeqry = from applicationitemtransfertypeEnum value in Enum.GetValues(typeof(applicationitemtransfertypeEnum))
-                                            where value != applicationitemtransfertypeEnum.NotSet
+                                           // where value != applicationitemtransfertypeEnum.NotSet
                                             orderby value // to sort by value; remove otherwise 
                                             select value;
-            applicationitemtransfertypeqry.ToList().ForEach(kvp => context.lu_applicationitempaymenttype.AddOrUpdate(new lu_applicationitempaymenttype()
+            applicationitemtransfertypeqry.ToList().ForEach(kvp => context.lu_applicationtransfertype.AddOrUpdate(new lu_applicationtransfertype()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -680,9 +725,9 @@ namespace Anewluv.Domain.Migrations
                                             where value != applicationtypeEnum.NotSet
                                             orderby value // to sort by value; remove otherwise 
                                             select value;
-            applicationtypeqry.ToList().ForEach(kvp => context.lu_applicationitempaymenttype.AddOrUpdate(new lu_applicationitempaymenttype()
+            applicationtypeqry.ToList().ForEach(kvp => context.lu_applicationtype.AddOrUpdate(new lu_applicationtype()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
@@ -693,13 +738,13 @@ namespace Anewluv.Domain.Migrations
                                             where value != iconImageresizerformatEnum.NotSet
                                             orderby value // to sort by value; remove otherwise 
                                             select value;
-            iconImageresizerformatqry.ToList().ForEach(kvp => context.lu_applicationitempaymenttype.AddOrUpdate(new lu_applicationitempaymenttype()
+            iconImageresizerformatqry.ToList().ForEach(kvp => context.lu_iconImagersizerformat.AddOrUpdate(new lu_iconImagersizerformat()
             {
-                id = (int)kvp,
+                id = (int)kvp,  ObjectState = ObjectState.Added,
                 description = EnumExtensionMethods.ToDescription(kvp)
             }));
 
-            
+            context.SaveChanges();
 
         }
     }

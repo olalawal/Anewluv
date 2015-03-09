@@ -12,7 +12,7 @@ namespace Anewluv.Domain.Data
         public lu_hotfeature()
         {
             this.profiledata_hotfeature = new List<profiledata_hotfeature>();
-            this.searchsetting_hotfeature = new List<searchsetting_hotfeature>();
+            //this.searchsetting_hotfeature = new List<searchsetting_hotfeature>();
         }
 
         [DataMember]
@@ -22,6 +22,6 @@ namespace Anewluv.Domain.Data
         [DataMember]
         public string description { get; set; }
         public virtual ICollection<profiledata_hotfeature> profiledata_hotfeature { get; set; }
-        public virtual ICollection<searchsetting_hotfeature> searchsetting_hotfeature { get; set; }
+        //public virtual ICollection<searchsetting_hotfeature> searchsetting_hotfeature { get; set; }
     }
 }

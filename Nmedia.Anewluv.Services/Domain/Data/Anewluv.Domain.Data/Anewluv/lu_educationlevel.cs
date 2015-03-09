@@ -11,7 +11,7 @@ namespace Anewluv.Domain.Data
         public lu_educationlevel()
         {
             this.profiledatas = new List<profiledata>();
-            this.searchsetting_educationlevel = new List<searchsetting_educationlevel>();
+            //this.searchsetting_educationlevel = new List<searchsetting_educationlevel>();
         }
 
         [DataMember]   public int id { get; set; }
@@ -19,6 +19,6 @@ namespace Anewluv.Domain.Data
         public bool selected { get; set; }
         [DataMember]   public string description { get; set; }
       public virtual ICollection<profiledata> profiledatas { get; set; }
-        public virtual ICollection<searchsetting_educationlevel> searchsetting_educationlevel { get; set; }
+        //public virtual ICollection<searchsetting_educationlevel> searchsetting_educationlevel { get; set; }
     }
 }

@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\abuser.cs" />
     <Compile Include="Models\abusereport.cs" />
     <Compile Include="Models\abusetype.cs" />

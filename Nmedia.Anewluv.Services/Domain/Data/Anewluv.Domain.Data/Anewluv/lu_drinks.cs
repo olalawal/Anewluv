@@ -10,13 +10,13 @@ namespace Anewluv.Domain.Data
         public lu_drinks()
         {
             this.profiledatas = new List<profiledata>();
-            this.searchsetting_drink = new List<searchsetting_drink>();
+            //this.searchsetting_drink = new List<searchsetting_drink>();
         }
 
         [DataMember]   public int id { get; set; }
         [NotMapped, DataMember]  public bool selected { get; set; }
         [DataMember]   public string description { get; set; }
          public virtual ICollection<profiledata> profiledatas { get; set; }
-         public virtual ICollection<searchsetting_drink> searchsetting_drink { get; set; }
+        // public virtual ICollection<searchsetting_drink> searchsetting_drink { get; set; }
     }
 }

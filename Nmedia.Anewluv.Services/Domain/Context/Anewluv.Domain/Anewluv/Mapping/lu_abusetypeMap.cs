@@ -15,6 +15,8 @@ namespace Anewluv.Domain.Data.Mapping
             this.ToTable("lu_abusetype");
             this.Property(t => t.id).HasColumnName("id");
             this.Property(t => t.description).HasColumnName("description");
+
+            this.HasMany(t => t.abusereports).WithOptional(z => z.lu_abusetype).HasForeignKey(z => z.abusetype_id);
         }
     }
 }

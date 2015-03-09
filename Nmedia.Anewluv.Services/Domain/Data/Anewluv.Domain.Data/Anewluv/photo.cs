@@ -11,7 +11,7 @@ namespace Anewluv.Domain.Data
             this.photo_securitylevel = new List<photo_securitylevel>();
             this.photoconversions = new List<photoconversion>();
             this.photoreviews = new List<photoreview>();
-            this.photoalbums = new List<photoalbum>();
+            this.photophotoalbums = new List<photophotoalbum>();
         }
 
         public System.Guid id { get; set; }
@@ -33,6 +33,8 @@ namespace Anewluv.Domain.Data
         public virtual ICollection<photoconversion> photoconversions { get; set; }
         public virtual ICollection<photoreview> photoreviews { get; set; }
         public virtual profilemetadata profilemetadata { get; set; }
-        public virtual ICollection<photoalbum> photoalbums { get; set; }
+      //  public virtual ICollection<photoalbum> photoalbums { get; set; }
+        public virtual ICollection<photophotoalbum> photophotoalbums { get; set; }
+
     }
 }

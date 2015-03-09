@@ -13,24 +13,21 @@ namespace  Anewluv.Domain
         //TO DO - determine weather we should be doing man detail ojects per rview since we have history as well
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-             modelBuilder.Configurations.Add(new abusereportnoteMap());
-            modelBuilder.Configurations.Add(new abusereportMap());
+
+
+            modelBuilder.Configurations.Add(new actionMap());
+           
             modelBuilder.Configurations.Add(new applicationiconconversionMap());
-            modelBuilder.Configurations.Add(new applicationitemMap());
+           
             modelBuilder.Configurations.Add(new applicationroleMap());
             modelBuilder.Configurations.Add(new applicationMap());
-            modelBuilder.Configurations.Add(new blocknoteMap());
-            modelBuilder.Configurations.Add(new blockMap());
+            
             modelBuilder.Configurations.Add(new communicationquotaMap());
-            modelBuilder.Configurations.Add(new favoriteMap());
-            modelBuilder.Configurations.Add(new friendMap());
-            modelBuilder.Configurations.Add(new hotlistMap());
-            modelBuilder.Configurations.Add(new interestMap());
-            modelBuilder.Configurations.Add(new likeMap());
+           
             modelBuilder.Configurations.Add(new lu_abusetypeMap());
+            modelBuilder.Configurations.Add(new lu_actiontypeMap());
             modelBuilder.Configurations.Add(new lu_activitytypeMap());
-            modelBuilder.Configurations.Add(new lu_applicationitempaymenttypeMap());
-            modelBuilder.Configurations.Add(new lu_applicationitemtransfertypeMap());
+            
             modelBuilder.Configurations.Add(new lu_applicationtypeMap());
             modelBuilder.Configurations.Add(new lu_bodytypeMap());
             modelBuilder.Configurations.Add(new lu_defaultmailboxfolderMap());
@@ -71,6 +68,7 @@ namespace  Anewluv.Domain
             modelBuilder.Configurations.Add(new lu_religionMap());
             modelBuilder.Configurations.Add(new lu_religiousattendanceMap());
             modelBuilder.Configurations.Add(new lu_roleMap());
+            modelBuilder.Configurations.Add(new lu_searchsettingdetailtypeMap());            
             modelBuilder.Configurations.Add(new lu_securityleveltypeMap());
             modelBuilder.Configurations.Add(new lu_securityquestionMap());
             modelBuilder.Configurations.Add(new lu_showmeMap());
@@ -85,10 +83,13 @@ namespace  Anewluv.Domain
             modelBuilder.Configurations.Add(new mailupdatefreqencyMap());
             modelBuilder.Configurations.Add(new membersinroleMap());
             modelBuilder.Configurations.Add(new openidMap());
-            modelBuilder.Configurations.Add(new peekMap());
+
+            modelBuilder.Configurations.Add(new noteMap());
+        
             modelBuilder.Configurations.Add(new photo_securitylevelMap());
             modelBuilder.Configurations.Add(new photoalbum_securitylevelMap());
             modelBuilder.Configurations.Add(new photoalbumMap());
+            modelBuilder.Configurations.Add(new photophotoalbumMap());            
             modelBuilder.Configurations.Add(new photoconversionMap());
             modelBuilder.Configurations.Add(new photoreviewMap());
             modelBuilder.Configurations.Add(new photoMap());
@@ -103,35 +104,15 @@ namespace  Anewluv.Domain
             modelBuilder.Configurations.Add(new profileMap());
             modelBuilder.Configurations.Add(new ratingMap());
             modelBuilder.Configurations.Add(new ratingvalueMap());
-            modelBuilder.Configurations.Add(new searchsetting_bodytypeMap());
-            modelBuilder.Configurations.Add(new searchsetting_dietMap());
-            modelBuilder.Configurations.Add(new searchsetting_drinkMap());
-            modelBuilder.Configurations.Add(new searchsetting_educationlevelMap());
-            modelBuilder.Configurations.Add(new searchsetting_employmentstatusMap());
-            modelBuilder.Configurations.Add(new searchsetting_ethnicityMap());
-            modelBuilder.Configurations.Add(new searchsetting_exerciseMap());
-            modelBuilder.Configurations.Add(new searchsetting_eyecolorMap());
-            modelBuilder.Configurations.Add(new searchsetting_genderMap());
-            modelBuilder.Configurations.Add(new searchsetting_haircolorMap());
-            modelBuilder.Configurations.Add(new searchsetting_havekidsMap());
-            modelBuilder.Configurations.Add(new searchsetting_hobbyMap());
-            modelBuilder.Configurations.Add(new searchsetting_hotfeatureMap());
-            modelBuilder.Configurations.Add(new searchsetting_humorMap());
-            modelBuilder.Configurations.Add(new searchsetting_incomelevelMap());
-            modelBuilder.Configurations.Add(new searchsetting_livingstituationMap());
+            
             modelBuilder.Configurations.Add(new searchsetting_locationMap());
-            modelBuilder.Configurations.Add(new searchsetting_lookingforMap());
-            modelBuilder.Configurations.Add(new searchsetting_maritalstatusMap());
-            modelBuilder.Configurations.Add(new searchsetting_politicalviewMap());
-            modelBuilder.Configurations.Add(new searchsetting_professionMap());
-            modelBuilder.Configurations.Add(new searchsetting_religionMap());
-            modelBuilder.Configurations.Add(new searchsetting_religiousattendanceMap());
-            modelBuilder.Configurations.Add(new searchsetting_showmeMap());
-            modelBuilder.Configurations.Add(new searchsetting_signMap());
-            modelBuilder.Configurations.Add(new searchsetting_smokesMap());
-            modelBuilder.Configurations.Add(new searchsetting_sortbytypeMap());
-            modelBuilder.Configurations.Add(new searchsetting_wantkidsMap());
+           
             modelBuilder.Configurations.Add(new searchsettingMap());
+
+              modelBuilder.Configurations.Add(new searchsettingdetailMap());
+       
+
+
             modelBuilder.Configurations.Add(new systempagesettingMap());
             modelBuilder.Configurations.Add(new userlogtimeMap());
             modelBuilder.Configurations.Add(new visiblitysettingMap());

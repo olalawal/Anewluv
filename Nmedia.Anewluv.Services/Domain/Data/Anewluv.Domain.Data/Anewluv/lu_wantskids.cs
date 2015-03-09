@@ -11,13 +11,13 @@ namespace Anewluv.Domain.Data
         public lu_wantskids()
         {
             this.profiledatas = new List<profiledata>();
-            this.searchsetting_wantkids = new List<searchsetting_wantkids>();
+           // this.searchsetting_wantkids = new List<searchsettingdetail>();
         }
 
         [DataMember]   public int id { get; set; }
         [NotMapped, DataMember]  public bool selected { get; set; }
         [DataMember]   public string description { get; set; }
         public virtual ICollection<profiledata> profiledatas { get; set; }
-        public virtual ICollection<searchsetting_wantkids> searchsetting_wantkids { get; set; }
+       // public virtual ICollection<searchsettingdetail> searchsetting_wantkids { get; set; }
     }
 }

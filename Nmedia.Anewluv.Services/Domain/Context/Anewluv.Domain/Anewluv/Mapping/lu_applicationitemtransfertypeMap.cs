@@ -3,9 +3,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace Anewluv.Domain.Data.Mapping
 {
-    public class lu_applicationitemtransfertypeMap : EntityTypeConfiguration<lu_applicationitemtransfertype>
+    public class lu_applicationtransfertypeMap : EntityTypeConfiguration<lu_applicationtransfertype>
     {
-        public lu_applicationitemtransfertypeMap()
+        public lu_applicationtransfertypeMap()
         {
             // Primary Key
             this.HasKey(t => t.id);

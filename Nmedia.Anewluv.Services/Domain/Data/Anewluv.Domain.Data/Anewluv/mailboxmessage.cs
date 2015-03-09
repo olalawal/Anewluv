@@ -19,7 +19,7 @@ namespace Anewluv.Domain.Data
         public string subject { get; set; }
         public Nullable<int> uniqueid { get; set; }
         public virtual ICollection<mailboxmessagefolder> mailboxmessagefolders { get; set; }
-        public virtual profilemetadata profilemetadata { get; set; }
-        public virtual profilemetadata profilemetadata1 { get; set; }
+        public virtual profilemetadata recipientprofilemetadata { get; set; }
+        public virtual profilemetadata senderprofilemetadata { get; set; }
     }
 }

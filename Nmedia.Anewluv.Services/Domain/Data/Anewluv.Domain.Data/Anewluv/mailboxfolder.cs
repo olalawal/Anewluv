@@ -12,7 +12,7 @@ namespace Anewluv.Domain.Data
         }
 
         public int id { get; set; }
-        public int profiled_id { get; set; }
+        public int profile_id { get; set; }
         public Nullable<int> active { get; set; }
         public Nullable<int> foldertype_id { get; set; }
         public virtual mailboxfoldertype mailboxfoldertype { get; set; }

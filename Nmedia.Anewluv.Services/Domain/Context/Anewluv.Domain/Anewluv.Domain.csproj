@@ -58,47 +58,27 @@
     <Compile Include="Anewluv.Chat\Context\SeedingConversions.cs" />
     <Compile Include="Anewluv.Chat\Context\SeedMethods.cs" />
     <Compile Include="Anewluv\Context\Anewluv.Context.cs" />
+    <Compile Include="Anewluv\Mapping\actionMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_searchsettingdetailtypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_actiontypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\photophotoalbumMap.cs" />
+    <Compile Include="Anewluv\Mapping\searchsettingMap.cs" />
     <Compile Include="Anewluv\ModelConfigurations\SeedingConversions.cs" />
     <Compile Include="Anewluv\ModelConfigurations\SeedMethods.cs" />
     <Compile Include="Anewluv\ModelConfigurations\Anewluv.Context.Modelbuilder.cs" />
-    <Compile Include="Migrations\201412281808010_MigrationFromJohn.cs" />
-    <Compile Include="Migrations\201412281808010_MigrationFromJohn.Designer.cs">
-      <DependentUpon>201412281808010_MigrationFromJohn.cs</DependentUpon>
+    <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.cs" />
+    <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.Designer.cs">
+      <DependentUpon>201503080503290_first.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201501080829588_new.cs" />
-    <Compile Include="Migrations\201501080829588_new.Designer.cs">
-      <DependentUpon>201501080829588_new.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201501080835207_reset.cs" />
-    <Compile Include="Migrations\201501080835207_reset.Designer.cs">
-      <DependentUpon>201501080835207_reset.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201501080902100_addedrequiredFKtogeodata.cs" />
-    <Compile Include="Migrations\201501080902100_addedrequiredFKtogeodata.Designer.cs">
-      <DependentUpon>201501080902100_addedrequiredFKtogeodata.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201501080905067_fix3.cs" />
-    <Compile Include="Migrations\201501080905067_fix3.Designer.cs">
-      <DependentUpon>201501080905067_fix3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Anewluv\Mapping\abusereportMap.cs" />
-    <Compile Include="Anewluv\Mapping\abusereportnoteMap.cs" />
+    <Compile Include="Migrations\AnewluvMigrations\Configuration.cs" />
+    <Compile Include="Anewluv\Mapping\noteMap.cs" />
     <Compile Include="Anewluv\Mapping\applicationiconconversionMap.cs" />
-    <Compile Include="Anewluv\Mapping\applicationitemMap.cs" />
     <Compile Include="Anewluv\Mapping\applicationMap.cs" />
     <Compile Include="Anewluv\Mapping\applicationroleMap.cs" />
-    <Compile Include="Anewluv\Mapping\blockMap.cs" />
-    <Compile Include="Anewluv\Mapping\blocknoteMap.cs" />
     <Compile Include="Anewluv\Mapping\communicationquotaMap.cs" />
-    <Compile Include="Anewluv\Mapping\favoriteMap.cs" />
-    <Compile Include="Anewluv\Mapping\friendMap.cs" />
-    <Compile Include="Anewluv\Mapping\hotlistMap.cs" />
-    <Compile Include="Anewluv\Mapping\interestMap.cs" />
-    <Compile Include="Anewluv\Mapping\likeMap.cs" />
     <Compile Include="Anewluv\Mapping\lu_abusetypeMap.cs" />
     <Compile Include="Anewluv\Mapping\lu_activitytypeMap.cs" />
-    <Compile Include="Anewluv\Mapping\lu_applicationitempaymenttypeMap.cs" />
+    <Compile Include="Anewluv\Mapping\lu_applicationpaymenttypeMap.cs" />
     <Compile Include="Anewluv\Mapping\lu_applicationitemtransfertypeMap.cs" />
     <Compile Include="Anewluv\Mapping\lu_applicationtypeMap.cs" />
     <Compile Include="Anewluv\Mapping\lu_bodytypeMap.cs" />
@@ -154,7 +134,6 @@
     <Compile Include="Anewluv\Mapping\mailupdatefreqencyMap.cs" />
     <Compile Include="Anewluv\Mapping\membersinroleMap.cs" />
     <Compile Include="Anewluv\Mapping\openidMap.cs" />
-    <Compile Include="Anewluv\Mapping\peekMap.cs" />
     <Compile Include="Anewluv\Mapping\photoalbumMap.cs" />
     <Compile Include="Anewluv\Mapping\photoalbum_securitylevelMap.cs" />
     <Compile Include="Anewluv\Mapping\photoconversionMap.cs" />
@@ -172,44 +151,20 @@
     <Compile Include="Anewluv\Mapping\profilemetadataMap.cs" />
     <Compile Include="Anewluv\Mapping\ratingMap.cs" />
     <Compile Include="Anewluv\Mapping\ratingvalueMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsettingMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_bodytypeMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_dietMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_drinkMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_educationlevelMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_employmentstatusMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_ethnicityMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_exerciseMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_eyecolorMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_genderMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_haircolorMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_havekidsMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_hobbyMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_hotfeatureMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_humorMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_incomelevelMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_livingstituationMap.cs" />
+    <Compile Include="Anewluv\Mapping\searchsettingdetailMap.cs" />
     <Compile Include="Anewluv\Mapping\searchsetting_locationMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_lookingforMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_maritalstatusMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_politicalviewMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_professionMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_religionMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_religiousattendanceMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_showmeMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_signMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_smokesMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_sortbytypeMap.cs" />
-    <Compile Include="Anewluv\Mapping\searchsetting_wantkidsMap.cs" />
     <Compile Include="Anewluv\Mapping\systempagesettingMap.cs" />
     <Compile Include="Anewluv\Mapping\userlogtimeMap.cs" />
     <Compile Include="Anewluv\Mapping\visiblitysettingMap.cs" />
     <Compile Include="Anewluv\Mapping\visiblitysettings_countryMap.cs" />
     <Compile Include="Anewluv\Mapping\visiblitysettings_genderMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\DebugUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -243,20 +198,8 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201412281808010_MigrationFromJohn.resx">
-      <DependentUpon>201412281808010_MigrationFromJohn.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201501080829588_new.resx">
-      <DependentUpon>201501080829588_new.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201501080835207_reset.resx">
-      <DependentUpon>201501080835207_reset.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201501080902100_addedrequiredFKtogeodata.resx">
-      <DependentUpon>201501080902100_addedrequiredFKtogeodata.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201501080905067_fix3.resx">
-      <DependentUpon>201501080905067_fix3.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\AnewluvMigrations\201503080503290_first.resx">
+      <DependentUpon>201503080503290_first.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

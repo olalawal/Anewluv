@@ -11,13 +11,13 @@ namespace Anewluv.Domain.Data
         public lu_religiousattendance()
         {
             this.profiledatas = new List<profiledata>();
-            this.searchsetting_religiousattendance = new List<searchsetting_religiousattendance>();
+       //     this.searchsetting_religiousattendance = new List<searchsetting_religiousattendance>();
         }
 
         [DataMember]   public int id { get; set; }
         [NotMapped, DataMember]  public bool selected { get; set; }
         [DataMember]   public string description { get; set; }
         public virtual ICollection<profiledata> profiledatas { get; set; }
-        public virtual ICollection<searchsetting_religiousattendance> searchsetting_religiousattendance { get; set; }
+      //  public virtual ICollection<searchsetting_religiousattendance> searchsetting_religiousattendance { get; set; }
     }
 }

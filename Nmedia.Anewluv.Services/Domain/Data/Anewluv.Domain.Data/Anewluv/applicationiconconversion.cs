@@ -9,11 +9,10 @@ namespace Anewluv.Domain.Data
     {
         [DataMember]  public int id { get; set; }
         [DataMember]  public int application_id { get; set; }
-       [DataMember]   public Nullable<System.DateTime> creationdate { get; set; }
+        [DataMember]   public Nullable<System.DateTime> creationdate { get; set; }
         public byte[] image { get; set; }
         [DataMember]
-        public long size { get; set; }
-       [DataMember]   public Nullable<int> application_id1 { get; set; }
+        public long size { get; set; }    
        [DataMember]   public Nullable<int> iconformat_id { get; set; }
        [DataMember]
        public virtual application application { get; set; }

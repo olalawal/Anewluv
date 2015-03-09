@@ -31,20 +31,21 @@ namespace Anewluv.DataExtentionMethods
             try
             {
                
-                var blocks = db.Repository<block>().Queryable();
+                var blocks = db.Repository<action>().Queryable().Where(p=>(p.actiontype_id == (int)actiontypeEnum.Block &p.active == true & p.deletedbycreatordate ==null)
+                    && p.creator_profile_id == model.profileid );
                 var messages = db.Repository<mailboxmessage>().Queryable();
                 var messagefolders = db.Repository<mailboxmessagefolder>().Queryable();
 
 
                 //filter out blocked profiles 
-                var MyActiveblocks = from c in blocks.Where(p => p.profile_id == model.profileid && p.removedate != null)
+                var MyActiveblocks = from c in blocks
                                      select new
                                      {
-                                         ProfilesBlockedId = c.blockprofile_id
+                                         ProfilesBlockedId = c.target_profile_id
                                      };
 
                 var query =                    
-(from p in messages.Where(p => p.profilemetadata.profile_id == model.profileid)
+                    (from p in messages.Where(p => p.recipientprofilemetadata.profile_id == model.profileid)
                     join f in messagefolders on new { a = p.id} equals new { a = f.mailboxmessage_id}
                     where (f.mailboxfolder_id == mailboxfolderid && !MyActiveblocks.Any(b => b.ProfilesBlockedId == p.sender_id)) //filter out banned profiles or deleted profiles            
                      select new mailviewmodel
@@ -57,20 +58,7 @@ namespace Anewluv.DataExtentionMethods
                 return query.Count();
 
 
-                //IEnumerable<mailviewmodel> models = null;
-                ////get a model of the messages that match this mail type
-                //models = (from m in db.Repository<mailboxmessage>().Query(p=>p.profilemetadata.profile_id == model.profileid).Select()
-                //          join f in db.Repository<mailboxmessagefolder>().Query(u => u.mailboxfolder_id == mailboxfolderid
-                //              && u.mailboxfolder.profiled_id == model.profileid)
-                //          on m.id equals f.mailboxmessage_id
-                //          select new mailviewmodel
-                //          {
-                //              sender_id = m.sender_id,
-                //              recipient_id = m.recipient_id                             
-
-                //          });
-
-                //return models.Count();
+           
 
             }
 
@@ -89,20 +77,21 @@ namespace Anewluv.DataExtentionMethods
             try
             {
 
-                var blocks = db.Repository<block>().Queryable();
+                var blocks = db.Repository<action>().Queryable().Where(p => (p.actiontype_id == (int)actiontypeEnum.Block & p.active == true & p.deletedbycreatordate == null)
+                  && p.creator_profile_id == model.profileid);
                 var messages = db.Repository<mailboxmessage>().Queryable();
                 var messagefolders = db.Repository<mailboxmessagefolder>().Queryable();
 
 
                 //filter out blocked profiles 
-                var MyActiveblocks = from c in blocks.Where(p => p.profile_id == model.profileid && p.removedate != null)
+                var MyActiveblocks = from c in blocks
                                      select new
                                      {
-                                         ProfilesBlockedId = c.blockprofile_id
+                                         ProfilesBlockedId = c.target_profile_id
                                      };
 
                                 var query =
-                (from p in messages.Where(p => p.profilemetadata.profile_id == model.profileid)
+                (from p in messages.Where(p => p.recipientprofilemetadata.profile_id == model.profileid)
                  join f in messagefolders on new { a = p.id } equals new { a = f.mailboxmessage_id }
                  where (f.mailboxfolder_id == mailboxfolderid && !MyActiveblocks.Any(b => b.ProfilesBlockedId == p.sender_id) && f.readdate == null) //filter out banned profiles or deleted profiles            
                  select new mailviewmodel
@@ -116,24 +105,6 @@ namespace Anewluv.DataExtentionMethods
 
 
 
-                //IEnumerable<mailviewmodel> models = null;
-
-
-                //models = (from m in db.Repository<mailboxmessage>().Query(p => p.profilemetadata.profile_id == model.profileid ).Select()
-                //          join f in db.Repository<mailboxmessagefolder>().Query(u => u.mailboxfolder_id == mailboxfolderid
-                //              && u.readdate == null)
-                //          on m.id equals f.mailboxmessage_id
-                //          select new mailviewmodel
-                //          {
-
-                //              sender_id = m.sender_id,
-                //              recipient_id = m.recipient_id,
-                             
-
-                //          });
-
-                ////  return filtermailmodels(models).Count();
-                //return models.Count();
 
             }
 

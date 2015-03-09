@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace Anewluv.Domain.Data
 {
     [DataContract]
-   public partial class lu_applicationtype
+    public partial class lu_applicationtype : Repository.Pattern.Ef6.Entity
     {
         
          public lu_applicationtype()

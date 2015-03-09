@@ -22,12 +22,12 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.uniqueid).HasColumnName("uniqueid");
 
             // Relationships
-            this.HasRequired(t => t.profilemetadata)
-                .WithMany(t => t.mailboxmessages)
-                .HasForeignKey(d => d.recipient_id);
-            this.HasRequired(t => t.profilemetadata1)
-                .WithMany(t => t.mailboxmessages1)
-                .HasForeignKey(d => d.sender_id);
+            this.HasRequired(t => t.recipientprofilemetadata)
+                .WithMany(t => t.receivedmailboxmessages)
+                .HasForeignKey(d => d.recipient_id).WillCascadeOnDelete(false);
+            this.HasRequired(t => t.senderprofilemetadata)
+                .WithMany(t => t.sentmailboxmessages)
+                .HasForeignKey(d => d.sender_id).WillCascadeOnDelete(false); ;
 
         }
     }

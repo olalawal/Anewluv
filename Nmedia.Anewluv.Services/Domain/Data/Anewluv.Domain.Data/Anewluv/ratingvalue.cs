@@ -11,8 +11,9 @@ namespace Anewluv.Domain.Data
         public int rateeprofile_id { get; set; }
         public Nullable<System.DateTime> date { get; set; }
         public Nullable<double> value { get; set; }
-        public virtual profilemetadata profilemetadata { get; set; }
-        public virtual profilemetadata profilemetadata1 { get; set; }
+        public virtual profilemetadata raterprofilemetadata { get; set; }
+        public virtual profilemetadata rateeprofilemetadata { get; set; }
+      
         public virtual rating rating { get; set; }
     }
 }

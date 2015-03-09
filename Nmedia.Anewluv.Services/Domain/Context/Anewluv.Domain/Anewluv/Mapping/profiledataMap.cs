@@ -54,7 +54,14 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.profession_id).HasColumnName("profession_id");
             this.Property(t => t.wantsKidstatus_id).HasColumnName("wantsKidstatus_id");
 
-            this.HasOptional(t => t.profilemetadata).WithRequired(z=>z.profiledatas);
+            this.HasRequired(t => t.profilemetadata).WithRequiredDependent(z => z.profiledata);
+            this.HasRequired(t => t.profile).WithRequiredDependent(z => z.profiledata);
+
+            this.HasMany(t => t.visiblitysettings).WithRequired
+             (t => t.profiledata)
+             .HasForeignKey(d => d.profile_id);
+
+
             //   .(t => t.profiledatas)
             //    .HasForeignKey(d => d.profilemetadata_profile_id);
 
@@ -122,14 +129,9 @@ namespace Anewluv.Domain.Data.Mapping
             this.HasOptional(t => t.lu_wantskids)
                 .WithMany(t => t.profiledatas)
                 .HasForeignKey(d => d.wantsKidstatus_id);
-            //this.HasOptional(t => t.profilemetadata)
-            //    .WithMany(t => t.profiledatas)
-            //    .HasForeignKey(d => d.profilemetadata_profile_id);
-            this.HasRequired(t => t.profile)
-                .WithOptional(t => t.profiledata);
-            this.HasOptional(t => t.visiblitysetting)
-                .WithMany(t => t.profiledatas)
-                .HasForeignKey(d => d.visibilitysettings_id);
+       
+         
+         
 
         }
     }

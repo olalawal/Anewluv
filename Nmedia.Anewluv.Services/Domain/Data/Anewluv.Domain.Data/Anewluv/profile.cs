@@ -8,10 +8,7 @@ namespace Anewluv.Domain.Data
     {
         public profile()
         {
-            this.applicationitems = new List<applicationitem>();
-            this.applicationitems1 = new List<applicationitem>();
-            this.applicationitems2 = new List<applicationitem>();
-            this.applicationitems3 = new List<applicationitem>();
+            
             this.membersinroles = new List<membersinrole>();
             this.openids = new List<openid>();
             this.profileactivities = new List<profileactivity>();
@@ -42,11 +39,7 @@ namespace Anewluv.Domain.Data
         public Nullable<int> sentemailquotahitcount { get; set; }
         public Nullable<int> sentmessagequotahitcount { get; set; }
         public Nullable<int> status_id { get; set; }
-        public Nullable<int> securityquestion_id { get; set; }
-        public virtual ICollection<applicationitem> applicationitems { get; set; }
-        public virtual ICollection<applicationitem> applicationitems1 { get; set; }
-        public virtual ICollection<applicationitem> applicationitems2 { get; set; }
-        public virtual ICollection<applicationitem> applicationitems3 { get; set; }
+        public Nullable<int> securityquestion_id { get; set; }     
         public virtual lu_profilestatus lu_profilestatus { get; set; }
         public virtual lu_securityquestion lu_securityquestion { get; set; }
         public virtual ICollection<membersinrole> membersinroles { get; set; }

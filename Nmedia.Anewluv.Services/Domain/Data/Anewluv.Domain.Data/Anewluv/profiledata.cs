@@ -10,8 +10,7 @@ namespace Anewluv.Domain.Data
     {
         public profiledata()
         {
-            this.communicationquotas = new List<communicationquota>();
-            this.photoreviews = new List<photoreview>();
+            this.communicationquotas = new List<communicationquota>();            
             this.visiblitysettings = new List<visiblitysetting>();
         }
 
@@ -52,7 +51,8 @@ namespace Anewluv.Domain.Data
         public Nullable<int> maritalstatus_id { get; set; }
         public Nullable<int> profession_id { get; set; }
         public Nullable<int> wantsKidstatus_id { get; set; }
-        public virtual ICollection<communicationquota> communicationquotas { get; set; }
+     
+      
         public virtual lu_bodytype lu_bodytype { get; set; }
         public virtual lu_diet lu_diet { get; set; }
         public virtual lu_drinks lu_drinks { get; set; }
@@ -74,10 +74,16 @@ namespace Anewluv.Domain.Data
         public virtual lu_sign lu_sign { get; set; }
         public virtual lu_smokes lu_smokes { get; set; }
         public virtual lu_wantskids lu_wantskids { get; set; }
-        public virtual ICollection<photoreview> photoreviews { get; set; }
-        public virtual profilemetadata profilemetadata { get; set; }
-        public virtual profile profile { get; set; }
-        public virtual visiblitysetting visiblitysetting { get; set; }
+
+       
+        
+        public virtual profilemetadata profilemetadata { get; set; }      
+        public virtual profile profile { get; set; }  
+
+
         public virtual ICollection<visiblitysetting> visiblitysettings { get; set; }
+        public virtual ICollection<communicationquota> communicationquotas { get; set; }
+     
+       
     }
 }

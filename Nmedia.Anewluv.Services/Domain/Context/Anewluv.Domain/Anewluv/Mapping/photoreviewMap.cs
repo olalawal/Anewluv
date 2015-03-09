@@ -23,9 +23,9 @@ namespace Anewluv.Domain.Data.Mapping
             this.HasRequired(t => t.photo)
                 .WithMany(t => t.photoreviews)
                 .HasForeignKey(d => d.photo_id);
-            this.HasRequired(t => t.profiledata)
+            this.HasRequired(t => t.profilemetadata)
                 .WithMany(t => t.photoreviews)
-                .HasForeignKey(d => d.reviewerprofile_id);
+                .HasForeignKey(d => d.reviewerprofile_id).WillCascadeOnDelete(false); ;
 
         }
     }

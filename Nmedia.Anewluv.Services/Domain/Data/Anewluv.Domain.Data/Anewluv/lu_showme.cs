@@ -11,12 +11,12 @@ namespace Anewluv.Domain.Data
     {
         public lu_showme()
         {
-            this.searchsetting_showme = new List<searchsetting_showme>();
+         //   this.searchsetting_showme = new List<searchsetting_showme>();
         }
 
         [DataMember] public int id { get; set; }
         [NotMapped,DataMember]  public bool selected { get; set; }
         [DataMember] public string description { get; set; }
-        public virtual ICollection<searchsetting_showme> searchsetting_showme { get; set; }
+        //public virtual ICollection<searchsetting_showme> searchsetting_showme { get; set; }
     }
 }

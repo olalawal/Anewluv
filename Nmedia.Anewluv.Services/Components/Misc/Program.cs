@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Anewluv.Domain;
+using Anewluv.Domain.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,15 +15,18 @@ namespace Misc
         static void Main(string[] args)
         {
 
+           // var context = new AnewluvContext();
+          //  Utils.SeedDebug(context);
+
           //var ddd =   ImageUtils.SmallImageTestdata();
-        // MisFunctions.StartDebuggingTest();
-       //  MisFunctions.ConvertFlatProfileandprofiledata();
-        //  MisFunctions.ConvertProfileCollections();
-       //   MisFunctions.ConvertProfileMetaDataBasicCollections();
-       // MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
-      //    MisFunctions.ConvertProfileSearchSettingsCollections();
-        //  MisFunctions.FixBadUserGeoData();
-          //  FixBadUserGeoData();
+         MisFunctions.StartDebuggingTest();
+         MisFunctions.ConvertFlatProfileandprofiledata();
+         MisFunctions.ConvertProfileCollections();
+        MisFunctions.ConvertProfileMetaDataBasicCollections();
+       MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
+         MisFunctions.ConvertProfileSearchSettingsCollections();
+       //  MisFunctions.FixBadUserGeoData();
+         //  FixBadUserGeoData();
         }
     }
 }

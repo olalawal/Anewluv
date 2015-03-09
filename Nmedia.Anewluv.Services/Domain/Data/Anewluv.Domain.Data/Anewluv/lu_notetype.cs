@@ -5,19 +5,20 @@ using System.Runtime.Serialization;
 namespace Anewluv.Domain.Data
 {
     [DataContract]
-    public partial class lu_notetype
+    public partial class lu_notetype : Repository.Pattern.Ef6.Entity
     {
         public lu_notetype()
         {
-            this.abusereportnotes = new List<abusereportnote>();
-            this.blocknotes = new List<blocknote>();
+            this.notes = new List<note>();
+
         }
 
 
         [DataMember]
         public int id { get; set; }
-        [DataMember]  public string description { get; set; }
-        [DataMember]  public virtual ICollection<abusereportnote> abusereportnotes { get; set; }
-        [DataMember]  public virtual ICollection<blocknote> blocknotes { get; set; }
+        [DataMember]
+        public string description { get; set; }
+        [DataMember]
+        public virtual ICollection<note> notes { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_iconformat
+    public partial class lu_iconformat : Repository.Pattern.Ef6.Entity
     {
         public lu_iconformat()
         {

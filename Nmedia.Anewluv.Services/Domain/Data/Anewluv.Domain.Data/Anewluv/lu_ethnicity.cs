@@ -12,7 +12,7 @@ namespace Anewluv.Domain.Data
         public lu_ethnicity()
         {
             this.profiledata_ethnicity = new List<profiledata_ethnicity>();
-            this.searchsetting_ethnicity = new List<searchsetting_ethnicity>();
+           // this.searchsetting_ethnicity = new List<searchsetting_ethnicity>();
         }
 
       
@@ -21,6 +21,6 @@ namespace Anewluv.Domain.Data
         public bool selected { get; set; }
         [DataMember]   public string description { get; set; }     
         public virtual ICollection<profiledata_ethnicity> profiledata_ethnicity { get; set; }        
-        public virtual ICollection<searchsetting_ethnicity> searchsetting_ethnicity { get; set; }
+      //  public virtual ICollection<searchsetting_ethnicity> searchsetting_ethnicity { get; set; }
     }
 }

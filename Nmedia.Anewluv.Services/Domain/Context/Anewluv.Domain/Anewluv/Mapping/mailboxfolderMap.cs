@@ -14,7 +14,7 @@ namespace Anewluv.Domain.Data.Mapping
             // Table & Column Mappings
             this.ToTable("mailboxfolders");
             this.Property(t => t.id).HasColumnName("id");
-            this.Property(t => t.profiled_id).HasColumnName("profiled_id");
+            this.Property(t => t.profile_id).HasColumnName("profile_id");
             this.Property(t => t.active).HasColumnName("active");
             this.Property(t => t.foldertype_id).HasColumnName("foldertype_id");
 
@@ -24,7 +24,7 @@ namespace Anewluv.Domain.Data.Mapping
                 .HasForeignKey(d => d.foldertype_id);
             this.HasRequired(t => t.profilemetadata)
                 .WithMany(t => t.mailboxfolders)
-                .HasForeignKey(d => d.profiled_id);
+                .HasForeignKey(d => d.profile_id);
 
         }
     }

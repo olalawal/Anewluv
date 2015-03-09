@@ -42,6 +42,9 @@ namespace Anewluv.Domain.Data.Mapping
                 .WithMany(t => t.photos)
                 .HasForeignKey(d => d.profile_id);
 
+
+
+
         }
     }
 }

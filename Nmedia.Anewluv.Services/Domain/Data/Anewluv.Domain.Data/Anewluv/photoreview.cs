@@ -11,6 +11,7 @@ namespace Anewluv.Domain.Data
         public int reviewerprofile_id { get; set; }
         public System.Guid photo_id { get; set; }
         public virtual photo photo { get; set; }
-        public virtual profiledata profiledata { get; set; }
+        public virtual profilemetadata profilemetadata { get; set; }
+     
     }
 }

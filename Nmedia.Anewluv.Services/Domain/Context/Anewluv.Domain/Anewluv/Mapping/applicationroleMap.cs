@@ -19,17 +19,19 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.roleexpiredate).HasColumnName("roleexpiredate");
             this.Property(t => t.rolestartdate).HasColumnName("rolestartdate");
             this.Property(t => t.deactivationdate).HasColumnName("deactivationdate");
-            this.Property(t => t.creationdate).HasColumnName("creationdate");
-            this.Property(t => t.application_id1).HasColumnName("application_id1");
+            this.Property(t => t.creationdate).HasColumnName("creationdate");           
             this.Property(t => t.role_id).HasColumnName("role_id");
 
             // Relationships
-            this.HasOptional(t => t.application)
-                .WithMany(t => t.applicationroles)
-                .HasForeignKey(d => d.application_id1);
-            this.HasOptional(t => t.lu_role)
-                .WithMany(t => t.applicationroles)
-                .HasForeignKey(d => d.role_id);
+
+            this.HasRequired(t => t.lu_role)
+        .WithMany(t => t.applicationroles)
+        .HasForeignKey(d => d.role_id);
+
+            this.HasRequired(t => t.application)
+       .WithMany(t => t.applicationroles)
+       .HasForeignKey(d => d.application_id);
+
 
         }
     }

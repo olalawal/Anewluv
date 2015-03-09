@@ -12,7 +12,7 @@ namespace Anewluv.Domain.Data
         public lu_humor()
         {
             this.profiledatas = new List<profiledata>();
-            this.searchsetting_humor = new List<searchsetting_humor>();
+           // this.searchsetting_humor = new List<searchsetting_humor>();
         }
 
         [DataMember]   public int id { get; set; }
@@ -20,6 +20,6 @@ namespace Anewluv.Domain.Data
         public bool selected { get; set; }
         [DataMember]   public string description { get; set; }
          public virtual ICollection<profiledata> profiledatas { get; set; }
-       public virtual ICollection<searchsetting_humor> searchsetting_humor { get; set; }
+       //public virtual ICollection<searchsetting_humor> searchsetting_humor { get; set; }
     }
 }

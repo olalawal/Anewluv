@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class lu_iconImagersizerformat
+    public partial class lu_iconImagersizerformat : Repository.Pattern.Ef6.Entity
     {
         public lu_iconImagersizerformat()
         {

@@ -55,24 +55,25 @@ namespace Anewluv.Domain
         #region "Db objects "
 
 
-        public DbSet<abusereportnote> abusereportnotes { get; set; }
-        public DbSet<abusereport> abusereports { get; set; }
-        public DbSet<applicationiconconversion> applicationiconconversions { get; set; }
-        public DbSet<applicationitem> applicationitems { get; set; }
-        public DbSet<applicationrole> applicationroles { get; set; }
-        public DbSet<application> applications { get; set; }
-        public DbSet<blocknote> blocknotes { get; set; }
-        public DbSet<block> blocks { get; set; }
-        public DbSet<communicationquota> communicationquotas { get; set; }
-        public DbSet<favorite> favorites { get; set; }
-        public DbSet<friend> friends { get; set; }
-        public DbSet<hotlist> hotlists { get; set; }
-        public DbSet<interest> interests { get; set; }
-        public DbSet<like> likes { get; set; }
+        
+        public DbSet<action> actions { get; set; }
+
+
+        public DbSet<application> applications { get; set; }         
+        public DbSet<applicationiconconversion> applicationiconconversions { get; set; }       
+        public DbSet<applicationrole> applicationroles { get; set; }             
+        public DbSet<communicationquota> communicationquotas { get; set; }      
         public DbSet<lu_abusetype> lu_abusetype { get; set; }
+
+
+
+        public DbSet< lu_actiontype> lu_actiontype {get;set;}
+
+
+
         public DbSet<lu_activitytype> lu_activitytype { get; set; }
-        public DbSet<lu_applicationitempaymenttype> lu_applicationitempaymenttype { get; set; }
-        public DbSet<lu_applicationitemtransfertype> lu_applicationitemtransfertype { get; set; }
+        public DbSet<lu_applicationpaymenttype> lu_applicationpaymenttype { get; set; }
+        public DbSet<lu_applicationtransfertype> lu_applicationtransfertype { get; set; }
         public DbSet<lu_applicationtype> lu_applicationtype { get; set; }
         public DbSet<lu_bodytype> lu_bodytype { get; set; }
         public DbSet<lu_defaultmailboxfolder> lu_defaultmailboxfolder { get; set; }
@@ -113,6 +114,10 @@ namespace Anewluv.Domain
         public DbSet<lu_religion> lu_religion { get; set; }
         public DbSet<lu_religiousattendance> lu_religiousattendance { get; set; }
         public DbSet<lu_role> lu_role { get; set; }
+
+         public DbSet< lu_searchsettingdetailtype> lu_searchsettingdetailtype {get;set;}
+
+
         public DbSet<lu_securityleveltype> lu_securityleveltype { get; set; }
         public DbSet<lu_securityquestion> lu_securityquestion { get; set; }
         public DbSet<lu_showme> lu_showme { get; set; }
@@ -126,14 +131,21 @@ namespace Anewluv.Domain
         public DbSet<mailboxmessage> mailboxmessages { get; set; }
         public DbSet<mailupdatefreqency> mailupdatefreqencies { get; set; }
         public DbSet<membersinrole> membersinroles { get; set; }
-        public DbSet<openid> openids { get; set; }
-        public DbSet<peek> peeks { get; set; }
+        public DbSet<openid> openids { get; set; }     
+       
+        
+        public DbSet<note> notes { get; set; }     
+      
+            
         public DbSet<photo_securitylevel> photo_securitylevel { get; set; }
         public DbSet<photoalbum_securitylevel> photoalbum_securitylevel { get; set; }
-        public DbSet<photoalbum> photoalbums { get; set; }
+        public DbSet<photophotoalbum> phototphotoalbums { get; set; }
+        public DbSet<photo> photos { get; set; }
         public DbSet<photoconversion> photoconversions { get; set; }
         public DbSet<photoreview> photoreviews { get; set; }
-        public DbSet<photo> photos { get; set; }
+        public DbSet<photoalbum> photoalbum { get; set; }
+
+  
         public DbSet<profileactivity> profileactivities { get; set; }
         public DbSet<profileactivitygeodata> profileactivitygeodatas { get; set; }
         public DbSet<profiledata_ethnicity> profiledata_ethnicity { get; set; }
@@ -144,36 +156,12 @@ namespace Anewluv.Domain
         public DbSet<profilemetadata> profilemetadatas { get; set; }
         public DbSet<profile> profiles { get; set; }
         public DbSet<rating> ratings { get; set; }
-        public DbSet<ratingvalue> ratingvalues { get; set; }
-        public DbSet<searchsetting_bodytype> searchsetting_bodytype { get; set; }
-        public DbSet<searchsetting_diet> searchsetting_diet { get; set; }
-        public DbSet<searchsetting_drink> searchsetting_drink { get; set; }
-        public DbSet<searchsetting_educationlevel> searchsetting_educationlevel { get; set; }
-        public DbSet<searchsetting_employmentstatus> searchsetting_employmentstatus { get; set; }
-        public DbSet<searchsetting_ethnicity> searchsetting_ethnicity { get; set; }
-        public DbSet<searchsetting_exercise> searchsetting_exercise { get; set; }
-        public DbSet<searchsetting_eyecolor> searchsetting_eyecolor { get; set; }
-        public DbSet<searchsetting_gender> searchsetting_gender { get; set; }
-        public DbSet<searchsetting_haircolor> searchsetting_haircolor { get; set; }
-        public DbSet<searchsetting_havekids> searchsetting_havekids { get; set; }
-        public DbSet<searchsetting_hobby> searchsetting_hobby { get; set; }
-        public DbSet<searchsetting_hotfeature> searchsetting_hotfeature { get; set; }
-        public DbSet<searchsetting_humor> searchsetting_humor { get; set; }
-        public DbSet<searchsetting_incomelevel> searchsetting_incomelevel { get; set; }
-        public DbSet<searchsetting_livingstituation> searchsetting_livingstituation { get; set; }
-        public DbSet<searchsetting_location> searchsetting_location { get; set; }
-        public DbSet<searchsetting_lookingfor> searchsetting_lookingfor { get; set; }
-        public DbSet<searchsetting_maritalstatus> searchsetting_maritalstatus { get; set; }
-        public DbSet<searchsetting_politicalview> searchsetting_politicalview { get; set; }
-        public DbSet<searchsetting_profession> searchsetting_profession { get; set; }
-        public DbSet<searchsetting_religion> searchsetting_religion { get; set; }
-        public DbSet<searchsetting_religiousattendance> searchsetting_religiousattendance { get; set; }
-        public DbSet<searchsetting_showme> searchsetting_showme { get; set; }
-        public DbSet<searchsetting_sign> searchsetting_sign { get; set; }
-        public DbSet<searchsetting_smokes> searchsetting_smokes { get; set; }
-        public DbSet<searchsetting_sortbytype> searchsetting_sortbytype { get; set; }
-        public DbSet<searchsetting_wantkids> searchsetting_wantkids { get; set; }
+        public DbSet<ratingvalue> ratingvalues { get; set; }      
+        public DbSet<searchsetting_location> searchsetting_location { get; set; }    
         public DbSet<searchsetting> searchsettings { get; set; }
+
+        public DbSet<searchsettingdetail> searchsettingdetails { get; set; }
+
         public DbSet<systempagesetting> systempagesettings { get; set; }
         public DbSet<userlogtime> userlogtimes { get; set; }
         public DbSet<visiblitysetting> visiblitysettings { get; set; }

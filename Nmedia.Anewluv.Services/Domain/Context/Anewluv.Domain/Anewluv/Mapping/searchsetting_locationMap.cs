@@ -12,6 +12,7 @@ namespace Anewluv.Domain.Data.Mapping
 
             // Properties
             // Table & Column Mappings
+
             this.ToTable("searchsetting_location");
             this.Property(t => t.id).HasColumnName("id");
             this.Property(t => t.city).HasColumnName("city");
@@ -20,9 +21,9 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.searchsetting_id).HasColumnName("searchsetting_id");
 
             // Relationships
-            this.HasOptional(t => t.searchsetting)
-                .WithMany(t => t.searchsetting_location)
-                .HasForeignKey(d => d.searchsetting_id);
+            //this.HasRequired(t => t.searchsetting)
+            //    .WithMany(t => t.locations)
+            //    .HasForeignKey(d => d.searchsetting_id);
 
         }
     }
