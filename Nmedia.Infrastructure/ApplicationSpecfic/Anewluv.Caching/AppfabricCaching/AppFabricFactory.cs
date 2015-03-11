@@ -19,16 +19,16 @@ using Nmedia.Infrastructure.Domain.Data.log;
 using Anewluv.Domain.Data;
 using Anewluv.Domain;
 using GeoData.Domain.Models.ViewModels;
-using Anewluv.Services.Mapping;
+//using Anewluv.Services.Mapping;
 using Anewluv.Domain.Data.ViewModels;
 using GeoData.Domain.Models;
-using Anewluv.Services.Spatial;
+//using Anewluv.Services.Spatial;
 //using Nmedia.DataAccess.Interfaces;
 using Nmedia.Infrastructure.Domain.Data;
 using Nmedia.Infrastructure.ExceptionHandling;
 using Nmedia.Infrastructure.Helpers;
 using Repository.Pattern.UnitOfWork;
-using Anewluv.DataExtentionMethods;
+
 
 
 
@@ -37,7 +37,7 @@ using Anewluv.DataExtentionMethods;
 namespace Anewluv.Caching
 {
 
-    public class CachingFactory
+    public static class CachingFactory
     {
         private static  Logging logger;
         // public  LoggingServiceClient  svcLoggingService;
@@ -2943,8 +2943,8 @@ namespace Anewluv.Caching
                       //  {
                           //  GeoService GeoService = new GeoService(tempdb);
                      
-                           return  spatialextentions.getcountryandpostalcodestatuslist(_storedProcedures);
-
+                          // return  spatialextentions.getcountryandpostalcodestatuslist(_storedProcedures);
+                        return null;
 
                           
 

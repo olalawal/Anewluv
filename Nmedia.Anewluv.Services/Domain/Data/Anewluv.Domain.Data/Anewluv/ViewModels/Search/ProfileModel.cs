@@ -11,6 +11,14 @@ namespace Anewluv.Domain.Data.ViewModels
     [DataContract]
     public class ProfileModel :Entity
     {
+       public ProfileModel()
+        { 
+        
+        
+        }
+
+
+
         [DataMember]
         public string email { get; set; }
         [DataMember]
@@ -18,7 +26,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public string password { get; set; }
         [DataMember]
-        public int? profileid { get; set; }
+        public int profileid { get; set; }
         [DataMember]
         public int? targetprofileid { get; set; }
         [DataMember]

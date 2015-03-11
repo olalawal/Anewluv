@@ -300,14 +300,7 @@ namespace Anewluv.Services.MemberActions
                         //TO DO add the POCO types like members search model to these custom classes so we can do it in one query instead of having to
                         //rematerialize on the back end.
                         //final query to send back only the profile datatas of the interests we want
-                        var interests = (from f in db.Repository<interest>().Queryable().OfType<interest>().Where(p => p.profile_id == model.profileid && p.deletedbymemberdate == null)
-                                         where (f.profilemetadata1.profile.status_id < 3 && !(MyActiveblocks.Count != 0 && f.profilemetadata1 != null))//&& !MyActiveblocks.Any(b => b.ProfilesBlockedId == f.profilemetadata1.profile_id)))
-                                         select new MemberSearchViewModel
-                                         {
-                                             interestdate = f.creationdate,
-                                             id = f.profilemetadata1.profile_id
-                                             // perfectmatchsettings = f.profilemetadata.searchsettings.Where(g => g.myperfectmatch == true).FirstOrDefault()   //GetPerFectMatchprofilemetadata.searchsettingsByprofileid(p.profileid )
-                                         }).ToList();
+                        
                         // var dd2 = 0;
                         //var dd = 2 /  dd2;
 

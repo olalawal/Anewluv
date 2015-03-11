@@ -87,13 +87,17 @@
       <Project>{a0b04284-784b-4322-a213-db178716efc1}</Project>
       <Name>Anewluv.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Domain\DataExtentionMethods\Anewluv.DataExtentionMethods\Anewluv.DataExtentionMethods.csproj">
-      <Project>{3cbb8d0a-5ea5-4336-aeaf-6717d2a09a45}</Project>
-      <Name>Anewluv.DataExtentionMethods</Name>
+    <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Domain\Context\GeoData.Domain\GeoData.Domain.csproj">
+      <Project>{01a79dcc-39ca-447e-a668-dd4206a8e5aa}</Project>
+      <Name>GeoData.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Domain\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
       <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>
       <Name>Anewluv.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Domain\Data\GeoData.Domain.Data\GeoData.Domain.Data.csproj">
+      <Project>{a7d35636-9574-4344-a761-138c3ff171bc}</Project>
+      <Name>GeoData.Domain.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
       <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
@@ -103,21 +107,9 @@
       <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
       <Name>Repository.Pattern</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Services\Anewluv.Services.Spatial\Anewluv.Services.Spatial.csproj">
-      <Project>{5130ac6c-76e9-4471-96d9-d5c8dcaba093}</Project>
-      <Name>Anewluv.Services.Spatial</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\LoggingNotificationApiAuth\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
       <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>
       <Name>Nmedia.Infrastructure.Domain.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Domain\Context\GeoData.Domain\GeoData.Domain.csproj">
-      <Project>{01A79DCC-39CA-447E-A668-DD4206A8E5AA}</Project>
-      <Name>GeoData.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Nmedia.Anewluv.Services\Services\Anewluv.Services.Mapping\Anewluv.Services.Mapping.csproj">
-      <Project>{A1725D8E-483A-4356-9F76-1CEB600B72D0}</Project>
-      <Name>Anewluv.Services.Mapping</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LoggingNotificationApiAuth\LoggingLibrary\LoggingLibrary.csproj">
       <Project>{ff7b929d-6086-4509-9095-396845569906}</Project>

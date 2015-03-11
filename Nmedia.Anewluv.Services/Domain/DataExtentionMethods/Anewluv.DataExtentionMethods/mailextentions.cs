@@ -30,9 +30,8 @@ namespace Anewluv.DataExtentionMethods
 
             try
             {
-               
-                var blocks = db.Repository<action>().Queryable().Where(p=>(p.actiontype_id == (int)actiontypeEnum.Block &p.active == true & p.deletedbycreatordate ==null)
-                    && p.creator_profile_id == model.profileid );
+
+                var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
                 var messages = db.Repository<mailboxmessage>().Queryable();
                 var messagefolders = db.Repository<mailboxmessagefolder>().Queryable();
 
@@ -77,8 +76,7 @@ namespace Anewluv.DataExtentionMethods
             try
             {
 
-                var blocks = db.Repository<action>().Queryable().Where(p => (p.actiontype_id == (int)actiontypeEnum.Block & p.active == true & p.deletedbycreatordate == null)
-                  && p.creator_profile_id == model.profileid);
+                var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
                 var messages = db.Repository<mailboxmessage>().Queryable();
                 var messagefolders = db.Repository<mailboxmessagefolder>().Queryable();
 

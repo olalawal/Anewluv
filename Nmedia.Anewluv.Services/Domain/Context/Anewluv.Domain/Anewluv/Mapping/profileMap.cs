@@ -39,7 +39,7 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.securityquestion_id).HasColumnName("securityquestion_id");
 
             // Relationships
-            this.HasOptional(t => t.lu_profilestatus)
+            this.HasRequired(t => t.lu_profilestatus)
                 .WithMany(t => t.profiles)
                 .HasForeignKey(d => d.status_id);
             this.HasOptional(t => t.lu_securityquestion)

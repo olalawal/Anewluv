@@ -100,8 +100,8 @@ namespace Misc
                         myprofile.passwordchangecount = item.PasswordChangedCount;
                         myprofile.failedpasswordchangeattemptcount = item.PasswordChangeAttempts;
                         myprofile.salt = item.salt;
-                        myprofile.status = context.lu_profilestatus.Where(z => z.id == item.ProfileStatusID).FirstOrDefault();
-                        myprofile.securityquestion = context.lu_securityquestion.Where(z => z.id == item.SecurityQuestionID).FirstOrDefault();
+                        myprofile.status_id = context.lu_profilestatus.Where(z => z.id == item.ProfileStatusID).FirstOrDefault().id;
+                       // myprofile.securityquestion_id = item.SecurityQuestionID;
                         myprofile.securityanswer = item.SecurityAnswer;
                         myprofile.sentemailquotahitcount = item.SentEmailQuotaHitCount;
                         myprofile.sentmessagequotahitcount = item.SentMessageQuotaHitCount;
@@ -132,27 +132,27 @@ namespace Misc
                         //myprofiledata.profile = context.profiles.Where(z => z.id == myprofiledata.id).FirstOrDefault();
                         //add in lookup feilds 
                         //lookups for personal profile details 
-                        myprofiledata.gender = context.lu_gender.Where(p => p.id == item.ProfileData.GenderID).FirstOrDefault();
-                        myprofiledata.bodytype = context.lu_bodytype.Where(p => p.id == item.ProfileData.BodyTypeID).FirstOrDefault();
-                        myprofiledata.eyecolor = context.lu_eyecolor.Where(p => p.id == item.ProfileData.EyeColorID).FirstOrDefault();
-                        myprofiledata.haircolor = context.lu_haircolor.Where(p => p.id == item.ProfileData.HairColorID).FirstOrDefault();
-                        myprofiledata.diet = context.lu_diet.Where(p => p.id == item.ProfileData.DietID).FirstOrDefault();
-                        myprofiledata.drinking = context.lu_drinks.Where(p => p.id == item.ProfileData.DrinksID).FirstOrDefault();
-                        myprofiledata.exercise = context.lu_exercise.Where(p => p.id == item.ProfileData.ExerciseID).FirstOrDefault();
-                        myprofiledata.humor = context.lu_humor.Where(p => p.id == item.ProfileData.HumorID).FirstOrDefault();
-                        myprofiledata.politicalview = context.lu_politicalview.Where(p => p.id == item.ProfileData.PoliticalViewID).FirstOrDefault();
-                        myprofiledata.religion = context.lu_religion.Where(p => p.id == item.ProfileData.ReligionID).FirstOrDefault();
-                        myprofiledata.religiousattendance = context.lu_religiousattendance.Where(p => p.id == item.ProfileData.ReligiousAttendanceID).FirstOrDefault();
-                        myprofiledata.sign = context.lu_sign.Where(p => p.id == item.ProfileData.SignID).FirstOrDefault();
-                        myprofiledata.smoking = context.lu_smokes.Where(p => p.id == item.ProfileData.SmokesID).FirstOrDefault();
-                        myprofiledata.educationlevel = context.lu_educationlevel.Where(p => p.id == item.ProfileData.EducationLevelID).FirstOrDefault();
-                        myprofiledata.employmentstatus = context.lu_employmentstatus.Where(p => p.id == item.ProfileData.EmploymentSatusID).FirstOrDefault();
-                        myprofiledata.kidstatus = context.lu_havekids.Where(p => p.id == item.ProfileData.HaveKidsId).FirstOrDefault();
-                        myprofiledata.incomelevel = context.lu_incomelevel.Where(p => p.id == item.ProfileData.IncomeLevelID).FirstOrDefault();
-                        myprofiledata.livingsituation = context.lu_livingsituation.Where(p => p.id == item.ProfileData.LivingSituationID).FirstOrDefault();
-                        myprofiledata.maritalstatus = context.lu_maritalstatus.Where(p => p.id == item.ProfileData.MaritalStatusID).FirstOrDefault();
-                        myprofiledata.profession = context.lu_profession.Where(p => p.id == item.ProfileData.ProfessionID).FirstOrDefault();
-                        myprofiledata.wantsKidstatus = context.lu_wantskids.Where(p => p.id == item.ProfileData.WantsKidsID).FirstOrDefault();
+                        myprofiledata.lu_gender = context.lu_gender.Where(p => p.id == item.ProfileData.GenderID).FirstOrDefault();
+                        myprofiledata.lu_bodytype = context.lu_bodytype.Where(p => p.id == item.ProfileData.BodyTypeID).FirstOrDefault();
+                        myprofiledata.lu_eyecolor = context.lu_eyecolor.Where(p => p.id == item.ProfileData.EyeColorID).FirstOrDefault();
+                        myprofiledata.lu_haircolor = context.lu_haircolor.Where(p => p.id == item.ProfileData.HairColorID).FirstOrDefault();
+                        myprofiledata.lu_diet = context.lu_diet.Where(p => p.id == item.ProfileData.DietID).FirstOrDefault();
+                        myprofiledata.lu_drinks = context.lu_drinks.Where(p => p.id == item.ProfileData.DrinksID).FirstOrDefault();
+                        myprofiledata.lu_exercise = context.lu_exercise.Where(p => p.id == item.ProfileData.ExerciseID).FirstOrDefault();
+                        myprofiledata.lu_humor = context.lu_humor.Where(p => p.id == item.ProfileData.HumorID).FirstOrDefault();
+                        myprofiledata.lu_politicalview = context.lu_politicalview.Where(p => p.id == item.ProfileData.PoliticalViewID).FirstOrDefault();
+                        myprofiledata.lu_religion = context.lu_religion.Where(p => p.id == item.ProfileData.ReligionID).FirstOrDefault();
+                        myprofiledata.lu_religiousattendance = context.lu_religiousattendance.Where(p => p.id == item.ProfileData.ReligiousAttendanceID).FirstOrDefault();
+                        myprofiledata.lu_sign = context.lu_sign.Where(p => p.id == item.ProfileData.SignID).FirstOrDefault();
+                        myprofiledata.lu_smokes = context.lu_smokes.Where(p => p.id == item.ProfileData.SmokesID).FirstOrDefault();
+                        myprofiledata.lu_educationlevel = context.lu_educationlevel.Where(p => p.id == item.ProfileData.EducationLevelID).FirstOrDefault();
+                        myprofiledata.lu_employmentstatus = context.lu_employmentstatus.Where(p => p.id == item.ProfileData.EmploymentSatusID).FirstOrDefault();
+                        myprofiledata.lu_havekids = context.lu_havekids.Where(p => p.id == item.ProfileData.HaveKidsId).FirstOrDefault();
+                        myprofiledata.lu_incomelevel = context.lu_incomelevel.Where(p => p.id == item.ProfileData.IncomeLevelID).FirstOrDefault();
+                        myprofiledata.lu_livingsituation = context.lu_livingsituation.Where(p => p.id == item.ProfileData.LivingSituationID).FirstOrDefault();
+                        myprofiledata.lu_maritalstatus = context.lu_maritalstatus.Where(p => p.id == item.ProfileData.MaritalStatusID).FirstOrDefault();
+                        myprofiledata.lu_profession = context.lu_profession.Where(p => p.id == item.ProfileData.ProfessionID).FirstOrDefault();
+                        myprofiledata.lu_wantskids = context.lu_wantskids.Where(p => p.id == item.ProfileData.WantsKidsID).FirstOrDefault();
                         //visiblity settings was never implemented anyways.
                         // myprofiledata.visibilitysettings=  context.visibilitysettings.Where(p => p.id   == item.Prof).FirstOrDefault();     
 

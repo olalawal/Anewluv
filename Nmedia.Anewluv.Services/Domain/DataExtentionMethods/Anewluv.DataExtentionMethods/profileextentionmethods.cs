@@ -262,7 +262,7 @@ namespace Anewluv.DataExtentionMethods
                         searchsetting Newsearchsettings = new searchsetting();
 
                         Newsearchsettings = new searchsetting();
-                        Newsearchsettings.profile_id = model.profileid.GetValueOrDefault();
+                        Newsearchsettings.profile_id = model.profileid;
                         Newsearchsettings.myperfectmatch = true;
                         Newsearchsettings.searchname = "myperfectmatch";
                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
@@ -301,7 +301,7 @@ namespace Anewluv.DataExtentionMethods
                         searchsetting Newsearchsettings = new searchsetting();
 
                         Newsearchsettings = new searchsetting();
-                        Newsearchsettings.profile_id = model.profileid.GetValueOrDefault();
+                        Newsearchsettings.profile_id = model.profileid; //.GetValueOrDefault();
                         Newsearchsettings.myperfectmatch = true;
                         Newsearchsettings.searchname = "myperfectmatch";
                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);

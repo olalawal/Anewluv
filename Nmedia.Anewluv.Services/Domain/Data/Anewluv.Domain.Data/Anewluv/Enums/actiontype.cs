@@ -21,10 +21,10 @@ namespace Anewluv.Domain.Data
         Like ,
         [Description("Peek")]
         [EnumMember]
-        Like,
+        Peek,
         [Description("Interest")]
         [EnumMember]
-        Like,
+        Interest,
         [Description("Friend")]
         [EnumMember]
         Friend,
@@ -42,13 +42,13 @@ namespace Anewluv.Domain.Data
         AbuseReport,
         [Description("PhotoReject")]
         [EnumMember]
-        AbuseReport,
+        PhotoReject,
          [Description("PhotoAprove")]
         [EnumMember]
-        AbuseReport,
+        PhotoAprove,
          [Description("AccountBann")]
          [EnumMember]
-         AbuseReport
+         AccountBann
       
        
        

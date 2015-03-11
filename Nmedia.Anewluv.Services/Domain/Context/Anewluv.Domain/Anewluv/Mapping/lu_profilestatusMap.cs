@@ -15,6 +15,8 @@ namespace Anewluv.Domain.Data.Mapping
             this.ToTable("lu_profilestatus");
             this.Property(t => t.id).HasColumnName("id");
             this.Property(t => t.description).HasColumnName("description");
+
+          
         }
     }
 }
