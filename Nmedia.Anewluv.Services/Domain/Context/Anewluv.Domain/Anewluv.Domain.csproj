@@ -128,7 +128,6 @@
     <Compile Include="Anewluv\Mapping\lu_sortbytypeMap.cs" />
     <Compile Include="Anewluv\Mapping\lu_wantskidsMap.cs" />
     <Compile Include="Anewluv\Mapping\mailboxfolderMap.cs" />
-    <Compile Include="Anewluv\Mapping\mailboxfoldertypeMap.cs" />
     <Compile Include="Anewluv\Mapping\mailboxmessagefolderMap.cs" />
     <Compile Include="Anewluv\Mapping\mailboxmessageMap.cs" />
     <Compile Include="Anewluv\Mapping\mailupdatefreqencyMap.cs" />

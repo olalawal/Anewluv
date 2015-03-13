@@ -7,11 +7,11 @@ namespace Anewluv.Domain.Data
     {
         public lu_defaultmailboxfolder()
         {
-            this.mailboxfoldertypes = new List<mailboxfoldertype>();
+            this.mailboxfolders = new List<mailboxfolder>();
         }
 
         public int id { get; set; }
         public string description { get; set; }
-        public virtual ICollection<mailboxfoldertype> mailboxfoldertypes { get; set; }
+        public virtual ICollection<mailboxfolder> mailboxfolders { get; set; }
     }
 }

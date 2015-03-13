@@ -125,8 +125,9 @@ namespace Anewluv.Domain
         public DbSet<lu_smokes> lu_smokes { get; set; }
         public DbSet<lu_sortbytype> lu_sortbytype { get; set; }
         public DbSet<lu_wantskids> lu_wantskids { get; set; }
+
         public DbSet<mailboxfolder> mailboxfolders { get; set; }
-        public DbSet<mailboxfoldertype> mailboxfoldertypes { get; set; }
+        //public DbSet<mailboxfoldertype> mailboxfoldertypes { get; set; }
         public DbSet<mailboxmessagefolder> mailboxmessagefolders { get; set; }
         public DbSet<mailboxmessage> mailboxmessages { get; set; }
         public DbSet<mailupdatefreqency> mailupdatefreqencies { get; set; }

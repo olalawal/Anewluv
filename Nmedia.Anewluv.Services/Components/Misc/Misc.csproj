@@ -150,10 +150,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\..\Domain\Context\Anewluv.Domain\bin\Debug\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\..\..\..\3rdPartyProjects\StatisticalSolutions\StatisticalSolutions.Domain\bin\Debug\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\..\Common\NET\Shared\SharedDLLs\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

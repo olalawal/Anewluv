@@ -91,7 +91,7 @@
     <Compile Include="Anewluv\Enums\wantskids.cs" />
     <Compile Include="Anewluv\Enums\abusetype.cs" />
     <Compile Include="Anewluv\Enums\activitytype.cs" />
-    <Compile Include="Anewluv\Enums\defaultmailboxfoldertype.cs" />
+    <Compile Include="Anewluv\Enums\defaultmailboxfolder.cs" />
     <Compile Include="Anewluv\Enums\flagyesno.cs" />
     <Compile Include="Anewluv\Enums\gender.cs" />
     <Compile Include="Anewluv\Enums\notetype.cs" />
@@ -162,7 +162,6 @@
     <Compile Include="Anewluv\lu_sortbytype.cs" />
     <Compile Include="Anewluv\lu_wantskids.cs" />
     <Compile Include="Anewluv\mailboxfolder.cs" />
-    <Compile Include="Anewluv\mailboxfoldertype.cs" />
     <Compile Include="Anewluv\mailboxmessage.cs" />
     <Compile Include="Anewluv\mailboxmessagefolder.cs" />
     <Compile Include="Anewluv\mailupdatefreqency.cs" />

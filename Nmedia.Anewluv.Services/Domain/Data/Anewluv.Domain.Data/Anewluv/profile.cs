@@ -37,10 +37,8 @@ namespace Anewluv.Domain.Data
         public string salt { get; set; }
         public string securityanswer { get; set; }
         public Nullable<int> sentemailquotahitcount { get; set; }
-        public Nullable<int> sentmessagequotahitcount { get; set; }
-     
-        public Nullable<int> passwordchangeattempts { get; set; }
-   
+        public Nullable<int> sentmessagequotahitcount { get; set; }     
+        public Nullable<int> passwordchangeattempts { get; set; }   
         public int status_id { get; set; }
         public int securityquestion_id { get; set; }     
         public virtual lu_profilestatus lu_profilestatus { get; set; }

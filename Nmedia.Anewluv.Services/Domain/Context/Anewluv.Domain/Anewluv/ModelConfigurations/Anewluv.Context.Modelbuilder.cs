@@ -77,7 +77,7 @@ namespace  Anewluv.Domain
             modelBuilder.Configurations.Add(new lu_sortbytypeMap());
             modelBuilder.Configurations.Add(new lu_wantskidsMap());
             modelBuilder.Configurations.Add(new mailboxfolderMap());
-            modelBuilder.Configurations.Add(new mailboxfoldertypeMap());
+            //modelBuilder.Configurations.Add(new mailboxfoldertypeMap());
             modelBuilder.Configurations.Add(new mailboxmessagefolderMap());
             modelBuilder.Configurations.Add(new mailboxmessageMap());
             modelBuilder.Configurations.Add(new mailupdatefreqencyMap());

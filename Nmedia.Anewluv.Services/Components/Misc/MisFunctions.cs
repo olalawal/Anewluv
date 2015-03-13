@@ -58,8 +58,8 @@ namespace Misc
             //})          
             //);
 
-
-
+            
+            
             //convert profileData and profile first 
             //convet abusers data
 
@@ -67,9 +67,13 @@ namespace Misc
             foreach (AnewLuvFTS.DomainAndData.Models.profile item in olddb.profiles)
             {
                 var myprofile = new Anewluv.Domain.Data.profile();
+                
                 var myprofiledata = new Anewluv.Domain.Data.profiledata();
                 //build the related  profilemetadata noew
                 var myprofilemetadata = new Anewluv.Domain.Data.profilemetadata();
+                var myopenids = new List<openid>();
+                var mylogtimes = new List<userlogtime>();
+
 
                 if (context.profiles.Any(p => p.emailaddress == item.ProfileID))
                 {
@@ -101,7 +105,7 @@ namespace Misc
                         myprofile.failedpasswordchangeattemptcount = item.PasswordChangeAttempts;
                         myprofile.salt = item.salt;
                         myprofile.status_id = context.lu_profilestatus.Where(z => z.id == item.ProfileStatusID).FirstOrDefault().id;
-                       // myprofile.securityquestion_id = item.SecurityQuestionID;
+                        // myprofile.securityquestion_id = item.SecurityQuestionID;
                         myprofile.securityanswer = item.SecurityAnswer;
                         myprofile.sentemailquotahitcount = item.SentEmailQuotaHitCount;
                         myprofile.sentmessagequotahitcount = item.SentMessageQuotaHitCount;
@@ -157,18 +161,56 @@ namespace Misc
                         // myprofiledata.visibilitysettings=  context.visibilitysettings.Where(p => p.id   == item.Prof).FirstOrDefault();     
 
 
-
                         myprofilemetadata.profile_id = newprofilecreated.id;
+
+
+                        //call create mail here
+
+
+                        //add openids
+                        foreach (profileOpenIDStore openiditem in item.profileOpenIDStores)
+                        {
+                            myopenids.Add(new openid
+                            {
+                                active = openiditem.active,
+                                creationdate = openiditem.creationDate,
+                                openidprovider_id = context.lu_openidprovider.Where(z => z.description == openiditem.openidProviderName).FirstOrDefault().id,
+                                openididentifier = openiditem.openidIdentifier,
+                                profile_id = newprofilecreated.id
+                            });
+
+                            Console.WriteLine("added open id for user :    :" + item.ProfileID);
+                        }
+
+                        //add user logtimes 
+                        foreach (AnewLuvFTS.DomainAndData.Models.User_Logtime logtime in olddb.User_Logtime.
+                                 Where(p => p.ProfileData.profile.ProfileID == myprofile.emailaddress))
+                        {
+
+                            mylogtimes.Add(new userlogtime
+                           {
+                               logintime = logtime.LoginTime,
+                               logouttime = logtime.LogoutTime,
+                               offline = true,
+                               profile_id = newprofilecreated.id,
+                               sessionid = logtime.SessionID
+                           });
+                            Console.WriteLine("profile added succesfull   :");
+                        }
+
+                        //mail stuff 
+
+
+
+
 
                         //add the two new objects to profile
                         //********************************
                         myprofile.profiledata = myprofiledata;
                         myprofile.profilemetadata = myprofilemetadata;
-
                         context.profiles.AddOrUpdate(myprofile);
-
-                        //iccrement new ID
-                        newprofileid = newprofileid + 1;
+                       
+                      
                     }
 
 
@@ -178,6 +220,11 @@ namespace Misc
                     {
 
                         var dd = ex.ToString();
+                    }
+                    finally
+                    {
+                        //iccrement on faliture too
+                        newprofileid = newprofileid + 1;
                     }
                 }
 
@@ -195,6 +242,113 @@ namespace Misc
                 var dd = ex.ToString();
             }
         }
+
+
+        public static void ConvertProfileMails()
+        {
+            var olddb = new AnewluvFTSContext();
+            var postaldb = new PostalData2Context();
+            var context = new AnewluvContext();
+
+
+            //global try for the rest of objects that are tied to profile
+            try
+            {
+
+                //populate collections tied to profile and profiledata
+
+
+                //build  members in role data if it exists
+                foreach (AnewLuvFTS.DomainAndData.Models.profile oldprofile in olddb.profiles)
+                {
+                    var membersinroleobject = new Anewluv.Domain.Data.membersinrole();
+
+                   
+                    //query the profile data
+                    //var matchedprofile = context.profiles.Where(p => p.emailaddress == membersinroleitem.ProfileID).FirstOrDefault();
+                    // Metadata classes are not meant to be instantiated.
+                    // myprofile.id = matchedprofile.First().id ;
+                    var matchedprofile = context.profiles.Where(p => p.emailaddress == oldprofile.ProfileID).FirstOrDefault();
+                    if (matchedprofile != null)
+                    {
+                        
+                        //get mailbox folders first 
+                        if (oldprofile.ProfileData.MailboxFolders.Count() > 0)
+                        {
+                            Console.WriteLine("attempting to create mailbox folders    :" + oldprofile.ProfileID);
+                            List<mailboxfolder> maildboxfolders = new List<mailboxfolder>();
+                            foreach (MailboxFolder oldfolder in oldprofile.ProfileData.MailboxFolders)
+                            {
+
+                                maildboxfolders.Add(new mailboxfolder
+                                {
+                                    active = oldfolder.Active ,  
+                                    foldertype_id = context.mailboxfolders
+                                    
+                                   , profile_id 
+                                });
+
+
+                            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("No mailbox detected skipping    :" + oldprofile.ProfileID);
+                        }
+
+
+
+
+
+
+
+
+
+                        Console.WriteLine("role added for old profileid of   :" + membersinroleitem.ProfileID);
+                        //save data one per row
+                    }
+
+                }
+
+
+
+          
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                var dd = ex.ToString();
+            }
+
+            context.SaveChanges();
+
+        }
+
 
         public static void ConvertProfileCollections()
         {
@@ -227,7 +381,7 @@ namespace Misc
 
                         membersinroleobject.active = true;
                         //membersinroleobject.profile_id = matchedprofile.id;
-                        membersinroleobject.role = context.lu_role.Where(z => z.id == membersinroleitem.Role.RoleID).FirstOrDefault();
+                        membersinroleobject.lu_role = context.lu_role.Where(z => z.id == membersinroleitem.Role.RoleID).FirstOrDefault();
                         membersinroleobject.roleexpiredate = null;
                         membersinroleobject.rolestartdate = DateTime.Now;
                         //add the related
@@ -264,7 +418,7 @@ namespace Misc
                         activitylogobject.routeurl = ""; //new
                         activitylogobject.useragent = activitylogitem.UserAgent;
                         //add the activity type  as pulled from old database since we did not have those then
-                        activitylogobject.activitytype = context.lu_activitytype.Where(p => p.id == (int)activitytypeEnum.fromolddatabasestructure).FirstOrDefault();
+                        activitylogobject.lu_activitytype = context.lu_activitytype.Where(p => p.id == (int)activitytypeEnum.fromoldInitialdatabasestructure).FirstOrDefault();
                         //add the profile
                         activitylogobject.profile = matchedprofile; //context.profiles.Where(p => p.emailaddress == activitylogitem.ProfileID).FirstOrDefault();
 
@@ -274,7 +428,7 @@ namespace Misc
                         myprofileactivitygeodata.city = activitylogitem.City;
                         myprofileactivitygeodata.regionname = activitylogitem.RegionName;
                         myprofileactivitygeodata.continent = activitylogitem.Continent;
-                        myprofileactivitygeodata.countryId = postaldb.CountryCodes.Where(p => p.CountryName == activitylogitem.CountryName).FirstOrDefault().CountryID;
+                        myprofileactivitygeodata.countryId = postaldb.GetCountryPostalCodeList().Where(p => p.CountryName == activitylogitem.CountryName).FirstOrDefault().CountryID;
                         myprofileactivitygeodata.countryname = activitylogitem.CountryName;
                         myprofileactivitygeodata.creationdate = activitylogitem.CreationDate;
                         myprofileactivitygeodata.lattitude = activitylogitem.Lattitude;
@@ -284,67 +438,16 @@ namespace Misc
                         activitylogobject.profileactivitygeodata = myprofileactivitygeodata;
 
                         //add the object to profile object
-                        context.profileactivity.Add(activitylogobject);
+                        context.profileactivities.Add(activitylogobject);
                         //save data one per row
                         Console.WriteLine("geo activity log value added for old profileid of   :" + activitylogitem.ProfileID);
                     }
                 }
 
 
-                //add openID data
+        
 
-                foreach (AnewLuvFTS.DomainAndData.Models.profileOpenIDStore openiditem in olddb.profileOpenIDStores)
-                {
-                    var openidobject = new Anewluv.Domain.Data.openid();
-                    Console.WriteLine("attempting to assign  a profile open id store value  for old profileid of    :" + openiditem.ProfileID);
-                    //query the profile data
-                    var matchedprofile = context.profiles.Where(p => p.emailaddress == openiditem.ProfileID).FirstOrDefault();
-                    if (matchedprofile != null)
-                    {
-                        openidobject.active = true;
-                        //openidobject.profile_id = matchedprofile.id;
-                        openidobject.creationdate = openiditem.creationDate;
-                        openidobject.openididentifier = openiditem.openidIdentifier;
-                        openidobject.openidprovider = context.lu_openidprovider.Where(p => p.description  == openiditem.openidIdentifier).FirstOrDefault(); //DbConte openiditem.openidProviderName;
-                        //add the related
-                        openidobject.profile = matchedprofile;
-                        //add the object to profile object
-                        context.opendIds.Add(openidobject);
-                        //save data one per row
-
-                        Console.WriteLine(" profile open id store added for old profileid of   :" + openiditem.ProfileID);
-                    }
-
-                }
-
-
-                //add userlogtime
-
-                foreach (AnewLuvFTS.DomainAndData.Models.User_Logtime userlogtimeitem in olddb.User_Logtime)
-                {
-                    var userlogtimeobject = new Anewluv.Domain.Data.userlogtime();
-                    Console.WriteLine("attempting assign a user logtime for old profileid of    :" + userlogtimeitem.ProfileID);
-                    //query the profile data
-                    var matchedprofile = context.profiles.Where(p => p.emailaddress == userlogtimeitem.ProfileID).FirstOrDefault();
-                    if (matchedprofile != null)
-                    {
-                        // Metadata classes are not meant to be instantiated.
-                        // myprofile.id = matchedprofile.First().id ;
-                        userlogtimeobject.logintime = userlogtimeitem.LoginTime;
-                        userlogtimeobject.logouttime = userlogtimeitem.LogoutTime;
-                        userlogtimeobject.offline = Convert.ToBoolean(userlogtimeitem.Offline);
-                        userlogtimeobject.sessionid = userlogtimeitem.SessionID;
-                        //add the related
-
-
-                        userlogtimeobject.profile_id = matchedprofile.id;
-                        //add the object to profile object
-                        context.userlogtimes.Add(userlogtimeobject);
-                        //save data one per row
-                        Console.WriteLine("user logtime added for old profileid of    :" + userlogtimeitem.ProfileID);
-                    }
-
-                }
+              
 
             }
             catch (Exception ex)
@@ -356,6 +459,8 @@ namespace Misc
             context.SaveChanges();
 
         }
+
+     
 
         public static void ConvertProfileMetaDataBasicCollections()
         {

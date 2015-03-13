@@ -16,12 +16,23 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.id).HasColumnName("id");
             this.Property(t => t.profile_id).HasColumnName("profile_id");
             this.Property(t => t.active).HasColumnName("active");
-            this.Property(t => t.foldertype_id).HasColumnName("foldertype_id");
+    
+          
+            this.Property(t => t.id).HasColumnName("id");
+            this.Property(t => t.displayname).HasColumnName("displayname");   
+            this.Property(t => t.creationdate).HasColumnName("creationdate");
+            this.Property(t => t.deleteddate).HasColumnName("deleteddate");
+            this.Property(t => t.maxsize).HasColumnName("maxsize");
+            this.Property(t => t.defaultfolder_id).HasColumnName("defaultfolder_id");
 
             // Relationships
-            this.HasOptional(t => t.mailboxfoldertype)
+            this.HasOptional(t => t.lu_defaultmailboxfolder)
                 .WithMany(t => t.mailboxfolders)
-                .HasForeignKey(d => d.foldertype_id);
+                .HasForeignKey(d => d.defaultfolder_id);
+
+
+            
+             
             this.HasRequired(t => t.profilemetadata)
                 .WithMany(t => t.mailboxfolders)
                 .HasForeignKey(d => d.profile_id);
