@@ -15,6 +15,11 @@ namespace Anewluv.Domain.Data.Mapping
             this.ToTable("lu_defaultmailboxfolder");
             this.Property(t => t.id).HasColumnName("id");
             this.Property(t => t.description).HasColumnName("description");
+
+          //  this.HasRequired(t => t.mailboxfolders).WithOptional
+               
+               
+
         }
     }
 }

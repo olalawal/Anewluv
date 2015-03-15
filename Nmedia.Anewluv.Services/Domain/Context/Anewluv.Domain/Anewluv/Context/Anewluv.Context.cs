@@ -76,7 +76,7 @@ namespace Anewluv.Domain
         public DbSet<lu_applicationtransfertype> lu_applicationtransfertype { get; set; }
         public DbSet<lu_applicationtype> lu_applicationtype { get; set; }
         public DbSet<lu_bodytype> lu_bodytype { get; set; }
-        public DbSet<lu_defaultmailboxfolder> lu_defaultmailboxfolder { get; set; }
+       // public DbSet<lu_defaultmailboxfolder> lu_defaultmailboxfolder { get; set; }
         public DbSet<lu_diet> lu_diet { get; set; }
         public DbSet<lu_drinks> lu_drinks { get; set; }
         public DbSet<lu_educationlevel> lu_educationlevel { get; set; }
@@ -127,7 +127,7 @@ namespace Anewluv.Domain
         public DbSet<lu_wantskids> lu_wantskids { get; set; }
 
         public DbSet<mailboxfolder> mailboxfolders { get; set; }
-        //public DbSet<mailboxfoldertype> mailboxfoldertypes { get; set; }
+        public DbSet<lu_defaultmailboxfolder> lu_defaultmailboxfolder { get; set; }
         public DbSet<mailboxmessagefolder> mailboxmessagefolders { get; set; }
         public DbSet<mailboxmessage> mailboxmessages { get; set; }
         public DbSet<mailupdatefreqency> mailupdatefreqencies { get; set; }

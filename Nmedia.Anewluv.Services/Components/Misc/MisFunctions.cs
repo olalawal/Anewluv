@@ -209,6 +209,8 @@ namespace Misc
                         myprofile.profiledata = myprofiledata;
                         myprofile.profilemetadata = myprofilemetadata;
                         context.profiles.AddOrUpdate(myprofile);
+
+                        context.SaveChanges();
                        
                       
                     }
@@ -234,7 +236,7 @@ namespace Misc
             //attempt bulk save
             try
             {
-                context.SaveChanges();
+              //  context.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -269,63 +271,103 @@ namespace Misc
                     // Metadata classes are not meant to be instantiated.
                     // myprofile.id = matchedprofile.First().id ;
                     var matchedprofile = context.profiles.Where(p => p.emailaddress == oldprofile.ProfileID).FirstOrDefault();
-                    if (matchedprofile != null)
+                    if (matchedprofile != null && matchedprofile.profilemetadata.mailboxfolders.Count == 0 )
                     {
                         
                         //get mailbox folders first 
                         if (oldprofile.ProfileData.MailboxFolders.Count() > 0)
                         {
                             Console.WriteLine("attempting to create mailbox folders    :" + oldprofile.ProfileID);
-                            List<mailboxfolder> maildboxfolders = new List<mailboxfolder>();
+                           // List<mailboxfolder> maildboxfolders = new List<mailboxfolder>();
+                            //List<mailboxmessagefolder> newmailboxmesages = new List<mailboxmessagefolder>();
                             foreach (MailboxFolder oldfolder in oldprofile.ProfileData.MailboxFolders)
                             {
 
-                                maildboxfolders.Add(new mailboxfolder
+                                var mailboxfolder =  (new mailboxfolder
                                 {
                                     active = oldfolder.Active ,  
-                                    foldertype_id = context.mailboxfolders
-                                    
-                                   , profile_id 
+                                    defaultfolder_id  = context.lu_defaultmailboxfolder.Where(p=>p.description == oldfolder.MailboxFolderTypeName).FirstOrDefault().id,
+                                     profile_id =  matchedprofile.id, creationdate = DateTime.Now, maxsizeinbytes = 128000, displayname = oldfolder.MailboxFolderTypeName                                   
                                 });
+                                matchedprofile.profilemetadata.mailboxfolders.Add(mailboxfolder);
+                                //save the folder 
+                                context.SaveChanges();
+
+                               //find all mailbox messages messages tied to this folder for the link table
+                                foreach (MailboxMessagesFolder OldMailBoxMessagesFolder in oldfolder.MailboxMessagesFolders)
+                                {
+                                   
+                                    var mailboxmessage = new mailboxmessage();
+                                    //see if the user is a recpient if so add to recived 
+                                    if (OldMailBoxMessagesFolder.MailboxMessage.RecipientID == matchedprofile.emailaddress)
+                                    {
+                                            Console.WriteLine("creating mapping btween recived messages and folders for    :" + oldprofile.ProfileID);
+                                     //create the new message 
+                                        mailboxmessage = (new mailboxmessage
+                                        {
+                                             body = OldMailBoxMessagesFolder.MailboxMessage.Body, subject = OldMailBoxMessagesFolder.MailboxMessage.Subject, recipient_id = matchedprofile.id, 
+                                             sender_id = context.profiles.Where(z=>z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault().id, 
+                                             creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
+                                             sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length+ OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
+                                                              
+                                        }); 
+                                        matchedprofile.profilemetadata.receivedmailboxmessages.Add(mailboxmessage);
+                                        context.SaveChanges();
+                                        //create the mailboxmesagesflder now
 
 
+                                    }
+
+                                     if (OldMailBoxMessagesFolder.MailboxMessage.SenderID == matchedprofile.emailaddress)
+                                    {
+                                            Console.WriteLine("creating mapping btween sent messages and folders for    :" + oldprofile.ProfileID);
+                                     //create the new message 
+                                         mailboxmessage =  (new mailboxmessage
+                                        {
+                                             body = OldMailBoxMessagesFolder.MailboxMessage.Body, subject = OldMailBoxMessagesFolder.MailboxMessage.Subject, recipient_id = matchedprofile.id, 
+                                             sender_id = context.profiles.Where(z=>z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault().id, 
+                                             creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
+                                             sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length+ OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
+                                                              
+                                        }); 
+                                        matchedprofile.profilemetadata.sentmailboxmessages.Add(mailboxmessage);
+                                        context.SaveChanges();
+                                    }
+
+                                    //now do the join table tables 
+                                       var newmailboxmesagesfolder =   (new mailboxmessagefolder
+                                        {
+                                            
+                                           mailboxmessage_id = mailboxmessage.id, 
+                                           mailboxfolder_id = mailboxfolder.id , 
+                                           deleted = OldMailBoxMessagesFolder.MessageDeleted == 1 ? true:false,
+                                            flagged   = OldMailBoxMessagesFolder.MessageFlagged == 1 ? true:false,
+                                            draft  = OldMailBoxMessagesFolder.MessageDraft == 1 ? true:false,
+                                            replied   = OldMailBoxMessagesFolder.MessageReplied == 1 ? true:false,
+                                             read    = OldMailBoxMessagesFolder.MessageRead == 1 ? true:false
+                                        }); 
+                                      
+                                           context.mailboxmessagefolders.Add(newmailboxmesagesfolder);
+                                           context.SaveChanges();
+                                      
+                                }
+
+                               
                             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                           
 
                         }
+                        else if (matchedprofile != null && matchedprofile.profilemetadata.mailboxfolders.Count > 0)
+                        {
+                            Console.WriteLine("Folders already exist for     :" + oldprofile.ProfileID);
+                         }
                         else
                         {
                             Console.WriteLine("No mailbox detected skipping    :" + oldprofile.ProfileID);
                         }
 
 
-
-
-
-
-
-
-
-                        Console.WriteLine("role added for old profileid of   :" + membersinroleitem.ProfileID);
+                     //   Console.WriteLine("role added for old profileid of   :" + membersinroleitem.ProfileID);
                         //save data one per row
                     }
 
@@ -505,180 +547,7 @@ namespace Misc
 
                 Console.WriteLine("saving  favorites "); context.SaveChanges();
 
-                //handle friends
-                foreach (AnewLuvFTS.DomainAndData.Models.Friend friendsitem in olddb.Friends)
-                {
-                    var friendsobject = new Anewluv.Domain.Data.friend();
-                    Console.WriteLine("attempting to assign friend request for the old profileid of    :" + friendsitem.ProfileID);
-                    //add the realted proflemetadatas 
-                    var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == friendsitem.ProfileID).FirstOrDefault();
-                    var matchedfriendprofilemetadata = context.profilemetadata.Where(p => p.profile.emailaddress == friendsitem.FriendID).FirstOrDefault();
-                    if (matchedprofilemetatdata != null && matchedfriendprofilemetadata != null)
-                    {
-                        friendsobject.profilemetadata = matchedprofilemetatdata; //context.profilemetadata.Where(p => p.profile.emailaddress == friendsitem.ProfileID).FirstOrDefault();
-                        friendsobject.friendprofilemetadata = matchedfriendprofilemetadata; //context.profilemetadata.Where(p => p.profile.emailaddress == friendsitem.friendID).FirstOrDefault();
-
-                        friendsobject.creationdate = (friendsitem.FriendDate != null) ? friendsitem.FriendDate : null;
-                        friendsobject.modificationdate = null;
-                        friendsobject.viewdate = (friendsitem.FriendViewedDate != null) ? friendsitem.FriendViewedDate : null;
-                        friendsobject.deletedbymemberdate = null;
-                        friendsobject.deletedbyfrienddate = null;
-
-                        //add the object to profile object
-                        context.friends.AddOrUpdate(friendsobject);
-                        //save data one per row
-                        //  context.SaveChanges();
-                        Console.WriteLine("friend request added for old profileid of    :" + friendsitem.ProfileID);
-                    }
-                }
-
-                Console.WriteLine("saving  friends "); context.SaveChanges();
-
-                //handle interests
-                foreach (AnewLuvFTS.DomainAndData.Models.Interest Interestsitem in olddb.Interests)
-                {
-                    var Interestsobject = new Anewluv.Domain.Data.interest();
-                    Console.WriteLine("attempting to assign Interest request for the old profileid of    :" + Interestsitem.ProfileID);
-                    //add the realted proflemetadatas 
-                    var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == Interestsitem.ProfileID).FirstOrDefault();
-                    var matchedInterestprofilemetadata = context.profilemetadata.Where(p => p.profile.emailaddress == Interestsitem.InterestID).FirstOrDefault();
-                    if (matchedprofilemetatdata != null && matchedInterestprofilemetadata != null)
-                    {
-                        Interestsobject.profilemetadata = matchedprofilemetatdata; //context.profilemetadata.Where(p => p.profile.emailaddress == Interestsitem.ProfileID).FirstOrDefault();
-                        Interestsobject.interestprofilemetadata = matchedInterestprofilemetadata; //context.profilemetadata.Where(p => p.profile.emailaddress == Interestsitem.InterestID).FirstOrDefault();
-                        Interestsobject.creationdate = (Interestsitem.InterestDate != null) ? Interestsitem.InterestDate : null;
-                        Interestsobject.modificationdate = null;
-                        Interestsobject.viewdate = (Interestsitem.IntrestViewedDate != null) ? Interestsitem.IntrestViewedDate : null;
-                        Interestsobject.deletedbymemberdate = null;
-                        Interestsobject.deletedbyinterestdate = null;
-
-                        //add the object to profile object
-                        context.interests.AddOrUpdate(Interestsobject);
-                        //save data one per row
-                        // context.SaveChanges();
-                        Console.WriteLine("Interest request added for old profileid of    :" + Interestsitem.ProfileID);
-
-                    }
-                }
-
-                Console.WriteLine("saving  Interests "); context.SaveChanges();
-
-                //handle likes
-                foreach (AnewLuvFTS.DomainAndData.Models.Like likesitem in olddb.Likes)
-                {
-                    var likesobject = new Anewluv.Domain.Data.like();
-                    Console.WriteLine("attempting to assign like request for the old profileid of    :" + likesitem.ProfileID);
-                    //add the realted proflemetadatas 
-                    var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == likesitem.ProfileID).FirstOrDefault();
-                    var matchedlikeprofilemetadata = context.profilemetadata.Where(p => p.profile.emailaddress == likesitem.LikeID).FirstOrDefault();
-                    if (matchedprofilemetatdata != null && matchedlikeprofilemetadata != null)
-                    {
-                        likesobject.profilemetadata = matchedprofilemetatdata; //context.profilemetadata.Where(p => p.profile.emailaddress == likesitem.ProfileID).FirstOrDefault();
-                        likesobject.likeprofilemetadata = matchedlikeprofilemetadata; //context.profilemetadata.Where(p => p.profile.emailaddress == likesitem.likeID).FirstOrDefault();
-
-                        likesobject.creationdate = (likesitem.LikeDate != null) ? likesitem.LikeDate : null;
-                        likesobject.modificationdate = null;
-                        likesobject.viewdate = (likesitem.LikeViewedDate != null) ? likesitem.LikeViewedDate : null;
-                        likesobject.deletedbymemberdate = null;
-                        likesobject.deletedbylikedate = null;
-
-                        //add the object to profile object
-                        context.likes.AddOrUpdate(likesobject);
-                        //save data one per row
-                        //   context.SaveChanges();
-                        Console.WriteLine("like request added for old profileid of    :" + likesitem.ProfileID);
-                    }
-                }
-                Console.WriteLine("saving  likes "); context.SaveChanges();
-
-                //handle peeks
-                //Peeks is invierse with profileviewer being the opposit of profile
-                foreach (AnewLuvFTS.DomainAndData.Models.ProfileView peeksitem in olddb.ProfileViews)
-                {
-                    var peeksobject = new Anewluv.Domain.Data.peek();
-                    Console.WriteLine("attempting to assign peek request for the old profileid of    :" + peeksitem.ProfileID);
-                    //add the realted proflemetadatas 
-                    var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == peeksitem.ProfileViewerID).FirstOrDefault();
-                    var matchedpeekprofilemetadata = context.profilemetadata.Where(p => p.profile.emailaddress == peeksitem.ProfileID).FirstOrDefault();
-                    if (matchedprofilemetatdata != null && matchedpeekprofilemetadata != null)
-                    {
-                        peeksobject.profilemetadata = matchedprofilemetatdata; //context.profilemetadata.Where(p => p.profile.emailaddress == peeksitem.ProfileID).FirstOrDefault();
-                        peeksobject.peekprofilemetadata = matchedpeekprofilemetadata; //context.profilemetadata.Where(p => p.profile.emailaddress == peeksitem.peekID).FirstOrDefault();
-
-                        peeksobject.creationdate = (peeksitem.ProfileViewDate != null) ? peeksitem.ProfileViewDate : null;
-                        peeksobject.modificationdate = null;
-                        peeksobject.viewdate = (peeksitem.ProfileViewViewedDate != null) ? peeksitem.ProfileViewViewedDate : null;
-                        peeksobject.deletedbymemberdate = null;
-                        peeksobject.deletedbypeekdate = null;
-
-                        //add the object to profile object
-                        context.peeks.AddOrUpdate(peeksobject);
-                        //save data one per row
-                        //   context.SaveChanges();
-                        Console.WriteLine("peek request added for old profileid of    :" + peeksitem.ProfileID);
-                    }
-                }
-
-                Console.WriteLine("saving  peeks "); context.SaveChanges();
-
-
-                //handle hotlists
-                foreach (AnewLuvFTS.DomainAndData.Models.Hotlist hotlistsitem in olddb.Hotlists)
-                {
-                    var hotlistsobject = new Anewluv.Domain.Data.hotlist();
-                    Console.WriteLine("attempting to assign hotlist request for the old profileid of    :" + hotlistsitem.ProfileID);
-                    //add the realted proflemetadatas 
-                    var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == hotlistsitem.ProfileID).FirstOrDefault();
-                    var matchedhotlistprofilemetadata = context.profilemetadata.Where(p => p.profile.emailaddress == hotlistsitem.HotlistID).FirstOrDefault();
-                    if (matchedprofilemetatdata != null && matchedhotlistprofilemetadata != null)
-                    {
-                        hotlistsobject.profilemetadata = matchedprofilemetatdata; //context.profilemetadata.Where(p => p.profile.emailaddress == hotlistsitem.ProfileID).FirstOrDefault();
-                        hotlistsobject.hotlistprofilemetadata = matchedhotlistprofilemetadata; //context.profilemetadata.Where(p => p.profile.emailaddress == hotlistsitem.hotlistID).FirstOrDefault();
-
-                        hotlistsobject.creationdate = (hotlistsitem.HotlistDate != null) ? hotlistsitem.HotlistDate : null;
-                        hotlistsobject.modificationdate = null;
-                        hotlistsobject.viewdate = (hotlistsitem.HotlistViewedDate != null) ? hotlistsitem.HotlistViewedDate : null;
-                        hotlistsobject.deletedbymemberdate = null;
-                        hotlistsobject.deletedbyhotlistdate = null;
-
-                        //add the object to profile object
-                        context.hotlists.AddOrUpdate(hotlistsobject);
-                        //save data one per row
-                        //   context.SaveChanges();
-                        Console.WriteLine("hotlist request added for old profileid of    :" + hotlistsitem.ProfileID);
-                    }
-                }
-
-                Console.WriteLine("saving  hotlists "); context.SaveChanges();
-
-                //custom work for blocks which was mailbox blocks
-                //no block notes for now since thye are optional
-                foreach (AnewLuvFTS.DomainAndData.Models.Mailboxblock blocksitem in olddb.Mailboxblocks)
-                {
-                    var blocksobject = new Anewluv.Domain.Data.block();
-
-                    Console.WriteLine("attempting to add a block for the old profileid of    :" + blocksitem.ProfileID);
-                    var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == blocksitem.ProfileID).FirstOrDefault();
-                    var matchedInterestprofilemetadata = context.profilemetadata.Where(p => p.profile.emailaddress == blocksitem.BlockID).FirstOrDefault();
-                    if (matchedprofilemetatdata != null && matchedInterestprofilemetadata != null)
-                    {
-                        //add the realted proflemetadatas 
-                        blocksobject.profilemetadata = matchedprofilemetatdata; //context.profilemetadata.Where(p => p.profile.emailaddress == blocksitem.ProfileID).FirstOrDefault();
-                        blocksobject.blockedprofilemetadata = matchedInterestprofilemetadata; //context.profilemetadata.Where(p => p.profile.emailaddress == blocksitem.BlockID).FirstOrDefault();
-
-                        blocksobject.creationdate = (blocksitem.MailboxBlockDate != null) ? blocksitem.MailboxBlockDate : null;
-                        blocksobject.modificationdate = null;
-                        blocksobject.removedate = (blocksitem.BlockRemovedDate != null) ? blocksitem.BlockRemovedDate : null;
-                        //No need to do anyting with notes since we had no notes in the the past
-
-                        //add the object to profile object
-                        context.blocks.Add(blocksobject);
-                        Console.WriteLine("block  added for old profileid of    :" + blocksitem.ProfileID);
-                        //save data one per row
-                    }
-                }
-
-                Console.WriteLine("saving  blocks "); context.SaveChanges();
+             
 
                 //now handle the collections for other profiledatavalues
 
@@ -693,15 +562,15 @@ namespace Misc
                         //add the realted proflemetadatas 
                         Console.WriteLine("attempting assign ethnicity for old profileid of    :" + profiledataethnicityitem.ProfileID);
                         //query the profile data
-                        var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == profiledataethnicityitem.ProfileID).FirstOrDefault();
+                        var matchedprofilemetatdata = context.profilemetadatas.Where(p => p.profile.emailaddress == profiledataethnicityitem.ProfileID).FirstOrDefault();
                         if (matchedprofilemetatdata != null)
                         {
                             profiledataethnicityobject.profilemetadata = matchedprofilemetatdata;
                             //context.profilemetadata.Where(p => p.profile.emailaddress == profiledataethnicityitem.ProfileID).FirstOrDefault();
-                            profiledataethnicityobject.ethnicty = context.lu_ethnicity.Where(p => p.id == profiledataethnicityitem.EthnicityID).FirstOrDefault();
+                            profiledataethnicityobject.lu_ethnicity = context.lu_ethnicity.Where(p => p.description.ToUpper() == profiledataethnicityitem.CriteriaAppearance_Ethnicity.EthnicityName.ToUpper()).FirstOrDefault();
 
                             //add the object to profile object
-                            context.ethnicities.Add(profiledataethnicityobject);
+                            context.profiledata_ethnicity.Add(profiledataethnicityobject);
                             //save data one per row
                             //context.SaveChanges();
                             Console.WriteLine("ethnicity added for old profileid of    :" + profiledataethnicityitem.ProfileID);
@@ -720,15 +589,15 @@ namespace Misc
                         //add the realted proflemetadatas 
                         Console.WriteLine("attempting assign hobby for old profileid of    :" + profiledatahobbyitem.ProfileID);
                         //query the profile data
-                        var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == profiledatahobbyitem.ProfileID).FirstOrDefault();
+                        var matchedprofilemetatdata = context.profilemetadatas.Where(p => p.profile.emailaddress == profiledatahobbyitem.ProfileID).FirstOrDefault();
                         if (matchedprofilemetatdata != null)
                         {
                             profiledatahobbyobject.profilemetadata = matchedprofilemetatdata;
                             //context.profilemetadata.Where(p => p.profile.emailaddress == profiledatahobbyitem.ProfileID).FirstOrDefault();
-                            profiledatahobbyobject.hobby = context.lu_hobby.Where(p => p.id == profiledatahobbyitem.HobbyID).FirstOrDefault();
+                            profiledatahobbyobject.lu_hobby = context.lu_hobby.Where(p => p.description.ToUpper() == profiledatahobbyitem.CriteriaCharacter_Hobby.HobbyName.ToUpper()).FirstOrDefault();
 
                             //add the object to profile object
-                            context.hobbies.Add(profiledatahobbyobject);
+                            context.profiledata_hobby.Add(profiledatahobbyobject);
                             //save data one per row
                             //context.SaveChanges();
                             Console.WriteLine("hobby added for old profileid of    :" + profiledatahobbyitem.ProfileID);
@@ -747,15 +616,15 @@ namespace Misc
                         //add the realted proflemetadatas 
                         Console.WriteLine("attempting assign hotfeature for old profileid of    :" + profiledatahotfeatureitem.ProfileID);
                         //query the profile data
-                        var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == profiledatahotfeatureitem.ProfileID).FirstOrDefault();
+                        var matchedprofilemetatdata = context.profilemetadatas.Where(p => p.profile.emailaddress == profiledatahotfeatureitem.ProfileID).FirstOrDefault();
                         if (matchedprofilemetatdata != null)
                         {
                             profiledatahotfeatureobject.profilemetadata = matchedprofilemetatdata;
                             //context.profilemetadata.Where(p => p.profile.emailaddress == profiledatahotfeatureitem.ProfileID).FirstOrDefault();
-                            profiledatahotfeatureobject.hotfeature = context.lu_hotfeature.Where(p => p.id == profiledatahotfeatureitem.HotFeatureID).FirstOrDefault();
+                            profiledatahotfeatureobject.lu_hotfeature = context.lu_hotfeature.Where(p => p.description.ToUpper() == profiledatahotfeatureitem.CriteriaCharacter_HotFeature.HotFeatureName.ToUpper()).FirstOrDefault();
 
                             //add the object to profile object
-                            context.hotfeatures.Add(profiledatahotfeatureobject);
+                            context.profiledata_hotfeature.Add(profiledatahotfeatureobject);
                             //save data one per row
                             //context.SaveChanges();
                             Console.WriteLine("hotfeature added for old profileid of    :" + profiledatahotfeatureitem.ProfileID);
@@ -776,17 +645,17 @@ namespace Misc
                         //add the realted proflemetadatas 
                         Console.WriteLine("attempting assign lookingfor for old profileid of    :" + profiledatalookingforitem.ProfileID);
                         //query the profile data
-                        var matchedprofilemetatdata = context.profilemetadata.Where(p => p.profile.emailaddress == profiledatalookingforitem.ProfileID).FirstOrDefault();
+                        var matchedprofilemetatdata = context.profilemetadatas.Where(p => p.profile.emailaddress == profiledatalookingforitem.ProfileID).FirstOrDefault();
                         if (matchedprofilemetatdata != null)
                         {
                            
 
                             profiledatalookingforobject.profilemetadata = matchedprofilemetatdata;
                             //context.profilemetadata.Where(p => p.profile.emailaddress == profiledatalookingforitem.ProfileID).FirstOrDefault();
-                            profiledatalookingforobject.lookingfor = context.lu_lookingfor.Where(p => p.id == profiledatalookingforitem.LookingForID).FirstOrDefault();
+                            profiledatalookingforobject.lu_lookingfor = context.lu_lookingfor.Where(p => p.description == profiledatalookingforitem.CriteriaLife_LookingFor.LookingForName.ToUpper()).FirstOrDefault();
 
                             //add the object to profile object
-                            context.lookingfor.Add(profiledatalookingforobject);
+                            context.profiledata_lookingfor.Add(profiledatalookingforobject);
                             //save data one per row
                             //context.SaveChanges();
                             Console.WriteLine("lookingfor added for old profileid of    :" + profiledatalookingforitem.ProfileID);

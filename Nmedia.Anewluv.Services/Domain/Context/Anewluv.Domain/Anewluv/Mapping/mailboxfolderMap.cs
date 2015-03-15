@@ -22,7 +22,7 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.displayname).HasColumnName("displayname");   
             this.Property(t => t.creationdate).HasColumnName("creationdate");
             this.Property(t => t.deleteddate).HasColumnName("deleteddate");
-            this.Property(t => t.maxsize).HasColumnName("maxsize");
+            this.Property(t => t.maxsizeinbytes).HasColumnName("maxsizeinbytes");
             this.Property(t => t.defaultfolder_id).HasColumnName("defaultfolder_id");
 
             // Relationships

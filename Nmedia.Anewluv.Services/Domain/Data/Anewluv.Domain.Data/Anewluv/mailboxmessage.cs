@@ -17,7 +17,7 @@ namespace Anewluv.Domain.Data
         public int sender_id { get; set; }
         public string body { get; set; }
         public string subject { get; set; }
-        public Nullable<int> uniqueid { get; set; }
+        public Nullable<int> sizeinbtyes { get; set; }
         public virtual ICollection<mailboxmessagefolder> mailboxmessagefolders { get; set; }
         public virtual profilemetadata recipientprofilemetadata { get; set; }
         public virtual profilemetadata senderprofilemetadata { get; set; }

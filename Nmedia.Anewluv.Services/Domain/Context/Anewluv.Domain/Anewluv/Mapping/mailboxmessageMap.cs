@@ -19,7 +19,7 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.sender_id).HasColumnName("sender_id");
             this.Property(t => t.body).HasColumnName("body");
             this.Property(t => t.subject).HasColumnName("subject");
-            this.Property(t => t.uniqueid).HasColumnName("uniqueid");
+            this.Property(t => t.sizeinbtyes).HasColumnName("sizeinbtyes");
 
             // Relationships
             this.HasRequired(t => t.recipientprofilemetadata)

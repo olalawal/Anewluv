@@ -21,12 +21,25 @@ namespace Anewluv.Domain.Data.Mapping
             this.ToTable("mailboxmessagefolders");
             this.Property(t => t.mailboxfolder_id).HasColumnName("mailboxfolder_id");
             this.Property(t => t.mailboxmessage_id).HasColumnName("mailboxmessage_id");
+
+            this.Property(t => t.deleted).HasColumnName("deleted");
             this.Property(t => t.deleteddate).HasColumnName("deleteddate");
+
+            this.Property(t => t.draft).HasColumnName("draft");
             this.Property(t => t.draftdate).HasColumnName("draftdate");
+
+            this.Property(t => t.flagged).HasColumnName("flagged");
             this.Property(t => t.flaggeddate).HasColumnName("flaggeddate");
+
+            this.Property(t => t.read).HasColumnName("read");
             this.Property(t => t.readdate).HasColumnName("readdate");
-            this.Property(t => t.recent).HasColumnName("recent");
+
+            this.Property(t => t.moved).HasColumnName("moved");
+            this.Property(t => t.movedate).HasColumnName("movedate");
+
+            this.Property(t => t.replied).HasColumnName("replied");
             this.Property(t => t.replieddate).HasColumnName("replieddate");
+
 
             // Relationships
             this.HasRequired(t => t.mailboxfolder)

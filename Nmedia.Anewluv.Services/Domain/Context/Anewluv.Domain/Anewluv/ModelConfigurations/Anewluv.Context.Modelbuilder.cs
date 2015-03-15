@@ -30,7 +30,7 @@ namespace  Anewluv.Domain
             
             modelBuilder.Configurations.Add(new lu_applicationtypeMap());
             modelBuilder.Configurations.Add(new lu_bodytypeMap());
-            modelBuilder.Configurations.Add(new lu_defaultmailboxfolderMap());
+           // modelBuilder.Configurations.Add(new lu_defaultmailboxfolderMap());
             modelBuilder.Configurations.Add(new lu_dietMap());
             modelBuilder.Configurations.Add(new lu_drinksMap());
             modelBuilder.Configurations.Add(new lu_educationlevelMap());
@@ -77,7 +77,7 @@ namespace  Anewluv.Domain
             modelBuilder.Configurations.Add(new lu_sortbytypeMap());
             modelBuilder.Configurations.Add(new lu_wantskidsMap());
             modelBuilder.Configurations.Add(new mailboxfolderMap());
-            //modelBuilder.Configurations.Add(new mailboxfoldertypeMap());
+            modelBuilder.Configurations.Add(new lu_defaultmailboxfolderMap());
             modelBuilder.Configurations.Add(new mailboxmessagefolderMap());
             modelBuilder.Configurations.Add(new mailboxmessageMap());
             modelBuilder.Configurations.Add(new mailupdatefreqencyMap());
