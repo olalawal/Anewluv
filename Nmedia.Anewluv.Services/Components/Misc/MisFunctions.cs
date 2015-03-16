@@ -230,9 +230,11 @@ namespace Misc
                     }
                 }
 
+
+
             }
-
-
+             
+            Console.WriteLine("Total number of profiles proccessed :" + newprofileid);
             //attempt bulk save
             try
             {
@@ -244,7 +246,6 @@ namespace Misc
                 var dd = ex.ToString();
             }
         }
-
 
         public static void ConvertProfileMails()
         {
@@ -391,7 +392,6 @@ namespace Misc
 
         }
 
-
         public static void ConvertProfileCollections()
         {
             var olddb = new AnewluvFTSContext();
@@ -501,10 +501,8 @@ namespace Misc
             context.SaveChanges();
 
         }
-
      
-
-        public static void ConvertProfileMetaDataBasicCollections()
+        public static void ConvertProfileMetaActionsToNewFormat()
         {
             var olddb = new AnewluvFTSContext();
             var postaldb = new PostalData2Context();
@@ -517,41 +515,283 @@ namespace Misc
 
                 //populate collections tied to profilemetadata
 
-
-                //handle favorites
-                foreach (AnewLuvFTS.DomainAndData.Models.favorite favoritesitem in olddb.favorites)
+                
+                //build  members in role data if it exists
+                foreach (AnewLuvFTS.DomainAndData.Models.profile oldprofile in olddb.profiles)
                 {
-                    var favoritesobject = new Anewluv.Domain.Data.favorites();
-                    Console.WriteLine("attempting to add a favorite for the old profileid of    :" + favoritesitem.ProfileID);
-                    //add the realted proflemetadatas 
-                    var matchedprofilemetatdata = context.profilemetadatas.Where(p => p.profile.emailaddress == favoritesitem.ProfileID).FirstOrDefault();
-                    var matchedfavoriteprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == favoritesitem.FavoriteID).FirstOrDefault();
-                    if (matchedprofilemetatdata != null && matchedfavoriteprofilemetadata != null)
-                    {
-                        favoritesobject.profilemetadata = matchedprofilemetatdata; //context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.ProfileID).FirstOrDefault();
-                        favoritesobject.favoriteprofilemetadata = matchedfavoriteprofilemetadata; //context.profilemetadata.Where(p => p.profile.emailaddress == favoritesitem.FavoriteID).FirstOrDefault();
+                    
+                    //query the profile data
+                    //var matchedprofile = context.profiles.Where(p => p.emailaddress == membersinroleitem.ProfileID).FirstOrDefault();
+                    // Metadata classes are not meant to be instantiated.
+                    // myprofile.id = matchedprofile.First().id ;
+                    var matchedprofile = context.profiles.Where(p => p.emailaddress == oldprofile.ProfileID).FirstOrDefault();
+                    var actionobjects = new List<Anewluv.Domain.Data.action>();
+                   //LIKES conversion
+                     
+                       Console.WriteLine("attempting to create Like actions    :" + oldprofile.ProfileID);
+                         
+                        //handle Likes this user created first
+                        foreach (AnewLuvFTS.DomainAndData.Models.Like Likesitem in olddb.Likes.Where(p=>p.ProfileID == matchedprofile.emailaddress))
+                        {                          
 
-                        favoritesobject.creationdate = (favoritesitem.FavoriteDate != null) ? favoritesitem.FavoriteDate : null;
-                        favoritesobject.modificationdate = null;
-                        favoritesobject.viewdate = (favoritesitem.FavoriteViewedDate != null) ? favoritesitem.FavoriteViewedDate : null;
-                        favoritesobject.deletedbymemberdate = null;
-                        favoritesobject.deletedbyfavoritedate = null;
+                            Console.WriteLine("attempting to add a creator actiontype of Like for the old profileid of    :" + Likesitem.ProfileID);
+                            //add the realted proflemetadatas                            
+                            var matchedLikeprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == Likesitem.LikeID).FirstOrDefault();
+                            if (matchedLikeprofilemetadata != null)
+                            {
+                                var action = (new action
+                                { creator_profile_id = matchedprofile.id, actiontype_id = (int)actiontypeEnum.Like,  creationdate = Likesitem.LikeDate
+                                , viewdate = Likesitem.LikeViewedDate , deletedbycreatordate= Likesitem.DeletedByProfileIDDate, deletedbytargetdate = Likesitem.DeletedByLikeIDDate
+                                , active = true , target_profile_id = matchedLikeprofilemetadata.profile_id, 
+                                    
+                                });
+                                actionobjects.Add(action);
+                               
+                               
+                                Console.WriteLine("action type of creator like  added for old profileid of    :" + Likesitem.ProfileID);
+                            }
+                        }
 
-                        //add the object to profile object
-                        context.favorites.AddOrUpdate(favoritesobject);
-                        //save data one per row
-                        // context.SaveChanges();
-                        Console.WriteLine("favorite  added for old profileid of    :" + favoritesitem.ProfileID);
-                    }
+                        Console.WriteLine("attempting to create Peek actions    :" + oldprofile.ProfileID);
+
+                        //handle Peeks this user created first
+                        foreach (AnewLuvFTS.DomainAndData.Models.ProfileView Peeksitem in olddb.ProfileViews.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        {
+
+                            Console.WriteLine("attempting to add a creator actiontype of Peek for the old profileid of    :" + Peeksitem.ProfileViewerID);
+                            //add the realted proflemetadatas                            
+                            var matchedPeekprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == Peeksitem.ProfileID).FirstOrDefault();
+                            if (matchedPeekprofilemetadata != null)
+                            {
+                                var action = (new action
+                                {
+                                    creator_profile_id = matchedprofile.id,
+                                    actiontype_id = (int)actiontypeEnum.Peek,
+                                    creationdate = Peeksitem.ProfileViewDate
+                                ,
+                                    viewdate = Peeksitem.ProfileViewViewedDate,
+                                    deletedbycreatordate = Peeksitem.DeletedByProfileViewerIDDate,
+                                    deletedbytargetdate = Peeksitem.DeletedByProfileIDDate
+                                     
+                                ,
+                                    active = true,
+                                    target_profile_id = matchedPeekprofilemetadata.profile_id
+
+                                });
+                                actionobjects.Add(action);
+
+
+                                Console.WriteLine("action type of creator Peek  added for old profileid of    :" + Peeksitem.ProfileID);
+                            }
+                        }
+
+                      
+                       Console.WriteLine("attempting to create Interest actions    :" + oldprofile.ProfileID);
+
+                        //handle Interests this user created first
+                        foreach (AnewLuvFTS.DomainAndData.Models.Interest Interestsitem in olddb.Interests.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        {
+
+                            Console.WriteLine("attempting to add a creator actiontype of Interest for the old profileid of    :" + Interestsitem.ProfileID);
+                            //add the realted proflemetadatas                            
+                            var matchedInterestprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == Interestsitem.InterestID).FirstOrDefault();
+                            if (matchedInterestprofilemetadata != null)
+                            {
+                                var action = (new action
+                                {
+                                    creator_profile_id = matchedprofile.id,
+                                    actiontype_id = (int)actiontypeEnum.Interest,
+                                    creationdate = Interestsitem.InterestDate
+                                ,
+                                    viewdate = Interestsitem.IntrestViewedDate,
+                                    deletedbycreatordate = Interestsitem.DeletedByProfileIDDate,
+                                    deletedbytargetdate = Interestsitem.DeletedByInterestIDDate
+                                ,
+                                    active = true,
+                                    target_profile_id = matchedInterestprofilemetadata.profile_id
+
+                                });
+                                actionobjects.Add(action);
+
+
+                                Console.WriteLine("action type of creator Interest  added for old profileid of    :" + Interestsitem.ProfileID);
+                            }
+                        }
+
+                        Console.WriteLine("attempting to create Friend actions    :" + oldprofile.ProfileID);
+
+                        //handle Friends this user created first
+                        foreach (AnewLuvFTS.DomainAndData.Models.Friend Friendsitem in olddb.Friends.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        {
+
+                            Console.WriteLine("attempting to add a creator actiontype of Friend for the old profileid of    :" + Friendsitem.ProfileID);
+                            //add the realted proflemetadatas                            
+                            var matchedFriendprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == Friendsitem.FriendID).FirstOrDefault();
+                            if (matchedFriendprofilemetadata != null)
+                            {
+                                var action = (new action
+                                {
+                                    creator_profile_id = matchedprofile.id,
+                                    actiontype_id = (int)actiontypeEnum.Friend,
+                                    creationdate = Friendsitem.FriendDate
+                                ,
+                                    viewdate = Friendsitem.FriendViewedDate                                    
+                                ,
+                                    active = true,
+                                    target_profile_id = matchedFriendprofilemetadata.profile_id
+
+                                });
+                                actionobjects.Add(action);
+
+
+                                Console.WriteLine("action type of creator Friend  added for old profileid of    :" + Friendsitem.ProfileID);
+                            }
+                        }
+
+                        Console.WriteLine("attempting to create Hotlist actions    :" + oldprofile.ProfileID);
+
+                        //handle Hotlists this user created first
+                        foreach (AnewLuvFTS.DomainAndData.Models.Hotlist Hotlistsitem in olddb.Hotlists.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        {
+
+                            Console.WriteLine("attempting to add a creator actiontype of Hotlist for the old profileid of    :" + Hotlistsitem.ProfileID);
+                            //add the realted proflemetadatas                            
+                            var matchedHotlistprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == Hotlistsitem.HotlistID).FirstOrDefault();
+                            if (matchedHotlistprofilemetadata != null)
+                            {
+                                var action = (new action
+                                {
+                                    creator_profile_id = matchedprofile.id,
+                                    actiontype_id = (int)actiontypeEnum.Hotlist,
+                                    creationdate = Hotlistsitem.HotlistDate
+                                ,
+                                    viewdate = Hotlistsitem.HotlistViewedDate,
+                                 
+                                 active = true,
+                                    target_profile_id = matchedHotlistprofilemetadata.profile_id
+
+                                });
+                                actionobjects.Add(action);
+
+
+                                Console.WriteLine("action type of creator Hotlist  added for old profileid of    :" + Hotlistsitem.ProfileID);
+                            }
+                        }
+
+
+                        Console.WriteLine("attempting to create Favorite actions    :" + oldprofile.ProfileID);
+
+                        //handle Favorites this user created first
+                        foreach (AnewLuvFTS.DomainAndData.Models.favorite Favoritesitem in olddb.favorites.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        {
+
+                            Console.WriteLine("attempting to add a creator actiontype of Favorite for the old profileid of    :" + Favoritesitem.ProfileID);
+                            //add the realted proflemetadatas                            
+                            var matchedFavoriteprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == Favoritesitem.FavoriteID).FirstOrDefault();
+                            if (matchedFavoriteprofilemetadata != null)
+                            {
+                                var action = (new action
+                                {
+                                    creator_profile_id = matchedprofile.id,
+                                    actiontype_id = (int)actiontypeEnum.Favorite,
+                                    creationdate = Favoritesitem.FavoriteDate
+                                ,
+                                    viewdate = Favoritesitem.FavoriteViewedDate                                
+                                ,
+                                    active = true,
+                                    target_profile_id = matchedFavoriteprofilemetadata.profile_id
+
+                                });
+                                actionobjects.Add(action);
+
+
+                                Console.WriteLine("action type of creator Favorite  added for old profileid of    :" + Favoritesitem.ProfileID);
+                            }
+                        }
+
+
+                        Console.WriteLine("attempting to create Block actions    :" + oldprofile.ProfileID);
+
+                        //handle Blocks this user created first
+                        foreach (AnewLuvFTS.DomainAndData.Models.Mailboxblock Blocksitem in olddb.Mailboxblocks.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        {
+
+                            Console.WriteLine("attempting to add a creator actiontype of Block for the old profileid of    :" + Blocksitem.ProfileID);
+                            //add the realted proflemetadatas                            
+                            var matchedBlockprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == Blocksitem.BlockID).FirstOrDefault();
+                            if (matchedBlockprofilemetadata != null)
+                            {
+                                var action = (new action
+                                {
+                                    creator_profile_id = matchedprofile.id,
+                                    actiontype_id = (int)actiontypeEnum.Block,
+                                    creationdate = Blocksitem.MailboxBlockDate
+                                ,
+                                 
+                                    deletedbycreatordate = Blocksitem.BlockRemovedDate,                                  
+                                
+                                    active = true,
+                                    target_profile_id = matchedBlockprofilemetadata.profile_id
+
+                                });
+                                actionobjects.Add(action);
+
+
+                                Console.WriteLine("action type of creator Block  added for old profileid of    :" + Blocksitem.ProfileID);
+                            }
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                         
+
+                    Console.WriteLine("saving  " + actionobjects.Count()  + " actions for profileID :" + oldprofile.ProfileID);
+                    matchedprofile.profilemetadata.createdactions = actionobjects;
+                    context.SaveChanges();
+
                 }
+               
 
-                Console.WriteLine("saving  favorites "); context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
 
-             
+                var dd = ex.ToString();
+            }
+
+
+            context.SaveChanges();
+
+        }
+
+        public static void ConvertProfileMetaDataBasicCollections()
+        {
+            var olddb = new AnewluvFTSContext();
+            var postaldb = new PostalData2Context();
+            var context = new AnewluvContext();
+
+
+            //global try for the rest of objects that are tied to profile
+            try
+            {
 
                 //now handle the collections for other profiledatavalues
-
-
+                
                 //handle ProfileData_Ethnicity
                 foreach (AnewLuvFTS.DomainAndData.Models.ProfileData_Ethnicity profiledataethnicityitem in olddb.ProfileData_Ethnicity)
                 {
