@@ -44,7 +44,7 @@ namespace Anewluv.Domain.Data.Mapping
                 .HasForeignKey(d => d.status_id);
             this.HasOptional(t => t.lu_securityquestion)
                 .WithMany(t => t.profiles)
-                .HasForeignKey(d => d.securityquestion_id);
+                .HasForeignKey(d => d.securityquestion_id).WillCascadeOnDelete(false);
 
         }
     }

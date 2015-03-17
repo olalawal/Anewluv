@@ -70,6 +70,10 @@
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.Designer.cs">
       <DependentUpon>201503080503290_first.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\AnewluvMigrations\201503170312568_new.cs" />
+    <Compile Include="Migrations\AnewluvMigrations\201503170312568_new.Designer.cs">
+      <DependentUpon>201503170312568_new.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AnewluvMigrations\Configuration.cs" />
     <Compile Include="Anewluv\Mapping\noteMap.cs" />
     <Compile Include="Anewluv\Mapping\applicationiconconversionMap.cs" />
@@ -199,6 +203,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\AnewluvMigrations\201503080503290_first.resx">
       <DependentUpon>201503080503290_first.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\AnewluvMigrations\201503170312568_new.resx">
+      <DependentUpon>201503170312568_new.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

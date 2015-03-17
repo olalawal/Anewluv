@@ -312,7 +312,7 @@ namespace Anewluv.Services.Members
                               for (i = 1; i < max; i++)
                               {
                                   mailboxfolder p = new mailboxfolder();
-                                  p.foldertype_id = i;
+                                  p.f = i;
                                   p.profile_id = model.profileid.GetValueOrDefault();
                                   //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
                                   switch (i)

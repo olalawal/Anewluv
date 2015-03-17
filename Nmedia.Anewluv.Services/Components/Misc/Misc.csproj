@@ -229,6 +229,10 @@
     <Content Include="Scripts\jquery.signalR-1.0.0.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Anewluv.Services.Contracts\Anewluv.Services.Contracts.csproj">
+      <Project>{efc502ae-dd76-4278-8738-dd0b1f55a724}</Project>
+      <Name>Anewluv.Services.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain\Context\Anewluv.Domain\Anewluv.Domain.csproj">
       <Project>{a0b04284-784b-4322-a213-db178716efc1}</Project>
       <Name>Anewluv.Domain</Name>
