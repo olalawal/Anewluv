@@ -94,7 +94,7 @@ namespace Anewluv.Apikey
 
                 var activitybase = new profileactivity
                 {
-                    profile_id = ProfileModel.profileid.GetValueOrDefault(),
+                    profile_id = ProfileModel.profileid,
                     creationdate = DateTime.Now,
                     routeurl = path,
                     sessionid = OperationContext.Current.SessionId,

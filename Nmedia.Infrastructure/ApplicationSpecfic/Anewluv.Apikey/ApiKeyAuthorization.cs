@@ -200,7 +200,7 @@ namespace Anewluv.Apikey
                            {
                                //check if the passed apikey matches the profile ID that was passed in and is also active on the apikservice side of things.
                                validrequest = Api.AsyncCalls.isvalidapikeyanduserasync(new
-                               apikey { application_id = (int)applicationenum.anewluv, keyvalue = apiKey, user = new user { useridentifier = ProfileModel.profileid.GetValueOrDefault() } }).Result;
+                               apikey { application_id = (int)applicationenum.anewluv, keyvalue = apiKey, user = new user { useridentifier = ProfileModel.profileid } }).Result;
                                //  (key, (int)applicationenum.anewluv, );
                                //log activity and geodata if it exists
                                Utilities.LogProfileActivity(ProfileModel, path, apiKey);

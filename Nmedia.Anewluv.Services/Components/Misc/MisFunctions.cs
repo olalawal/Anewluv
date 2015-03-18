@@ -113,13 +113,13 @@ namespace Misc
 
                         context.profiles.AddOrUpdate(myprofile);
                         context.SaveChanges();
-                        var newprofilecreated = context.profiles.Where(p => p.emailaddress == item.ProfileID).First();
+                       // var newprofilecreated = context.profiles.Where(p => p.emailaddress == item.ProfileID).First();
 
 
                         //query the profile data
                         var matchedprofiledata = olddb.ProfileDatas.Where(p => p.ProfileID == item.ProfileID);
                         // Metadata classes are not meant to be instantiated.
-                        myprofiledata.profile_id = newprofilecreated.id; //newprofileid;
+                        myprofiledata.profile_id = myprofile.id; //newprofileid;
                         myprofiledata.age = matchedprofiledata.FirstOrDefault().Age;
                         myprofiledata.birthdate = matchedprofiledata.FirstOrDefault().Birthdate;
                         myprofiledata.city = matchedprofiledata.FirstOrDefault().City;
@@ -161,7 +161,7 @@ namespace Misc
                         // myprofiledata.visibilitysettings=  context.visibilitysettings.Where(p => p.id   == item.Prof).FirstOrDefault();     
 
 
-                        myprofilemetadata.profile_id = newprofilecreated.id;
+                        myprofilemetadata.profile_id = myprofile.id;
 
 
                         //call create mail here
@@ -176,10 +176,11 @@ namespace Misc
                                 creationdate = openiditem.creationDate,
                                 openidprovider_id = context.lu_openidprovider.Where(z => z.description == openiditem.openidProviderName).FirstOrDefault().id,
                                 openididentifier = openiditem.openidIdentifier,
-                                profile_id = newprofilecreated.id
+                                profile_id = myprofile.id
                             });
 
                             Console.WriteLine("added open id for user :    :" + item.ProfileID);
+                          
                         }
 
                         //add user logtimes 
@@ -192,7 +193,7 @@ namespace Misc
                                logintime = logtime.LoginTime,
                                logouttime = logtime.LogoutTime,
                                offline = true,
-                               profile_id = newprofilecreated.id,
+                               profile_id = myprofile.id,
                                sessionid = logtime.SessionID
                            });
                             Console.WriteLine("profile added succesfull   :");
@@ -208,6 +209,9 @@ namespace Misc
                         //********************************
                         myprofile.profiledata = myprofiledata;
                         myprofile.profilemetadata = myprofilemetadata;
+                        myprofile.openids = myopenids;
+                        myprofile.userlogtimes = mylogtimes;
+
                         context.profiles.AddOrUpdate(myprofile);
 
                         context.SaveChanges();
