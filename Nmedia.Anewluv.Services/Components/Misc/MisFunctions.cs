@@ -22,6 +22,7 @@ using Anewluv.Domain.Data.ViewModels;
 using AnewLuvFTS.DomainAndData.Models;
 using GeoData.Domain.Models;
 using Anewluv.Services.Contracts;
+using Repository.Pattern.Infrastructure;
 
 namespace Misc
 {
@@ -70,7 +71,7 @@ namespace Misc
                 
                 var myprofiledata = new Anewluv.Domain.Data.profiledata();
                 //build the related  profilemetadata noew
-                var myprofilemetadata = new Anewluv.Domain.Data.profilemetadata();
+                //var myprofilemetadata = new Anewluv.Domain.Data.profilemetadata();
                 var myopenids = new List<openid>();
                 var mylogtimes = new List<userlogtime>();
 
@@ -110,8 +111,9 @@ namespace Misc
                         myprofile.sentemailquotahitcount = item.SentEmailQuotaHitCount;
                         myprofile.sentmessagequotahitcount = item.SentMessageQuotaHitCount;
 
-
-                        context.profiles.AddOrUpdate(myprofile);
+                        myprofile.profiledata = null; myprofile.profilemetadata = null;
+                        myprofile.ObjectState = ObjectState.Added;
+                        context.profiles.AddOrUpdate(myprofile);                    
                         context.SaveChanges();
                        // var newprofilecreated = context.profiles.Where(p => p.emailaddress == item.ProfileID).First();
 
@@ -119,49 +121,69 @@ namespace Misc
                         //query the profile data
                         var matchedprofiledata = olddb.ProfileDatas.Where(p => p.ProfileID == item.ProfileID);
                         // Metadata classes are not meant to be instantiated.
-                        myprofiledata.profile_id = myprofile.id; //newprofileid;
-                        myprofiledata.age = matchedprofiledata.FirstOrDefault().Age;
-                        myprofiledata.birthdate = matchedprofiledata.FirstOrDefault().Birthdate;
-                        myprofiledata.city = matchedprofiledata.FirstOrDefault().City;
-                        myprofiledata.countryregion = matchedprofiledata.FirstOrDefault().Country_Region;
-                        myprofiledata.stateprovince = matchedprofiledata.FirstOrDefault().State_Province;
-                        myprofiledata.countryid = matchedprofiledata.FirstOrDefault().CountryID;
-                        myprofiledata.longitude = matchedprofiledata.FirstOrDefault().Longitude;
-                        myprofiledata.latitude = matchedprofiledata.FirstOrDefault().Latitude;
-                        myprofiledata.aboutme = matchedprofiledata.FirstOrDefault().AboutMe;
-                        myprofiledata.height = (long)matchedprofiledata.FirstOrDefault().Height.GetValueOrDefault();
-                        myprofiledata.mycatchyintroLine = matchedprofiledata.FirstOrDefault().MyCatchyIntroLine;
-                        myprofiledata.phone = matchedprofiledata.FirstOrDefault().Phone;
-                        myprofiledata.postalcode = matchedprofiledata.FirstOrDefault().PostalCode;
-                        //myprofiledata.profile = context.profiles.Where(z => z.id == myprofiledata.id).FirstOrDefault();
-                        //add in lookup feilds 
-                        //lookups for personal profile details 
-                        myprofiledata.lu_gender = context.lu_gender.Where(p => p.id == item.ProfileData.GenderID).FirstOrDefault();
-                        myprofiledata.lu_bodytype = context.lu_bodytype.Where(p => p.id == item.ProfileData.BodyTypeID).FirstOrDefault();
-                        myprofiledata.lu_eyecolor = context.lu_eyecolor.Where(p => p.id == item.ProfileData.EyeColorID).FirstOrDefault();
-                        myprofiledata.lu_haircolor = context.lu_haircolor.Where(p => p.id == item.ProfileData.HairColorID).FirstOrDefault();
-                        myprofiledata.lu_diet = context.lu_diet.Where(p => p.id == item.ProfileData.DietID).FirstOrDefault();
-                        myprofiledata.lu_drinks = context.lu_drinks.Where(p => p.id == item.ProfileData.DrinksID).FirstOrDefault();
-                        myprofiledata.lu_exercise = context.lu_exercise.Where(p => p.id == item.ProfileData.ExerciseID).FirstOrDefault();
-                        myprofiledata.lu_humor = context.lu_humor.Where(p => p.id == item.ProfileData.HumorID).FirstOrDefault();
-                        myprofiledata.lu_politicalview = context.lu_politicalview.Where(p => p.id == item.ProfileData.PoliticalViewID).FirstOrDefault();
-                        myprofiledata.lu_religion = context.lu_religion.Where(p => p.id == item.ProfileData.ReligionID).FirstOrDefault();
-                        myprofiledata.lu_religiousattendance = context.lu_religiousattendance.Where(p => p.id == item.ProfileData.ReligiousAttendanceID).FirstOrDefault();
-                        myprofiledata.lu_sign = context.lu_sign.Where(p => p.id == item.ProfileData.SignID).FirstOrDefault();
-                        myprofiledata.lu_smokes = context.lu_smokes.Where(p => p.id == item.ProfileData.SmokesID).FirstOrDefault();
-                        myprofiledata.lu_educationlevel = context.lu_educationlevel.Where(p => p.id == item.ProfileData.EducationLevelID).FirstOrDefault();
-                        myprofiledata.lu_employmentstatus = context.lu_employmentstatus.Where(p => p.id == item.ProfileData.EmploymentSatusID).FirstOrDefault();
-                        myprofiledata.lu_havekids = context.lu_havekids.Where(p => p.id == item.ProfileData.HaveKidsId).FirstOrDefault();
-                        myprofiledata.lu_incomelevel = context.lu_incomelevel.Where(p => p.id == item.ProfileData.IncomeLevelID).FirstOrDefault();
-                        myprofiledata.lu_livingsituation = context.lu_livingsituation.Where(p => p.id == item.ProfileData.LivingSituationID).FirstOrDefault();
-                        myprofiledata.lu_maritalstatus = context.lu_maritalstatus.Where(p => p.id == item.ProfileData.MaritalStatusID).FirstOrDefault();
-                        myprofiledata.lu_profession = context.lu_profession.Where(p => p.id == item.ProfileData.ProfessionID).FirstOrDefault();
-                        myprofiledata.lu_wantskids = context.lu_wantskids.Where(p => p.id == item.ProfileData.WantsKidsID).FirstOrDefault();
+                        context.profiledatas.Add(new profiledata
+                        {
+                            profile_id = myprofile.id, //newprofileid;
+                            age = matchedprofiledata.FirstOrDefault().Age,
+                            birthdate = matchedprofiledata.FirstOrDefault().Birthdate,
+                            city = matchedprofiledata.FirstOrDefault().City,
+                            countryregion = matchedprofiledata.FirstOrDefault().Country_Region,
+                            stateprovince = matchedprofiledata.FirstOrDefault().State_Province,
+                            countryid = matchedprofiledata.FirstOrDefault().CountryID,
+                            longitude = matchedprofiledata.FirstOrDefault().Longitude,
+                            latitude = matchedprofiledata.FirstOrDefault().Latitude,
+                            aboutme = matchedprofiledata.FirstOrDefault().AboutMe,
+                            height = (long)matchedprofiledata.FirstOrDefault().Height.GetValueOrDefault(),
+                            mycatchyintroLine = matchedprofiledata.FirstOrDefault().MyCatchyIntroLine,
+                            phone = matchedprofiledata.FirstOrDefault().Phone,
+                            postalcode = matchedprofiledata.FirstOrDefault().PostalCode,
+                            lu_gender = context.lu_gender.Where(p => p.id == item.ProfileData.GenderID).FirstOrDefault()
+                            ,
+                            lu_bodytype = context.lu_bodytype.Where(p => p.id == item.ProfileData.BodyTypeID).FirstOrDefault()
+                            ,
+                            lu_eyecolor = context.lu_eyecolor.Where(p => p.id == item.ProfileData.EyeColorID).FirstOrDefault()
+                            ,
+                            lu_haircolor = context.lu_haircolor.Where(p => p.id == item.ProfileData.HairColorID).FirstOrDefault()
+                            ,
+                            lu_diet = context.lu_diet.Where(p => p.id == item.ProfileData.DietID).FirstOrDefault()
+                            ,
+                            lu_drinks = context.lu_drinks.Where(p => p.id == item.ProfileData.DrinksID).FirstOrDefault()
+                            ,
+                            lu_exercise = context.lu_exercise.Where(p => p.id == item.ProfileData.ExerciseID).FirstOrDefault()
+                            ,
+                            lu_humor = context.lu_humor.Where(p => p.id == item.ProfileData.HumorID).FirstOrDefault()
+                            ,
+                            lu_politicalview = context.lu_politicalview.Where(p => p.id == item.ProfileData.PoliticalViewID).FirstOrDefault()
+                            ,
+                            lu_religion = context.lu_religion.Where(p => p.id == item.ProfileData.ReligionID).FirstOrDefault()
+                            ,
+                            lu_religiousattendance = context.lu_religiousattendance.Where(p => p.id == item.ProfileData.ReligiousAttendanceID).FirstOrDefault()
+                            ,
+                            lu_sign = context.lu_sign.Where(p => p.id == item.ProfileData.SignID).FirstOrDefault()
+                            ,
+                            lu_smokes = context.lu_smokes.Where(p => p.id == item.ProfileData.SmokesID).FirstOrDefault()
+                            ,
+                            lu_educationlevel = context.lu_educationlevel.Where(p => p.id == item.ProfileData.EducationLevelID).FirstOrDefault()
+                            ,
+                            lu_employmentstatus = context.lu_employmentstatus.Where(p => p.id == item.ProfileData.EmploymentSatusID).FirstOrDefault()
+                            ,
+                            lu_havekids = context.lu_havekids.Where(p => p.id == item.ProfileData.HaveKidsId).FirstOrDefault()
+                            ,
+                            lu_incomelevel = context.lu_incomelevel.Where(p => p.id == item.ProfileData.IncomeLevelID).FirstOrDefault()
+                            ,
+                            lu_livingsituation = context.lu_livingsituation.Where(p => p.id == item.ProfileData.LivingSituationID).FirstOrDefault()
+                            ,
+                            lu_maritalstatus = context.lu_maritalstatus.Where(p => p.id == item.ProfileData.MaritalStatusID).FirstOrDefault()
+                            ,
+                            lu_profession = context.lu_profession.Where(p => p.id == item.ProfileData.ProfessionID).FirstOrDefault()
+                            ,
+                            lu_wantskids = context.lu_wantskids.Where(p => p.id == item.ProfileData.WantsKidsID).FirstOrDefault(), ObjectState = ObjectState.Added
+                        });
                         //visiblity settings was never implemented anyways.
                         // myprofiledata.visibilitysettings=  context.visibilitysettings.Where(p => p.id   == item.Prof).FirstOrDefault();     
 
 
-                        myprofilemetadata.profile_id = myprofile.id;
+                        //myprofilemetadata.profile_id = myprofile.id;
 
 
                         //call create mail here
@@ -176,7 +198,7 @@ namespace Misc
                                 creationdate = openiditem.creationDate,
                                 openidprovider_id = context.lu_openidprovider.Where(z => z.description == openiditem.openidProviderName).FirstOrDefault().id,
                                 openididentifier = openiditem.openidIdentifier,
-                                profile_id = myprofile.id
+                                profile_id = myprofile.id,ObjectState = ObjectState.Added
                             });
 
                             Console.WriteLine("added open id for user :    :" + item.ProfileID);
@@ -194,7 +216,8 @@ namespace Misc
                                logouttime = logtime.LogoutTime,
                                offline = true,
                                profile_id = myprofile.id,
-                               sessionid = logtime.SessionID
+                               sessionid = logtime.SessionID,
+                               ObjectState = ObjectState.Added
                            });
                             Console.WriteLine("profile added succesfull   :");
                         }
@@ -207,11 +230,10 @@ namespace Misc
 
                         //add the two new objects to profile
                         //********************************
-                        myprofile.profiledata = myprofiledata;
-                        myprofile.profilemetadata = myprofilemetadata;
+                        //myprofile.profiledata = myprofiledata;
+                        myprofile.profilemetadata = new profilemetadata { profile_id = myprofile.id , ObjectState = ObjectState.Added };
                         myprofile.openids = myopenids;
                         myprofile.userlogtimes = mylogtimes;
-
                         context.profiles.AddOrUpdate(myprofile);
 
                         context.SaveChanges();
@@ -291,7 +313,8 @@ namespace Misc
                                 {
                                     active = oldfolder.Active ,  
                                     defaultfolder_id  = context.lu_defaultmailboxfolder.Where(p=>p.description == oldfolder.MailboxFolderTypeName).FirstOrDefault().id,
-                                     profile_id =  matchedprofile.id, creationdate = DateTime.Now, maxsizeinbytes = 128000, displayname = oldfolder.MailboxFolderTypeName                                   
+                                     profile_id =  matchedprofile.id, creationdate = DateTime.Now, maxsizeinbytes = 128000, displayname = oldfolder.MailboxFolderTypeName  ,
+                                     ObjectState=ObjectState.Added                                 
                                 });
                                 matchedprofile.profilemetadata.mailboxfolders.Add(mailboxfolder);
                                 //save the folder 
@@ -311,9 +334,9 @@ namespace Misc
                                         {
                                              body = OldMailBoxMessagesFolder.MailboxMessage.Body, subject = OldMailBoxMessagesFolder.MailboxMessage.Subject, recipient_id = matchedprofile.id, 
                                              sender_id = context.profiles.Where(z=>z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault().id, 
-                                             creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
+                                             creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate, ObjectState =ObjectState.Added,
                                              sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length+ OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
-                                                              
+                                                               
                                         }); 
                                         matchedprofile.profilemetadata.receivedmailboxmessages.Add(mailboxmessage);
                                         context.SaveChanges();
@@ -331,6 +354,7 @@ namespace Misc
                                              body = OldMailBoxMessagesFolder.MailboxMessage.Body, subject = OldMailBoxMessagesFolder.MailboxMessage.Subject, recipient_id = matchedprofile.id, 
                                              sender_id = context.profiles.Where(z=>z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault().id, 
                                              creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
+                                             ObjectState = ObjectState.Added,
                                              sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length+ OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
                                                               
                                         }); 
@@ -348,7 +372,8 @@ namespace Misc
                                             flagged   = OldMailBoxMessagesFolder.MessageFlagged == 1 ? true:false,
                                             draft  = OldMailBoxMessagesFolder.MessageDraft == 1 ? true:false,
                                             replied   = OldMailBoxMessagesFolder.MessageReplied == 1 ? true:false,
-                                             read    = OldMailBoxMessagesFolder.MessageRead == 1 ? true:false
+                                           read = OldMailBoxMessagesFolder.MessageRead == 1 ? true : false,
+                                           ObjectState = ObjectState.Added
                                         }); 
                                       
                                            context.mailboxmessagefolders.Add(newmailboxmesagesfolder);
@@ -430,9 +455,10 @@ namespace Misc
                         membersinroleobject.rolestartdate = DateTime.Now;
                         //add the related
                         membersinroleobject.profile = matchedprofile; //context.profiles.Where(p => p.emailaddress == membersinroleitem.ProfileID).FirstOrDefault();
-
+                        membersinroleobject.ObjectState = ObjectState.Added;
                         //add the object to profile object
                         context.membersinroles.Add(membersinroleobject);
+
 
                         Console.WriteLine("role added for old profileid of   :" + membersinroleitem.ProfileID);
                         //save data one per row
@@ -480,6 +506,7 @@ namespace Misc
 
                         //add the geodata value for this object to activitylog
                         activitylogobject.profileactivitygeodata = myprofileactivitygeodata;
+                        activitylogobject.ObjectState = ObjectState.Added;
 
                         //add the object to profile object
                         context.profileactivities.Add(activitylogobject);
@@ -543,7 +570,7 @@ namespace Misc
                                 var action = (new action
                                 { creator_profile_id = matchedprofile.id, actiontype_id = (int)actiontypeEnum.Like,  creationdate = Likesitem.LikeDate
                                 , viewdate = Likesitem.LikeViewedDate , deletedbycreatordate= Likesitem.DeletedByProfileIDDate, deletedbytargetdate = Likesitem.DeletedByLikeIDDate
-                                , active = true , target_profile_id = matchedLikeprofilemetadata.profile_id, 
+                                , active = true , target_profile_id = matchedLikeprofilemetadata.profile_id,  ObjectState = ObjectState.Added
                                     
                                 });
                                 actionobjects.Add(action);
@@ -576,7 +603,8 @@ namespace Misc
                                      
                                 ,
                                     active = true,
-                                    target_profile_id = matchedPeekprofilemetadata.profile_id
+                                    target_profile_id = matchedPeekprofilemetadata.profile_id,
+                                    ObjectState = ObjectState.Added
 
                                 });
                                 actionobjects.Add(action);
@@ -609,7 +637,8 @@ namespace Misc
                                     deletedbytargetdate = Interestsitem.DeletedByInterestIDDate
                                 ,
                                     active = true,
-                                    target_profile_id = matchedInterestprofilemetadata.profile_id
+                                    target_profile_id = matchedInterestprofilemetadata.profile_id,
+                                    ObjectState = ObjectState.Added
 
                                 });
                                 actionobjects.Add(action);
@@ -639,7 +668,7 @@ namespace Misc
                                     viewdate = Friendsitem.FriendViewedDate                                    
                                 ,
                                     active = true,
-                                    target_profile_id = matchedFriendprofilemetadata.profile_id
+                                    target_profile_id = matchedFriendprofilemetadata.profile_id,ObjectState =  ObjectState.Added
 
                                 });
                                 actionobjects.Add(action);
@@ -669,7 +698,8 @@ namespace Misc
                                     viewdate = Hotlistsitem.HotlistViewedDate,
                                  
                                  active = true,
-                                    target_profile_id = matchedHotlistprofilemetadata.profile_id
+                                    target_profile_id = matchedHotlistprofilemetadata.profile_id,
+                                    ObjectState = ObjectState.Added
 
                                 });
                                 actionobjects.Add(action);
@@ -700,7 +730,8 @@ namespace Misc
                                     viewdate = Favoritesitem.FavoriteViewedDate                                
                                 ,
                                     active = true,
-                                    target_profile_id = matchedFavoriteprofilemetadata.profile_id
+                                    target_profile_id = matchedFavoriteprofilemetadata.profile_id,
+                                    ObjectState = ObjectState.Added
 
                                 });
                                 actionobjects.Add(action);
@@ -732,7 +763,8 @@ namespace Misc
                                     deletedbycreatordate = Blocksitem.BlockRemovedDate,                                  
                                 
                                     active = true,
-                                    target_profile_id = matchedBlockprofilemetadata.profile_id
+                                    target_profile_id = matchedBlockprofilemetadata.profile_id,
+                                    ObjectState = ObjectState.Added
 
                                 });
                                 actionobjects.Add(action);
@@ -792,11 +824,12 @@ namespace Misc
                             profiledataethnicityobject.profilemetadata = matchedprofilemetatdata;
                             //context.profilemetadata.Where(p => p.profile.emailaddress == profiledataethnicityitem.ProfileID).FirstOrDefault();
                             profiledataethnicityobject.lu_ethnicity = context.lu_ethnicity.Where(p => p.description.ToUpper() == profiledataethnicityitem.CriteriaAppearance_Ethnicity.EthnicityName.ToUpper()).FirstOrDefault();
-
+                            profiledataethnicityobject.ObjectState = ObjectState.Added; 
                             //add the object to profile object
                             context.profiledata_ethnicity.Add(profiledataethnicityobject);
                             //save data one per row
                             //context.SaveChanges();
+
                             Console.WriteLine("ethnicity added for old profileid of    :" + profiledataethnicityitem.ProfileID);
                         }
                     }
@@ -819,7 +852,7 @@ namespace Misc
                             profiledatahobbyobject.profilemetadata = matchedprofilemetatdata;
                             //context.profilemetadata.Where(p => p.profile.emailaddress == profiledatahobbyitem.ProfileID).FirstOrDefault();
                             profiledatahobbyobject.lu_hobby = context.lu_hobby.Where(p => p.description.ToUpper() == profiledatahobbyitem.CriteriaCharacter_Hobby.HobbyName.ToUpper()).FirstOrDefault();
-
+                            profiledatahobbyobject.ObjectState = ObjectState.Added;
                             //add the object to profile object
                             context.profiledata_hobby.Add(profiledatahobbyobject);
                             //save data one per row
@@ -846,7 +879,7 @@ namespace Misc
                             profiledatahotfeatureobject.profilemetadata = matchedprofilemetatdata;
                             //context.profilemetadata.Where(p => p.profile.emailaddress == profiledatahotfeatureitem.ProfileID).FirstOrDefault();
                             profiledatahotfeatureobject.lu_hotfeature = context.lu_hotfeature.Where(p => p.description.ToUpper() == profiledatahotfeatureitem.CriteriaCharacter_HotFeature.HotFeatureName.ToUpper()).FirstOrDefault();
-
+                            profiledatahotfeatureobject.ObjectState = ObjectState.Added;
                             //add the object to profile object
                             context.profiledata_hotfeature.Add(profiledatahotfeatureobject);
                             //save data one per row
@@ -877,7 +910,7 @@ namespace Misc
                             profiledatalookingforobject.profilemetadata = matchedprofilemetatdata;
                             //context.profilemetadata.Where(p => p.profile.emailaddress == profiledatalookingforitem.ProfileID).FirstOrDefault();
                             profiledatalookingforobject.lu_lookingfor = context.lu_lookingfor.Where(p => p.description == profiledatalookingforitem.CriteriaLife_LookingFor.LookingForName.ToUpper()).FirstOrDefault();
-
+                            profiledatalookingforobject.ObjectState = ObjectState.Added;
                             //add the object to profile object
                             context.profiledata_lookingfor.Add(profiledatalookingforobject);
                             //save data one per row
@@ -1069,14 +1102,15 @@ namespace Misc
                     // Metadata classes are not meant to be instantiated.
                     // myprofile.id = matchedprofile.First().id ;
                     var matchedprofile = context.profiles.Where(p => p.emailaddress == oldprofile.ProfileID).FirstOrDefault();
-                    var actionobjects = new List<Anewluv.Domain.Data.action>();
+                    
                     //LIKES conversion                     
-                    Console.WriteLine("attempting to create Like actions    :" + oldprofile.ProfileID);
+               
 
                     //handle Likes this user created first
                     foreach (AnewLuvFTS.DomainAndData.Models.SearchSetting oldsearchsetting in olddb.SearchSettings.Where(p => p.ProfileID == matchedprofile.emailaddress))
                     {
                             var searchsettingobject = new Anewluv.Domain.Data.searchsetting();
+                            var searchsettingsdetails = new List<Anewluv.Domain.Data.searchsettingdetail>();
                             Console.WriteLine("attempting a search setting for the old profileid of    :" + oldsearchsetting.ProfileID);
 
                             if (context.searchsettings.Any(p => p.profilemetadata.profile.emailaddress == oldsearchsetting.ProfileID))
@@ -1103,7 +1137,7 @@ namespace Misc
                                     searchsettingobject.searchname = oldsearchsetting.SearchName;
                                     searchsettingobject.searchrank = oldsearchsetting.SearchRank;
                                     searchsettingobject.systemmatch = oldsearchsetting.SystemMatch;
-
+                                    searchsettingobject.ObjectState = ObjectState.Added;
                                     //add the object to profile object
                                     context.searchsettings.AddOrUpdate(searchsettingobject);
                                     counter = counter + 1;
@@ -1117,35 +1151,833 @@ namespace Misc
                          //add related collections
 
                         
-                        foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Location searchsettinglocationitem in oldsearchsetting.SearchSettings_Location)
-                        {
-                            if (searchsettinglocationitem != null)
+                            foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Location searchsettinglocationitem in oldsearchsetting.SearchSettings_Location)
                             {
-                                Console.WriteLine("attempting a search setting location for the old profileid of    :" + searchsettinglocationitem.SearchSetting.ProfileID);
-                                var searchsettinglocationobject = new Anewluv.Domain.Data.searchsetting_location();
-                                if (context.searchsetting_location.Any(p => p.countryid == searchsettinglocationitem.CountryID))
+                                if (searchsettinglocationitem != null)
                                 {
-                                    Console.WriteLine("skipping profile with email  :" + searchsettinglocationitem.SearchSetting.ProfileID + "it alaready has search settings location   ");
-                                }
-                                else
-                                {
-                                    var matchedsearchsetting = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == searchsettinglocationitem.SearchSetting.ProfileID).FirstOrDefault();
-                                    if (matchedsearchsetting != null)
+                                    Console.WriteLine("attempting a search setting location for the old profileid of    :" + searchsettinglocationitem.SearchSetting.ProfileID);
+                                    var searchsettinglocationobject = new Anewluv.Domain.Data.searchsetting_location();
+                                    if (context.searchsetting_location.Any(p => p.countryid == searchsettinglocationitem.CountryID))
                                     {
-                                        searchsettinglocationobject.searchsetting = matchedsearchsetting;
-                                        searchsettinglocationobject.countryid = searchsettinglocationitem.CountryID;  //context.lu_location.Where(p => p.id == searchsettinglocationitem.locationsID).FirstOrDefault();
-                                        searchsettinglocationobject.postalcode = searchsettinglocationitem.PostalCode;
-                                        context.searchsetting_location.Add(searchsettinglocationobject);
-                                        //save data one per row
-                                        Console.WriteLine("added a search setting location for the old profileid of    :" + searchsettinglocationitem.SearchSetting.ProfileID);
-                                        counter = counter + 1;                                      
+                                        Console.WriteLine("skipping profile with email  :" + searchsettinglocationitem.SearchSetting.ProfileID + "it alaready has search settings location   ");
+                                    }
+                                    else
+                                    {
+                                        var matchedsearchsetting = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == searchsettinglocationitem.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsetting != null)
+                                        {
+                                            searchsettinglocationobject.searchsetting = matchedsearchsetting;
+                                            searchsettinglocationobject.countryid = searchsettinglocationitem.CountryID;  //context.lu_location.Where(p => p.id == searchsettinglocationitem.locationsID).FirstOrDefault();
+                                            searchsettinglocationobject.postalcode = searchsettinglocationitem.PostalCode;
+                                            searchsettinglocationobject.ObjectState = ObjectState.Added;
+                                            context.searchsetting_location.Add(searchsettinglocationobject);
+                                            //save data one per row
+                                            Console.WriteLine("added a search setting location for the old profileid of    :" + searchsettinglocationitem.SearchSetting.ProfileID);
+                                            counter = counter + 1;                                      
+                                        }
                                     }
                                 }
-                            }
 
-                              context.SaveChanges();
-                        }
-                        Console.WriteLine("saving  a total of : " + counter + " searchsettinglocations"); context.SaveChanges();
+                                  context.SaveChanges();
+                            }
+                            
+                             
+ 
+                        //Details go here now !
+
+                         
+
+                                //create the searchsetting detail stuff for bodytype
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_BodyTypes bodytype in oldsearchsetting.SearchSettings_BodyTypes)
+                                {
+                                    if (bodytype != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  bodytype  for the old profileid of    :" + bodytype.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == bodytype.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.bodytype,                                        
+                                                creationdate = DateTime.Now, 
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added, value = bodytype.BodyTypesID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of bodytype like  added for old profileid of    :" + bodytype.SearchSetting.ProfileID);
+                                        }
+                                    }
+                          
+                                }
+
+
+
+
+                                //create the searchsetting detail stuff for Diet
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Diet Diet in oldsearchsetting.SearchSettings_Diet)
+                                {
+                                    if (Diet != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  Diet  for the old profileid of    :" + Diet.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == Diet.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.diet,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = Diet.DietID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of Diet like  added for old profileid of    :" + Diet.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for Drink
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Drinks Drink in oldsearchsetting.SearchSettings_Drinks)
+                                {
+                                    if (Drink != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  Drink  for the old profileid of    :" + Drink.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == Drink.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.drink,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = Drink.DrinksID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of Drink like  added for old profileid of    :" + Drink.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for Educationlevel
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_EducationLevel Educationlevel in oldsearchsetting.SearchSettings_EducationLevel)
+                                {
+                                    if (Educationlevel != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  Educationlevel  for the old profileid of    :" + Educationlevel.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == Educationlevel.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.educationlevel,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = Educationlevel.EducationLevelID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of Educationlevel like  added for old profileid of    :" + Educationlevel.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+                                //create the searchsetting detail stuff for EmploymentStatus
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_EmploymentStatus EmploymentStatus in oldsearchsetting.SearchSettings_EmploymentStatus)
+                                {
+                                    if (EmploymentStatus != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  EmploymentStatus  for the old profileid of    :" + EmploymentStatus.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == EmploymentStatus.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.employmentstatus,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = EmploymentStatus.EmploymentStatusID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of EmploymentStatus like  added for old profileid of    :" + EmploymentStatus.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for Ethnicity
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Ethnicity Ethnicity in oldsearchsetting.SearchSettings_Ethnicity)
+                                {
+                                    if (Ethnicity != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  Ethnicity  for the old profileid of    :" + Ethnicity.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == Ethnicity.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.ethnicity,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = Ethnicity.EthicityID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of Ethnicity like  added for old profileid of    :" + Ethnicity.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for excercise
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Exercise excercise in oldsearchsetting.SearchSettings_Exercise)
+                                {
+                                    if (excercise != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  excercise  for the old profileid of    :" + excercise.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == excercise.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.excercise,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = excercise.ExerciseID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of excercise like  added for old profileid of    :" + excercise.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for eyecolor
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_EyeColor eyecolor in oldsearchsetting.SearchSettings_EyeColor)
+                                {
+                                    if (eyecolor != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  eyecolor  for the old profileid of    :" + eyecolor.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == eyecolor.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.eyecolor,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = eyecolor.EyeColorID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of eyecolor like  added for old profileid of    :" + eyecolor.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for gender
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Genders gender in oldsearchsetting.SearchSettings_Genders)
+                                {
+                                    if (gender != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  gender  for the old profileid of    :" + gender.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == gender.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.gender,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = gender.GenderID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of gender like  added for old profileid of    :" + gender.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for haircolor
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_HairColor haircolor in oldsearchsetting.SearchSettings_HairColor)
+                                {
+                                    if (haircolor != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  haircolor  for the old profileid of    :" + haircolor.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == haircolor.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.haircolor,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = haircolor.HairColorID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of haircolor like  added for old profileid of    :" + haircolor.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for havekids
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_HaveKids havekids in oldsearchsetting.SearchSettings_HaveKids)
+                                {
+                                    if (havekids != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  havekids  for the old profileid of    :" + havekids.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == havekids.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.havekids,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = havekids.HaveKidsID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of havekids like  added for old profileid of    :" + havekids.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for hobby
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Hobby hobby in oldsearchsetting.SearchSettings_Hobby)
+                                {
+                                    if (hobby != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  hobby  for the old profileid of    :" + hobby.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == hobby.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.hobby,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = hobby.HobbyID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of hobby like  added for old profileid of    :" + hobby.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+                                //create the searchsetting detail stuff for hotfeature
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_HotFeature hotfeature in oldsearchsetting.SearchSettings_HotFeature)
+                                {
+                                    if (hotfeature != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  hotfeature  for the old profileid of    :" + hotfeature.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == hotfeature.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.hotfeature,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = hotfeature.HotFeatureID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of hotfeature like  added for old profileid of    :" + hotfeature.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for humor
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Humor humor in oldsearchsetting.SearchSettings_Humor)
+                                {
+                                    if (humor != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  humor  for the old profileid of    :" + humor.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == humor.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.humor,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = humor.HumorID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of humor like  added for old profileid of    :" + humor.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for incomelevel
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_IncomeLevel incomelevel in oldsearchsetting.SearchSettings_IncomeLevel)
+                                {
+                                    if (incomelevel != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  incomelevel  for the old profileid of    :" + incomelevel.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == incomelevel.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.incomelevel,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = incomelevel.ImcomeLevelID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of incomelevel like  added for old profileid of    :" + incomelevel.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for livingsituation
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_LivingStituation livingsituation in oldsearchsetting.SearchSettings_LivingStituation)
+                                {
+                                    if (livingsituation != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  livingsituation  for the old profileid of    :" + livingsituation.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == livingsituation.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.livingsituation,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = livingsituation.LivingStituationID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of livingsituation like  added for old profileid of    :" + livingsituation.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for lookingfor
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_LookingFor lookingfor in oldsearchsetting.SearchSettings_LookingFor)
+                                {
+                                    if (lookingfor != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  lookingfor  for the old profileid of    :" + lookingfor.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == lookingfor.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.lookingfor,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = lookingfor.LookingForID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of lookingfor like  added for old profileid of    :" + lookingfor.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+                                //create the searchsetting detail stuff for maritialstatus
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_MaritalStatus maritialstatus in oldsearchsetting.SearchSettings_MaritalStatus)
+                                {
+                                    if (maritialstatus != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  maritialstatus  for the old profileid of    :" + maritialstatus.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == maritialstatus.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.maritialstatus,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = maritialstatus.MaritalStatusID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of maritialstatus like  added for old profileid of    :" + maritialstatus.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for politicalview
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_PoliticalView politicalview in oldsearchsetting.SearchSettings_PoliticalView)
+                                {
+                                    if (politicalview != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  politicalview  for the old profileid of    :" + politicalview.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == politicalview.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.politicalview,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = politicalview.PoliticalViewID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of politicalview like  added for old profileid of    :" + politicalview.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for profession
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Profession profession in oldsearchsetting.SearchSettings_Profession)
+                                {
+                                    if (profession != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  profession  for the old profileid of    :" + profession.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == profession.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.profession,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = profession.ProfessionID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of profession like  added for old profileid of    :" + profession.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for religion
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Religion religion in oldsearchsetting.SearchSettings_Religion)
+                                {
+                                    if (religion != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  religion  for the old profileid of    :" + religion.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == religion.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.religion,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = religion.ReligionID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of religion like  added for old profileid of    :" + religion.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for religiousattendance
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_ReligiousAttendance religiousattendance in oldsearchsetting.SearchSettings_ReligiousAttendance)
+                                {
+                                    if (religiousattendance != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  religiousattendance  for the old profileid of    :" + religiousattendance.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == religiousattendance.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.religiousattendance,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = religiousattendance.ReligiousAttendanceID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of religiousattendance like  added for old profileid of    :" + religiousattendance.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for showme
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_ShowMe showme in oldsearchsetting.SearchSettings_ShowMe)
+                                {
+                                    if (showme != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  showme  for the old profileid of    :" + showme.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == showme.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.showme,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = showme.ShowMeID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of showme like  added for old profileid of    :" + showme.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+                                //create the searchsetting detail stuff for sign
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Sign sign in oldsearchsetting.SearchSettings_Sign)
+                                {
+                                    if (sign != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  sign  for the old profileid of    :" + sign.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == sign.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.sign,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = sign.SignID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of sign like  added for old profileid of    :" + sign.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for smokes
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_Smokes smokes in oldsearchsetting.SearchSettings_Smokes)
+                                {
+                                    if (smokes != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  smokes  for the old profileid of    :" + smokes.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == smokes.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.smokes,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = smokes.SmokesID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of smokes like  added for old profileid of    :" + smokes.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for sortbytype
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_SortByType sortbytype in oldsearchsetting.SearchSettings_SortByType)
+                                {
+                                    if (sortbytype != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  sortbytype  for the old profileid of    :" + sortbytype.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == sortbytype.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.sortbytype,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = sortbytype.SortByTypeID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of sortbytype like  added for old profileid of    :" + sortbytype.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+                                //create the searchsetting detail stuff for wantskids
+                                foreach (AnewLuvFTS.DomainAndData.Models.SearchSettings_WantKids wantskids in oldsearchsetting.SearchSettings_WantKids)
+                                {
+                                    if (wantskids != null)
+                                    {
+                                        Console.WriteLine("attempting to add a searchsetting detail of  wantskids  for the old profileid of    :" + wantskids.SearchSetting.ProfileID);
+                                        //add the realted proflemetadatas                            
+                                        var matchedsearchsettingobject = context.searchsettings.Where(p => p.profilemetadata.profile.emailaddress == wantskids.SearchSetting.ProfileID).FirstOrDefault();
+                                        if (matchedsearchsettingobject != null)
+                                        {
+                                            var detail = (new searchsettingdetail
+                                            {
+                                                searchsettingdetailtype_id = (int)searchsettingdetailtypeEnum.wantskids,
+                                                creationdate = DateTime.Now,
+                                                active = true,
+                                                searchsetting_id = matchedsearchsettingobject.id,
+                                                ObjectState = ObjectState.Added,
+                                                value = wantskids.WantKidsID.GetValueOrDefault()
+
+                                            });
+                                            searchsettingsdetails.Add(detail);
+                                            Console.WriteLine("search detail type of wantskids like  added for old profileid of    :" + wantskids.SearchSetting.ProfileID);
+                                        }
+                                    }
+
+                                }
+
+
+
+
+
+                      
+
+
+
+
+
+
+                        Console.WriteLine("saving  a total of : " + counter + " searchsettinglocations");
+                        searchsettingobject.details = searchsettingsdetails;
+                        context.SaveChanges();
 
 
 
