@@ -301,31 +301,44 @@ namespace Misc
                     // Metadata classes are not meant to be instantiated.
                     // myprofile.id = matchedprofile.First().id ;
                     var matchedprofile = context.profiles.Where(p => p.emailaddress == oldprofile.ProfileID).FirstOrDefault();
-                    if (matchedprofile != null && matchedprofile.profilemetadata.mailboxfolders.Count == 0)
+                    if (matchedprofile != null)
                     {
 
                         //get mailbox folders first 
-                        if (oldprofile.ProfileData.MailboxFolders.Count() > 0)
+                        if (oldprofile.ProfileData.MailboxFolders.Count() > 0 )
                         {
                             Console.WriteLine("attempting to create mailbox folders    :" + oldprofile.ProfileID);
+                            var mailboxfolder = new mailboxfolder();
                             // List<mailboxfolder> maildboxfolders = new List<mailboxfolder>();
                             //List<mailboxmessagefolder> newmailboxmesages = new List<mailboxmessagefolder>();
                             foreach (MailboxFolder oldfolder in oldprofile.ProfileData.MailboxFolders)
                             {
-
-                                var mailboxfolder = (new mailboxfolder
+                                //only create new mailbox folders
+                                if (matchedprofile.profilemetadata.mailboxfolders.Count == 0)
                                 {
-                                    active = oldfolder.Active,
-                                    defaultfolder_id = context.lu_defaultmailboxfolder.Where(p => p.description == oldfolder.MailboxFolderTypeName).FirstOrDefault().id,
-                                    profile_id = matchedprofile.id,
-                                    creationdate = DateTime.Now,
-                                    maxsizeinbytes = 128000,
-                                    displayname = oldfolder.MailboxFolderTypeName,
-                                    ObjectState = ObjectState.Added
-                                });
-                                matchedprofile.profilemetadata.mailboxfolders.Add(mailboxfolder);
-                                //save the folder 
-                                context.SaveChanges();
+                                    mailboxfolder = (new mailboxfolder
+                                    {
+                                        active = oldfolder.Active,
+                                        defaultfolder_id = context.lu_defaultmailboxfolder.Where(p => p.description == oldfolder.MailboxFolderTypeName).FirstOrDefault().id,
+                                        profile_id = matchedprofile.id,
+                                        creationdate = DateTime.Now,
+                                        maxsizeinbytes = 128000,
+                                        displayname = oldfolder.MailboxFolderTypeName,
+                                        ObjectState = ObjectState.Added
+                                    });
+                                    matchedprofile.profilemetadata.mailboxfolders.Add(mailboxfolder);
+                                    //save the folder 
+                                    context.SaveChanges();
+                                }
+                                else
+                                { 
+                                //get existing folder
+                                    //this only works beecase no custom folders exist right now
+                                    mailboxfolder = context.mailboxfolders.Where(p => p.displayname.ToUpper() == oldfolder.MailboxFolderTypeName.ToUpper()).FirstOrDefault();
+
+                                }
+
+                              
 
                                 //find all mailbox messages messages tied to this folder for the link table
                                 foreach (MailboxMessagesFolder OldMailBoxMessagesFolder in oldfolder.MailboxMessagesFolders)
