@@ -13,8 +13,6 @@ namespace Anewluv.Domain.Data
             this.openids = new List<openid>();
             this.profileactivities = new List<profileactivity>();
             this.userlogtimes = new List<userlogtime>();
-            this.profilemetadata = new profilemetadata();
-            this.profiledata = new profiledata();
         }
 
         public int id { get; set; }

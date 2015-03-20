@@ -18,15 +18,15 @@ namespace Anewluv.DataExtentionMethods
     {
 
 
-        #region "standard queryable extentions actions to me and actions i made to others i.e whoipeekedat would be actiontype peek and creator would me me"
+        #region "private standard queryable extentions actions to me and actions i made to others i.e whoipeekedat would be actiontype peek and creator would me me"
 
-        public static  IQueryable<action> getmyactionbyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
+        private static  IQueryable<action> getmyactionbyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
         {
             return repo.Query(p => (p.actiontype_id == (int)action & p.active == true & p.deletedbycreatordate == null)
                   && p.creator_profile_id == profileid).Include(z=>z.targetprofilemetadata.profile).Select().AsQueryable();
         }
 
-        public static IQueryable<action> getothersactiontomebyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
+        private static IQueryable<action> getothersactiontomebyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
         {
             return repo.Query(p => (p.actiontype_id == (int)action & p.active == true & p.deletedbycreatordate == null)
                    && p.target_profile_id == profileid).Include(z => z.creatorprofilemetadata.profile).Select().AsQueryable();
@@ -37,7 +37,7 @@ namespace Anewluv.DataExtentionMethods
 
 
 
-        #region "private  list methods for reuuse"
+        #region "methods for reuuse"
 
         //INTEREST methods
         ////////////////////////////////////////
@@ -45,7 +45,7 @@ namespace Anewluv.DataExtentionMethods
         /// <summary>
         /// count all total interests
         /// </summary>       
-     public static List<profile> getmyactionbyprofileidandactiontype(ProfileModel model,actiontypeEnum action, IUnitOfWorkAsync db)
+     public static List<profile> getmyactionbyprofileidandactiontype(ProfileModel model, IUnitOfWorkAsync db,actiontypeEnum action)
         {
 
 
@@ -83,7 +83,7 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
-     public static List<profile> getotheractiontomeprofilesbyprofileidandactiontype(ProfileModel model, actiontypeEnum action, IUnitOfWorkAsync db)
+     public static List<profile> getotheractionbyprofileidandactiontype(ProfileModel model, IUnitOfWorkAsync db, actiontypeEnum action, bool? unviewed = false)
      {
 
 
@@ -92,8 +92,17 @@ namespace Anewluv.DataExtentionMethods
 
 
              var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
-             var othersactionstome = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, action);
 
+             IQueryable<action> othersactionstome = null;
+
+             if (unviewed.GetValueOrDefault())
+             {
+              othersactionstome=   db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, action);
+             }
+             else
+             {
+              othersactionstome=    db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, action).Where(p=>p.viewdate !=null);
+             }
 
 
              //filter out blocked profiles 
@@ -119,6 +128,8 @@ namespace Anewluv.DataExtentionMethods
 
 
      }
+   
+   
 
 
         #endregion

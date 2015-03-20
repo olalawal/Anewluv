@@ -1,10 +1,9 @@
-using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class membersinrole : Entity
+    public partial class membersinrole
     {
         public int id { get; set; }
         public Nullable<bool> active { get; set; }

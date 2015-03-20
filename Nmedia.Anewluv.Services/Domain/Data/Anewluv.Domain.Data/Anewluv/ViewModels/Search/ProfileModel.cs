@@ -84,6 +84,10 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public bool allphotos { get; set; }
 
+        //added abitlity to add notes 
+
+        public string note { get; set; }
+
 
     }
 }

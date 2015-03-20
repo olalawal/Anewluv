@@ -20,15 +20,18 @@ namespace Anewluv.Domain.Data
             this.profiledata_ethnicity = new List<profiledata_ethnicity>();
             this.profiledata_hobby = new List<profiledata_hobby>();
             this.profiledata_hotfeature = new List<profiledata_hotfeature>();
-            this.profiledata_lookingfor = new List<profiledata_lookingfor>();         
+            this.profiledata_lookingfor = new List<profiledata_lookingfor>();
+            this.profiledata = new profiledata();
             this.raterratingvalues = new List<ratingvalue>();
-            this.rateeratingvalues = new List<ratingvalue>();       
+            this.rateeratingvalues = new List<ratingvalue>();
+       
             this.searchsettings = new List<searchsetting>();
             this.photoreviews = new List<photoreview>();
 
         }
 
-        public int profile_id { get; set; }      
+        public int profile_id { get; set; }
+      
         public virtual ICollection<mailboxfolder> mailboxfolders { get; set; }       
         public virtual ICollection<mailboxmessage> sentmailboxmessages { get; set; }
         public virtual ICollection<mailboxmessage> receivedmailboxmessages { get; set; }     
