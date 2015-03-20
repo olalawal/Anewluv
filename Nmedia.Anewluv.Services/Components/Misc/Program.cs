@@ -19,7 +19,7 @@ namespace Misc
           //  Utils.SeedDebug(context);
 
           //var ddd =   ImageUtils.SmallImageTestdata();
-         //   MisFunctions.StartDebuggingTest();
+          MisFunctions.StartDebuggingTest();
             MisFunctions.ConvertFlatProfileandprofiledata();
             MisFunctions.ConvertProfileMails();
             MisFunctions.ConvertProfileCollections();

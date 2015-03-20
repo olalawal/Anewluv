@@ -27,7 +27,10 @@ namespace Anewluv.Domain.Data
         AdminAbuseReportReviewNote,
         [Description("Admin block review Note")]
         [EnumMember]
-        AdminBlockReviewNote
+        AdminBlockReviewNote,
+        [Description("User Action Attachment Message")]
+        [EnumMember]
+       UserActionAttachment
         
     }
 

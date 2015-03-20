@@ -18,15 +18,15 @@ namespace Anewluv.DataExtentionMethods
     {
 
 
-        #region "private standard queryable extentions actions to me and actions i made to others i.e whoipeekedat would be actiontype peek and creator would me me"
+        #region " standard queryable extentions actions to me and actions i made to others i.e whoipeekedat would be actiontype peek and creator would me me"
 
-        private static  IQueryable<action> getmyactionbyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
+        public static  IQueryable<action> getmyactionbyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
         {
             return repo.Query(p => (p.actiontype_id == (int)action & p.active == true & p.deletedbycreatordate == null)
                   && p.creator_profile_id == profileid).Include(z=>z.targetprofilemetadata.profile).Select().AsQueryable();
         }
 
-        private static IQueryable<action> getothersactiontomebyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
+        public static IQueryable<action> getothersactiontomebyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
         {
             return repo.Query(p => (p.actiontype_id == (int)action & p.active == true & p.deletedbycreatordate == null)
                    && p.target_profile_id == profileid).Include(z => z.creatorprofilemetadata.profile).Select().AsQueryable();

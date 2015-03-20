@@ -64,7 +64,7 @@ namespace Misc
             //convert profileData and profile first 
             //convet abusers data
 
-            int newprofileid = 1;
+            int profilecount = 1;
             foreach (AnewLuvFTS.DomainAndData.Models.profile item in olddb.profiles)
             {
                 var myprofile = new Anewluv.Domain.Data.profile();
@@ -84,9 +84,9 @@ namespace Misc
                 {
                     try
                     {
-                        Console.WriteLine("attempting to assign old profile with email  :" + item.ProfileID + "to the new database with id: " + newprofileid);
+                        Console.WriteLine("attempting to assign old profile with email  :" + item.ProfileID + "to the new database with" + "added profiledcounter = " + profilecount);
 
-                        myprofile.id = newprofileid;
+                      
                         myprofile.username = item.UserName;
                         myprofile.emailaddress = item.ProfileID;
                         myprofile.screenname = item.ScreenName;
@@ -219,7 +219,7 @@ namespace Misc
                                sessionid = logtime.SessionID,
                                ObjectState = ObjectState.Added
                            });
-                            Console.WriteLine("profile added succesfull   :");
+                            Console.WriteLine("profile logintime added succesfull ");
                         }
 
                         //mail stuff 
@@ -231,7 +231,7 @@ namespace Misc
                         //add the two new objects to profile
                         //********************************
                         //myprofile.profiledata = myprofiledata;
-                        myprofile.profilemetadata = new profilemetadata { profile_id = myprofile.id , ObjectState = ObjectState.Added };
+                        myprofile.profilemetadata = new profilemetadata { profile_id = myprofile.id , ObjectState = ObjectState.Added,profile = null,profiledata = null };
                         myprofile.openids = myopenids;
                         myprofile.userlogtimes = mylogtimes;
                         context.profiles.AddOrUpdate(myprofile);
@@ -252,15 +252,15 @@ namespace Misc
                     finally
                     {
                         //iccrement on faliture too
-                        newprofileid = newprofileid + 1;
+                        profilecount = profilecount + 1;
                     }
                 }
 
 
 
             }
-             
-            Console.WriteLine("Total number of profiles proccessed :" + newprofileid);
+
+            Console.WriteLine("Total number of profiles proccessed :" + profilecount);
             //attempt bulk save
             try
             {
@@ -280,64 +280,74 @@ namespace Misc
 
 
             //global try for the rest of objects that are tied to profile
-            try
-            {
+         
 
                 //populate collections tied to profile and profiledata
 
 
                 //build  members in role data if it exists
-                foreach (AnewLuvFTS.DomainAndData.Models.profile oldprofile in olddb.profiles)
+            foreach (AnewLuvFTS.DomainAndData.Models.profile oldprofile in olddb.profiles)
+            {
+                try
                 {
+
+
                     var membersinroleobject = new Anewluv.Domain.Data.membersinrole();
 
-                   
+
+
                     //query the profile data
                     //var matchedprofile = context.profiles.Where(p => p.emailaddress == membersinroleitem.ProfileID).FirstOrDefault();
                     // Metadata classes are not meant to be instantiated.
                     // myprofile.id = matchedprofile.First().id ;
                     var matchedprofile = context.profiles.Where(p => p.emailaddress == oldprofile.ProfileID).FirstOrDefault();
-                    if (matchedprofile != null && matchedprofile.profilemetadata.mailboxfolders.Count == 0 )
+                    if (matchedprofile != null && matchedprofile.profilemetadata.mailboxfolders.Count == 0)
                     {
-                        
+
                         //get mailbox folders first 
                         if (oldprofile.ProfileData.MailboxFolders.Count() > 0)
                         {
                             Console.WriteLine("attempting to create mailbox folders    :" + oldprofile.ProfileID);
-                           // List<mailboxfolder> maildboxfolders = new List<mailboxfolder>();
+                            // List<mailboxfolder> maildboxfolders = new List<mailboxfolder>();
                             //List<mailboxmessagefolder> newmailboxmesages = new List<mailboxmessagefolder>();
                             foreach (MailboxFolder oldfolder in oldprofile.ProfileData.MailboxFolders)
                             {
 
-                                var mailboxfolder =  (new mailboxfolder
+                                var mailboxfolder = (new mailboxfolder
                                 {
-                                    active = oldfolder.Active ,  
-                                    defaultfolder_id  = context.lu_defaultmailboxfolder.Where(p=>p.description == oldfolder.MailboxFolderTypeName).FirstOrDefault().id,
-                                     profile_id =  matchedprofile.id, creationdate = DateTime.Now, maxsizeinbytes = 128000, displayname = oldfolder.MailboxFolderTypeName  ,
-                                     ObjectState=ObjectState.Added                                 
+                                    active = oldfolder.Active,
+                                    defaultfolder_id = context.lu_defaultmailboxfolder.Where(p => p.description == oldfolder.MailboxFolderTypeName).FirstOrDefault().id,
+                                    profile_id = matchedprofile.id,
+                                    creationdate = DateTime.Now,
+                                    maxsizeinbytes = 128000,
+                                    displayname = oldfolder.MailboxFolderTypeName,
+                                    ObjectState = ObjectState.Added
                                 });
                                 matchedprofile.profilemetadata.mailboxfolders.Add(mailboxfolder);
                                 //save the folder 
                                 context.SaveChanges();
 
-                               //find all mailbox messages messages tied to this folder for the link table
+                                //find all mailbox messages messages tied to this folder for the link table
                                 foreach (MailboxMessagesFolder OldMailBoxMessagesFolder in oldfolder.MailboxMessagesFolders)
                                 {
-                                   
+
                                     var mailboxmessage = new mailboxmessage();
                                     //see if the user is a recpient if so add to recived 
                                     if (OldMailBoxMessagesFolder.MailboxMessage.RecipientID == matchedprofile.emailaddress)
                                     {
-                                            Console.WriteLine("creating mapping btween recived messages and folders for    :" + oldprofile.ProfileID);
-                                     //create the new message 
+                                        Console.WriteLine("creating mapping btween recived messages and folders for    :" + oldprofile.ProfileID);
+                                        //create the new message 
                                         mailboxmessage = (new mailboxmessage
                                         {
-                                             body = OldMailBoxMessagesFolder.MailboxMessage.Body, subject = OldMailBoxMessagesFolder.MailboxMessage.Subject, recipient_id = matchedprofile.id, 
-                                             sender_id = context.profiles.Where(z=>z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault().id, 
-                                             creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate, ObjectState =ObjectState.Added,
-                                             sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length+ OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
-                                                               
-                                        }); 
+                                            body = OldMailBoxMessagesFolder.MailboxMessage.Body,
+                                            subject = OldMailBoxMessagesFolder.MailboxMessage.Subject,
+                                            recipient_id = matchedprofile.id,
+                                            sender_id = context.profiles.Where(z => z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault().id,
+                                            creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
+                                            ObjectState = ObjectState.Added,
+                                            sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length + OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
+
+                                        });
                                         matchedprofile.profilemetadata.receivedmailboxmessages.Add(mailboxmessage);
                                         context.SaveChanges();
                                         //create the mailboxmesagesflder now
@@ -345,78 +355,85 @@ namespace Misc
 
                                     }
 
-                                     if (OldMailBoxMessagesFolder.MailboxMessage.SenderID == matchedprofile.emailaddress)
+                                    if (OldMailBoxMessagesFolder.MailboxMessage.SenderID == matchedprofile.emailaddress)
                                     {
-                                            Console.WriteLine("creating mapping btween sent messages and folders for    :" + oldprofile.ProfileID);
-                                     //create the new message 
-                                         mailboxmessage =  (new mailboxmessage
-                                        {
-                                             body = OldMailBoxMessagesFolder.MailboxMessage.Body, subject = OldMailBoxMessagesFolder.MailboxMessage.Subject, recipient_id = matchedprofile.id, 
-                                             sender_id = context.profiles.Where(z=>z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault().id, 
-                                             creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
-                                             ObjectState = ObjectState.Added,
-                                             sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length+ OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
-                                                              
-                                        }); 
+                                        Console.WriteLine("creating mapping btween sent messages and folders for    :" + oldprofile.ProfileID);
+                                        //create the new message 
+                                        mailboxmessage = (new mailboxmessage
+                                       {
+                                           body = OldMailBoxMessagesFolder.MailboxMessage.Body,
+                                           subject = OldMailBoxMessagesFolder.MailboxMessage.Subject,
+                                           recipient_id = matchedprofile.id,
+                                           sender_id = context.profiles.Where(z => z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault().id,
+                                           creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
+                                           ObjectState = ObjectState.Added,
+                                           sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length + OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
+
+                                       });
                                         matchedprofile.profilemetadata.sentmailboxmessages.Add(mailboxmessage);
                                         context.SaveChanges();
                                     }
 
                                     //now do the join table tables 
-                                       var newmailboxmesagesfolder =   (new mailboxmessagefolder
-                                        {
-                                            
-                                           mailboxmessage_id = mailboxmessage.id, 
-                                           mailboxfolder_id = mailboxfolder.id , 
-                                           deleted = OldMailBoxMessagesFolder.MessageDeleted == 1 ? true:false,
-                                            flagged   = OldMailBoxMessagesFolder.MessageFlagged == 1 ? true:false,
-                                            draft  = OldMailBoxMessagesFolder.MessageDraft == 1 ? true:false,
-                                            replied   = OldMailBoxMessagesFolder.MessageReplied == 1 ? true:false,
-                                           read = OldMailBoxMessagesFolder.MessageRead == 1 ? true : false,
-                                           ObjectState = ObjectState.Added
-                                        }); 
-                                      
-                                           context.mailboxmessagefolders.Add(newmailboxmesagesfolder);
-                                           context.SaveChanges();
-                                      
+                                    var newmailboxmesagesfolder = (new mailboxmessagefolder
+                                     {
+
+                                         mailboxmessage_id = mailboxmessage.id,
+                                         mailboxfolder_id = mailboxfolder.id,
+                                         deleted = OldMailBoxMessagesFolder.MessageDeleted == 1 ? true : false,
+                                         flagged = OldMailBoxMessagesFolder.MessageFlagged == 1 ? true : false,
+                                         draft = OldMailBoxMessagesFolder.MessageDraft == 1 ? true : false,
+                                         replied = OldMailBoxMessagesFolder.MessageReplied == 1 ? true : false,
+                                         read = OldMailBoxMessagesFolder.MessageRead == 1 ? true : false,
+                                         ObjectState = ObjectState.Added
+                                     });
+
+                                    context.mailboxmessagefolders.Add(newmailboxmesagesfolder);
+                                    context.SaveChanges();
+
                                 }
 
-                               
+
                             }
-                           
+
 
                         }
                         else if (matchedprofile != null && matchedprofile.profilemetadata.mailboxfolders.Count > 0)
                         {
                             Console.WriteLine("Folders already exist for     :" + oldprofile.ProfileID);
-                         }
+                        }
                         else
                         {
                             Console.WriteLine("No mailbox detected skipping    :" + oldprofile.ProfileID);
                         }
 
 
-                     //   Console.WriteLine("role added for old profileid of   :" + membersinroleitem.ProfileID);
+                        //   Console.WriteLine("role added for old profileid of   :" + membersinroleitem.ProfileID);
                         //save data one per row
                     }
 
                 }
+                
+                catch (Exception ex)
+                {
 
+                    var dd = ex.ToString();
+                    Console.WriteLine(ex.ToString());
+                    Console.WriteLine("Critical error press Stop proccessing  Press <Enter> to stop the debugging");
+                    Console.ReadLine();
 
+                }
+
+            }
 
           
 
 
 
 
-            }
-            catch (Exception ex)
-            {
+           
 
-                var dd = ex.ToString();
-            }
-
-            context.SaveChanges();
+         //   context.SaveChanges();
 
         }
         public static void ConvertProfileCollections()
@@ -525,6 +542,9 @@ namespace Misc
             {
 
                 var dd = ex.ToString();
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Critical error press Stop proccessing  Press <Enter> to stop the debugging");
+                Console.ReadLine();
             }
 
             context.SaveChanges();
@@ -789,6 +809,9 @@ namespace Misc
             {
 
                 var dd = ex.ToString();
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Critical error press Stop proccessing  Press <Enter> to stop the debugging");
+                Console.ReadLine();
             }
 
 

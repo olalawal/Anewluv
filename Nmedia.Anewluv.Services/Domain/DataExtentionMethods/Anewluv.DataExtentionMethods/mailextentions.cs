@@ -31,7 +31,7 @@ namespace Anewluv.DataExtentionMethods
             try
             {
 
-                var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
+                var blocks = db.Repository<action>().get(model.profileid, actiontypeEnum.Block);
                 var messages = db.Repository<mailboxmessage>().Queryable();
                 var messagefolders = db.Repository<mailboxmessagefolder>().Queryable();
 

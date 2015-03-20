@@ -108,7 +108,7 @@ namespace Anewluv.Services.Mapping
                     {
 
 
-                        return membermappingextentions.mapmembersearchviewmodel(model.profileid.GetValueOrDefault(), model.modeltomap, model.allphotos, db, geodb);
+                        return membermappingextentions.mapmembersearchviewmodel(model.profileid, model.modeltomap, model.allphotos, db, geodb);
 
 
                     });
@@ -221,13 +221,13 @@ namespace Anewluv.Services.Mapping
                         {
                             //TO Do user a mapper instead of a contructur and map it from the service
                             //Move all this to a service
-                            ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid.GetValueOrDefault() }, model.allphotos, db, geodb),
+                            ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid }, model.allphotos, db, geodb),
                             //profile of the person being viewed
-                            ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.GetValueOrDefault(), new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() }, model.allphotos, db, geodb)
+                            ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() }, model.allphotos, db, geodb)
                         };
 
                         //add in the ProfileCritera
-                        NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid.GetValueOrDefault(), db);
+                        NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid, db);
                         NewProfileBrowseModel.ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db);
 
 
@@ -244,7 +244,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.GetValueOrDefault()));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -282,13 +282,13 @@ namespace Anewluv.Services.Mapping
                             {
                                 //TO Do user a mapper instead of a contructur and map it from the service
                                 //Move all this to a service
-                                ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid.GetValueOrDefault() }, model.allphotos, db, geodb),
-                                ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.GetValueOrDefault(), new MemberSearchViewModel { id = Convert.ToInt32(item) }, model.allphotos, db, geodb)
+                                ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid }, model.allphotos, db, geodb),
+                                ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid, new MemberSearchViewModel { id = Convert.ToInt32(item) }, model.allphotos, db, geodb)
 
                             };
 
                             //add in the ProfileCritera
-                            NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid.GetValueOrDefault(), db);
+                            NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid, db);
                             NewProfileBrowseModel.ProfileCriteria = membermappingextentions.getprofilecriteriamodel(Convert.ToInt32(item), db);
 
 
@@ -309,7 +309,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.GetValueOrDefault()));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -771,7 +771,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(newmodel.profileid.GetValueOrDefault()));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(newmodel.profileid));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1029,28 +1029,29 @@ namespace Anewluv.Services.Mapping
                         DateTime min = today.AddYears(-intAgeTo);
 
 
+                        //TO DO Move this to a function so its cleaner and re-usable
                         //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
                         //requery all the has tbls
                         HashSet<int> LookingForGenderValues = new HashSet<int>();
-                        LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_gender.Select(c => c.id)) : LookingForGenderValues;
+                        LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p=>p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Select(c => c.value)) : LookingForGenderValues;
                         //Appearacnce seache settings values         
 
                         //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
 
                         HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
-                        LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_bodytype.Select(c => c.id)) : LookingForBodyTypesValues;
+                        LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.bodytype).Select(c => c.value)) : LookingForBodyTypesValues;
 
                         HashSet<int> LookingForEthnicityValues = new HashSet<int>();
-                        LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_ethnicity.Select(c => c.id)) : LookingForEthnicityValues;
+                        LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.ethnicity).Select(c => c.value)) : LookingForEthnicityValues;
 
                         HashSet<int> LookingForEyeColorValues = new HashSet<int>();
-                        LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_eyecolor.Select(c => c.id)) : LookingForEyeColorValues;
+                        LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.eyecolor).Select(c => c.value)) : LookingForEyeColorValues;
 
                         HashSet<int> LookingForHairColorValues = new HashSet<int>();
-                        LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_haircolor.Select(c => c.id)) : LookingForHairColorValues;
+                        LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.haircolor).Select(c => c.value)) : LookingForHairColorValues;
 
                         HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
-                        LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_hotfeature.Select(c => c.id)) : LookingForHotFeatureValues;
+                        LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hotfeature).Select(c => c.value)) : LookingForHotFeatureValues;
 
 
                         //******** visiblitysettings test code ************************
@@ -1235,29 +1236,28 @@ namespace Anewluv.Services.Mapping
                         DateTime min = today.AddYears(-intAgeTo);
 
 
-
-                        //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
-                        //requery all the has tbls
+                        //TO DO this needs to be in a function to build all these
                         HashSet<int> LookingForGenderValues = new HashSet<int>();
-                        LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_gender.Select(c => c.id)) : LookingForGenderValues;
+                        LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p=>p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Select(c => c.value)) : LookingForGenderValues;
                         //Appearacnce seache settings values         
 
                         //set a value to determine weather to evaluate hights i.e if this user has not height values whats the point ?
 
                         HashSet<int> LookingForBodyTypesValues = new HashSet<int>();
-                        LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_bodytype.Select(c => c.id)) : LookingForBodyTypesValues;
+                        LookingForBodyTypesValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.bodytype).Select(c => c.value)) : LookingForBodyTypesValues;
 
                         HashSet<int> LookingForEthnicityValues = new HashSet<int>();
-                        LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_ethnicity.Select(c => c.id)) : LookingForEthnicityValues;
+                        LookingForEthnicityValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.ethnicity).Select(c => c.value)) : LookingForEthnicityValues;
 
                         HashSet<int> LookingForEyeColorValues = new HashSet<int>();
-                        LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_eyecolor.Select(c => c.id)) : LookingForEyeColorValues;
+                        LookingForEyeColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.eyecolor).Select(c => c.value)) : LookingForEyeColorValues;
 
                         HashSet<int> LookingForHairColorValues = new HashSet<int>();
-                        LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_haircolor.Select(c => c.id)) : LookingForHairColorValues;
+                        LookingForHairColorValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.haircolor).Select(c => c.value)) : LookingForHairColorValues;
 
                         HashSet<int> LookingForHotFeatureValues = new HashSet<int>();
-                        LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_hotfeature.Select(c => c.id)) : LookingForHotFeatureValues;
+                        LookingForHotFeatureValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hotfeature).Select(c => c.value)) : LookingForHotFeatureValues;
+
 
                         // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
 
@@ -1789,7 +1789,8 @@ namespace Anewluv.Services.Mapping
                 //get values from the collections to test for , this should already be done in the viewmodel mapper but juts incase they made changes that were not updated
                 //requery all the has tbls
                 HashSet<int> LookingForGenderValues = new HashSet<int>();
-                LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.searchsetting_gender.Select(c => c.id)) : LookingForGenderValues;
+                LookingForGenderValues = (perfectmatchsearchsettings != null) ? new HashSet<int>(perfectmatchsearchsettings.details.Where(p => p.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Select(c => c.value)) : LookingForGenderValues;
+  
               
                 //basic search
                 var repo = db.Repository<profiledata>().Query(p => p.birthdate > min && p.birthdate <= max &&

@@ -312,29 +312,33 @@ namespace Anewluv.Services.Members
                               for (i = 1; i < max; i++)
                               {
                                   mailboxfolder p = new mailboxfolder();
-                                  p.f = i;
-                                  p.profile_id = model.profileid.GetValueOrDefault();
+                                  p.creationdate = DateTime.Now;  
+                                  
+                                  p.maxsizeinbytes = 128;
+                                  p.defaultfolder_id = i;
+                                  p.displayname = db.Repository<lu_defaultmailboxfolder>().Queryable().Where(z=>z.id == i).FirstOrDefault().description;
+                                  p.profile_id = model.profileid;
                                   //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
-                                  switch (i)
-                                  {
-                                      case 1:
-                                          p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Inbox";
-                                          break;
-                                      case 2:
-                                          p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Sent";
-                                          break;
-                                      case 3:
-                                          p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Drafts";
-                                          break;
-                                      case 4:
-                                          p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Trash";
-                                          break;
-                                      case 5:
-                                          p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Deleted";
-                                          break;
-                                  }
+                                  //switch (i)
+                                  //{
+                                  //    case 1:
+                                  //        p..lu_defaultmailboxfolder.description = "Inbox";
+                                  //        break;
+                                  //    case 2:
+                                  //        p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Sent";
+                                  //        break;
+                                  //    case 3:
+                                  //        p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Drafts";
+                                  //        break;
+                                  //    case 4:
+                                  //        p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Trash";
+                                  //        break;
+                                  //    case 5:
+                                  //        p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Deleted";
+                                  //        break;
+                                  //}
                                   db.Repository<mailboxfolder>().Insert(p);
-                                  var z =db.SaveChanges();
+                                  var m =db.SaveChanges();
                                  // transaction.Commit();
 
                                //   return true;
@@ -521,7 +525,7 @@ namespace Anewluv.Services.Members
                           {
                               active = true,
                               creationdate = DateTime.UtcNow,
-                              profile_id = model.profileid.GetValueOrDefault(),
+                              profile_id = model.profileid,
                                lu_openidprovider = db.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
                               openididentifier = model.openididentifier
                           };
@@ -727,7 +731,7 @@ namespace Anewluv.Services.Members
 
                               //noew aslo update the logtime and then 
                               userlogtime myLogtime = new userlogtime();
-                              myLogtime.profile_id = model.profileid.GetValueOrDefault();
+                              myLogtime.profile_id = model.profileid;
                               myLogtime.offline = false;
                               myLogtime.sessionid = model.sessionid;
                               myLogtime.logintime = DateTime.Now;
@@ -858,7 +862,7 @@ namespace Anewluv.Services.Members
 
                         //noew aslo update the logtime and then 
                         userlogtime myLogtime = new userlogtime();
-                        myLogtime.profile_id = model.profileid.GetValueOrDefault();
+                        myLogtime.profile_id = model.profileid;
                         myLogtime.offline = false;
                         myLogtime.sessionid = model.sessionid;
                         myLogtime.logintime = DateTime.Now;
