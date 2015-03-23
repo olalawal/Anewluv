@@ -18,11 +18,13 @@ namespace Repository.Pattern.Ef6
         public DataContext(string nameOrConnectionString) : base(nameOrConnectionString)
         {
             _instanceId = Guid.NewGuid();
-            Configuration.LazyLoadingEnabled = false;
-            Configuration.ProxyCreationEnabled = false;
+            Configuration.LazyLoadingEnabled = true;
+            Configuration.ProxyCreationEnabled = true;
         }
 
         public Guid InstanceId { get { return _instanceId; } }
+
+     
 
         /// <summary>
         ///     Saves all changes made in this context to the underlying database.

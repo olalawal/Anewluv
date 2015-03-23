@@ -30,13 +30,15 @@ namespace Anewluv.Domain
 
 
 
+
+
         public AnewluvContext()
             : base("name=AnewluvContext")
         {
          //  // Database.SetInitializer<AnewluvContext>(null);           
-         //   this.Configuration.ProxyCreationEnabled = true;
+          //this.Configuration.ProxyCreationEnabled = true;
          //   this.Configuration.AutoDetectChangesEnabled = true;
-         //   this.DisableLazyLoading = true;
+         //  this.Configuration.DisableLazyLoading = true;
          //   //rebuild DB if schema is differnt
          //   //Initializer init = new Initializer();            
          //   // init.InitializeDatabase(this);
@@ -49,6 +51,7 @@ namespace Anewluv.Domain
          //  new DropCreateDatabaseIfModelChanges<AnewluvContext>());
         }
 
+       
 
         //add the obects alphabetically 
 
