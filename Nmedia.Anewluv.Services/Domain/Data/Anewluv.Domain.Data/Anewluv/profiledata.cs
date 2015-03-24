@@ -13,8 +13,9 @@ namespace Anewluv.Domain.Data
             this.communicationquotas = new List<communicationquota>();            
             this.visiblitysettings = new List<visiblitysetting>();
         }
-
+        public int id { get; set; }
         public int profile_id { get; set; }
+        public int profilemetadata_id { get; set; }
         public Nullable<int> age { get; set; }
         public Nullable<System.DateTime> birthdate { get; set; }
         public string city { get; set; }

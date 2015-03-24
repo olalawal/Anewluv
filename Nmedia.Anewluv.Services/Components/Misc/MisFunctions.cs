@@ -345,12 +345,17 @@ namespace Misc
                                        // mailboxfolder.profilemetadata.ObjectState = ObjectState.Unchanged;
                                       //  mailboxfolder.profilemetadata.profiledata.ObjectState = ObjectState.Unchanged;
                                         context.Configuration.ProxyCreationEnabled = false;
+                                        context.Configuration.LazyLoadingEnabled = false;
+
+                                        if (mailboxfolder.profilemetadata != null)
+                                            mailboxfolder.profilemetadata = null;
                                         context.mailboxfolders.Add(mailboxfolder);
 
                                         
                                         //save the folder 
                                         context.SaveChanges();
                                         context.Configuration.ProxyCreationEnabled = true;
+                                        context.Configuration.LazyLoadingEnabled = true;
                                     }
 
 

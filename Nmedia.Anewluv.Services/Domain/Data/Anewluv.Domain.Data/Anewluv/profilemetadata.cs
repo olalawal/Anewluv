@@ -30,8 +30,9 @@ namespace Anewluv.Domain.Data
 
         }
 
-        public int profile_id { get; set; }
-      
+        public int id { get; set; }
+        public int profiledata_id { get; set; }
+        public int profile_id { get; set; }      
         public virtual ICollection<mailboxfolder> mailboxfolders { get; set; }       
         public virtual ICollection<mailboxmessage> sentmailboxmessages { get; set; }
         public virtual ICollection<mailboxmessage> receivedmailboxmessages { get; set; }     
