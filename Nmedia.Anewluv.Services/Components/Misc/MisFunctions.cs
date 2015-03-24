@@ -317,6 +317,14 @@ namespace Misc
                                 {
                                     mailboxfolder = null;
                                     //check for matching folder nmae
+                                    if ((matchedprofile.profilemetadata == null))
+                                    {
+                                        Utils.fixmissingprofiledataandmetadata(olddb, context, oldfolder.ProfileID, matchedprofile.id);
+
+                                        matchedprofile = context.profiles.Where(p => p.emailaddress == oldprofile.ProfileID).FirstOrDefault();
+                                    }
+
+
                                     mailboxfolder = matchedprofile.profilemetadata.mailboxfolders.Where(z => z.displayname.ToUpper() == oldfolder.MailboxFolderTypeName.ToUpper()).FirstOrDefault();
 
                                     //only create new mailbox folders
@@ -329,13 +337,20 @@ namespace Misc
                                             profile_id = matchedprofile.id,
                                             creationdate = DateTime.Now,
                                             maxsizeinbytes = 128000,
-                                            profilemetadata =null,
+                                            profilemetadata =null,                                            
                                             displayname = oldfolder.MailboxFolderTypeName,
                                             ObjectState = ObjectState.Added
                                         });
+
+                                       // mailboxfolder.profilemetadata.ObjectState = ObjectState.Unchanged;
+                                      //  mailboxfolder.profilemetadata.profiledata.ObjectState = ObjectState.Unchanged;
+                                        context.Configuration.ProxyCreationEnabled = false;
                                         context.mailboxfolders.Add(mailboxfolder);
+
+                                        
                                         //save the folder 
                                         context.SaveChanges();
+                                        context.Configuration.ProxyCreationEnabled = true;
                                     }
 
 
