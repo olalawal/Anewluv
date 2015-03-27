@@ -197,6 +197,7 @@ namespace Anewluv.Domain.Migrations
                 newitem.description = value.Key;
                 newitem.userMessage = value.Value ;
                 System.Diagnostics.Debug.WriteLine(value.Key + "," + value.Value);
+                newitem.ObjectState = ObjectState.Added;
                 context.lu_photorejectionreason.AddOrUpdate(newitem);
                 counter = counter + 1;
             }

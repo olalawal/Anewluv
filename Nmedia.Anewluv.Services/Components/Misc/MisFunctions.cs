@@ -336,26 +336,22 @@ namespace Misc
                                             defaultfolder_id = context.lu_defaultmailboxfolder.Where(p => p.description == oldfolder.MailboxFolderTypeName).FirstOrDefault().id,
                                             profile_id = matchedprofile.id,
                                             creationdate = DateTime.Now,
-                                            maxsizeinbytes = 128000,
-                                            profilemetadata =null,                                            
+                                            maxsizeinbytes = 128000,                                                                                      
                                             displayname = oldfolder.MailboxFolderTypeName,
-                                            ObjectState = ObjectState.Added
+                                                                                        ObjectState = ObjectState.Added
                                         });
 
                                        // mailboxfolder.profilemetadata.ObjectState = ObjectState.Unchanged;
                                       //  mailboxfolder.profilemetadata.profiledata.ObjectState = ObjectState.Unchanged;
-                                        context.Configuration.ProxyCreationEnabled = false;
-                                        context.Configuration.LazyLoadingEnabled = false;
-
-                                        if (mailboxfolder.profilemetadata != null)
-                                            mailboxfolder.profilemetadata = null;
-                                        context.mailboxfolders.Add(mailboxfolder);
-
                                         
+                                        using (var db = new AnewluvContext())
+                                        {  
+                                               db.mailboxfolders.Add(mailboxfolder);
+                                               db.SaveChanges();
+                                        }
+
                                         //save the folder 
-                                        context.SaveChanges();
-                                        context.Configuration.ProxyCreationEnabled = true;
-                                        context.Configuration.LazyLoadingEnabled = true;
+                                      
                                     }
 
 
@@ -373,48 +369,69 @@ namespace Misc
                                         if (OldMailBoxMessagesFolder.MailboxMessage.RecipientID == matchedprofile.emailaddress)
                                         {
 
-                                            existingmessage = context.mailboxmessages.Where(z => z.recipient_id == matchedprofile.id && z.body == OldMailBoxMessagesFolder.MailboxMessage.Body
-                                                && z.subject == OldMailBoxMessagesFolder.MailboxMessage.Subject).FirstOrDefault();
+                                            try
+                                            {
+                                                existingmessage = context.mailboxmessages.Where(z => z.recipient_id == matchedprofile.id && z.body == OldMailBoxMessagesFolder.MailboxMessage.Body
+                                                                                               && z.subject == OldMailBoxMessagesFolder.MailboxMessage.Subject).FirstOrDefault();
 
-                                            if (existingmessage == null)
+
+                                                //make sure sender exists exists 
+                                                var sendertest = context.profiles.Where(z => z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault();
+
+                                              
+
+                                                if (existingmessage == null && sendertest !=null)
+                                                {
+
+                                                    //create the new message 
+                                                    mailboxmessage = (new mailboxmessage
+                                                    {
+                                                        body = OldMailBoxMessagesFolder.MailboxMessage.Body,
+                                                        subject = OldMailBoxMessagesFolder.MailboxMessage.Subject,
+                                                        recipient_id = matchedprofile.id,
+                                                        sender_id = context.profiles.Where(z => z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault().id,
+                                                        creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
+                                                        ObjectState = ObjectState.Added,
+                                                        sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length + OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
+
+
+                                                    });
+
+                                                    //check if a matching mail message exists 
+
+                                                    //if sender meatadata and profiledata are not here fix that
+                                                    if ((context.profiledatas.Where(p => p.profile_id == mailboxmessage.sender_id).FirstOrDefault() == null))
+                                                    {
+                                                        Utils.fixmissingprofiledataandmetadata(olddb, context, OldMailBoxMessagesFolder.MailboxMessage.SenderID, mailboxmessage.sender_id);
+
+                                                    }
+                                                    else if (mailboxmessage.sender_id == null)
+                                                    {
+                                                        Console.WriteLine("missing profile skipping    : " + OldMailBoxMessagesFolder.MailboxMessage.SenderID);
+                                                    }
+
+
+                                                    if ((context.profiledatas.Where(p => p.profile_id == mailboxmessage.sender_id).FirstOrDefault() != null && mailboxmessage.sender_id != null))
+                                                    {
+                                                        Console.WriteLine("creating mapping btween recived messages and folders for    : " + oldprofile.ProfileID);
+
+                                                        using (var db = new AnewluvContext())
+                                                        {
+                                                            db.mailboxmessages.Add(mailboxmessage);
+                                                            db.SaveChanges();
+
+                                                        }
+
+                                                    }
+
+
+                                                    //create the mailboxmesagesflder now
+                                                }
+                                            }
+                                            catch (Exception ex)
                                             {
 
-                                                //create the new message 
-                                                mailboxmessage = (new mailboxmessage
-                                                {
-                                                    body = OldMailBoxMessagesFolder.MailboxMessage.Body,
-                                                    subject = OldMailBoxMessagesFolder.MailboxMessage.Subject,
-                                                    recipient_id = matchedprofile.id,                                                    
-                                                    sender_id = context.profiles.Where(z => z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.SenderID).FirstOrDefault().id,
-                                                    creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
-                                                    ObjectState = ObjectState.Added,
-                                                    sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length + OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
 
-                                                });
-
-                                                //check if a matching mail message exists 
-                                                                                           
-                                                //if sender meatadata and profiledata are not here fix that
-                                                if ((context.profiledatas.Where(p=>p.profile_id == mailboxmessage.sender_id).FirstOrDefault() == null))
-                                                {
-                                                    Utils.fixmissingprofiledataandmetadata(olddb, context, OldMailBoxMessagesFolder.MailboxMessage.SenderID, mailboxmessage.sender_id);
-                                                 
-                                                }
-                                                else if (mailboxmessage.sender_id == null)
-                                                {
-                                                    Console.WriteLine("missing profile skipping    : " + OldMailBoxMessagesFolder.MailboxMessage.SenderID);
-                                                }
-                                               
-
-                                               if ((context.profiledatas.Where(p=>p.profile_id == mailboxmessage.sender_id).FirstOrDefault() != null && mailboxmessage.sender_id !=null))
-                                               {
-                                                    Console.WriteLine("creating mapping btween recived messages and folders for    : " + oldprofile.ProfileID);   
-                                                    context.mailboxmessages.Add(mailboxmessage);
-                                                    context.SaveChanges();
-                                                }
-
-
-                                                //create the mailboxmesagesflder now
                                             }
 
                                         }
@@ -422,49 +439,72 @@ namespace Misc
 
                                         else if (OldMailBoxMessagesFolder.MailboxMessage.SenderID == matchedprofile.emailaddress)
                                         {
-
-                                            //check if a matching mail message exists 
-                                            existingmessage = context.mailboxmessages.Where(z => z.sender_id == matchedprofile.id && z.body == OldMailBoxMessagesFolder.MailboxMessage.Body
-                                               && z.subject == OldMailBoxMessagesFolder.MailboxMessage.Subject).FirstOrDefault();
-
-                                            if (existingmessage == null)
+                                            try
                                             {
-                                                //create the new message 
-                                                mailboxmessage = (new mailboxmessage
-                                                {
-                                                    body = OldMailBoxMessagesFolder.MailboxMessage.Body,
-                                                    subject = OldMailBoxMessagesFolder.MailboxMessage.Subject,
-                                                    recipient_id = context.profiles.Where(z => z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.RecipientID).FirstOrDefault().id,                                                   
-                                                    sender_id = matchedprofile.id,
-                                                    creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
-                                                    ObjectState = ObjectState.Added,
-                                                    sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length + OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
+                                                //check if a matching mail message exists                                                 
+                                                existingmessage = context.mailboxmessages.Where(z => z.sender_id == matchedprofile.id && z.body == OldMailBoxMessagesFolder.MailboxMessage.Body
+                                                   && z.subject == OldMailBoxMessagesFolder.MailboxMessage.Subject).FirstOrDefault();
+                                                 
+                                                //make sure recipient exists 
+                                                var recipienttest = context.profiles.Where(z => z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.RecipientID).FirstOrDefault();
 
-                                                });
-
-                                                //if sender meatadata and profiledata are not here fix that
-                                                if ((context.profiledatas.Where(p => p.profile_id == mailboxmessage.recipient_id).FirstOrDefault() == null))
+                                                if (recipienttest == null)
                                                 {
-                                                    Utils.fixmissingprofiledataandmetadata(olddb, context, OldMailBoxMessagesFolder.MailboxMessage.RecipientID, mailboxmessage.recipient_id);
-
-                                                }
-                                                else if (mailboxmessage.recipient_id == null)
-                                                {
-                                                    Console.WriteLine("missing profile skipping    : " + OldMailBoxMessagesFolder.MailboxMessage.RecipientID);
+                                                    var ddssadasd = "";
                                                 }
 
-
-                                                if ((context.profiledatas.Where(p => p.profile_id == mailboxmessage.recipient_id).FirstOrDefault() != null && mailboxmessage.recipient_id != null))
+                                                if (existingmessage == null && recipienttest !=null)
                                                 {
-                                                    Console.WriteLine("creating mapping btween sent messages and folders for    : " + oldprofile.ProfileID);
-                                                    context.mailboxmessages.Add(mailboxmessage);
-                                                    context.SaveChanges();
+
+                                                                                                    
+                                                        //create the new message 
+                                                        mailboxmessage = (new mailboxmessage
+                                                        {
+                                                            body = OldMailBoxMessagesFolder.MailboxMessage.Body,
+                                                            subject = OldMailBoxMessagesFolder.MailboxMessage.Subject,
+                                                            recipient_id = context.profiles.Where(z => z.emailaddress == OldMailBoxMessagesFolder.MailboxMessage.RecipientID).FirstOrDefault().id,
+                                                            sender_id = matchedprofile.id,
+                                                            creationdate = OldMailBoxMessagesFolder.MailboxMessage.CreationDate,
+                                                            ObjectState = ObjectState.Added,
+                                                            sizeinbtyes = (OldMailBoxMessagesFolder.MailboxMessage.Body.Length + OldMailBoxMessagesFolder.MailboxMessage.Subject.Length)
+
+                                                        });
+
+
+                                                    
+                                                            //if sender meatadata and profiledata are not here fix that
+                                                            if ((context.profiledatas.Where(p => p.profile_id == mailboxmessage.recipient_id).FirstOrDefault() == null))
+                                                            {
+                                                                Utils.fixmissingprofiledataandmetadata(olddb, context, OldMailBoxMessagesFolder.MailboxMessage.RecipientID, mailboxmessage.recipient_id);
+
+                                                            }
+                                                            else if (mailboxmessage.recipient_id == null)
+                                                            {
+                                                                Console.WriteLine("missing profile skipping    : " + OldMailBoxMessagesFolder.MailboxMessage.RecipientID);
+                                                            }
+
+
+                                                            if ((context.profiledatas.Where(p => p.profile_id == mailboxmessage.recipient_id).FirstOrDefault() != null && mailboxmessage.recipient_id != null))
+                                                            {
+                                                                Console.WriteLine("creating mapping btween sent messages and folders for    : " + oldprofile.ProfileID);
+                                                                using (var db = new AnewluvContext())
+                                                                {
+                                                                    db.mailboxmessages.Add(mailboxmessage);
+                                                                    db.SaveChanges();
+                                                                }
+                                                            } 
                                                 }
                                             }
+                                            catch (Exception ex)
+                                            {
+
+
+                                            }
+                                          
 
                                         }
 
-                                        if (existingmessage == null && mailboxmessage != null)
+                                        if (existingmessage == null && mailboxmessage != null && mailboxmessage.id !=0 )
                                         {
                                             //now do the join table tables 
                                             var newmailboxmesagesfolder = (new mailboxmessagefolder
@@ -481,8 +521,12 @@ namespace Misc
                                                 ObjectState = ObjectState.Added
                                             });
 
-                                            context.mailboxmessagefolders.Add(newmailboxmesagesfolder);
-                                            context.SaveChanges();
+                                            using (var db = new AnewluvContext())
+                                            {
+                                                db.mailboxmessagefolders.Add(newmailboxmesagesfolder);
+                                                db.SaveChanges();
+                                            }
+                                        
                                         }
                                         else
                                         {

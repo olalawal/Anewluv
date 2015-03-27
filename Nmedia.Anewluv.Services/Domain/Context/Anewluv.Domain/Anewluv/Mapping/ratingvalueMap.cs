@@ -15,7 +15,7 @@ namespace Anewluv.Domain.Data.Mapping
             this.ToTable("ratingvalues");
             this.Property(t => t.id).HasColumnName("id");
             this.Property(t => t.rating_id).HasColumnName("rating_id");
-            this.Property(t => t.profile_id).HasColumnName("profile_id");
+            this.Property(t => t.raterprofile_id).HasColumnName("raterprofile_id");
             this.Property(t => t.rateeprofile_id).HasColumnName("rateeprofile_id");
             this.Property(t => t.date).HasColumnName("date");
             this.Property(t => t.value).HasColumnName("value");
@@ -23,7 +23,7 @@ namespace Anewluv.Domain.Data.Mapping
             // Relationships
             this.HasRequired(t => t.raterprofilemetadata)
                 .WithMany(t => t.raterratingvalues)
-                .HasForeignKey(d => d.profile_id);
+                .HasForeignKey(d => d.raterprofile_id);
           
             this.HasRequired(t => t.rateeprofilemetadata)
                 .WithMany(t => t.rateeratingvalues)

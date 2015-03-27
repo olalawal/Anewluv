@@ -21,7 +21,7 @@ namespace Anewluv.Domain.Data
             this.profiledata_hobby = new List<profiledata_hobby>();
             this.profiledata_hotfeature = new List<profiledata_hotfeature>();
             this.profiledata_lookingfor = new List<profiledata_lookingfor>();
-            this.profiledata = new profiledata();
+            //this.profiledata = new profiledata();
             this.raterratingvalues = new List<ratingvalue>();
             this.rateeratingvalues = new List<ratingvalue>();
        
@@ -30,8 +30,7 @@ namespace Anewluv.Domain.Data
 
         }
 
-        public int id { get; set; }
-        public int profiledata_id { get; set; }
+      //  public int id { get; set; }       
         public int profile_id { get; set; }      
         public virtual ICollection<mailboxfolder> mailboxfolders { get; set; }       
         public virtual ICollection<mailboxmessage> sentmailboxmessages { get; set; }
@@ -49,7 +48,6 @@ namespace Anewluv.Domain.Data
 
         public virtual ICollection<ratingvalue> raterratingvalues { get; set; }
         public virtual ICollection<ratingvalue> rateeratingvalues { get; set; }
-
         public virtual ICollection<searchsetting> searchsettings { get; set; }
 
         

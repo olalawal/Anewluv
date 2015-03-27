@@ -7,7 +7,7 @@ namespace Anewluv.Domain.Data
     {
         public int id { get; set; }
         public int rating_id { get; set; }
-        public int profile_id { get; set; }
+        public int raterprofile_id { get; set; }
         public int rateeprofile_id { get; set; }
         public Nullable<System.DateTime> date { get; set; }
         public Nullable<double> value { get; set; }

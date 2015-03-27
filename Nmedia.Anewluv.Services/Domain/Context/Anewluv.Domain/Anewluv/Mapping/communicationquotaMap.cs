@@ -21,12 +21,12 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.quotavalue).HasColumnName("quotavalue");
             this.Property(t => t.updaterprofile_id).HasColumnName("updaterprofile_id");
             this.Property(t => t.updatedate).HasColumnName("updatedate");
-            this.Property(t => t.updaterprofiledata_profile_id).HasColumnName("updaterprofiledata_profile_id");
+           // this.Property(t => t.updaterprofiledata_profile_id).HasColumnName("updaterprofiledata_profile_id");
 
             // Relationships
             this.HasRequired(t => t.profiledata)
                 .WithMany(t => t.communicationquotas)
-                .HasForeignKey(d => d.updaterprofiledata_profile_id);
+                .HasForeignKey(d => d.updaterprofile_id);
 
         }
     }

@@ -10,11 +10,18 @@ delete from   [Promotions].[dbo].[lu_promoter]
 to migrate changes to the model open up package manager console and run the following command 
 
 
+
+
+
+***IMPORTANT if you keep getting and error saying the connection string does not eexist and it does take the Domain or target porject off
+the Startup deal.  Use another project or se it to multiple startup projects.
+
 if only one contex:
 run only once !
 -base option 1
 PM>Enable-Migrations -v  
 option 2 more contexts  in separate databes
+Enable-Migrations -ContextTypeName Anewluv.Domain.AnewluvContext.
  Enable-Migrations -ContextTypeName "LoggingContext"
 -option 3 mutiple contexts in the same project and same Initial Catalog=
 enable-migrations  -ContextTypeName "NotificationContext" -MigrationsDirectory:NotificationMigrations
@@ -23,6 +30,7 @@ enable-migrations  -ProjectName:DataLayer.CasinoModel  -ContextTypeName  "Notifi
 -option 5 (current) 2 or more contexts in separate Initial Catalog=s and configuration for migration in seprartae folders 
 Enable-Migrations -ContextTypeName "LoggingContext" -MigrationsDirectory:Logging\Migrations -f
 Enable-Migrations -ContextTypeName "NotificationContext" -MigrationsDirectory:Notification\Migrations -f
+ Add-Migration first -ConfigurationTypeName "Anewluv.Domain.Migrations"
 
 then you want to have EF code first scafolt your up-down changes for the balank Initial Catalog= into the current migration file
 

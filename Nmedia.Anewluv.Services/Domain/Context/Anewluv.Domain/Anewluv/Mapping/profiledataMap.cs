@@ -54,7 +54,8 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.profession_id).HasColumnName("profession_id");
             this.Property(t => t.wantsKidstatus_id).HasColumnName("wantsKidstatus_id");
 
-            this.HasRequired(t => t.profilemetadata).WithRequiredDependent(z => z.profiledata);
+           // this.HasRequired(t => t.profilemetadata).WithRequiredDependent(z => z.profiledata);
+            
             this.HasRequired(t => t.profile).WithRequiredDependent(z => z.profiledata);
 
             this.HasMany(t => t.visiblitysettings).WithRequired

@@ -16,8 +16,8 @@ namespace Anewluv.Domain.Data
         }
 
         public int id { get; set; }
-        public int profiledata_id { get; set; }
-        public int profilemeatadata_id  { get; set; }
+       // public int profiledata_id { get; set; }
+       // public int profilemeatadata_id  { get; set; }
         public string username { get; set; }
         public string emailaddress { get; set; }
         public string screenname { get; set; }

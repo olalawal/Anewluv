@@ -8,7 +8,7 @@ namespace Anewluv.Domain.Data
     {
         public mailboxmessage()
         {
-            this.mailboxmessagefolders = new List<mailboxmessagefolder>();
+          //  this.mailboxmessagefolders = new List<mailboxmessagefolder>();
         }
 
         public int id { get; set; }
