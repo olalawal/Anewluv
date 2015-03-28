@@ -647,20 +647,20 @@ namespace Anewluv.Services.Edit
                     model.myperfectmatch = p.myperfectmatch == null ? true : p.myperfectmatch;
                     model.systemmatch = p.systemmatch == null ? false : p.systemmatch;
                     //test of map the list items to the generic listitem object in order to clean up the models so no iselected item on them
-                    model.showmelist =  showmelist.ToList().Select(o => new listitem { id = o.id, description= o.description }).ToList();                  
-                    model.genderlist = genderlist.ToList().Select(o => new lu_gender { id = o.id, description= o.description, selected = false }).ToList();
-                    model.sortbylist = sortbylist.ToList().Select(o => new lu_sortbytype  {  id = o.id, description= o.description, selected = false }).ToList();
+                    model.showmelist = showmelist;
+                    model.genderlist = genderlist;
+                    model.sortbylist = sortbylist;
                     model.agelist = agelist;  //TO do have it use desction and IC as well instead of age object
                 
                     //update the list with the items that are selected.
-                    foreach (lu_showme showme in showmelist.Where(c => p.details.Where(m=>m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.showme).Any(f => f.value == c.id)))
+                    foreach (listitem showme in showmelist.Where(c => p.details.Where(m=>m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.showme).Any(f => f.value == c.id)))
                     {
                        //update the value as checked here on the list
                        model.showmelist.First(d => d.id == showme.id).selected = true; 
                     }
 
                     //update the list with the items that are selected.
-                    foreach (lu_gender gender in genderlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Any(f => f.value == c.id)))
+                    foreach (listitem gender in genderlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.gender).Any(f => f.value == c.id)))
                     {
                         //update the value as checked here on the list
                         model.showmelist.First(d => d.id == gender.id).selected = true;
@@ -668,7 +668,7 @@ namespace Anewluv.Services.Edit
 
 
                     //update the list with the items that are selected.
-                    foreach (lu_sortbytype sortbytype in sortbylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.sortbytype).Any(f => f.value == c.id)))
+                    foreach (listitem sortbytype in sortbylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.sortbytype).Any(f => f.value == c.id)))
                     {
                         //update the value as checked here on the list
                         model.sortbylist.First(d => d.id == sortbytype.id).selected = true;

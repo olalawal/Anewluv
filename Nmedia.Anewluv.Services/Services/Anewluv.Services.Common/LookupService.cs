@@ -17,6 +17,7 @@ using Nmedia.Infrastructure.Domain.Data;
 using Repository.Pattern.UnitOfWork;
 using GeoData.Domain.Models;
 using Nmedia.Infrastructure.DependencyInjection;
+using Nmedia.Infrastructure.DTOs;
 
 namespace Anewluv.Services.Common
 {
@@ -109,8 +110,8 @@ namespace Anewluv.Services.Common
         }
 
 
-        
-        public List<lu_photoapprovalstatus> getphotoapprovalstatuslist()
+
+        public List<listitem> getphotoapprovalstatuslist()
         {
 
 
@@ -204,7 +205,7 @@ namespace Anewluv.Services.Common
 
 
 
-        public List<lu_photostatus> getphotostatuslist()
+        public List<listitem> getphotostatuslist()
         {
 
 
@@ -251,7 +252,7 @@ namespace Anewluv.Services.Common
 
 
 
-        public List<lu_photoimagetype> getphotoimagetypeslist()
+        public List<listitem> getphotoimagetypeslist()
         {
            
          
@@ -898,7 +899,7 @@ namespace Anewluv.Services.Common
         #region "generic lookup and collections"
 
 
-        public List<lu_gender> getgenderlist()
+        public List<listitem> getgenderlist()
         {
            
          
@@ -1025,7 +1026,7 @@ namespace Anewluv.Services.Common
 
 
 
-        public List<lu_bodytype> getbodytypelist()
+        public List<listitem> getbodytypelist()
         {
 
            
@@ -1072,7 +1073,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_ethnicity> getethnicitylist()
+        public List<listitem> getethnicitylist()
         {
 
            
@@ -1118,7 +1119,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_eyecolor> geteyecolorlist()
+        public List<listitem> geteyecolorlist()
         {
 
            
@@ -1164,7 +1165,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_haircolor> gethaircolorlist()
+        public List<listitem> gethaircolorlist()
         {
 
            
@@ -1209,7 +1210,7 @@ namespace Anewluv.Services.Common
      
         }
 
-        public List<lu_hotfeature> gethotfeaturelist()
+        public List<listitem> gethotfeaturelist()
         {
 
            
@@ -1258,7 +1259,7 @@ namespace Anewluv.Services.Common
 
         #region "Criteria Character Dropdowns"
 
-        public List<lu_diet> getdietlist()
+        public List<listitem> getdietlist()
         {
 
 
@@ -1308,7 +1309,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_drinks> getdrinkslist()
+        public List<listitem> getdrinkslist()
         {
 
            
@@ -1355,7 +1356,7 @@ namespace Anewluv.Services.Common
 
       
         }
-        public List<lu_exercise> getexerciselist()
+        public List<listitem> getexerciselist()
         {
 
            
@@ -1400,7 +1401,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_hobby> gethobbylist()
+        public List<listitem> gethobbylist()
         {
 
            
@@ -1447,7 +1448,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_humor> gethumorlist()
+        public List<listitem> gethumorlist()
         {
 
            
@@ -1494,7 +1495,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_politicalview> getpoliticalviewlist()
+        public List<listitem> getpoliticalviewlist()
         {
 
            
@@ -1539,7 +1540,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_religion> getreligionlist()
+        public List<listitem> getreligionlist()
         {
 
            
@@ -1585,7 +1586,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_religiousattendance> getreligiousattendancelist()
+        public List<listitem> getreligiousattendancelist()
         {
 
            
@@ -1630,7 +1631,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_sign> getsignlist()
+        public List<listitem> getsignlist()
         {
 
            
@@ -1676,7 +1677,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_smokes> getsmokeslist()
+        public List<listitem> getsmokeslist()
         {
 
 
@@ -1726,7 +1727,7 @@ namespace Anewluv.Services.Common
 
         #region "Criteria Lifestyle Dropdowns"
 
-        public List<lu_educationlevel> geteducationlevellist()
+        public List<listitem> geteducationlevellist()
         {
 
            
@@ -1772,7 +1773,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_employmentstatus> getemploymentstatuslist()
+        public List<listitem> getemploymentstatuslist()
         {
 
            
@@ -1818,7 +1819,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_havekids> gethavekidslist()
+        public List<listitem> gethavekidslist()
         {
 
            
@@ -1863,7 +1864,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_incomelevel> getincomelevellist()
+        public List<listitem> getincomelevellist()
         {
 
            
@@ -1911,7 +1912,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_livingsituation> getlivingsituationlist()
+        public List<listitem> getlivingsituationlist()
         {
 
            
@@ -1955,7 +1956,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_lookingfor> getlookingforlist()
+        public List<listitem> getlookingforlist()
         {
 
            
@@ -2001,7 +2002,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_maritalstatus> getmaritalstatuslist()
+        public List<listitem> getmaritalstatuslist()
         {
 
            
@@ -2047,7 +2048,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_profession> getprofessionlist()
+        public List<listitem> getprofessionlist()
         {
 
            
@@ -2091,9 +2092,9 @@ namespace Anewluv.Services.Common
 
            
         }
-       
-        
-        public List<lu_wantskids> getwantskidslist()
+
+
+        public List<listitem> getwantskidslist()
         {
 
            

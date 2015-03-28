@@ -205,7 +205,6 @@
     <Compile Include="Anewluv\ViewModels\Account\LostActivationCodeModel.cs" />
     <Compile Include="Anewluv\ViewModels\Actions\MembeActionsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Activity\ActivityModel.cs" />
-    <Compile Include="Anewluv\ViewModels\ListsHandling\lookupitem.cs" />
     <Compile Include="Anewluv\ViewModels\Search\AdvancedSearchModel.cs" />
     <Compile Include="Anewluv\ViewModels\Search\ProfileModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\RegisterExternalLoginModel.cs" />

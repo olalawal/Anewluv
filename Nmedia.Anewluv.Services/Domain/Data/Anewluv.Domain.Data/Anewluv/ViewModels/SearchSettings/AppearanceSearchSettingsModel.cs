@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using Nmedia.Infrastructure.DTOs;
 
 namespace Anewluv.Domain.Data.ViewModels
 {
@@ -23,14 +24,14 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]     
         public List<metricheight> metricheightlist { get; set; } // = new List<string>();
        [DataMember]
-       public List<lu_ethnicity> ethnicitylist { get; set; } // = new List<string>();
+        public List<listitem> ethnicitylist { get; set; } // = new List<string>();
        [DataMember]
-       public List<lu_bodytype> bodytypeslist { get; set; } // = new List<string>();
+       public List<listitem> bodytypeslist { get; set; } // = new List<string>();
        [DataMember]
-       public List<lu_eyecolor > eyecolorlist { get; set; } // = new List<string>();
+       public List<listitem> eyecolorlist { get; set; } // = new List<string>();
        [DataMember]
-       public List<lu_haircolor> haircolorlist { get; set; } // = new List<string>();
+       public List<listitem> haircolorlist { get; set; } // = new List<string>();
        [DataMember]
-       public List<lu_hotfeature> hotfeaturelist { get; set; } // = new List<string>();
+       public List<listitem> hotfeaturelist { get; set; } // = new List<string>();
     }
 }
