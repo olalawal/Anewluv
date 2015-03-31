@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using Nmedia.Infrastructure.DTOs;
 
 namespace Anewluv.Domain.Data.ViewModels
 {
@@ -28,6 +29,6 @@ namespace Anewluv.Domain.Data.ViewModels
          [DataMember]
          public lu_religiousattendance religiousattendance { get; set; }
          [DataMember]
-         public List<lu_hobby> hobbylist { get; set; }
+         public List<listitem> hobbylist { get; set; }
     }
 }

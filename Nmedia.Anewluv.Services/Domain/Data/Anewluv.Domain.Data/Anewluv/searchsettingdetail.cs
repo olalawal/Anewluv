@@ -10,8 +10,8 @@ namespace Anewluv.Domain.Data
     {
         public searchsettingdetail()
         {
-            this.lu_searchsettingdetailtype = new lu_searchsettingdetailtype();
-            this.searchsetting = new searchsetting();
+           // this.lu_searchsettingdetailtype = new lu_searchsettingdetailtype();
+           // this.searchsetting = new searchsetting();
         }
 
         [DataMember]

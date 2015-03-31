@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using Nmedia.Infrastructure.DTOs;
 
 namespace Anewluv.Domain.Data.ViewModels
 {
@@ -16,7 +17,7 @@ namespace Anewluv.Domain.Data.ViewModels
        [DataMember]
        public lu_incomelevel incomelevel { get; set; }
        [DataMember]
-       public List<lu_lookingfor> lookingforlist { get; set; }
+       public List<listitem> lookingforlist { get; set; }
        [DataMember]
        public lu_wantskids wantskids { get; set; }
        [DataMember]

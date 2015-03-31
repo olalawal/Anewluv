@@ -102,7 +102,7 @@ namespace Anewluv.Services.Media
                 {
                    //var db = _unitOfWorkAsync;
                     var test = _unitOfWorkAsync.Repository<lu_photoformat>().Queryable().OfType<lu_photoformat>().ToList();
-                    foreach (lu_photoformat currentformat in _unitOfWorkAsync.Repository<lu_photoformat>().Queryable().OfType<lu_photoformat>().ToList())
+                    foreach (lu_photoformat currentformat in _unitOfWorkAsync.Repository<lu_photoformat>().Query().Include(p=>p.lu_photoImagersizerformat).Select())
                     {
 
 
@@ -114,6 +114,7 @@ namespace Anewluv.Services.Media
                                 try
                                 {
                                     //var settings1 = new ResizeSettings("maxwidth=200&maxheight=200");
+
                                     var settings = new ResizeSettings(currentformat.lu_photoImagersizerformat.description);
                                     ImageResizer.ImageBuilder.Current.Build(inStream, outStream, settings);
                                     var outBytes = outStream.ToArray();
@@ -124,7 +125,7 @@ namespace Anewluv.Services.Media
                                     {
                                         creationdate = DateTime.Now,
                                         description = currentformat.description,
-                                         lu_photoformat = currentformat,
+                                         lu_photoformat = currentformat,formattype_id =currentformat.id, ObjectState= Repository.Pattern.Infrastructure.ObjectState.Added,
                                         image = outBytes,
                                         size = outBytes.Length,
                                         photo_id = photo.id
@@ -892,6 +893,7 @@ namespace Anewluv.Services.Media
                                     photo NewPhoto = new photo();
                                     Guid identifier = Guid.NewGuid();
                                     NewPhoto.id = identifier;
+                                    NewPhoto.size = (long)item.legacysize;
                                     NewPhoto.profile_id = model.profileid; //model.ProfileImage.Length;
                                     // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
                                     NewPhoto.creationdate = item.creationdate;
@@ -900,9 +902,16 @@ namespace Anewluv.Services.Media
                                     // NewPhoto.size = item.size.GetValueOrDefault();                        
                                     //set the rest of the information as needed i.e approval status refecttion etc
                                     NewPhoto.lu_photoimagetype = (item.imagetypeid != null) ? _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.id == item.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
+                                    NewPhoto.imagetype_id = NewPhoto.lu_photoimagetype != null ? NewPhoto.lu_photoimagetype.id : (int?)null; 
+                                   
                                     NewPhoto.lu_photoapprovalstatus = (item.approvalstatusid != null) ? _unitOfWorkAsync.Repository<lu_photoapprovalstatus>().Queryable().ToList().Where(p => p.id == item.approvalstatusid).FirstOrDefault() : null;
+                                    NewPhoto.approvalstatus_id = NewPhoto.lu_photoapprovalstatus != null ? NewPhoto.lu_photoapprovalstatus.id : (int?)null; 
+                                  
                                     NewPhoto.lu_photorejectionreason = (item.rejectionreasonid != null) ? _unitOfWorkAsync.Repository<lu_photorejectionreason>().Queryable().ToList().Where(p => p.id == item.rejectionreasonid).FirstOrDefault() : null;
+                                    NewPhoto.rejectionreason_id = NewPhoto.lu_photorejectionreason != null ? NewPhoto.lu_photorejectionreason.id : (int?)null; 
+
                                     NewPhoto.lu_photostatus = (item.photostatusid != null) ? _unitOfWorkAsync.Repository<lu_photostatus>().Queryable().ToList().Where(p => p.id == item.photostatusid).FirstOrDefault() : null;
+                                    NewPhoto.photostatus_id = NewPhoto.lu_photostatus != null ? NewPhoto.lu_photostatus.id : (int?)null; 
 
                                     var temp = addphotoconverionsb64string(NewPhoto, item, db);
                                     if (temp.Count > 0)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using Nmedia.Infrastructure.DTOs;
 
     //TO DO move this data out to a Searchsettings model and create a full view model maybe 
   //that way the edit code is re-usuable, final code change will be search settings object
@@ -25,9 +26,9 @@ namespace Anewluv.Domain.Data.ViewModels
          [DataMember]
          public lu_eyecolor eyecolor { get; set; }
          [DataMember]
-         public List<lu_hotfeature> hotfeaturelist { get; set; }
+         public List<listitem> hotfeaturelist { get; set; }
          [DataMember]
-         public List<lu_ethnicity > ethnicitylist { get; set; }
+         public List<listitem> ethnicitylist { get; set; }
 
 
       

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{0FBD058F-E21B-4B34-A5CF-6D685F3D7AF8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{5011EA9B-04EB-4519-A657-7A4AA2769144}"
@@ -142,6 +144,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{C347E17D-1241-4D15-BBA1-86B9CAA1B4E6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Misc", "Components\Misc\Misc.csproj", "{D1F87F9F-7628-4874-BA2D-0ADB3CA6B4F2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0F7347CA-C2A4-413D-B3F5-EEB9F1196480} = {0F7347CA-C2A4-413D-B3F5-EEB9F1196480}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnewluvOLDDataForMerge", "AnewluvOLDDataForMerge", "{0DA97F06-6EA1-459A-9FD3-F7D73962CB0D}"
 EndProject

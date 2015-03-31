@@ -16,6 +16,9 @@ namespace Anewluv.Domain.Data
     [DataContract]
     public enum securityquestionEnum : int
     {
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("Your Mothers Maiden Name")]
         [EnumMember]
         YourMothersMaidenName,

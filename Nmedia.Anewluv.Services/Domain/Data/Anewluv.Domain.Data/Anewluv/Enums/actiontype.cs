@@ -16,6 +16,9 @@ namespace Anewluv.Domain.Data
     [DataContract]
     public enum actiontypeEnum : int
     {
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("Like")] 
         [EnumMember]
         Like ,

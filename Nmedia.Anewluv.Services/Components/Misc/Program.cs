@@ -21,11 +21,12 @@ namespace Misc
           //var ddd =   ImageUtils.SmallImageTestdata();
           MisFunctions.StartDebuggingTest();
         //   MisFunctions.ConvertFlatProfileandprofiledata();
-            MisFunctions.ConvertProfileMails();
-            MisFunctions.ConvertProfileCollections();
-        MisFunctions.ConvertProfileMetaDataBasicCollections();
+            //MisFunctions.ConvertProfileMails();
+         //   MisFunctions.ConvertProfileCollections();
+        //MisFunctions.ConvertProfileMetaDataBasicCollections();
+       //   MisFunctions.ConvertProfileSearchSettingsCollections();
         MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
-            MisFunctions.ConvertProfileSearchSettingsCollections();
+          
        //  MisFunctions.FixBadUserGeoData();
          //  FixBadUserGeoData();
         }

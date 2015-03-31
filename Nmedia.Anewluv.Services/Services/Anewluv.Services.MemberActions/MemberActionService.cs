@@ -124,7 +124,7 @@ namespace Anewluv.Services.MemberActions
 
         
 
-        #region "Interest Methods"
+ 
 
         //added 1/29/2010 ola lawal
         //no checks i.e invokes to test values here only updates deletes etc , for now on the MVC side
@@ -1116,7 +1116,7 @@ namespace Anewluv.Services.MemberActions
         #endregion
 
 
-        #endregion
+
 
         //end of basica action methods
         //********************************************************

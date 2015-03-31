@@ -19,6 +19,8 @@ public class ServiceFault
     private string report;
 
     private string _detail;
+    
+  
     public ServiceFault(string message, string Detail = "")
     {
         this.report = message;

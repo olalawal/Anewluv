@@ -343,7 +343,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_abusetype> getabusetypelist()
+        public List<listitem> getabusetypelist()
         {
 
            
@@ -389,7 +389,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_photoImagersizerformat> getphotoImagersizerformatlist()
+        public List<listitem> getphotoImagersizerformatlist()
         {
            
          
@@ -432,7 +432,7 @@ namespace Anewluv.Services.Common
 
         
         }
-        public List<lu_profilestatus> getprofilestatuslist()
+        public List<listitem> getprofilestatuslist()
         {
 
            
@@ -526,7 +526,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_securityleveltype> getsecurityleveltypelist()
+        public List<listitem> getsecurityleveltypelist()
         {
 
 
@@ -573,7 +573,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_showme> getshowmelist()
+        public List<listitem> getshowmelist()
         {
 
            
@@ -619,7 +619,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_sortbytype> getsortbytypelist()
+        public List<listitem> getsortbytypelist()
         {
 
            
@@ -664,7 +664,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_securityquestion> getsecurityquestionlist()
+        public List<listitem> getsecurityquestionlist()
         {
 
            
@@ -755,7 +755,7 @@ namespace Anewluv.Services.Common
         }
 
 
-        public List<lu_profilefiltertype> getprofilefiltertypelist()
+        public List<listitem> getprofilefiltertypelist()
         {
 
            

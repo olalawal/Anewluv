@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost/Anewluv.Web.Services.Media/PhotoService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/Repository.Pattern.Ef6" />
+  <xs:complexType name="lu_photoformat">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/Repository.Pattern.Ef6" base="q1:Entity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="id" type="xs:int" />
+          <xs:element minOccurs="0" name="photoImagersizerformat_id" type="xs:int" />
+          <xs:element minOccurs="0" name="selected" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="lu_photoformat" nillable="true" type="tns:lu_photoformat" />
+</xs:schema>

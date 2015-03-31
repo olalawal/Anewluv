@@ -2687,7 +2687,7 @@ namespace Anewluv.Caching
                 {
                     //context context = new context();
                     //remafill the ages list from the repositry and exit
-                    smokes = (from o in context.Repository<lu_smokes().Queryable().ToList()
+                    smokes = (from o in context.Repository<lu_smokes>().Queryable().ToList()
                               select new listitem
                               {
                                   id = o.id,

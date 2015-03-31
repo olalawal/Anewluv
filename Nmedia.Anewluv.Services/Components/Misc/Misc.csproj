@@ -67,6 +67,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -181,6 +182,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Service References\PhotoService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Testlist.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
@@ -192,6 +198,11 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Anewluv.Domain.Data.ViewModels.AnewluvMessages.datasource" />
+    <None Include="Properties\DataSources\Anewluv.Domain.Data.ViewModels.photoeditmodel.datasource" />
+    <None Include="Properties\DataSources\Anewluv.Domain.Data.ViewModels.PhotoEditViewModel.datasource" />
+    <None Include="Properties\DataSources\Anewluv.Domain.Data.ViewModels.PhotoModel.datasource" />
+    <None Include="Properties\DataSources\Anewluv.Domain.Data.ViewModels.PhotoViewModel.datasource" />
     <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.photo.datasource" />
     <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email.EmailModel.datasource" />
     <None Include="Properties\DataSources\Shell.MVC2.Domain.Entities.Anewluv.ViewModels.Email.EmailViewModel.datasource" />
@@ -202,6 +213,34 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\PhotoService\PhotoService.wsdl" />
+    <None Include="Service References\PhotoService\PhotoService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PhotoService\PhotoService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PhotoService\PhotoService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PhotoService\PhotoService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PhotoService\PhotoService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PhotoService\PhotoService5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PhotoService\PhotoService6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PhotoService\PhotoService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PhotoService\PhotoService8.xsd">
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -228,11 +267,26 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery.signalR-1.0.0.js" />
+    <None Include="Service References\PhotoService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\PhotoService\configuration.svcinfo" />
+    <None Include="Service References\PhotoService\configuration91.svcinfo" />
+    <None Include="Service References\PhotoService\PhotoService.disco" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Common\NET\ServiceContracts\Anewluv.Services.Contracts\Anewluv.Services.Contracts.csproj">
       <Project>{efc502ae-dd76-4278-8738-dd0b1f55a724}</Project>
       <Name>Anewluv.Services.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\ApplicationSpecfic\Anewluv.Api\Anewluv.Api.csproj">
+      <Project>{1e78fd8f-5a46-4894-b7e9-9e572d558562}</Project>
+      <Name>Anewluv.Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\WCF\Nmedia.WCFHelpers\Nmedia.WCFHelpers.csproj">
+      <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
+      <Name>Nmedia.WCFHelpers</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Domain\Context\Anewluv.Domain\Anewluv.Domain.csproj">
       <Project>{a0b04284-784b-4322-a213-db178716efc1}</Project>
@@ -262,6 +316,9 @@
       <Project>{7936f205-b18b-4fc7-aa17-97882576a40a}</Project>
       <Name>AnewLuvFTS.DomainAndData</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\PhotoService\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

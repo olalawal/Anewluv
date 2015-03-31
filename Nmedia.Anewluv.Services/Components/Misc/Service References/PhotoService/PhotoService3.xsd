@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Repository.Pattern.Ef6" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Repository.Pattern.Ef6" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost/Anewluv.Web.Services.Media/PhotoService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/Repository.Pattern.Infrastructure" />
+  <xs:complexType name="Entity">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Repository.Pattern.Infrastructure" minOccurs="0" name="ObjectState" type="q1:ObjectState" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Entity" nillable="true" type="tns:Entity" />
+</xs:schema>

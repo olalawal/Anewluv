@@ -21,7 +21,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public int? heightmax { get; set; }
         [DataMember]
         public int? heightmin { get; set; }
-        [DataMember]     
+       [DataMember]     
         public List<metricheight> metricheightlist { get; set; } // = new List<string>();
        [DataMember]
         public List<listitem> ethnicitylist { get; set; } // = new List<string>();

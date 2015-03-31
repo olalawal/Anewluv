@@ -16,6 +16,10 @@ namespace Anewluv.Domain.Data
     [DataContract]
     public enum searchsettingdetailtypeEnum : int
     {
+
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("bodytype")]
         [EnumMember]
         bodytype,

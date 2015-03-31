@@ -16,7 +16,9 @@ namespace Anewluv.Domain.Data
     [DataContract]
     public enum applicationitemtransfertypeEnum : int
     {
-       
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("Member Permanent one use To other Member")] 
         [EnumMember]
         MemberToMemberOneUse ,

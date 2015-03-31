@@ -16,6 +16,9 @@ namespace Anewluv.Domain.Data
     [DataContract]
     public enum notetypeEnum : int
     {
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("Member abuse report note")] 
         [EnumMember]
         MemberAbuseReportNote ,

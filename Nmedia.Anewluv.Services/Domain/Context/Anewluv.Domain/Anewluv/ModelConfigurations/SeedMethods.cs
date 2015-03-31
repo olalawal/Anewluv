@@ -305,8 +305,9 @@ namespace Anewluv.Domain.Migrations
          
             //ssearchsettingdetail
             //filter an enum for not set since that is the zero value i.e  
-            var searchsettingdetailtypeqry = from searchsettingdetailtypeEnum value in Enum.GetValues(typeof(searchsettingdetailtypeEnum))                             
-                               orderby value // to sort by value; remove otherwise 
+            var searchsettingdetailtypeqry = from searchsettingdetailtypeEnum value in Enum.GetValues(typeof(searchsettingdetailtypeEnum))
+                                             where value != searchsettingdetailtypeEnum.NotSet
+                                             orderby value // to sort by value; remove otherwise 
                                select value;
             searchsettingdetailtypeqry.ToList().ForEach(kvp => context.lu_searchsettingdetailtype.AddOrUpdate(new lu_searchsettingdetailtype()
             {
@@ -317,8 +318,9 @@ namespace Anewluv.Domain.Migrations
 
                //securityquestions
             //filter an enum for not set since that is the zero value i.e  
-            var securityquestionqry = from securityquestionEnum value in Enum.GetValues(typeof(securityquestionEnum))                            
-                               orderby value // to sort by value; remove otherwise 
+            var securityquestionqry = from securityquestionEnum value in Enum.GetValues(typeof(securityquestionEnum))
+                                      where value != securityquestionEnum.NotSet
+                                      orderby value // to sort by value; remove otherwise 
                                select value;
             securityquestionqry.ToList().ForEach(kvp => context.lu_securityquestion.AddOrUpdate(new lu_securityquestion()
             {

@@ -16,6 +16,9 @@ namespace Anewluv.Domain.Data
     [DataContract]
     public enum openidproviderEnum : int
     {
+        [Description("NotSet")]
+        [EnumMember]
+        NotSet,
         [Description("FaceBook")]
         [EnumMember]
         FaceBook,
