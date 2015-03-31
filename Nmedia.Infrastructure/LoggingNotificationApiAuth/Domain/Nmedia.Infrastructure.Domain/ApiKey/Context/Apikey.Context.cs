@@ -26,21 +26,23 @@ namespace Nmedia.Infrastructure.Domain
 
     public partial class ApiKeyContext : DataContext
     {
-        private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
+      
+        
+        static ApiKeyContext()
+        {
+            Database.SetInitializer<ApiKeyContext>(null);
+        }
+
+
+     
+
 
         public ApiKeyContext()
             : base("name=ApikeyContext")
         {
-            this.Configuration.ProxyCreationEnabled = true;
-            this.Configuration.AutoDetectChangesEnabled = true;
-            //rebuild DB if schema is differnt
-            //Initializer init = new Initializer();            
-            // init.InitializeDatabase(this);
-            this.Configuration.ValidateOnSaveEnabled = false;
-            //IsAuditEnabled = true;
-            
-            Database.SetInitializer(
-             new DropCreateDatabaseIfModelChanges<ApiKeyContext>());
+
+
+           
         }
 
 

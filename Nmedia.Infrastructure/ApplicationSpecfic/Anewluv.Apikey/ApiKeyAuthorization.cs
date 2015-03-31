@@ -126,8 +126,7 @@ namespace Anewluv.Apikey
                 //TO do we need to create a server side method that generates or randomizes the apikey so folks cannot use our calls for other things
                 //withoute permission.  For mobile a permemant apikey can be embeded in the code, for web the web server has a call to allow the client to grab the IP 
                 //do not expose it in the client somehow.
-                apikeyonlyURLS.Add("Anewluv.Web.Services.Authentication");  
-                                
+                apikeyonlyURLS.Add("Anewluv.Web.Services.Authentication");                                  
                 apikeyonlyURLS.Add("Anewluv.Web.Services.Common");
                 apikeyonlyURLS.Add("Anewluv.Web.Services.Spatial");
                 apikeyonlyURLS.Add("/Anewluv.Web.Services.Media/PhotoService.svc/Rest/addphotos");  //everyone can call addphotos
@@ -154,18 +153,21 @@ namespace Anewluv.Apikey
 
                 
                 //allow soap access to add photos tempoary soad access 
-                if (urisegments.Last().Replace("/", "").ToLower() == soapsegment)
-                    return true;
+               // if (urisegments.Last().Replace("/", "").ToLower() == soapsegment)
+                  //  return true;
 
                 //allow access to help page, even if they added help to a wrong URL they could not get in
                 //if last segment is rest no operation is getting activated so ok to display help service page
                 //if we have help in the url dont do api key verifcation
-                if (urisegments.Last().Replace("/", "").ToLower() == restsegment &&  urisegments[4].Replace("/", "") == helpsegment)
+
+            
+                var segmentcount = urisegments.Count();
+                if (urisegments.Last().Replace("/", "").ToLower() == helpsegment || urisegments.ToList().Contains(restsegment))
                     return true;
 
                 //check if we are looking at the URLS or specific methods that allow Anonymoys access
                 //seecon part checks the end of the URL i.e updateuserlogintimebyprofileidandsessionid since it could be called from somehwere else
-                if (nonauthenticatedURLS.Contains(urisegments[1].ToString().Replace("/", "")) | (nonauthenticatedURLS.Contains(urisegments[4].ToString()))) return true;
+                if (nonauthenticatedURLS.Contains(urisegments[1].ToString().Replace("/", ""))) return true;
                 
                 //flag the API key only auth URLS
                 if ((apikeyonlyURLS.Contains(urisegments[1].ToString().Replace("/", "")) || apikeyonlyURLS.Contains(path))) apikeyauthonly = true; ;

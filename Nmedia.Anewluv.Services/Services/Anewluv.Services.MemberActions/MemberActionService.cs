@@ -142,7 +142,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public async Task<int> getmyactioncount(ProfileModel model,actiontypeEnum actiontype)
+        public async Task<int> getmyactioncount(ProfileModel model)
         {
           
                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
@@ -153,7 +153,7 @@ namespace Anewluv.Services.MemberActions
                  var task = Task.Factory.StartNew(() =>
                  {
 
-                     return memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, actiontype).Count();
+                     return memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontype).Count();
 
                  });
 
@@ -183,7 +183,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public async Task<int> getothersactioncount(ProfileModel model,actiontypeEnum actiontype)
+        public async Task<int> getothersactioncount(ProfileModel model)
         {
 
                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
@@ -196,7 +196,7 @@ namespace Anewluv.Services.MemberActions
                  {
 
 
-                     return memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontype).Count();
+                     return memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype).Count();
 
 
                  });
@@ -227,7 +227,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// count all total interests
         /// </summary>       
-        public async Task<int> getothersactioncountnew(ProfileModel model,actiontypeEnum actiontype)
+        public async Task<int> getothersactioncountnew(ProfileModel model)
         {
 
                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
@@ -237,7 +237,7 @@ namespace Anewluv.Services.MemberActions
              {
                  var task = Task.Factory.StartNew(() =>
                  {
-                    return memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontype, true).Count();                    
+                    return memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype, true).Count();                    
 
 
                  });
@@ -269,7 +269,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets list of all the profiles I am interested in
         /// </summary 
-        public async Task<SearchResultsViewModel> getmyaction(ProfileModel model, actiontypeEnum actiontype)
+        public async Task<SearchResultsViewModel> getmyaction(ProfileModel model)
         {
 
 
@@ -291,7 +291,7 @@ namespace Anewluv.Services.MemberActions
 
                         
 
-                           var interests = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, actiontype).Select
+                           var interests = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db,model.actiontype).Select
                             (f=>new MemberSearchViewModel 
                                                 {
                                                     interestdate = f.creationdate,
@@ -360,7 +360,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who are interested in me
         /// </summary 
-        public async Task<SearchResultsViewModel> getothersaction(ProfileModel model,actiontypeEnum actiontype)
+        public async Task<SearchResultsViewModel> getothersaction(ProfileModel model)
         {
        
        
@@ -378,7 +378,7 @@ namespace Anewluv.Services.MemberActions
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
 
-                     var whoisinterestedinme = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontype).Select
+                     var whoisinterestedinme = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype).Select
                          (f => new MemberSearchViewModel
                          {
                              interestdate = f.creationdate,
@@ -434,7 +434,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //gets all the members who are interested in me, that ive not viewd yet
         /// </summary 
-        public async Task<SearchResultsViewModel> getothersactionnew(ProfileModel model,actiontypeEnum actiontype)
+        public async Task<SearchResultsViewModel> getothersactionnew(ProfileModel model)
         {
             
 
@@ -454,7 +454,7 @@ namespace Anewluv.Services.MemberActions
                      int? pageint = model.page;
                      int? numberperpageint = model.numberperpage;
 
-                     var whoisinterestedinmenew = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontype, true).Select
+                     var whoisinterestedinmenew = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype, true).Select
                       (f => new MemberSearchViewModel
                       {
                           interestdate = f.creationdate,
@@ -515,7 +515,7 @@ namespace Anewluv.Services.MemberActions
         ///  //not inmplemented
         /// </summary 
         //work on this later
-        public async Task<SearchResultsViewModel> getmutualactions(ProfileModel model,actiontypeEnum actiontype)
+        public async Task<SearchResultsViewModel> getmutualactions(ProfileModel model)
         {
 
                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
@@ -569,7 +569,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// //checks if you already sent and interest to the target profile
         /// </summary        
-        public async Task<bool> checkaction(ProfileModel model,actiontypeEnum actiontype)
+        public async Task<bool> checkaction(ProfileModel model)
         {
 
                ////  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
@@ -580,7 +580,7 @@ namespace Anewluv.Services.MemberActions
                  var task = Task.Factory.StartNew(() =>
                  {
 
-                     return memberactionsextentions.getmyactionbyprofileidandactiontype(model, db,actiontype) 
+                     return memberactionsextentions.getmyactionbyprofileidandactiontype(model, db,model.actiontype) 
                          .Any(r => r.id == model.targetprofileid);
 
 
@@ -611,7 +611,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         /// Adds a New interest
         /// </summary>
-        public async Task addmyaction(ProfileModel model,actiontypeEnum actiontype)
+        public async Task addmyaction(ProfileModel model)
         {
 
 
@@ -634,7 +634,7 @@ namespace Anewluv.Services.MemberActions
 
                             //check  interest first  
                             //if this was a interest being restored just do that part
-                            var existinginterest =  memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontype)
+                            var existinginterest =  memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype)
                             .Where (r => r.id == model.targetprofileid).FirstOrDefault();
 
                            
@@ -710,7 +710,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-        public async Task removemyactionbyprofileid(ProfileModel model,actiontypeEnum actiontype)
+        public async Task removemyactionbyprofileid(ProfileModel model)
         {
 
 
@@ -729,7 +729,7 @@ namespace Anewluv.Services.MemberActions
 
                          //   var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = memberactionsextentions.getmyactionbyprofileidandactiontype(model,db,actiontype).Where(p => p.id == model.targetprofileid).FirstOrDefault();
+                            var interest = memberactionsextentions.getmyactionbyprofileidandactiontype(model,db,model.actiontype).Where(p => p.id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                               if (interest != null)
@@ -779,7 +779,7 @@ namespace Anewluv.Services.MemberActions
         /// <summary>
         ///  Update interest with a view     
         /// </summary 
-        public async Task updateotheractionviewstatus(ProfileModel model, actiontypeEnum actiontype)
+        public async Task updateotheractionviewstatus(ProfileModel model)
         {
             //update method code
             var db = _unitOfWorkAsync;
@@ -794,7 +794,7 @@ namespace Anewluv.Services.MemberActions
                         {
 
 
-                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontype).Where(p => p.id == model.targetprofileid).FirstOrDefault();
+                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype).Where(p => p.id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             if (interest != null)
@@ -843,7 +843,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-         public async Task removeothersactionnbyprofileid(ProfileModel model,actiontypeEnum actiontype)
+         public async Task removeothersactionnbyprofileid(ProfileModel model)
         {
 
 
@@ -859,12 +859,12 @@ namespace Anewluv.Services.MemberActions
                         var task = Task.Factory.StartNew(() =>
                         {
                             //DO not allow to remove blocks
-                            if ((actiontype.ToDescription().ToUpper() == "BLOCK")) return;
+                            if ((model.actiontype.ToDescription().ToUpper() == "BLOCK")) return;
 
 
                             //  var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model,db,actiontype).Where(p => p.id == model.targetprofileid ).FirstOrDefault();
+                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model,db,model.actiontype).Where(p => p.id == model.targetprofileid ).FirstOrDefault();
                             //update the profile status to 2
 
                             if (interest != null)
@@ -917,7 +917,7 @@ namespace Anewluv.Services.MemberActions
         ///  Right now it is a straight delete no history i.e you could keep spamming but they can interest u
         ///  //not inmplemented
         /// </summary 
-         public async Task restoreothersactionbyprofileid(ProfileModel model,actiontypeEnum actiontype)
+         public async Task restoreothersactionbyprofileid(ProfileModel model)
         {
 
 
@@ -935,7 +935,7 @@ namespace Anewluv.Services.MemberActions
 
                            // var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontype).Where(p => p.id == model.targetprofileid).FirstOrDefault();
+                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype).Where(p => p.id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             if (interest != null)

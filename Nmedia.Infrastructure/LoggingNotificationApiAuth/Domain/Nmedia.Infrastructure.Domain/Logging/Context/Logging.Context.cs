@@ -22,44 +22,44 @@ namespace Nmedia.Infrastructure.Domain
     {
 
 
-        private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
+
+        static LoggingContext()
+        {
+            Database.SetInitializer<LoggingContext>(null);
+        }
 
 
 
         public LoggingContext()
             : base("name=LoggingContext")
         {
-            this.Configuration.ValidateOnSaveEnabled = false;
-           // IsAuditEnabled = true;
-          //  ObjectContext.SavingChanges += OnSavingChanges;
-            Database.SetInitializer(
-                new DropCreateDatabaseIfModelChanges<LoggingContext>());
+           
         }
 
         public DbSet<log> logs { get; set; }
 
      
-        public class Initializer : IDatabaseInitializer<LoggingContext>
-        {
-            public void InitializeDatabase(LoggingContext context)
-            {
-                if (!context.Database.Exists())
-                {
-                    //  context.Database.Delete(); 
-                    context.Database.Create();
-                    context.SaveChanges();
-                }
-                else if (!context.Database.CompatibleWithModel(false))
-                {
-                    //TO DO migrations here
-                    context.Database.Delete();
-                    context.Database.Create();
-                    context.SaveChanges();
-                }
+        //public class Initializer : IDatabaseInitializer<LoggingContext>
+        //{
+        //    public void InitializeDatabase(LoggingContext context)
+        //    {
+        //        if (!context.Database.Exists())
+        //        {
+        //            //  context.Database.Delete(); 
+        //            context.Database.Create();
+        //            context.SaveChanges();
+        //        }
+        //        else if (!context.Database.CompatibleWithModel(false))
+        //        {
+        //            //TO DO migrations here
+        //            context.Database.Delete();
+        //            context.Database.Create();
+        //            context.SaveChanges();
+        //        }
 
 
-            }
-        }
+        //    }
+        //}
 
         //#region IContext Implementation
 

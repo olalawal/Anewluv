@@ -26,8 +26,7 @@ namespace Nmedia.Infrastructure.Domain
 
     public partial class NotificationContext : DataContext //DbContext, IUnitOfWork
     {
-        private static readonly IDictionary<Type, object> repos = new Dictionary<Type, object>();
-
+       
         public DbSet<address> address { get; set; }
         public DbSet<systemaddress> systemaddress { get; set; }
         public DbSet<lu_addresstype> lu_addresstype { get; set; }
@@ -41,33 +40,40 @@ namespace Nmedia.Infrastructure.Domain
         public DbSet<message> messages { get; set; }
 
 
+
+        static NotificationContext()
+        {
+            Database.SetInitializer<NotificationContext>(null);
+        }
+
+
         public NotificationContext()
             : base("name=NotificationContext")
         {
-            this.Configuration.ValidateOnSaveEnabled = false;
+         //   this.Configuration.ValidateOnSaveEnabled = false;
           //  IsAuditEnabled = true;
          //   ObjectContext.SavingChanges += OnSavingChanges;
-            Database.SetInitializer(
-            new DropCreateDatabaseIfModelChanges<NotificationContext>());
+         //   Database.SetInitializer(
+         //   new DropCreateDatabaseIfModelChanges<NotificationContext>());
         }
 
 
-        public class Initializer : IDatabaseInitializer<NotificationContext>
-        {
-            public void InitializeDatabase(NotificationContext context)
-            {
-                if (!context.Database.Exists() || !context.Database.CompatibleWithModel(false))
-                {
-                    context.Database.Create();
-                    context.SaveChanges();
-                }
-                else if (!context.Database.CompatibleWithModel(false))
-                {
-                    //DO migrations here
-                }
+        //public class Initializer : IDatabaseInitializer<NotificationContext>
+        //{
+        //    public void InitializeDatabase(NotificationContext context)
+        //    {
+        //        if (!context.Database.Exists() || !context.Database.CompatibleWithModel(false))
+        //        {
+        //            context.Database.Create();
+        //            context.SaveChanges();
+        //        }
+        //        else if (!context.Database.CompatibleWithModel(false))
+        //        {
+        //            //DO migrations here
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
     
 
