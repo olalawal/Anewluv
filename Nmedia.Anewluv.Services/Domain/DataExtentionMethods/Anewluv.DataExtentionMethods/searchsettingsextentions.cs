@@ -28,8 +28,7 @@ namespace Anewluv.DataExtentionMethods
                 allsearchsettings = repo.Query
                 (z => (searchmodel.searchid != 0 && z.id == searchmodel.searchid) ||
                 (searchmodel.profileid != 0 && (z.profile_id == searchmodel.profileid)))                 
-                 .Include(x => x.profilemetadata)
-                .Include(x => x.profilemetadata.profiledata)
+                 .Include(x => x.profilemetadata)               
                 .Include(x => x.profilemetadata.profile)               
                 .Include(y => y.details  )             
                 .Include(y => y.locations)
@@ -65,9 +64,9 @@ namespace Anewluv.DataExtentionMethods
                 //default handling for empty profile ID and other search data
 
                 mysearchsettings = repo.Query(z => z.id == searchid)
-                .Include(x => x.profilemetadata)
-                .Include(x => x.profilemetadata.profiledata)
+                .Include(x => x.profilemetadata)            
                 .Include(x => x.profilemetadata.profile)
+                  .Include(x => x.profilemetadata.profile.profiledata)
                 .Include(y => y.details)
                 .Include(y => y.locations)
                 .Select().FirstOrDefault();

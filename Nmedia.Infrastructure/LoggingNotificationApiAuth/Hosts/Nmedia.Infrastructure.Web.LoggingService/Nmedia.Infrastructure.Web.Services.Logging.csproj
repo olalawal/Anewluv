@@ -113,6 +113,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\WCF\Nmedia.WCFHelpers\Nmedia.WCFHelpers.csproj">
+      <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
+      <Name>Nmedia.WCFHelpers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Services\Contracts\Nmedia.Services.Contracts\Nmedia.Infrastructure.Services.Contracts.csproj">
       <Project>{2322C931-607A-46D5-BC71-BE6B25288B14}</Project>
       <Name>Nmedia.Infrastructure.Services.Contracts</Name>

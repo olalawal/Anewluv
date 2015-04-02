@@ -23,7 +23,7 @@ namespace Anewluv.DataExtentionMethods
         public static  IQueryable<action> getmyactionbyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
         {
             return repo.Query(p => (p.actiontype_id == (int)action & p.active == true & p.deletedbycreatordate == null)
-                  && p.creator_profile_id == profileid).Include(z=>z.targetprofilemetadata.profile).Select().AsQueryable();
+                  && p.creator_profile_id == profileid).Include(z => z.targetprofilemetadata.profile).Select().AsQueryable();
         }
 
         public static IQueryable<action> getothersactiontomebyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
@@ -47,15 +47,12 @@ namespace Anewluv.DataExtentionMethods
         /// </summary>       
      public static List<profile> getmyactionbyprofileidandactiontype(ProfileModel model, IUnitOfWorkAsync db,actiontypeEnum action)
         {
-
-
+         
             try
             {
 
-
-                var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
-                var myactions = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, action);
-                  
+                var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block).ToList();
+                var myactions = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, action).ToList();                 
               
 
                 //filter out blocked profiles 
@@ -63,15 +60,19 @@ namespace Anewluv.DataExtentionMethods
                                      select new
                                      {
                                          ProfilesBlockedId = c.target_profile_id
+                 
                                      };
+                if (myactions.Count == 0) new List<profile>();
 
                 var query =
                      from p in myactions 
                      where (p.targetprofilemetadata.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == p.targetprofilemetadata.profile.id)) //filter out banned profiles or deleted profiles            
                      select p.targetprofilemetadata.profile;
 
+             
                 return query.ToList();
-               // count =          db.Repository<interest>().Count(f => f.profile_id == model.profileid && f.deletedbymemberdate == null);
+
+              
           
             }
             catch (Exception ex)
@@ -93,17 +94,16 @@ namespace Anewluv.DataExtentionMethods
 
              var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
 
-             IQueryable<action> othersactionstome = null;
+             List<action> othersactionstome = null;
 
              if (unviewed.GetValueOrDefault())
              {
-              othersactionstome=   db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, action);
+              othersactionstome=   db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, action).ToList();
              }
              else
              {
-              othersactionstome=    db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, action).Where(p=>p.viewdate !=null);
+              othersactionstome=    db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, action).Where(p=>p.viewdate !=null).ToList();
              }
-
 
              //filter out blocked profiles 
              var MyActiveblocks = from c in blocks
@@ -112,10 +112,12 @@ namespace Anewluv.DataExtentionMethods
                                       ProfilesBlockedId = c.target_profile_id
                                   };
 
+             if (othersactionstome.Count == 0) new List<profile>();
+
              var query =
                      from p in othersactionstome
                      where (p.creatorprofilemetadata.profile.status_id < 3 && !MyActiveblocks.Any(b => b.ProfilesBlockedId == p.creatorprofilemetadata.profile.id)) //filter out banned profiles or deleted profiles            
-                     select p.targetprofilemetadata.profile;
+                     select p.creatorprofilemetadata.profile;
 
              return query.ToList();
              // count =          db.Repository<interest>().Count(f => f.profile_id == model.profileid && f.deletedbymemberdate == null);

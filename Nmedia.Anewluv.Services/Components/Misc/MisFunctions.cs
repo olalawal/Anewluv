@@ -232,7 +232,7 @@ namespace Misc
                         //add the two new objects to profile
                         //********************************
                         //myprofile.profiledata = myprofiledata;
-                        myprofile.profilemetadata = new profilemetadata { profile_id = myprofile.id , ObjectState = ObjectState.Added,profile = null,profiledata = null };
+                        myprofile.profilemetadata = new profilemetadata { profile_id = myprofile.id , ObjectState = ObjectState.Added,profile = null };
                         myprofile.openids = myopenids;
                         myprofile.userlogtimes = mylogtimes;
                         context.profiles.AddOrUpdate(myprofile);
@@ -706,48 +706,59 @@ namespace Misc
 
                 
                 //build  members in role data if it exists
-                foreach (AnewLuvFTS.DomainAndData.Models.profile oldprofile in olddb.profiles)
+                foreach (AnewLuvFTS.DomainAndData.Models.profile oldprofile in olddb.profiles.OrderBy(p=>p.CreationDate))
                 {
                     
                     //query the profile data
                     //var matchedprofile = context.profiles.Where(p => p.emailaddress == membersinroleitem.ProfileID).FirstOrDefault();
                     // Metadata classes are not meant to be instantiated.
                     // myprofile.id = matchedprofile.First().id ;
-                    var matchedprofile = context.profiles.Where(p => p.emailaddress == oldprofile.ProfileID).FirstOrDefault();
+                    var matchedprofile = context.profiles.Where(p => p.emailaddress == oldprofile.ProfileID).Include(z=>z.profilemetadata).FirstOrDefault();
                     var actionobjects = new List<Anewluv.Domain.Data.action>();
                    //LIKES conversion
                      
                        Console.WriteLine("attempting to create Like actions    :" + oldprofile.ProfileID);
                          
                         //handle Likes this user created first
-                        foreach (AnewLuvFTS.DomainAndData.Models.Like Likesitem in olddb.Likes.Where(p=>p.ProfileID == matchedprofile.emailaddress))
+                        foreach (AnewLuvFTS.DomainAndData.Models.Like Likesitem in olddb.Likes.Where(p=>p.ProfileID == matchedprofile.emailaddress && p.LikeID != p.ProfileID))
                         {                          
 
                             Console.WriteLine("attempting to add a creator actiontype of Like for the old profileid of    :" + Likesitem.ProfileID);
                             //add the realted proflemetadatas                            
-                            var matchedLikeprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == Likesitem.LikeID).FirstOrDefault();
+                            var matchedLikeprofilemetadata = context.profilemetadatas.Where(p => p.profile.emailaddress == Likesitem.LikeID ).FirstOrDefault();
                             if (matchedLikeprofilemetadata != null)
                             {
                                 var action = (new action
-                                { creator_profile_id = matchedprofile.id, actiontype_id = (int)actiontypeEnum.Like,  creationdate = Likesitem.LikeDate
-                                , viewdate = Likesitem.LikeViewedDate , deletedbycreatordate= Likesitem.DeletedByProfileIDDate, deletedbytargetdate = Likesitem.DeletedByLikeIDDate
-                                , active = true , target_profile_id = matchedLikeprofilemetadata.profile_id,  ObjectState = ObjectState.Added
+                                {
+                                    creator_profile_id = matchedprofile.id, 
+                                    actiontype_id = (int)actiontypeEnum.Like, 
+                                    creationdate = Likesitem.LikeDate,
+                                    lu_actiontype =null
+                                , viewdate = Likesitem.LikeViewedDate , 
+                                deletedbycreatordate= Likesitem.DeletedByProfileIDDate,
+                                deletedbytargetdate = Likesitem.DeletedByLikeIDDate
+                                , active = true ,
+                                target_profile_id = matchedLikeprofilemetadata.profile_id,
+                                ObjectState = ObjectState.Added,
+                                creatorprofilemetadata=null,
+                                targetprofilemetadata = null
                                     
                                 });
 
 
 
-                                actionobjects.Add(action);
+                                matchedprofile.profilemetadata.createdactions.Add(action);
                                
                                
                                 Console.WriteLine("action type of creator like  added for old profileid of    :" + Likesitem.ProfileID);
                             }
                         }
+                       
 
                         Console.WriteLine("attempting to create Peek actions    :" + oldprofile.ProfileID);
 
                         //handle Peeks this user created first
-                        foreach (AnewLuvFTS.DomainAndData.Models.ProfileView Peeksitem in olddb.ProfileViews.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        foreach (AnewLuvFTS.DomainAndData.Models.ProfileView Peeksitem in olddb.ProfileViews.Where(p => p.ProfileViewerID == matchedprofile.emailaddress && p.ProfileID != p.ProfileViewerID))
                         {
 
                             Console.WriteLine("attempting to add a creator actiontype of Peek for the old profileid of    :" + Peeksitem.ProfileViewerID);
@@ -768,10 +779,12 @@ namespace Misc
                                 ,
                                     active = true,
                                     target_profile_id = matchedPeekprofilemetadata.profile_id,
-                                    ObjectState = ObjectState.Added
+                                    ObjectState = ObjectState.Added, creatorprofilemetadata=null,
+                                    lu_actiontype =null,
+                                targetprofilemetadata = null,
 
                                 });
-                                actionobjects.Add(action);
+                                matchedprofile.profilemetadata.createdactions.Add(action);
 
 
                                 Console.WriteLine("action type of creator Peek  added for old profileid of    :" + Peeksitem.ProfileID);
@@ -782,7 +795,7 @@ namespace Misc
                        Console.WriteLine("attempting to create Interest actions    :" + oldprofile.ProfileID);
 
                         //handle Interests this user created first
-                        foreach (AnewLuvFTS.DomainAndData.Models.Interest Interestsitem in olddb.Interests.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                       foreach (AnewLuvFTS.DomainAndData.Models.Interest Interestsitem in olddb.Interests.Where(p => p.ProfileID == matchedprofile.emailaddress && p.InterestID != p.ProfileID))
                         {
 
                             Console.WriteLine("attempting to add a creator actiontype of Interest for the old profileid of    :" + Interestsitem.ProfileID);
@@ -802,10 +815,12 @@ namespace Misc
                                 ,
                                     active = true,
                                     target_profile_id = matchedInterestprofilemetadata.profile_id,
-                                    ObjectState = ObjectState.Added
-
+                                    ObjectState = ObjectState.Added,
+                                    creatorprofilemetadata = null,
+                                    targetprofilemetadata = null,
+                                    lu_actiontype =null
                                 });
-                                actionobjects.Add(action);
+                                matchedprofile.profilemetadata.createdactions.Add(action);
 
 
                                 Console.WriteLine("action type of creator Interest  added for old profileid of    :" + Interestsitem.ProfileID);
@@ -815,7 +830,7 @@ namespace Misc
                         Console.WriteLine("attempting to create Friend actions    :" + oldprofile.ProfileID);
 
                         //handle Friends this user created first
-                        foreach (AnewLuvFTS.DomainAndData.Models.Friend Friendsitem in olddb.Friends.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        foreach (AnewLuvFTS.DomainAndData.Models.Friend Friendsitem in olddb.Friends.Where(p => p.ProfileID == matchedprofile.emailaddress && p.FriendID != p.ProfileID))
                         {
 
                             Console.WriteLine("attempting to add a creator actiontype of Friend for the old profileid of    :" + Friendsitem.ProfileID);
@@ -832,10 +847,14 @@ namespace Misc
                                     viewdate = Friendsitem.FriendViewedDate                                    
                                 ,
                                     active = true,
-                                    target_profile_id = matchedFriendprofilemetadata.profile_id,ObjectState =  ObjectState.Added
+                                    target_profile_id = matchedFriendprofilemetadata.profile_id,
+                                    ObjectState = ObjectState.Added,
+                                    creatorprofilemetadata = null,
+                                    targetprofilemetadata = null,
+                                     lu_actiontype =null
 
                                 });
-                                actionobjects.Add(action);
+                                matchedprofile.profilemetadata.createdactions.Add(action);
 
 
                                 Console.WriteLine("action type of creator Friend  added for old profileid of    :" + Friendsitem.ProfileID);
@@ -845,7 +864,7 @@ namespace Misc
                         Console.WriteLine("attempting to create Hotlist actions    :" + oldprofile.ProfileID);
 
                         //handle Hotlists this user created first
-                        foreach (AnewLuvFTS.DomainAndData.Models.Hotlist Hotlistsitem in olddb.Hotlists.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        foreach (AnewLuvFTS.DomainAndData.Models.Hotlist Hotlistsitem in olddb.Hotlists.Where(p => p.ProfileID == matchedprofile.emailaddress && p.HotlistID != p.ProfileID))
                         {
 
                             Console.WriteLine("attempting to add a creator actiontype of Hotlist for the old profileid of    :" + Hotlistsitem.ProfileID);
@@ -863,10 +882,13 @@ namespace Misc
                                  
                                  active = true,
                                     target_profile_id = matchedHotlistprofilemetadata.profile_id,
-                                    ObjectState = ObjectState.Added
+                                    ObjectState = ObjectState.Added,
+                                    creatorprofilemetadata = null,
+                                    targetprofilemetadata = null,
+                                     lu_actiontype =null
 
                                 });
-                                actionobjects.Add(action);
+                                matchedprofile.profilemetadata.createdactions.Add(action);
 
 
                                 Console.WriteLine("action type of creator Hotlist  added for old profileid of    :" + Hotlistsitem.ProfileID);
@@ -877,7 +899,7 @@ namespace Misc
                         Console.WriteLine("attempting to create Favorite actions    :" + oldprofile.ProfileID);
 
                         //handle Favorites this user created first
-                        foreach (AnewLuvFTS.DomainAndData.Models.favorite Favoritesitem in olddb.favorites.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        foreach (AnewLuvFTS.DomainAndData.Models.favorite Favoritesitem in olddb.favorites.Where(p => p.ProfileID == matchedprofile.emailaddress && p.FavoriteID != p.ProfileID))
                         {
 
                             Console.WriteLine("attempting to add a creator actiontype of Favorite for the old profileid of    :" + Favoritesitem.ProfileID);
@@ -895,10 +917,13 @@ namespace Misc
                                 ,
                                     active = true,
                                     target_profile_id = matchedFavoriteprofilemetadata.profile_id,
-                                    ObjectState = ObjectState.Added
+                                    ObjectState = ObjectState.Added,
+                                    creatorprofilemetadata = null,
+                                    targetprofilemetadata = null,
+                                     lu_actiontype =null
 
                                 });
-                                actionobjects.Add(action);
+                                matchedprofile.profilemetadata.createdactions.Add(action);
 
 
                                 Console.WriteLine("action type of creator Favorite  added for old profileid of    :" + Favoritesitem.ProfileID);
@@ -909,7 +934,7 @@ namespace Misc
                         Console.WriteLine("attempting to create Block actions    :" + oldprofile.ProfileID);
 
                         //handle Blocks this user created first
-                        foreach (AnewLuvFTS.DomainAndData.Models.Mailboxblock Blocksitem in olddb.Mailboxblocks.Where(p => p.ProfileID == matchedprofile.emailaddress))
+                        foreach (AnewLuvFTS.DomainAndData.Models.Mailboxblock Blocksitem in olddb.Mailboxblocks.Where(p => p.ProfileID == matchedprofile.emailaddress && p.BlockID != p.ProfileID))
                         {
 
                             Console.WriteLine("attempting to add a creator actiontype of Block for the old profileid of    :" + Blocksitem.ProfileID);
@@ -928,10 +953,13 @@ namespace Misc
                                 
                                     active = true,
                                     target_profile_id = matchedBlockprofilemetadata.profile_id,
-                                    ObjectState = ObjectState.Added
+                                    ObjectState = ObjectState.Added,
+                                    creatorprofilemetadata = null,
+                                    targetprofilemetadata = null,
+                                     lu_actiontype =null
 
                                 });
-                                actionobjects.Add(action);
+                                matchedprofile.profilemetadata.createdactions.Add(action);
 
 
                                 Console.WriteLine("action type of creator Block  added for old profileid of    :" + Blocksitem.ProfileID);
@@ -939,11 +967,11 @@ namespace Misc
                         }
 
 
- 
+                        context.SaveChanges();
 
                     Console.WriteLine("saving  " + actionobjects.Count()  + " actions for profileID :" + oldprofile.ProfileID);
-                    matchedprofile.profilemetadata.createdactions = actionobjects;
-                    context.SaveChanges();
+                  
+                 
 
                 }
                

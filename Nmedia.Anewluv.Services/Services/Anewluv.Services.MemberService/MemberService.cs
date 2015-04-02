@@ -198,7 +198,7 @@ namespace Anewluv.Services.Members
                 try
                 {
 
-                 return  db.Repository<profiledata>().Queryable().Single(p=>p.profilemetadata.photos.ToList().Any(z=>z.id == model.photoid)).lu_gender.description;
+                 return  db.Repository<profiledata>().Query(p=>p.profile.profilemetadata.photos.ToList().Any(z=>z.id == model.photoid)).Select().FirstOrDefault().lu_gender.description;
                    
                 }
                 catch (Exception ex)

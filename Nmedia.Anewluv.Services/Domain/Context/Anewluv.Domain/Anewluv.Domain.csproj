@@ -36,11 +36,11 @@
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -69,6 +69,10 @@
     <Compile Include="Migrations\201503260904285_first.cs" />
     <Compile Include="Migrations\201503260904285_first.Designer.cs">
       <DependentUpon>201503260904285_first.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504020641040_profilemetatdataclean.cs" />
+    <Compile Include="Migrations\201504020641040_profilemetatdataclean.Designer.cs">
+      <DependentUpon>201504020641040_profilemetatdataclean.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.cs" />
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.Designer.cs">
@@ -208,6 +212,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201503260904285_first.resx">
       <DependentUpon>201503260904285_first.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504020641040_profilemetatdataclean.resx">
+      <DependentUpon>201504020641040_profilemetatdataclean.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\AnewluvMigrations\201503080503290_first.resx">
       <DependentUpon>201503080503290_first.cs</DependentUpon>

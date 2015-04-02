@@ -121,7 +121,7 @@ namespace Misc
                     //********************************
                     //myprofile.profiledata = myprofiledata;
 
-                    myprofile.profilemetadata = new profilemetadata { profile_id = myprofile.id, ObjectState = ObjectState.Added, profile = null, profiledata = null };
+                    myprofile.profilemetadata = new profilemetadata { profile_id = myprofile.id, ObjectState = ObjectState.Added, profile = null};
                     context.SaveChanges();
 
                 }

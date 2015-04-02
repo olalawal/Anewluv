@@ -115,7 +115,7 @@ namespace Nmedia.Services.Authorization
                 FaultReason faultreason = new FaultReason("Error in member Apikey service");
                 string ErrorMessage = "";
                 string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+              throw ex;
 
                 //throw convertedexcption;
             }
@@ -175,7 +175,7 @@ namespace Nmedia.Services.Authorization
                 FaultReason faultreason = new FaultReason("Error in member Apikey service");
                 string ErrorMessage = "";
                 string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+              throw ex;
 
                 //throw convertedexcption;
             }
@@ -226,7 +226,7 @@ namespace Nmedia.Services.Authorization
                 FaultReason faultreason = new FaultReason("Error in member Apikey service");
                 string ErrorMessage = "";
                 string ErrorDetail = "ErrorMessage: " + ex.Message;
-                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+              throw ex;
 
                 //throw convertedexcption;
             }
@@ -302,7 +302,7 @@ namespace Nmedia.Services.Authorization
                     FaultReason faultreason = new FaultReason("Error in member Apikey service");
                     string ErrorMessage = "";
                     string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                  throw ex;
 
                     //throw convertedexcption;
                 }
@@ -413,7 +413,8 @@ namespace Nmedia.Services.Authorization
                            user.registeringapplication = registringapplication;
 
                            _unitOfWorkAsync.Repository<user>().Insert(user);
-                           var j = _unitOfWorkAsync.Commit();
+                        //only use commit if we have a transaction
+                           var j = _unitOfWorkAsync.SaveChanges();
                           //  db.Add(user);
                             //save all changes bro
                            // int i = db.Commit();
@@ -467,7 +468,7 @@ namespace Nmedia.Services.Authorization
         //        FaultReason faultreason = new FaultReason("Error in member Apikey service");
         //        string ErrorMessage = "";
         //        string ErrorDetail = "ErrorMessage: " + ex.Message;
-        //        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+        //      throw ex;
 
         //        //throw convertedexcption;
         //    }

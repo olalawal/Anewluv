@@ -25,7 +25,8 @@ namespace Misc
          //   MisFunctions.ConvertProfileCollections();
         //MisFunctions.ConvertProfileMetaDataBasicCollections();
        //   MisFunctions.ConvertProfileSearchSettingsCollections();
-        MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
+      //  MisFunctions.ConvertProfileDataMetadataCollectionsPhoto();
+          MisFunctions.ConvertProfileMetaActionsToNewFormat();
           
        //  MisFunctions.FixBadUserGeoData();
          //  FixBadUserGeoData();

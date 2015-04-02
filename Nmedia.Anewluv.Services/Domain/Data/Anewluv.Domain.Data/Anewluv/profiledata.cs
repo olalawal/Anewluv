@@ -75,10 +75,9 @@ namespace Anewluv.Domain.Data
         public virtual lu_sign lu_sign { get; set; }
         public virtual lu_smokes lu_smokes { get; set; }
         public virtual lu_wantskids lu_wantskids { get; set; }
-
        
         
-        public virtual profilemetadata profilemetadata { get; set; }      
+       
         public virtual profile profile { get; set; }  
 
 

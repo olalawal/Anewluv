@@ -56,7 +56,7 @@ namespace Anewluv.Domain.Data.Mapping
 
            // this.HasRequired(t => t.profilemetadata).WithRequiredDependent(z => z.profiledata);
             
-            this.HasRequired(t => t.profile).WithRequiredDependent(z => z.profiledata);
+            this.HasRequired(t => t.profile).WithOptional(z => z.profiledata);
 
             this.HasMany(t => t.visiblitysettings).WithRequired
              (t => t.profiledata)

@@ -10,9 +10,10 @@ namespace Anewluv.Domain.Data
     {
         public action()
         {
-            this.lu_actiontype = new lu_actiontype();
-            this.targetprofilemetadata = new profilemetadata();
-            this.creatorprofilemetadata = new profilemetadata();
+          //  this.lu_actiontype = new lu_actiontype();
+          //  this.targetprofilemetadata = new profilemetadata();
+          //  this.creatorprofilemetadata = new profilemetadata();
+            this.notes = new List<note>();
         }
 
         [DataMember]  

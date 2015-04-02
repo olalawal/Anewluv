@@ -23,9 +23,7 @@ namespace Anewluv.Domain.Data.Mapping
 
             // Relationships
             this.HasRequired(t => t.profile)
-                .WithOptional(t => t.profilemetadata);
-
-            this.HasRequired(t => t.profiledata).WithOptional(z => z.profilemetadata);
+                .WithOptional(p=>p.profilemetadata);
 
             this.HasMany(t => t.mailboxfolders).WithRequired(z => z.profilemetadata).HasForeignKey(z => z.profile_id);
 

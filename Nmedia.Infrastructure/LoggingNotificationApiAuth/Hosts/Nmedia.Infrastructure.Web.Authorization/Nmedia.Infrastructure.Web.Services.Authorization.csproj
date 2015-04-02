@@ -62,10 +62,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Common\NET\Shared\SharedDLLs\CommonInstanceFactory.Extensions.Wcf.Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework">
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Nmedia.Anewluv.Services\Domain\Context\Anewluv.Domain\bin\Debug\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Nmedia.Anewluv.Services\Domain\Context\Anewluv.Domain\bin\Debug\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -110,6 +112,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\WCF\Nmedia.WCFHelpers\Nmedia.WCFHelpers.csproj">
+      <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
+      <Name>Nmedia.WCFHelpers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Nmedia.Infrastructure.DependencyResolution.Ninject\Nmedia.Infrastructure.DependencyResolution.Ninject.csproj">
       <Project>{b848bd2c-ba7c-4b9f-a2ee-8501a05acae6}</Project>
       <Name>Nmedia.Infrastructure.DependencyResolution.Ninject</Name>

@@ -28,6 +28,11 @@ namespace Anewluv.Domain.Data
             this.searchsettings = new List<searchsetting>();
             this.photoreviews = new List<photoreview>();
 
+             this.createdactions = new List<action>();
+            this.targetofactions= new List<action>();
+        //consoldiated applications]
+            this.applications = new List<application>();
+
         }
 
       //  public int id { get; set; }       
@@ -42,8 +47,7 @@ namespace Anewluv.Domain.Data
         public virtual ICollection<profiledata_ethnicity> profiledata_ethnicity { get; set; }
         public virtual ICollection<profiledata_hobby> profiledata_hobby { get; set; }
         public virtual ICollection<profiledata_hotfeature> profiledata_hotfeature { get; set; }
-        public virtual ICollection<profiledata_lookingfor> profiledata_lookingfor { get; set; }
-        public virtual profiledata profiledata { get; set; }
+        public virtual ICollection<profiledata_lookingfor> profiledata_lookingfor { get; set; }       
         public virtual profile profile { get; set; }
 
         public virtual ICollection<ratingvalue> raterratingvalues { get; set; }
