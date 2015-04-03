@@ -40,9 +40,13 @@ namespace Anewluv.Domain.Data.ViewModels
     
       //mail
         [DataMember]
-        public int? mailnewcount { get; set; }
+        public int? mailreceivednewcount { get; set; }
         [DataMember]
-        public int? mailcount { get; set; }   
+        public int?  mailreceivedcount { get; set; }
+        [DataMember]
+        public int? mailsentcount { get; set; }
+        [DataMember]
+        public int? mailsentunreadcount { get; set; }   
 
       //to do chat ?
        

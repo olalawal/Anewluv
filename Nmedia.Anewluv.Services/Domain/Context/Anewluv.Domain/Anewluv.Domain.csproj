@@ -74,6 +74,10 @@
     <Compile Include="Migrations\201504020641040_profilemetatdataclean.Designer.cs">
       <DependentUpon>201504020641040_profilemetatdataclean.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504030047562_profiledata_profileidremoveal.cs" />
+    <Compile Include="Migrations\201504030047562_profiledata_profileidremoveal.Designer.cs">
+      <DependentUpon>201504030047562_profiledata_profileidremoveal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.cs" />
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.Designer.cs">
       <DependentUpon>201503080503290_first.cs</DependentUpon>
@@ -215,6 +219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504020641040_profilemetatdataclean.resx">
       <DependentUpon>201504020641040_profilemetatdataclean.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504030047562_profiledata_profileidremoveal.resx">
+      <DependentUpon>201504030047562_profiledata_profileidremoveal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\AnewluvMigrations\201503080503290_first.resx">
       <DependentUpon>201503080503290_first.cs</DependentUpon>

@@ -45,7 +45,7 @@ Add-Migration first -ConfigurationTypeName "Nmedia.Infrastructure.Domain.Logging
 
 adding another migration sample after this :
 
-Add-Migration MigrationFromJohn -f -ConfigurationTypeName "Configuration" -verbose
+Add-Migration MigrationFromJohn -f -ConfigurationTypeName "Anewluv.Domain.Migrations.Configuration" -verbose
 
 The Designer Code for this migration file includes a snapshot of your current Code First model.
 This snapshot is used to calculate the changes to your model when you scaffold the next migration. 

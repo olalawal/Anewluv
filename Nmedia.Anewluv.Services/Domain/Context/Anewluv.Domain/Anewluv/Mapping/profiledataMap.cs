@@ -30,7 +30,7 @@ namespace Anewluv.Domain.Data.Mapping
             this.Property(t => t.mycatchyintroLine).HasColumnName("mycatchyintroLine");
             this.Property(t => t.phone).HasColumnName("phone");
             this.Property(t => t.postalcode).HasColumnName("postalcode");
-            this.Property(t => t.profilemetadata_profile_id).HasColumnName("profilemetadata_profile_id");
+            //this.Property(t => t.profilemetadata_profile_id).HasColumnName("profilemetadata_profile_id");
             this.Property(t => t.visibilitysettings_id).HasColumnName("visibilitysettings_id");
             this.Property(t => t.gender_id).HasColumnName("gender_id");
             this.Property(t => t.bodytype_id).HasColumnName("bodytype_id");

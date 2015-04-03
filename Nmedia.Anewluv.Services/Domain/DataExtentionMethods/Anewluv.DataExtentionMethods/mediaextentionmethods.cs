@@ -59,6 +59,7 @@ namespace Anewluv.DataExtentionMethods
                                      orginalsize = r.photo.size,
                                      imagecaption = r.photo.imagecaption,
                                      creationdate = r.photo.creationdate,
+                                     photodetail = r.photo
 
                                  }).ToList()
                             select new PhotoModel
@@ -72,6 +73,7 @@ namespace Anewluv.DataExtentionMethods
                                 orginalsize = p.orginalsize,
                                 imagecaption = p.imagecaption,
                                 creationdate = p.creationdate,
+                                photostatusid = p.photodetail.photostatus_id.GetValueOrDefault()
 
                             }).FirstOrDefault();
 
@@ -112,6 +114,7 @@ namespace Anewluv.DataExtentionMethods
                                      orginalsize = p.photo.size,
                                      imagecaption = p.photo.imagecaption,
                                      creationdate = p.photo.creationdate,
+                                     photostatusid = p.photo.photostatus_id.GetValueOrDefault()
                                  });
 
                     if (model.Count() > Convert.ToInt32(pagesize)) { pagesize = model.Count().ToString(); }
@@ -151,6 +154,7 @@ namespace Anewluv.DataExtentionMethods
                            //   profileimagetype = p.imagetype.description,
                            imagecaption = p.photo.imagecaption,
                            creationdate = p.photo.creationdate,
+                           photostatusid = p.photo.photostatus_id.GetValueOrDefault()
                            //   checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
                        })
                              .OrderBy(o => o.creationdate)
@@ -168,6 +172,7 @@ namespace Anewluv.DataExtentionMethods
                            //  profileimagetype = p.imagetype.description,
                            imagecaption = p.photo.imagecaption,
                            creationdate = p.photo.creationdate,
+                           photostatusid = p.photo.photostatus_id.GetValueOrDefault()
                            //   photostatusid = p.photostatus.id,
                            //  checkedprimary = (p.photostatus.id == (int)photostatusEnum.Gallery)
                        })

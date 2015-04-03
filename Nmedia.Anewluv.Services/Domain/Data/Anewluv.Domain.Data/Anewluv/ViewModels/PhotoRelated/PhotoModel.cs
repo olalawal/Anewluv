@@ -36,6 +36,8 @@ namespace Anewluv.Domain.Data.ViewModels
         public long? orginalsize { get; set; }
         [DataMember]
         public long? convertedsize { get; set; }
+        [DataMember]
+        public int photostatusid { get; set; }
      //   [DataMember]
       //  public lu_photostatus photostatus { get; set; }
        // [DataMember]

@@ -73,11 +73,11 @@ namespace Anewluv.DataExtentionMethods
                     //to do build a custom include for this using search :
                 //https://www.google.com/?gws_rd=ssl#q=linq++findinculding+extention
                 //http://damieng.com/blog/2010/05/21/include-for-linq-to-sql-and-maybe-other-providers
-                    if (profile.profilemetadata == null)
-                    {
-                        profile.profiledata = db.Repository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id) });
-                         profile.profilemetadata = db.Repository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id)});
-                    }
+                    //if (profile.profilemetadata == null)
+                    //{
+                    //    profile.profiledata = db.Repository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id) });
+                    //     profile.profilemetadata = db.Repository<profilemetadata>().getprofilemetadatabyprofileid(new ProfileModel { profileid = Convert.ToInt32(modeltomap.id)});
+                    //}
                     //12-6-2012 olawal added the info for distance between members only if all these values are fufilled
                     if (viewerprofile.latitude != null &&
                         viewerprofile.longitude != null &&
@@ -104,7 +104,7 @@ namespace Anewluv.DataExtentionMethods
                     // modelprofile = profile.profile;
                     model.longitude = (double)profile.profiledata.longitude;
                     model.latitude = (double)profile.profiledata.latitude;
-                    model.hasgalleryphoto = profile.profilemetadata.photos.Where(i => i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false;
+                 //   model.hasgalleryphoto = profile.    profilemetadata.photos.Where(i => i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false;
                     model.creationdate = profile.creationdate;
                     model.city = Extensions.ReduceStringLength(profile.profiledata.city, 11);
                     model.lastlogindate = profile.logindate;
@@ -133,14 +133,17 @@ namespace Anewluv.DataExtentionMethods
 
                         model.profilephotos.ProfilePhotosApproved = db.Repository<photoconversion>().getpagedphotomodelbyprofileidandstatus(
                             profile.id.ToString(),
-                            photoapprovalstatusEnum.Approved.ToString(), ((int)photoformatEnum.Thumbnail).ToString(), page.ToString(), ps.ToString());   //membereditRepository.GetPhotoViewModel(Approved, NotApproved, Private, MyPhotos);
+                            photoapprovalstatusEnum.Approved.ToString(), ((int)photoformatEnum.Thumbnail).ToString(), page.ToString(), ps.ToString());
+                        model.galleryphoto = model.profilephotos.ProfilePhotosApproved.Where(p => p.photostatusid == (int)photostatusEnum.Gallery).FirstOrDefault();
                     }// approvedphotos = photorepository.
                     else
                     {
                         // model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
                         model.galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString());
+
                     }
 
+                    model.hasgalleryphoto = model.galleryphoto != null ? true : false;
                     // Api.DisposeGeoService();
 
                     return model;
@@ -301,7 +304,7 @@ namespace Anewluv.DataExtentionMethods
                     //handle perfect match settings here .
                     // first load perfect match settings for this user from Initial Catalog=
                     //set defaults if no values are available
-                    var PerfectMatchSettings = metadata.searchsettings.First();
+                    var PerfectMatchSettings = metadata.searchsettings.FirstOrDefault(); 
 
 
                     //basic search settings here
@@ -540,8 +543,8 @@ namespace Anewluv.DataExtentionMethods
                 // model.Profile = model.profile;
                 model.profile_id = profile.id;
                 //4-28-2012 added mapping for profile visiblity
-                
-                model.profilevisiblity = profile.profiledata.visiblitysettings.First();   //swict this to have flags 
+
+                model.profilevisiblity = profile.profiledata.visiblitysettings.FirstOrDefault();   //swict this to have flags 
                 model.profile = profile;
                
                 //on first load this should always be false

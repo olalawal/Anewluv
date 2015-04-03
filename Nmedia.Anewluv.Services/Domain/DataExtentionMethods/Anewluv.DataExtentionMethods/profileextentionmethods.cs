@@ -41,7 +41,34 @@ namespace Anewluv.DataExtentionMethods
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)
         {
 
-            return repo.Query(p => p.id == model.profileid).Include(x => x.profiledata).Include(z => z.profilemetadata).Include(z => z.profilemetadata.searchsettings).Select().FirstOrDefault();
+            return repo.Query(p => p.id == model.profileid).Include(x => x.profiledata)
+                .Include(z => z.profilemetadata)
+                  .Include(i => i.profilemetadata.searchsettings.Select(s => s.details)).Select().FirstOrDefault();
+               // .Include(z => z.profilemetadata.searchsettings).Select().FirstOrDefault();
+        }
+        /// <summary>
+        /// This extention returns even more metadata stuff
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static profile getprofileandmetadatabyprofileid(this IRepository<profile> repo, ProfileModel model)
+        {
+
+            return repo.Query(p => p.id == model.profileid).Include(x => x.profiledata)
+                .Include(z => z.profilemetadata)
+                   .Include(z => z.profilemetadata.photos.Select(s=>s.photoconversions))
+                      .Include(z => z.profilemetadata.profiledata_ethnicity)
+                         .Include(z => z.profilemetadata.profiledata_hobby)
+                            .Include(z => z.profilemetadata.profiledata_hotfeature)
+                    .Include(z => z.profilemetadata.profiledata_lookingfor)
+                    .Include(z => z.profilemetadata.rateeratingvalues)
+                    .Include(z => z.profilemetadata.createdactions)
+                    .Include(z => z.profilemetadata.targetofactions)
+                    .Include(z => z.profilemetadata.applications)
+
+
+                  .Include(i => i.profilemetadata.searchsettings.Select(s => s.details)).Select().FirstOrDefault();
         }
 
         public static profile getprofilebyscreenname(this IRepository<profile> repo, ProfileModel model)

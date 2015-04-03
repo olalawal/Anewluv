@@ -974,7 +974,7 @@ namespace Anewluv.Services.Edit
                 {
                     //we have an existing value and we want to remove it in this case since selected was false for sure
                     //we will be doing a remove either way
-                    var temp = _unitOfWorkAsync.Repository<profiledata_ethnicity>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.ethnicty_id == ethnicity.id).First();
+                    var temp = _unitOfWorkAsync.Repository<profiledata_ethnicity>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.ethnicty_id == ethnicity.id).FirstOrDefault(); 
                     if (temp != null)
                         _unitOfWorkAsync.Repository<profiledata_ethnicity>().Delete(temp);               
                 }
@@ -1010,7 +1010,7 @@ namespace Anewluv.Services.Edit
                 { //exists means we want to remove it
                     if (currentprofilemetadata.profiledata_hotfeature.Any(p => p.id == hotfeature.id))
                     {
-                        var temp = _unitOfWorkAsync.Repository<profiledata_hotfeature>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hotfeature_id == hotfeature.id).First();
+                        var temp = _unitOfWorkAsync.Repository<profiledata_hotfeature>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hotfeature_id == hotfeature.id).FirstOrDefault(); 
                         _unitOfWorkAsync.Repository<profiledata_lookingfor>().Delete(temp);
 
                     }
@@ -1042,7 +1042,7 @@ namespace Anewluv.Services.Edit
                 { //exists means we want to remove it
                     if (currentprofilemetadata.profiledata_hobby.Any(p => p.id == hobby.id))
                     {
-                        var temp =  _unitOfWorkAsync.Repository<profiledata_hobby>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hobby_id == hobby.id).First();
+                        var temp =  _unitOfWorkAsync.Repository<profiledata_hobby>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.hobby_id == hobby.id).FirstOrDefault(); 
                         _unitOfWorkAsync.Repository<profiledata_hobby>().Delete(temp);
 
                     }
@@ -1079,7 +1079,7 @@ namespace Anewluv.Services.Edit
 
                     if (currentprofilemetadata.profiledata_lookingfor.Any(p => p.id == lookingfor.id))
                     {
-                        var temp = _unitOfWorkAsync.Repository<profiledata_lookingfor>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.lookingfor_id == lookingfor.id).First();
+                        var temp = _unitOfWorkAsync.Repository<profiledata_lookingfor>().Queryable().Where(p => p.profile_id == currentprofilemetadata.profile_id && p.lookingfor_id == lookingfor.id).FirstOrDefault(); 
                         _unitOfWorkAsync.Repository<profiledata_lookingfor>().Delete(temp);
 
                     }

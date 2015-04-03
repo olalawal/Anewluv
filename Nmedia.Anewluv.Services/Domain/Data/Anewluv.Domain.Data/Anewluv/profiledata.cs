@@ -29,7 +29,7 @@ namespace Anewluv.Domain.Data
         public string mycatchyintroLine { get; set; }
         public string phone { get; set; }
         public string postalcode { get; set; }
-        public Nullable<int> profilemetadata_profile_id { get; set; }
+        //public Nullable<int> profilemetadata_profile_id { get; set; }
         public Nullable<int> visibilitysettings_id { get; set; }
         public Nullable<int> gender_id { get; set; }
         public Nullable<int> bodytype_id { get; set; }

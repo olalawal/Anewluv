@@ -16,7 +16,65 @@ namespace Anewluv.DataExtentionMethods
     public static class mailextentions
     {
 
-      
+
+
+        public static List<mailviewmodel> getallmailbyprofileid(ProfileModel model,  IUnitOfWorkAsync db)
+        {
+
+
+            try
+            {
+
+                var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
+                var messages = db.Repository<mailboxmessagefolder>()
+                    .Query(p => p.mailboxmessage.recipient_id == model.profileid | p.mailboxmessage.sender_id == model.profileid)
+                    .Include(z => z.mailboxmessage)
+                   //  .Include(z => z.mailboxmessage.recipientprofilemetadata.profile.profiledata)
+                   //   .Include(z => z.mailboxmessage.senderprofilemetadata.profile.profiledata)
+                    .Select().AsQueryable();
+                //var messagefolders = db.Repository<mailboxmessagefolder>().Queryable().Where(p=>p.);
+
+
+                var dd = (from p in messages
+                          where (!blocks.Any(z => z.target_profile_id != p.mailboxmessage.sender_id))
+                          select new mailviewmodel
+                          {
+                              sender_id = p.mailboxmessage.sender_id,
+                              recipient_id = p.mailboxmessage.recipient_id, body = p.mailboxmessage.body,
+                              readdate = p.readdate 
+                              //subject = p.mailboxmessage.subject,
+                            //  recipientscreenname = p.mailboxmessage.recipientprofilemetadata.profile.screenname,
+                            //  senderscreenname = p.mai
+
+                          });
+
+                return dd.ToList();
+
+                // var query =                    
+                //     (from p in messages
+                ////   join f in messagefolders on new { a = p.id} equals new { a = f.mailboxmessage_id}
+                //    where (z- .mailboxfolder_id == mailboxfolderid && !MyActiveblocks.Any(b => b.ProfilesBlockedId == p.sender_id)) //filter out banned profiles or deleted profiles            
+                //      select new mailviewmodel
+                //           {
+                //               sender_id = p.sender_id,
+                //               recipient_id = p.recipient_id                             
+
+                //           });
+
+                // return query.Count();
+
+
+
+
+            }
+
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
 
         //INTEREST methods
         ////////////////////////////////////////
@@ -37,7 +95,7 @@ namespace Anewluv.DataExtentionMethods
 
 
                 var dd = (from p in messages
-                          where (blocks.Any(z=>z.target_profile_id !=p.mailboxmessage.sender_id) )                         
+                          where (!blocks.Any(z=>z.target_profile_id !=p.mailboxmessage.sender_id) )                         
                          select new mailviewmodel
                  {
                      sender_id = p.mailboxmessage.sender_id,
@@ -91,7 +149,7 @@ namespace Anewluv.DataExtentionMethods
 
                   var query =
                 (from p in messages                
-                 where (blocks.Any(z=>z.target_profile_id !=p.mailboxmessage.sender_id)  && p.readdate == null) //filter out banned profiles or deleted profiles            
+                 where (!blocks.Any(z=>z.target_profile_id !=p.mailboxmessage.sender_id)  && p.readdate == null) //filter out banned profiles or deleted profiles            
                  select new mailviewmodel
                  {
                      sender_id = p.mailboxmessage.sender_id,

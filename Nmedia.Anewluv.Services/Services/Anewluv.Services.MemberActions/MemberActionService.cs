@@ -1166,10 +1166,11 @@ namespace Anewluv.Services.MemberActions
 
                         //place holder
                         int inboxfolderid = 1;
-
-                        MemberActions.mailcount = mailextentions.getmailcountbyfolderid(model, inboxfolderid, db);
-
-                        MemberActions.mailnewcount = mailextentions.getnewmailcountbyfolderid(model, inboxfolderid, db);
+                        var allmails = mailextentions.getallmailbyprofileid(model,  db);
+                        //TO DO maybe do this on client
+                        MemberActions.mailsentcount = allmails.Where(p => p.sender_id == model.profileid).Count();
+                        MemberActions.mailreceivedcount = allmails.Where(p => p.recipient_id == model.profileid).Count();
+                        MemberActions.mailreceivednewcount = allmails.Where(p => p.recipient_id == model.profileid && (p.readdate == null | p.read.GetValueOrDefault() != true)).Count();
 
                         return  MemberActions;
 

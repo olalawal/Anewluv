@@ -37,6 +37,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]  public int recipient_id { get; set; }
         [DataMember]  public string recipientscreenname { get; set; }
        [DataMember]    public DateTime? readdate { get; set; }
+           [DataMember]    public bool? read { get; set; }
        [DataMember]    public DateTime? replieddate { get; set; }
 
 

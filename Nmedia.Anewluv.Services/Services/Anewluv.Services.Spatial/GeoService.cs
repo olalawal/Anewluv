@@ -1035,7 +1035,7 @@ namespace Anewluv.Services.Spatial
                             //sp_GetPostalCodesByCountryNameCityandPrefix
 
                             //  var customers = _postalcontext.GetPostalCodesByCountryAndCityPrefixDynamic(country, city, filter);
-                              var postalcodelist = _storedProcedures.GetPostalCodesByCountryNameCityandPrefix(model.country,model.city, model.filter);
+                              var postalcodelist = _storedProcedures.GetPostalCodesByCountryIDCityandPrefix(model.countryid,model.city, model.filter);
                             //TO DO scafold in lattitude and longitude
                             if (postalcodelist != null)
                                 return ((from s in postalcodelist.Take(25).ToList() select new postalcode { postalcodevalue = s.PostalCode, lattitude =s.LATITUDE,longitude =s.LONGITUDE }).ToList());
