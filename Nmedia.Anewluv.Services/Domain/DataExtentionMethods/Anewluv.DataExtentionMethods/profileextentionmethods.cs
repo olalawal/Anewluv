@@ -35,7 +35,19 @@ namespace Anewluv.DataExtentionMethods
 
         public static profilemetadata getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
         {
-            return repo.Query(p => p.profile_id == model.profileid).Include(x=>x.profile).Select().FirstOrDefault();
+            return repo.Query(p => p.profile_id == model.profileid)
+                .Include(x=>x.profile)
+                   .Include(z => z.photos.Select(s => s.photoconversions))
+                      .Include(z => z.profiledata_ethnicity)
+                         .Include(z => z.profiledata_hobby)
+                            .Include(z => z.profiledata_hotfeature)
+                    .Include(z => z.profiledata_lookingfor)
+                    .Include(z => z.rateeratingvalues)
+                    .Include(z => z.createdactions)
+                    .Include(z => z.targetofactions)
+                    .Include(z => z.applications)
+                
+                .Select().FirstOrDefault();
         }
 
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)

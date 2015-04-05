@@ -18,14 +18,18 @@ namespace Anewluv.Domain.Data.ViewModels
     [DataContract]
     public class ProfileBrowseModel
     {
-          
 
+
+        [DataMember]
         public MemberSearchViewModel ViewerProfileDetails { get; set; }
+          [DataMember]
         public MemberSearchViewModel ProfileDetails { get; set; }   
         //Moved profileData to ProfileDetails
        // public profiledata  ViewerProfileData { get; set; }
        // public profiledata  profiledata { get; set; }  
+        [DataMember]
         public ProfileCriteriaModel ViewerProfileCriteria { get; set; }
+          [DataMember]
         public ProfileCriteriaModel ProfileCriteria { get; set; }  
    
         [DataMember] public bool PeekedAtMe { get; set; }  //if you have already sent a peek to this memmber

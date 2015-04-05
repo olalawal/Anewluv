@@ -146,8 +146,8 @@ namespace Anewluv.Apikey
 
                 string path = OperationContext.Current.IncomingMessageHeaders.To.AbsolutePath;
                 string[] urisegments = OperationContext.Current.IncomingMessageHeaders.To.Segments;
-                string helpsegment = "help"; //this is the thing we are checking   
-                string restsegment = "rest"; //this is the thing we are checking 
+                string helpsegment = "help/"; //this is the thing we are checking   
+                string restsegment = "rest/"; //this is the thing we are checking 
                 string soapsegment = "soap"; //this is the thing we are checking 
 
 
@@ -162,7 +162,7 @@ namespace Anewluv.Apikey
 
             
                 var segmentcount = urisegments.Count();
-                if (urisegments.Last().Replace("/", "").ToLower() == helpsegment || urisegments.ToList().Contains(restsegment))
+                if (urisegments.ToList().Contains(restsegment) && (urisegments.ToList().Contains(helpsegment) | urisegments.ToList().Contains(helpsegment.Replace("/",""))))
                     return true;
 
                 //check if we are looking at the URLS or specific methods that allow Anonymoys access

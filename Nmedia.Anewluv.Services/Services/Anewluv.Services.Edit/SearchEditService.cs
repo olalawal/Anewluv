@@ -808,7 +808,10 @@ namespace Anewluv.Services.Edit
 
                 var humorlist = CachingFactory.SharedObjectHelper.gethumorlist(_unitOfWorkAsync);
                 var dietlist = CachingFactory.SharedObjectHelper.getdietlist(_unitOfWorkAsync);
+
                 var hobbylist = CachingFactory.SharedObjectHelper.gethobbylist(_unitOfWorkAsync);
+                
+
                 var drinklist = CachingFactory.SharedObjectHelper.getdrinkslist(_unitOfWorkAsync);
                 var exerciselist = CachingFactory.SharedObjectHelper.getexerciselist(_unitOfWorkAsync);
                 var smokeslist = CachingFactory.SharedObjectHelper.getsmokeslist(_unitOfWorkAsync);
@@ -817,8 +820,9 @@ namespace Anewluv.Services.Edit
                 var religionlist = CachingFactory.SharedObjectHelper.getreligionlist(_unitOfWorkAsync);
                 var religiousattendancelist = CachingFactory.SharedObjectHelper.getreligiousattendancelist(_unitOfWorkAsync);
 
-                model.humorlist = humorlist; ;
+                model.humorlist = humorlist;
                 model.dietlist = dietlist;
+
                 model.hobbylist = hobbylist;
                 model.drinkslist = drinklist;
                 model.exerciselist = exerciselist;
@@ -830,6 +834,21 @@ namespace Anewluv.Services.Edit
 
               
                 //update the list with the items that are selected.
+
+
+                //update the list with the items that are selected.
+                //special handling for hobby, there is no Any value so for search since any is allowed make sure its selected if none selected
+                foreach (listitem hobby in hobbylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hobby).Any(f => f.value == c.id)))
+                {   
+                    //update the value as checked here on the list
+                    model.hobbylist.First(d => d.id == hobby.id).selected = true;
+                }
+
+                //if no hobby is selected set any to true.
+                if (!model.hobbylist.Any(z=>z.selected  == true))
+                    model.hobbylist.First(f=>f.description =="Any").selected = true;
+
+
                 foreach (listitem humor in humorlist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.humor).Any(f => f.value == c.id)))
                 {
                     //update the value as checked here on the list
@@ -842,14 +861,6 @@ namespace Anewluv.Services.Edit
                 {
                     //update the value as checked here on the list
                     model.dietlist.First(d => d.id == diet.id).selected = true;
-                }
-
-
-                //update the list with the items that are selected.
-                foreach (listitem hobby in hobbylist.Where(c => p.details.Where(m => m.searchsettingdetailtype_id == (int)searchsettingdetailtypeEnum.hobby).Any(f => f.value == c.id)))
-                {
-                    //update the value as checked here on the list
-                    model.hobbylist.First(d => d.id == hobby.id).selected = true;
                 }
 
 
