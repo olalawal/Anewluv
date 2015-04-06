@@ -11,6 +11,18 @@ namespace Anewluv.Domain.Data.ViewModels
     [DataContract]
     public class BasicSearchSettingsModel
     {
+
+        public BasicSearchSettingsModel()
+        {
+
+            this.showmelist = new List<listitem>();
+            this.genderlist = new List<listitem>();
+            this.sortbylist = new List<listitem>();
+            this.agelist = new List<age>();
+            this.locationlist = new List<searchsetting_location>();
+        
+        }
+
         [DataMember]
         public int profileid { get; set; }
         [DataMember]
@@ -51,6 +63,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public List<listitem> sortbylist { get; set; }
         [DataMember]
         public List<age> agelist { get; set; }
+        //Viewmodel only feild for lisitng locations 
         [DataMember]
         public List<searchsetting_location> locationlist { get; set; }
     }

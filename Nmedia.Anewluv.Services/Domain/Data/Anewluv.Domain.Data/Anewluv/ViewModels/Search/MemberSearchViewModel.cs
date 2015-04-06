@@ -83,6 +83,8 @@ namespace Anewluv.Domain.Data.ViewModels
           [DataMember]
         public string screenname { get; set; }
           [DataMember]
+          public string heightbyculture { get; set; }
+          [DataMember]
         public string mycatchyintroline { get; set; }
            [DataMember]
         public string aboutme { get; set; }

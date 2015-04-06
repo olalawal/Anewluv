@@ -369,10 +369,10 @@ namespace Anewluv.Services.Media
               
                     try
                     {
-
+                       
                         var task = Task.Factory.StartNew(() =>
                         {
-                            return _unitOfWorkAsync.Repository<photoconversion>().getpagedphotomodelbyprofileidandstatus(profileid, status, format, page, pagesize);
+                            return _unitOfWorkAsync.Repository<photoconversion>().getpagedphotomodelbyprofileidandstatus(Convert.ToInt16(profileid), Convert.ToInt16(status), Convert.ToInt16(format), Convert.ToInt16(page), Convert.ToInt16(pagesize));
                         });
                         return await task.ConfigureAwait(false);
                        

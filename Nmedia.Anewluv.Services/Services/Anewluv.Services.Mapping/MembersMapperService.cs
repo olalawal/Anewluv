@@ -196,6 +196,8 @@ namespace Anewluv.Services.Mapping
             }
         }
 
+      
+      //TO DO use roles to determine what photos and other data a user sees btw  
         /// <summary>
         /// profile detail that compares two users
         /// the viewer is the profileid and the person being viewed is the viewing profileid
@@ -216,19 +218,23 @@ namespace Anewluv.Services.Mapping
 
                     var task = Task.Factory.StartNew(() =>
                     {
-
+                        //THIS NEEDS to go away and be done in the profile browsemodel !!!!
                         var NewProfileBrowseModel = new ProfileBrowseModel
-                        {
+                        {  
                             //TO Do user a mapper instead of a contructur and map it from the service
                             //Move all this to a service
-                            ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid }, model.allphotos, db, geodb),
+                          //ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid }, model.allphotos, db, geodb),
                             //profile of the person being viewed
-                            ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() }, model.allphotos, db, geodb)
+                            ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() }, model.allphotos, db, geodb),
+                            ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db)
                         };
 
-                        //add in the ProfileCritera
-                        NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid, db);
-                        NewProfileBrowseModel.ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db);
+                        //TO DO add a cache object for the profilebrowesemodel and Memberseachmodel of the currently logged in user
+                        //this should probbaly be cached client side or server side no need to requery, if anything get from Cache
+                        //NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid, db);
+                        
+                     
+                        // NewProfileBrowseModel.ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db);
 
 
                         return NewProfileBrowseModel;
@@ -1091,6 +1097,7 @@ namespace Anewluv.Services.Mapping
                                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
                                                           id = x.profile_id,
                                                           stateprovince = x.stateprovince,
+                                                          city = x.city,
                                                           postalcode = x.postalcode,
                                                           countryid = x.countryid,
                                                           genderid = x.gender_id,
@@ -1099,17 +1106,14 @@ namespace Anewluv.Services.Mapping
                                                           screenname = f.screenname,
                                                           longitude = x.longitude ?? 0,
                                                           latitude = x.latitude ?? 0,
-                                                          hasgalleryphoto = (db.Repository<photo>().Queryable().Where(i => i.profile_id == f.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null) ? true : false,
                                                           creationdate = f.creationdate,
-                                                          // city = db.fnTruncateString(x.city, 11),
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                                           lastlogindate = f.logindate,
                                                           distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
                                                           //TO DO look at this and explore
                                                           //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
                                                           //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
-                                                          //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
-
+                                                   
 
                                                       }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
@@ -1283,6 +1287,7 @@ namespace Anewluv.Services.Mapping
                                                           // MyCatchyIntroLineQuickSearch = x.AboutMe,
                                                           id = x.profile_id,
                                                           stateprovince = x.stateprovince,
+                                                          city = x.city,
                                                           postalcode = x.postalcode,
                                                           countryid = x.countryid,
                                                           genderid = x.gender_id,
@@ -1291,17 +1296,14 @@ namespace Anewluv.Services.Mapping
                                                           screenname = f.screenname,
                                                           longitude = x.longitude ?? 0,
                                                           latitude = x.latitude ?? 0,
-                                                          hasgalleryphoto = (db.Repository<photo>().Queryable().Where(i => i.profile_id == f.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null) ? true : false,
                                                           creationdate = f.creationdate,
-                                                          // city = db.fnTruncateString(x.city, 11),
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                                           lastlogindate = f.logindate,
                                                           distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
                                                           //TO DO look at this and explore
-                                                          //  distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
-                                                          //       lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
-                                                          //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
-
+                                                          //distancefromme = _datingcontext.fnGetDistance((double)x.latitude, (double)x.longitude,myLattitude.Value  , myLongitude.Value   , "Miles")
+                                                          //lookingforagefrom = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemin.ToString() : "25",
+                                                   
 
                                                       }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme);//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
@@ -1473,8 +1475,7 @@ namespace Anewluv.Services.Mapping
                                                           screenname = f.screenname,
                                                           longitude = x.longitude ?? 0,
                                                           latitude = x.latitude ?? 0,
-                                                          creationdate = f.creationdate,
-                                                          // city = db.fnTruncateString(x.city, 11),
+                                                          creationdate = f.creationdate,                                                        
                                                           // lastloggedonString = _datingcontext.fnGetLastLoggedOnTime(f.logindate),
                                                           lastlogindate = f.logindate,
                                                           distancefromme = spatialextentions.getdistancebetweenmembers((double)x.latitude, (double)x.longitude, myLattitude.Value, myLongitude.Value, "Miles")
@@ -1812,7 +1813,7 @@ namespace Anewluv.Services.Mapping
                                               join f in db.Repository<profile>().Queryable() on x.profile_id equals f.id
                                               select new MemberSearchViewModel
                                               {
-                                                
+                                                  city =x.city,
                                                   id = x.profile_id,
                                                   stateprovince = x.stateprovince,
                                                   postalcode = x.postalcode,
@@ -1888,7 +1889,7 @@ namespace Anewluv.Services.Mapping
             {
                 MyCatchyIntroLineQuickSearch = x.aboutme,
                 id = x.id,
-                stateprovince = x.stateprovince,
+                stateprovince = x.stateprovince,                 
                 postalcode = x.postalcode,
                 countryid = x.countryid,
                 genderid = x.genderid,

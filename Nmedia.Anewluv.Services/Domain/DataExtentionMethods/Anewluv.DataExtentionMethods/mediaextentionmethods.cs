@@ -95,35 +95,74 @@ namespace Anewluv.DataExtentionMethods
 
         }
 
-
-        public static List<PhotoModel> getpagedphotomodelbyprofileidandstatus(this IRepository<photoconversion> repo, string profileid, string status, string format, string page, string pagesize)
+        //TO DO needs code to check roles to see how many photos can be viewd etc
+        public static List<PhotoModel> getpagedphotomodelbyprofileidandstatus(this IRepository<photoconversion> repo, int profileid, int status, int format, int page, int pagesize)
         {
         
             try
             {
-             var model = (from p in repo.Query(a => a.formattype_id ==  Convert.ToInt16(format) && a.photo.profile_id ==  Convert.ToInt16(profileid) && a.photo.profile_id ==  Convert.ToInt32(profileid) && (
-                                                     a.photo.photostatus_id  != null && a.photo.photostatus_id == Convert.ToInt16(status))).Select().ToList()
-                                 select new PhotoModel
-                                 {
-                                     photoid = p.photo.id,
-                                     profileid = p.photo.profile_id,
-                                     screenname = p.photo.profilemetadata.profile.screenname,
-                                     photo = b64Converters.ByteArraytob64string(p.image),
-                                     photoformat = p.lu_photoformat,
-                                     convertedsize = p.size,
-                                     orginalsize = p.photo.size,
-                                     imagecaption = p.photo.imagecaption,
-                                     creationdate = p.photo.creationdate,
-                                     photostatusid = p.photo.photostatus_id.GetValueOrDefault()
-                                 });
 
-                    if (model.Count() > Convert.ToInt32(pagesize)) { pagesize = model.Count().ToString(); }
+                var model = (from p in
+                                 (from r in repo.Query(a => a.lu_photoformat.id == format && (a.photo.profile_id == profileid &
+                                     a.photo.photostatus_id != null &&
+                                     (a.photo.photostatus_id == (int)photostatusEnum.Gallery |
+                                      a.photo.lu_photostatus.id == (int)photostatusEnum.NotSet |
+                                       a.photo.lu_photostatus.id == (int)photostatusEnum.Nostatus)))
+                                  select new
+                                  {
+                                      photoid = r.photo.id,
+                                      profileid = r.photo.profile_id,
+                                      screenname = r.photo.profilemetadata.profile.screenname,
+                                      photo = r.image,
+                                      photoformat = r.lu_photoformat,
+                                      convertedsize = r.size,
+                                      orginalsize = r.photo.size,
+                                      imagecaption = r.photo.imagecaption,
+                                      creationdate = r.photo.creationdate,
+                                      photodetail = r.photo
+
+                                  }).ToList()
+                             select new PhotoModel
+                             {
+                                 photoid = p.photoid,
+                                 profileid = p.profileid,
+                                 screenname = p.screenname,
+                                 photo = b64Converters.ByteArraytob64string(p.photo),
+                                 photoformat = p.photoformat,
+                                 convertedsize = p.convertedsize,
+                                 orginalsize = p.orginalsize,
+                                 imagecaption = p.imagecaption,
+                                 creationdate = p.creationdate,
+                                 photostatusid = p.photodetail.photostatus_id.GetValueOrDefault()
+
+                             }).ToList();
+               
+
+
+             //var model = (from p in repo.Query(a => a.formattype_id == format &&  a.photo.profile_id ==  profileid && (
+             //                                        a.photo.photostatus_id  != null && a.photo.photostatus_id == status)).Select().ToList()
+             //                    select new PhotoModel
+             //                    {
+             //                        photoid = p.photo.id,
+             //                        profileid = p.photo.profile_id,
+             //                        screenname = p.photo.profilemetadata.profile.screenname,
+             //                        photo = b64Converters.ByteArraytob64string(p.image),
+             //                        photoformat = p.lu_photoformat,
+             //                        convertedsize = p.size,
+             //                        orginalsize = p.photo.size,
+             //                        imagecaption = p.photo.imagecaption,
+             //                        creationdate = p.photo.creationdate,
+             //                        photostatusid = p.photo.photostatus_id.GetValueOrDefault()
+             //                    });
+
+                    if (model.Count() > Convert.ToInt32(pagesize)) { pagesize = model.Count(); }
 
                     return (model.OrderByDescending(u => u.creationdate).Skip((Convert.ToInt16(page) - 1) * Convert.ToInt16(pagesize)).Take(Convert.ToInt16(pagesize))).ToList();
             }
              catch (Exception ex)
             {
-            
+//eath the eception
+               // throw ex;
             }
 
             return null;

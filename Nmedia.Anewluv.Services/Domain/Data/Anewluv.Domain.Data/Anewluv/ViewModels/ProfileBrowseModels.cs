@@ -18,7 +18,12 @@ namespace Anewluv.Domain.Data.ViewModels
     [DataContract]
     public class ProfileBrowseModel
     {
-
+        public ProfileBrowseModel()
+        {
+            //USe theis when we figure out how to do it using out 
+          //  this.ProfileCriteria = new ProfileCriteriaModel();
+        
+        }
 
         [DataMember]
         public MemberSearchViewModel ViewerProfileDetails { get; set; }

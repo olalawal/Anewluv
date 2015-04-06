@@ -9,8 +9,23 @@ namespace Anewluv.Domain.Data.ViewModels
 {
       [DataContract]
     public class CharacterSearchSettingsModel
-
     {
+          public CharacterSearchSettingsModel()
+          { 
+           this.dietlist = new List<listitem>();         
+          this.humorlist =new List<listitem>();         
+          this.hobbylist =new List<listitem>();         
+          this.drinkslist =new List<listitem>();         
+          this.exerciselist =new List<listitem>();         
+          this.smokeslist =new List<listitem>();         
+          this.signlist =new List<listitem>();         
+          this.politicalviewlist =new List<listitem>();         
+          this.religionlist =new List<listitem>();         
+          this.religiousattendancelist =new List<listitem>();
+          
+          }
+
+
           [DataMember]
           public int profileid { get; set; }
         [DataMember]

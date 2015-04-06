@@ -10,6 +10,22 @@ namespace Anewluv.Domain.Data.ViewModels
       [DataContract]
     public class LifeStyleSearchSettingsModel
     {
+          public LifeStyleSearchSettingsModel()
+          { 
+            
+            this. educationlevellist =new List<listitem>();      
+            this. lookingforlist =new List<listitem>();      
+           this. employmentstatuslist =new List<listitem>();      
+           this. havekidslist =new List<listitem>();      
+           this. incomelevellist =new List<listitem>();      
+           this. livingsituationlist =new List<listitem>();      
+           this. maritalstatuslist =new List<listitem>();      
+           this. professionlist =new List<listitem>();      
+           this. wantskidslist =new List<listitem>();
+          
+          }
+
+
           [DataMember]
           public int profileid { get; set; }
         [DataMember]

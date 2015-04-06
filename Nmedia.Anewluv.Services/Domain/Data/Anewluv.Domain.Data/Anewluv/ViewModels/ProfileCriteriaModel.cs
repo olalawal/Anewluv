@@ -19,7 +19,21 @@ namespace Anewluv.Domain.Data.ViewModels
           [DataContract]
     public class ProfileCriteriaModel
     {
-      //
+
+          public ProfileCriteriaModel()
+          {
+
+              this.Ethnicity = new List<string>();
+                  this.Hobbies = new List<string>();
+                  this.LookingFor = new List<string>();
+                  this.HotFeature = new List<string>();
+              this.BasicSearchSettings = new BasicSearchSettingsModel();
+              this.AppearanceSearchSettings = new AppearanceSearchSettingsModel();
+              this.CharacterSearchSettings = new CharacterSearchSettingsModel();
+              this.LifeStyleSearchSettings = new LifeStyleSearchSettingsModel();
+
+          
+          }
         
 
         //proprperies from profileDetail I think

@@ -10,6 +10,18 @@ namespace Anewluv.Domain.Data.ViewModels
       [DataContract]
     public class AppearanceSearchSettingsModel
     {
+          public AppearanceSearchSettingsModel()
+          { 
+          
+        this.metricheightlist = new List<metricheight>();
+      this.ethnicitylist  = new List<listitem>();
+       this.bodytypeslist  = new List<listitem>();
+       this. eyecolorlist  = new List<listitem>();
+    this.haircolorlist  = new List<listitem>();
+    this.hotfeaturelist = new List<listitem>();
+          }
+
+
           [DataMember]
           public int profileid { get; set; }
         //appereance search settings 
@@ -20,7 +32,12 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int? heightmax { get; set; }
         [DataMember]
+        public string heightminbyculture { get; set; }
+        [DataMember]
+        public string heightmaxbyculture { get; set; }
+        [DataMember]
         public int? heightmin { get; set; }
+
        [DataMember]     
         public List<metricheight> metricheightlist { get; set; } // = new List<string>();
        [DataMember]
