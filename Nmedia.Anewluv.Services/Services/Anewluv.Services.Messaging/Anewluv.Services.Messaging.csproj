@@ -56,6 +56,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessagingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +83,14 @@
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\WCF\Nmedia.WCFHelpers\Nmedia.WCFHelpers.csproj">
       <Project>{88d4508e-7ced-49cc-b43a-e3af99470d35}</Project>
       <Name>Nmedia.WCFHelpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\DataExtentionMethods\Anewluv.DataExtentionMethods\Anewluv.DataExtentionMethods.csproj">
+      <Project>{3cbb8d0a-5ea5-4336-aeaf-6717d2a09a45}</Project>
+      <Name>Anewluv.DataExtentionMethods</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Domain\Data\Anewluv.Domain.Data\Anewluv.Domain.Data.csproj">
+      <Project>{8e3079e3-2244-47b1-ab1f-ee171398666e}</Project>
+      <Name>Anewluv.Domain.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Frameworks\GenericUnitOfWork\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
       <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>

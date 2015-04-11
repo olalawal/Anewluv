@@ -36,11 +36,7 @@ namespace Anewluv.Domain.Data.ViewModels
           }
         
 
-        //proprperies from profileDetail I think
-          [DataMember]  public string ScreenName { get; set; }
-       [DataMember]  public string AboutMe { get; set; }
-      // [DataMember]  public string MyCatchyIntroLine { get; set; }
-   
+          
 
         // properties        
         [DataMember]  public string HeightByCulture { get; set; }

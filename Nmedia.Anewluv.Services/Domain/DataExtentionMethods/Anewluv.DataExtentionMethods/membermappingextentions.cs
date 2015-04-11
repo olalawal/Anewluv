@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Anewluv.Domain.Data.Helpers;
 
 
 
@@ -23,9 +24,162 @@ namespace Anewluv.DataExtentionMethods
         //shared extentionsused to map profiles together and desimnate detailed user data for view models
         #region "Member mapping extentions Functions"
 
+        /// <summary>
+        /// viewer can be blank or null : simply means we will not look for distance between memebers and other comparaitibe fatures      
+        /// </summary>
+        /// <param name="veiwerpeofileid"></param>
+        /// <param name="viewingprofileid"></param>
+        /// <param name="allphotos"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
+        // use this function to get distance at the same time, add it to the model
+        public static FullProfileViewModel mapfullprofileviewmodel(int? veiwerpeofileid, int profileid, IUnitOfWorkAsync db, IGeoDataStoredProcedures _storedProcedures)
+        {
+
+            //we need lazy loading and proxy stuff
+            // db.DisableProxyCreation = false;
+            //  db.DisableLazyLoading = false;
+            try
+            {
+
+                if (veiwerpeofileid != 0)
+                {
+                    FullProfileViewModel model = new FullProfileViewModel(); //new FullProfileViewModel();
+                    //blank viewprofile simply means we will not look for distance between memebers and other comparaitibe fatures
+                    profiledata viewerprofile = new profiledata();
+                    //get profile of user
+                    profile profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt32(profileid) });
+                    if (veiwerpeofileid != null)
+                    {
+                        viewerprofile = db.Repository<profiledata>().getprofiledatabyprofileid(new ProfileModel { profileid = veiwerpeofileid.Value });
+
+                        if (viewerprofile.latitude != null &&
+                            viewerprofile.longitude != null &&
+                            profile.profiledata.longitude != null &&
+                             profile.profiledata.latitude != null)  //TO DO determine countries that use Mile or KM
+                            model.distancefromme = spatialextentions.getdistancebetweenmembers(
+                                viewerprofile.latitude.GetValueOrDefault(),
+                                viewerprofile.longitude.GetValueOrDefault(),
+                                 profile.profiledata.latitude.GetValueOrDefault(),
+                                profile.profiledata.longitude.GetValueOrDefault(), "M");
+                        //TO DO do this async in another call ?!
+                        //Map the criteria
+                        model.MemeberToMemberActions = membermappingextentions.mapmemberactionsrelationships(profileid,veiwerpeofileid.Value,db);
+                    }
+
+                    //we already have this so its overkill
+                    // model.id = profile.id;
+                    model.screenname = profile.screenname;
+                    model.birthdate = profile.profiledata.birthdate;
+                    model.lastloggedonstring =  profileextentionmethods.getlastloggedinstring(profile.logindate.GetValueOrDefault());
+                    model.joindate = profile.creationdate.ToString(); //TO do format this
+                    model.online = db.Repository<profile>().getuseronlinestatus(new ProfileModel { profileid = profile.id });
+                    model.heightbyculture = (profile.profiledata.height == null) ? "Ask Me" : Extensions.ToFeetInches((double)profile.profiledata.height);
+                    //TTO DO verifiy is this is created by getter
+                    model.mycatchyintroline = profile.profiledata.mycatchyintroLine;
+                    model.aboutme = profile.profiledata.aboutme;
+                    model.genderid = profile.profiledata.gender_id.Value;
+                    model.gender = DataFormatingExtensions.ConvertGenderID(model.genderid);
+
+                    
+                    model.stateprovince = profile.profiledata.stateprovince;
+                    model.postalcode = profile.profiledata.postalcode;
+                    model.countryid = profile.profiledata.countryid;
+                    model.countryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = model.countryid.ToString() }, _storedProcedures);
+                    // modelprofile = profile.profile;
+                    model.longitude = (double)profile.profiledata.longitude;
+                    model.latitude = (double)profile.profiledata.latitude;
+                    //   model.hasgalleryphoto = profile.    profilemetadata.photos.Where(i => i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false;                 
+                    model.city = Extensions.ReduceStringLength(profile.profiledata.city, 11);    
+                   
+                  
+                    // PerfectMatchSettings = Currentprofiledata.SearchSettings.First();
+                    //DistanceFromMe = 0  get distance from somwhere else
+                    //to do do something with the unaproved photos so it is a nullable value , private photos are linked too here
+                    //to do also figure out how to not show the gallery photo in the list but when they click off it allow it to default back
+                    //or instead just have the photo the select zoom up                    
+                    // var MyPhotos = membereditRepository.MyPhotos(model.profile.username);
+                    // var Approved = membereditRepository.GetApproved(MyPhotos, "Yes", page, ps);
+                    // var NotApproved = membereditRepository.GetApproved(MyPhotos, "No", page, ps);
+                    // var Private = membereditRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
+                   // model.profilephotos = new PhotoViewModel();
+                    // int something = (int)photoformatEnum.Thumbnail;
+                     // model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
+                     model.galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString());
+                                     
+                    //TO DO split this into another call
+                    //TO DO put these into separate call i think
+                    model.hasgalleryphoto = model.galleryphoto != null ? true : false;
+                    // Api.DisposeGeoService();
+
+                    return model;
 
 
+                }
 
+
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                //execptions will be handled in the caller
+                throw;
+            }
+
+        }
+
+        /// <summary>
+        ///  SHOULD be called async probbaly
+        /// </summary>
+        /// <param name="profileid"></param>
+        /// <param name="viewerprofileid"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
+        public static MemberToMemberActionsModel mapmemberactionsrelationships(int profileid, int viewerprofileid,IUnitOfWorkAsync db)
+        {
+
+            MemberToMemberActionsModel actions = new MemberToMemberActionsModel();
+            try
+            {
+                //get the viwers actions to this member first :
+                var vieweractionstoprofile = db.Repository<action>().getmyactionbyprofileid(viewerprofileid).Where(z => z.target_profile_id == profileid).ToList();
+                var profileactionstoviewer = db.Repository<action>().getmyactionbyprofileid(profileid).Where(z => z.target_profile_id == viewerprofileid).ToList();
+
+                actions.peekedataviewerdate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
+                actions.peekedataviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).Count();
+
+                actions.peekedatbyviewerdate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
+                actions.peekedatbyviewercount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Peek).Count();
+
+                actions.likedviewerdate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
+                actions.likedviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).Count();
+
+                actions.likedbyviewerdate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
+                actions.likedbyviewercount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Like).Count();
+
+                actions.blockedviewerdate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
+                actions.blockedviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).Count();
+
+                actions.blockedbyviewerdate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
+                actions.blockedbyviewecount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Block).Count();
+
+                actions.intrestsenttoviewerDate = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
+                actions.intrestsenttoviewercount = profileactionstoviewer.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).Count();
+
+                actions.interestsentbyviewerDate = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).OrderByDescending(p => p.creationdate).FirstOrDefault().creationdate;
+                actions.interestsentbyviewercount = vieweractionstoprofile.Where(z => z.actiontype_id == (int)actiontypeEnum.Interest).Count();
+
+                return actions;
+            }
+            catch (Exception ex)
+            {
+                //TO DO LOG
+                throw ex;
+            }
+
+            return actions;
+        }
 
 
         /// <summary>
@@ -251,8 +405,8 @@ namespace Anewluv.DataExtentionMethods
                     //Ethnicity =      metadata.profile.profiledata_Ethnicity.Where(
                     //find a way to populate hoby, looking for and ethnicuty from the profiledata_Ethncity and etc
 
-                    CriteriaModel.ScreenName = (metadata.profile.screenname == null) ? Extensions.ReduceStringLength(metadata.profile.screenname, 10) : Extensions.ReduceStringLength(metadata.profile.screenname, 10);
-                    CriteriaModel.AboutMe = (metadata.profile.profiledata.aboutme == null || metadata.profile.profiledata.aboutme == "Hello") ? "This is the description of the type of person I am looking for.. comming soon. For Now Email Me to find out more about me" : metadata.profile.profiledata.aboutme;
+                    //CriteriaModel.ScreenName = (metadata.profile.screenname == null) ? Extensions.ReduceStringLength(metadata.profile.screenname, 10) : Extensions.ReduceStringLength(metadata.profile.screenname, 10);
+                    //CriteriaModel.AboutMe = (metadata.profile.profiledata.aboutme == null || metadata.profile.profiledata.aboutme == "Hello") ? "This is the description of the type of person I am looking for.. comming soon. For Now Email Me to find out more about me" : metadata.profile.profiledata.aboutme;
                     //  MyCatchyIntroLine = metadata.prMyCatchyIntroLine == null ? "Hi There!" : metadata.MyCatchyIntroLine;
                     CriteriaModel.BodyType = (metadata.profile.profiledata.lu_bodytype == null & metadata.profile.profiledata.bodytype_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_bodytype.description;
                     CriteriaModel.EyeColor = (metadata.profile.profiledata.lu_eyecolor == null & metadata.profile.profiledata.eyecolor_id == null) ? "Ask Me" : metadata.profile.profiledata.lu_eyecolor.description;

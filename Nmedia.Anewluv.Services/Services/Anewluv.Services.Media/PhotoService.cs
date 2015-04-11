@@ -191,7 +191,7 @@ namespace Anewluv.Services.Media
                         
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var convertedformat = Convert.ToInt16(format);
+                        var convertedformat = model.format);
                         var convertedphotoid = Guid.Parse(photoid);
 
                         PhotoModel model = (from p in
@@ -308,9 +308,9 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = Convert.ToInt16(format);
+                            var convertedformat = model.format);
                             var convertedprofileid = Convert.ToInt32(profileid);
-                            var convertedstatus = Convert.ToInt16(status);
+                            var convertedstatus = model.status);
 
                             //var convertedphotoid = Guid.Parse(photoid);
                             // Retrieve All User's Photos that are not approved.
@@ -372,7 +372,7 @@ namespace Anewluv.Services.Media
                        
                         var task = Task.Factory.StartNew(() =>
                         {
-                            return _unitOfWorkAsync.Repository<photoconversion>().getpagedphotomodelbyprofileidandstatus(Convert.ToInt16(profileid), Convert.ToInt16(status), Convert.ToInt16(format), Convert.ToInt16(page), Convert.ToInt16(pagesize));
+                            return _unitOfWorkAsync.Repository<photoconversion>().getpagedphotomodelbyprofileidandstatus(model.profileid), model.status), model.format), model.page), model.pagesize));
                         });
                         return await task.ConfigureAwait(false);
                        
@@ -399,7 +399,7 @@ namespace Anewluv.Services.Media
 
         //TO DO get photo albums as well ?
         //TO DO not implemented
-        public async Task <PhotoViewModel> getpagedphotoviewmodelbyprofileid(string profileid, string format, string page, string pagesize)
+        public async Task <PhotoViewModel> getpagedphotoviewmodelbyprofileid(ProfileModel model)
         {
            
          
@@ -411,7 +411,11 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            return new PhotoViewModel();
+
+                            return _unitOfWorkAsync.Repository<photoconversion>()
+                                .getpagedphotomodelbyprofileid(model.profileid,(int)model.photosformat,model.page.GetValueOrDefault(),model.numberperpage.GetValueOrDefault());
+                   
+
                         });
                         return await task.ConfigureAwait(false);
 
@@ -454,10 +458,10 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = Convert.ToInt16(format);
+                            var convertedformat = model.format);
                             var convertedphotoid = Guid.Parse(photoid);
                             // var convertedprofileid = Convert.ToInt32(profileid);
-                            // var convertedstatus = Convert.ToInt16(status);
+                            // var convertedstatus = model.status);
 
                             photoeditmodel model = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(p => p.formattype_id == convertedformat && p.photo.id == convertedphotoid).ToList()
                                                     select new photoeditmodel
@@ -510,8 +514,8 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = Convert.ToInt16(format);
-                            var convertedstatus = Convert.ToInt16(status);
+                            var convertedformat = model.format);
+                            var convertedstatus = model.status);
 
                             var model = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id == convertedformat
                                 && a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id == convertedstatus).ToList()
@@ -566,10 +570,10 @@ namespace Anewluv.Services.Media
                         
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var convertedformat = Convert.ToInt16(format);
+                        var convertedformat = model.format);
                         //var convertedphotoid = Guid.Parse(photoid);
                         //var convertedprofileid = Convert.ToInt32(profileid);
-                        var convertedstatus = Convert.ToInt16(status);
+                        var convertedstatus = model.status);
                         // Retrieve All User's Photos that are not approved.
                         //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
 
@@ -594,7 +598,7 @@ namespace Anewluv.Services.Media
 
                         if (model.Count() > Convert.ToInt32(pagesize)) { pagesize = model.Count().ToString(); }
 
-                        return (model.OrderByDescending(u => u.creationdate).Skip((Convert.ToInt16(page) - 1) * Convert.ToInt16(pagesize)).Take(Convert.ToInt16(pagesize))).ToList();
+                        return (model.OrderByDescending(u => u.creationdate).Skip((model.page) - 1) * model.pagesize)).Take(model.pagesize))).ToList();
                            });
                     return await task.ConfigureAwait(false);
 
@@ -619,7 +623,7 @@ namespace Anewluv.Services.Media
  
         }
         //12-10-2012 this also filters the format
-        public  async Task<PhotoEditViewModel> getpagededitphotoviewmodelbyprofileidandformat(string profileid, string format, string page, string pagesize)
+        public  async Task<PhotoEditViewModel> getpagededitphotoviewmodelbyprofileidandformat(ProfileModel model)
         {
             
          
@@ -631,17 +635,17 @@ namespace Anewluv.Services.Media
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            var convertedformat = Convert.ToInt16(format);
+                            var convertedformat = model.photosformat;
                             // var convertedphotoid = Guid.Parse(photoid);
-                            var convertedprofileid = Convert.ToInt32(profileid);
-                            //  var convertedstatus = Convert.ToInt16(status);
+                            var convertedprofileid =model.profileid;
+                            //  var convertedstatus = model.status);
 
-                            var myPhotos = _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(z => z.formattype_id == convertedformat && z.photo.profile_id == convertedprofileid).ToList();
-                            var ApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, Convert.ToInt16(page), Convert.ToInt16(pagesize)).ToList();
-                            var NotApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, Convert.ToInt16(page), Convert.ToInt16(pagesize));
+                            var myPhotos = _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(z => z.formattype_id == (int)convertedformat && z.photo.profile_id == convertedprofileid).ToList();
+                            var ApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, model.page.Value, model.numberperpage.Value).ToList();
+                            var NotApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, model.page.Value, model.numberperpage.Value);
                             //TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
                             //since this is edit mode that is fine
-                            var PrivatePhotos = mediaextentionmethods.filterphotosbysecuitylevel(myPhotos, securityleveltypeEnum.Private, Convert.ToInt16(page), Convert.ToInt16(pagesize));
+                            var PrivatePhotos = mediaextentionmethods.filterphotosbysecuitylevel(myPhotos, securityleveltypeEnum.Private, model.page.Value, model.numberperpage.Value);
                             var model = mediaextentionmethods.getphotoeditviewmodel(ApprovedPhotos, NotApprovedPhotos, PrivatePhotos, myPhotos);
 
                             return (model);
@@ -686,10 +690,10 @@ namespace Anewluv.Services.Media
 
                             var task = Task.Factory.StartNew(() =>
                             {
-                                // var convertedformat = Convert.ToInt16(format);
+                                // var convertedformat = model.format);
                                 var convertedphotoid = Guid.Parse(photoid);
                                 //var convertedprofileid = Convert.ToInt32(profileid);
-                                // var convertedstatus = Convert.ToInt16(status);
+                                // var convertedstatus = model.status);
 
                                 // Retrieve single value from photos table
                                 photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == convertedphotoid).FirstOrDefault();
@@ -744,10 +748,10 @@ namespace Anewluv.Services.Media
                           
                     var task = Task.Factory.StartNew(() =>
                     {
-                                //var convertedformat = Convert.ToInt16(format);
+                                //var convertedformat = model.format);
                                 var convertedphotoid = Guid.Parse(photoid);
                                 // var convertedprofileid = Convert.ToInt32(profileid);
-                                // var convertedstatus = Convert.ToInt16(status);
+                                // var convertedstatus = model.status);
 
                                 // Retrieve single value from photos table
                                 photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == convertedphotoid).FirstOrDefault();
@@ -809,10 +813,10 @@ namespace Anewluv.Services.Media
 
                             var task = Task.Factory.StartNew(() =>
                             {
-                                //var convertedformat = Convert.ToInt16(format);
+                                //var convertedformat = model.format);
                                 var convertedphotoid = Guid.Parse(photoid);
                                 // var convertedprofileid = Convert.ToInt32(profileid);
-                                // var convertedstatus = Convert.ToInt16(status);
+                                // var convertedstatus = model.status);
 
                                 // Retrieve single value from photos table
                                 photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == convertedphotoid).FirstOrDefault();
@@ -1006,10 +1010,10 @@ namespace Anewluv.Services.Media
 
 
 
-                            //var convertedformat = Convert.ToInt16(format);
+                            //var convertedformat = model.format);
                            // var convertedphotoid = Guid.Parse(photoid);
                             var convertedprofileid = Convert.ToInt32(profileid);
-                            //var convertedstatus = Convert.ToInt16(status);
+                            //var convertedstatus = model.status);
 
                             AnewluvResponse response = new AnewluvResponse();
                             AnewluvMessages message = new AnewluvMessages();
@@ -1152,10 +1156,10 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = Convert.ToInt16(format);
+                            var convertedformat = model.format);
                             //  var convertedphotoid = Guid.Parse(photoid);
                             //  var convertedprofileid = Convert.ToInt32(profileid);
-                            // var convertedstatus = Convert.ToInt16(status);
+                            // var convertedstatus = model.status);
                             var GalleryPhoto = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.screenname == strscreenname).ToList()
                                                 join f in _unitOfWorkAsync.Repository<photoconversion>().Queryable() on p.id equals f.photo.profile_id
                                                 where (f.formattype_id == (int)convertedformat && f.photo.lu_photoapprovalstatus != null &&
@@ -1203,10 +1207,10 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = Convert.ToInt16(format);
+                            var convertedformat = model.format);
                             var convertedphotoid = Guid.Parse(photoid);
                             //var convertedprofileid = Convert.ToInt32(profileid);
-                            // var convertedstatus = Convert.ToInt16(status);
+                            // var convertedstatus = model.status);
 
                             var GalleryPhoto = (from f in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(f => f.photo.id == (convertedphotoid) &&
                              f.formattype_id == (int)convertedformat && f.photo.lu_photoapprovalstatus != null &&
@@ -1255,7 +1259,7 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = Convert.ToInt16(format);
+                            var convertedformat = model.format);
                             var convertedprofileid = Convert.ToInt32(profileid);
 
 

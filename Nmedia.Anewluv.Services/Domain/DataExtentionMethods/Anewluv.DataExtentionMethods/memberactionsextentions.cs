@@ -26,12 +26,24 @@ namespace Anewluv.DataExtentionMethods
                   && p.creator_profile_id == profileid).Include(z => z.targetprofilemetadata.profile).Select().AsQueryable();
         }
 
+        public static IQueryable<action> getmyactionbyprofileid(this IRepository<action> repo, int profileid)
+        {
+            return repo.Query(p => (p.active == true & p.deletedbycreatordate == null)
+                  && p.creator_profile_id == profileid).Include(z => z.targetprofilemetadata.profile).Select().AsQueryable();
+        }
+
+
         public static IQueryable<action> getothersactiontomebyprofileidandactiontype(this IRepository<action> repo, int profileid, actiontypeEnum action)
         {
             return repo.Query(p => (p.actiontype_id == (int)action & p.active == true & p.deletedbycreatordate == null)
                    && p.target_profile_id == profileid).Include(z => z.creatorprofilemetadata.profile).Select().AsQueryable();
         }
-              
+
+        public static IQueryable<action> getothersactiontomebyprofileid(this IRepository<action> repo, int profileid)
+        {
+            return repo.Query(p => (p.active == true & p.deletedbycreatordate == null)
+                   && p.target_profile_id == profileid).Include(z => z.creatorprofilemetadata.profile).Select().AsQueryable();
+        }
 
         #endregion
 

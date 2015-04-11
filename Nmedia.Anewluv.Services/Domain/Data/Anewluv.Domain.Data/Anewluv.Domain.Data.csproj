@@ -51,6 +51,9 @@
     <Compile Include="Anewluv\application.cs" />
     <Compile Include="Anewluv\applicationiconconversion.cs" />
     <Compile Include="Anewluv\applicationrole.cs" />
+    <Compile Include="Anewluv\Enums\mailfoldertype.cs" />
+    <Compile Include="Anewluv\Mail\ViewModels\mailfolderviewmodel.cs" />
+    <Compile Include="Anewluv\Mail\ViewModels\mailfoldermodel.cs" />
     <Compile Include="Anewluv\photophotoalbum.cs" />
     <Compile Include="Anewluv\note.cs" />
     <Compile Include="Anewluv\communicationquota.cs" />
@@ -203,8 +206,10 @@
     <Compile Include="Anewluv\ViewModels\Account\LogonViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\LostAccountInfoModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\LostActivationCodeModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Actions\MemberToMemberActionsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Actions\MembeActionsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Activity\ActivityModel.cs" />
+    <Compile Include="Anewluv\ViewModels\FullProfileViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Search\AdvancedSearchModel.cs" />
     <Compile Include="Anewluv\ViewModels\Search\ProfileModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\RegisterExternalLoginModel.cs" />

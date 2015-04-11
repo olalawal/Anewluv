@@ -136,9 +136,6 @@ namespace Anewluv.Services.Mapping
 
         }
        
-
-  
-
         public async  Task<SearchResultsViewModel> getmembersearchviewmodels(ProfileModel model)
         {
 
@@ -267,6 +264,102 @@ namespace Anewluv.Services.Mapping
             }
         }
 
+        public async Task<FullProfileViewModel> getprofiledetails(ProfileModel model)
+        {
+
+          //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var geodb = _geodatastoredProcedures;
+            var db = _unitOfWorkAsync;
+            {
+                try
+                {
+
+                    var task = Task.Factory.StartNew(() =>
+                    {
+                        
+
+                        //TO DO add a cache object for the profilebrowesemodel and Memberseachmodel of the currently logged in user
+                        //this should probbaly be cached client side or server side no need to requery, if anything get from Cache
+                        //NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid, db);
+
+                        return membermappingextentions.mapfullprofileviewmodel(model.profileid, model.viewingprofileid.Value, db, _geodatastoredProcedures);
+
+                    });
+                    return await task.ConfigureAwait(false);
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+                finally
+                {
+
+                }
+
+            }
+        }
+     
+        /// <summary>
+        /// get cretieri details for a given user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<ProfileCriteriaModel> getprofilesearchcriteria(ProfileModel model)
+        {
+
+            //  _unitOfWorkAsync.DisableProxyCreation = false; _unitOfWorkAsync.DisableLazyLoading = false;
+            var geodb = _geodatastoredProcedures;
+            var db = _unitOfWorkAsync;
+            {
+                try
+                {
+
+                    var task = Task.Factory.StartNew(() =>
+                    {
+
+                        return  membermappingextentions.getprofilecriteriamodel(model.profileid, db);
+
+                    });
+                    return await task.ConfigureAwait(false);
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MemberService);
+                    //int profileid = Convert.ToInt32(viewerprofileid);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in member mapper service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+
+                    //throw convertedexcption;
+                }
+                finally
+                {
+
+                }
+
+            }
+        }
+        
         //returns a list of profile browsemodles for a given user
         public async Task<List<ProfileBrowseModel>> getprofilebrowsemodels(ProfileModel model)
         {

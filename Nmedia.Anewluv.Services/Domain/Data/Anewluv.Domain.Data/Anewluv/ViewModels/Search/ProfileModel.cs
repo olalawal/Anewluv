@@ -81,8 +81,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public MemberSearchViewModel modeltomap { get; set; }
         [DataMember]
         public List<MemberSearchViewModel> modelstomap { get; set; }
-        [DataMember]
-        public bool allphotos { get; set; }
+    
 
         //added abitlity to add notes 
          [DataMember]
@@ -91,6 +90,23 @@ namespace Anewluv.Domain.Data.ViewModels
         //acdded action to the body
         [DataMember]
         public actiontypeEnum actiontype { get; set; }
+
+        //search stuff for photos
+        //**********/
+        [DataMember]
+        public bool allphotos { get; set; }
+        [DataMember]
+        public photostatusEnum photostatus { get; set; }
+        [DataMember]
+        public  photoformatEnum  photosformat { get; set; }
+
+        //search stuff for mail
+        [DataMember]
+        public mailfoldertypeEnum mailboxfoldertype { get; set; }  //folder types to retrive , only one folder per call for now
+        [DataMember]
+        public mailviewmodel mailviewmodel { get; set; } //mail being sent along with all relevant data 
+       
+
 
 
     }
