@@ -1523,6 +1523,59 @@ namespace Anewluv.Caching
 
             }
 
+
+            public static List<listitem> getphotosecurityleveltypelist(IUnitOfWorkAsync context)
+            {
+                DataCache dataCache;
+                //DataCacheFactory dataCacheFactory = new DataCacheFactory();
+                dataCache = GetPersistantCache;  // dataCacheFactory.GetDefaultCache();
+
+                List<listitem> getphotosecurityleveltypelist = null;
+                try
+                {
+
+                    try { if (dataCache != null) getphotosecurityleveltypelist = dataCache.Get("getphotosecurityleveltypelist") as List<listitem>; }
+                   catch (DataCacheException ex)
+                    {
+                        //TO DO LOG and NOTIFY HERE
+                        //throw new InvalidOperationException();
+                    }
+                    catch (Exception ex)
+                    {
+                        //put cleanup code here
+                      throw;
+                    }
+
+                    if (getphotosecurityleveltypelist == null)
+                    {
+                        // context context = new context();
+                        //remafill the Genders list from the repositry and exit
+                        getphotosecurityleveltypelist = (from o in context.Repository<lu_securityleveltype>().Queryable().ToList()
+                                          select new listitem
+                                          {
+                                              id = o.id,
+                                              description = o.description,
+                                              selected = false
+                                          }).ToList();
+
+                        //if we still have no datacahe do tis
+                        if (dataCache != null)
+                            dataCache.Put("getphotosecurityleveltypelist", getphotosecurityleveltypelist);
+
+                    } return getphotosecurityleveltypelist;
+                }
+               catch (DataCacheException ex)
+                {
+                    throw new InvalidOperationException();
+
+                }
+                catch (Exception ex)
+                {
+                    //put cleanup code here
+                  throw;
+                }
+
+            }
             //olawal 3-13-2013 other functions added after fact
             public static List<lu_photostatusdescription> getphotostatusdescriptionlist(IUnitOfWorkAsync context)
             {

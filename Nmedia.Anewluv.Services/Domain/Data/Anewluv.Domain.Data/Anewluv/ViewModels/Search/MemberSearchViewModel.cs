@@ -72,45 +72,45 @@ namespace Anewluv.Domain.Data.ViewModels
          [DataMember]
          public PhotoModel galleryphoto { get; set; }
 
-
-
-        public photoconversion galleryphotoconverted { get; set; }
+           [DataMember]
+         public PhotoSearchResultsViewModel photosearchresults { get; set; }
+           [DataMember]
+         public photoconversion galleryphotoconverted { get; set; }
           [DataMember]
-        public string countryname { get; set; }
+         public string countryname { get; set; }
           [DataMember]
-        public string city { get; set; }
+         public string city { get; set; }
         //added screen name since we dont pass profile anymore
           [DataMember]
-        public string screenname { get; set; }
+         public string screenname { get; set; }
           [DataMember]
           public string heightbyculture { get; set; }
           [DataMember]
-        public string mycatchyintroline { get; set; }
+         public string mycatchyintroline { get; set; }
            [DataMember]
-        public string aboutme { get; set; }
+         public string aboutme { get; set; }
            [DataMember]
-        public int? genderid { get; set; }
+         public int? genderid { get; set; }
            [DataMember]
-        public double? distancefromme { get; set; }
+         public double? distancefromme { get; set; }
         //stuff I am looking for , loaded from search settings or 
         //intially loaded by system , which just picks defaults i.e
         //male would be default looking for female etc         
            [DataMember]
-        public string lookingforagefrom { get; set; }
+         public string lookingforagefrom { get; set; }
           [DataMember]
-        public string lookingForageto { get; set; }
-        //double vlaue represents the max distance i am looking for        
-
+         public string lookingForageto { get; set; }
+        //double vlaue represents the max distance i am looking for      
         //Zip Code for search, pull out of postal data contex
         //replace zipcode with city on the membershome page list using thier country and postal code to find cities near them          
          [DataMember]
-        public bool postalcodestatus { get; set; }  //this flag determines if the user is from a coutnry with postal codes , if they are let
+         public bool postalcodestatus { get; set; }  //this flag determines if the user is from a coutnry with postal codes , if they are let
         //them search by postal code otherwise hide it
         //gps data    
           [DataMember]
-        public double? longitude { get; set; }
+         public double? longitude { get; set; }
           [DataMember]
-        public double? latitude { get; set; }
+         public double? latitude { get; set; }
         //convery the ID feild country to the actuall country name if it is needed 
         //addded handling to chop the value i.e trim it using the extentionmethod automatically on a get         
 

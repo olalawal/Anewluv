@@ -1,9 +1,10 @@
+using Repository.Pattern.Ef6;
 using System;
 using System.Collections.Generic;
 
 namespace Anewluv.Domain.Data
 {
-    public partial class photoalbum
+    public partial class photoalbum :Entity
     {
         public photoalbum()
         {

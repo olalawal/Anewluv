@@ -9,10 +9,15 @@ namespace Anewluv.Domain.Data.ViewModels
     //10-29-2011 moved the  edit photo stuff here but it is not edit only, probably should be in photomodel
    
     [DataContract]
-    public class photoeditmodel
+    [Serializable]
+    public class PhotoModel
     {
+
+
         [DataMember]
         public Guid photoid { get; set; }
+        [DataMember]
+        public string photo { get; set; }
         [DataMember]
         public string screenname { get; set; }
         [DataMember]
@@ -40,14 +45,16 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public long orginalsize { get; set; }
         [DataMember]
-        public int convertedsize { get; set; }
+        public long convertedsize { get; set; }
        // [DataMember]
        // public virtual lu_photostatus photostatus { get; set; }
        // [DataMember]
        // public virtual lu_photoapprovalstatus approvalstatus { get; set; }
        // [DataMember]
        // public virtual lu_photoimagetype imagetype { get; set; }
-       
+        [DataMember]
+        public int? totalresults { get; set; }
+      
 
     }  
 }

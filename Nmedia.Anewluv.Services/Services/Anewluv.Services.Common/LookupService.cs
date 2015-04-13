@@ -108,9 +108,6 @@ namespace Anewluv.Services.Common
             }
 
         }
-
-
-
         public List<listitem> getphotoapprovalstatuslist()
         {
 
@@ -202,9 +199,6 @@ namespace Anewluv.Services.Common
 
 
         }
-
-
-
         public List<listitem> getphotostatuslist()
         {
 
@@ -249,9 +243,6 @@ namespace Anewluv.Services.Common
 
        
         }
-
-
-
         public List<listitem> getphotoimagetypeslist()
         {
            
@@ -293,6 +284,48 @@ namespace Anewluv.Services.Common
             }
 
      
+        }
+        public List<listitem> getphotosecurityleveltypelist()
+        {
+
+
+            {
+
+                try
+                {
+#if DISCONECTED
+                List<lu_photoimagetype> photoimagetypelist = new List<lu_photoimagetype>();
+                photoimagetypelist.Add(new lu_photoimagetype { description = "Male",  id  = 1, selected   = false });
+                photoimagetypelist.Add(new lu_photoimagetype { description = "Female", id = 2, selected = false });
+                return photoimagetypelist;
+                
+#else
+                    return CachingFactory.SharedObjectHelper.getphotosecurityleveltypelist(_unitOfWorkAsync);
+                    // return temp;
+#endif
+                }
+                catch (Exception ex)
+                {
+
+                    using (var logger = new Logging(applicationEnum.LookupService))
+                    {
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    }
+
+                    FaultReason faultreason = new FaultReason("Error in Lookup service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
+                finally
+                {
+                    // Api.DisposeMemberMapperService();
+                }
+
+            }
+
+
         }
 
         //olawawl 3-13-2012 added more items 

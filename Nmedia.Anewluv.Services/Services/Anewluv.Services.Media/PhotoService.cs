@@ -27,6 +27,7 @@ using Nmedia.Infrastructure.ExceptionHandling;
 using System.Threading.Tasks;
 using Anewluv.Domain;
 using Repository.Pattern.UnitOfWork;
+using Nmedia.Infrastructure;
 
 namespace Anewluv.Services.Media
 {
@@ -68,19 +69,7 @@ namespace Anewluv.Services.Media
 
         }
 
-        //BEfore unit of work contrcutor
-        //public MemberActionsService(IMemberActionsRepository memberactionsrepository)
-        //    {
-        //        _memberactionsrepository = memberactionsrepository;
-        //       // _apikey  = HttpContext.Current.Request.QueryString["apikey"];
-        //      //  throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
-
-        //    }
-
-
-
-
-        #region "private Data Context methods that are not to be serialzied"
+       #region "private Data Context methods that are not to be serialzied"
        
         //TO DO move to extention methods 
         /// <summary>
@@ -176,11 +165,12 @@ namespace Anewluv.Services.Media
 
 
         }
+
         #endregion
 
         #region "View Photo models"  
 
-        public async Task<PhotoModel> getphotomodelbyphotoid(string photoid, string format)
+        public async Task<PhotoModel> getphotomodelbyphotoid(ProfileModel model)
         {
            
          
@@ -191,15 +181,15 @@ namespace Anewluv.Services.Media
                         
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var convertedformat = model.format);
-                        var convertedphotoid = Guid.Parse(photoid);
+                        //var  model.photoformat = model.photoformatid.Value;
+                       // var photoid = model.photoid;// Guid.Parse(photoid);
 
-                        PhotoModel model = (from p in
-                                                (from r in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id == convertedformat && (a.photo.id == convertedphotoid)).ToList()
+                        PhotoModel photomodel = (from p in
+                                                (from r in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id ==  model.photoformatid.Value && (a.photo.id == model.photoid)).ToList()
                                                  select new
                                                  {
-                                                     photoid = r.photo.id,
-                                                     profileid = r.photo.profile_id,
+                                                     photoid = r.photo.id,   
+                                                     profileid =  r.photo.profile_id,
                                                      screenname = r.photo.profilemetadata.profile.screenname,
                                                      photo = r.image,
                                                      photoformat = r.lu_photoformat,
@@ -231,7 +221,7 @@ namespace Anewluv.Services.Media
 
 
 
-                        return (model);
+                        return (photomodel);
                            });
                     return await task.ConfigureAwait(false);
 
@@ -256,8 +246,7 @@ namespace Anewluv.Services.Media
 
             
         }
-
-        public async Task<PhotoModel> getgalleryphotomodelbyprofileid(string profileid, string format)
+        public async Task<PhotoModel> getgalleryphotomodelbyprofileid(ProfileModel model)
         {
 
          
@@ -269,7 +258,7 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            return _unitOfWorkAsync.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profileid, format);
+                            return _unitOfWorkAsync.Repository<photoconversion>().getgalleryphotomodelbyprofileid(model.profileid,model.photoformatid.Value);
                         });
                         return await task.ConfigureAwait(false);
 
@@ -293,8 +282,7 @@ namespace Anewluv.Services.Media
             }
           
         }
-
-        public async Task<List<PhotoModel>> getphotomodelsbyprofileidandstatus(string profileid, string status, string format)
+        public async Task<List<PhotoModel>> getphotomodelsbyprofileidandstatus(ProfileModel model)
         {
 
            
@@ -308,19 +296,19 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = model.format);
-                            var convertedprofileid = Convert.ToInt32(profileid);
-                            var convertedstatus = model.status);
+                            //var  model.photoformat = model.photoformat;
+                            //var convertedprofileid = Convert.ToInt32(model.profileid);
+                           // var convertedstatus =  model.photostatus
 
-                            //var convertedphotoid = Guid.Parse(photoid);
+                            //var photoid = Guid.Parse(photoid);
                             // Retrieve All User's Photos that are not approved.
                             //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
 
                             // Retrieve All User's Approved Photo's that are not Private and approved.
                             //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
-                            var model = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id == convertedformat && a.photo.profile_id == convertedprofileid &&
-                                ((a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id == convertedstatus))).ToList()
+                            var photomodel= (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id == model.photoformatid && a.photo.profile_id == model.profileid &&
+                                ((a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id == model.photoformatid))).ToList()
                                          select new PhotoModel
                                          {
                                              photoid = p.photo.id,
@@ -334,7 +322,7 @@ namespace Anewluv.Services.Media
                                              creationdate = p.photo.creationdate,
                                          });
 
-                            return (model.OrderByDescending(u => u.creationdate).ToList());
+                            return (photomodel.OrderByDescending(u => u.creationdate).ToList());
                         });
                         return await task.ConfigureAwait(false);
 
@@ -358,67 +346,23 @@ namespace Anewluv.Services.Media
             }
 
            
-        }
+        }      
       
-       public async Task<List<PhotoModel>> getpagedphotomodelbyprofileidandstatus(string profileid, string status, string format, string page, string pagesize)
-        {
-
-         
-         
-            {
-              
-                    try
-                    {
-                       
-                        var task = Task.Factory.StartNew(() =>
-                        {
-                            return _unitOfWorkAsync.Repository<photoconversion>().getpagedphotomodelbyprofileidandstatus(model.profileid), model.status), model.format), model.page), model.pagesize));
-                        });
-                        return await task.ConfigureAwait(false);
-                       
-                    }
-                    catch (Exception ex)
-                    {
-                        //instantiate logger here so it does not break anything else.
-                        logger = new Logging(applicationEnum.MediaService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in photo service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    }
-              
-
-
-               
-            }
-       
-
-        }
-
         //TO DO get photo albums as well ?
         //TO DO not implemented
-        public async Task <PhotoViewModel> getpagedphotoviewmodelbyprofileid(ProfileModel model)
-        {
-           
+       public async Task<List<PhotoModel>> getpagedphotoviewmodelbyprofileid(ProfileModel model)
+        {          
          
             {
-
-               
                     try
                     {
-
                         var task = Task.Factory.StartNew(() =>
                         {
-
                             return _unitOfWorkAsync.Repository<photoconversion>()
-                                .getpagedphotomodelbyprofileid(model.profileid,(int)model.photosformat,model.page.GetValueOrDefault(),model.numberperpage.GetValueOrDefault());
-                   
+                                .getpagedphotomodelbyprofileid(model.profileid,model.photoformatid.Value,model.page.GetValueOrDefault(),model.numberperpage.GetValueOrDefault());                   
 
                         });
                         return await task.ConfigureAwait(false);
-
                        
                     }
                     catch (Exception ex)
@@ -433,7 +377,7 @@ namespace Anewluv.Services.Media
                         throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                     }
 
-                    return new PhotoViewModel();
+                   // return new List<PhotoModel>();
              
 
               
@@ -443,28 +387,114 @@ namespace Anewluv.Services.Media
               
         #endregion
 
-        #region "Edititable Photo models
+        #region "main Query methods"
 
-        public async Task<photoeditmodel> getphotoeditmodelbyphotoid(string photoid, string format)
-        {
-           
+       //This should be the only method used to get photos
+       public async Task<PhotoSearchResultsViewModel> getpagedphotosbyprofileidformatstatusandalbumid(ProfileModel model)
+       {
+           {
+               try
+               {
+                   var task = Task.Factory.StartNew(() =>
+                   {
+                       var repo = _unitOfWorkAsync.Repository<photoconversion>();
+                       var dd = mediaextentionmethods.getpagedphotomodelbyprofileidandstatusandalbumid
+                           (repo, model.profileid, model.photoformatid, model.phototstatusid, model.photosecuritylevel, model.photoalbumid, model.page, model.numberperpage);
+
+                       return dd;
+ 
+
+                   });
+                   return await task.ConfigureAwait(false);
+
+
+               }
+               catch (Exception ex)
+               {
+                   //instantiate logger here so it does not break anything else.
+                   logger = new Logging(applicationEnum.MediaService);
+                   logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                   //can parse the error to build a more custom error mssage and populate fualt faultreason
+                   FaultReason faultreason = new FaultReason("Error in photo service");
+                   string ErrorMessage = "";
+                   string ErrorDetail = "ErrorMessage: " + ex.Message;
+                   throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+               }
+
+           }
+
+
+
+       }
+       //this is the method used to get albums and the ids      
+       public async Task<List<PhotoAlbumModel>> getphotoalbumlistbyprofileid(ProfileModel model)
+       {
+
+           {
+               try
+               {
+
+                   var task = Task.Factory.StartNew(() =>
+                   {
+                       
+                       // string strProfileID = this.getprofileidbyscreenname(strScreenName);
+                       var albums = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.id == model.profileid).ToList()
+                                     join f in _unitOfWorkAsync.Repository<photoalbum>().Queryable() on p.id equals f.profile_id
+                                     select new PhotoAlbumModel
+                                     {
+                                         active = true,
+                                         description = f.description,
+                                         id = f.id
+
+                                     }).ToList();
+
+
+                       return albums;
+                   });
+                   return await task.ConfigureAwait(false);
+
+
+               }
+               catch (Exception ex)
+               {
+                   //instantiate logger here so it does not break anything else.
+                   logger = new Logging(applicationEnum.MediaService);
+                   logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                   //can parse the error to build a more custom error mssage and populate fualt faultreason
+                   FaultReason faultreason = new FaultReason("Error in photo service");
+                   string ErrorMessage = "";
+                   string ErrorDetail = "ErrorMessage: " + ex.Message;
+                   throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+               }
+
+
+
+
+               return null;
+           }
+
+
+
+       }
+
+       //** end of the new replacement quries *
+        
+       public async Task<PhotoModel> getphotomodelbyphotoid(ProfileModel model)
+        {          
          
             {
-
              
                     try
                     {
-
-
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = model.format);
-                            var convertedphotoid = Guid.Parse(photoid);
-                            // var convertedprofileid = Convert.ToInt32(profileid);
-                            // var convertedstatus = model.status);
+                           // var  model.photoformat = model. model.photoformat);
+                           // var photoid = Guid.Parse(photoid);
+                            // var convertedprofileid = Convert.ToInt32(model.profileid);
+                            // var convertedstatus =  model.photostatus);
 
-                            photoeditmodel model = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(p => p.formattype_id == convertedformat && p.photo.id == convertedphotoid).ToList()
-                                                    select new photoeditmodel
+                            PhotoModel profilemodel = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(p => p.formattype_id == model.photoformatid.Value && p.photo.id == model.photoid).ToList()
+                                                    select new PhotoModel
                                                     {
                                                         photoid = p.photo.id,
                                                         profileid = p.photo.profile_id,
@@ -479,7 +509,7 @@ namespace Anewluv.Services.Media
 
                             // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
                             //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
-                            return (model);
+                            return (profilemodel);
                         });
                         return await task.ConfigureAwait(false);
 
@@ -501,8 +531,7 @@ namespace Anewluv.Services.Media
 
             }
        }
-
-        public async Task<List<photoeditmodel>> getphotoeditmodelsbyprofileidandstatus(string profile_id, string status, string format)
+       public async Task<List<PhotoModel>> getphotomodelsbyprofileidandstatus(ProfileModel model)
         {
            
          
@@ -514,12 +543,12 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = model.format);
-                            var convertedstatus = model.status);
+                          //  var  model.photoformat = model. model.photoformat);
+                          //  var convertedstatus =  model.photostatus);
 
-                            var model = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id == convertedformat
-                                && a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id == convertedstatus).ToList()
-                                         select new photoeditmodel
+                            var photomodel= (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id ==  model.photoformatid.Value
+                                && a.photo.lu_photoapprovalstatus != null && a.photo.approvalstatus_id == model.phototstatusid.Value).ToList()
+                                         select new PhotoModel
                                          {
                                              photoid = p.photo.id,
                                              profileid = p.photo.profile_id,
@@ -531,7 +560,7 @@ namespace Anewluv.Services.Media
                                              photostatusid = p.photo.lu_photostatus.id,
                                              checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
                                          });
-                            return (model.OrderByDescending(u => u.creationdate).ToList());
+                            return (photomodel.OrderByDescending(u => u.creationdate).ToList());
                         });
                         return await task.ConfigureAwait(false);
 
@@ -556,33 +585,28 @@ namespace Anewluv.Services.Media
            
 
         }
-
-        public async Task<List<photoeditmodel>> getpagedphotoeditmodelsbyprofileidstatus(string profile_id, string status, string format,
-                                                              string page, string pagesize)
-        {
-
-           
+       public async Task<PhotoSearchResultsViewModel> getpagedphotomodelsbyprofileidstatus(ProfileModel model)
+        {          
          
-            {
-              
+            {              
                     try
                     {
                         
                     var task = Task.Factory.StartNew(() =>
                     {
-                        var convertedformat = model.format);
-                        //var convertedphotoid = Guid.Parse(photoid);
-                        //var convertedprofileid = Convert.ToInt32(profileid);
-                        var convertedstatus = model.status);
+                       // var  model.photoformat = model. model.photoformat);
+                        //var photoid = Guid.Parse(photoid);
+                        //var convertedprofileid = Convert.ToInt32(model.profileid);
+                       // var convertedstatus =  model.photostatus);
                         // Retrieve All User's Photos that are not approved.
                         //var photos = MyPhotos.Where(a => a.approvalstatus.id  == (int)approvalstatus);
 
                         // Retrieve All User's Approved Photo's that are not Private and approved.
                         //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
-                        var model = (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id == convertedformat && a.photo.lu_photoapprovalstatus != null
-                            && a.photo.approvalstatus_id == convertedstatus).ToList()
-                                     select new photoeditmodel
+                        var photomodel= (from p in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(a => a.formattype_id ==  model.photoformatid.Value && a.photo.lu_photoapprovalstatus != null
+                            && a.photo.approvalstatus_id == model.phototstatusid.Value).ToList()
+                                     select new PhotoModel
                                      {
                                          photoid = p.photo.id,
                                          profileid = p.photo.profile_id,
@@ -596,10 +620,18 @@ namespace Anewluv.Services.Media
                                      });
 
 
-                        if (model.Count() > Convert.ToInt32(pagesize)) { pagesize = model.Count().ToString(); }
+                        //if (photomodel.Count() > Convert.ToInt32(model.numberperpage)) { model.numberperpage = photomodel.Count() }
 
-                        return (model.OrderByDescending(u => u.creationdate).Skip((model.page) - 1) * model.pagesize)).Take(model.pagesize))).ToList();
-                           });
+                          // int? totalrecordcount = MemberSearchViewmodels.Count;
+                        //handle zero and null paging values
+                        if (model.page.Value == null || model.page == 0) model.page = 1;
+                        if (model.numberperpage == null || model.numberperpage == 0)model.numberperpage = 4;
+                        bool allowpaging = (photomodel.Count() >= (model.page * model.numberperpage) ? true : false);
+                        var pageData =model.page > 1 & allowpaging ?
+                            new PaginatedList<PhotoModel>().GetCurrentPages(photomodel.ToList(), model.page ?? 1, model.numberperpage ?? 20) : photomodel.Take(model.numberperpage.GetValueOrDefault());
+                        return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
+
+                    });
                     return await task.ConfigureAwait(false);
 
                     
@@ -622,8 +654,8 @@ namespace Anewluv.Services.Media
             }
  
         }
-        //12-10-2012 this also filters the format
-        public  async Task<PhotoEditViewModel> getpagededitphotoviewmodelbyprofileidandformat(ProfileModel model)
+       //12-10-2012 this also filters the  model.photoformat
+       public  async Task<PhotoEditViewModel> getpagededitphotoviewmodelbyprofileidandformat(ProfileModel model)
         {
             
          
@@ -635,20 +667,21 @@ namespace Anewluv.Services.Media
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            var convertedformat = model.photosformat;
-                            // var convertedphotoid = Guid.Parse(photoid);
-                            var convertedprofileid =model.profileid;
-                            //  var convertedstatus = model.status);
+                           // var  model.photoformat = model.photosformat;
+                            // var photoid = Guid.Parse(photoid);
+                          //  var convertedprofileid =model.model.profileid;
+                            //  var convertedstatus =  model.photostatus);
 
-                            var myPhotos = _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(z => z.formattype_id == (int)convertedformat && z.photo.profile_id == convertedprofileid).ToList();
-                            var ApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, model.page.Value, model.numberperpage.Value).ToList();
-                            var NotApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, model.page.Value, model.numberperpage.Value);
-                            //TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
-                            //since this is edit mode that is fine
-                            var PrivatePhotos = mediaextentionmethods.filterphotosbysecuitylevel(myPhotos, securityleveltypeEnum.Private, model.page.Value, model.numberperpage.Value);
-                            var model = mediaextentionmethods.getphotoeditviewmodel(ApprovedPhotos, NotApprovedPhotos, PrivatePhotos, myPhotos);
+                            //var myPhotos = _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(z => z.formattype_id == (int) model.photoformat && z.photo.profile_id == model.profileid).ToList();
+                            //var ApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.Approved, model.page.Value, model.numberperpage.Value).ToList();
+                            //var NotApprovedPhotos = mediaextentionmethods.filterandpagephotosbystatus(myPhotos, photoapprovalstatusEnum.NotReviewed, model.page.Value, model.numberperpage.Value);
+                            ////TO DO need to discuss this all photos should be filtered by security level for other users not for your self so 
+                            ////since this is edit mode that is fine
+                            //var PrivatePhotos = mediaextentionmethods.filterandpagephotosbysecuitylevel(myPhotos, securityleveltypeEnum.Private, model.page.Value, model.numberperpage.Value);
+                            //var photomodel= mediaextentionmethods.getphotoeditviewmodel(ApprovedPhotos, NotApprovedPhotos, PrivatePhotos, myPhotos);
 
-                            return (model);
+                           // return (photomodel);
+                            return new PhotoEditViewModel();
 
                         });
                         return await task.ConfigureAwait(false);
@@ -671,97 +704,264 @@ namespace Anewluv.Services.Media
  
         }
        
-        #endregion
+       #endregion
 
-        public async Task<AnewluvMessages> deleteuserphoto(string photoid)
+        #region "Edit Test methods"
+
+        public async Task<AnewluvMessages> edituserphoto(ProfileModel model)
         {
-
-         
             {
-               //do not audit on adds
+                //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
-             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
 
-                
-                        try
+                    try
+                    {
+
+
+                        var task = Task.Factory.StartNew(() =>
                         {
+                            AnewluvMessages.errormessages.Add("Only caption edits are allowed use edit caption");
+                            return AnewluvMessages;
+                                ;
+  
+                        });
+                        return await task.ConfigureAwait(false);
 
 
-                            var task = Task.Factory.StartNew(() =>
-                            {
-                                // var convertedformat = model.format);
-                                var convertedphotoid = Guid.Parse(photoid);
-                                //var convertedprofileid = Convert.ToInt32(profileid);
-                                // var convertedstatus = model.status);
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
 
-                                // Retrieve single value from photos table
-                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == convertedphotoid).FirstOrDefault();
-                                PhotoModify.photostatus_id = (int)photostatusEnum.deletedbyuser;
-                                _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-                                // Update database
-                                // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                              var i  =_unitOfWorkAsync.SaveChanges();
-                               // transaction.Commit();
-                                AnewluvMessages.messages.Add("photo deleted successfully");
-                                return AnewluvMessages;
-                            });
-                            return await task.ConfigureAwait(false);
-
-                        
-                        }
-                        catch (Exception ex)
-                        {
-                            //TO DO track the transaction types only rollback on DB connections
-                            //rollback transaction
-                           // transaction.Rollback();
-                            //instantiate logger here so it does not break anything else.
-                            logger = new Logging(applicationEnum.MediaService);
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                            //can parse the error to build a more custom error mssage and populate fualt faultreason
-                            FaultReason faultreason = new FaultReason("Error in photo service");
-                            string ErrorMessage = "";
-                            string ErrorDetail = "ErrorMessage: " + ex.Message;
-                            throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                        }
-
-              
-
-
-                 
                 }
             }
 
         }
-
-        public async Task<AnewluvMessages> makeuserphoto_private(string photoid)
+        public async Task<AnewluvMessages> deleteuserphotos(ProfileModel model)
         {
-         
             {
-               //do not audit on adds
+                //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
-             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
-                      try
-                        {
 
-                          
-                    var task = Task.Factory.StartNew(() =>
+                    try
                     {
-                                //var convertedformat = model.format);
-                                var convertedphotoid = Guid.Parse(photoid);
-                                // var convertedprofileid = Convert.ToInt32(profileid);
-                                // var convertedstatus = model.status);
+
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                            foreach (Guid photoid in model.photoids)
+                            {
+                                // var  model.photoformat = model. model.photoformat);
+                                //var photoid = model.photoid;
+                                //var convertedprofileid = Convert.ToInt32(model.profileid);
+                                // var convertedstatus =  model.photostatus);
 
                                 // Retrieve single value from photos table
-                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == convertedphotoid).FirstOrDefault();
+                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
+                                PhotoModify.photostatus_id = (int)photostatusEnum.deletedbyuser;
+                                _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+                                // Update database
+                                // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                                var i = _unitOfWorkAsync.SaveChanges();
+                                // transaction.Commit();
+                                AnewluvMessages.messages.Add("photo deleted successfully");
+                               
+                            
+                            }
+                            return AnewluvMessages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+        }
+        public async Task<AnewluvMessages> deleteuserphoto(ProfileModel model)
+        {
+
+
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                {
+
+
+                    try
+                    {
+
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                            // var  model.photoformat = model. model.photoformat);
+                            //var photoid = model.photoid;
+                            //var convertedprofileid = Convert.ToInt32(model.profileid);
+                            // var convertedstatus =  model.photostatus);
+
+                            // Retrieve single value from photos table
+                            photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid).FirstOrDefault();
+                            PhotoModify.photostatus_id = (int)photostatusEnum.deletedbyuser;
+                            _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+                            // Update database
+                            // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                            var i = _unitOfWorkAsync.SaveChanges();
+                            // transaction.Commit();
+                            AnewluvMessages.messages.Add("photo deleted successfully");
+                            return AnewluvMessages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+
+
+
+
+                }
+            }
+
+        }
+        public async Task<AnewluvMessages> makeuserphoto_private(ProfileModel model)
+        {
+
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                {
+                    try
+                    {
+
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                            //var  model.photoformat = model. model.photoformat);
+                            //  var photoid = Guid.Parse(photoid);
+                            // var convertedprofileid = Convert.ToInt32(model.profileid);
+                            // var convertedstatus =  model.photostatus);
+
+                            // Retrieve single value from photos table
+                            photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
+                            PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
+
+                            if (PhotoModify.photo_securitylevel.Any(z => z.id != (int)securityleveltypeEnum.Private))
+                            {
+                                PhotoModify.photo_securitylevel.Add(new photo_securitylevel
+                                {
+                                    photo_id = model.photoid.Value,
+                                    lu_securityleveltype = _unitOfWorkAsync.Repository<lu_securityleveltype>().Queryable().Where(p => p.id == (int)securityleveltypeEnum.Private).FirstOrDefault()
+                                });
+                                // newsecurity.id = (int)securityleveltypeEnum.Private;
+                            }
+
+                            _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+                            // Update database
+                            // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                            var i = _unitOfWorkAsync.SaveChanges();
+                            // transaction.Commit();
+                           AnewluvMessages.messages.Add("photo privacy added for photo with id: " + model.photoid);
+                            return AnewluvMessages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+        }
+        public async Task<AnewluvMessages> makeuserphotos_private(ProfileModel model)
+        {
+
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                {
+                    try
+                    {
+
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                            //var  model.photoformat = model. model.photoformat);
+                            //  var photoid = Guid.Parse(photoid);
+                            // var convertedprofileid = Convert.ToInt32(model.profileid);
+                            // var convertedstatus =  model.photostatus);
+                            foreach (Guid photoid in model.photoids)
+                            {
+                                // Retrieve single value from photos table
+                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == photoid && u.profile_id ==model.profileid).FirstOrDefault();
                                 PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
 
                                 if (PhotoModify.photo_securitylevel.Any(z => z.id != (int)securityleveltypeEnum.Private))
                                 {
                                     PhotoModify.photo_securitylevel.Add(new photo_securitylevel
                                     {
-                                        photo_id = convertedphotoid,
+                                        photo_id = model.photoid.Value,
                                         lu_securityleveltype = _unitOfWorkAsync.Repository<lu_securityleveltype>().Queryable().Where(p => p.id == (int)securityleveltypeEnum.Private).FirstOrDefault()
                                     });
                                     // newsecurity.id = (int)securityleveltypeEnum.Private;
@@ -770,100 +970,168 @@ namespace Anewluv.Services.Media
                                 _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
                                 // Update database
                                 // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                                var i  =_unitOfWorkAsync.SaveChanges();
-                               // transaction.Commit();
-                                AnewluvMessages.messages.Add("photo privacy added");
-                                return AnewluvMessages;
-                           });
-                    return await task.ConfigureAwait(false);
+                                var i = _unitOfWorkAsync.SaveChanges();
+                                // transaction.Commit();
+                                AnewluvMessages.messages.Add("photo privacy added for photo with id: " + photoid);
+                            }
+                            return AnewluvMessages;
+                        });
+                        return await task.ConfigureAwait(false);
 
-                         
-                        }
-                        catch (Exception ex)
-                        {
-                            //TO DO track the transaction types only rollback on DB connections
-                            //rollback transaction
-                           // transaction.Rollback();
-                            //instantiate logger here so it does not break anything else.
-                            logger = new Logging(applicationEnum.MediaService);
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                            //can parse the error to build a more custom error mssage and populate fualt faultreason
-                            FaultReason faultreason = new FaultReason("Error in photo service");
-                            string ErrorMessage = "";
-                            string ErrorDetail = "ErrorMessage: " + ex.Message;
-                            throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                        }
-                  
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
                 }
             }
 
         }
-
-        public async Task<AnewluvMessages> makeuserphoto_public(string photoid)
+        public async Task<AnewluvMessages> makeuserphoto_public(ProfileModel model)
         {
-         
+
             {
-               //do not audit on adds
+                //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
-             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
-                 
-                        try
+
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
                         {
+                            //var  model.photoformat = model. model.photoformat);
+                            //  var photoid = Guid.Parse(photoid);
+                            // var convertedprofileid = Convert.ToInt32(model.profileid);
+                            // var convertedstatus =  model.photostatus);
 
-                            var task = Task.Factory.StartNew(() =>
-                            {
-                                //var convertedformat = model.format);
-                                var convertedphotoid = Guid.Parse(photoid);
-                                // var convertedprofileid = Convert.ToInt32(profileid);
-                                // var convertedstatus = model.status);
+                            // Retrieve single value from photos table
+                            photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
+                            PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
+                            _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+                            // Update database
+                            // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                            var i = _unitOfWorkAsync.SaveChanges();
+                            // transaction.Commit();
+                          AnewluvMessages.messages.Add("photo privacy removed for photo with id: " + model.photoid);
+                            return AnewluvMessages;
 
-                                // Retrieve single value from photos table
-                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == convertedphotoid).FirstOrDefault();
-                                PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
-                                _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-                                // Update database
-                                // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                              var i  =_unitOfWorkAsync.SaveChanges();
-                               // transaction.Commit();
-                               AnewluvMessages.messages.Add("photo privacy removed");
-                               return AnewluvMessages;
-
-                            });
-                            return await task.ConfigureAwait(false);
-
-                            
-                        }
-                        catch (Exception ex)
-                        {
-                            //TO DO track the transaction types only rollback on DB connections
-                            //rollback transaction
-                           // transaction.Rollback();
-                            //instantiate logger here so it does not break anything else.
-                            logger = new Logging(applicationEnum.MediaService);
-                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                            //can parse the error to build a more custom error mssage and populate fualt faultreason
-                            FaultReason faultreason = new FaultReason("Error in photo service");
-                            string ErrorMessage = "";
-                            string ErrorDetail = "ErrorMessage: " + ex.Message;
-                            throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                        }
-
-                   
+                        });
+                        return await task.ConfigureAwait(false);
 
 
-                  
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+
+
+
+
                 }
             }
 
 
-         
-          
+
+
         }
+        public async Task<AnewluvMessages> makeuserphotos_public(ProfileModel model)
+        {
+
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                {
+
+                    try
+                    {
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                               foreach (Guid photoid in model.photoids)
+                               {
+
+                                    // Retrieve single value from photos table
+                                    photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == photoid && model.profileid == u.profile_id).FirstOrDefault();
+                                    PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
+                                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+                                    // Update database
+                                    // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                                    var i = _unitOfWorkAsync.SaveChanges();
+                                    // transaction.Commit();
+                                    AnewluvMessages.messages.Add("photo privacy removed for photo with id: " + photoid);
+                               }
+                            return AnewluvMessages;
+
+                        });
+                        return await task.ConfigureAwait(false);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+
+
+
+
+                }
+            }
+
+
+
+
+        }
+
+
+      
+                           
+        #endregion
+
+
+       
 
         //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
         //since photo is only a row no big deal if duplicates but since conversion is required we must roll back if the photo already exists
-        public async Task<AnewluvMessages> addphotos(PhotoUploadViewModel model)
+        public async Task<AnewluvMessages> addphotos(ProfileModel model)
         {
 
 
@@ -890,7 +1158,7 @@ namespace Anewluv.Services.Media
                         var task = Task.Factory.StartNew(() =>
                             {
                                 
-                                foreach (PhotoUploadModel item in model.photosuploaded)
+                                foreach (PhotoUploadModel item in model.photouploadviewmodel.photosuploaded)
                                 {
                                     #region "inner code"
 
@@ -993,7 +1261,7 @@ namespace Anewluv.Services.Media
         /// </summary>
         /// <param name="newphoto"></param>
         /// <returns></returns>
-        public async Task<AnewluvMessages> addsinglephoto(PhotoUploadModel newphoto, string profileid)
+        public async Task<AnewluvMessages> addsinglephoto(ProfileModel model)
         {
 
             //update method code
@@ -1008,12 +1276,12 @@ namespace Anewluv.Services.Media
                         try
                         {
 
+                            var newphoto = model.singlephotouploadmodel;
 
-
-                            //var convertedformat = model.format);
-                           // var convertedphotoid = Guid.Parse(photoid);
-                            var convertedprofileid = Convert.ToInt32(profileid);
-                            //var convertedstatus = model.status);
+                            //var  model.photoformat = model. model.photoformat);
+                           // var photoid = Guid.Parse(photoid);
+                          //  var convertedprofileid = Convert.ToInt32(model.profileid);
+                            //var convertedstatus =  model.photostatus);
 
                             AnewluvResponse response = new AnewluvResponse();
                             AnewluvMessages message = new AnewluvMessages();
@@ -1022,7 +1290,7 @@ namespace Anewluv.Services.Media
                             photo NewPhoto = new photo();
                             Guid identifier = Guid.NewGuid();
                             NewPhoto.id = identifier;
-                            NewPhoto.profile_id = convertedprofileid; //model.ProfileImage.Length;
+                            NewPhoto.profile_id =  model.profileid; //model.ProfileImage.Length;
                             // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
                             NewPhoto.creationdate = newphoto.creationdate;
                             NewPhoto.imagecaption = newphoto.caption;
@@ -1038,7 +1306,7 @@ namespace Anewluv.Services.Media
                             if (temp.Count > 0)
                             {
                                 //existing conversions to compare with new one : 
-                                var existingthumbnailconversion = _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(z => z.photo.profile_id == convertedprofileid & z.formattype_id == (int)photoformatEnum.Thumbnail).ToList();
+                                var existingthumbnailconversion = _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(z => z.photo.profile_id == model.profileid & z.formattype_id == (int)photoformatEnum.Thumbnail).ToList();
                                 var newphotothumbnailconversion = temp.Where(p => p.formattype_id == (int)photoformatEnum.Thumbnail).FirstOrDefault();
                                 if (existingthumbnailconversion.Any(p => p.size == newphotothumbnailconversion.size & p.image == newphotothumbnailconversion.image))
                                 {
@@ -1138,12 +1406,14 @@ namespace Anewluv.Services.Media
           
           
 
-        }
-        
+        }        
         //Stuff pulled from dating service regular
         // added by Deshola on 5/17/2011
 
-        public async Task<string> getgalleryphotobyscreenname(string strscreenname, string format)
+
+
+
+        public async Task<string> getgalleryphotobyscreenname(ProfileModel model)
         {
 
            
@@ -1156,13 +1426,13 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = model.format);
-                            //  var convertedphotoid = Guid.Parse(photoid);
-                            //  var convertedprofileid = Convert.ToInt32(profileid);
-                            // var convertedstatus = model.status);
-                            var GalleryPhoto = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.screenname == strscreenname).ToList()
+                           // var  model.photoformat = model. model.photoformat);
+                            //  var photoid = Guid.Parse(photoid);
+                            //  var convertedprofileid = Convert.ToInt32(model.profileid);
+                            // var convertedstatus =  model.photostatus);
+                            var GalleryPhoto = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.screenname == model.screenname).ToList()
                                                 join f in _unitOfWorkAsync.Repository<photoconversion>().Queryable() on p.id equals f.photo.profile_id
-                                                where (f.formattype_id == (int)convertedformat && f.photo.lu_photoapprovalstatus != null &&
+                                                where (f.formattype_id == (int) model.photoformatid.Value && f.photo.lu_photoapprovalstatus != null &&
                                                 f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
                                                 f.photo.imagetype_id == (int)photostatusEnum.Gallery)
                                                 select f).FirstOrDefault();
@@ -1193,12 +1463,8 @@ namespace Anewluv.Services.Media
 
          
         }
-
-        public async Task<string> getgalleryimagebyphotoid(string photoid, string format)
+        public async Task<string> getgalleryimagebyphotoid(ProfileModel model)
         {
-
-           
-         
             {
 
               
@@ -1207,13 +1473,13 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = model.format);
-                            var convertedphotoid = Guid.Parse(photoid);
-                            //var convertedprofileid = Convert.ToInt32(profileid);
-                            // var convertedstatus = model.status);
+                            //var  model.photoformat = model. model.photoformat);
+                           // var photoid = Guid.Parse(photoid);
+                            //var convertedprofileid = Convert.ToInt32(model.profileid);
+                            // var convertedstatus =  model.photostatus);
 
-                            var GalleryPhoto = (from f in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(f => f.photo.id == (convertedphotoid) &&
-                             f.formattype_id == (int)convertedformat && f.photo.lu_photoapprovalstatus != null &&
+                            var GalleryPhoto = (from f in _unitOfWorkAsync.Repository<photoconversion>().Queryable().Where(f => f.photo.id == (model.photoid) &&
+                             f.formattype_id == model.photoformatid.Value && f.photo.lu_photoapprovalstatus != null &&
                              f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
                              f.photo.imagetype_id == (int)photostatusEnum.Gallery).ToList()
                                                 select f).FirstOrDefault();
@@ -1247,7 +1513,7 @@ namespace Anewluv.Services.Media
         }
         //TO DO normalize name
        
-       public async Task<string> getgalleryphotobyprofileid(string profileid, string format)
+       public async Task<string> getgalleryphotobyprofileid(ProfileModel model)
         {
            
          
@@ -1259,13 +1525,13 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            var convertedformat = model.format);
-                            var convertedprofileid = Convert.ToInt32(profileid);
+                           // var  model.photoformat = model. model.photoformat);
+                          //  var convertedprofileid = Convert.ToInt32(model.profileid);
 
 
-                            var GalleryPhoto = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.id == convertedprofileid).ToList()
+                            var GalleryPhoto = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.id == model.profileid).ToList()
                                                 join f in _unitOfWorkAsync.Repository<photoconversion>().Queryable() on p.id equals f.photo.profile_id
-                                                where (f.formattype_id == (int)Convert.ToInt32(format) && f.photo.lu_photoapprovalstatus != null &&
+                                                where (f.formattype_id == (int)Convert.ToInt32( model.photoformatid.Value) && f.photo.lu_photoapprovalstatus != null &&
                                                 f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
                                                 f.photo.imagetype_id == (int)photostatusEnum.Gallery)
                                                 select f).FirstOrDefault();
@@ -1298,9 +1564,8 @@ namespace Anewluv.Services.Media
      
            
         }
-
         //TO DO fix this code
-        public async Task<string> getgalleryimagebynormalizedscreenname(string strScreenName, string format)
+        public async Task<string> getgalleryimagebynormalizedscreenname(ProfileModel model)
         {
 
            
@@ -1315,9 +1580,9 @@ namespace Anewluv.Services.Media
                         {
                             var test = "";
                             // string strProfileID = this.getprofileidbyscreenname(strScreenName);
-                            var GalleryPhoto = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.screenname.Replace(" ", "") == strScreenName).ToList()
+                            var GalleryPhoto = (from p in _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.screenname.Replace(" ", "") == model.screenname).ToList()
                                                 join f in _unitOfWorkAsync.Repository<photoconversion>().Queryable() on p.id equals f.photo.profile_id
-                                                where (f.formattype_id == (int)Convert.ToInt32(format) && f.photo.lu_photoapprovalstatus != null &&
+                                                where (f.formattype_id == (int)Convert.ToInt32( model.photoformatid.Value) && f.photo.lu_photoapprovalstatus != null &&
                                                     f.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved &&
                                                     f.photo.imagetype_id == (int)photostatusEnum.Gallery)
                                                 select f).FirstOrDefault();
@@ -1355,22 +1620,16 @@ namespace Anewluv.Services.Media
          
         
         }
-
-        public async Task<bool> checkifphotocaptionalreadyexists(string profileid, string strPhotoCaption)
+        public async Task<bool> checkifphotocaptionalreadyexists(ProfileModel model)
         {
-
-           
-         
             {
-
-               
                     try
                     {
                         
                     var task = Task.Factory.StartNew(() =>
                     {
-                                var convertedprofileid = Convert.ToInt32(profileid);
-                                var myPhotoList = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == convertedprofileid && p.imagecaption == strPhotoCaption).FirstOrDefault();
+                                var convertedprofileid = Convert.ToInt32(model.profileid);
+                                var myPhotoList = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == convertedprofileid && p.imagecaption == model.photocaption).FirstOrDefault();
                                 if (myPhotoList != null)
                                 {
                                     return true;
@@ -1395,31 +1654,21 @@ namespace Anewluv.Services.Media
                         string ErrorDetail = "ErrorMessage: " + ex.Message;
                         throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                     }
-     
-
-
-              
             }
         
           //  return _photorepo.checkifphotocaptionalreadyexists(convertedprofileid, strPhotoCaption);
-
-
-           
         }
-
-        public async Task<bool> checkforgalleryphotobyprofileid(string profileid)
-        {
-
-           
+        public async Task<bool> checkforgalleryphotobyprofileid(ProfileModel model)
+        {           
          
-            {                
+            {               
                       
                             try
                             {
 
                                 var task = Task.Factory.StartNew(() =>
                                 {
-                                    var convertedprofileid = Convert.ToInt32(profileid);
+                                    var convertedprofileid = Convert.ToInt32(model.profileid);
                                     var GalleryPhoto = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == convertedprofileid &&
                                     p.lu_photoapprovalstatus != null && p.approvalstatus_id == (int)photoapprovalstatusEnum.Approved && p.imagetype_id == (int)photostatusEnum.Gallery).FirstOrDefault();
 
@@ -1452,11 +1701,8 @@ namespace Anewluv.Services.Media
 
 
         }
-
-        public async Task<bool> checkforuploadedphotobyprofileid(string profileid)
-        {
-
-           
+        public async Task<bool> checkforuploadedphotobyprofileid(ProfileModel model)
+        {           
          
             {
                                     
@@ -1465,7 +1711,7 @@ namespace Anewluv.Services.Media
 
                             var task = Task.Factory.StartNew(() =>
                             {
-                                var convertedprofileid = Convert.ToInt32(profileid);
+                                var convertedprofileid = Convert.ToInt32(model.profileid);
                                 IQueryable<photo> GalleryPhoto = default(IQueryable<photo>);
                                 //Dim ctx As New Entities()
                                 GalleryPhoto = _unitOfWorkAsync.Repository<photo>().Queryable().Where(p => p.profile_id == convertedprofileid);
@@ -1499,7 +1745,6 @@ namespace Anewluv.Services.Media
 
           
         }
-
         //TO DO move to media extention methods or generic extentions
         /// <summary>
         /// 
@@ -1558,7 +1803,6 @@ namespace Anewluv.Services.Media
            
 
         }
-
 
     }
 }

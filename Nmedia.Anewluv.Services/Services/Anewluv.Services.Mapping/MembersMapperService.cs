@@ -108,7 +108,7 @@ namespace Anewluv.Services.Mapping
                     {
 
 
-                        return membermappingextentions.mapmembersearchviewmodel(model.profileid, model.modeltomap, model.allphotos, db, geodb);
+                        return membermappingextentions.mapmembersearchviewmodel(model.profileid, model.modeltomap, db, geodb);
 
 
                     });
@@ -158,7 +158,7 @@ namespace Anewluv.Services.Mapping
                             modeltomap = null;
                             modeltomap.id = Convert.ToInt32(item);
                             tempmodel.modeltomap = modeltomap;
-                            returnmodel.results.Add(membermappingextentions.mapmembersearchviewmodel(tempmodel.profileid, tempmodel.modeltomap, tempmodel.allphotos, db, geodb));
+                            returnmodel.results.Add(membermappingextentions.mapmembersearchviewmodel(tempmodel.profileid, tempmodel.modeltomap,  db, geodb));
                             
 
                         }
@@ -222,7 +222,7 @@ namespace Anewluv.Services.Mapping
                             //Move all this to a service
                           //ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid }, model.allphotos, db, geodb),
                             //profile of the person being viewed
-                            ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() }, model.allphotos, db, geodb),
+                            ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() },  db, geodb),
                             ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db)
                         };
 
@@ -381,8 +381,8 @@ namespace Anewluv.Services.Mapping
                             {
                                 //TO Do user a mapper instead of a contructur and map it from the service
                                 //Move all this to a service
-                                ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid }, model.allphotos, db, geodb),
-                                ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid, new MemberSearchViewModel { id = Convert.ToInt32(item) }, model.allphotos, db, geodb)
+                                ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid },  db, geodb),
+                                ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid, new MemberSearchViewModel { id = Convert.ToInt32(item) }, db, geodb)
 
                             };
 
@@ -684,7 +684,8 @@ namespace Anewluv.Services.Mapping
                         //  {
                         //  PhotoService PhotoService = new PhotoService(tempdb);
 
-                        var returnedTaskTResult = AsyncCalls.getimageb64stringfromurlasync(membersmodel.rpxmodel.photo, "");
+                      
+                        var returnedTaskTResult = AsyncCalls.getimageb64stringfromurlasync(new ProfileModel { imageUrl =   membersmodel.rpxmodel.photo,inmagesource =""});
                         photobeinguploaded.imageb64string = returnedTaskTResult.Result;
 
                         //    }
@@ -700,7 +701,8 @@ namespace Anewluv.Services.Mapping
                         //  using (var tempdb = AnewluvContext)
                         // {
                         // PhotoService PhotoService = new PhotoService(tempdb);
-                        var photouploadTaskResult = AsyncCalls.addphotosasync(photouploadvm);
+
+                        var photouploadTaskResult = AsyncCalls.addphotosasync(new ProfileModel { photouploadviewmodel = photouploadvm });
                         var messages = photouploadTaskResult.Result;
 
                         //  }
@@ -1997,7 +1999,7 @@ namespace Anewluv.Services.Mapping
                 lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
                 lastlogindate = x.lastlogindate,
                 distancefromme = x.distancefromme,
-                galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(x.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString()),
+                galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(x.id, (int)photoformatEnum.Thumbnail),
                 lookingforagefrom = x.lookingforagefrom,
                 lookingForageto = x.lookingForageto,
                 online = db.Repository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })

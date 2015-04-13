@@ -1479,9 +1479,6 @@ namespace Anewluv.Services.Authentication
             profile profile = new profile();
             AnewluvResponse response = new AnewluvResponse();
             bool activationsuccesful = false;
-
-            
-
          
             {
 
@@ -1538,7 +1535,7 @@ namespace Anewluv.Services.Authentication
                                     //11-1-2011
                                     //store the valid profileID in appfarbic cache
                                     // CachingFactory.MembersViewModelHelper.SaveProfileIDBySessionID( model.activateprofilemodel.profileid, this.HttpContext);
-                                    var returnedTaskTResult = checkforuploadedphotobyprofileidasync(profile.id.ToString()).Result;
+                                    var returnedTaskTResult = checkforuploadedphotobyprofileidasync(profile.id).Result;
                                     // bool result =
                                     model.photostatus = returnedTaskTResult;
                                     //}
@@ -2006,7 +2003,7 @@ namespace Anewluv.Services.Authentication
             return result;
         }
 
-        private async Task<bool> checkforuploadedphotobyprofileidasync(string profileid)
+        private async Task<bool> checkforuploadedphotobyprofileidasync(int profileid)
         {
             Task<bool> returnedTaskTResult = Api.AsyncCalls.checkforuploadedphotobyprofileidasync(profileid);
             bool result = await returnedTaskTResult;

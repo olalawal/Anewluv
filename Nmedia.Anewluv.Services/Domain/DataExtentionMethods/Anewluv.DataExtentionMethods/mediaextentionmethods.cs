@@ -7,6 +7,7 @@ using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.ViewModels;
 using Nmedia.Infrastructure.Helpers;
 using Repository.Pattern.Repositories;
+using Nmedia.Infrastructure;
 
 
 namespace Anewluv.DataExtentionMethods
@@ -26,28 +27,22 @@ namespace Anewluv.DataExtentionMethods
         {
             return repo.Query(o => o.id == model.photoid.GetValueOrDefault()).Select().FirstOrDefault();
                                     
-
-            //If above does not work
-        //   _gender = (from x in (_datingcontext.photos.Where(f => f.id == model.photoid))
-          //             join f in _datingcontext.profiledata on x.profile_id equals f.profile_id
-           //            select f.gender).Select().FirstOrDefault();
-
+         
         }
 
 
-        public static PhotoModel getgalleryphotomodelbyprofileid(this IRepository<photoconversion> repo,string profileid, string format)
+        public static PhotoModel getgalleryphotomodelbyprofileid(this IRepository<photoconversion> repo,int profileid, int photoformatid)
         {
-
            
               
                 try
                 {
-                    var convertedprofileid = Convert.ToInt32(profileid);
-                    var converedtedphotoformat = Convert.ToInt16(format);
+                    //var convertedprofileid = Convert.ToInt32(profileid);
+                   // var converedtedphotoformat = Convert.ToInt16(format);
                     //var format = 
 
                     return (from p in
-                                (from r in repo.Query(a => a.lu_photoformat.id == converedtedphotoformat && (a.photo.profile_id == convertedprofileid & a.photo.lu_photostatus.id == (int)photostatusEnum.Gallery))
+                                (from r in repo.Query(a => a.lu_photoformat.id == photoformatid && (a.photo.profile_id == profileid & a.photo.lu_photostatus.id == (int)photostatusEnum.Gallery))
                                  select new
                                  {
                                      photoid = r.photo.id,
@@ -95,69 +90,38 @@ namespace Anewluv.DataExtentionMethods
 
         }
 
+        //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
-        public static List<PhotoModel> getpagedphotomodelbyprofileidandstatus(this IRepository<photoconversion> repo, int profileid, int status, int format, int page, int pagesize)
+        public static PhotoSearchResultsViewModel getpagedphotomodelbyprofileidandstatusandalbumid (this IRepository<photoconversion> repo, int profileid, int? format, int? status, int? securitylevel, int? albumid, int? page, int? numberperpage)
         {
         
             try
             {
+                //added roles
+                IQueryable<photoconversion> photomodel = repo.Query(z=>z.photo.profile_id == profileid)
+                    .Include(p=>p.photo.profilemetadata).Include(p=>p.photo.photo_securitylevel).Include(p=>p.photo.profilemetadata.profile.membersinroles.Select(z=>z.profile_id == profileid))
+                    .Select().AsQueryable();
 
-                var model = (from p in
-                                 (from r in repo.Query(a => a.lu_photoformat.id == format && (a.photo.profile_id == profileid &
-                                     a.photo.photostatus_id != null &&
+                if (securitylevel  !=null)    //if phop
+                       photomodel = photomodel.Where(a => a.photo.photo_securitylevel!=null && a.photo.photo_securitylevel.Any(d =>  d.securityleveltype_id == (int)securitylevel));
+                if (securitylevel  ==null) //only grab photos with no status 
+                       photomodel = photomodel.Where(a => a.photo.photo_securitylevel!=null && a.photo.photo_securitylevel.Any(d => (d.securityleveltype_id ==  (int)securityleveltypeEnum.Public) | (d.securityleveltype_id ==  (int)securityleveltypeEnum.Public)));
+                if (status != null)
+                       photomodel = photomodel.Where(a =>  a.photo.photostatus_id == status );
+                if (status ==null) //grab all photos with good status
+                       photomodel = photomodel.Where(a =>   a.photo.photostatus_id != null &&
                                      (a.photo.photostatus_id == (int)photostatusEnum.Gallery |
                                       a.photo.lu_photostatus.id == (int)photostatusEnum.NotSet |
-                                       a.photo.lu_photostatus.id == (int)photostatusEnum.Nostatus)))
-                                  select new
-                                  {
-                                      photoid = r.photo.id,
-                                      profileid = r.photo.profile_id,
-                                      screenname = r.photo.profilemetadata.profile.screenname,
-                                      photo = r.image,
-                                      photoformat = r.lu_photoformat,
-                                      convertedsize = r.size,
-                                      orginalsize = r.photo.size,
-                                      imagecaption = r.photo.imagecaption,
-                                      creationdate = r.photo.creationdate,
-                                      photodetail = r.photo
-
-                                  }).ToList()
-                             select new PhotoModel
-                             {
-                                 photoid = p.photoid,
-                                 profileid = p.profileid,
-                                 screenname = p.screenname,
-                                 photo = b64Converters.ByteArraytob64string(p.photo),
-                                 photoformat = p.photoformat,
-                                 convertedsize = p.convertedsize,
-                                 orginalsize = p.orginalsize,
-                                 imagecaption = p.imagecaption,
-                                 creationdate = p.creationdate,
-                                 photostatusid = p.photodetail.photostatus_id.GetValueOrDefault()
-
-                             }).ToList();
-               
+                                       a.photo.lu_photostatus.id == (int)photostatusEnum.Nostatus));
+                if (format != null)
+                    photomodel = photomodel.Where(a => a.photo.photoconversions.Any(z=>z.formattype_id == format.Value ));
+                //if no photo status passed get call (premmium members only 
+                //TO DO
+                // if (format == null)
+                //     photomodel = photomodel.Where(a =>    a.photo.photoconversions.Any(z => z.formattype_id == format.Value));
+                //   return pagephotos(photomodel.ToList(), page, numberperpage);
 
 
-             //var model = (from p in repo.Query(a => a.formattype_id == format &&  a.photo.profile_id ==  profileid && (
-             //                                        a.photo.photostatus_id  != null && a.photo.photostatus_id == status)).Select().ToList()
-             //                    select new PhotoModel
-             //                    {
-             //                        photoid = p.photo.id,
-             //                        profileid = p.photo.profile_id,
-             //                        screenname = p.photo.profilemetadata.profile.screenname,
-             //                        photo = b64Converters.ByteArraytob64string(p.image),
-             //                        photoformat = p.lu_photoformat,
-             //                        convertedsize = p.size,
-             //                        orginalsize = p.photo.size,
-             //                        imagecaption = p.photo.imagecaption,
-             //                        creationdate = p.photo.creationdate,
-             //                        photostatusid = p.photo.photostatus_id.GetValueOrDefault()
-             //                    });
-
-                    if (model.Count() > Convert.ToInt32(pagesize)) { pagesize = model.Count(); }
-
-                    return (model.OrderByDescending(u => u.creationdate).Skip((Convert.ToInt16(page) - 1) * Convert.ToInt16(pagesize)).Take(Convert.ToInt16(pagesize))).ToList();
             }
              catch (Exception ex)
             {
@@ -211,26 +175,14 @@ namespace Anewluv.DataExtentionMethods
                              }).ToList();
 
 
+               // if (page == null || page == 0) page = 1;
+               // if (numberperpage == null || numberperpage == 0) numberperpage = 4;
+             //   bool allowpaging = (photomodel.Count() >= (page * numberperpage) ? true : false);
+            //    var pageData = page > 1 & allowpaging ?
+            //        new PaginatedList<PhotoModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
+          //      return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
 
-                //var model = (from p in repo.Query(a => a.formattype_id == format &&  a.photo.profile_id ==  profileid && (
-                //                                        a.photo.photostatus_id  != null && a.photo.photostatus_id == status)).Select().ToList()
-                //                    select new PhotoModel
-                //                    {
-                //                        photoid = p.photo.id,
-                //                        profileid = p.photo.profile_id,
-                //                        screenname = p.photo.profilemetadata.profile.screenname,
-                //                        photo = b64Converters.ByteArraytob64string(p.image),
-                //                        photoformat = p.lu_photoformat,
-                //                        convertedsize = p.size,
-                //                        orginalsize = p.photo.size,
-                //                        imagecaption = p.photo.imagecaption,
-                //                        creationdate = p.photo.creationdate,
-                //                        photostatusid = p.photo.photostatus_id.GetValueOrDefault()
-                //                    });
 
-                if (model.Count() > Convert.ToInt32(pagesize)) { pagesize = model.Count(); }
-
-                return (model.OrderByDescending(u => u.creationdate).Skip((Convert.ToInt16(page) - 1) * Convert.ToInt16(pagesize)).Take(Convert.ToInt16(pagesize))).ToList();
             }
             catch (Exception ex)
             {
@@ -324,53 +276,21 @@ namespace Anewluv.DataExtentionMethods
 
 
 
-        //format should be known by down
-        public static List<photoeditmodel> filterandpagephotosbystatus(List<photoconversion> MyPhotos, photoapprovalstatusEnum approvalstatus,
-                                                               int page, int pagesize)
-        {
-            // Retrieve All User's Photos that are not approved.
-            var photos = MyPhotos.Where(a => a.photo.approvalstatus_id != null && a.photo.approvalstatus_id == (int)approvalstatus);
+      
 
-            // Retrieve All User's Approved Photo's that are not Private and approved.
-            //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
-
-            var model = (from p in photos
-                         select new photoeditmodel
-                         {
-                             photoid = p.photo.id,
-                             profileid = p.photo.profile_id,
-                             screenname = p.photo.profilemetadata.profile.screenname,
-                             approved = (p.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved) ? true : false,
-                             profileimagetype = p.lu_photoformat.description,
-                             imagecaption = p.photo.imagecaption,
-                             creationdate = p.photo.creationdate,
-                             photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
-                             checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
-                         });
-
-
-            if (model.Count() > pagesize) { pagesize = model.Count(); }
-
-
-            return (model.OrderByDescending(u => u.creationdate).Skip((page - 1) * pagesize).Take(pagesize)).ToList();
-
-
-
-        }
-
-        public static PhotoEditViewModel getphotoeditviewmodel(IEnumerable<photoeditmodel> Approved,
-                                                            IEnumerable<photoeditmodel> NotApproved,
-                                                            IEnumerable<photoeditmodel> Private,
+        public static PhotoEditViewModel getphotoeditviewmodel(IEnumerable<PhotoModel> Approved,
+                                                            IEnumerable<PhotoModel> NotApproved,
+                                                            IEnumerable<PhotoModel> Private,
                                                             List<photoconversion> model)
         {
             // Retrieve singlephotoProfile from either the approved model or photo model
-            photoeditmodel src = new photoeditmodel();
+            PhotoModel src = new PhotoModel();
             if (Approved.Count() > 0)
             {
                 src = (from p in model
                        join x in Approved
                        on p.photo.id equals x.photoid
-                       select new photoeditmodel
+                       select new PhotoModel
                        {
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,
@@ -388,7 +308,7 @@ namespace Anewluv.DataExtentionMethods
             else
             {
                 src = (from p in model
-                       select new photoeditmodel
+                       select new PhotoModel
                        {
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,
@@ -422,10 +342,47 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
+
+        //format should be known by down
+        public static PhotoSearchResultsViewModel filterandpagephotosbystatus(List<photoconversion> MyPhotos, photoapprovalstatusEnum approvalstatus,
+                                                               int? page, int? numberperpage)
+        {
+            // Retrieve All User's Photos that are not approved.
+            var photos = MyPhotos.Where(a => a.photo.approvalstatus_id != null && a.photo.approvalstatus_id == (int)approvalstatus);
+
+            // Retrieve All User's Approved Photo's that are not Private and approved.
+            //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
+
+            var photomodel = (from p in photos
+                         select new PhotoModel
+                         {
+                             photoid = p.photo.id,
+                             profileid = p.photo.profile_id,
+                             screenname = p.photo.profilemetadata.profile.screenname,
+                             approved = (p.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                             profileimagetype = p.lu_photoformat.description,
+                             imagecaption = p.photo.imagecaption,
+                             creationdate = p.photo.creationdate,
+                             photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
+                             checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
+                         });
+
+
+            if (page == null || page == 0) page = 1;
+            if (numberperpage == null || numberperpage == 0) numberperpage = 4;
+            bool allowpaging = (photomodel.Count() >= (page * numberperpage) ? true : false);
+            var pageData = page > 1 & allowpaging ?
+                new PaginatedList<PhotoModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
+            return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
+
+
+
+        }
+
         //Filter methods for edit photo models
-        public static IEnumerable<photoeditmodel> filterphotosapprovedminusgallery(IQueryable<photoconversion> MyPhotos,
+        public static PhotoSearchResultsViewModel filterandpagephotosapprovedminusgallery(IQueryable<photoconversion> MyPhotos,
                                                         photoapprovalstatusEnum status,
-                                                            int page, int pagesize)
+                                                            int? page, int? numberperpage)
         {
             // Retrieve All User's Photos that are not approved.
             var photos = MyPhotos.Where(a => a.photo.photostatus_id == (int)status);
@@ -437,8 +394,8 @@ namespace Anewluv.DataExtentionMethods
                 photos = photos.Where(a => a.photo.imagetype_id != (int)photostatusEnum.Gallery);
             }
 
-            var model = (from p in photos
-                         select new photoeditmodel
+            var photomodel = (from p in photos
+                         select new PhotoModel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
@@ -451,18 +408,20 @@ namespace Anewluv.DataExtentionMethods
                              checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
                          });
 
-
-            if (model.Count() > pagesize) { pagesize = model.Count(); }
-
-            return (model.OrderByDescending(u => u.creationdate).Skip((page - 1) * pagesize).Take(pagesize));
+            if (page == null || page == 0) page = 1;
+            if (numberperpage == null || numberperpage == 0) numberperpage = 4;
+            bool allowpaging = (photomodel.Count() >= (page * numberperpage) ? true : false);
+            var pageData = page > 1 & allowpaging ?
+                new PaginatedList<PhotoModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
+            return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
 
         }
 
-        public static IEnumerable<photoeditmodel> filterphotosbysecuitylevel(List<photoconversion> MyPhotos, securityleveltypeEnum status,
-                                                                        int page, int pagesize)
+        public static PhotoSearchResultsViewModel filterandpagephotosbysecuitylevel(List<photoconversion> MyPhotos, securityleveltypeEnum status,
+                                                                        int? page, int? numberperpage)
         {
-            var model = (from p in MyPhotos.Where(a => a.photo.photo_securitylevel.Any(d => d.securityleveltype_id == (int)status))
-                         select new photoeditmodel
+            var photomodel = (from p in MyPhotos.Where(a => a.photo.photo_securitylevel.Any(d => d.securityleveltype_id == (int)status))
+                         select new PhotoModel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
@@ -476,12 +435,46 @@ namespace Anewluv.DataExtentionMethods
                          });
 
 
-            if (model.Count() > pagesize) { pagesize = model.Count(); }
-            return (model.OrderByDescending(u => u.creationdate).Skip((page - 1) * pagesize).Take(pagesize));
+            if (page == null || page == 0) page = 1;
+            if (numberperpage == null || numberperpage == 0) numberperpage = 4;
+            bool allowpaging = (photomodel.Count() >= (page * numberperpage) ? true : false);
+            var pageData = page > 1 & allowpaging ?
+                new PaginatedList<PhotoModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
+            return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
 
         }
-     
 
+        public static PhotoSearchResultsViewModel pagephotos(List<photoconversion> source,
+                                                                   int? page, int? numberperpage)
+        {
+
+            
+           // int? totalrecordcount = MemberSearchViewmodels.Count;
+            //handle zero and null paging values
+            if (page == null || page == 0) page = 1;
+            if (numberperpage == null || numberperpage == 0) numberperpage = 4;
+            bool allowpaging = (source.Count() >= (page * numberperpage) ? true : false);
+            var pageData = page > 1 & allowpaging ?
+                new PaginatedList<photoconversion>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
+
+
+            var results = pageData.Select(p => new PhotoModel                             
+                              {
+                                  photoid = p.photo.id,
+                                  profileid = p.photo.profile_id,
+                                  screenname = p.photo.profilemetadata.profile.screenname,
+                                  approved = (p.photo.photostatus_id != null && p.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                                  profileimagetype = p.lu_photoformat.description,
+                                  imagecaption = p.photo.imagecaption,
+                                  orginalsize = p.photo.size,
+                                  creationdate = p.photo.creationdate,
+                                  photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
+                                  checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
+                              }).ToList();
+
+            return new PhotoSearchResultsViewModel { results = results, totalresults = source.Count() };
+
+        }
 
     }
 }

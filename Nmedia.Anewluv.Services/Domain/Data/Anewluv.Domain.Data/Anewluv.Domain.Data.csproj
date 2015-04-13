@@ -210,7 +210,9 @@
     <Compile Include="Anewluv\ViewModels\Actions\MembeActionsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Activity\ActivityModel.cs" />
     <Compile Include="Anewluv\ViewModels\FullProfileViewModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoAlbumModel.cs" />
     <Compile Include="Anewluv\ViewModels\Search\AdvancedSearchModel.cs" />
+    <Compile Include="Anewluv\ViewModels\Search\PhotoSearchResultsViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Search\ProfileModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\RegisterExternalLoginModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\RegisterModel.cs" />

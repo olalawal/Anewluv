@@ -101,29 +101,30 @@ namespace Anewluv.Api
 
         #region "Media API asyc calls"
     
-        public static async Task<bool> checkforuploadedphotobyprofileidasync(string profileid)
+        public static async Task<bool> checkforuploadedphotobyprofileidasync(int profileid)
         {
 
-            Task<bool> returnedTaskTResult = Api.PhotoService.checkforuploadedphotobyprofileid(profileid);
+            Task<bool> returnedTaskTResult = Api.PhotoService.checkforuploadedphotobyprofileid(new ProfileModel { profileid = profileid });
             bool result = await returnedTaskTResult;
             return result;
             // IsApiKeyValid = await 
         }
 
-        public static async Task<AnewluvMessages>addphotosasync(PhotoUploadViewModel model)
+        public static async Task<AnewluvMessages>addphotosasync(ProfileModel model)
         {
 
-            Task<AnewluvMessages> returnedTaskTResult = Api.PhotoService.addphotos(model);
+            Task<AnewluvMessages> returnedTaskTResult = Api.PhotoService.addphotos(new ProfileModel { profileid = model.profileid });
             AnewluvMessages result = await returnedTaskTResult;
             return result;
             // IsApiKeyValid = await 
         }
 
 
-        public static async Task<string> getimageb64stringfromurlasync(string imageurl,string source)
+        public static async Task<string> getimageb64stringfromurlasync(ProfileModel model)
         {
 
-            Task<string> returnedTaskTResult = Api.PhotoService.getimageb64stringfromurl(imageurl, source);
+            Task<string> returnedTaskTResult = Api.PhotoService.getimageb64stringfromurl(model);
+               
             string result = await returnedTaskTResult;
             return result;
             // IsApiKeyValid = await 

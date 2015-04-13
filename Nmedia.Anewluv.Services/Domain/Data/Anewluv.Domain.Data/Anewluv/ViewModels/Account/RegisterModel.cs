@@ -81,7 +81,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public string ziporpostalcode { get; set; }
        
         [DataMember]
-        public photoeditmodel registrationphotos { get; set; }
+        public PhotoModel registrationphotos { get; set; }
 
         //add temp storage for activation code too i guess     ]
         [DataMember]

@@ -105,7 +105,7 @@ namespace Anewluv.DataExtentionMethods
                    // model.profilephotos = new PhotoViewModel();
                     // int something = (int)photoformatEnum.Thumbnail;
                      // model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
-                     model.galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString());
+                     model.galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid( profile.id, (int)photoformatEnum.Thumbnail);
                                      
                     //TO DO split this into another call
                     //TO DO put these into separate call i think
@@ -191,7 +191,7 @@ namespace Anewluv.DataExtentionMethods
         /// <param name="db"></param>
         /// <returns></returns>
         // use this function to get distance at the same time, add it to the model
-        public static MemberSearchViewModel mapmembersearchviewmodel(int? veiwerpeofileid, MemberSearchViewModel modeltomap, bool allphotos, IUnitOfWorkAsync db, IGeoDataStoredProcedures _storedProcedures)
+        public static MemberSearchViewModel mapmembersearchviewmodel(int? veiwerpeofileid, MemberSearchViewModel modeltomap, IUnitOfWorkAsync db, IGeoDataStoredProcedures _storedProcedures)
         {
             
             //we need lazy loading and proxy stuff
@@ -282,21 +282,21 @@ namespace Anewluv.DataExtentionMethods
                     // var Private = membereditRepository.GetPhotoByStatusID(MyPhotos, 3, page, ps);
                     model.profilephotos = new PhotoViewModel();
                    // int something = (int)photoformatEnum.Thumbnail;
-                    if (allphotos == true)
-                    {
+                    //if (allphotos == true)
+                    //{
 
-                        model.profilephotos.ProfilePhotosApproved = db.Repository<photoconversion>().getpagedphotomodelbyprofileidandstatus(
-                        profile.id,(int)photoapprovalstatusEnum.Approved, (int)photoformatEnum.Thumbnail, page, ps);
+                    //    model.photosearchresults= db.Repository<photoconversion>().getpagedphotomodelbyprofileidandstatusandalbumid(profile.id,(int)photoformatEnum.Thumbnail,)
+                    //    profile.id,(int)photoapprovalstatusEnum.Approved, (int)photoformatEnum.Thumbnail, page, ps);
 
 
-                        model.galleryphoto = model.profilephotos.ProfilePhotosApproved !=null ?model.profilephotos.ProfilePhotosApproved.Where(p => p.photostatusid == (int)photostatusEnum.Gallery).FirstOrDefault():null;
-                    }// approvedphotos = photorepository.
-                    else
-                    {
+                    //    model.galleryphoto = model.profilephotos.ProfilePhotosApproved !=null ?model.profilephotos.ProfilePhotosApproved.Where(p => p.photostatusid == (int)photostatusEnum.Gallery).FirstOrDefault():null;
+                    //}// approvedphotos = photorepository.
+                    //else
+                    //{
                         // model.profilephotos.SingleProfilePhoto = photorepository.getphotomodelbyprofileid(profile.id, photoformatEnum.Thumbnail);
-                        model.galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id.ToString(), ((int)photoformatEnum.Thumbnail).ToString());
+                    model.galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(profile.id, (int)photoformatEnum.Thumbnail);
 
-                    }
+                   // }
 
                     model.hasgalleryphoto = model.galleryphoto != null ? true : false;
                     // Api.DisposeGeoService();
@@ -322,7 +322,7 @@ namespace Anewluv.DataExtentionMethods
         public static List<MemberSearchViewModel> mapmembersearchviewmodels(ProfileModel model, IUnitOfWorkAsync db, IGeoDataStoredProcedures geodb)
         {
 
-                   try
+                try
                 {
 
                   
@@ -332,7 +332,7 @@ namespace Anewluv.DataExtentionMethods
                         {
                             //set current model for mapping
                             tempmodel.modeltomap = item;
-                            models.Add(membermappingextentions.mapmembersearchviewmodel(model.profileid, tempmodel.modeltomap, model.allphotos, db, geodb));
+                            models.Add(membermappingextentions.mapmembersearchviewmodel(model.profileid, tempmodel.modeltomap, db, geodb));
 
                         }
                         return models;

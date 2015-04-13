@@ -14,19 +14,19 @@ namespace Anewluv.Domain.Data.ViewModels
         // properties
 
         [DataMember]
-        public photoeditmodel SingleProfilePhoto { get; set; }
+        public PhotoModel SingleProfilePhoto { get; set; }
 
         [DataMember]
        // public List<EditProfileViewPhotoModel> ProfilePhotosApproved { get; set; }
-        public List<photoeditmodel> ProfilePhotosApproved { get; set; }
+        public List<PhotoModel> ProfilePhotosApproved { get; set; }
 
         [DataMember]
         //public List<EditProfileViewPhotoModel> ProfilePhotosNotApproved { get; set; }
-        public List<photoeditmodel> ProfilePhotosNotApproved { get; set; }
+        public List<PhotoModel> ProfilePhotosNotApproved { get; set; }
 
         [DataMember]
        // public List<EditProfileViewPhotoModel> ProfilePhotosPrivate { get; set; }
-        public List<photoeditmodel> ProfilePhotosPrivate { get; set; }
+        public List<PhotoModel> ProfilePhotosPrivate { get; set; }
 
 
         [DataMember]

@@ -84,21 +84,37 @@ namespace Anewluv.Domain.Data.ViewModels
     
 
         //added abitlity to add notes 
-         [DataMember]
+        [DataMember]
         public string note { get; set; }
-
         //acdded action to the body
         [DataMember]
         public actiontypeEnum actiontype { get; set; }
-
         //search stuff for photos
         //**********/
         [DataMember]
-        public bool allphotos { get; set; }
+        public int? photoalbumid { get; set; }
         [DataMember]
-        public photostatusEnum photostatus { get; set; }
+        public int? phototstatusid { get; set; }
         [DataMember]
-        public  photoformatEnum  photosformat { get; set; }
+        public  int?  photoformatid { get; set; }
+        [DataMember]
+        public int? photosecuritylevel { get; set; }
+        [DataMember]
+        public PhotoUploadViewModel photouploadviewmodel { get; set; }
+        [DataMember]
+        public PhotoUploadModel singlephotouploadmodel { get; set; }
+        [DataMember]
+        public List<Guid> photoids { get; set; }
+        [DataMember]
+        public string photocaption { get; set; }
+        [DataMember]
+        public string imageUrl { get; set; }
+        [DataMember]
+        public string inmagesource { get; set; }
+        [DataMember]
+        public PhotoAlbumModel photoalbum { get; set; }
+  
+
 
         //search stuff for mail
         [DataMember]
