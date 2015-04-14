@@ -1151,7 +1151,7 @@ namespace Misc
                 foreach (Anewluv.Domain.Data.profile profile in profilestosearch)
                 {
                     var photosobject = new Anewluv.Domain.Data.photo();
-                    PhotoUploadViewModel model = new PhotoUploadViewModel();
+                    PhotosUploadModel model = new PhotosUploadModel();
 
                     Console.WriteLine("attempting add all photos for the the new profileid of    :" + profile.emailaddress);
                     //get the profileID since that was saved first

@@ -191,6 +191,8 @@
     <Compile Include="Anewluv\ratingvalue.cs" />
     <Compile Include="Anewluv\searchsetting.cs" />
     <Compile Include="Anewluv\searchsetting_location.cs" />
+    <Compile Include="Anewluv\SearchEditModels\MailModel.cs" />
+    <Compile Include="Anewluv\SearchEditModels\PhotoModel.cs" />
     <Compile Include="Anewluv\SharedModels\generatedlists.cs" />
     <Compile Include="Anewluv\SharedModels\sharedmodels.cs" />
     <Compile Include="Anewluv\systempagesetting.cs" />
@@ -211,9 +213,9 @@
     <Compile Include="Anewluv\ViewModels\Activity\ActivityModel.cs" />
     <Compile Include="Anewluv\ViewModels\FullProfileViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoAlbumModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\AdvancedSearchModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\PhotoSearchResultsViewModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\ProfileModel.cs" />
+    <Compile Include="Anewluv\SearchEditModels\AdvancedSearchModel.cs" />
+    <Compile Include="Anewluv\SearchEditModels\PhotoSearchResultsViewModel.cs" />
+    <Compile Include="Anewluv\SearchEditModels\ProfileModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\RegisterExternalLoginModel.cs" />
     <Compile Include="Anewluv\ViewModels\Account\RegisterModel.cs" />
     <Compile Include="Anewluv\ViewModels\AdminPhotoModel.cs" />
@@ -231,22 +233,20 @@
     <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\Editprofile\LifeStyleSettingsViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Email\EmailEnums\subjecttype.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\SearchResultsViewModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\MemberSearchViewModel.cs" />
+    <Compile Include="Anewluv\SearchEditModels\SearchResultsViewModel.cs" />
+    <Compile Include="Anewluv\SearchEditModels\MemberSearchViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\AnewLuvMembershipUser.cs" />
     <Compile Include="Anewluv\ViewModels\Membership\MembershipUserViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\MembersViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\OpenId\rpxauthinfo.cs" />
     <Compile Include="Anewluv\ViewModels\OpenId\RpxProfile.cs" />
-    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoEditModel.cs" />
+    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoEditViewModel.cs" />
-    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoUploadModel.cs" />
     <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoUploadViewModel.cs" />
-    <Compile Include="Anewluv\ViewModels\PhotoRelated\PhotoViewModel.cs" />
     <Compile Include="Anewluv\ViewModels\ProfileBrowseModels.cs" />
     <Compile Include="Anewluv\ViewModels\ProfileCriteriaModel.cs" />
-    <Compile Include="Anewluv\ViewModels\Search\QuickSearchModel.cs" />
+    <Compile Include="Anewluv\SearchEditModels\QuickSearchModel.cs" />
     <Compile Include="Anewluv\ViewModels\SearchSettings\AppearanceSearchSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\SearchSettings\BasicSearchSettingsModel.cs" />
     <Compile Include="Anewluv\ViewModels\SearchSettings\CharacterSearchSettingsModel.cs" />
@@ -274,6 +274,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Anewluv\Edit\" />
     <Folder Include="Anewluv\Validation\" />
     <Folder Include="Infrasrtucture\" />
   </ItemGroup>

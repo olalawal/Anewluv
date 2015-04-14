@@ -314,7 +314,7 @@ namespace Anewluv.Services.MemberActions
 
 
 
-                        results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                        results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList() }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
                         
                         // return data2.OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();;
                         //.OrderByDescending(f => f.interestdate ?? DateTime.MaxValue).ToList();
@@ -398,7 +398,7 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList() }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                      return new SearchResultsViewModel { results = results, totalresults = whoisinterestedinme.Count() };
 
@@ -472,7 +472,7 @@ namespace Anewluv.Services.MemberActions
 
                      //return interests.ToList();
                      List<MemberSearchViewModel> results;
-                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList(), allphotos = false }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
+                     results = membermappingextentions.mapmembersearchviewmodels(new ProfileModel { profileid = model.profileid, modelstomap = pageData.ToList() }, db, _storedProcedures).OrderByDescending(f => f.interestdate.Value).ThenByDescending(f => f.lastlogindate.Value).ToList();
 
                      return new SearchResultsViewModel { results = results, totalresults = whoisinterestedinmenew.Count() };
 

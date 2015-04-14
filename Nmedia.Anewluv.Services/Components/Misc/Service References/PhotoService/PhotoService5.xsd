@@ -193,7 +193,7 @@
   <xs:element name="addphotos">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="model" nillable="true" type="q13:PhotoUploadViewModel" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Anewluv.Domain.Data.ViewModels" minOccurs="0" name="model" nillable="true" type="q13:PhotosUploadModel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

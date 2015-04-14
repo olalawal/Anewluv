@@ -89,7 +89,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public bool hasgalleryphoto { get; set; }
         [DataMember]
-        public PhotoModel galleryphoto { get; set; }
+        public PhotoViewModel galleryphoto { get; set; }
         //added code to to keep track of currently selected photo ID so we can swicth the large phot
         //i.e the zoomed one
         public Guid ViewingPhotoID { get; set; }

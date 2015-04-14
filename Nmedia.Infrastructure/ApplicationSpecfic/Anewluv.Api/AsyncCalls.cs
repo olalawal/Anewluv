@@ -104,7 +104,7 @@ namespace Anewluv.Api
         public static async Task<bool> checkforuploadedphotobyprofileidasync(int profileid)
         {
 
-            Task<bool> returnedTaskTResult = Api.PhotoService.checkforuploadedphotobyprofileid(new ProfileModel { profileid = profileid });
+            Task<bool> returnedTaskTResult = Api.PhotoService.checkforuploadedphotobyprofileid(new PhotoModel { profileid = profileid });
             bool result = await returnedTaskTResult;
             return result;
             // IsApiKeyValid = await 
@@ -113,14 +113,14 @@ namespace Anewluv.Api
         public static async Task<AnewluvMessages>addphotosasync(ProfileModel model)
         {
 
-            Task<AnewluvMessages> returnedTaskTResult = Api.PhotoService.addphotos(new ProfileModel { profileid = model.profileid });
+            Task<AnewluvMessages> returnedTaskTResult = Api.PhotoService.addphotos(new PhotoModel { profileid = model.profileid });
             AnewluvMessages result = await returnedTaskTResult;
             return result;
             // IsApiKeyValid = await 
         }
 
 
-        public static async Task<string> getimageb64stringfromurlasync(ProfileModel model)
+        public static async Task<string> getimageb64stringfromurlasync(PhotoModel model)
         {
 
             Task<string> returnedTaskTResult = Api.PhotoService.getimageb64stringfromurl(model);

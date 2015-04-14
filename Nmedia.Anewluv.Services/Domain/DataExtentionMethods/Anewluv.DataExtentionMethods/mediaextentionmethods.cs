@@ -23,7 +23,7 @@ namespace Anewluv.DataExtentionMethods
 
         }
 
-        public static photo getphotobyphotoid(this IRepository<photo> repo, ProfileModel model)
+        public static photo getphotobyphotoid(this IRepository<photo> repo, PhotoModel model)
         {
             return repo.Query(o => o.id == model.photoid.GetValueOrDefault()).Select().FirstOrDefault();
                                     
@@ -31,7 +31,7 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
-        public static PhotoModel getgalleryphotomodelbyprofileid(this IRepository<photoconversion> repo,int profileid, int photoformatid)
+        public static PhotoViewModel getgalleryphotomodelbyprofileid(this IRepository<photoconversion> repo,int profileid, int photoformatid)
         {
            
               
@@ -57,7 +57,7 @@ namespace Anewluv.DataExtentionMethods
                                      photodetail = r.photo
 
                                  }).ToList()
-                            select new PhotoModel
+                            select new PhotoViewModel
                             {
                                 photoid = p.photoid,
                                 profileid = p.profileid,
@@ -119,7 +119,7 @@ namespace Anewluv.DataExtentionMethods
                 //TO DO
                 // if (format == null)
                 //     photomodel = photomodel.Where(a =>    a.photo.photoconversions.Any(z => z.formattype_id == format.Value));
-                //   return pagephotos(photomodel.ToList(), page, numberperpage);
+                 return pagephotos(photomodel.ToList(), page, numberperpage);
 
 
             }
@@ -132,8 +132,63 @@ namespace Anewluv.DataExtentionMethods
             return null;
         }
 
+        //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
-        public static List<PhotoModel> getpagedphotomodelbyprofileid(this IRepository<photoconversion> repo, int profileid, int format, int page, int pagesize)
+        public static PhotoViewModel getphotomodelbyprofileidandstatusandalbumid(this IRepository<photoconversion> repo, int profileid, int? format, int? status,Guid? photoid,string screenname, int? securitylevel, int? albumid)
+        {
+
+            try
+            {
+                //added roles
+                IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == profileid)
+                    .Include(p => p.photo.profilemetadata).Include(p => p.photo.photo_securitylevel).Include(p => p.photo.profilemetadata.profile.membersinroles.Select(z => z.profile_id == profileid))
+                    .Select().AsQueryable();
+
+                if (securitylevel != null)    //if phop
+                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel != null && a.photo.photo_securitylevel.Any(d => d.securityleveltype_id == (int)securitylevel));
+                if (securitylevel == null) //only grab photos with no status 
+                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel != null && a.photo.photo_securitylevel.Any(d => (d.securityleveltype_id == (int)securityleveltypeEnum.Public) | (d.securityleveltype_id == (int)securityleveltypeEnum.Public)));
+                if (status != null)
+                    photomodel = photomodel.Where(a => a.photo.photostatus_id == status);
+                if (status == null) //grab all photos with good status
+                    photomodel = photomodel.Where(a => a.photo.photostatus_id != null &&
+                                  (a.photo.photostatus_id == (int)photostatusEnum.Gallery |
+                                   a.photo.lu_photostatus.id == (int)photostatusEnum.NotSet |
+                                    a.photo.lu_photostatus.id == (int)photostatusEnum.Nostatus));
+                if (format != null)
+                    photomodel = photomodel.Where(a => a.photo.photoconversions.Any(z => z.formattype_id == format.Value));
+
+
+                var results = photomodel.Select(p => new PhotoViewModel
+                {
+                    photoid = p.photo.id,
+                    profileid = p.photo.profile_id,
+                    screenname = p.photo.profilemetadata.profile.screenname,
+                    approved = (p.photo.photostatus_id != null && p.photo.approvalstatus_id == (int)photoapprovalstatusEnum.Approved) ? true : false,
+                    profileimagetype = p.lu_photoformat.description,
+                    imagecaption = p.photo.imagecaption,
+                    orginalsize = p.photo.size,
+                    creationdate = p.photo.creationdate,
+                    photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
+                    checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
+                }).FirstOrDefault();
+
+                return results;
+               
+
+
+            }
+            catch (Exception ex)
+            {
+                //eath the eception
+                // throw ex;
+            }
+
+            return null;
+        }
+
+        //TO DO needs code to check roles to see how many photos can be viewd etc
+        public static List<PhotoViewModel> getpagedphotomodelbyprofileid(this IRepository<photoconversion> repo, int profileid, int format, int page, int pagesize)
         {
 
             try
@@ -159,7 +214,7 @@ namespace Anewluv.DataExtentionMethods
                                       photodetail = r.photo
 
                                   }).ToList()
-                             select new PhotoModel
+                             select new PhotoViewModel
                              {
                                  photoid = p.photoid,
                                  profileid = p.profileid,
@@ -196,19 +251,19 @@ namespace Anewluv.DataExtentionMethods
 
 
         //Private filtering methods :
-        public static PhotoViewModel getphotoviewmodel(IEnumerable<PhotoModel> Approved,
-                                                           IEnumerable<PhotoModel> NotApproved,
-                                                           IEnumerable<PhotoModel> Private,
+        public static PhotoEditViewModel getphotoviewmodel(IEnumerable<PhotoViewModel> Approved,
+                                                           IEnumerable<PhotoViewModel> NotApproved,
+                                                           IEnumerable<PhotoViewModel> Private,
                                                            List<photoconversion> model)
         {
             // Retrieve singlephotoProfile from either the approved model or photo model
-            PhotoModel src = new PhotoModel();
+            PhotoViewModel src = new PhotoViewModel();
             if (Approved.Count() > 0)
             {
                 src = (from p in model
                        join x in Approved
                        on p.photo.id equals x.photoid
-                       select new PhotoModel
+                       select new PhotoViewModel
                        {
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,
@@ -228,7 +283,7 @@ namespace Anewluv.DataExtentionMethods
             else
             {
                 src = (from p in model
-                       select new PhotoModel
+                       select new PhotoViewModel
                        {
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,
@@ -257,9 +312,9 @@ namespace Anewluv.DataExtentionMethods
 
             //}
 
-            // PhotoUploadViewModel UploadPhotos = new PhotoUploadViewModel();
+            // PhotosUploadModel UploadPhotos = new PhotosUploadModel();
 
-            PhotoViewModel ViewModel = new PhotoViewModel
+            PhotoEditViewModel ViewModel = new PhotoEditViewModel
             {
                 SingleProfilePhoto = src,
                 ProfilePhotosApproved = Approved.ToList(),
@@ -276,21 +331,21 @@ namespace Anewluv.DataExtentionMethods
 
 
 
-      
 
-        public static PhotoEditViewModel getphotoeditviewmodel(IEnumerable<PhotoModel> Approved,
-                                                            IEnumerable<PhotoModel> NotApproved,
-                                                            IEnumerable<PhotoModel> Private,
+
+        public static PhotoEditViewModel getphotoeditviewmodel(IEnumerable<PhotoViewModel> Approved,
+                                                            IEnumerable<PhotoViewModel> NotApproved,
+                                                            IEnumerable<PhotoViewModel> Private,
                                                             List<photoconversion> model)
         {
             // Retrieve singlephotoProfile from either the approved model or photo model
-            PhotoModel src = new PhotoModel();
+            PhotoViewModel src = new PhotoViewModel();
             if (Approved.Count() > 0)
             {
                 src = (from p in model
                        join x in Approved
                        on p.photo.id equals x.photoid
-                       select new PhotoModel
+                       select new PhotoViewModel
                        {
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,
@@ -308,7 +363,7 @@ namespace Anewluv.DataExtentionMethods
             else
             {
                 src = (from p in model
-                       select new PhotoModel
+                       select new PhotoViewModel
                        {
                            photoid = p.photo.id,
                            profileid = p.photo.profile_id,
@@ -324,7 +379,7 @@ namespace Anewluv.DataExtentionMethods
             }
 
 
-            PhotoUploadViewModel UploadPhotos = new PhotoUploadViewModel();
+            PhotosUploadModel UploadPhotos = new PhotosUploadModel();
 
             PhotoEditViewModel ViewModel = new PhotoEditViewModel
             {
@@ -354,7 +409,7 @@ namespace Anewluv.DataExtentionMethods
             //  if (approvalstatus == "Yes") { photos = photos.Where(a => a.photostatus.id  != 3); }
 
             var photomodel = (from p in photos
-                         select new PhotoModel
+                         select new PhotoViewModel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
@@ -372,7 +427,7 @@ namespace Anewluv.DataExtentionMethods
             if (numberperpage == null || numberperpage == 0) numberperpage = 4;
             bool allowpaging = (photomodel.Count() >= (page * numberperpage) ? true : false);
             var pageData = page > 1 & allowpaging ?
-                new PaginatedList<PhotoModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
+                new PaginatedList<PhotoViewModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
             return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
 
 
@@ -395,7 +450,7 @@ namespace Anewluv.DataExtentionMethods
             }
 
             var photomodel = (from p in photos
-                         select new PhotoModel
+                         select new PhotoViewModel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
@@ -412,7 +467,7 @@ namespace Anewluv.DataExtentionMethods
             if (numberperpage == null || numberperpage == 0) numberperpage = 4;
             bool allowpaging = (photomodel.Count() >= (page * numberperpage) ? true : false);
             var pageData = page > 1 & allowpaging ?
-                new PaginatedList<PhotoModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
+                new PaginatedList<PhotoViewModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
             return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
 
         }
@@ -421,7 +476,7 @@ namespace Anewluv.DataExtentionMethods
                                                                         int? page, int? numberperpage)
         {
             var photomodel = (from p in MyPhotos.Where(a => a.photo.photo_securitylevel.Any(d => d.securityleveltype_id == (int)status))
-                         select new PhotoModel
+                         select new PhotoViewModel
                          {
                              photoid = p.photo.id,
                              profileid = p.photo.profile_id,
@@ -439,7 +494,7 @@ namespace Anewluv.DataExtentionMethods
             if (numberperpage == null || numberperpage == 0) numberperpage = 4;
             bool allowpaging = (photomodel.Count() >= (page * numberperpage) ? true : false);
             var pageData = page > 1 & allowpaging ?
-                new PaginatedList<PhotoModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
+                new PaginatedList<PhotoViewModel>().GetCurrentPages(photomodel.ToList(), page ?? 1, numberperpage ?? 20) : photomodel.ToList().Take(numberperpage.Value);
             return new PhotoSearchResultsViewModel { results = pageData.ToList(), totalresults = pageData.Count() };
 
         }
@@ -458,7 +513,7 @@ namespace Anewluv.DataExtentionMethods
                 new PaginatedList<photoconversion>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
 
 
-            var results = pageData.Select(p => new PhotoModel                             
+            var results = pageData.Select(p => new PhotoViewModel                             
                               {
                                   photoid = p.photo.id,
                                   profileid = p.photo.profile_id,

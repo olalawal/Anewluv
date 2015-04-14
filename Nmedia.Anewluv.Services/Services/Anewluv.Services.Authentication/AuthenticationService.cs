@@ -1550,12 +1550,12 @@ namespace Anewluv.Services.Authentication
                                     //TO DO USE TASK for this
                                     // add photo view model stuff
                                     //Need to me made to run asynch
-                                    //if (model.photouploadviewmodel.photosuploaded.Count() > 0)
+                                    //if (model.PhotosUploadModel.photosuploaded.Count() > 0)
                                     //{
 
-                                    //    var returnedTaskTResult = AsyncCalls.addphotosasync(model.photouploadviewmodel);
+                                    //    var returnedTaskTResult = AsyncCalls.addphotosasync(model.PhotosUploadModel);
 
-                                    //    // Api.PhotoService.addphotos(model.photouploadviewmodel);
+                                    //    // Api.PhotoService.addphotos(model.PhotosUploadModel);
                                     //}
 
                                     //since we got here we can now check if the user has a photo

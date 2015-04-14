@@ -14,7 +14,7 @@ namespace Anewluv.Domain.Data.ViewModels
    public class PhotoSearchResultsViewModel
     {
         [DataMember]
-        public List<PhotoModel> results { get; set; }
+        public List<PhotoViewModel> results { get; set; }
         [DataMember]
         public int? totalresults { get; set; }
     

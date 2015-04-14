@@ -9,8 +9,13 @@ using System.Threading.Tasks;
 namespace Anewluv.Domain.Data.ViewModels
 {
     [DataContract]
-    public class PhotoAlbumModel
+    public class PhotoAlbumViewModel
     {
+        public PhotoAlbumViewModel()
+        {
+            this.securitylevels = new List<listitem>();
+        }
+
         public int id { get; set; }
         public string description { get; set; }
         public bool active { get; set; }

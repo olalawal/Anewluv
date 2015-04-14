@@ -51,7 +51,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public bool? photostatus { get; set; }
 
         // [DataMember]
-        // public PhotoUploadViewModel photouploadviewmodel { get; set; }
+        // public PhotosUploadModel PhotosUploadModel { get; set; }
 
         // [DataMember]
         //  public int profileid { get; set; }

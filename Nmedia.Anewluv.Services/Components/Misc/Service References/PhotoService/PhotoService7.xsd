@@ -63,7 +63,7 @@
   <xs:complexType name="PhotoEditViewModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="IsUploading" type="xs:boolean" />
-      <xs:element minOccurs="0" name="PhotosUploading" nillable="true" type="tns:PhotoUploadViewModel" />
+      <xs:element minOccurs="0" name="PhotosUploading" nillable="true" type="tns:PhotosUploadModel" />
       <xs:element minOccurs="0" name="ProfilePhotosApproved" nillable="true" type="tns:ArrayOfphotoeditmodel" />
       <xs:element minOccurs="0" name="ProfilePhotosNotApproved" nillable="true" type="tns:ArrayOfphotoeditmodel" />
       <xs:element minOccurs="0" name="ProfilePhotosPrivate" nillable="true" type="tns:ArrayOfphotoeditmodel" />
@@ -71,7 +71,7 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PhotoEditViewModel" nillable="true" type="tns:PhotoEditViewModel" />
-  <xs:complexType name="PhotoUploadViewModel">
+  <xs:complexType name="PhotosUploadModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="autoupload" type="xs:boolean" />
       <xs:element minOccurs="0" name="multiple" type="xs:boolean" />
@@ -79,7 +79,7 @@
       <xs:element minOccurs="0" name="profileid" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="PhotoUploadViewModel" nillable="true" type="tns:PhotoUploadViewModel" />
+  <xs:element name="PhotosUploadModel" nillable="true" type="tns:PhotosUploadModel" />
   <xs:complexType name="ArrayOfPhotoUploadModel">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PhotoUploadModel" nillable="true" type="tns:PhotoUploadModel" />

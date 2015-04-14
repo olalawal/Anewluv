@@ -9,10 +9,13 @@ namespace Anewluv.Domain.Data.ViewModels
 {
  
     [DataContract]  
-    public class PhotoUploadViewModel
+    public class PhotosUploadModel
     {
-       
-      
+
+        public PhotosUploadModel()
+        {
+            this.photosuploaded = new List<PhotoUploadModel>();  
+        }
        
         [DataMember]
         public List<PhotoUploadModel> photosuploaded { get; set; }
@@ -24,10 +27,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public bool multiple { get; set; }
 
-        public PhotoUploadViewModel()
-        {
-            this.photosuploaded = new List<PhotoUploadModel>();
-        }
+      
 
     }
 }

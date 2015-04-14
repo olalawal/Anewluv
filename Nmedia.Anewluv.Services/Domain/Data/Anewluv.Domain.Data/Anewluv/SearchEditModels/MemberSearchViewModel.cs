@@ -70,7 +70,7 @@ namespace Anewluv.Domain.Data.ViewModels
          public bool hasgalleryphoto { get; set; }
         
          [DataMember]
-         public PhotoModel galleryphoto { get; set; }
+         public PhotoViewModel galleryphoto { get; set; }
 
            [DataMember]
          public PhotoSearchResultsViewModel photosearchresults { get; set; }

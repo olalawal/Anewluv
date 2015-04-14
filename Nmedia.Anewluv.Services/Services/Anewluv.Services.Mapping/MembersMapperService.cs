@@ -666,8 +666,8 @@ namespace Anewluv.Services.Mapping
                     //5/8/2011  set other defualt values here
                     //model.RegistrationPhotos.PhotoStatus = "";
                     // model.PostalCodeStatus = false;
-                    PhotoUploadViewModel photouploadvm = new PhotoUploadViewModel();
-                    //initlaize PhotoUploadViewModel object          
+                    PhotosUploadModel photouploadvm = new PhotosUploadModel();
+                    //initlaize PhotosUploadModel object          
                     photouploadvm.profileid = membersmodel.profile.id; //set the profileID  
                     photouploadvm.photosuploaded = new List<PhotoUploadModel>();
                     PhotoUploadModel photobeinguploaded = new PhotoUploadModel();
@@ -702,7 +702,7 @@ namespace Anewluv.Services.Mapping
                         // {
                         // PhotoService PhotoService = new PhotoService(tempdb);
 
-                        var photouploadTaskResult = AsyncCalls.addphotosasync(new ProfileModel { photouploadviewmodel = photouploadvm });
+                        var photouploadTaskResult = AsyncCalls.addphotosasync(new ProfileModel { PhotosUploadModel = photouploadvm });
                         var messages = photouploadTaskResult.Result;
 
                         //  }
