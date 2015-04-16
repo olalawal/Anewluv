@@ -14,9 +14,9 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int profileid { get; set; }
         [DataMember]
-        public int mailboxfolderid { get; set; }
+        public int? mailboxfolderid { get; set; }
         [DataMember]
-        public int destinationmailboxfolderid { get; set; }
+        public int? destinationmailboxfolderid { get; set; }
         [DataMember]
         public string mailboxfoldername { get; set; }
         [DataMember]
@@ -27,7 +27,7 @@ namespace Anewluv.Domain.Data.ViewModels
 
         //message details being sent
         [DataMember]
-        public int recipeintprofileid { get; set; }
+        public int? recipeintprofileid { get; set; }
         [DataMember]
         public string subject { get; set; }
         [DataMember]

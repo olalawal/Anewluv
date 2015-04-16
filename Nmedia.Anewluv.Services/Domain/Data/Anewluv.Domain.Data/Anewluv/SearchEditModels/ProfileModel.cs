@@ -95,7 +95,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public mailfoldertypeEnum mailboxfoldertype { get; set; }  //folder types to retrive , only one folder per call for now
         [DataMember]
-        public mailviewmodel mailviewmodel { get; set; } //mail being sent along with all relevant data 
+        public MailViewModel mailviewmodel { get; set; } //mail being sent along with all relevant data 
        
 
 

@@ -14,7 +14,7 @@ namespace Anewluv.Domain.Data.ViewModels
    public class MailSearchResultsViewModel
     {
         [DataMember]
-        public List<mail> results { get; set; }
+        public List<MailViewModel> results { get; set; }
         [DataMember]
         public int? totalresults { get; set; }
     

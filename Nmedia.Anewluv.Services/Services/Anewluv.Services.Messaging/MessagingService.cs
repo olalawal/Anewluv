@@ -124,7 +124,7 @@ namespace Anewluv.Services.Media
                                    
                                      if (profile.dailsentmessagequota.Value > 5)
                                      {
-                                         AnewluvMessages.errormessages.Add("Daily Message Qouata Exceeded please upgrade your memembership to send more than 5 messages a day");
+                                         AnewluvMessages.errormessages.Add("Daily Message Quota Exceeded please upgrade your memembership to send more than 5 messages a day");
                                          return AnewluvMessages;
                                      }
 

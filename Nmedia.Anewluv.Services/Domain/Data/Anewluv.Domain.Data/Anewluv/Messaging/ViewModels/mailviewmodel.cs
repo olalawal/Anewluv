@@ -71,42 +71,6 @@ namespace Anewluv.Domain.Data.ViewModels
 
        
 
-        //[DataMember]  public string read
-        //{
-        //    get
-        //    {
-
-        //        return (ConvertReadReplied(messageread));
-        //    }
-        //    set
-        //    {
-        //        ;
-        //    }
-        //}
-        //[DataMember]  public string Replied
-        //{
-        //    get
-        //    {
-
-        //        return (ConvertReadReplied(messagereplied));
-        //    }
-        //    set
-        //    {
-        //        ;
-        //    }
-        //}
-        [DataMember]  public int dob
-        {
-            get
-            {
-                return (DataFormatingExtensions.CalculateAge(age));
-            }
-            set
-            {
-                ;
-            }
-        }     
-
 
         public static string ConvertReadReplied(int? ReadReplied)
         {

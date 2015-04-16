@@ -70,19 +70,24 @@ namespace Anewluv.DataExtentionMethods
 
             try
             {
+                //TO DO figure out if we will add stuff where the the profile id  blocked members , maybe add to profile visiblity setings
                 //get blocked profiles
-                var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
+                var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
                 
 
 
                 //added roles
-                IQueryable<mailboxfolder> mailboxfolderlist = repo.Query(z => z.profile_id == model.profileid    
+                IQueryable<mailboxfolder> mailboxfolderlist = repo.Query(z => z.profile_id == model.profileid
                     )
                     .Include(p => p.profilemetadata.profile).Include(p => p.profilemetadata.profile.membersinroles.Select(z => z.profile_id == model.profileid))
-                    .Include(p=>p.mailboxmessagefolders.Select(z=>z.mailboxmessage))
-                    .Select().AsQueryable();
+                    .Include(p => p.mailboxmessagefolders.Select(z => z.mailboxmessage).Where(z => !otherblocks.Any(d => d.target_profile_id == z.sender_id))).Select().AsQueryable();
+                    
 
-                
+
+                //remove profiles that blocked me  .i,e should be invlisble to me
+               
+
+
 
                 //to do roles ? allowing what photos they can view i.e the high rez stuff or more than 2 -3 etc
 
@@ -114,7 +119,7 @@ namespace Anewluv.DataExtentionMethods
 
             try
             {
-                var dd = filtermailboxmessagefolders(repo, model);
+                var dd = filtermailboxmessagefolders(repo, model,db);
                 return pagemail(dd.ToList(), model.page, model.numberperpage, db);
 
 
