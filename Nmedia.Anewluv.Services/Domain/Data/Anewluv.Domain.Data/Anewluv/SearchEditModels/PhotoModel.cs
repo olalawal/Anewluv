@@ -11,7 +11,10 @@ namespace Anewluv.Domain.Data.ViewModels
     [DataContract]
     public class PhotoModel
     {
-
+        public PhotoModel()
+        {
+            this.photostoupload = new List<PhotoUploadModel>();
+        }
         
 
         //search stuff for photos
@@ -27,11 +30,16 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int? photoformatid { get; set; }
         [DataMember]
-        public int? photosecuritylevel { get; set; }
+        public int? photosecuritylevelid { get; set; }
         [DataMember]
-        public PhotosUploadModel photosuploadmodel { get; set; }
+        public List<PhotoUploadModel> photostoupload { get; set; }
         [DataMember]
-        public PhotoUploadModel singlephotouploadmodel { get; set; }
+        public bool autoupload { get; set; }
+        [DataMember]
+        public bool multiple { get; set; }
+
+        [DataMember]
+        public PhotoUploadModel singlephototoupload { get; set; }
         [DataMember]
         public Guid? photoid { get; set; }
         [DataMember]
@@ -44,6 +52,8 @@ namespace Anewluv.Domain.Data.ViewModels
         public string inmagesource { get; set; }
         [DataMember]
         public PhotoAlbumViewModel photoalbum { get; set; }
+        [DataMember]
+        public byte[] image { get; set; }
 
         //paging variables
         [DataMember]

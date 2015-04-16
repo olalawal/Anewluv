@@ -30,7 +30,7 @@ namespace Anewluv.Domain.Data.ViewModels
 
 
         [DataMember]
-        public PhotosUploadModel PhotosUploading { get; set; }
+        public List<PhotoUploadModel> PhotosUploading { get; set; }
          
         [DataMember]
         public bool IsUploading { get; set; }

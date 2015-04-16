@@ -93,9 +93,25 @@ namespace Anewluv.Domain.Data.ViewModels
         //added code to to keep track of currently selected photo ID so we can swicth the large phot
         //i.e the zoomed one
         public Guid ViewingPhotoID { get; set; }
-       
-              
- 
+
+        //Needed for the actions you can take towards this member 
+        //Needed for the actions you can take towards this member 
+        [DataMember]
+        public bool peekedatme { get; set; }  //if you have already sent a peek to this memmber
+        [DataMember]
+        public bool peekedatthismember { get; set; }  //if you have already sent a peek to this memmber
+        [DataMember]
+        public bool likesme { get; set; }  //if you have already sent a like to this member
+        [DataMember]
+        public bool likedthismember { get; set; }  //if you have already sent a like to this member
+        [DataMember]
+        public bool blockedme { get; set; }  // if this user has blocked you
+        [DataMember]
+        public bool blockedthismember { get; set; }  // if you have blocked this member       
+        [DataMember]
+        public bool intrestsenttome { get; set; }  // if you have already sent an interest to this member
+        [DataMember]
+        public bool intrestsenttothismember { get; set; }  // if you have already sent an interest to this membe
             
 
        

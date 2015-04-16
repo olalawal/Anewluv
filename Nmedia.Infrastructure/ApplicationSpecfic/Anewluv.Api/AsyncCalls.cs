@@ -110,10 +110,10 @@ namespace Anewluv.Api
             // IsApiKeyValid = await 
         }
 
-        public static async Task<AnewluvMessages>addphotosasync(ProfileModel model)
+        public static async Task<AnewluvMessages>addphotosasync(PhotoModel model)
         {
 
-            Task<AnewluvMessages> returnedTaskTResult = Api.PhotoService.addphotos(new PhotoModel { profileid = model.profileid });
+            Task<AnewluvMessages> returnedTaskTResult = Api.PhotoService.addphotos(model);
             AnewluvMessages result = await returnedTaskTResult;
             return result;
             // IsApiKeyValid = await 

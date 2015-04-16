@@ -85,6 +85,7 @@ namespace Anewluv.DataExtentionMethods
                     model.stateprovince = profile.profiledata.stateprovince;
                     model.postalcode = profile.profiledata.postalcode;
                     model.countryid = profile.profiledata.countryid;
+                    //TOD DO hard code country list from common and get it from cached version to filter
                     model.countryname = spatialextentions.getcountrynamebycountryid(new GeoModel { countryid = model.countryid.ToString() }, _storedProcedures);
                     // modelprofile = profile.profile;
                     model.longitude = (double)profile.profiledata.longitude;

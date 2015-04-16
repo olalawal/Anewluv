@@ -9,7 +9,7 @@ using Anewluv.Domain.Data.Helpers;
 namespace Anewluv.Domain.Data.ViewModels
 {
     [DataContract]
-    public class mailfoldermodel
+    public class MailFolderViewModel
     {
          [DataMember]
          public int folderid { get; set; }

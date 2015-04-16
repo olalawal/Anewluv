@@ -9,6 +9,7 @@ namespace Anewluv.Domain.Data
         public mailboxmessage()
         {
           //  this.mailboxmessagefolders = new List<mailboxmessagefolder>();
+            this.creationdate = DateTime.Now;           
         }
 
         public int id { get; set; }

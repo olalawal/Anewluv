@@ -188,39 +188,7 @@ namespace Anewluv.Services.Members
           
         }
 
-        //get full profile stuff
-        //*****************************************************
-        public string getgenderbyphotoid(ProfileModel model)
-        {
-          
-            using (var db = _unitOfWork)
-            {
-                try
-                {
-
-                 return  db.Repository<profiledata>().Query(p=>p.profile.profilemetadata.photos.ToList().Any(z=>z.id == model.photoid)).Select().FirstOrDefault().lu_gender.description;
-                   
-                }
-                catch (Exception ex)
-                {
-
-                    //instantiate logger here so it does not break anything else.
-                    logger = new  Logging(applicationEnum.MemberService);
-                    //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
-                    //can parse the error to build a more custom error mssage and populate fualt faultreason
-                    FaultReason faultreason = new FaultReason("Error in member service");
-                    string ErrorMessage = "";
-                    string ErrorDetail = "ErrorMessage: " + ex.Message;
-                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-
-                    //throw convertedexcption;
-                }
-
-            }
-
-        
-        }
+       
 
         //TO DO this needs to be  linked to roles
         //"Message and Email Quota stuff"

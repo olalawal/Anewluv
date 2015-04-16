@@ -16,8 +16,24 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public int mailboxfolderid { get; set; }
         [DataMember]
-        public int mailboxfoldername { get; set; }
+        public int destinationmailboxfolderid { get; set; }
+        [DataMember]
+        public string mailboxfoldername { get; set; }
+        [DataMember]
+        public List<int> deletemailboxmessagesids { get; set; }
+        [DataMember]
+        public List<int> movemailboxmessagesids { get; set; }
 
+
+        //message details being sent
+        [DataMember]
+        public int recipeintprofileid { get; set; }
+        [DataMember]
+        public string subject { get; set; }
+        [DataMember]
+        public string body { get; set; }
+              
+        
         //paging variables
         [DataMember]
         public int? page { get; set; }

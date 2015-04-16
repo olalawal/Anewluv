@@ -90,36 +90,76 @@ namespace Anewluv.DataExtentionMethods
 
         }
 
+
+
         //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
-        public static PhotoSearchResultsViewModel getpagedphotomodelbyprofileidandstatusandalbumid (this IRepository<photoconversion> repo, int profileid, int? format, int? status, int? securitylevel, int? albumid, int? page, int? numberperpage)
+        public static IQueryable<photoconversion> filterphotos(this IRepository<photoconversion> repo, PhotoModel model)
+        {
+
+            try
+            {
+                //added roles
+                IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == model.profileid)
+                    .Include(p => p.photo.profilemetadata).Include(p => p.photo.photo_securitylevel).Include(p => p.photo.profilemetadata.profile.membersinroles.Select(z => z.profile_id == model.profileid))
+                    .Select().AsQueryable();
+
+
+                //to do roles ? allowing what photos they can view i.e the high rez stuff or more than 2 -3 etc
+
+                //photo id
+                if (model.photoid != null)
+                    photomodel = photomodel.Where(a => a.photo.photoconversions.Any((p => p.photo_id == model.photoid)));
+
+                //security level
+                if (model.photosecuritylevelid != null)    //if phop
+                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel != null && a.photo.photo_securitylevel.Any(d => d.securityleveltype_id ==model.photosecuritylevelid));
+                if (model.photosecuritylevelid == null) //only grab photos with no status 
+                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel != null && a.photo.photo_securitylevel.Any(d => (d.securityleveltype_id == (int)securityleveltypeEnum.Public) | (d.securityleveltype_id == (int)securityleveltypeEnum.Public)));
+               
+                //status
+                if (model.phototstatusid != null)
+                    photomodel = photomodel.Where(a => a.photo.photostatus_id == model.phototstatusid);
+                if (model.phototstatusid == null) //grab all photos with good status
+                    photomodel = photomodel.Where(a => a.photo.photostatus_id != null &&
+                                  (a.photo.photostatus_id == (int)photostatusEnum.Gallery |
+                                   a.photo.lu_photostatus.id == (int)photostatusEnum.NotSet |
+                                    a.photo.lu_photostatus.id == (int)photostatusEnum.Nostatus));
+
+                //format
+                if (model.photoformatid != null)
+                    photomodel = photomodel.Where(a => a.photo.photoconversions.Any(z => z.formattype_id == model.photoformatid.Value));
+                if (model.photoformatid == null) //default
+                    photomodel = photomodel.Where(a => a.photo.photoconversions.Any(z => z.formattype_id == (int)photoformatEnum.Thumbnail));
+                //screenname
+                if (model.screenname != null | model.screenname != null)
+                    photomodel = photomodel.Where(a => a.photo.photoconversions.Any((p => p.photo.profilemetadata.profile.screenname.Replace(" ", "") == model.screenname)));
+
+
+
+                return photomodel;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //eath the eception
+                // throw ex;
+            }
+
+            return null;
+        }
+
+        //TO DO Premuim roles get all
+        //TO DO needs code to check roles to see how many photos can be viewd etc
+        public static PhotoSearchResultsViewModel getfilteredphotospaged(this IRepository<photoconversion> repo, PhotoModel model)
         {
         
             try
             {
-                //added roles
-                IQueryable<photoconversion> photomodel = repo.Query(z=>z.photo.profile_id == profileid)
-                    .Include(p=>p.photo.profilemetadata).Include(p=>p.photo.photo_securitylevel).Include(p=>p.photo.profilemetadata.profile.membersinroles.Select(z=>z.profile_id == profileid))
-                    .Select().AsQueryable();
-
-                if (securitylevel  !=null)    //if phop
-                       photomodel = photomodel.Where(a => a.photo.photo_securitylevel!=null && a.photo.photo_securitylevel.Any(d =>  d.securityleveltype_id == (int)securitylevel));
-                if (securitylevel  ==null) //only grab photos with no status 
-                       photomodel = photomodel.Where(a => a.photo.photo_securitylevel!=null && a.photo.photo_securitylevel.Any(d => (d.securityleveltype_id ==  (int)securityleveltypeEnum.Public) | (d.securityleveltype_id ==  (int)securityleveltypeEnum.Public)));
-                if (status != null)
-                       photomodel = photomodel.Where(a =>  a.photo.photostatus_id == status );
-                if (status ==null) //grab all photos with good status
-                       photomodel = photomodel.Where(a =>   a.photo.photostatus_id != null &&
-                                     (a.photo.photostatus_id == (int)photostatusEnum.Gallery |
-                                      a.photo.lu_photostatus.id == (int)photostatusEnum.NotSet |
-                                       a.photo.lu_photostatus.id == (int)photostatusEnum.Nostatus));
-                if (format != null)
-                    photomodel = photomodel.Where(a => a.photo.photoconversions.Any(z=>z.formattype_id == format.Value ));
-                //if no photo status passed get call (premmium members only 
-                //TO DO
-                // if (format == null)
-                //     photomodel = photomodel.Where(a =>    a.photo.photoconversions.Any(z => z.formattype_id == format.Value));
-                 return pagephotos(photomodel.ToList(), page, numberperpage);
+                var dd = filterphotos(repo, model);
+                 return pagephotos(dd.ToList(), model.page, model.numberperpage);
 
 
             }
@@ -134,32 +174,15 @@ namespace Anewluv.DataExtentionMethods
 
         //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
-        public static PhotoViewModel getphotomodelbyprofileidandstatusandalbumid(this IRepository<photoconversion> repo, int profileid, int? format, int? status,Guid? photoid,string screenname, int? securitylevel, int? albumid)
+        public static PhotoViewModel getfilteredphoto(this IRepository<photoconversion> repo, PhotoModel model)
         {
 
             try
             {
-                //added roles
-                IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == profileid)
-                    .Include(p => p.photo.profilemetadata).Include(p => p.photo.photo_securitylevel).Include(p => p.photo.profilemetadata.profile.membersinroles.Select(z => z.profile_id == profileid))
-                    .Select().AsQueryable();
-
-                if (securitylevel != null)    //if phop
-                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel != null && a.photo.photo_securitylevel.Any(d => d.securityleveltype_id == (int)securitylevel));
-                if (securitylevel == null) //only grab photos with no status 
-                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel != null && a.photo.photo_securitylevel.Any(d => (d.securityleveltype_id == (int)securityleveltypeEnum.Public) | (d.securityleveltype_id == (int)securityleveltypeEnum.Public)));
-                if (status != null)
-                    photomodel = photomodel.Where(a => a.photo.photostatus_id == status);
-                if (status == null) //grab all photos with good status
-                    photomodel = photomodel.Where(a => a.photo.photostatus_id != null &&
-                                  (a.photo.photostatus_id == (int)photostatusEnum.Gallery |
-                                   a.photo.lu_photostatus.id == (int)photostatusEnum.NotSet |
-                                    a.photo.lu_photostatus.id == (int)photostatusEnum.Nostatus));
-                if (format != null)
-                    photomodel = photomodel.Where(a => a.photo.photoconversions.Any(z => z.formattype_id == format.Value));
+                
 
 
-                var results = photomodel.Select(p => new PhotoViewModel
+                var results = filterphotos(repo,model).Select(p => new PhotoViewModel
                 {
                     photoid = p.photo.id,
                     profileid = p.photo.profile_id,
@@ -186,6 +209,7 @@ namespace Anewluv.DataExtentionMethods
 
             return null;
         }
+
 
         //TO DO needs code to check roles to see how many photos can be viewd etc
         public static List<PhotoViewModel> getpagedphotomodelbyprofileid(this IRepository<photoconversion> repo, int profileid, int format, int page, int pagesize)
@@ -247,7 +271,6 @@ namespace Anewluv.DataExtentionMethods
 
             return null;
         }
-
 
 
         //Private filtering methods :
@@ -330,9 +353,6 @@ namespace Anewluv.DataExtentionMethods
         }
 
 
-
-
-
         public static PhotoEditViewModel getphotoeditviewmodel(IEnumerable<PhotoViewModel> Approved,
                                                             IEnumerable<PhotoViewModel> NotApproved,
                                                             IEnumerable<PhotoViewModel> Private,
@@ -379,7 +399,7 @@ namespace Anewluv.DataExtentionMethods
             }
 
 
-            PhotosUploadModel UploadPhotos = new PhotosUploadModel();
+          //  PhotosUploadModel UploadPhotos = new PhotosUploadModel();
 
             PhotoEditViewModel ViewModel = new PhotoEditViewModel
             {
@@ -387,7 +407,7 @@ namespace Anewluv.DataExtentionMethods
                 ProfilePhotosApproved = Approved.ToList(),
                 ProfilePhotosNotApproved = NotApproved.ToList(),
                 ProfilePhotosPrivate = Private.ToList(),
-                PhotosUploading = UploadPhotos
+              //  PhotosUploading = UploadPhotos
             };
 
 
@@ -395,7 +415,6 @@ namespace Anewluv.DataExtentionMethods
 
 
         }
-
 
 
         //format should be known by down

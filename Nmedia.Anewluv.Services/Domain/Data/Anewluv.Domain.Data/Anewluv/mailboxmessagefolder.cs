@@ -6,6 +6,13 @@ namespace Anewluv.Domain.Data
 {
     public partial class mailboxmessagefolder :Entity
     {
+        public mailboxmessagefolder()
+        {
+           
+
+        }
+
+
         public int mailboxfolder_id { get; set; }
         public int mailboxmessage_id { get; set; }
         public bool? deleted { get; set; }

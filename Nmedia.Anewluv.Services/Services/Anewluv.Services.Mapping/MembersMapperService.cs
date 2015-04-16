@@ -666,11 +666,12 @@ namespace Anewluv.Services.Mapping
                     //5/8/2011  set other defualt values here
                     //model.RegistrationPhotos.PhotoStatus = "";
                     // model.PostalCodeStatus = false;
-                    PhotosUploadModel photouploadvm = new PhotosUploadModel();
+                    //PhotoUploadModel> photouploadvm = new List<PhotoUploadModel>();
+
                     //initlaize PhotosUploadModel object          
-                    photouploadvm.profileid = membersmodel.profile.id; //set the profileID  
-                    photouploadvm.photosuploaded = new List<PhotoUploadModel>();
-                    PhotoUploadModel photobeinguploaded = new PhotoUploadModel();
+                   // photouploadvm.profileid = membersmodel.profile.id; //set the profileID  
+                   // photouploadvm.photosuploaded = new List<PhotoUploadModel>();
+                    var photobeinguploaded = new PhotoUploadModel();
 
                     //right now we are only uploading one photo 
                     //for now we are using URL from each, we can hanlde mutiple provider formats that might return a byte using the source paremater
@@ -685,7 +686,7 @@ namespace Anewluv.Services.Mapping
                         //  PhotoService PhotoService = new PhotoService(tempdb);
 
                       
-                        var returnedTaskTResult = AsyncCalls.getimageb64stringfromurlasync(new ProfileModel { imageUrl =   membersmodel.rpxmodel.photo,inmagesource =""});
+                        var returnedTaskTResult = AsyncCalls.getimageb64stringfromurlasync(new PhotoModel { imageUrl =   membersmodel.rpxmodel.photo,inmagesource =""});
                         photobeinguploaded.imageb64string = returnedTaskTResult.Result;
 
                         //    }
@@ -702,7 +703,7 @@ namespace Anewluv.Services.Mapping
                         // {
                         // PhotoService PhotoService = new PhotoService(tempdb);
 
-                        var photouploadTaskResult = AsyncCalls.addphotosasync(new ProfileModel { PhotosUploadModel = photouploadvm });
+                        var photouploadTaskResult = AsyncCalls.addphotosasync(new PhotoModel { singlephototoupload = photobeinguploaded });
                         var messages = photouploadTaskResult.Result;
 
                         //  }
@@ -1167,6 +1168,12 @@ namespace Anewluv.Services.Mapping
                         //                     select x).FirstOrDefault();
 
 
+                        //TO DO add code to filter out blocked members
+                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, actiontypeEnum.Block);
+                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid)
+                        //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
+                        //                           select m).AsQueryable();     
+
                         //****** end of visiblity test settings *****************************************
 
                         var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
@@ -1360,6 +1367,11 @@ namespace Anewluv.Services.Mapping
 
                         // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
 
+                        //TO DO add code to filter out blocked members
+                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, actiontypeEnum.Block);
+                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid)
+                        //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
+                        //                           select m).AsQueryable();   
 
                         //basic search
                         var repo = db.Repository<profiledata>().Query(p => p.birthdate > min && p.birthdate <= max &&
@@ -1546,6 +1558,16 @@ namespace Anewluv.Services.Mapping
                         // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
 
                         //add more values as we get more members 
+
+
+
+                        //TO DO add code to filter out blocked members
+                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, actiontypeEnum.Block);
+                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid)
+                        //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
+                        //                           select m).AsQueryable();   
+
+
                         //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
                         var MemberSearchViewmodels = (from x in db.Repository<profiledata>().Queryable().Where(p => p.birthdate > min && p.birthdate <= max &&
                          p.countryid == countryid && p.city == city && p.stateprovince == stateprovince)
@@ -1580,6 +1602,7 @@ namespace Anewluv.Services.Mapping
                                                           //lookingForageto = x.profile.profilemetadata.searchsettings != null ? x.profile.profilemetadata.searchsettings.FirstOrDefault().agemax.ToString() : "45",
                                                       }).OrderByDescending(p => p.creationdate).ThenByDescending(p => p.distancefromme).ToList();//.OrderBy(p=>p.creationdate ).Take(maxwebmatches).ToList();
 
+                    
 
 
                         //this.AddRange(pageData.ToList());
@@ -1730,6 +1753,13 @@ namespace Anewluv.Services.Mapping
                         ////LookingForHotFeatureValues = (Model != null) ? new HashSet<int>(Model.searchsetting_hotfeature.Select(c => c.id)) : LookingForHotFeatureValues;
 
                         //// var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
+
+
+                        //TO DO add code to filter out blocked members
+                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, actiontypeEnum.Block);
+                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid)
+                        //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
+                        //                           select m).AsQueryable();   
 
                         ////add more values as we get more members 
                         ////TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches

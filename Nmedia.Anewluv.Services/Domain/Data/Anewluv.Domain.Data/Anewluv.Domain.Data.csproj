@@ -52,12 +52,13 @@
     <Compile Include="Anewluv\applicationiconconversion.cs" />
     <Compile Include="Anewluv\applicationrole.cs" />
     <Compile Include="Anewluv\Enums\mailfoldertype.cs" />
-    <Compile Include="Anewluv\Mail\ViewModels\mailfolderviewmodel.cs" />
-    <Compile Include="Anewluv\Mail\ViewModels\mailfoldermodel.cs" />
+    <Compile Include="Anewluv\Messaging\ViewModels\MailFoldersViewModel.cs" />
+    <Compile Include="Anewluv\Messaging\ViewModels\MailFolderViewModel.cs" />
     <Compile Include="Anewluv\photophotoalbum.cs" />
     <Compile Include="Anewluv\note.cs" />
     <Compile Include="Anewluv\communicationquota.cs" />
     <Compile Include="Anewluv\action.cs" />
+    <Compile Include="Anewluv\SearchEditModels\MailSearchResultsViewModel.cs" />
     <Compile Include="Anewluv\searchsettingdetail.cs" />
     <Compile Include="Anewluv\lu_actiontype.cs" />
     <Compile Include="Anewluv\lu_searchsettingdetailtype.cs" />
@@ -168,8 +169,8 @@
     <Compile Include="Anewluv\mailboxmessage.cs" />
     <Compile Include="Anewluv\mailboxmessagefolder.cs" />
     <Compile Include="Anewluv\mailupdatefreqency.cs" />
-    <Compile Include="Anewluv\Mail\ViewModels\mailmessageviewmodel.cs" />
-    <Compile Include="Anewluv\Mail\ViewModels\mailviewmodel.cs" />
+    <Compile Include="Anewluv\Messaging\ViewModels\mailmessageviewmodel.cs" />
+    <Compile Include="Anewluv\Messaging\ViewModels\MailViewModel.cs" />
     <Compile Include="Anewluv\membersinrole.cs" />
     <Compile Include="Anewluv\openid.cs" />
     <Compile Include="Anewluv\photo.cs" />

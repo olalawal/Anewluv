@@ -10,16 +10,16 @@ namespace Anewluv.Domain.Data.ViewModels
 {
     
     [DataContract] 
-    public class mailfolderviewmodel
+    public class MailFoldersViewModel
     {
-         public mailfolderviewmodel ()
+        public MailFoldersViewModel()
         {
-            this.folders = new List<mailfoldermodel>();
+            this.folders = new List<MailFolderViewModel>();
         }
         
 
          [DataMember]
-         public List<mailfoldermodel> folders { get; set; }
+        public List<MailFolderViewModel> folders { get; set; }
        
 
     }

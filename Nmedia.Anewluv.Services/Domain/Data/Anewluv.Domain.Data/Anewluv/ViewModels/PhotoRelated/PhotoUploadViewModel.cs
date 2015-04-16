@@ -9,23 +9,23 @@ namespace Anewluv.Domain.Data.ViewModels
 {
  
     [DataContract]  
-    public class PhotosUploadModel
+    public class PhotosUploadModelOLD
     {
 
-        public PhotosUploadModel()
-        {
-            this.photosuploaded = new List<PhotoUploadModel>();  
-        }
+        //public PhotosUploadModel()
+        //{
+        //    this.photosuploaded = new List<PhotoUploadModel>();  
+        //}
        
-        [DataMember]
-        public List<PhotoUploadModel> photosuploaded { get; set; }
-        [DataMember]
-        public int profileid { get; set; }
+        //[DataMember]
       
-        [DataMember]
-        public bool autoupload { get; set; }
-        [DataMember]
-        public bool multiple { get; set; }
+        //[DataMember]
+        //public int profileid { get; set; }
+      
+        //[DataMember]
+        //public bool autoupload { get; set; }
+        //[DataMember]
+        //public bool multiple { get; set; }
 
       
 
