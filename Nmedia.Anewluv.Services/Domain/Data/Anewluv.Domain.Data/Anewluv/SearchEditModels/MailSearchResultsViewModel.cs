@@ -13,6 +13,12 @@ namespace Anewluv.Domain.Data.ViewModels
     [DataContract]
    public class MailSearchResultsViewModel
     {
+        public MailSearchResultsViewModel()
+        {
+            this.results = new List<MailViewModel>();
+        }
+
+
         [DataMember]
         public List<MailViewModel> results { get; set; }
         [DataMember]

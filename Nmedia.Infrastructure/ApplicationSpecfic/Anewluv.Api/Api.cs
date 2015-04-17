@@ -275,5 +275,46 @@ namespace Anewluv.Api
 
         }
 
+        private static WebChannelFactory<INotificationService> _Notificationservice;
+        private static INotificationService _Notificationchannel = null;
+        public static INotificationService NotificationService
+        {
+            get
+            {
+                if (_Notificationservice == null || _Notificationservice.State == CommunicationState.Closed || _Notificationchannel == null)
+                {
+                    _Notificationservice = new WebChannelFactory<INotificationService>("webHttpBinding_INotificationService");
+                    _Notificationchannel = _Notificationservice.CreateChannel();
+                    return _Notificationchannel;
+
+                }
+                else
+                {
+                    // INotificationService channel = _Notificationservice.CreateChannel();
+                    return _Notificationchannel;
+
+
+                }
+                //return _IMemberService;
+            }
+        }
+        public static bool DisposeNotificationService()
+        {
+
+            if (_Notificationservice != null)
+            {
+                _Notificationservice.Close();
+
+                //IIMemberService channel = _IMemberService.CreateChannel();
+                // return channel;
+                return true;
+            }
+            return false;
+            //return _IMemberService;
+
+        }
+
+
+
     } 
 }

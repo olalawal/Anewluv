@@ -81,12 +81,19 @@ namespace Anewluv.DataExtentionMethods
                 .Select().FirstOrDefault();
         }
 
+        /// <summary>
+        /// added roles
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)
         {
 
             return repo.Query(p => p.id == model.profileid).Include(x => x.profiledata)
                 .Include(z => z.profilemetadata)
-                  .Include(i => i.profilemetadata.searchsettings.Select(s => s.details)).Select().FirstOrDefault();
+                .Include(p => p.membersinroles.Select(z => z.lu_role))                 
+                .Include(i => i.profilemetadata.searchsettings.Select(s => s.details)).Select().FirstOrDefault();
                // .Include(z => z.profilemetadata.searchsettings).Select().FirstOrDefault();
         }
         /// <summary>
@@ -99,7 +106,8 @@ namespace Anewluv.DataExtentionMethods
         {
 
             return repo.Query(p => p.id == model.profileid).Include(x => x.profiledata)
-                .Include(z => z.profilemetadata)
+                .Include(z => z.profilemetadata)              
+                 .Include(p => p.membersinroles.Select(z => z.lu_role))   
                    .Include(z => z.profilemetadata.photos.Select(s=>s.photoconversions))
                       .Include(z => z.profilemetadata.profiledata_ethnicity)
                          .Include(z => z.profilemetadata.profiledata_hobby)
@@ -116,17 +124,25 @@ namespace Anewluv.DataExtentionMethods
 
         public static profile getprofilebyscreenname(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Query(p => p.screenname == model.screenname).Include(x => x.profiledata).Include(z=>z.profilemetadata).Select().FirstOrDefault();
+            return repo.Query(p => p.screenname == model.screenname).Include(x => x.profiledata)
+                .Include(z=>z.profilemetadata)
+                .Include(p => p.membersinroles.Select(z => z.lu_role))   
+                .Select().FirstOrDefault();
         }
 
         public static profile getprofilebyemailaddress(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Query(p => p.emailaddress == model.email).Include(x => x.profiledata).Include(z=>z.profilemetadata).Select().FirstOrDefault();
+            return repo.Query(p => p.emailaddress == model.email).Include(x => x.profiledata)
+                .Include(p => p.membersinroles.Select(z => z.lu_role))   
+                .Include(z=>z.profilemetadata).Select().FirstOrDefault();
         }
 
         public static profile getprofilebyusername(this IRepository<profile> repo, ProfileModel model)
         {
-            return repo.Query(p => p.username == model.username).Include(x => x.profiledata).Include(z=>z.profilemetadata).Select().FirstOrDefault();
+            return repo.Query(p => p.username == model.username)
+                .Include(x => x.profiledata)
+                .Include(p => p.membersinroles.Select(z => z.lu_role))   
+                .Include(z=>z.profilemetadata).Select().FirstOrDefault();
         }
 
         public static profile getprofileidbyopenid(this IRepository<profile> repo, ProfileModel model)
@@ -134,7 +150,10 @@ namespace Anewluv.DataExtentionMethods
             //MembersRepository membersrepository = new MembersRepository();
             //get the correct value from DB
             //lazy loading needed
-            var profile = repo.Query(p => p.emailaddress == model.email).Include(x => x.profiledata).Include(z=>z.profilemetadata).Select().FirstOrDefault();
+            var profile = repo.Query(p => p.emailaddress == model.email)
+                .Include(x => x.profiledata)
+                .Include(p => p.membersinroles.Select(z => z.lu_role))   
+                .Include(z=>z.profilemetadata).Select().FirstOrDefault();
 
 
             //if we have an active cache we store the current value 
@@ -188,7 +207,9 @@ namespace Anewluv.DataExtentionMethods
 
         public static visiblitysetting getvisibilitysettingsbyprofileid(this IRepository<visiblitysetting> repo, ProfileModel model)
         {
-            return repo.Query(p => p.profile_id == model.profileid).Select().FirstOrDefault();
+            return repo.Query(p => p.profile_id == model.profileid)
+                .Include(p => p.profiledata)   
+                .Select().FirstOrDefault();
         }
 
         //TO DO move the generic infratructure extentions

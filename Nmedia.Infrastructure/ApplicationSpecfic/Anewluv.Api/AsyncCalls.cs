@@ -6,6 +6,7 @@ using GeoData.Domain.ViewModels;
 using Nmedia.Infrastructure.Domain.Data.Apikey;
 using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
 using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
+using Nmedia.Infrastructure.Domain.Data.Notification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,6 @@ namespace Anewluv.Api
 
 
         }
-
         public static async Task<bool> isvalidapikeyanduserasync(apikey model)
         {
 
@@ -53,7 +53,6 @@ namespace Anewluv.Api
 
 
         }
-
         public static async Task<Guid> validateorgetapikeyasync(ApiKeyValidationModel model)
         {
 
@@ -81,10 +80,7 @@ namespace Anewluv.Api
             // IsApiKeyValid = await 
 
 
-        }
-
-     
-
+        }    
          public static async Task<int> getcountryidbycountryname(string countryname)
                 {
 
@@ -109,7 +105,6 @@ namespace Anewluv.Api
             return result;
             // IsApiKeyValid = await 
         }
-
         public static async Task<AnewluvMessages>addphotosasync(PhotoModel model)
         {
 
@@ -118,8 +113,6 @@ namespace Anewluv.Api
             return result;
             // IsApiKeyValid = await 
         }
-
-
         public static async Task<string> getimageb64stringfromurlasync(PhotoModel model)
         {
 
@@ -145,7 +138,6 @@ namespace Anewluv.Api
             return result;
 
         }
-
         //old method that returned bool, now we want profileid to validate agains body
         public static async Task<bool> validateuserbyusernamepasswordasync(string username,string password)
         {
@@ -155,7 +147,6 @@ namespace Anewluv.Api
                     return result;
 
         }
-
         public static void addprofileactvity(ActivityModel activitymodel)
         {
            // Api.MemberService.addprofileactvity(activity);
@@ -165,7 +156,6 @@ namespace Anewluv.Api
 
             Task.Run(() => Api.MemberService.addprofileactvity(activitymodel));
         }
-
         public static void updateuserlogintimeasync(ProfileModel model)
         {
             // Api.MemberService.addprofileactvity(activity);
@@ -175,27 +165,12 @@ namespace Anewluv.Api
 
             Task.Run(() => Api.MemberService.updateuserlogintimebyprofileid(model));
         }
-
         public static void updateuserlogintimebyprofileidandsessionidasync(ProfileModel model)
         {
 
             Task.Run(() => Api.MemberService.updateuserlogintimebyprofileidandsessionid(model));
         
         }
-
-
-        //public static void addprofileactvitygeodata(profileactivitygeodata profileactivitygeodata)
-        //{
-        //    //Api.MemberService.addprofileactvitygeodata(profileactivitygeodata);
-        //    //  result = await returnedTaskTResult;
-        //    // IsApiKeyValid = await 
-        //    //  return result;
-
-        //    Task.Run(() => Api.MemberService.addprofileactvitygeodata(profileactivitygeodata));
-        //}
-
-
-
         public static async Task<bool> checkifprofileisactivatedasync(ProfileModel model)
         {
          Task<bool> returnedTaskTResult =  Api.MemberService.checkifprofileisactivated(model);
@@ -204,7 +179,6 @@ namespace Anewluv.Api
                     return result;
 
         }
-
         public static async Task<bool> activateprofileasync(ProfileModel model)
         {
          Task<bool> returnedTaskTResult =  Api.MemberService.activateprofile(model);
@@ -213,8 +187,6 @@ namespace Anewluv.Api
                     return result;
 
         }
-
-
         public static void createmailboxfoldersasync(ProfileModel model)
         {
 
@@ -225,7 +197,6 @@ namespace Anewluv.Api
          //           // IsApiKeyValid = await 
          //           return result;
         }
-
         public static async Task<bool> checkifmailboxfoldersarecreatedasync(ProfileModel model)
         {
             Task<bool> returnedTaskTResult = Api.MemberService.checkifmailboxfoldersarecreated(model);
@@ -235,6 +206,24 @@ namespace Anewluv.Api
         }
         
 
+
+        #endregion
+
+
+
+        #region "Notification Service calls"
+        public static void sendmessagebytemplate(EmailViewModel model)
+        {
+
+            Task.Run(() => Api.NotificationService.sendmessagebytemplate(model));
+
+            //Task<bool> returnedTaskTResult =  Api.MemberService.createmailboxfolders(model);
+            //           bool result = await returnedTaskTResult;
+            //           // IsApiKeyValid = await 
+            //           return result;
+
+        }
+        
 
         #endregion
 

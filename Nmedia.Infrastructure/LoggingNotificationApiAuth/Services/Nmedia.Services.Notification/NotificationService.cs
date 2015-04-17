@@ -282,10 +282,10 @@ namespace Nmedia.Services.Notification
         }
 
 
-        public async Task sendmessagebytemplate(EmailModel model)
+        public async Task sendmessagebytemplate(EmailViewModel model)
         {
 
-            EmailViewModel viewmodel = new EmailViewModel();
+           // EmailViewModel viewmodel = new EmailViewModel();
 
           //    using (var db = _unitOfWork)
             {
@@ -304,46 +304,37 @@ namespace Nmedia.Services.Notification
                         await Task.Factory.StartNew(() =>
                         {
 
-                            var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
+                           // var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
+
+
                             //Id's messed up in DB use the first 
-                            dynamic systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList()) select x).FirstOrDefault(); 
-                            lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == (int)templateenum)) select x).FirstOrDefault();                             
-                            lu_messagetype messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == (int)templateenum)) select x).FirstOrDefault(); 
-                            //var recipientemailaddresss = (from x in (_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(f => f.addresstype.id == (int)(addresstypeenum.Developer))) select x).ToList();
-
-                            //build the recipient address objects
-                           // EmailModel returnmodel = new EmailModel();
-                            model = getemailbytemplateid(templateenum, _unitOfWorkAsync);
-                            //fill in the rest of the email model values 
-                             ICollection<address> addresses = new List<address>();
-                            addresses.Add(getorcreateaddaddress(viewmodel,_unitOfWorkAsync));
-
-
-                            //TO DO put in special code for the matches and the searches 
-                            //i.e if template ID = 
-                            if (templateenum == templateenum.MemberMatchesSentMemberNotification)
-                            { 
-                             //TO DO use the API service to get that data QuickMatches and put it into the viewmodel
-                            }
-
-                            //Now build the message e
-                            // recipeints = context.MessageSystemAddresses.Where(Function(c) c.SystemAddressType = CInt(AddressType))
-                            //Perform validation on the updated order before applying the changes.
+                            dynamic systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList()) select x).FirstOrDefault();
                             message message = new message();
-                            //use create method it like this 
-
                             //11-29-2013 get the template path from web config
                             var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
+
+                            //member part
+                            //************************************************************************
+                            lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == model.userEmailViewModel.templateid)) select x).FirstOrDefault();                             
+                            lu_messagetype messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id ==  model.userEmailViewModel.messagetypeid )) select x).FirstOrDefault();
+                            lu_addresstype addresstype = (from x in (_unitOfWorkAsync.Repository<lu_addresstype>().Queryable().ToList().Where(f => f.id == model.userEmailViewModel.addresstypeid)) select x).FirstOrDefault(); 
+
+                         
+                            ICollection<address> addresses = new List<address>();
+
+                            //create the user address
+                            addresses.Add(getorcreateaddaddress(model,_unitOfWorkAsync));
+                        
 
                             //the member message created and sent here
                             message = (message.Create(c =>
                             {
 
-                                c.id = (int)templateenum;
+                                c.id = model.userEmailViewModel.templateid;
                                 c.template = template;
                                 c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
                                 c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                                c.subject = model.subject;
+                                c.subject = model.userEmailViewModel.subject;
                                 c.recipients = addresses;
                                 c.sendingapplication = "NotificationService";
                                 c.systemaddress = systemsenderaddress;
@@ -356,9 +347,37 @@ namespace Nmedia.Services.Notification
 
                             _unitOfWorkAsync.Repository<message>().Insert(message);
                             var j = _unitOfWorkAsync.SaveChanges();
-                           // transaction.Commit();
+                         
+                            //send admin email here
+                            //************************************************************
+                             template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == model.adminEmailViewModel.templateid)) select x).FirstOrDefault();
+                             messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == model.adminEmailViewModel.messagetypeid)) select x).FirstOrDefault();
+                             addresstype = (from x in (_unitOfWorkAsync.Repository<lu_addresstype>().Queryable().ToList().Where(f => f.id == model.adminEmailViewModel.addresstypeid)) select x).FirstOrDefault(); 
 
-                          
+                             //get the addresss for all admins for now down the line filter based on message type ?
+                             addresses = _unitOfWorkAsync.Repository<address>().Query(z => z.addresstype_id ==  (int)addresstypeenum.SystemAdmin ).Select().ToList();
+
+                             //the member message created and sent here
+                             message = (message.Create(c =>
+                             {
+
+                                 c.id = model.adminEmailViewModel.templateid;
+                                 c.template = template;
+                                 c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
+                                 c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
+                                 c.subject = model.adminEmailViewModel.subject;
+                                 c.recipients = addresses;
+                                 c.sendingapplication = "NotificationService";
+                                 c.systemaddress = systemsenderaddress;
+                             }));
+
+                             message.sent = message.body != null ? sendemail(message) : false;//attempt to send the message
+                             message.sendattempts = message.body != null ? 1 : 0;
+                             //  db.Add(message);
+                             // int j = db.Commit();
+
+                             _unitOfWorkAsync.Repository<message>().Insert(message);
+                              j = _unitOfWorkAsync.SaveChanges();
 
 
                         });
@@ -1365,7 +1384,7 @@ namespace Nmedia.Services.Notification
          //check to see if the recipeint address already exists if not add i
                         address current =
                         _unitOfWorkAsync.Repository<address>().Queryable().ToList()
-                        .Where(p => p.emailaddress.ToUpper() == Model.userEmailViewModel.emailaddress && p.addresstype_id == (int)Model.userEmailViewModel.addresstype).FirstOrDefault();
+                        .Where(p => p.emailaddress.ToUpper() == Model.userEmailViewModel.emailaddress && p.addresstype_id == Model.userEmailViewModel.addresstypeid).FirstOrDefault();
                             //_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(p => p.emailaddress.ToUpper() == Model.EmailModel.to && Model.EmailModel.addresstypefrom == addresstypeenum.SiteUser).FirstOrDefault();
 
                          
@@ -1375,13 +1394,13 @@ namespace Nmedia.Services.Notification
                            // var addresstype = new lu_addresstype();
                          //   current.addresstype = addresstype;
                             //add the email address                         
-                            current.addresstype_id = (int)Model.userEmailViewModel.addresstype;//:  (int)Model.EmailModel.addresstypefrom;
+                            current.addresstype_id = Model.userEmailViewModel.addresstypeid;//:  (int)Model.EmailModel.addresstypefrom;
                             current.username = Model.userEmailViewModel.username;
                             current.emailaddress = Model.userEmailViewModel.emailaddress;  //IsToAddress == true? Model.EmailModel.to:Model.EmailModel.from;
                             current.active = true;
                             current.creationdate = DateTime.Now;
                             _unitOfWorkAsync.Repository<address>().Insert(current); 
-                            var i = db.Commit();
+                            var i = db.SaveChanges();
                         }
                       
                         //get the ID since it is required either way , got to be a betetr way to do this than to query twice

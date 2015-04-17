@@ -79,7 +79,7 @@ namespace Anewluv.DataExtentionMethods
                 //added roles
                 IQueryable<mailboxfolder> mailboxfolderlist = repo.Query(z => z.profile_id == model.profileid
                     )
-                    .Include(p => p.profilemetadata.profile).Include(p => p.profilemetadata.profile.membersinroles.Select(z => z.profile_id == model.profileid))
+                    .Include(p => p.profilemetadata.profile).Include(p => p.profilemetadata.profile.membersinroles.Select(z =>z.lu_role))
                     .Include(p => p.mailboxmessagefolders.Select(z => z.mailboxmessage).Where(z => !otherblocks.Any(d => d.target_profile_id == z.sender_id))).Select().AsQueryable();
                     
 
@@ -135,12 +135,12 @@ namespace Anewluv.DataExtentionMethods
 
         //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
-        public static MailFoldersViewModel getmailfolderdetails(this IRepository<mailboxfolder> repo, MailModel model)
+        public static MailFoldersViewModel getmailfolderdetails(this IRepository<mailboxfolder> repo, MailModel model,IUnitOfWorkAsync db)
         {
 
             try
             {
-                var folders = filtermailboxfolders(repo, model).Select(p => new MailFolderViewModel
+                var folders = filtermailboxfolders(repo, model,db).Select(p => new MailFolderViewModel
                 {
                     active = p.active ==1? true:false, folderid = p.id, foldername = p.displayname ,
                     totalmessagecount = p.mailboxmessagefolders.Select(z=>z.mailboxmessage).Count(),
@@ -177,7 +177,7 @@ namespace Anewluv.DataExtentionMethods
                 new PaginatedList<mailboxmessagefolder>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
 
 
-            var results = pageData.Select(p => new mailviewmodel
+            var results = pageData.Select(p => new MailViewModel
             {
                 senderprofile_id = p.mailboxmessage.senderprofilemetadata.profile_id ,
                 senderscreenname = p.mailboxmessage.senderprofilemetadata.profile.screenname,
