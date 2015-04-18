@@ -333,7 +333,7 @@ namespace Anewluv.DataExtentionMethods
                         {
                             //set current model for mapping
                             tempmodel.modeltomap = item;
-                            models.Add(membermappingextentions.mapmembersearchviewmodel(model.profileid, tempmodel.modeltomap, db, geodb));
+                            models.Add(membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, tempmodel.modeltomap, db, geodb));
 
                         }
                         return models;
@@ -687,7 +687,7 @@ namespace Anewluv.DataExtentionMethods
 
     
 
-            profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = newmodel.profileid}); //  .getprofilebyprofileid(newmodel);
+            profile = db.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = newmodel.profileid.Value}); //  .getprofilebyprofileid(newmodel);
            
             //handles failues in lazy loading
             //TO DO this should be a try cacth with exception handling

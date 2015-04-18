@@ -89,7 +89,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid ));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value ));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -129,7 +129,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -171,7 +171,7 @@ namespace Anewluv.Services.Members
                           //instantiate logger here so it does not break anything else.
                           logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
-                          logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                          logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
                           FaultReason faultreason = new FaultReason("Error in member service");
                           string ErrorMessage = "";
@@ -243,7 +243,7 @@ namespace Anewluv.Services.Members
                            //instantiate logger here so it does not break anything else.
                            logger = new  Logging(applicationEnum.MemberService);
                            //int profileid = Convert.ToInt32(viewerprofileid);
-                           logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                           logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                            //can parse the error to build a more custom error mssage and populate fualt faultreason
                            FaultReason faultreason = new FaultReason("Error in member service");
                            string ErrorMessage = "";
@@ -285,7 +285,7 @@ namespace Anewluv.Services.Members
                                   p.maxsizeinbytes = 128;
                                   p.defaultfolder_id = i;
                                   p.displayname = db.Repository<lu_defaultmailboxfolder>().Queryable().Where(z=>z.id == i).FirstOrDefault().description;
-                                  p.profile_id = model.profileid;
+                                  p.profile_id = model.profileid.Value;
                                   //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
                                   //switch (i)
                                   //{
@@ -322,7 +322,7 @@ namespace Anewluv.Services.Members
                           //instantiate logger here so it does not break anything else.
                           logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
-                          logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                          logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
                           FaultReason faultreason = new FaultReason("Error in member service");
                           string ErrorMessage = "";
@@ -374,7 +374,7 @@ namespace Anewluv.Services.Members
                               //instantiate logger here so it does not break anything else.
                               logger = new Logging(applicationEnum.MemberService);
                               //int profileid = Convert.ToInt32(viewerprofileid);
-                              logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                              logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                               //can parse the error to build a more custom error mssage and populate fualt faultreason
                               FaultReason faultreason = new FaultReason("Error in member service");
                               string ErrorMessage = "";
@@ -418,7 +418,7 @@ namespace Anewluv.Services.Members
                           //instantiate logger here so it does not break anything else.
                           logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
-                          logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                          logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
                           FaultReason faultreason = new FaultReason("Error in member service");
                           string ErrorMessage = "";
@@ -493,7 +493,7 @@ namespace Anewluv.Services.Members
                           {
                               active = true,
                               creationdate = DateTime.UtcNow,
-                              profile_id = model.profileid,
+                              profile_id = model.profileid.Value,
                                lu_openidprovider = db.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
                               openididentifier = model.openididentifier
                           };
@@ -584,7 +584,7 @@ namespace Anewluv.Services.Members
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        return (db.Repository<mailboxfolder>().Queryable().Where(p => p.profile_id == model.profileid).FirstOrDefault() != null);
+                        return (db.Repository<mailboxfolder>().Queryable().Where(p => p.profile_id == model.profileid.Value).FirstOrDefault() != null);
                     });
                     return await task.ConfigureAwait(false);
                    
@@ -595,7 +595,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -639,7 +639,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -681,7 +681,7 @@ namespace Anewluv.Services.Members
                           var task = Task.Factory.StartNew(() =>
                           {
                               //update all other sessions that were not properly logged out
-                              var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                              var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
                               foreach (userlogtime p in myQuery)
                               {
@@ -699,7 +699,7 @@ namespace Anewluv.Services.Members
 
                               //noew aslo update the logtime and then 
                               userlogtime myLogtime = new userlogtime();
-                              myLogtime.profile_id = model.profileid;
+                              myLogtime.profile_id = model.profileid.Value;
                               myLogtime.offline = false;
                               myLogtime.sessionid = model.sessionid;
                               myLogtime.logintime = DateTime.Now;
@@ -720,7 +720,7 @@ namespace Anewluv.Services.Members
                           //instantiate logger here so it does not break anything else.
                           logger = new  Logging(applicationEnum.MemberService);
                           //int profileid = Convert.ToInt32(viewerprofileid);
-                          logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                          logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                           //can parse the error to build a more custom error mssage and populate fualt faultreason
                           FaultReason faultreason = new FaultReason("Error in member service");
                           string ErrorMessage = "";
@@ -755,7 +755,7 @@ namespace Anewluv.Services.Members
                     var task = Task.Factory.StartNew(() =>
                     {
                         //update all other sessions that were not properly logged out
-                        var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                        var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
                         foreach (userlogtime p in myQuery)
                         {
@@ -779,7 +779,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -812,7 +812,7 @@ namespace Anewluv.Services.Members
                     var task = Task.Factory.StartNew(() =>
                     {
                          //update all other sessions that were not properly logged out
-                        var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                        var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
                         foreach (userlogtime p in myQuery)
                         {
@@ -852,7 +852,7 @@ namespace Anewluv.Services.Members
                         //instantiate logger here so it does not break anything else.
                         logger = new  Logging(applicationEnum.MemberService);
                         //int profileid = Convert.ToInt32(viewerprofileid);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                         //can parse the error to build a more custom error mssage and populate fualt faultreason
                         FaultReason faultreason = new FaultReason("Error in member service");
                         string ErrorMessage = "";
@@ -887,7 +887,7 @@ namespace Anewluv.Services.Members
                     try
                     {
                         //update all other sessions that were not properly logged out
-                      // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                      // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
                         
                     var task = Task.Factory.StartNew(() =>
@@ -949,7 +949,7 @@ namespace Anewluv.Services.Members
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
 
                         var task = Task.Factory.StartNew(() =>
@@ -1002,7 +1002,7 @@ namespace Anewluv.Services.Members
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
                         db.Repository<profileactivity>().Insert(model);
                             //save all changes bro
@@ -1040,7 +1040,7 @@ namespace Anewluv.Services.Members
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid && p.offline == false).ToList(); ;
+                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
 
 
@@ -1127,7 +1127,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1165,7 +1165,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1206,7 +1206,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1228,7 +1228,7 @@ namespace Anewluv.Services.Members
                 try
                 {
                     IQueryable<profile> myQuery = default(IQueryable<profile>);
-                    myQuery =  db.Repository<profile>().Queryable().Where(p => p.id == model.profileid && p.securityanswer == model.securityanswer && p.lu_securityquestion.description == model.securityquestion);
+                    myQuery =  db.Repository<profile>().Queryable().Where(p => p.id == model.profileid.Value && p.securityanswer == model.securityanswer && p.lu_securityquestion.description == model.securityquestion);
 
                     if (myQuery.Count() > 0)
                     {
@@ -1247,7 +1247,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1282,7 +1282,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1313,7 +1313,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1343,7 +1343,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1375,7 +1375,7 @@ namespace Anewluv.Services.Members
                    //instantiate logger here so it does not break anything else.
                    logger = new  Logging(applicationEnum.MemberService);
                    //int profileid = Convert.ToInt32(viewerprofileid);
-                   logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                   logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                    //can parse the error to build a more custom error mssage and populate fualt faultreason
                    FaultReason faultreason = new FaultReason("Error in member service");
                    string ErrorMessage = "";
@@ -1410,7 +1410,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1440,7 +1440,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1470,7 +1470,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1500,7 +1500,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1531,7 +1531,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1562,7 +1562,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1593,7 +1593,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1627,7 +1627,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1658,7 +1658,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";
@@ -1688,7 +1688,7 @@ namespace Anewluv.Services.Members
                     //instantiate logger here so it does not break anything else.
                     logger = new  Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError,globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member service");
                     string ErrorMessage = "";

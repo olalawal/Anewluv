@@ -26,7 +26,7 @@ namespace Anewluv.Domain.Data.ViewModels
         [DataMember]
         public string password { get; set; }
         [DataMember]
-        public int profileid { get; set; }
+        public int? profileid { get; set; }
         [DataMember]
         public int? targetprofileid { get; set; }
         [DataMember]

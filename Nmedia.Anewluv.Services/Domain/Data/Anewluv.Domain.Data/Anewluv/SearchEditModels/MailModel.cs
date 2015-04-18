@@ -12,7 +12,7 @@ namespace Anewluv.Domain.Data.ViewModels
     {
 
         [DataMember]
-        public int profileid { get; set; }
+        public int? profileid { get; set; }
         [DataMember]
         public int? mailboxfolderid { get; set; }
         [DataMember]
@@ -41,5 +41,13 @@ namespace Anewluv.Domain.Data.ViewModels
         public int? numberperpage { get; set; }
         [DataMember]
         public int? currentpage { get; set; }
+
+        //update mail details
+        [DataMember]
+        public bool? readmessage { get; set; }
+        [DataMember]
+        public bool? flagmessage { get; set; }
+        [DataMember]
+        public int? mailboxmessageid { get; set; }
     }
 }

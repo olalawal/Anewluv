@@ -105,7 +105,7 @@ namespace Misc.PhotoService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/addphotos", ReplyAction="http://tempuri.org/IPhotoService/addphotosResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(ServiceFault), Action="http://Schemas.Testws.Medtox.com", Name="ServiceFault", Namespace="http://schemas.datacontract.org/2004/07/")]
-        Anewluv.Domain.Data.ViewModels.AnewluvMessages addphotos(Anewluv.Domain.Data.ViewModels.PhotosUploadModel model);
+        Anewluv.Domain.Data.ViewModels.AnewluvMessages addphotos(Anewluv.Domain.Data.ViewModels.photou model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPhotoService/addphotos", ReplyAction="http://tempuri.org/IPhotoService/addphotosResponse")]
         System.Threading.Tasks.Task<Anewluv.Domain.Data.ViewModels.AnewluvMessages> addphotosAsync(Anewluv.Domain.Data.ViewModels.PhotosUploadModel model);

@@ -26,6 +26,7 @@ using Nmedia.Infrastructure.Domain.Data.Apikey;
 using System.Xml;
 using Anewluv.Domain.Data;
 using Anewluv.Domain.Data.Anewluv.ViewModels;
+using Nmedia.Infrastructure.Utils;
 //using Anewluv.Lib;
 //using Nmedia.Services.Authorization;
 //using Anewluv.Domain;
@@ -176,14 +177,13 @@ namespace Anewluv.Apikey
                 //allows service to be discovereable with no api key
                 if (OperationContext.Current.IncomingMessageHeaders.To.Segments.Last().Replace("/", "") != "$metadata")
                 {
-                    string key = GetAPIKey(operationContext);   
+                    Guid? key = WCFContextParser.GetAPIKey(operationContext);   
               
                    // ProfileModel ProfileModel = new ProfileModel(); 
                     //if there is no API key nothing happens
-                    if (key != "undefined" && key != null )
+                    if (key != null )
                     {  
-                       Guid apiKey;
-                       Guid.TryParse(key.ToString(), out apiKey);
+                      
                                 
                         //separate calls that need to verify the IPkey is tied to a profileID
                        if (!apikeyauthonly)
@@ -203,16 +203,16 @@ namespace Anewluv.Apikey
                            //    // msg.Close();  //kill this since we need it no more.
                            //}
 
-                           var ProfileModel = Inspectors.getprofileidmodelfrombody(ref internalCopy);
+                           var ProfileModel = WCFMessageInpectors.getprofileidmodelfrombody(ref internalCopy);
 
                            if (ProfileModel.profileid != null)
                            {
                                //check if the passed apikey matches the profile ID that was passed in and is also active on the apikservice side of things.
                                validrequest = Api.AsyncCalls.isvalidapikeyanduserasync(new
-                               apikey { application_id = (int)applicationenum.anewluv, keyvalue = apiKey, user = new user { useridentifier = ProfileModel.profileid } }).Result;
+                               apikey { application_id = (int)applicationenum.anewluv, keyvalue = key.Value, user = new user { useridentifier = ProfileModel.profileid.Value} }).Result;
                                //  (key, (int)applicationenum.anewluv, );
                                //log activity and geodata if it exists
-                               Utilities.LogProfileActivity(ProfileModel, path, apiKey);
+                              // Utilities.LogProfileActivity(ProfileModel, path, apiKey);
                            }
                            else
                            {
@@ -227,7 +227,7 @@ namespace Anewluv.Apikey
                        {
                            //just validate the api key
                           // var dd = Api.ApiKeyService.IsValidAPIKey(new apikey { key = apiKey }).Result;
-                           validrequest = Api.AsyncCalls.isvalidapikeyasync(new apikey { keyvalue = apiKey, application_id = (int)applicationenum.anewluv }).Result;//; Utilities.ValidateApiKey(key).Result;
+                           validrequest = Api.AsyncCalls.isvalidapikeyasync(new apikey { keyvalue = key.Value, application_id = (int)applicationenum.anewluv }).Result;//; Utilities.ValidateApiKey(key).Result;
                        }
                         //Api.DisposeApiKeyService();
                         //   return validrequest;                        
@@ -235,7 +235,7 @@ namespace Anewluv.Apikey
                     else
                     {
                         // Send back an HTML reply
-                        CreateApiKeyErrorReply(operationContext, key);
+                        CreateApiKeyErrorReply(operationContext, key.Value.ToString());
                         validrequest = false;
                     }  
                
@@ -265,38 +265,6 @@ namespace Anewluv.Apikey
 
         
 
-        public string GetAPIKey(OperationContext operationContext)
-        {
-
-
-            // Get the request message
-            var request = operationContext.RequestContext.RequestMessage;
-
-
-            // Get the HTTP Request
-            var requestProp = (HttpRequestMessageProperty)request.Properties[HttpRequestMessageProperty.Name];
-            // Get the query string
-           // NameValueCollection queryParams = HttpUtility.get(requestProp.Headers);
-
-            var prop = (HttpRequestMessageProperty)request.Properties[HttpRequestMessageProperty.Name];
-
-            return prop.Headers[APIKEY];
-
-            
-
-           //var dd = operationContext.IncomingMessageHeaders.Where(p=>p.Name == APIKEY);
-
-           // if (operationContext.IncomingMessageHeaders.FindHeader(APIKEY, "") != -1)
-           // {
-           //     MessageHeaders headers = operationContext.IncomingMessageHeaders;
-           //     string apikey = headers.GetHeader<string>(APIKEY, "");
-           //     return apikey;
-           // }
-            
-            
-            // Return the API key (if present, null if not)
-           // return queryParams[APIKEY];
-        }
                
 
         private static void CreateApiKeyErrorReply(OperationContext operationContext, string key)
@@ -379,7 +347,7 @@ namespace Anewluv.Apikey
 ";
 
 
-        const string APIKEY = "apikey";
+     
         const string APIErrorHTML = @"
 <html>
 <head>

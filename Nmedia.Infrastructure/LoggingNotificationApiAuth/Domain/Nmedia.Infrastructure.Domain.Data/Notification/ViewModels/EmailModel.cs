@@ -38,6 +38,6 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
      public string userlogon { get; set; }  //Personal user updates strored here
      //[DataMember]
     // public int? addresstypeid { get; set; }  //Personal user updates strored here
-/
+
     }
 }

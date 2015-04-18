@@ -19,7 +19,7 @@ namespace Anewluv.Domain.Data.ViewModels
 
         //search stuff for photos
         [DataMember]
-        public int profileid { get; set; }
+        public int? profileid { get; set; }
         [DataMember]
         public string screenname { get; set; }
         //**********/

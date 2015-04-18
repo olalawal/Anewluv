@@ -27,18 +27,18 @@ namespace Anewluv.DataExtentionMethods
             try
             {
                 //get blocked profiles , and filter any profiles on left or right side, i.e if a member blocked me or i blocked them
-                //var myblocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
-                var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
+                //var myblocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid.Value, actiontypeEnum.Block);
+                var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid.Value, actiontypeEnum.Block);
                 //added roles
 
-                IQueryable<mailboxmessagefolder> mailboxmessagefolderlist = repo.Query(z => z.mailboxfolder.profile_id  == model.profileid )
-                    .Include(p => p.mailboxfolder.profilemetadata.profile).Include(p => p.mailboxfolder.profilemetadata.profile.membersinroles.Select(z => z.profile_id == model.profileid))
+                IQueryable<mailboxmessagefolder> mailboxmessagefolderlist = repo.Query(z => z.mailboxfolder.profile_id  == model.profileid.Value )
+                    .Include(p => p.mailboxfolder.profilemetadata.profile).Include(p => p.mailboxfolder.profilemetadata.profile.membersinroles.Select(z => z.profile_id == model.profileid.Value))
                     .Include(m=>m.mailboxmessage.recipientprofilemetadata.profile.profiledata).Include(m=>m.mailboxmessage.senderprofilemetadata.profile.profiledata)
                     .Select().AsQueryable();
 
 
                 //remove profiles that blocked me  .i,e should be invlisble to me
-                mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id ==  model.profileid)
+                mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id ==  model.profileid.Value)
                                            where ( !otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id  )) select m ).AsQueryable();     
 
                
@@ -72,12 +72,12 @@ namespace Anewluv.DataExtentionMethods
             {
                 //TO DO figure out if we will add stuff where the the profile id  blocked members , maybe add to profile visiblity setings
                 //get blocked profiles
-                var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
+                var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid.Value, actiontypeEnum.Block);
                 
 
 
                 //added roles
-                IQueryable<mailboxfolder> mailboxfolderlist = repo.Query(z => z.profile_id == model.profileid
+                IQueryable<mailboxfolder> mailboxfolderlist = repo.Query(z => z.profile_id == model.profileid.Value
                     )
                     .Include(p => p.profilemetadata.profile).Include(p => p.profilemetadata.profile.membersinroles.Select(z =>z.lu_role))
                     .Include(p => p.mailboxmessagefolders.Select(z => z.mailboxmessage).Where(z => !otherblocks.Any(d => d.target_profile_id == z.sender_id))).Select().AsQueryable();
@@ -230,9 +230,9 @@ namespace Anewluv.DataExtentionMethods
 
         //    try
         //    {
-        //        var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
+        //        var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid.Value, actiontypeEnum.Block);
         //        var messages = db.Repository<mailboxmessagefolder>()
-        //        .Query(p => p.mailboxmessage.recipient_id == model.profileid | p.mailboxmessage.sender_id == model.profileid)
+        //        .Query(p => p.mailboxmessage.recipient_id == model.profileid.Value | p.mailboxmessage.sender_id == model.profileid.Value)
         //        .Include(z => z.mailboxmessage)
         //            //  .Include(z => z.mailboxmessage.recipientprofilemetadata.profile.profiledata)
         //            //   .Include(z => z.mailboxmessage.senderprofilemetadata.profile.profiledata)
@@ -288,8 +288,8 @@ namespace Anewluv.DataExtentionMethods
         //    try
         //    {
 
-        //        var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
-        //        var messages = db.Repository<mailboxmessagefolder>().Query(p => p.mailboxmessage.recipient_id == model.profileid).Include(z => z.mailboxmessage).Select().AsQueryable();
+        //        var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid.Value, actiontypeEnum.Block);
+        //        var messages = db.Repository<mailboxmessagefolder>().Query(p => p.mailboxmessage.recipient_id == model.profileid.Value).Include(z => z.mailboxmessage).Select().AsQueryable();
         //        //var messagefolders = db.Repository<mailboxmessagefolder>().Queryable().Where(p=>p.);
 
 
@@ -338,8 +338,8 @@ namespace Anewluv.DataExtentionMethods
         //    try
         //    {
 
-        //        var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
-        //        var messages = db.Repository<mailboxmessagefolder>().Query(p => p.mailboxmessage.recipient_id == model.profileid).Include(z => z.mailboxmessage).Select().AsQueryable();
+        //        var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid.Value, actiontypeEnum.Block);
+        //        var messages = db.Repository<mailboxmessagefolder>().Query(p => p.mailboxmessage.recipient_id == model.profileid.Value).Include(z => z.mailboxmessage).Select().AsQueryable();
         //        var messagefolders = db.Repository<mailboxmessagefolder>().Queryable();
 
 

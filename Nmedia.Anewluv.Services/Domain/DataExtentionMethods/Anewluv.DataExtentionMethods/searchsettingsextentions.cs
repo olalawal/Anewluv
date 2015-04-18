@@ -27,7 +27,7 @@ namespace Anewluv.DataExtentionMethods
 
                 allsearchsettings = repo.Query
                 (z => (searchmodel.searchid != 0 && z.id == searchmodel.searchid) ||
-                (searchmodel.profileid != 0 && (z.profile_id == searchmodel.profileid)))                 
+                (searchmodel.profileid.Value != 0 && (z.profile_id == searchmodel.profileid.Value)))                 
                  .Include(x => x.profilemetadata)               
                 .Include(x => x.profilemetadata.profile) 
                   .Include(x => x.profilemetadata.profile.profiledata)   

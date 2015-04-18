@@ -78,7 +78,7 @@ namespace Anewluv.Services.Media
         /// <param name="photo"></param>
         /// <param name="photouploaded"></param>
         /// <returns></returns>
-        private List<photoconversion> addphotoconverionsb64string(photo photo, PhotoUploadModel photouploaded,AnewluvContext db)
+        private List<photoconversion> addphotoconverionsb64string(photo photo, PhotoUploadModel photouploaded)
         {
             //TemporaryImageUpload tempImageUpload = new TemporaryImageUpload();             
             // tempImageUpload = _service.GetImageData(id) ?? null;
@@ -727,15 +727,8 @@ namespace Anewluv.Services.Media
             ResponseMessage responsemessage = new ResponseMessage();
             int photosaddedcount = 0;
 
-            //update method code
-            //Test this with unit oof work as ut for now...
-           using (var db = new AnewluvContext())  
-          //  using (var db = _unitOfWorkAsync)  
+                       
             {
-               //do not audit on adds
-               
-             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
-                {
 
                     try
                     {
@@ -750,7 +743,7 @@ namespace Anewluv.Services.Media
                                     Guid identifier = Guid.NewGuid();
                                     NewPhoto.id = identifier;
                                     NewPhoto.size = (long)item.legacysize;
-                                    NewPhoto.profile_id = model.profileid; //model.ProfileImage.Length;
+                                    NewPhoto.profile_id = model.profileid.Value; //model.ProfileImage.Length;
                                     // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
                                     NewPhoto.creationdate = item.creationdate;
                                     NewPhoto.imagecaption = item.caption;
@@ -769,7 +762,7 @@ namespace Anewluv.Services.Media
                                     NewPhoto.lu_photostatus = (item.photostatusid != null) ? _unitOfWorkAsync.Repository<lu_photostatus>().Queryable().ToList().Where(p => p.id == item.photostatusid).FirstOrDefault() : null;
                                     NewPhoto.photostatus_id = NewPhoto.lu_photostatus != null ? NewPhoto.lu_photostatus.id : (int?)null; 
 
-                                    var temp = addphotoconverionsb64string(NewPhoto, item, db);
+                                    var temp = addphotoconverionsb64string(NewPhoto, item);
                                     if (temp.Count > 0)
                                     {
                                         //existing conversions to compare with new one : 
@@ -824,6 +817,10 @@ namespace Anewluv.Services.Media
                         logger = new Logging(applicationEnum.MediaService);
                         logger.WriteSingleEntry(logseverityEnum.Warning, globals.getenviroment, ex);
                         //no need to throw heer wince we build the eror thing for them
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                     }
 
 
@@ -831,14 +828,13 @@ namespace Anewluv.Services.Media
                     // responsemessage = new ResponseMessage("", message.message, "");
                     // response.ResponseMessages.Add(responsemessage);
                     return AnewluvMessage;
-
-                }
+               }
                  
-            }
+ }
 
            
         
-        }
+        
         /// <summary>
         /// for adding as single photo withoute VM 
         /// replaces InseartPhotoCustom , maybe add the profileID but i dont want to
@@ -874,7 +870,7 @@ namespace Anewluv.Services.Media
                             photo NewPhoto = new photo();
                             Guid identifier = Guid.NewGuid();
                             NewPhoto.id = identifier;
-                            NewPhoto.profile_id =  model.profileid; //model.ProfileImage.Length;
+                            NewPhoto.profile_id =  model.profileid.Value; //model.ProfileImage.Length;
                             // NewPhoto.reviewstatus = "No"; not sure what to do with review status 
                             NewPhoto.creationdate = newphoto.creationdate;
                             NewPhoto.imagecaption = newphoto.caption;
@@ -886,7 +882,7 @@ namespace Anewluv.Services.Media
                             NewPhoto.lu_photorejectionreason = (newphoto.rejectionreasonid != null) ? _unitOfWorkAsync.Repository<lu_photorejectionreason>().Queryable().ToList().Where(p => p.id == newphoto.rejectionreasonid).FirstOrDefault() : null;
                             NewPhoto.lu_photostatus = (newphoto.photostatusid != null) ? _unitOfWorkAsync.Repository<lu_photostatus>().Queryable().ToList().Where(p => p.id == newphoto.photostatusid).FirstOrDefault() : null;
 
-                            var temp = addphotoconverionsb64string(NewPhoto, newphoto,db);
+                            var temp = addphotoconverionsb64string(NewPhoto, newphoto);
                             if (temp.Count > 0)
                             {
                                 //existing conversions to compare with new one : 

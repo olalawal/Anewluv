@@ -21,11 +21,11 @@ namespace Anewluv.DataExtentionMethods
 
 
          //example using eager loading of profile metadata -- too slow right now 
-        // return repo.Find(p => p.id == model.profileid,p=>p.profilemetadata).Select().FirstOrDefault();
+        // return repo.Find(p => p.id == model.profileid.Value,p=>p.profilemetadata).Select().FirstOrDefault();
 
         public static profiledata getprofiledatabyprofileid(this IRepository<profiledata> repo, ProfileModel model)
         {
-            return repo.Query(p => p.profile_id == model.profileid).Select().FirstOrDefault();
+            return repo.Query(p => p.profile_id == model.profileid.Value).Select().FirstOrDefault();
         }
 
         public static profiledata getprofiledatabyscreenname(this IRepository<profiledata> repo, ProfileModel model)
@@ -36,7 +36,7 @@ namespace Anewluv.DataExtentionMethods
         //TO DO add photos and photo conversions maybe ? so we dont need the profile viewmodel
         public static profilemetadata getprofilemetadatabyprofileid(this IRepository<profilemetadata> repo, ProfileModel model)
         {
-            return repo.Query(p => p.profile_id == model.profileid)
+            return repo.Query(p => p.profile_id == model.profileid.Value)
 
                 .Include(x => x.profile)
                    .Include(z => z.photos.Select(s => s.photoconversions))
@@ -90,7 +90,7 @@ namespace Anewluv.DataExtentionMethods
         public static profile getprofilebyprofileid(this IRepository<profile> repo, ProfileModel model)
         {
 
-            return repo.Query(p => p.id == model.profileid).Include(x => x.profiledata)
+            return repo.Query(p => p.id == model.profileid.Value).Include(x => x.profiledata)
                 .Include(z => z.profilemetadata)
                 .Include(p => p.membersinroles.Select(z => z.lu_role))                 
                 .Include(i => i.profilemetadata.searchsettings.Select(s => s.details)).Select().FirstOrDefault();
@@ -105,7 +105,7 @@ namespace Anewluv.DataExtentionMethods
         public static profile getprofileandmetadatabyprofileid(this IRepository<profile> repo, ProfileModel model)
         {
 
-            return repo.Query(p => p.id == model.profileid).Include(x => x.profiledata)
+            return repo.Query(p => p.id == model.profileid.Value).Include(x => x.profiledata)
                 .Include(z => z.profilemetadata)              
                  .Include(p => p.membersinroles.Select(z => z.lu_role))   
                    .Include(z => z.profilemetadata.photos.Select(s=>s.photoconversions))
@@ -207,7 +207,7 @@ namespace Anewluv.DataExtentionMethods
 
         public static visiblitysetting getvisibilitysettingsbyprofileid(this IRepository<visiblitysetting> repo, ProfileModel model)
         {
-            return repo.Query(p => p.profile_id == model.profileid)
+            return repo.Query(p => p.profile_id == model.profileid.Value)
                 .Include(p => p.profiledata)   
                 .Select().FirstOrDefault();
         }
@@ -310,8 +310,8 @@ namespace Anewluv.DataExtentionMethods
                 //profile myProfile;
                 // IQueryable<userlogtime> myQuery = default(IQueryable<userlogtime>);
 
-                // var  myQuery = repo.Query<userlogtime>().Where(p => p.profile_id == model.profileid && p.offline == false).Distinct().OrderBy(n => n.logintime).ToList();
-                var myQuery = repo.Queryable().Where(p => p.id == model.profileid && !(p.userlogtimes != null && p.userlogtimes.Any(z => z.offline == false))).FirstOrDefault() != null;
+                // var  myQuery = repo.Query<userlogtime>().Where(p => p.profile_id == model.profileid.Value && p.offline == false).Distinct().OrderBy(n => n.logintime).ToList();
+                var myQuery = repo.Queryable().Where(p => p.id == model.profileid.Value && !(p.userlogtimes != null && p.userlogtimes.Any(z => z.offline == false))).FirstOrDefault() != null;
                 return myQuery;
                 //            var queryB =
                 //                (from o in db.Orders
@@ -339,7 +339,7 @@ namespace Anewluv.DataExtentionMethods
 
                     IQueryable<searchsetting> tmpsearchsettings = default(IQueryable<searchsetting>);
                     //Dim ctx As New Entities()
-                    tmpsearchsettings = db.Repository<searchsetting>().Queryable().Where(p => p.profile_id == model.profileid && p.myperfectmatch == true);
+                    tmpsearchsettings = db.Repository<searchsetting>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.myperfectmatch == true);
 
                     //End If
                     if (tmpsearchsettings.Count() > 0)
@@ -353,7 +353,7 @@ namespace Anewluv.DataExtentionMethods
                         searchsetting Newsearchsettings = new searchsetting();
 
                         Newsearchsettings = new searchsetting();
-                        Newsearchsettings.profile_id = model.profileid;
+                        Newsearchsettings.profile_id = model.profileid.Value;
                         Newsearchsettings.myperfectmatch = true;
                         Newsearchsettings.searchname = "myperfectmatch";
                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);
@@ -392,7 +392,7 @@ namespace Anewluv.DataExtentionMethods
                         searchsetting Newsearchsettings = new searchsetting();
 
                         Newsearchsettings = new searchsetting();
-                        Newsearchsettings.profile_id = model.profileid; //.GetValueOrDefault();
+                        Newsearchsettings.profile_id = model.profileid.Value; //.GetValueOrDefault();
                         Newsearchsettings.myperfectmatch = true;
                         Newsearchsettings.searchname = "myperfectmatch";
                         //Newsearchsettings.profiledata = this.GetProfileDataByProfileID(profileid);

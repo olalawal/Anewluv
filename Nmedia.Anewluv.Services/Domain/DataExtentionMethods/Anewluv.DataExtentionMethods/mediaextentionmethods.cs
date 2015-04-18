@@ -100,7 +100,7 @@ namespace Anewluv.DataExtentionMethods
             try
             {
                 //added roles
-                IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == model.profileid)
+                IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == model.profileid.Value)
                     .Include(p => p.photo.profilemetadata)
                     .Include(p => p.photo.photo_securitylevel.Select(z=>z.lu_securityleveltype))
                     .Include(p => p.photo.profilemetadata.profile.membersinroles.Select(z => z.lu_role))

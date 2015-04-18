@@ -108,7 +108,7 @@ namespace Anewluv.Services.Mapping
                     {
 
 
-                        return membermappingextentions.mapmembersearchviewmodel(model.profileid, model.modeltomap, db, geodb);
+                        return membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, model.modeltomap, db, geodb);
 
 
                     });
@@ -121,7 +121,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     //FaultReason faultreason = new FaultReason("Error in member mapper service");
                     // string ErrorMessage = "";
@@ -176,7 +176,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -220,15 +220,15 @@ namespace Anewluv.Services.Mapping
                         {  
                             //TO Do user a mapper instead of a contructur and map it from the service
                             //Move all this to a service
-                          //ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid }, model.allphotos, db, geodb),
+                          //ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid.Value }, model.allphotos, db, geodb),
                             //profile of the person being viewed
-                            ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() },  db, geodb),
+                            ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = model.viewingprofileid.GetValueOrDefault() },  db, geodb),
                             ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db)
                         };
 
                         //TO DO add a cache object for the profilebrowesemodel and Memberseachmodel of the currently logged in user
                         //this should probbaly be cached client side or server side no need to requery, if anything get from Cache
-                        //NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid, db);
+                        //NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid.Value, db);
                         
                      
                         // NewProfileBrowseModel.ProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.viewingprofileid.GetValueOrDefault(), db);
@@ -247,7 +247,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -280,9 +280,9 @@ namespace Anewluv.Services.Mapping
 
                         //TO DO add a cache object for the profilebrowesemodel and Memberseachmodel of the currently logged in user
                         //this should probbaly be cached client side or server side no need to requery, if anything get from Cache
-                        //NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid, db);
+                        //NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid.Value, db);
 
-                        return membermappingextentions.mapfullprofileviewmodel(model.profileid, model.viewingprofileid.Value, db, _geodatastoredProcedures);
+                        return membermappingextentions.mapfullprofileviewmodel(model.profileid.Value, model.viewingprofileid.Value, db, _geodatastoredProcedures);
 
                     });
                     return await task.ConfigureAwait(false);
@@ -295,7 +295,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -330,7 +330,7 @@ namespace Anewluv.Services.Mapping
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                        return  membermappingextentions.getprofilecriteriamodel(model.profileid, db);
+                        return  membermappingextentions.getprofilecriteriamodel(model.profileid.Value, db);
 
                     });
                     return await task.ConfigureAwait(false);
@@ -343,7 +343,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -381,13 +381,13 @@ namespace Anewluv.Services.Mapping
                             {
                                 //TO Do user a mapper instead of a contructur and map it from the service
                                 //Move all this to a service
-                                ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid },  db, geodb),
-                                ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid, new MemberSearchViewModel { id = Convert.ToInt32(item) }, db, geodb)
+                                ViewerProfileDetails = membermappingextentions.mapmembersearchviewmodel(null, new MemberSearchViewModel { id = model.profileid.Value },  db, geodb),
+                                ProfileDetails = membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, new MemberSearchViewModel { id = Convert.ToInt32(item) }, db, geodb)
 
                             };
 
                             //add in the ProfileCritera
-                            NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid, db);
+                            NewProfileBrowseModel.ViewerProfileCriteria = membermappingextentions.getprofilecriteriamodel(model.profileid.Value, db);
                             NewProfileBrowseModel.ProfileCriteria = membermappingextentions.getprofilecriteriamodel(Convert.ToInt32(item), db);
 
 
@@ -408,7 +408,7 @@ namespace Anewluv.Services.Mapping
                     //instantiate logger here so it does not break anything else.
                     logger = new Logging(applicationEnum.MemberService);
                     //int profileid = Convert.ToInt32(viewerprofileid);
-                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
                     //can parse the error to build a more custom error mssage and populate fualt faultreason
                     FaultReason faultreason = new FaultReason("Error in member mapper service");
                     string ErrorMessage = "";
@@ -1170,7 +1170,7 @@ namespace Anewluv.Services.Mapping
 
                         //TO DO add code to filter out blocked members
                         var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, actiontypeEnum.Block);
-                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid)
+                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();     
 
@@ -1369,7 +1369,7 @@ namespace Anewluv.Services.Mapping
 
                         //TO DO add code to filter out blocked members
                         var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, actiontypeEnum.Block);
-                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid)
+                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();   
 
@@ -1561,11 +1561,7 @@ namespace Anewluv.Services.Mapping
 
 
 
-                        //TO DO add code to filter out blocked members
-                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, actiontypeEnum.Block);
-                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid)
-                        //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
-                        //                           select m).AsQueryable();   
+                      
 
 
                         //TO DO change the photostatus thing to where if maybe, based on HAS PHOTOS only matches
@@ -1756,8 +1752,8 @@ namespace Anewluv.Services.Mapping
 
 
                         //TO DO add code to filter out blocked members
-                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, actiontypeEnum.Block);
-                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid)
+                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(Model.profileid.Value, actiontypeEnum.Block);
+                        //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();   
 
@@ -2061,7 +2057,7 @@ namespace Anewluv.Services.Mapping
 
 //    try
 //    {
-//        if (model.profileid != null)
+//        if (model.profileid.Value != null)
 //        {
 
 
@@ -2125,7 +2121,7 @@ namespace Anewluv.Services.Mapping
 //                    {
 //                        //set current model for mapping
 //                        tempmodel.modeltomap = item;
-//                        models.Add(membermappingextentions.mapmembersearchviewmodel(model.profileid, item.id, model.allphotos, db, geodb));
+//                        models.Add(membermappingextentions.mapmembersearchviewmodel(model.profileid.Value, item.id, model.allphotos, db, geodb));
 
 //                    }
 //                    return models;
@@ -2141,7 +2137,7 @@ namespace Anewluv.Services.Mapping
 //                    //instantiate logger here so it does not break anything else.
 //                    logger = new Logging(applicationEnum.MemberService);
 //                    //int profileid = Convert.ToInt32(viewerprofileid);
-//                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid));
+//                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, Convert.ToInt32(model.profileid.Value));
 //                    //can parse the error to build a more custom error mssage and populate fualt faultreason
 //                    FaultReason faultreason = new FaultReason("Error in member mapper service");
 //                    string ErrorMessage = "";

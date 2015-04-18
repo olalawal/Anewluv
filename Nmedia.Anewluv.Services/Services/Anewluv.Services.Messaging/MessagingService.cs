@@ -29,6 +29,7 @@ using Anewluv.DataExtentionMethods;
 using Nmedia.Infrastructure.Domain.Data.Notification;
 
 using Nmedia.Infrastructure;
+using Nmedia.Infrastructure.Utils;
 
 namespace Anewluv.Services.Media
 {
@@ -43,6 +44,8 @@ namespace Anewluv.Services.Media
         //private IPromotionRepository  promotionrepository;
 
         private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        //&&&&&  used for activity logging 
+        private readonly OperationContext _context;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
@@ -61,20 +64,29 @@ namespace Anewluv.Services.Media
                 throw new ArgumentNullException("dataContext", "dataContext cannot be null");
             }
 
-         
+            _context = OperationContext.Current;
             _unitOfWorkAsync = unitOfWork;
          
 
         }
 
 
-
+        
         public async Task<MailFoldersViewModel> getmailfolderdetails(MailModel model)
            {
                var task = Task.Factory.StartNew(() =>
                {
+
+
                    var repo = _unitOfWorkAsync.Repository<mailboxfolder>();
-                   var dd = mailextentions.getmailfolderdetails(repo, model);
+                   var dd = mailextentions.getmailfolderdetails(repo, model,_unitOfWorkAsync);
+
+                   //Log the activity for history
+                   Api.AnewLuvLogging.LogProfileActivity
+                       (new ProfileModel { profileid = model.profileid.Value },
+                       (int)activitytypeEnum.updateprofile,
+                       _context);
+
 
                    return dd;
 
@@ -88,6 +100,14 @@ namespace Anewluv.Services.Media
                 {
                     var repo = _unitOfWorkAsync.Repository<mailboxmessagefolder>();
                     var dd = mailextentions.getmailfilteredandpaged(repo, model,_unitOfWorkAsync);
+
+
+                    //Log the activity for history
+                    Api.AnewLuvLogging.LogProfileActivity
+                        (new ProfileModel { profileid = model.profileid.Value },
+                        (int)activitytypeEnum.updateprofile,
+                        _context);
+                    
                     return dd;
 
 
@@ -110,95 +130,71 @@ namespace Anewluv.Services.Media
 
                 try
                 {
-
-
                     var task = Task.Factory.StartNew(() =>
                     {
-
-                        // var  model.photoformat = model. model.photoformat);
-                        //var photoid = model.photoid;
-                        //var convertedprofileid = Convert.ToInt32(model.profileid);
-                        // var convertedstatus =  model.photostatus);
-
-                        //first check the sent qotat for this user
-                        var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid });
-
-                        //add daily read message quota as well
-                        if (profile.dailsentmessagequota.Value > 3)
-                        {
-                            AnewluvMessages.errormessages.Add("Daily Message Quota Exceeded please upgrade your memembership to read more than 3 messages a day");
-                            return AnewluvMessages;
-                        }
-
+                      
                         // get the folderr details
-                        mailboxfolder mailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid).FirstOrDefault();
-                        if (mailboxfolder != null)
+                        mailboxfolder mailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
+                        mailboxmessage mailboxmessage = _unitOfWorkAsync.Repository<mailboxmessage>().Queryable().Where(u => u.id == model.mailboxfolderid).FirstOrDefault();
+
+
+                        if (mailboxfolder != null && mailboxmessage != null)
                         {
-                            //create the message and save it
-                            var newmailboxmessage = new mailboxmessage
+                         
+                            //find the mailboxfoldermessages  that we will be updating
+                            var mailboxmessagefolder = _unitOfWorkAsync.Repository<mailboxmessagefolder>().Query(p => p.mailboxfolder_id == mailboxfolder.id && p.mailboxmessage_id == mailboxmessage.id).Select().FirstOrDefault();
+                            if (mailboxmessagefolder !=null)
                             {
-                                body = model.body,
-                                subject = model.subject,
-                                sizeinbtyes = model.body.Length + model.subject.Length,
-                                recipient_id = model.recipeintprofileid.Value,
-                                sender_id = model.profileid
-                            };
-                            _unitOfWorkAsync.Repository<mailboxmessage>().Insert(newmailboxmessage);
+                                bool messageupdated = false;
 
-                            //create the message folder and save it 
-                            var newmailboxmessagesfolder = new mailboxmessagefolder
-                            {
-                                mailboxmessage_id = newmailboxmessage.id,
-                                mailboxfolder_id = mailboxfolder.id
-
-                            };
-                            _unitOfWorkAsync.Repository<mailboxmessagefolder>().Insert(newmailboxmessagesfolder);
-
-
-                            // Update database
-                            // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                            var i = _unitOfWorkAsync.SaveChanges();
-
-
-                            //TO DO call the Notification Service to QUUE up this message. For now 
-                            // All messages are sent on the fly but long term we will add it to the QUUE and then the sevice will send peroidoically.
-
-                            //member 
-                            var EmailViewModel = new EmailViewModel
-                            {
-                                userEmailViewModel = new EmailModel
+                                if(model.readmessage !=null)
                                 {
-                                    templateid = (int)templateenum.MemberRecivedEmailMessageMemberNotification,
-                                    messagetypeid = (int)messagetypeenum.UserUpdate,
-                                    addresstypeid = (int)addresstypeenum.SiteUser,
-                                    emailaddress = newmailboxmessage.recipientprofilemetadata.profile.emailaddress,
-                                    username = newmailboxmessage.recipientprofilemetadata.profile.username,
-                                    subject = templatesubjectenum.MemberRecivedEmailMessageMemberNotification.ToDescription()
-                                },
-                                adminEmailViewModel = new EmailModel
-                                {
-                                    templateid = (int)templateenum.MemberRecivedEmailMessageAdminNotification,
-                                    messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                    addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                    subject = templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
+                                    mailboxmessagefolder.read =model.readmessage ;
+                                    mailboxmessagefolder.readdate = DateTime.Now;
+                                    messageupdated = true;
+
                                 }
-                            };
+                                else if (model.flagmessage != null)
+                                {
+                                    mailboxmessagefolder.flagged = model.flagmessage.Value;
+                                    mailboxmessagefolder.flaggeddate = DateTime.Now;
+                                    messageupdated = true;
+                                }
 
-                            //this sends both admin and user emails  
-                            Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
+                                if (messageupdated)
+                                {
+                                    _unitOfWorkAsync.Repository<mailboxmessagefolder>().Update(mailboxmessagefolder);
+                                    var i = _unitOfWorkAsync.SaveChanges();
+                                    AnewluvMessages.messages.Add("message updated Succesfully");
+
+                                }
+
+                                       
+                            }
+                            else
+                            {
+                                AnewluvMessages.errormessages.Add("Message not found!");
+
+                            }
+                           
+                
 
 
-                            AnewluvMessages.messages.Add("Email was sent Succesfully");
+                            
                         }
                         else
                         {
-                            AnewluvMessages.errormessages.Add("Invalid Mailbox folder or profile both values are required to delete messages");
+                            AnewluvMessages.errormessages.Add("Invalid Mailbox folder or messageid both values are required to update messages");
                         }
 
 
 
 
-
+                        //Log the activity for history
+                        Api.AnewLuvLogging.LogProfileActivity
+                            (new ProfileModel { profileid = model.profileid.Value },
+                            (int)activitytypeEnum.updateprofile,
+                            _context);
 
                         return AnewluvMessages;
                     });
@@ -240,13 +236,9 @@ namespace Anewluv.Services.Media
                             var task = Task.Factory.StartNew(() =>
                             {
                                 
-                                    // var  model.photoformat = model. model.photoformat);
-                                    //var photoid = model.photoid;
-                                    //var convertedprofileid = Convert.ToInt32(model.profileid);
-                                    // var convertedstatus =  model.photostatus);
-
+                                    //TO DO use activity stuff to manage this
                                    //first check the sent qotat for this user
-                                    var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid});
+                                    var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid.Value});
                                    
                                      if (profile.dailsentmessagequota.Value > 5)
                                      {
@@ -255,7 +247,7 @@ namespace Anewluv.Services.Media
                                      }
 
                                     // get the folderr details
-                                     mailboxfolder mailboxfolder  = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid).FirstOrDefault();
+                                     mailboxfolder mailboxfolder  = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
                                     if (mailboxfolder !=null)
                                     {
                                         //create the message and save it
@@ -265,7 +257,7 @@ namespace Anewluv.Services.Media
                                             subject = model.subject,
                                             sizeinbtyes = model.body.Length + model.subject.Length,
                                             recipient_id = model.recipeintprofileid.Value,
-                                            sender_id = model.profileid
+                                            sender_id = model.profileid.Value
                                         };
                                        _unitOfWorkAsync.Repository<mailboxmessage>().Insert(newmailboxmessage);
 
@@ -319,9 +311,13 @@ namespace Anewluv.Services.Media
                                     }
 
 
-                               
-                                 
 
+
+                                    //Log the activity for history
+                                    Api.AnewLuvLogging.LogProfileActivity
+                                        (new ProfileModel { profileid = model.profileid.Value },
+                                        (int)activitytypeEnum.sentmail,
+                                        _context);
                                 
                                 return AnewluvMessages;
                             });
@@ -365,7 +361,7 @@ namespace Anewluv.Services.Media
                             {
                                
                                      // get the folderr details
-                                     mailboxfolder mailboxfolder  = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid).FirstOrDefault();
+                                     mailboxfolder mailboxfolder  = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
                                      mailboxmessage mailboxmessage = _unitOfWorkAsync.Repository<mailboxmessage>().Queryable().Where(u => u.id == deletemailboxmessagesid).FirstOrDefault();
                                     if (mailboxfolder !=null && mailboxmessage !=null)
                                     {
@@ -380,6 +376,11 @@ namespace Anewluv.Services.Media
                                             _unitOfWorkAsync.Repository<mailboxmessagefolder>().Update(mailboxmessagefolder);
                                             var i = _unitOfWorkAsync.SaveChanges();
                                             AnewluvMessages.messages.Add("Message deleted Succesfully");
+                                        }
+                                        else
+                                        {
+                                            AnewluvMessages.errormessages.Add("Message not found!");
+
                                         }
                                      
                                     }
@@ -418,7 +419,7 @@ namespace Anewluv.Services.Media
                    
             }
 
-            public async Task<AnewluvMessages> movemessages(MailModel model)
+            public async Task<AnewluvMessages> movemessagestofolder(MailModel model)
             {
                 //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
@@ -435,7 +436,7 @@ namespace Anewluv.Services.Media
                         {
 
                             // get the folderr details
-                            mailboxfolder mailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid).FirstOrDefault();
+                            mailboxfolder mailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
                             mailboxmessage mailboxmessage = _unitOfWorkAsync.Repository<mailboxmessage>().Queryable().Where(u => u.id == movemailboxmessagesid).FirstOrDefault();
                             if (mailboxfolder != null && mailboxmessage != null && model.destinationmailboxfolderid !=null)
                             {
@@ -462,7 +463,7 @@ namespace Anewluv.Services.Media
 
                         }
 
-
+                       
                         return AnewluvMessages;
 
 
@@ -486,7 +487,7 @@ namespace Anewluv.Services.Media
                 }
             }
 
-            public async Task<AnewluvMessages> addmailfoxfolder(MailModel model)
+            public async Task<AnewluvMessages> addmailboxfolder(MailModel model)
             {
                 //do not audit on adds
                 AnewluvMessages AnewluvMessages = new AnewluvMessages();
@@ -500,84 +501,135 @@ namespace Anewluv.Services.Media
                         var task = Task.Factory.StartNew(() =>
                         {
 
-                            // var  model.photoformat = model. model.photoformat);
-                            //var photoid = model.photoid;
-                            //var convertedprofileid = Convert.ToInt32(model.profileid);
-                            // var convertedstatus =  model.photostatus);
-
-                            //first check the sent qotat for this user
-                            var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid });
-
-                            if (profile.dailsentmessagequota.Value > 5)
+                            //get user profile data
+                            var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid.Value });                                   
+                         
+                            // get the folderr details
+                            List<mailboxfolder> mailboxfolders = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.profile_id == model.profileid.Value).ToList();
+                            if (!mailboxfolders.Any(f=>f.displayname.ToUpper() == model.mailboxfoldername.ToUpper()) && profile != null )
                             {
-                                AnewluvMessages.errormessages.Add("Daily Message Quota Exceeded please upgrade your memembership to send more than 5 messages a day");
-                                return AnewluvMessages;
+                              
+                                //check the roles 
+                                if (profile.membersinroles.Any(z=>z.role_id == (int)roleEnum.Suscriber))
+                                {
+                                    //create the message and save it
+                                    var newmailboxfolder = new mailboxfolder
+                                    { displayname = model.mailboxfoldername, profile_id = model.profileid.Value, active = 1, creationdate = DateTime.Now,
+                                         maxsizeinbytes = 500
+
+                                    };
+                                    _unitOfWorkAsync.Repository<mailboxfolder>().Insert(newmailboxfolder);
+
+                                  
+                                    AnewluvMessages.messages.Add("Folder was created Succesfully");
+                                    var i = _unitOfWorkAsync.SaveChanges();
+                                }
+                                else
+                                {
+                                    AnewluvMessages.errormessages.Add("folder name already exists !");
+                                }
                             }
+                            else
+                            {
+
+                                AnewluvMessages.errormessages.Add("only suscribers can create new folders !");
+                            }
+                            
+
+                            //Log the activity for history
+                            Api.AnewLuvLogging.LogProfileActivity
+                                (new ProfileModel { profileid = model.profileid.Value },
+                                (int)activitytypeEnum.updateprofile,
+                                _context);
+
+                            return AnewluvMessages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in Messaging Service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+
+            }
+
+            public async Task<AnewluvMessages> deletemailboxfolder(MailModel model)
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                {
+
+                    try
+                    {
+
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+                            //get user profile data
+                            var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid.Value });
 
                             // get the folderr details
-                            mailboxfolder mailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid).FirstOrDefault();
-                            if (mailboxfolder != null)
+                            //only non default folders can be deleted
+                            mailboxfolder existingmailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>()
+                             .Query(u => u.profile_id == model.profileid.Value && u.defaultfolder_id == null)    
+                             .Include(z=>z.mailboxmessagefolders.Select(f=>f.mailboxmessage)).Select().FirstOrDefault();
+
+
+                            if (existingmailboxfolder!=null && !(existingmailboxfolder.mailboxmessagefolders.Count() > 0) && profile != null)
                             {
-                                //create the message and save it
-                                var newmailboxmessage = new mailboxmessage
+
+                                //check the roles 
+                                if (profile.membersinroles.Any(z => z.role_id == (int)roleEnum.Suscriber))
                                 {
-                                    body = model.body,
-                                    subject = model.subject,
-                                    sizeinbtyes = model.body.Length + model.subject.Length,
-                                    recipient_id = model.recipeintprofileid.Value,
-                                    sender_id = model.profileid
-                                };
-                                _unitOfWorkAsync.Repository<mailboxmessage>().Insert(newmailboxmessage);
-
-                                //create the message folder and save it 
-                                var newmailboxmessagesfolder = new mailboxmessagefolder
-                                {
-                                    mailboxmessage_id = newmailboxmessage.id,
-                                    mailboxfolder_id = mailboxfolder.id
-
-                                };
-                                _unitOfWorkAsync.Repository<mailboxmessagefolder>().Insert(newmailboxmessagesfolder);
-
-                                //TO DO call the Notification Service to QUUE up this message. For now 
-                                // All messages are sent on the fly but long term we will add it to the QUUE and then the sevice will send peroidoically.
-
-                                //member 
-                                var EmailViewModel = new EmailViewModel
-                                {
-                                    userEmailViewModel = new EmailModel
+                                    //create the message and save it
+                                    var newmailboxfolder = new mailboxfolder
                                     {
-                                        templateid = (int)templateenum.MemberRecivedEmailMessageMemberNotification,
-                                        messagetypeid = (int)messagetypeenum.UserUpdate,
-                                        addresstypeid = (int)addresstypeenum.SiteUser,
-                                        emailaddress = newmailboxmessage.recipientprofilemetadata.profile.emailaddress,
-                                        username = newmailboxmessage.recipientprofilemetadata.profile.username,
-                                        subject = templatesubjectenum.MemberRecivedEmailMessageMemberNotification.ToDescription()
-                                    },
-                                    adminEmailViewModel = new EmailModel
-                                    {
-                                        templateid = (int)templateenum.MemberRecivedEmailMessageAdminNotification,
-                                        messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                        addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                        subject = templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
-                                    }
-                                };
+                                        displayname = model.mailboxfoldername,
+                                        profile_id = model.profileid.Value,
+                                        active = 1,
+                                        creationdate = DateTime.Now,
+                                        maxsizeinbytes = 500
 
-                                //this sends both admin and user emails  
-                                Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
+                                    };
+                                    _unitOfWorkAsync.Repository<mailboxfolder>().Insert(newmailboxfolder);
 
 
-                                AnewluvMessages.messages.Add("Email was sent Succesfully");
+                                    AnewluvMessages.messages.Add("Folder was created Succesfully");
+                                    var i = _unitOfWorkAsync.SaveChanges();
+                                }
+                                else
+                                {
+                                    AnewluvMessages.errormessages.Add("only suscribers can create new folders !");
+                                }
+                            }
+                            else
+                            {
+
+                                AnewluvMessages.errormessages.Add("Folder is not empty or you are attemting to delete a default folder ");
                             }
 
 
-
-                            // Update database
-                            // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                            var i = _unitOfWorkAsync.SaveChanges();
-                            // transaction.Commit();
-                            AnewluvMessages.messages.Add("Email was sent Succesfully");
-
-
+                            //Log the activity for history
+                            Api.AnewLuvLogging.LogProfileActivity
+                                (new ProfileModel { profileid = model.profileid.Value },
+                                (int)activitytypeEnum.updateprofile,
+                                _context);
 
                             return AnewluvMessages;
                         });

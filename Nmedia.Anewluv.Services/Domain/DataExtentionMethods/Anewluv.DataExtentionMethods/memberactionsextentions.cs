@@ -63,8 +63,8 @@ namespace Anewluv.DataExtentionMethods
             try
             {
 
-                var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block).ToList();
-                var myactions = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, action).ToList();                 
+                var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid.Value, actiontypeEnum.Block).ToList();
+                var myactions = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid.Value, action).ToList();                 
               
 
                 //filter out blocked profiles 
@@ -104,17 +104,17 @@ namespace Anewluv.DataExtentionMethods
          {
 
 
-             var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid, actiontypeEnum.Block);
+             var blocks = db.Repository<action>().getmyactionbyprofileidandactiontype(model.profileid.Value, actiontypeEnum.Block);
 
              List<action> othersactionstome = null;
 
              if (unviewed.GetValueOrDefault())
              {
-              othersactionstome=   db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, action).ToList();
+              othersactionstome=   db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid.Value, action).ToList();
              }
              else
              {
-              othersactionstome=    db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid, action).Where(p=>p.viewdate !=null).ToList();
+              othersactionstome=    db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid.Value, action).Where(p=>p.viewdate !=null).ToList();
              }
 
              //filter out blocked profiles 
@@ -132,7 +132,7 @@ namespace Anewluv.DataExtentionMethods
                      select p.creatorprofilemetadata.profile;
 
              return query.ToList();
-             // count =          db.Repository<interest>().Count(f => f.profile_id == model.profileid && f.deletedbymemberdate == null);
+             // count =          db.Repository<interest>().Count(f => f.profile_id == model.profileid.Value && f.deletedbymemberdate == null);
 
          }
          catch (Exception ex)
