@@ -18,19 +18,19 @@ namespace Anewluv.Domain.Data
     {
         [Description("Inbox")]
         [EnumMember]
-        Inbox,
+        Inbox=1,
         [Description("Sent")] 
         [EnumMember]
-        Sent ,
+        Sent=2 ,
         [Description("Trash")]
         [EnumMember]
-        Trash,
+        Trash=3,
         [Description("Drafts")]
         [EnumMember]
-        Drafts,
+        Drafts=4,
         [Description("Custom")]
         [EnumMember]
-        Custom
+        Custom=5
     }
 
 

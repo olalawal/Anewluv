@@ -29,8 +29,13 @@ namespace Anewluv.Domain.Data.ViewModels
         public int? phototstatusid { get; set; }
         [DataMember]
         public int? photoformatid { get; set; }
+
+        //secruity level changing
+        [DataMember]
+        public bool? makepublic { get; set; }
         [DataMember]
         public int? photosecuritylevelid { get; set; }
+
         [DataMember]
         public List<PhotoUploadModel> photostoupload { get; set; }
         [DataMember]
@@ -62,5 +67,9 @@ namespace Anewluv.Domain.Data.ViewModels
         public int? numberperpage { get; set; }
         [DataMember]
         public int? currentpage { get; set; }
+
+        //search stuff for photos
+        [DataMember]
+        public int? viewerprofileid { get; set; }
     }
 }

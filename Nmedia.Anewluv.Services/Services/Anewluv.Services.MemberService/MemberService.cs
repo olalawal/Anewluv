@@ -41,7 +41,7 @@ namespace Anewluv.Services.Members
     {
 
 
-        private readonly IUnitOfWorkAsync _unitOfWork;
+        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
         private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
@@ -61,7 +61,7 @@ namespace Anewluv.Services.Members
             }
 
             //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
+            _unitOfWorkAsync = unitOfWork;
             //disable proxy stuff by default
             //_unitOfWork.DisableProxyCreation = true;
             //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
@@ -76,11 +76,11 @@ namespace Anewluv.Services.Members
         public profiledata getprofiledatabyprofileid(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
-                   return  db.Repository<profiledata>().getprofiledatabyprofileid(model);
+                   return  _unitOfWorkAsync.Repository<profiledata>().getprofiledatabyprofileid(model);
 
                 }
                 catch (Exception ex)
@@ -107,7 +107,7 @@ namespace Anewluv.Services.Members
         public async Task<searchsetting> getperfectmatchsearchsettingsbyprofileid(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
@@ -115,7 +115,7 @@ namespace Anewluv.Services.Members
                     var task = Task.Factory.StartNew(() =>
                     {
 
-                      return   profileextentionmethods.getperfectmatchsearchsettingsbyprofileid(model, db);
+                        return profileextentionmethods.getperfectmatchsearchsettingsbyprofileid(model, _unitOfWorkAsync);
 
                     });
                    return await task.ConfigureAwait(false);
@@ -147,10 +147,10 @@ namespace Anewluv.Services.Members
         {
            
            
-            using (var db = _unitOfWork)
+            
             {
                  //do not audit on adds
-               //   using (var transaction = db.BeginTransaction())
+               //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                   {
                       try
                       {
@@ -158,7 +158,7 @@ namespace Anewluv.Services.Members
                           var task = Task.Factory.StartNew(() =>
                           {
 
-                              profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(model,db);
+                              profileextentionmethods.createmyperfectmatchsearchsettingsbyprofileid(model, _unitOfWorkAsync);
 
                           });
                           await task.ConfigureAwait(false);
@@ -208,20 +208,20 @@ namespace Anewluv.Services.Members
             //ProfileModel model = GetProfileIdbyusername(username);
 
            
-            using (var db = _unitOfWork)
+            
             {
                   //do not audit on adds
-                //   using (var transaction = db.BeginTransaction())
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                    {
                        try
                        {
                            //get the profile
-                           myProfile = db.Repository<profile>().getprofilebyprofileid(model);
+                           myProfile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(model);
 
                            //update all other sessions that were not properly logged out   
                            //check if the user hit the count before updating that
                            int EmailDailyQuota = myProfile.dailsentmessagequota ?? 0;
-                           int EmailQuotaLimitWithNoRoleCheck = db.Repository<communicationquota>().Queryable().ToList().Where(p => p.id == 1).FirstOrDefault().quotavalue ?? 0;
+                           int EmailQuotaLimitWithNoRoleCheck = _unitOfWorkAsync.Repository<communicationquota>().Queryable().ToList().Where(p => p.id == 1).FirstOrDefault().quotavalue ?? 0;
                            //TO DO check qoute for correct role down the line
                            if (EmailDailyQuota != 0 && EmailDailyQuota >= EmailQuotaLimitWithNoRoleCheck)
                            {
@@ -231,8 +231,8 @@ namespace Anewluv.Services.Members
                            // update the count
                            myProfile.dailysentemailquota = myProfile.dailysentemailquota == null ? 1 : myProfile.dailysentemailquota + 1;
 
-                           db.Repository<profile>().Update(myProfile);
-                         var i  =db.SaveChanges();
+                           _unitOfWorkAsync.Repository<profile>().Update(myProfile);
+                         var i  =_unitOfWorkAsync.SaveChanges();
                           // transaction.Commit();
 
                            return true;
@@ -262,10 +262,10 @@ namespace Anewluv.Services.Members
         public async Task createmailboxfolders(ProfileModel model)
         {
           
-            using (var db = _unitOfWork)
+            
             {
                  //do not audit on adds
-               //   using (var transaction = db.BeginTransaction())
+               //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                   {
 
                       try
@@ -284,7 +284,7 @@ namespace Anewluv.Services.Members
                                   
                                   p.maxsizeinbytes = 128;
                                   p.defaultfolder_id = i;
-                                  p.displayname = db.Repository<lu_defaultmailboxfolder>().Queryable().Where(z=>z.id == i).FirstOrDefault().description;
+                                  p.displayname = _unitOfWorkAsync.Repository<lu_defaultmailboxfolder>().Queryable().Where(z=>z.id == i).FirstOrDefault().description;
                                   p.profile_id = model.profileid.Value;
                                   //determin what the folder type is , we have inbox=1 , sent=2, Draft=3,Trash=4,Deleted=5
                                   //switch (i)
@@ -305,8 +305,8 @@ namespace Anewluv.Services.Members
                                   //        p.mailboxfoldertype.lu_defaultmailboxfolder.description = "Deleted";
                                   //        break;
                                   //}
-                                  db.Repository<mailboxfolder>().Insert(p);
-                                  var m =db.SaveChanges();
+                                  _unitOfWorkAsync.Repository<mailboxfolder>().Insert(p);
+                                  var m =_unitOfWorkAsync.SaveChanges();
                                  // transaction.Commit();
 
                                //   return true;
@@ -341,10 +341,10 @@ namespace Anewluv.Services.Members
         public async Task<bool> activateprofile(ProfileModel model)
         {
           
-            using (var db = _unitOfWork)
+            
             {
                  //do not audit on adds
-               //   using (var transaction = db.BeginTransaction())
+               //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                   {
 
                       try
@@ -352,14 +352,14 @@ namespace Anewluv.Services.Members
 
                               var task = Task.Run(() =>
                               {
-                                  var myProfile = db.Repository<profile>().getprofilebyprofileid(model);
+                                  var myProfile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(model);
                                   // if( myProfile == null ) return null;
                                   //update the profile status to 2
                                   myProfile.status_id = (int)profilestatusEnum.Activated;
                                   //handele the update using EF
-                                  //  db.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                                  db.Repository<profile>().Update(myProfile);
-                                var i  =db.SaveChanges();
+                                  //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                                  _unitOfWorkAsync.Repository<profile>().Update(myProfile);
+                                var i  =_unitOfWorkAsync.SaveChanges();
                                  // transaction.Commit();
 
                                   return true;
@@ -394,20 +394,20 @@ namespace Anewluv.Services.Members
         public bool deactivateprofile(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                  //do not audit on adds
-               //   using (var transaction = db.BeginTransaction())
+               //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                   {
                       try
                       {
-                          var myProfile = db.Repository<profile>().getprofilebyprofileid(model); 
+                          var myProfile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(model); 
                           //update the profile status to 2
                           myProfile.status_id = (int)profilestatusEnum.Inactive;
                           //handele the update using EF
-                          //  db.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                          db.Repository<profile>().Update(myProfile);
-                        var i  =db.SaveChanges();
+                          //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                          _unitOfWorkAsync.Repository<profile>().Update(myProfile);
+                        var i  =_unitOfWorkAsync.SaveChanges();
                          // transaction.Commit();
 
                           return true;
@@ -436,24 +436,24 @@ namespace Anewluv.Services.Members
         public bool updatepassword(ProfileModel model, string encryptedpassword)
         {
             
-            using (var db = _unitOfWork)
+            
             {
                  //do not audit on adds
-               //   using (var transaction = db.BeginTransaction())
+               //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                   {
                       try
                       {
 
-                          var myProfile = db.Repository<profile>().getprofilebyprofileid(model); 
+                          var myProfile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(model); 
                           //update the profile status to 2
                           myProfile.password = encryptedpassword;
                           myProfile.modificationdate = DateTime.Now;
                           myProfile.passwordChangeddate = DateTime.Now;
                           myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
                           //handele the update using EF
-                          //  db.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
-                          db.Repository<profile>().Update(myProfile);
-                        var i  =db.SaveChanges();
+                          //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                          _unitOfWorkAsync.Repository<profile>().Update(myProfile);
+                        var i  =_unitOfWorkAsync.SaveChanges();
                          // transaction.Commit();
 
                           return true;
@@ -481,10 +481,10 @@ namespace Anewluv.Services.Members
         public bool addnewopenidforprofile(ProfileModel model)
         {
             
-            using (var db = _unitOfWork)
+            
             {
                  //do not audit on adds
-               //   using (var transaction = db.BeginTransaction())
+               //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                   {
                       try
                       {
@@ -494,11 +494,11 @@ namespace Anewluv.Services.Members
                               active = true,
                               creationdate = DateTime.UtcNow,
                               profile_id = model.profileid.Value,
-                               lu_openidprovider = db.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
+                               lu_openidprovider = _unitOfWorkAsync.Repository<lu_openidprovider>().Queryable().ToList().Where(p => (p.description).ToUpper() == model.openidprovider.ToUpper()).FirstOrDefault(),
                               openididentifier = model.openididentifier
                           };
-                          db.Repository<openid>().Insert(profileOpenIDStore);
-                         var i  =db.SaveChanges();
+                          _unitOfWorkAsync.Repository<openid>().Insert(profileOpenIDStore);
+                         var i  =_unitOfWorkAsync.SaveChanges();
                           // transaction.Commit();
 
                            return true;
@@ -528,7 +528,7 @@ namespace Anewluv.Services.Members
         public async Task<bool> checkifprofileisactivated(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
 
               
@@ -537,7 +537,7 @@ namespace Anewluv.Services.Members
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            return db.Repository<profile>().checkifprofileisactivated(model);
+                            return _unitOfWorkAsync.Repository<profile>().checkifprofileisactivated(model);
                         });
                         return await task.ConfigureAwait(false);
                       
@@ -574,7 +574,7 @@ namespace Anewluv.Services.Members
         public async Task<bool> checkifmailboxfoldersarecreated(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
 
                
@@ -584,7 +584,7 @@ namespace Anewluv.Services.Members
 
                     var task = Task.Factory.StartNew(() =>
                     {
-                        return (db.Repository<mailboxfolder>().Queryable().Where(p => p.profile_id == model.profileid.Value).FirstOrDefault() != null);
+                        return (_unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(p => p.profile_id == model.profileid.Value).FirstOrDefault() != null);
                     });
                     return await task.ConfigureAwait(false);
                    
@@ -616,7 +616,7 @@ namespace Anewluv.Services.Members
         {
 
            
-            using (var db = _unitOfWork)
+            
             {
 
                
@@ -625,7 +625,7 @@ namespace Anewluv.Services.Members
                 {
                     var task = Task.Factory.StartNew(() =>
                     {
-                        return db.Repository<profile>().getprofilebyprofileid(model).logindate;
+                        return _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(model).logindate;
 
                     });
                     return await task.ConfigureAwait(false);
@@ -667,11 +667,11 @@ namespace Anewluv.Services.Members
           
 
            
-            using (var db = _unitOfWork)
+            
             {
                
                  //do not audit on adds
-               //   using (var transaction = db.BeginTransaction())
+               //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                   {
                     
                       try
@@ -681,20 +681,20 @@ namespace Anewluv.Services.Members
                           var task = Task.Factory.StartNew(() =>
                           {
                               //update all other sessions that were not properly logged out
-                              var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
+                              var myQuery = _unitOfWorkAsync.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
                               foreach (userlogtime p in myQuery)
                               {
                                   p.offline = true;
-                                  db.Repository<userlogtime>().Update(p);
+                                  _unitOfWorkAsync.Repository<userlogtime>().Update(p);
                               }
 
 
                               //aloso update the profile table with current login date
-                              var myProfile = db.Repository<profile>().getprofilebyprofileid(model);
+                              var myProfile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(model);
                               //update the profile status to 2
                               myProfile.logindate = DateTime.Now;
-                              db.Repository<profile>().Update(myProfile);
+                              _unitOfWorkAsync.Repository<profile>().Update(myProfile);
 
 
                               //noew aslo update the logtime and then 
@@ -703,9 +703,9 @@ namespace Anewluv.Services.Members
                               myLogtime.offline = false;
                               myLogtime.sessionid = model.sessionid;
                               myLogtime.logintime = DateTime.Now;
-                              db.Repository<userlogtime>().Insert(myLogtime);
+                              _unitOfWorkAsync.Repository<userlogtime>().Insert(myLogtime);
                               //save all changes bro                         
-                            var i  =db.SaveChanges();
+                            var i  =_unitOfWorkAsync.SaveChanges();
                              // transaction.Commit();
 
                              // return true;
@@ -743,10 +743,10 @@ namespace Anewluv.Services.Members
       public async Task updateuserlogouttimebyprofileid(ProfileModel model)
         {
             //_unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            
             {
                 //do not audit on adds
-               //   using (var transaction = db.BeginTransaction())
+               //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                   {
                 try
                 {
@@ -755,16 +755,16 @@ namespace Anewluv.Services.Members
                     var task = Task.Factory.StartNew(() =>
                     {
                         //update all other sessions that were not properly logged out
-                        var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
+                        var myQuery = _unitOfWorkAsync.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
                         foreach (userlogtime p in myQuery)
                         {
                             p.offline = true;
                             p.logouttime = DateTime.Now;
-                            db.Repository<userlogtime>().Update(p);
+                            _unitOfWorkAsync.Repository<userlogtime>().Update(p);
                         }
 
-                      var i  =db.SaveChanges();
+                      var i  =_unitOfWorkAsync.SaveChanges();
                        // transaction.Commit();
 
                    //     return true;
@@ -800,10 +800,10 @@ namespace Anewluv.Services.Members
       public async Task updateuserlogintimebyprofileid(ProfileModel model)
         {
             //_unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            
             {
                //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
                     try
                     {
@@ -812,31 +812,31 @@ namespace Anewluv.Services.Members
                     var task = Task.Factory.StartNew(() =>
                     {
                          //update all other sessions that were not properly logged out
-                        var myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
+                        var myQuery = _unitOfWorkAsync.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
                         foreach (userlogtime p in myQuery)
                         {
                             p.offline = true;
-                            db.Repository<userlogtime>().Update(p);
+                            _unitOfWorkAsync.Repository<userlogtime>().Update(p);
                         }
 
 
                         //aloso update the profile table with current login date
-                        var myProfile = db.Repository<profile>().getprofilebyprofileid(model);
+                        var myProfile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(model);
                         //update the profile status to 2
                         myProfile.logindate = DateTime.Now;
-                        db.Repository<profile>().Update(myProfile);
+                        _unitOfWorkAsync.Repository<profile>().Update(myProfile);
 
 
                         //noew aslo update the logtime and then 
                         userlogtime myLogtime = new userlogtime();
-                        myLogtime.profile_id = model.profileid;
+                        myLogtime.profile_id = model.profileid.Value;
                         myLogtime.offline = false;
                         myLogtime.sessionid = model.sessionid;
                         myLogtime.logintime = DateTime.Now;
-                        db.Repository<userlogtime>().Insert(myLogtime);
+                        _unitOfWorkAsync.Repository<userlogtime>().Insert(myLogtime);
                         //save all changes bro                         
-                      var i  =db.SaveChanges();
+                      var i  =_unitOfWorkAsync.SaveChanges();
                        // transaction.Commit();
 
                         // return true;
@@ -877,27 +877,27 @@ namespace Anewluv.Services.Members
           //  DateTime currenttime = DateTime.Now;
 
             //_unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            
             {
 
                //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
 
                     try
                     {
                         //update all other sessions that were not properly logged out
-                      // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
+                      // var  myQuery = _unitOfWorkAsync.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
                         
                     var task = Task.Factory.StartNew(() =>
                     {
-                             var id = addprofileactvity(model.activitybase,db); 
+                        var id = addprofileactvity(model.activitybase, _unitOfWorkAsync); 
                              //get the ID and save geodata if there is data for it
                              model.activitygeodata.activity_id =id;
                              
                              if (id!=0 && ( model.activitygeodata.countryname != null | ( model.activitygeodata.lattitude != 0 & model.activitygeodata.longitude !=0)) )
-                             addprofileactvitygeodata(model.activitygeodata,db);
+                                 addprofileactvitygeodata(model.activitygeodata, _unitOfWorkAsync);
                    
                            });
                     await task.ConfigureAwait(false);
@@ -939,23 +939,23 @@ namespace Anewluv.Services.Members
             //  DateTime currenttime = DateTime.Now;
 
             //_unitOfWork.DisableProxyCreation = true;
-            using (var db = _unitOfWork)
+            
             {
 
                //do not audit on adds
-            // //   using (var transaction = db.BeginTransaction())
+            // //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
               //  {
 
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
+                        // var  myQuery = _unitOfWorkAsync.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
 
                         var task = Task.Factory.StartNew(() =>
                         {
- 
-                          addprofileactvitygeodata(model.activitygeodata,db);
+
+                            addprofileactvitygeodata(model.activitygeodata, _unitOfWorkAsync);
 
                             // return true;
                         });
@@ -996,17 +996,17 @@ namespace Anewluv.Services.Members
             //  DateTime currenttime = DateTime.Now;
 
                //do not audit on adds
-                //using (var transaction = db.BeginTransaction())
+                //using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
 
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
+                        // var  myQuery = _unitOfWorkAsync.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
-                        db.Repository<profileactivity>().Insert(model);
+                        _unitOfWorkAsync.Repository<profileactivity>().Insert(model);
                             //save all changes bro
-                          var i  =db.SaveChanges();
+                          var i  =_unitOfWorkAsync.SaveChanges();
                         //   // transaction.Commit();
                             return model.id;
                     }
@@ -1034,19 +1034,19 @@ namespace Anewluv.Services.Members
         {
 
            //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
+             //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
                 {
 
                     try
                     {
                         //update all other sessions that were not properly logged out
-                        // var  myQuery = db.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
+                        // var  myQuery = _unitOfWorkAsync.Repository<userlogtime>().Queryable().Where(p => p.profile_id == model.profileid.Value && p.offline == false).ToList(); ;
 
 
 
-                        db.Repository<profileactivitygeodata>().Insert(model);
+                        _unitOfWorkAsync.Repository<profileactivitygeodata>().Insert(model);
                             //save all changes bro
-                          var i  =db.SaveChanges();
+                          var i  =_unitOfWorkAsync.SaveChanges();
                            // transaction.Commit();
 
                            return model.id;
@@ -1083,7 +1083,7 @@ namespace Anewluv.Services.Members
         public string getlastloggedinstring(string logindate)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
@@ -1114,12 +1114,12 @@ namespace Anewluv.Services.Members
         public bool getuseronlinestatus(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
 
-                 return   db.Repository<profile>().getuseronlinestatus(model);
+                 return   _unitOfWorkAsync.Repository<profile>().getuseronlinestatus(model);
                 }
                 catch (Exception ex)
                 {
@@ -1149,13 +1149,13 @@ namespace Anewluv.Services.Members
         public bool checkifscreennamealreadyexists(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
 
                     //TO DO remove dd
-                 var dd =  db.Repository<profile>().checkifscreennamealreadyexists(model);
+                 var dd =  _unitOfWorkAsync.Repository<profile>().checkifscreennamealreadyexists(model);
                  return dd;
 
                 }
@@ -1191,12 +1191,12 @@ namespace Anewluv.Services.Members
         public bool checkifusernamealreadyexists(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
                     //IQueryable<profile> myQuery = default(IQueryable<profile>);
-                     return db.Repository<profile>().checkifusernamealreadyexists(model);
+                     return _unitOfWorkAsync.Repository<profile>().checkifusernamealreadyexists(model);
 
                   
                 }
@@ -1223,12 +1223,12 @@ namespace Anewluv.Services.Members
         public string validatesecurityansweriscorrect(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
                     IQueryable<profile> myQuery = default(IQueryable<profile>);
-                    myQuery =  db.Repository<profile>().Queryable().Where(p => p.id == model.profileid.Value && p.securityanswer == model.securityanswer && p.lu_securityquestion.description == model.securityquestion);
+                    myQuery =  _unitOfWorkAsync.Repository<profile>().Queryable().Where(p => p.id == model.profileid.Value && p.securityanswer == model.securityanswer && p.lu_securityquestion.description == model.securityquestion);
 
                     if (myQuery.Count() > 0)
                     {
@@ -1267,13 +1267,13 @@ namespace Anewluv.Services.Members
         public bool checkifactivationcodeisvalid(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
 
                     //Dim ctx As New Entities()
-                   return db.Repository<profile>().checkifactivationcodeisvalid(model);
+                   return _unitOfWorkAsync.Repository<profile>().checkifactivationcodeisvalid(model);
                    
                 }
                 catch (Exception ex)
@@ -1299,11 +1299,11 @@ namespace Anewluv.Services.Members
         public profile getprofilebyusername(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
-                    return db.Repository<profile>().getprofilebyusername(model);
+                    return _unitOfWorkAsync.Repository<profile>().getprofilebyusername(model);
                
 
                 }
@@ -1330,11 +1330,11 @@ namespace Anewluv.Services.Members
         public profile getprofilebyprofileid(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
-                    return db.Repository<profile>().getprofilebyprofileid(model);
+                    return _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(model);
 
                 }
                 catch (Exception ex)
@@ -1361,12 +1361,12 @@ namespace Anewluv.Services.Members
        public profile getprofilebyemailaddress(ProfileModel model)
        {
           
-           using (var db = _unitOfWork)
+           
            {
                try
                {
 
-                   return db.Repository<profile>().getprofilebyemailaddress(model);
+                   return _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(model);
 
                }
                catch (Exception ex)
@@ -1397,11 +1397,11 @@ namespace Anewluv.Services.Members
        public int? getprofileidbyusername(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
-                    return db.Repository<profile>().getprofilebyusername(model).id ;
+                    return _unitOfWorkAsync.Repository<profile>().getprofilebyusername(model).id ;
 
                 }
                 catch (Exception ex)
@@ -1427,12 +1427,12 @@ namespace Anewluv.Services.Members
         public int?  getprofileidbyopenid(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
 
-                    return db.Repository<profile>().getprofileidbyopenid(model).id ;
+                    return _unitOfWorkAsync.Repository<profile>().getprofileidbyopenid(model).id ;
                 }
                 catch (Exception ex)
                 {
@@ -1457,11 +1457,11 @@ namespace Anewluv.Services.Members
        public int? getprofileidbyscreenname(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
-                   return db.Repository<profile>().getprofilebyscreenname(model).id;
+                   return _unitOfWorkAsync.Repository<profile>().getprofilebyscreenname(model).id;
 
                 }
                 catch (Exception ex)
@@ -1487,7 +1487,7 @@ namespace Anewluv.Services.Members
        public int? getprofileidbyssessionid(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
@@ -1518,11 +1518,11 @@ namespace Anewluv.Services.Members
         public string getusernamebyprofileid(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
-                    return db.Repository<profile>().getprofilebyprofileid(model).username;
+                    return _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(model).username;
 
                 }
                 catch (Exception ex)
@@ -1549,12 +1549,12 @@ namespace Anewluv.Services.Members
         public string getscreennamebyprofileid(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
 
-                    return db.Repository<profile>().getprofilebyprofileid(model).screenname ;
+                    return _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(model).screenname ;
                 }
                 catch (Exception ex)
                 {
@@ -1580,11 +1580,11 @@ namespace Anewluv.Services.Members
         public string getscreennamebyusername(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
-                    return db.Repository<profile>().getprofilebyusername(model).screenname ;
+                    return _unitOfWorkAsync.Repository<profile>().getprofilebyusername(model).screenname ;
 
                 }
                 catch (Exception ex)
@@ -1612,11 +1612,11 @@ namespace Anewluv.Services.Members
         public bool checkifemailalreadyexists(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
-                  var dd = db.Repository<profile>().checkifemailalreadyexists(model);
+                  var dd = _unitOfWorkAsync.Repository<profile>().checkifemailalreadyexists(model);
 
                   return dd;
 
@@ -1646,11 +1646,11 @@ namespace Anewluv.Services.Members
         public string getgenderbyscreenname(ProfileModel model)
         {
           
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
-                    return db.Repository<profiledata>().getprofiledatabyscreenname(model).lu_gender.description;
+                    return _unitOfWorkAsync.Repository<profiledata>().getprofiledatabyscreenname(model).lu_gender.description;
                 }
                 catch (Exception ex)
                 {
@@ -1676,11 +1676,11 @@ namespace Anewluv.Services.Members
         public visiblitysetting getprofilevisibilitysettingsbyprofileid(ProfileModel model)
         {
            
-            using (var db = _unitOfWork)
+            
             {
                 try
                 {
-                   return  db.Repository<visiblitysetting>().getvisibilitysettingsbyprofileid(model);
+                   return  _unitOfWorkAsync.Repository<visiblitysetting>().getvisibilitysettingsbyprofileid(model);
                 }
                 catch (Exception ex)
                 {

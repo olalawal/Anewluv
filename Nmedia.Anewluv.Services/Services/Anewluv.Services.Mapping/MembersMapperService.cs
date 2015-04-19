@@ -1995,48 +1995,56 @@ namespace Anewluv.Services.Mapping
         internal SearchResultsViewModel GenerateSearchSearchResults(IEnumerable<MemberSearchViewModel> source, int? page, int? numberperpage, IUnitOfWorkAsync db)
         {
 
-            // int? totalrecordcount = MemberSearchViewmodels.Count;
-            //handle zero and null paging values
-            if (page == null || page == 0) page = 1;
-            if (numberperpage == null || numberperpage == 0) numberperpage = 4;
-
-            bool allowpaging = (source.Count() >= (page * numberperpage) ? true : false);
-            var pageData = page > 1 & allowpaging ?
-                new PaginatedList<MemberSearchViewModel>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
-
-
-            //do any conversions and calcs here
-            var test = pageData.Select(x => new MemberSearchViewModel
+            try
             {
-                MyCatchyIntroLineQuickSearch = x.aboutme,
-                id = x.id,
-                stateprovince = x.stateprovince,                 
-                postalcode = x.postalcode,
-                countryid = x.countryid,
-                genderid = x.genderid,
-                birthdate = x.birthdate,
-                profile = x.profile,
-                screenname = x.screenname,
-                longitude = x.longitude ?? 0,
-                latitude = x.latitude ?? 0,
-                hasgalleryphoto = db.Repository<photo>().Queryable().Where(i => i.profile_id == x.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false,
-                creationdate = x.creationdate,
-                city = Extensions.Chop(x.city, 11),
-                lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
-                lastlogindate = x.lastlogindate,
-                distancefromme = x.distancefromme,
-                galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(x.id, (int)photoformatEnum.Thumbnail),
-                lookingforagefrom = x.lookingforagefrom,
-                lookingForageto = x.lookingForageto,
-                online = db.Repository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
+                // int? totalrecordcount = MemberSearchViewmodels.Count;
+                //handle zero and null paging values
+                if (page == null || page == 0) page = 1;
+                if (numberperpage == null || numberperpage == 0) numberperpage = 4;
+
+                bool allowpaging = (source.Count() >= (page * numberperpage) ? true : false);
+                var pageData = page > 1 & allowpaging ?
+                    new PaginatedList<MemberSearchViewModel>().GetCurrentPages(source.ToList(), page ?? 1, numberperpage ?? 20) : source.Take(numberperpage.GetValueOrDefault());
 
 
-            }).ToList();
+                //do any conversions and calcs here
+                var test = pageData.Select(x => new MemberSearchViewModel
+                {
+                    MyCatchyIntroLineQuickSearch = x.aboutme,
+                    id = x.id,
+                    stateprovince = x.stateprovince,
+                    postalcode = x.postalcode,
+                    countryid = x.countryid,
+                    genderid = x.genderid,
+                    birthdate = x.birthdate,
+                    profile = x.profile,
+                    screenname = x.screenname,
+                    longitude = x.longitude ?? 0,
+                    latitude = x.latitude ?? 0,
+              
+                    hasgalleryphoto = db.Repository<photo>().Queryable().Where(i => i.profile_id == x.id && i.photostatus_id == (int)photostatusEnum.Gallery).FirstOrDefault() != null ? true : false,
+                    creationdate = x.creationdate,
+                    city = Extensions.Chop(x.city, 11),
+                    lastloggedonstring = profileextentionmethods.getlastloggedinstring(x.lastlogindate.GetValueOrDefault()),
+                    lastlogindate = x.lastlogindate,
+                    distancefromme = x.distancefromme,
+                    galleryphoto = db.Repository<photoconversion>().getgalleryphotomodelbyprofileid(x.id, (int)photoformatEnum.Thumbnail),
+                    lookingforagefrom = x.lookingforagefrom,
+                    lookingForageto = x.lookingForageto,
+                    online = db.Repository<profile>().getuseronlinestatus(new ProfileModel { profileid = x.id })
 
 
-            return new SearchResultsViewModel { results = test, totalresults = source.Count() };
+                }).ToList();
 
-        
+
+                return new SearchResultsViewModel { results = test, totalresults = source.Count() };
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
     }

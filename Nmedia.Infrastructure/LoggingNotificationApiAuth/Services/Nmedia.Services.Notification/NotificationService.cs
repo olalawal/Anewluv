@@ -195,7 +195,7 @@ namespace Nmedia.Services.Notification
         public async Task  senderrormessage(log error, string systemaddresstype)
         {
 
-            EmailModel emailmodels = new EmailModel();
+            
 
           //    using (var db = _unitOfWork)
             {
@@ -206,35 +206,29 @@ namespace Nmedia.Services.Notification
                     try
                     {
                         //parse the address type
-
+                       
                         //Task that returns nothing
                         await Task.Factory.StartNew (() =>
                         {
-
-                        var systemaddresstypeenum = (systemaddresstypeenum)Enum.Parse(typeof(systemaddresstypeenum), systemaddresstype);
+                            
                         //Id's messed up in DB use the first 
-                        dynamic systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList()) select x).FirstOrDefault(); 
+                        dynamic systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList()) select x).FirstOrDefault();
+                        message message = new message();
+                        //11-29-2013 get the template path from web config
+                        var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
+                           
+                      
                         lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == 1)) select x).FirstOrDefault(); 
 
                         lu_messagetype messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == (int)(messagetypeenum.DeveloperError))) select x).FirstOrDefault(); 
                         var recipientemailaddresss = (from x in (_unitOfWorkAsync.Repository<address>().Queryable().ToList().Where(f => f.addresstype.id == (int)(addresstypeenum.Developer))) select x).ToList();
 
-                        //build the recipient address objects
-                        EmailModel returnmodel = new EmailModel();
-                        returnmodel = getemailbytemplateid(templateenum.GenericErrorMessage, _unitOfWorkAsync);
-                        //fill in the rest of the email model values 
-                        returnmodel.subject = String.Format(returnmodel.subject, error.profileid);
-                        returnmodel.body = String.Format(returnmodel.body, error.profileid, error.message);
-
-
-                        //Now build the message e
-                        // recipeints = context.MessageSystemAddresses.Where(Function(c) c.SystemAddressType = CInt(AddressType))
-                        //Perform validation on the updated order before applying the changes.
-                        message message = new message();
-                        //use create method it like this 
-
-                        //11-29-2013 get the template path from web config
-                        var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
+                            //TO DO show the profile id 
+                        EmailViewModel returnmodel = new EmailViewModel
+                        {
+                            adminEmailViewModel = new EmailModel { subject = template.subject.description, body = template.body.description }
+                        };
+                       
 
                         message = (message.Create(c =>
                         {
@@ -243,7 +237,7 @@ namespace Nmedia.Services.Notification
                             c.template = template;
                             c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
                             c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref returnmodel, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
-                            c.subject = returnmodel.subject;
+                            c.subject = returnmodel.adminEmailViewModel.subject;
                             c.recipients = recipientemailaddresss;
                             c.sendingapplication = "NotificationService";
                             c.systemaddress = systemsenderaddress;

@@ -65,6 +65,13 @@ namespace Anewluv.DataExtentionMethods
             return null;
         }
 
+        /// <summary>
+        /// filters by folderid or foldername and profileid by default
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <param name="model"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         public static IQueryable<mailboxfolder> filtermailboxfolders(this IRepository<mailboxfolder> repo, MailModel model,IUnitOfWorkAsync db)
         {
 
@@ -80,22 +87,21 @@ namespace Anewluv.DataExtentionMethods
                 IQueryable<mailboxfolder> mailboxfolderlist = repo.Query(z => z.profile_id == model.profileid.Value
                     )
                     .Include(p => p.profilemetadata.profile).Include(p => p.profilemetadata.profile.membersinroles.Select(z =>z.lu_role))
-                    .Include(p => p.mailboxmessagefolders.Select(z => z.mailboxmessage).Where(z => !otherblocks.Any(d => d.target_profile_id == z.sender_id))).Select().AsQueryable();
+                    .Include(p => p.mailboxmessagefolders.Select(z => z.mailboxmessage)).Select().AsQueryable();
+                  
+                 
+                //TO DO filter out the blocks
+                //  mailboxfolderlist = mailboxfolderlist.Where(z => !otherblocks.Any(d => d.target_profile_id == z.)
                     
 
-
                 //remove profiles that blocked me  .i,e should be invlisble to me
-               
-
-
-
                 //to do roles ? allowing what photos they can view i.e the high rez stuff or more than 2 -3 etc
 
                 //folder id
                 if (model.mailboxfolderid != null)
                     mailboxfolderlist = mailboxfolderlist.Where(a => a.mailboxmessagefolders.Any((p => p.mailboxfolder.id == model.mailboxfolderid)));
                 //folder name filter
-                if (model.mailboxfoldername != "" | model.mailboxfoldername != null)
+                if (model.mailboxfoldername != null)
                     mailboxfolderlist = mailboxfolderlist.Where(a => a.mailboxmessagefolders.Any((p => p.mailboxfolder.displayname == model.mailboxfoldername)));
 
                 return mailboxfolderlist;

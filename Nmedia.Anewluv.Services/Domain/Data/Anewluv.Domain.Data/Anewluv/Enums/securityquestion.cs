@@ -14,23 +14,24 @@ namespace Anewluv.Domain.Data
     /// this is parsed into Initial Catalog= values when the context is created
     /// </summary>
     [DataContract]
-    public enum securityleveltypeEnum : int
+    public enum securityquestionEnum : int
     {
         [Description("NotSet")]
         [EnumMember]
         NotSet,
-        [Description("Public")] 
+        [Description("Your Mothers Maiden Name")]
         [EnumMember]
-        Public,
-        [Description("Private")]
+        YourMothersMaidenName,
+        [Description("What State Were you Born In")] 
         [EnumMember]
-        Private,
-        [Description("Likes")]
+        WhatStateWereyouBornIn,
+        [Description("Your Favorite Food")]
         [EnumMember]
-        Likes,
-        [Description("Intrests")]
+        YourFavoriteFood,
+        [Description("Your Favorite Movie")]
         [EnumMember]
-        Intrests
+        YourFavoriteMovie,
+     
      
         
     }

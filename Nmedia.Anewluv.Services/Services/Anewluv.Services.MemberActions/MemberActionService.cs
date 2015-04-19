@@ -657,7 +657,7 @@ namespace Anewluv.Services.MemberActions
                                 var newaction = new action();
                                 var newnote = new note();
 
-                                newaction.creator_profile_id = model.profileid;
+                                newaction.creator_profile_id = model.profileid.Value;
                                 newaction.target_profile_id = model.targetprofileid.GetValueOrDefault();
                                 //TO DO add notes if posible
                                 if (model.note !="")
@@ -1165,12 +1165,22 @@ namespace Anewluv.Services.MemberActions
                         //First get the folder id of the user's inbox then you can get the messages as bellow
 
                         //place holder
-                        int inboxfolderid = 1;
-                        var allmails = mailextentions.getallmailbyprofileid(model,  db);
+                       
+                        var allmails = _unitOfWorkAsync.Repository<mailboxfolder>().getmailfolderdetails(
+                            new MailModel { profileid = model.profileid.Value, mailboxfolderid = (int)mailfoldertypeEnum.Inbox },db );
                         //TO DO maybe do this on client
-                        MemberActions.mailsentcount = allmails.Where(p => p.sender_id == model.profileid).Count();
-                        MemberActions.mailreceivedcount = allmails.Where(p => p.recipient_id == model.profileid).Count();
-                        MemberActions.mailreceivednewcount = allmails.Where(p => p.recipient_id == model.profileid && (p.readdate == null | p.read.GetValueOrDefault() != true)).Count();
+
+                        if (allmails != null)
+                        {
+                          //  var sentfolderdetail = allmails.folders.Where(z => z.folderid == (int)mailfoldertypeEnum.Sent).FirstOrDefault();
+                            var recivedfolderdetail = allmails.folders.Where(z => z.folderid == (int)mailfoldertypeEnum.Inbox).FirstOrDefault();
+                           
+                           //MemberActions.mailsentcount = sentfolderdetail != null ? sentfolderdetail.totalmessagecount : null;
+                            MemberActions.mailreceivedcount = recivedfolderdetail != null ? recivedfolderdetail.totalmessagecount : null;
+                            MemberActions.mailreceivednewcount = recivedfolderdetail != null ? recivedfolderdetail.undreadmessagecount : null;
+                        }
+                        
+                      
 
                         return  MemberActions;
 

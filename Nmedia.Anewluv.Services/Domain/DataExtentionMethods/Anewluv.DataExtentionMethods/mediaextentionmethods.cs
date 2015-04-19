@@ -41,7 +41,7 @@ namespace Anewluv.DataExtentionMethods
                    // var converedtedphotoformat = Convert.ToInt16(format);
                     //var format = 
 
-                    return (from p in
+                    var dd = (from p in
                                 (from r in repo.Query(a => a.lu_photoformat.id == photoformatid && (a.photo.profile_id == profileid & a.photo.lu_photostatus.id == (int)photostatusEnum.Gallery))
                                  select new
                                  {
@@ -72,6 +72,7 @@ namespace Anewluv.DataExtentionMethods
 
                             }).FirstOrDefault();
 
+                    return dd;
                     // model.checkedPrimary = model.BoolImageType(model.ProfileImageType.ToString());
 
                     //Product product789 = products.FirstOrDefault(p => p.ProductID == 789);
@@ -92,6 +93,9 @@ namespace Anewluv.DataExtentionMethods
 
 
 
+        //TO DO need to grab the actions of the current user to the photo profileid (i.e viewer profileid) 
+        //if user is in correect relation ship to the photo profileid then allow the photo to be downloaded.
+
         //TO DO Premuim roles get all
         //TO DO needs code to check roles to see how many photos can be viewd etc
         public static IQueryable<photoconversion> filterphotos(this IRepository<photoconversion> repo, PhotoModel model)
@@ -100,11 +104,14 @@ namespace Anewluv.DataExtentionMethods
             try
             {
                 //added roles
-                IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == model.profileid.Value)
+                //filterer out photos that are not approved
+                IQueryable<photoconversion> photomodel = repo.Query(z => z.photo.profile_id == model.profileid.Value &
+                    (z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.Rejected | z.photo.approvalstatus_id != (int)photoapprovalstatusEnum.NotReviewed))
                     .Include(p => p.photo.profilemetadata)
-                    .Include(p => p.photo.photo_securitylevel.Select(z=>z.lu_securityleveltype))
+                    .Include(p => p.photo.photo_securitylevel.Select(z => z.lu_securityleveltype))
                     .Include(p => p.photo.profilemetadata.profile.membersinroles.Select(z => z.lu_role))
                     .Select().AsQueryable();
+
 
 
                 //to do roles ? allowing what photos they can view i.e the high rez stuff or more than 2 -3 etc
@@ -117,7 +124,7 @@ namespace Anewluv.DataExtentionMethods
                 if (model.photosecuritylevelid != null)    //if phop
                     photomodel = photomodel.Where(a => a.photo.photo_securitylevel != null && a.photo.photo_securitylevel.Any(d => d.securityleveltype_id ==model.photosecuritylevelid));
                 if (model.photosecuritylevelid == null) //only grab photos with no status 
-                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel != null && a.photo.photo_securitylevel.Any(d => (d.securityleveltype_id == (int)securityleveltypeEnum.Public) | (d.securityleveltype_id == (int)securityleveltypeEnum.Public)));
+                    photomodel = photomodel.Where(a => a.photo.photo_securitylevel != null && a.photo.photo_securitylevel.Count() == 0);
                
                 //status
                 if (model.phototstatusid != null)

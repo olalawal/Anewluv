@@ -147,8 +147,9 @@ namespace Anewluv.Apikey
 
                 string path = OperationContext.Current.IncomingMessageHeaders.To.AbsolutePath;
                 string[] urisegments = OperationContext.Current.IncomingMessageHeaders.To.Segments;
-                string helpsegment = "help/"; //this is the thing we are checking   
-                string restsegment = "rest/"; //this is the thing we are checking 
+                string helpsegment = "help"; //this is the thing we are checking   
+                string restsegment = "rest"; //this is the thing we are checking 
+                string operationssegment = "operations/"; //this is the thing we are checking 
                 string soapsegment = "soap"; //this is the thing we are checking 
 
 
@@ -163,8 +164,13 @@ namespace Anewluv.Apikey
 
             
                 var segmentcount = urisegments.Count();
-                if (urisegments.ToList().Contains(restsegment) && (urisegments.ToList().Contains(helpsegment) | urisegments.ToList().Contains(helpsegment.Replace("/",""))))
-                    return true;
+
+                
+                //if last segment is rest or help dont do anything we are fine
+                if (urisegments[segmentcount - 1].Contains(restsegment) || urisegments[segmentcount - 1].Contains(helpsegment) || urisegments.ToList().Contains(operationssegment)) return true; 
+
+                //if (urisegments.ToList().Contains(restsegment) && (urisegments.ToList().Contains(helpsegment) | urisegments.ToList().Contains(helpsegment.Replace("/",""))))
+                 //   return true;
 
                 //check if we are looking at the URLS or specific methods that allow Anonymoys access
                 //seecon part checks the end of the URL i.e updateuserlogintimebyprofileidandsessionid since it could be called from somehwere else
@@ -202,7 +208,7 @@ namespace Anewluv.Apikey
                            //    }
                            //    // msg.Close();  //kill this since we need it no more.
                            //}
-
+                        
                            var ProfileModel = WCFMessageInpectors.getprofileidmodelfrombody(ref internalCopy);
 
                            if (ProfileModel.profileid != null)

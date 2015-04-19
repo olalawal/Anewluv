@@ -1,39 +1,58 @@
-﻿using Anewluv.Domain.Data;
-using Anewluv.Domain.Data.ViewModels;
-using Anewluv.Lib;
-using Anewluv.Services.Contracts;
-using LoggingLibrary;
-using Nmedia.DataAccess.Interfaces;
-using Nmedia.Infrastructure.Domain.Data.errorlog;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.ServiceModel.Activation;
 using System.Text;
+using Anewluv.Services.Contracts;
+using System.Web;
+using System.Net;
 
+using Anewluv.Domain.Data;
+using Anewluv.Domain.Data.ViewModels;
+using System.ServiceModel.Activation;
+using LoggingLibrary;
+
+using Anewluv.Services.Contracts.ServiceResponse;
+
+using System.IO;
+
+//using Nmedia.DataAccess.Interfaces;
+using System.Drawing;
+
+using Nmedia.Infrastructure.Domain.Data.log;
+using Nmedia.Infrastructure.Domain.Data;
+using System.Threading.Tasks;
+using Anewluv.Domain;
+using Repository.Pattern.UnitOfWork;
+using Anewluv.DataExtentionMethods;
+using Nmedia.Infrastructure.Domain.Data.Notification;
+
+using Nmedia.Infrastructure;
+using Nmedia.Infrastructure.Utils;
+
+       
 namespace Anewluv.Services.Messaging
 {
-
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
-
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class MailService : IMailService
+   [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple)]  
+    public class MailService : IMailService 
     {
+
+
         //if our repo was generic it would be IPromotionRepository<T>  etc IPromotionRepository<reviews> 
         //private IPromotionRepository  promotionrepository;
 
-        IUnitOfWork _unitOfWork;
-        private LoggingLibrary.ErroLogging logger;
-        // logenviromentEnum currentenviroment = logenviromentEnum.dev;
+        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        //&&&&&  used for activity logging 
+        private readonly OperationContext _context;
+        private LoggingLibrary.Logging logger;
 
         //  private IMemberActionsRepository  _memberactionsrepository;
         // private string _apikey;
 
-        public MailService(IUnitOfWork unitOfWork)
+        public MailService(IUnitOfWorkAsync unitOfWork)
         {
 
             if (unitOfWork == null)
@@ -46,604 +65,610 @@ namespace Anewluv.Services.Messaging
                 throw new ArgumentNullException("dataContext", "dataContext cannot be null");
             }
 
-            //promotionrepository = _promotionrepository;
-            _unitOfWork = unitOfWork;
-            //disable proxy stuff by default
-            //_unitOfWork.DisableProxyCreation = true;
-            //  _apikey  = HttpContext.Current.Request.QueryString["apikey"];
-            //   throw new System.ServiceModel.Web.WebFaultException<string>("Invalid API Key", HttpStatusCode.Forbidden);
+            _context = OperationContext.Current;
+            _unitOfWorkAsync = unitOfWork;
+         
 
         }
 
 
-        // Query Methods
-        public List<mailmessageviewmodel> replyemail1(int? id, int mailboxMsgFldId)
-        {
+        
+        public async Task<MailFoldersViewModel> getmailfolderdetails(MailModel model)
+           {
+               var task = Task.Factory.StartNew(() =>
+               {
 
 
-            try
+                   var repo = _unitOfWorkAsync.Repository<mailboxfolder>();
+                   var dd = mailextentions.getmailfolderdetails(repo, model,_unitOfWorkAsync);
+
+                   //Log the activity for history
+                   Api.AnewLuvLogging.LogProfileActivity
+                       (new ProfileModel { profileid = model.profileid.Value },
+                       (int)activitytypeEnum.updateprofile,
+                       _context);
+
+
+                   return dd;
+
+
+               });
+               return await task.ConfigureAwait(false);
+           }
+        public async Task<MailSearchResultsViewModel> getmailfilteredandpaged(MailModel model)
             {
-                var allMail =
-                                 from m in db.mailboxmessages.Where(x => x.id == id)
-                                 select new mailmessageviewmodel
-                                 {
-
-                                     mailboxmessage_id = m.id,
-                                     //mailboxmessagefoldersID  = mailboxMsgFldId,
-                                     uniqueid = m.uniqueid,
-                                     sender_id = m.recipient_id,
-                                     recipient_id = m.sender_id,
-                                     body = m.body,
-                                     subject = m.subject,
-                                     creationdate = m.creationdate,
-                                     // Sender and Recipient are flipped in a reply
-                                     senderscreenname = (from p in db.profiles where (p.id == m.recipient_id) select p.screenname).FirstOrDefault(),
-                                     recipientscreenname = (from p in db.profiles where (p.id == m.sender_id) select p.screenname).FirstOrDefault()
-                                 };
-                return allMail.ToList();
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, id, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, id, null, false);
-                throw;
-            }
-        }
-        // tobe deleted
-        public List<mailmessageviewmodel> replyemail(int? id)
-        {
-
-
-            try
-            {
-                var allMail =
-                 from m in db.mailboxmessages.Where(x => x.id == id)
-                 select new mailmessageviewmodel
-                 {
-
-                     mailboxmessage_id = m.id,
-                     //mailboxmessagefoldersID = mailboxMsgFldId,
-                     uniqueid = m.uniqueid,
-                     sender_id = m.recipient_id,
-                     body = m.body,
-                     subject = m.subject,
-                     creationdate = m.creationdate,
-                     recipient_id = m.sender_id,
-                     senderscreenname = (from p in db.profiles where (p.id == m.recipient_id) select p.screenname).FirstOrDefault(),
-                     recipientscreenname = (from p in db.profiles where (p.id == m.sender_id) select p.screenname).FirstOrDefault()
-                 };
-                return allMail.ToList();
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, id, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, id, null, false);
-                throw;
-            }
-        }
-        public int getmailboxmessagefoldersid(int mailboxMsgId)
-        {
-
-            try
-            {
-                return (from p in db.mailboxmessagefolders
-                        where p.mailboxmessage.id == mailboxMsgId
-                        && p.mailboxfolder.mailboxfoldertype.defaultfolder_id == (int)defaultmailboxfoldertypeEnum.Inbox
-                        select p.mailboxfolder_id).FirstOrDefault();
-
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, null, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null, false);
-                throw;
-            }
-        }
-
-        public int getmailboxfolderid(string mailboxFolderTypeName, int profileId)
-        {
-
-
-            try
-            {
-                return (from i in db.mailboxfolders
-                        where i.mailboxfoldertype.name == mailboxFolderTypeName && i.profiled_id == profileId
-                        select i.id).FirstOrDefault();
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileId, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileId, null, false);
-                throw;
-            }
-        }
-
-        public mailboxmessagefolder newmailboxmessagefolderobject(string mailboxFolderTypeName, int profileId)
-        {
-
-
-            try
-            {
-                int fldId = getmailboxfolderid(mailboxFolderTypeName, profileId); // Retrieve specific mailboxfolderId by its mailboxFolderTypename and ProfileID
-
-                //create mailbox folders if we have a null mailbox folders for a user
-                if (fldId == 0)
+                var task = Task.Factory.StartNew(() =>
                 {
-                    //TO do move this to a mail repop
-                    AnewluvContext AnewluvContext = new AnewluvContext();
-                    using (var tempdb = AnewluvContext)
+                    var repo = _unitOfWorkAsync.Repository<mailboxmessagefolder>();
+                    var dd = mailextentions.getmailfilteredandpaged(repo, model,_unitOfWorkAsync);
+
+
+                    //Log the activity for history
+                    Api.AnewLuvLogging.LogProfileActivity
+                        (new ProfileModel { profileid = model.profileid.Value },
+                        (int)activitytypeEnum.updateprofile,
+                        _context);
+                    
+                    return dd;
+
+
+                });
+                return await task.ConfigureAwait(false);
+            }
+
+        
+
+
+        #region "update methods"
+
+            public async Task<AnewluvMessages> updatemessage(MailModel model)
+        {
+
+            //do not audit on adds
+            AnewluvMessages AnewluvMessages = new AnewluvMessages();
+            //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+            {
+
+                try
+                {
+                    var task = Task.Factory.StartNew(() =>
                     {
-                        MemberService MemberService = new MemberService(tempdb);
-                        MemberService.createmailboxfolders(new ProfileModel { profileid = profileId });
-                    }
-                    return newmailboxmessagefolderobject(mailboxFolderTypeName, profileId);
+                      
+                        // get the folderr details
+                        mailboxfolder mailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
+                        mailboxmessage mailboxmessage = _unitOfWorkAsync.Repository<mailboxmessage>().Queryable().Where(u => u.id == model.mailboxfolderid).FirstOrDefault();
+
+
+                        if (mailboxfolder != null && mailboxmessage != null)
+                        {
+                         
+                            //find the mailboxfoldermessages  that we will be updating
+                            var mailboxmessagefolder = _unitOfWorkAsync.Repository<mailboxmessagefolder>().Query(p => p.mailboxfolder_id == mailboxfolder.id && p.mailboxmessage_id == mailboxmessage.id).Select().FirstOrDefault();
+                            if (mailboxmessagefolder !=null)
+                            {
+                                bool messageupdated = false;
+
+                                if(model.readmessage !=null)
+                                {
+                                    mailboxmessagefolder.read =model.readmessage ;
+                                    mailboxmessagefolder.readdate = DateTime.Now;
+                                    messageupdated = true;
+
+                                }
+                                else if (model.flagmessage != null)
+                                {
+                                    mailboxmessagefolder.flagged = model.flagmessage.Value;
+                                    mailboxmessagefolder.flaggeddate = DateTime.Now;
+                                    messageupdated = true;
+                                }
+
+                                if (messageupdated)
+                                {
+                                    _unitOfWorkAsync.Repository<mailboxmessagefolder>().Update(mailboxmessagefolder);
+                                    var i = _unitOfWorkAsync.SaveChanges();
+                                    AnewluvMessages.messages.Add("message updated Succesfully");
+
+                                }
+
+                                       
+                            }
+                            else
+                            {
+                                AnewluvMessages.errormessages.Add("Message not found!");
+
+                            }
+                           
+                
+
+
+                            
+                        }
+                        else
+                        {
+                            AnewluvMessages.errormessages.Add("Invalid Mailbox folder or messageid both values are required to update messages");
+                        }
+
+
+
+
+                        //Log the activity for history
+                        Api.AnewLuvLogging.LogProfileActivity
+                            (new ProfileModel { profileid = model.profileid.Value },
+                            (int)activitytypeEnum.updateprofile,
+                            _context);
+
+                        return AnewluvMessages;
+                    });
+                    return await task.ConfigureAwait(false);
+
+
+                }
+                catch (Exception ex)
+                {
+                    //TO DO track the transaction types only rollback on DB connections
+                    //rollback transaction
+                    // transaction.Rollback();
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MediaService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in Messaging Service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
                 }
 
-                mailboxmessagefolder fld_mailboxmessagefolder = new mailboxmessagefolder() // Create a new mailboxmessagefolder object
-                {
-                    mailboxfolder_id = fldId,
-                    readdate = null,
-                    replieddate = null,
-                    flaggeddate = null,
-                    deleteddate = null,
-                    draftdate = null,
-                    recent = false
-                };
-                return fld_mailboxmessagefolder;
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileId, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileId, null, false);
-                throw;
-            }
-        }
-
-        public void add(mailboxmessage mailboxmessage)
-        {
-
-
-            try
-            {
-                db.mailboxmessages.Add(mailboxmessage); //Updating the context
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, null, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null, false);
-                throw;
-            }
-        }
-
-        // Persistence
-        public void Save()
-        {
-
-            try
-            {
-                db.SaveChanges(); //Save to Database
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, null, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null, false);
-                throw;
-            }
-        }
-
-
-        //
-        // Query Methods
-
-        public string getuserid(string User)
-        {
-
-
-
-            try
-            {
-                return (from p in db.profiles
-                        where p.username == User
-                        select p.id).FirstOrDefault().ToString();
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, null, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null, false);
-                throw;
-            }
-        }
-
-        public int getallmailcountbyfolderid(int folderid, int profileid)
-        {
-
-            try
-            {
-                IEnumerable<mailviewmodel> models = null;
-
-                //return (from i in db.mailboxmessagefolders
-                //             .Where(u => u.mailboxfolderID == u.mailboxfolder.mailboxfolderID
-                //            && u.mailboxfolder.foldertype.name == MailType && u.mailboxfolder.ProfileID == User)
-                //        select i.MessageRead).Count();
-
-
-                //join f in _datingcontext.profiledatas on p.blockprofile_id  equals f.id 
-                //get a model of the messages that match this mail type
-
-                //get a model of the messages that match this mail type
-                models = (from m in db.mailboxmessages
-                          join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
-                              && u.mailboxfolder.profiled_id == profileid)
-                          on m.id equals f.mailboxmessage_id
-                          select new mailviewmodel
-                          {
-
-                              sender_id = m.sender_id,
-                              recipient_id = m.recipient_id,
-                              mailboxmessagefolder_id = f.mailboxfolder_id,
-                              mailboxfolder_id = f.mailboxfolder.id,
-                              senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                              recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
-                              blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
-                              creationdate = m.creationdate,
-                              senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                              recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
-
-                          });
-                return filtermailmodels(models).Count();
-
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileid, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null, false);
-                throw;
             }
 
         }
 
-        public int getnewmailcountbyfolderid(int folderid, int profileid)
-        {
-
-
-            try
+            public async Task<AnewluvMessages> sendmessage(MailModel model)
             {
-                IEnumerable<mailviewmodel> models = null;
+                
+                    //do not audit on adds
+                    AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                    //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                    {
 
-                models = (from m in db.mailboxmessages
-                          join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
-                              && u.mailboxfolder.profiled_id == profileid && u.readdate == null)
-                          on m.id equals f.mailboxmessage_id
-                          select new mailviewmodel
-                          {
-
-                              sender_id = m.sender_id,
-                              recipient_id = m.recipient_id,
-                              mailboxmessagefolder_id = f.mailboxfolder_id,
-                              mailboxfolder_id = f.mailboxfolder.id,
-                              senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                              recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
-                              blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
-                              creationdate = m.creationdate,
-                              senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                              recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
-
-                          });
-
-                return filtermailmodels(models).Count();
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileid, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null, false);
-                throw;
-            }
-
-        }
-
-        //TO DO find a way to use ENUM for these names 
-        //TO DO re-wite code based on EF code first composite table queries
-        public List<mailviewmodel> getallmailbydefaultmailboxfoldertypemail(string foldertypename, int profileid)
-        {
+                        try
+                        {
 
 
+                            var task = Task.Factory.StartNew(() =>
+                            {
+                                
+                                    //TO DO use activity stuff to manage this
+                                   //first check the sent qotat for this user
+                                    var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid.Value});
+                                   
+                                     if (profile.dailsentmessagequota.Value > 5)
+                                     {
+                                         AnewluvMessages.errormessages.Add("Daily Message Quota Exceeded please upgrade your memembership to send more than 5 messages a day");
+                                         return AnewluvMessages;
+                                     }
 
-            try
-            {
+                                    // get the folderr details
+                                     mailboxfolder mailboxfolder  = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
+                                    if (mailboxfolder !=null)
+                                    {
+                                        //create the message and save it
+                                        var newmailboxmessage = new mailboxmessage
+                                        {
+                                            body = model.body,
+                                            subject = model.subject,
+                                            sizeinbtyes = model.body.Length + model.subject.Length,
+                                            recipient_id = model.recipeintprofileid.Value,
+                                            sender_id = model.profileid.Value
+                                        };
+                                       _unitOfWorkAsync.Repository<mailboxmessage>().Insert(newmailboxmessage);
 
-                IEnumerable<mailviewmodel> models = null;
+                                        //create the message folder and save it 
+                                       var newmailboxmessagesfolder = new mailboxmessagefolder
+                                       {
+                                           mailboxmessage_id = newmailboxmessage.id,
+                                           mailboxfolder_id = mailboxfolder.id
 
-                models = (from m in db.mailboxmessages
-                          join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
-                              && u.mailboxfolder.mailboxfoldertype.name == foldertypename && u.mailboxfolder.profiled_id == profileid)
-                           on m.id equals f.mailboxmessage_id
-                          orderby m.creationdate descending
-                          select new mailviewmodel
-                          {
-
-                              mailboxfoldername = f.mailboxfolder.mailboxfoldertype.name,
-                              mailboxmessageid = m.id,
-                              sender_id = m.sender_id,
-                              body = m.body,
-                              subject = m.subject,
-                              mailboxfolder_id = f.mailboxfolder.id,
-                              age = m.profilemetadata.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
-                              city = m.profilemetadata.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
-                              state = m.profilemetadata.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
-                              creationdate = m.creationdate,
-                              recipient_id = m.recipient_id,
-                              readdate = f.readdate,
-                              replieddate = f.replieddate,
-                              senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                              recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
-                              blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
-                              senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                              recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
-
-                          });
-
-                return filtermailmodels(models).ToList();
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileid, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null, false);
-                throw;
-            }
+                                       };
+                                       _unitOfWorkAsync.Repository<mailboxmessagefolder>().Insert(newmailboxmessagesfolder);
 
 
-        }
+                                       // Update database
+                                       // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+                                       var i = _unitOfWorkAsync.SaveChanges();
+                                                                        
 
-        public List<mailviewmodel> getallmailbyfolder(int folderid, int profileid)
-        {
+                                        //TO DO call the Notification Service to QUUE up this message. For now 
+                                       // All messages are sent on the fly but long term we will add it to the QUUE and then the sevice will send peroidoically.
 
-            try
-            {
-                var models = (from m in db.mailboxmessages
-                              join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder_id == u.mailboxfolder.id
-                                  && u.mailboxfolder.profiled_id == profileid && u.readdate == null && u.mailboxfolder.id == folderid)
-                              on m.id equals f.mailboxmessage_id
-                              select new mailviewmodel
-                              {
+                                        //member 
+                                       var EmailViewModel = new EmailViewModel
+                                       {
+                                           userEmailViewModel = new EmailModel
+                                           {
+                                               templateid = (int)templateenum.MemberRecivedEmailMessageMemberNotification,
+                                               messagetypeid = (int)messagetypeenum.UserUpdate,                                           
+                                               addresstypeid = (int)addresstypeenum.SiteUser,
+                                               emailaddress = newmailboxmessage.recipientprofilemetadata.profile.emailaddress,
+                                               username = newmailboxmessage.recipientprofilemetadata.profile.username,
+                                               subject = templatesubjectenum.MemberRecivedEmailMessageMemberNotification.ToDescription()
+                                           },
+                                               adminEmailViewModel = new EmailModel {
+                                               templateid = (int)templateenum.MemberRecivedEmailMessageAdminNotification,
+                                               messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                               addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                               subject =templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
+                                           }
+                                       };
+                                      
+                                       //this sends both admin and user emails  
+                                       Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
 
-
-                                  mailboxfoldername = f.mailboxfolder.mailboxfoldertype.name,
-                                  mailboxmessageid = m.id,
-                                  sender_id = m.sender_id,
-                                  body = m.body,
-                                  subject = m.subject,
-                                  mailboxfolder_id = f.mailboxfolder.id,
-                                  age = m.profilemetadata.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
-                                  city = m.profilemetadata.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
-                                  state = m.profilemetadata.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
-                                  creationdate = m.creationdate,
-                                  recipient_id = m.recipient_id,
-                                  readdate = f.readdate,
-                                  replieddate = f.replieddate,
-                                  senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                                  recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
-                                  blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
-                                  senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                                  recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
-
-                              });
-
-                return filtermailmodels(models);
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileid, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null, false);
-                throw;
-            }
-        }
-
-        //TO DO read out the description feild from enum using sample code
-        public List<mailviewmodel> getmailmsgthreadbyuserid(int uniqueId, int profileid)
-        {
-
-
-            try
-            {
-
-                IEnumerable<mailviewmodel> model = null;
-
-                model = (from m in db.mailboxmessages.Where(x => x.uniqueid == uniqueId)
-                         join f in db.mailboxmessagefolders.Where(u => u.mailboxfolder.mailboxfoldertype.name != "Deleted"
-                         && u.mailboxfolder.profiled_id == profileid)
-                           on m.id equals f.mailboxmessage_id
-                         orderby m.creationdate ascending
-                         select new mailviewmodel
-                         {
-
-
-                             mailboxfoldername = f.mailboxfolder.mailboxfoldertype.name,
-                             mailboxmessageid = m.id,
-                             sender_id = m.sender_id,
-                             body = m.body,
-                             subject = m.subject,
-                             mailboxfolder_id = f.mailboxfolder.id,
-                             age = m.profilemetadata.profile.profiledata.birthdate.GetValueOrDefault(), //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.Birthdate).FirstOrDefault(),
-                             city = m.profilemetadata.profile.profiledata.city,   //(from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.City).FirstOrDefault(),
-                             state = m.profilemetadata.profile.profiledata.stateprovince, // (from p in db.ProfileDatas where p.ProfileID == m.sender_id select p.State_Province).FirstOrDefault(),
-                             creationdate = m.creationdate,
-                             recipient_id = m.recipient_id,
-                             readdate = f.readdate,
-                             replieddate = f.replieddate,
-                             senderstatus_id = m.profilemetadata.profile.status_id.GetValueOrDefault(), //(from p in db.profiles where p.id  == m.sender_id select p.status.id ).FirstOrDefault(),
-                             recipientstatus_id = m.profilemetadata1.profile.status_id.GetValueOrDefault(),
-                             blockstatus = (db.blocks.Where(i => i.profile_id == profileid && i.blockprofile_id == m.sender_id && i.removedate == null).FirstOrDefault().id != null) ? true : false,
-                             senderscreenname = m.profilemetadata.profile.screenname, //(from p in db.profiles where (p.id == m.sender_id) select p.screenname  ).FirstOrDefault(),
-                             recipientscreenname = m.profilemetadata1.profile.screenname // (from p in db.profiles where (p.id  == m.recipient_id) select p.screenname ).FirstOrDefault()
-                         });
-                return filtermailmodels(model);
-
-            }
-
-            catch (DataException dx)
-            {
-                //Log the error (add a variable name after DataException) 
-                // newmodel.CurrentErrors.Add("Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                // return model;
-                //handle logging here
-                var message = dx.Message;
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, dx, profileid, null, false);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //log error mesasge
-                new ErroLogging(logapplicationEnum.MailService).WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, profileid, null, false);
-                throw;
-            }
-
-        }
     
-     
+                                       AnewluvMessages.messages.Add("Email was sent Succesfully");
+                                    }
+                                    else
+                                    {
+                                        AnewluvMessages.errormessages.Add("Invalid Mailbox folder or profile both values are required to delete messages");
+                                    }
+
+
+
+
+                                    //Log the activity for history
+                                    Api.AnewLuvLogging.LogProfileActivity
+                                        (new ProfileModel { profileid = model.profileid.Value },
+                                        (int)activitytypeEnum.sentmail,
+                                        _context);
+                                
+                                return AnewluvMessages;
+                            });
+                            return await task.ConfigureAwait(false);
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            //TO DO track the transaction types only rollback on DB connections
+                            //rollback transaction
+                            // transaction.Rollback();
+                            //instantiate logger here so it does not break anything else.
+                            logger = new Logging(applicationEnum.MediaService);
+                            logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                            //can parse the error to build a more custom error mssage and populate fualt faultreason
+                            FaultReason faultreason = new FaultReason("Error in Messaging Service");
+                            string ErrorMessage = "";
+                            string ErrorDetail = "ErrorMessage: " + ex.Message;
+                            throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                        }
+
+                    }
+                
+            }
+
+            public async Task<AnewluvMessages> deletemessagesfromfolder(MailModel model)
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();                   
+
+                    try
+                    {
+
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                           
+                            
+                            foreach (int deletemailboxmessagesid in model.deletemailboxmessagesids)
+                            {
+                               
+                                     // get the folderr details
+                                     mailboxfolder mailboxfolder  = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
+                                     mailboxmessage mailboxmessage = _unitOfWorkAsync.Repository<mailboxmessage>().Queryable().Where(u => u.id == deletemailboxmessagesid).FirstOrDefault();
+                                    if (mailboxfolder !=null && mailboxmessage !=null)
+                                    {
+
+                                        //find the mailboxfoldermessages and update it to deleted
+                                        var mailboxmessagefolder = _unitOfWorkAsync.Repository<mailboxmessagefolder>().Query(p => p.mailboxfolder_id == mailboxfolder.id && p.mailboxmessage_id == mailboxmessage.id).Select().FirstOrDefault();
+
+                                        if (mailboxmessagefolder !=null)
+                                        {
+                                            mailboxmessagefolder.deleted = true;
+                                            mailboxmessagefolder.deleteddate = DateTime.Now;
+                                            _unitOfWorkAsync.Repository<mailboxmessagefolder>().Update(mailboxmessagefolder);
+                                            var i = _unitOfWorkAsync.SaveChanges();
+                                            AnewluvMessages.messages.Add("Message deleted Succesfully");
+                                        }
+                                        else
+                                        {
+                                            AnewluvMessages.errormessages.Add("Message not found!");
+
+                                        }
+                                     
+                                    }
+                                    else
+                                    {
+                                        AnewluvMessages.errormessages.Add("Invalid Mailbox folder or profile both values are required to delete messages");
+                                    }
+
+
+                            }
+
+
+                            return AnewluvMessages;
+
+
+                        });
+                        return await task.ConfigureAwait(false);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in Messaging Service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                
+                   
+            }
+
+            public async Task<AnewluvMessages> movemessagestofolder(MailModel model)
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+
+                try
+                {
+
+
+                    var task = Task.Factory.StartNew(() =>
+                    {
+
+
+                        foreach (int movemailboxmessagesid in model.movemailboxmessagesids)
+                        {
+
+                            // get the folderr details
+                            mailboxfolder mailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
+                            mailboxmessage mailboxmessage = _unitOfWorkAsync.Repository<mailboxmessage>().Queryable().Where(u => u.id == movemailboxmessagesid).FirstOrDefault();
+                            if (mailboxfolder != null && mailboxmessage != null && model.destinationmailboxfolderid !=null)
+                            {
+
+                                //find the mailboxfoldermessages and update it to deleted
+                                var mailboxmessagefolder = _unitOfWorkAsync.Repository<mailboxmessagefolder>().Query(p => p.mailboxfolder_id == mailboxfolder.id && p.mailboxmessage_id == mailboxmessage.id).Select().FirstOrDefault();
+
+                                if (mailboxmessagefolder != null)
+                                {
+                                    mailboxmessagefolder.moved = true;
+                                    mailboxmessagefolder.movedate = DateTime.Now;
+                                    mailboxmessagefolder.mailboxfolder_id = model.destinationmailboxfolderid.GetValueOrDefault();
+                                    _unitOfWorkAsync.Repository<mailboxmessagefolder>().Update(mailboxmessagefolder);
+                                    var i = _unitOfWorkAsync.SaveChanges();
+                                    AnewluvMessages.messages.Add("Message moved Succesfully");
+                                }
+
+                            }
+                            else
+                            {
+                                AnewluvMessages.errormessages.Add("Invalid Mailbox folder or profile both values are required to move messages, destination folder id is also required");
+                            }
+
+
+                        }
+
+                       
+                        return AnewluvMessages;
+
+
+                    });
+                    return await task.ConfigureAwait(false);
+
+                }
+                catch (Exception ex)
+                {
+                    //TO DO track the transaction types only rollback on DB connections
+                    //rollback transaction
+                    // transaction.Rollback();
+                    //instantiate logger here so it does not break anything else.
+                    logger = new Logging(applicationEnum.MediaService);
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                    //can parse the error to build a more custom error mssage and populate fualt faultreason
+                    FaultReason faultreason = new FaultReason("Error in Messaging Service");
+                    string ErrorMessage = "";
+                    string ErrorDetail = "ErrorMessage: " + ex.Message;
+                    throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                }
+            }
+
+            public async Task<AnewluvMessages> addmailboxfolder(MailModel model)
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                {
+
+                    try
+                    {
+
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+                            //get user profile data
+                            var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid.Value });                                   
+                         
+                            // get the folderr details
+                            List<mailboxfolder> mailboxfolders = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.profile_id == model.profileid.Value).ToList();
+                            if (!mailboxfolders.Any(f=>f.displayname.ToUpper() == model.mailboxfoldername.ToUpper()) && profile != null )
+                            {
+                              
+                                //check the roles 
+                                if (profile.membersinroles.Any(z=>z.role_id == (int)roleEnum.Suscriber))
+                                {
+                                    //create the message and save it
+                                    var newmailboxfolder = new mailboxfolder
+                                    { displayname = model.mailboxfoldername, profile_id = model.profileid.Value, active = 1, creationdate = DateTime.Now, 
+                                         maxsizeinbytes = 128000
+
+                                    };
+                                    _unitOfWorkAsync.Repository<mailboxfolder>().Insert(newmailboxfolder);
+
+                                  
+                                    AnewluvMessages.messages.Add("Folder was created Succesfully");
+                                    var i = _unitOfWorkAsync.SaveChanges();
+                                }
+                                else
+                                {
+                                    AnewluvMessages.errormessages.Add("folder name already exists !");
+                                }
+                            }
+                            else
+                            {
+
+                                AnewluvMessages.errormessages.Add("only suscribers can create new folders !");
+                            }
+                            
+
+                            //Log the activity for history
+                            Api.AnewLuvLogging.LogProfileActivity
+                                (new ProfileModel { profileid = model.profileid.Value },
+                                (int)activitytypeEnum.updateprofile,
+                                _context);
+
+                            return AnewluvMessages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in Messaging Service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+
+            }
+
+            public async Task<AnewluvMessages> deletemailboxfolder(MailModel model)
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                {
+
+                    try
+                    {
+
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+
+                            //get user profile data
+                            var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid.Value });
+
+                            // get the folderr details
+                            //only non default folders can be deleted
+                            mailboxfolder existingmailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>()
+                             .Query(u => u.profile_id == model.profileid.Value && u.defaultfolder_id == null)    
+                             .Include(z=>z.mailboxmessagefolders.Select(f=>f.mailboxmessage)).Select().FirstOrDefault();
+
+
+                            if (existingmailboxfolder!=null && !(existingmailboxfolder.mailboxmessagefolders.Count() > 0) && profile != null)
+                            {
+
+                                //check the roles 
+                                if (profile.membersinroles.Any(z => z.role_id == (int)roleEnum.Suscriber))
+                                {
+                                    //create the message and save it
+                                    var newmailboxfolder = new mailboxfolder
+                                    {
+                                        displayname = model.mailboxfoldername,
+                                        profile_id = model.profileid.Value,
+                                        active = 1,
+                                        creationdate = DateTime.Now,
+                                        maxsizeinbytes = 500
+
+                                    };
+                                    _unitOfWorkAsync.Repository<mailboxfolder>().Insert(newmailboxfolder);
+
+
+                                    AnewluvMessages.messages.Add("Folder was created Succesfully");
+                                    var i = _unitOfWorkAsync.SaveChanges();
+                                }
+                                else
+                                {
+                                    AnewluvMessages.errormessages.Add("only suscribers can create new folders !");
+                                }
+                            }
+                            else
+                            {
+
+                                AnewluvMessages.errormessages.Add("Folder is not empty or you are attemting to delete a default folder ");
+                            }
+
+
+                            //Log the activity for history
+                            Api.AnewLuvLogging.LogProfileActivity
+                                (new ProfileModel { profileid = model.profileid.Value },
+                                (int)activitytypeEnum.updateprofile,
+                                _context);
+
+                            return AnewluvMessages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in Messaging Service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+
+            }
+
+        #endregion
+
+
+
+
+
+
+
+
 
     }
+
+
 }
+

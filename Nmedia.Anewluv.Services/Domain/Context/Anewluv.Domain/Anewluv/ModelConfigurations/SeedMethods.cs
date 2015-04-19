@@ -292,7 +292,7 @@ namespace Anewluv.Domain.Migrations
             //securityleveltypes
             //filter an enum for not set since that is the zero value i.e  
             var securityleveltypeqry = from securityleveltypeEnum value in Enum.GetValues(typeof(securityleveltypeEnum))
-                               where value != securityleveltypeEnum.NotSet
+                            
                                orderby value // to sort by value; remove otherwise 
                                select value;
             securityleveltypeqry.ToList().ForEach(kvp => context.lu_securityleveltype.AddOrUpdate(new lu_securityleveltype()

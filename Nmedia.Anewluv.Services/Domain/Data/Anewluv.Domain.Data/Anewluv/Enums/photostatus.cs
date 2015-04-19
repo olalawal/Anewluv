@@ -24,10 +24,7 @@ namespace Anewluv.Domain.Data
         Gallery,
         [Description("nostatus")]
         [EnumMember]
-        Nostatus,
-        [Description("private")]
-        [EnumMember]
-        PrivatePhoto,
+        Nostatus,      
         [Description("deletedbyuser")]
         [EnumMember]
         deletedbyuser,

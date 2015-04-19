@@ -110,8 +110,8 @@
     <Compile Include="Anewluv\Enums\profilefiltertype.cs" />
     <Compile Include="Anewluv\Enums\profilestatus.cs" />
     <Compile Include="Anewluv\Enums\role.cs" />
-    <Compile Include="Anewluv\Enums\securityleveltype.cs" />
     <Compile Include="Anewluv\Enums\securityquestion.cs" />
+    <Compile Include="Anewluv\Enums\securityleveltype.cs" />
     <Compile Include="Anewluv\Enums\showme.cs" />
     <Compile Include="Anewluv\Enums\sortbytype.cs" />
     <Compile Include="Anewluv\lu_abusetype.cs" />

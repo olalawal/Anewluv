@@ -462,71 +462,71 @@ namespace Anewluv.Services.Media
             }
 
         }
-        public async Task<AnewluvMessages> makeuserphoto_private(PhotoModel model)
-        {
+        //public async Task<AnewluvMessages> updatephotosecuritylevel(PhotoModel model)
+        //{
 
-            {
-                //do not audit on adds
-                AnewluvMessages AnewluvMessages = new AnewluvMessages();
-                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
-                {
-                    try
-                    {
-
-
-                        var task = Task.Factory.StartNew(() =>
-                        {
-                            //var  model.photoformat = model. model.photoformat);
-                            //  var photoid = Guid.Parse(photoid);
-                            // var convertedprofileid = Convert.ToInt32(model.profileid);
-                            // var convertedstatus =  model.photostatus);
-
-                            // Retrieve single value from photos table
-                            photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
-                            PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
-
-                            if (PhotoModify.photo_securitylevel.Any(z => z.id != (int)securityleveltypeEnum.Private))
-                            {
-                                PhotoModify.photo_securitylevel.Add(new photo_securitylevel
-                                {
-                                    photo_id = model.photoid.Value,
-                                    lu_securityleveltype = _unitOfWorkAsync.Repository<lu_securityleveltype>().Queryable().Where(p => p.id == (int)securityleveltypeEnum.Private).FirstOrDefault()
-                                });
-                                // newsecurity.id = (int)securityleveltypeEnum.Private;
-                            }
-
-                            _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-                            // Update database
-                            // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                            var i = _unitOfWorkAsync.SaveChanges();
-                            // transaction.Commit();
-                           AnewluvMessages.messages.Add("photo privacy added for photo with id: " + model.photoid);
-                            return AnewluvMessages;
-                        });
-                        return await task.ConfigureAwait(false);
+        //    {
+        //        //do not audit on adds
+        //        AnewluvMessages AnewluvMessages = new AnewluvMessages();
+        //        //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+        //        {
+        //            try
+        //            {
 
 
-                    }
-                    catch (Exception ex)
-                    {
-                        //TO DO track the transaction types only rollback on DB connections
-                        //rollback transaction
-                        // transaction.Rollback();
-                        //instantiate logger here so it does not break anything else.
-                        logger = new Logging(applicationEnum.MediaService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in photo service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    }
+        //                var task = Task.Factory.StartNew(() =>
+        //                {
+        //                    //var  model.photoformat = model. model.photoformat);
+        //                    //  var photoid = Guid.Parse(photoid);
+        //                    // var convertedprofileid = Convert.ToInt32(model.profileid);
+        //                    // var convertedstatus =  model.photostatus);
 
-                }
-            }
+        //                    // Retrieve single value from photos table
+        //                    photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
+        //                    PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
 
-        }
-        public async Task<AnewluvMessages> makeuserphotos_private(PhotoModel model)
+        //                    if (PhotoModify.photo_securitylevel.Any(z => z.id != (int)securityleveltypeEnum.Private))
+        //                    {
+        //                        PhotoModify.photo_securitylevel.Add(new photo_securitylevel
+        //                        {
+        //                            photo_id = model.photoid.Value,
+        //                            lu_securityleveltype = _unitOfWorkAsync.Repository<lu_securityleveltype>().Queryable().Where(p => p.id == (int)securityleveltypeEnum.Private).FirstOrDefault()
+        //                        });
+        //                        // newsecurity.id = (int)securityleveltypeEnum.Private;
+        //                    }
+
+        //                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+        //                    // Update database
+        //                    // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+        //                    var i = _unitOfWorkAsync.SaveChanges();
+        //                    // transaction.Commit();
+        //                   AnewluvMessages.messages.Add("photo privacy added for photo with id: " + model.photoid);
+        //                    return AnewluvMessages;
+        //                });
+        //                return await task.ConfigureAwait(false);
+
+
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                //TO DO track the transaction types only rollback on DB connections
+        //                //rollback transaction
+        //                // transaction.Rollback();
+        //                //instantiate logger here so it does not break anything else.
+        //                logger = new Logging(applicationEnum.MediaService);
+        //                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+        //                //can parse the error to build a more custom error mssage and populate fualt faultreason
+        //                FaultReason faultreason = new FaultReason("Error in photo service");
+        //                string ErrorMessage = "";
+        //                string ErrorDetail = "ErrorMessage: " + ex.Message;
+        //                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+        //            }
+
+        //        }
+        //    }
+
+        //}
+        public async Task<AnewluvMessages> updatephotossecuritylevel(PhotoModel model)
         {
 
             {
@@ -547,25 +547,53 @@ namespace Anewluv.Services.Media
                             foreach (Guid photoid in model.photoids)
                             {
                                 // Retrieve single value from photos table
-                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == photoid && u.profile_id ==model.profileid).FirstOrDefault();
-                                PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
+                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Query(u => u.id == photoid && u.profile_id ==model.profileid)
+                                    .Include(z=>z.photo_securitylevel.Select(f=>f.lu_securityleveltype)).Select()                                    
+                                    .FirstOrDefault();                             
 
-                                if (PhotoModify.photo_securitylevel.Any(z => z.id != (int)securityleveltypeEnum.Private))
+
+                               //remove all secruity otptions if its public
+                                if (model.makepublic!=null & model.makepublic == true)
                                 {
-                                    PhotoModify.photo_securitylevel.Add(new photo_securitylevel
+                                    foreach (photo_securitylevel securitylevel in PhotoModify.photo_securitylevel.ToList())
                                     {
-                                        photo_id = model.photoid.Value,
-                                        lu_securityleveltype = _unitOfWorkAsync.Repository<lu_securityleveltype>().Queryable().Where(p => p.id == (int)securityleveltypeEnum.Private).FirstOrDefault()
-                                    });
-                                    // newsecurity.id = (int)securityleveltypeEnum.Private;
+                                        var secruityleveltodelete = _unitOfWorkAsync.Repository<photo_securitylevel>().Query(p => p.id == securitylevel.id).Select().FirstOrDefault();
+                                        _unitOfWorkAsync.Repository<photo_securitylevel>().Delete(secruityleveltodelete);
+                                        // newsecurity.id = (int)securityleveltypeEnum.Private;
+                                    }
+                                    _unitOfWorkAsync.SaveChanges();
+                                    AnewluvMessages.messages.Add("photo security removed for selected photos");
+                                }
+                                else if (model.photosecuritylevelid != null)
+                                {
+                                    foreach (photo_securitylevel securitylevel in PhotoModify.photo_securitylevel.ToList())
+                                    {
+                                        var existingsecuritylevel = _unitOfWorkAsync.Repository<photo_securitylevel>().Query(p => p.id == securitylevel.id).Select().FirstOrDefault();
+
+                                        if (existingsecuritylevel == null)
+                                        {
+                                            //add it only if it exists
+
+                                            var newsecuritylevel = new photo_securitylevel
+                                            {
+                                                photo_id = model.photoid.Value,
+                                                securityleveltype_id = model.photosecuritylevelid,
+                                                lu_securityleveltype = _unitOfWorkAsync.Repository<lu_securityleveltype>().Queryable().Where(p => p.id == model.photosecuritylevelid).FirstOrDefault()
+                                            };
+                                            _unitOfWorkAsync.Repository<photo_securitylevel>().Insert(newsecuritylevel);
+                                        }
+
+                                    }
+
+                                    _unitOfWorkAsync.SaveChanges();
+                                    AnewluvMessages.messages.Add("photo scurity added removed for selected photos");
+                                }
+                                else
+                                {
+                                    AnewluvMessages.errormessages.Add("photosecuritylevelid or makepublic or photoids are empty , cannot modify security level");
                                 }
 
-                                _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-                                // Update database
-                                // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                                var i = _unitOfWorkAsync.SaveChanges();
-                                // transaction.Commit();
-                                AnewluvMessages.messages.Add("photo privacy added for photo with id: " + photoid);
+                            
                             }
                             return AnewluvMessages;
                         });
@@ -592,127 +620,128 @@ namespace Anewluv.Services.Media
             }
 
         }
-        public async Task<AnewluvMessages> makeuserphoto_public(PhotoModel model)
-        {
+        //public async Task<AnewluvMessages> makeuserphoto_public(PhotoModel model)
+        //{
 
-            {
-                //do not audit on adds
-                AnewluvMessages AnewluvMessages = new AnewluvMessages();
-                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
-                {
+        //    {
+        //        //do not audit on adds
+        //        AnewluvMessages AnewluvMessages = new AnewluvMessages();
+        //        //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+        //        {
 
-                    try
-                    {
+        //            try
+        //            {
 
-                        var task = Task.Factory.StartNew(() =>
-                        {
-                            //var  model.photoformat = model. model.photoformat);
-                            //  var photoid = Guid.Parse(photoid);
-                            // var convertedprofileid = Convert.ToInt32(model.profileid);
-                            // var convertedstatus =  model.photostatus);
+        //                var task = Task.Factory.StartNew(() =>
+        //                {
+        //                    //var  model.photoformat = model. model.photoformat);
+        //                    //  var photoid = Guid.Parse(photoid);
+        //                    // var convertedprofileid = Convert.ToInt32(model.profileid);
+        //                    // var convertedstatus =  model.photostatus);
 
-                            // Retrieve single value from photos table
-                            photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
-                            PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
-                            _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-                            // Update database
-                            // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                            var i = _unitOfWorkAsync.SaveChanges();
-                            // transaction.Commit();
-                          AnewluvMessages.messages.Add("photo privacy removed for photo with id: " + model.photoid);
-                            return AnewluvMessages;
+        //                    // Retrieve single value from photos table
+        //                    photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
+        //                    PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
+        //                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+        //                    // Update database
+        //                    // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+        //                    var i = _unitOfWorkAsync.SaveChanges();
+        //                    // transaction.Commit();
+        //                  AnewluvMessages.messages.Add("photo privacy removed for photo with id: " + model.photoid);
+        //                    return AnewluvMessages;
 
-                        });
-                        return await task.ConfigureAwait(false);
-
-
-                    }
-                    catch (Exception ex)
-                    {
-                        //TO DO track the transaction types only rollback on DB connections
-                        //rollback transaction
-                        // transaction.Rollback();
-                        //instantiate logger here so it does not break anything else.
-                        logger = new Logging(applicationEnum.MediaService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in photo service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    }
+        //                });
+        //                return await task.ConfigureAwait(false);
 
 
-
-
-
-                }
-            }
-
-
-
-
-        }
-        public async Task<AnewluvMessages> makeuserphotos_public(PhotoModel model)
-        {
-
-            {
-                //do not audit on adds
-                AnewluvMessages AnewluvMessages = new AnewluvMessages();
-                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
-                {
-
-                    try
-                    {
-
-                        var task = Task.Factory.StartNew(() =>
-                        {
-                               foreach (Guid photoid in model.photoids)
-                               {
-
-                                    // Retrieve single value from photos table
-                                    photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == photoid && model.profileid == u.profile_id).FirstOrDefault();
-                                    PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
-                                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-                                    // Update database
-                                    // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-                                    var i = _unitOfWorkAsync.SaveChanges();
-                                    // transaction.Commit();
-                                    AnewluvMessages.messages.Add("photo privacy removed for photo with id: " + photoid);
-                               }
-                            return AnewluvMessages;
-
-                        });
-                        return await task.ConfigureAwait(false);
-
-
-                    }
-                    catch (Exception ex)
-                    {
-                        //TO DO track the transaction types only rollback on DB connections
-                        //rollback transaction
-                        // transaction.Rollback();
-                        //instantiate logger here so it does not break anything else.
-                        logger = new Logging(applicationEnum.MediaService);
-                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-                        //can parse the error to build a more custom error mssage and populate fualt faultreason
-                        FaultReason faultreason = new FaultReason("Error in photo service");
-                        string ErrorMessage = "";
-                        string ErrorDetail = "ErrorMessage: " + ex.Message;
-                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-                    }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                //TO DO track the transaction types only rollback on DB connections
+        //                //rollback transaction
+        //                // transaction.Rollback();
+        //                //instantiate logger here so it does not break anything else.
+        //                logger = new Logging(applicationEnum.MediaService);
+        //                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+        //                //can parse the error to build a more custom error mssage and populate fualt faultreason
+        //                FaultReason faultreason = new FaultReason("Error in photo service");
+        //                string ErrorMessage = "";
+        //                string ErrorDetail = "ErrorMessage: " + ex.Message;
+        //                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+        //            }
 
 
 
 
 
-                }
-            }
+        //        }
+        //    }
 
 
 
 
-        }
+        //}
+       
+       //public async Task<AnewluvMessages> makeuserphotos_public(PhotoModel model)
+       // {
+
+       //     {
+       //         //do not audit on adds
+       //         AnewluvMessages AnewluvMessages = new AnewluvMessages();
+       //         //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+       //         {
+
+       //             try
+       //             {
+
+       //                 var task = Task.Factory.StartNew(() =>
+       //                 {
+       //                        foreach (Guid photoid in model.photoids)
+       //                        {
+
+       //                             // Retrieve single value from photos table
+       //                             photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == photoid && model.profileid == u.profile_id).FirstOrDefault();
+       //                             PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
+       //                             _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+       //                             // Update database
+       //                             // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
+       //                             var i = _unitOfWorkAsync.SaveChanges();
+       //                             // transaction.Commit();
+       //                             AnewluvMessages.messages.Add("photo privacy removed for photo with id: " + photoid);
+       //                        }
+       //                     return AnewluvMessages;
+
+       //                 });
+       //                 return await task.ConfigureAwait(false);
+
+
+       //             }
+       //             catch (Exception ex)
+       //             {
+       //                 //TO DO track the transaction types only rollback on DB connections
+       //                 //rollback transaction
+       //                 // transaction.Rollback();
+       //                 //instantiate logger here so it does not break anything else.
+       //                 logger = new Logging(applicationEnum.MediaService);
+       //                 logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+       //                 //can parse the error to build a more custom error mssage and populate fualt faultreason
+       //                 FaultReason faultreason = new FaultReason("Error in photo service");
+       //                 string ErrorMessage = "";
+       //                 string ErrorDetail = "ErrorMessage: " + ex.Message;
+       //                 throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+       //             }
+
+
+
+
+
+       //         }
+       //     }
+
+
+
+
+       // }
                
         #endregion
 

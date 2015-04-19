@@ -104,6 +104,7 @@
     </Compile>
     <Compile Include="TestModules\ContextModules\PostalDataContextModule.cs" />
     <Compile Include="TestModules\ContextModules\UnitOfWorkAsyncModule.cs" />
+    <Compile Include="TestModules\MessagingModule.cs" />
     <Compile Include="TestModules\GeoModule.cs" />
     <Compile Include="TestModules\LookupModule.cs" />
     <Compile Include="TestModules\MemberActionsModule.cs" />
