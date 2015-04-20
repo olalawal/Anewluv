@@ -113,7 +113,7 @@ namespace Anewluv.DataExtentionMethods
                     .Select().AsQueryable();
 
 
-
+                return photomodel;
                 //to do roles ? allowing what photos they can view i.e the high rez stuff or more than 2 -3 etc
 
                 //photo id
@@ -201,7 +201,7 @@ namespace Anewluv.DataExtentionMethods
                     imagecaption = p.photo.imagecaption,
                     orginalsize = p.photo.size,
                     creationdate = p.photo.creationdate,
-                    photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
+                    photostatusid = p.photo.photostatus_id.Value,
                     checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
                 }).FirstOrDefault();
 
@@ -551,7 +551,7 @@ namespace Anewluv.DataExtentionMethods
                                   imagecaption = p.photo.imagecaption,
                                   orginalsize = p.photo.size,
                                   creationdate = p.photo.creationdate,
-                                  photostatusid = p.photo.photostatus_id.GetValueOrDefault(),
+                                  photostatusid = p.photo.photostatus_id.Value,
                                   checkedprimary = (p.photo.photostatus_id == (int)photostatusEnum.Gallery)
                               }).ToList();
 

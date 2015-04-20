@@ -112,7 +112,7 @@ namespace Anewluv.Services.Media
 
                                     convertedphotos.Add(new photoconversion
                                     {
-                                        creationdate = DateTime.Now,
+                                        creationdate =photo.creationdate,
                                         description = currentformat.description,
                                          lu_photoformat = currentformat,formattype_id =currentformat.id, ObjectState= Repository.Pattern.Infrastructure.ObjectState.Added,
                                         image = outBytes,
