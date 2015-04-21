@@ -47,10 +47,10 @@ namespace Anewluv.DataExtentionMethods
 
                 //folder id
                 if (model.mailboxfolderid != null)
-                    mailboxmessagefolderlist = mailboxmessagefolderlist.Where(a => a.mailboxfolder.mailboxmessagefolders.Any((p => p.mailboxfolder.id == model.mailboxfolderid)));
+                    mailboxmessagefolderlist = mailboxmessagefolderlist.Where(p => p.mailboxfolder.id == model.mailboxfolderid);
                 //folder name filter
                 if (model.mailboxfoldername != "" | model.mailboxfoldername != null)
-                    mailboxmessagefolderlist = mailboxmessagefolderlist.Where(a => a.mailboxfolder.mailboxmessagefolders.Any((p => p.mailboxfolder.displayname == model.mailboxfoldername)));
+                    mailboxmessagefolderlist = mailboxmessagefolderlist.Where(p => p.mailboxfolder.displayname == model.mailboxfoldername);
                 
                 return mailboxmessagefolderlist;
 

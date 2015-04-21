@@ -779,17 +779,16 @@ namespace Anewluv.Services.Media
                                     NewPhoto.imagename = item.imagename; //11-26-2012 olawal added the name for comparisons 
                                     // NewPhoto.size = item.size.GetValueOrDefault();                        
                                     //set the rest of the information as needed i.e approval status refecttion etc
-                                    NewPhoto.lu_photoimagetype = (item.imagetypeid != null) ? _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.id == item.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
-                                    NewPhoto.imagetype_id = NewPhoto.lu_photoimagetype != null ? NewPhoto.lu_photoimagetype.id : (int?)null; 
-                                   
-                                    NewPhoto.lu_photoapprovalstatus = (item.approvalstatusid != null) ? _unitOfWorkAsync.Repository<lu_photoapprovalstatus>().Queryable().ToList().Where(p => p.id == item.approvalstatusid).FirstOrDefault() : null;
-                                    NewPhoto.approvalstatus_id = NewPhoto.lu_photoapprovalstatus != null ? NewPhoto.lu_photoapprovalstatus.id : (int?)null; 
-                                  
-                                    NewPhoto.lu_photorejectionreason = (item.rejectionreasonid != null) ? _unitOfWorkAsync.Repository<lu_photorejectionreason>().Queryable().ToList().Where(p => p.id == item.rejectionreasonid).FirstOrDefault() : null;
-                                    NewPhoto.rejectionreason_id = NewPhoto.lu_photorejectionreason != null ? NewPhoto.lu_photorejectionreason.id : (int?)null; 
 
-                                    NewPhoto.lu_photostatus = (item.photostatusid != null) ? _unitOfWorkAsync.Repository<lu_photostatus>().Queryable().ToList().Where(p => p.id == item.photostatusid).FirstOrDefault() : null;
-                                    NewPhoto.photostatus_id = NewPhoto.lu_photostatus != null ? NewPhoto.lu_photostatus.id : (int?)null; 
+                                    NewPhoto.lu_photoimagetype = (item.imagetypedescription != "") ?
+                                    _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.description.ToUpper().Contains(item.imagetypedescription.ToUpper())).FirstOrDefault() :
+                                    _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.id == (int)photoimagetypeEnum.other).FirstOrDefault(); 
+
+                                    NewPhoto.imagetype_id = NewPhoto.lu_photoimagetype != null ? NewPhoto.lu_photoimagetype.id : (int?)null;
+
+                                    NewPhoto.approvalstatus_id = (int)photoapprovalstatusEnum.NotReviewed;
+                                    NewPhoto.rejectionreason_id = null;
+                                    NewPhoto.photostatus_id = (int)photostatusEnum.Nostatus;
 
                                     var temp = addphotoconverionsb64string(NewPhoto, item);
                                     if (temp.Count > 0)
@@ -906,10 +905,17 @@ namespace Anewluv.Services.Media
                             NewPhoto.imagename = newphoto.imagename; //11-26-2012 olawal added the name for comparisons 
                             NewPhoto.size = newphoto.legacysize.GetValueOrDefault();
                             //set the rest of the information as needed i.e approval status refecttion etc
-                            NewPhoto.lu_photoimagetype = (newphoto.imagetypeid != null) ? _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.id == newphoto.imagetypeid).FirstOrDefault() : null; // : null; newphoto.imagetypeid;
-                            NewPhoto.lu_photoapprovalstatus = (newphoto.approvalstatusid != null) ? _unitOfWorkAsync.Repository<lu_photoapprovalstatus>().Queryable().ToList().Where(p => p.id == newphoto.approvalstatusid).FirstOrDefault() : null;
-                            NewPhoto.lu_photorejectionreason = (newphoto.rejectionreasonid != null) ? _unitOfWorkAsync.Repository<lu_photorejectionreason>().Queryable().ToList().Where(p => p.id == newphoto.rejectionreasonid).FirstOrDefault() : null;
-                            NewPhoto.lu_photostatus = (newphoto.photostatusid != null) ? _unitOfWorkAsync.Repository<lu_photostatus>().Queryable().ToList().Where(p => p.id == newphoto.photostatusid).FirstOrDefault() : null;
+
+
+                            NewPhoto.lu_photoimagetype = (newphoto.imagetypedescription != "") ?
+                            _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.description.ToUpper().Contains(newphoto.imagetypedescription.ToUpper())).FirstOrDefault() :
+                            _unitOfWorkAsync.Repository<lu_photoimagetype>().Queryable().ToList().Where(p => p.id == (int)photoimagetypeEnum.other).FirstOrDefault();
+
+                            NewPhoto.imagetype_id = NewPhoto.lu_photoimagetype != null ? NewPhoto.lu_photoimagetype.id : (int?)null;
+
+                            NewPhoto.approvalstatus_id = (int)photoapprovalstatusEnum.NotReviewed;
+                            NewPhoto.rejectionreason_id = null;
+                            NewPhoto.photostatus_id = (int)photostatusEnum.Nostatus;
 
                             var temp = addphotoconverionsb64string(NewPhoto, newphoto);
                             if (temp.Count > 0)

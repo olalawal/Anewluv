@@ -25,6 +25,8 @@ namespace Anewluv.Domain.Data.ViewModels
         public string imageb64string { get; set; }       
         [DataMember]
         public int? approvalstatusid { get; set; }
+        [DataMember]
+        public string imagetypedescription { get; set; }
        [DataMember]
        public int? imagetypeid { get; set; }
 
