@@ -71,5 +71,10 @@ namespace Anewluv.Domain.Data.ViewModels
         //search stuff for photos
         [DataMember]
         public int? viewerprofileid { get; set; }
+
+        //admin otions for rejecting phtoos
+        public bool? photoapproved { get; set; }
+        public int? photorejectionreasonid  { get; set; }
+        public string photoapprovalrejectnote { get; set; }
     }
 }

@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using Anewluv.Domain;
 using Repository.Pattern.UnitOfWork;
 using Nmedia.Infrastructure;
+using Nmedia.Infrastructure.Domain.Data.Notification;
 
 namespace Anewluv.Services.Media
 {
@@ -299,8 +300,9 @@ namespace Anewluv.Services.Media
        
        #endregion
 
-        #region "Edit Test methods"
+        #region "Edit User methods"
 
+       //For now only caption can be edited by user 
         public async Task<AnewluvMessages> edituserphoto(PhotoModel model)
         {
             {
@@ -316,10 +318,32 @@ namespace Anewluv.Services.Media
 
                         var task = Task.Factory.StartNew(() =>
                         {
-                            AnewluvMessages.errormessages.Add("Only caption edits are allowed use edit caption");
+                                                         
+
+                                // Retrieve single value from photos table
+                                photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
+
+                                //remove all secruity otptions if its public
+                                if (model.photocaption != null & model.photocaption != PhotoModify.imagecaption)
+                                {
+
+                                    PhotoModify.imagecaption = model.photocaption;
+                                    //TO DO add modify date
+                                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+                                    var i = _unitOfWorkAsync.SaveChanges();
+                                    AnewluvMessages.messages.Add("Photo caption changed!");
+                                }
+                                else
+                                {
+                                    // transaction.Commit();
+                                    AnewluvMessages.errormessages.Add("Only the caption of a photo can be changed please select a new caption");                                
+                                }
+                           
+                              
+
+
+                            
                             return AnewluvMessages;
-                                ;
-  
                         });
                         return await task.ConfigureAwait(false);
 
@@ -343,8 +367,8 @@ namespace Anewluv.Services.Media
                 }
             }
 
-        }
-        public async Task<AnewluvMessages> deleteuserphotos(PhotoModel model)
+        }       
+       public async Task<AnewluvMessages> deleteuserphotos(PhotoModel model)
         {
             {
                 //do not audit on adds
@@ -461,71 +485,7 @@ namespace Anewluv.Services.Media
                 }
             }
 
-        }
-        //public async Task<AnewluvMessages> updatephotosecuritylevel(PhotoModel model)
-        //{
-
-        //    {
-        //        //do not audit on adds
-        //        AnewluvMessages AnewluvMessages = new AnewluvMessages();
-        //        //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
-        //        {
-        //            try
-        //            {
-
-
-        //                var task = Task.Factory.StartNew(() =>
-        //                {
-        //                    //var  model.photoformat = model. model.photoformat);
-        //                    //  var photoid = Guid.Parse(photoid);
-        //                    // var convertedprofileid = Convert.ToInt32(model.profileid);
-        //                    // var convertedstatus =  model.photostatus);
-
-        //                    // Retrieve single value from photos table
-        //                    photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
-        //                    PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
-
-        //                    if (PhotoModify.photo_securitylevel.Any(z => z.id != (int)securityleveltypeEnum.Private))
-        //                    {
-        //                        PhotoModify.photo_securitylevel.Add(new photo_securitylevel
-        //                        {
-        //                            photo_id = model.photoid.Value,
-        //                            lu_securityleveltype = _unitOfWorkAsync.Repository<lu_securityleveltype>().Queryable().Where(p => p.id == (int)securityleveltypeEnum.Private).FirstOrDefault()
-        //                        });
-        //                        // newsecurity.id = (int)securityleveltypeEnum.Private;
-        //                    }
-
-        //                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-        //                    // Update database
-        //                    // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-        //                    var i = _unitOfWorkAsync.SaveChanges();
-        //                    // transaction.Commit();
-        //                   AnewluvMessages.messages.Add("photo privacy added for photo with id: " + model.photoid);
-        //                    return AnewluvMessages;
-        //                });
-        //                return await task.ConfigureAwait(false);
-
-
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                //TO DO track the transaction types only rollback on DB connections
-        //                //rollback transaction
-        //                // transaction.Rollback();
-        //                //instantiate logger here so it does not break anything else.
-        //                logger = new Logging(applicationEnum.MediaService);
-        //                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-        //                //can parse the error to build a more custom error mssage and populate fualt faultreason
-        //                FaultReason faultreason = new FaultReason("Error in photo service");
-        //                string ErrorMessage = "";
-        //                string ErrorDetail = "ErrorMessage: " + ex.Message;
-        //                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-        //            }
-
-        //        }
-        //    }
-
-        //}
+        }        
         public async Task<AnewluvMessages> updatephotossecuritylevel(PhotoModel model)
         {
 
@@ -619,130 +579,180 @@ namespace Anewluv.Services.Media
                 }
             }
 
-        }
-        //public async Task<AnewluvMessages> makeuserphoto_public(PhotoModel model)
-        //{
-
-        //    {
-        //        //do not audit on adds
-        //        AnewluvMessages AnewluvMessages = new AnewluvMessages();
-        //        //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
-        //        {
-
-        //            try
-        //            {
-
-        //                var task = Task.Factory.StartNew(() =>
-        //                {
-        //                    //var  model.photoformat = model. model.photoformat);
-        //                    //  var photoid = Guid.Parse(photoid);
-        //                    // var convertedprofileid = Convert.ToInt32(model.profileid);
-        //                    // var convertedstatus =  model.photostatus);
-
-        //                    // Retrieve single value from photos table
-        //                    photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid && u.profile_id == model.profileid).FirstOrDefault();
-        //                    PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
-        //                    _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-        //                    // Update database
-        //                    // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-        //                    var i = _unitOfWorkAsync.SaveChanges();
-        //                    // transaction.Commit();
-        //                  AnewluvMessages.messages.Add("photo privacy removed for photo with id: " + model.photoid);
-        //                    return AnewluvMessages;
-
-        //                });
-        //                return await task.ConfigureAwait(false);
-
-
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                //TO DO track the transaction types only rollback on DB connections
-        //                //rollback transaction
-        //                // transaction.Rollback();
-        //                //instantiate logger here so it does not break anything else.
-        //                logger = new Logging(applicationEnum.MediaService);
-        //                logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-        //                //can parse the error to build a more custom error mssage and populate fualt faultreason
-        //                FaultReason faultreason = new FaultReason("Error in photo service");
-        //                string ErrorMessage = "";
-        //                string ErrorDetail = "ErrorMessage: " + ex.Message;
-        //                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-        //            }
-
-
-
-
-
-        //        }
-        //    }
-
-
-
-
-        //}
-       
-       //public async Task<AnewluvMessages> makeuserphotos_public(PhotoModel model)
-       // {
-
-       //     {
-       //         //do not audit on adds
-       //         AnewluvMessages AnewluvMessages = new AnewluvMessages();
-       //         //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
-       //         {
-
-       //             try
-       //             {
-
-       //                 var task = Task.Factory.StartNew(() =>
-       //                 {
-       //                        foreach (Guid photoid in model.photoids)
-       //                        {
-
-       //                             // Retrieve single value from photos table
-       //                             photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == photoid && model.profileid == u.profile_id).FirstOrDefault();
-       //                             PhotoModify.lu_photostatus.id = 1; //public values:1 or 2 are public values
-       //                             _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
-       //                             // Update database
-       //                             // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
-       //                             var i = _unitOfWorkAsync.SaveChanges();
-       //                             // transaction.Commit();
-       //                             AnewluvMessages.messages.Add("photo privacy removed for photo with id: " + photoid);
-       //                        }
-       //                     return AnewluvMessages;
-
-       //                 });
-       //                 return await task.ConfigureAwait(false);
-
-
-       //             }
-       //             catch (Exception ex)
-       //             {
-       //                 //TO DO track the transaction types only rollback on DB connections
-       //                 //rollback transaction
-       //                 // transaction.Rollback();
-       //                 //instantiate logger here so it does not break anything else.
-       //                 logger = new Logging(applicationEnum.MediaService);
-       //                 logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
-       //                 //can parse the error to build a more custom error mssage and populate fualt faultreason
-       //                 FaultReason faultreason = new FaultReason("Error in photo service");
-       //                 string ErrorMessage = "";
-       //                 string ErrorDetail = "ErrorMessage: " + ex.Message;
-       //                 throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
-       //             }
-
-
-
-
-
-       //         }
-       //     }
-
-
-
-
-       // }
+        }       
                
+        #endregion
+
+        #region "Edit Methods for Admin role"
+
+        public async Task<AnewluvMessages> editphotostatus(PhotoModel model)
+        {
+            {
+                //do not audit on adds
+                AnewluvMessages AnewluvMessages = new AnewluvMessages();
+
+                //   using (var transaction = _unitOfWorkAsync.BeginTransaction())
+                {
+
+                    try
+                    {
+
+
+                        var task = Task.Factory.StartNew(() =>
+                        {
+                            bool updated = false;
+                            //get the profile role
+                           var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid.Value });
+                                
+                            //if user is in admin role
+                            if (profile !=null && profile.membersinroles.Any(z=>z.role_id == (int)roleEnum.Admin && z.active != false && z.roleexpiredate > DateTime.Now))
+                            {
+                                // Retrieve single value from photos table
+                            photo PhotoModify = _unitOfWorkAsync.Repository<photo>().Queryable().Where(u => u.id == model.photoid).FirstOrDefault();
+
+                            //test to see if photo was rejected
+                             if (model.photorejectionreasonid != null && model.photoapproved == false | model.photoapproved == null)
+                             {
+                                 updated = true;
+                                 PhotoModify.approvalstatus_id = (int)photoapprovalstatusEnum.Rejected;
+                                 PhotoModify.rejectionreason_id = model.photorejectionreasonid.Value;                                
+                                //TO DO add modify date
+                                _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);                                   
+                                    
+                                //add the action as well to trck the admins work 
+                                var newaction = new action();
+                                var newnote = new note();
+
+                                newaction.creator_profile_id = model.profileid.Value;
+                                newaction.target_profile_id =  PhotoModify.profile_id;
+                                newaction.actiontype_id = (int)actiontypeEnum.PhotoReject;
+                                //TO DO add notes if posible
+                                if (model.photoapprovalrejectnote !="")
+                                {
+                                    //To do change this to photo rejecttion note for filtering
+                                    newaction.notes.Add(new note { action_id = newaction.id, notedetail = model.photoapprovalrejectnote, creationdate = DateTime.Now, notetype_id = (int)notetypeEnum.AdminPhotoRejectionNote });
+                                }
+                                newaction.creationdate = DateTime.Now;
+                                //handele the update using EF
+                                // this. db.Repository<profile>().Queryable().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
+                                _unitOfWorkAsync.Repository<action>().Insert(newaction);
+                                AnewluvMessages.errormessages.Add("Photo Rejected");
+
+                                //member 
+                                var EmailViewModel = new EmailViewModel
+                                {
+                                    userEmailViewModel = new EmailModel
+                                    {
+                                        templateid = (int)templateenum.MemberPhotoRejectedMemberNotification,
+                                        messagetypeid = (int)messagetypeenum.UserUpdate,
+                                        addresstypeid = (int)addresstypeenum.SiteUser,
+                                        emailaddress =PhotoModify.profilemetadata.profile.emailaddress,
+                                        username = PhotoModify.profilemetadata.profile.screenname,
+                                        subject = templatesubjectenum.MemberPhotoRejectedMemberNotification.ToDescription()
+                                    },
+                                    adminEmailViewModel = new EmailModel
+                                    {
+                                        templateid = (int)templateenum.MemberPhotoRejectedAdminNotification,
+                                        messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                        addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                        subject = templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
+                                    }
+                                };
+
+                                //this sends both admin and user emails  
+                                Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
+
+                                    
+                                }
+                             else if (model.photoapproved == true)
+                            {
+                                updated = true;
+                                PhotoModify.approvalstatus_id = (int)photoapprovalstatusEnum.Approved;
+                                //TO DO add modify date
+                                _unitOfWorkAsync.Repository<photo>().Update(PhotoModify);
+
+                                //add the action as well to trck the admins work 
+                                var newaction = new action();
+                                var newnote = new note();
+
+                                newaction.creator_profile_id = model.profileid.Value;
+                                newaction.target_profile_id = PhotoModify.profile_id;
+                                newaction.actiontype_id = (int)actiontypeEnum.PhotoAprove;
+                                //TO DO add notes if posible
+                                if (model.photoapprovalrejectnote != "")
+                                {
+                                    //To do change this to photo rejecttion note for filtering
+                                    newaction.notes.Add(new note { action_id = newaction.id, notedetail = model.photoapprovalrejectnote, creationdate = DateTime.Now, notetype_id = (int)notetypeEnum.AdminPhotoRejectionNote });
+                                }
+                                newaction.creationdate = DateTime.Now;
+                                //handele the update using EF
+                                // this. db.Repository<profile>().Queryable().AttachAsModified(Profile, this.ChangeSet.GetOriginal(Profile));
+                                _unitOfWorkAsync.Repository<action>().Insert(newaction);
+                                AnewluvMessages.errormessages.Add("Photo Approved");
+
+                                //member 
+                                var EmailViewModel = new EmailViewModel
+                                {
+                                   
+                                    adminEmailViewModel = new EmailModel
+                                    {
+                                        templateid = (int)templateenum.MemberPhotoApprovedAdminNotification,
+                                        messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                        addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                        subject = templatesubjectenum.MemberPhotoApprovedAdminNotification.ToDescription()
+                                    }
+                                };
+
+                                Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
+                            }
+
+                            else
+                            {
+                                // transaction.Commit();
+                                AnewluvMessages.errormessages.Add("Only the caption of a photo can be changed please select a new caption");
+                            }
+
+
+                            var i = _unitOfWorkAsync.SaveChanges();
+                            AnewluvMessages.messages.Add("Photo caption changed!");
+                            
+                             }
+                             else
+                            {
+                                // transaction.Commit();
+                                AnewluvMessages.errormessages.Add("You must be an adminstrator to modify member photos !");
+                            }
+
+
+
+
+
+                            return AnewluvMessages;
+                        });
+                        return await task.ConfigureAwait(false);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //TO DO track the transaction types only rollback on DB connections
+                        //rollback transaction
+                        // transaction.Rollback();
+                        //instantiate logger here so it does not break anything else.
+                        logger = new Logging(applicationEnum.MediaService);
+                        logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex);
+                        //can parse the error to build a more custom error mssage and populate fualt faultreason
+                        FaultReason faultreason = new FaultReason("Error in photo service");
+                        string ErrorMessage = "";
+                        string ErrorDetail = "ErrorMessage: " + ex.Message;
+                        throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+                    }
+
+                }
+            }
+
+        }
+
         #endregion
 
         //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail
@@ -828,7 +838,20 @@ namespace Anewluv.Services.Media
 
                                 if (photosaddedcount > 0)
                                 {
-                                   // transaction.Commit();
+                                    //update admins 
+                                    //member 
+                                    var EmailViewModel = new EmailViewModel
+                                    {
+                                       
+                                        adminEmailViewModel = new EmailModel
+                                        {
+                                            templateid = (int)templateenum.MemberPhotoUploadedAdminNotification,
+                                            messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                            addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                            subject = templatesubjectenum.MemberPhotoUploadedAdminNotification.ToDescription()
+                                        }
+                                    };
+                                    Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
                                 }
 
                                 return AnewluvMessage;
@@ -941,6 +964,21 @@ namespace Anewluv.Services.Media
                                   var i  =_unitOfWorkAsync.SaveChanges();
                                    // transaction.Commit();
                                 }
+
+                                //update admins 
+                                //member 
+                                var EmailViewModel = new EmailViewModel
+                                {
+
+                                    adminEmailViewModel = new EmailModel
+                                    {
+                                        templateid = (int)templateenum.MemberPhotoUploadedAdminNotification,
+                                        messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                        addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                        subject = templatesubjectenum.MemberPhotoUploadedAdminNotification.ToDescription()
+                                    }
+                                };
+                                Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
 
                                 message.messages.Add("photo added succesfully ");
                             }

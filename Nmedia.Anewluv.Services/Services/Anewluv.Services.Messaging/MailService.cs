@@ -289,7 +289,7 @@ namespace Anewluv.Services.Messaging
                                                messagetypeid = (int)messagetypeenum.UserUpdate,                                           
                                                addresstypeid = (int)addresstypeenum.SiteUser,
                                                emailaddress = newmailboxmessage.recipientprofilemetadata.profile.emailaddress,
-                                               username = newmailboxmessage.recipientprofilemetadata.profile.username,
+                                               username = newmailboxmessage.recipientprofilemetadata.profile.screenname,
                                                subject = templatesubjectenum.MemberRecivedEmailMessageMemberNotification.ToDescription()
                                            },
                                                adminEmailViewModel = new EmailModel {
@@ -301,9 +301,7 @@ namespace Anewluv.Services.Messaging
                                        };
                                       
                                        //this sends both admin and user emails  
-                                       Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
-
-    
+                                       Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);    
                                        AnewluvMessages.messages.Add("Email was sent Succesfully");
                                     }
                                     else

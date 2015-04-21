@@ -659,6 +659,7 @@ namespace Anewluv.Services.MemberActions
 
                                 newaction.creator_profile_id = model.profileid.Value;
                                 newaction.target_profile_id = model.targetprofileid.GetValueOrDefault();
+                                newaction.actiontype_id = (int)model.actiontype;
                                 //TO DO add notes if posible
                                 if (model.note !="")
                                 {

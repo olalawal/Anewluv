@@ -117,6 +117,10 @@
       <Project>{D0FA8AA1-5A17-4C42-A92F-F1266CD01D7C}</Project>
       <Name>Nmedia.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Nmedia.Infrastructure\ApplicationSpecfic\Anewluv.Api\Anewluv.Api.csproj">
+      <Project>{1e78fd8f-5a46-4894-b7e9-9e572d558562}</Project>
+      <Name>Anewluv.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Nmedia.Infrastructure\LoggingNotificationApiAuth\Domain\Nmedia.Infrastructure.Domain.Data\Nmedia.Infrastructure.Domain.Data.csproj">
       <Project>{59BC30AF-1691-44EA-BFFA-34B39E334E93}</Project>
       <Name>Nmedia.Infrastructure.Domain.Data</Name>

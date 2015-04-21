@@ -33,8 +33,11 @@ namespace Anewluv.Domain.Data
         AdminBlockReviewNote,
         [Description("User Action Attachment Message")]
         [EnumMember]
-       UserActionAttachment
-        
+       UserActionAttachment,
+          AdminBlockReviewNote,
+        [Description("Admin photorejection note")]
+        [EnumMember]
+       AdminPhotoRejectionNote =7
     }
 
 
