@@ -753,6 +753,23 @@ namespace Anewluv.Services.Media
 
         }
 
+        /// <summary>
+        /// allows for getting photos that are not approved yet
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<PhotoSearchResultsViewModel> getadminfilteredphotospaged(PhotoModel model)
+        { 
+
+        var task = Task.Factory.StartNew(() =>
+                            {
+                                return new PhotoSearchResultsViewModel();
+                            });
+        return await task.ConfigureAwait(false);
+       
+        
+        }
+
         #endregion
 
         //9-18-2012 olawal when this is uploaded now we want to do the image conversions as well for the large photo and the thumbnail

@@ -95,7 +95,8 @@ namespace Anewluv.Services.Messaging
                });
                return await task.ConfigureAwait(false);
            }
-        public async Task<MailSearchResultsViewModel> getmailfilteredandpaged(MailModel model)
+          
+       public async Task<MailSearchResultsViewModel> getmailfilteredandpaged(MailModel model)
             {
                 var task = Task.Factory.StartNew(() =>
                 {
