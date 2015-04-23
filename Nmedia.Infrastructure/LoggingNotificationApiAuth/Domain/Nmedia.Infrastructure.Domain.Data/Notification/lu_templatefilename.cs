@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using Repository.Pattern.Ef6;
 
 namespace Nmedia.Infrastructure.Domain.Data.Notification
 {
@@ -11,7 +12,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
 
      [DataContract(Namespace = "")]
-    public class lu_templatefilename
+    public class lu_templatefilename :Entity
     {
        
         //we generate this manually from enums for now

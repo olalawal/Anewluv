@@ -212,16 +212,31 @@ namespace Anewluv.Api
 
 
         #region "Notification Service calls"
-        public static void sendmessagebytemplate(EmailViewModel model)
+        public static string  sendmessagebytemplate(EmailViewModel model)
         {
+            try
+            {
 
-            Task.Run(() => Api.NotificationService.sendmessagebytemplate(model));
 
-            //Task<bool> returnedTaskTResult =  Api.MemberService.createmailboxfolders(model);
-            //           bool result = await returnedTaskTResult;
-            //           // IsApiKeyValid = await 
-            //           return result;
+              var  returnedTaskTResult = Api.NotificationService.sendmessagebytemplate(model).Result;
+                //string result = await returnedTaskTResult;
+                // IsApiKeyValid = await 
+               // return result;
+              return returnedTaskTResult;
 
+
+               // Task.Run(() => Api.NotificationService.sendmessagebytemplate(model));
+
+                //Task<bool> returnedTaskTResult =  Api.MemberService.createmailboxfolders(model);
+                //           bool result = await returnedTaskTResult;
+                //           // IsApiKeyValid = await 
+                //           return result;
+            }
+            catch (Exception ex)
+            { 
+            
+            }
+            return "";
         }
         
 

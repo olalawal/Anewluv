@@ -1169,7 +1169,7 @@ namespace Anewluv.Services.Mapping
 
 
                         //TO DO add code to filter out blocked members
-                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, actiontypeEnum.Block);
+                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id,(int) actiontypeEnum.Block);
                         //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();     
@@ -1368,7 +1368,7 @@ namespace Anewluv.Services.Mapping
                         // var photostest = _datingcontext.profiles.Where(p => (p.profilemetadata.photos.Any(z => z.photostatus != null && z.photostatus.id != (int)photostatusEnum.Gallery)));
 
                         //TO DO add code to filter out blocked members
-                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id, actiontypeEnum.Block);
+                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profile_id,(int) actiontypeEnum.Block);
                         //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();   
@@ -1670,7 +1670,7 @@ namespace Anewluv.Services.Mapping
 
         //quick search for members in the same country for now, no more filters yet
         //this needs to be updated to search based on the user's prefered setting i.e thier looking for settings
-        public async Task<SearchResultsViewModel> getadvancedsearch(advancedsearchmodel Model)
+        public async Task<SearchResultsViewModel> getadvancedsearch(advancedsearchmodel model)
         {
             var dd = new SearchResultsViewModel();
             //            _unitOfWorkAsync.DisableProxyCreation = false;
@@ -1752,7 +1752,7 @@ namespace Anewluv.Services.Mapping
 
 
                         //TO DO add code to filter out blocked members
-                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(Model.profileid.Value, actiontypeEnum.Block);
+                        var otherblocks = db.Repository<action>().getothersactiontomebyprofileidandactiontype(model.profileid.Value, (int)actiontypeEnum.Block);
                         //mailboxmessagefolderlist = (from m in mailboxmessagefolderlist.Where(a => a.mailboxmessage.sender_id == model.profileid.Value)
                         //                           where (!otherblocks.Any(f => f.target_profile_id != m.mailboxmessage.sender_id))
                         //                           select m).AsQueryable();   

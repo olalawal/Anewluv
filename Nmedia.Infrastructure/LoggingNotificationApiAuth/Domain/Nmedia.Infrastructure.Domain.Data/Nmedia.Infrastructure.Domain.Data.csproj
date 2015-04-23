@@ -69,6 +69,7 @@
     <Compile Include="Globals.cs" />
     <Compile Include="Notification\address.cs" />
     <Compile Include="Notification\Enums\addresstype.cs" />
+    <Compile Include="Notification\Enums\systemaddresses.cs" />
     <Compile Include="Notification\Enums\MessageType.cs" />
     <Compile Include="Notification\Enums\news.cs" />
     <Compile Include="Notification\Enums\systemaddresstype.cs" />

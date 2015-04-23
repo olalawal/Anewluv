@@ -900,9 +900,6 @@ namespace Anewluv.Services.Media
                  
  }
 
-           
-        
-        
         /// <summary>
         /// for adding as single photo withoute VM 
         /// replaces InseartPhotoCustom , maybe add the profileID but i dont want to

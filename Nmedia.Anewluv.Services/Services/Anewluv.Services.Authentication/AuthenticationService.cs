@@ -25,6 +25,7 @@ using GeoData.Domain.ViewModels;
 using GeoData.Domain.Models.ViewModels;
 using Anewluv.Services.Contracts.ServiceResponse;
 
+using Nmedia.Infrastructure;
 
 using Anewluv.DataExtentionMethods;
 
@@ -34,6 +35,7 @@ using Nmedia.Infrastructure.Domain.Data.CustomClaimToken;
 using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
 using Nmedia.Infrastructure.Domain.Data.Apikey;
 using Repository.Pattern.UnitOfWork;
+using Nmedia.Infrastructure.Domain.Data.Notification;
 
 
 
@@ -777,13 +779,49 @@ namespace Anewluv.Services.Authentication
             return membershipprovider;
         }
 
-        
-        public override string ResetPassword(string profileID, string answer)
+        public override string ResetPassword(string emailaddress, string answer)
         {
 
             try
             {
-                return this.ResetPasswordCustom(Convert.ToInt16(profileID));
+
+                throw new NotImplementedException();
+
+               // return this.ResetPasswordCustom(model.profileid.Value, model.securityanswer).Result;
+
+            }
+            catch (Exception ex)
+            {
+                using (var logger = new Logging(applicationEnum.UserAuthorizationService))
+                {
+
+                    logger.WriteSingleEntry(logseverityEnum.CriticalError, globals.getenviroment, ex, null, null);
+                }
+
+
+                //log error mesasge
+                //handle logging here
+                var message = ex.Message;
+                // status = MembershipCreateStatus.ProviderError;
+                // newUser = null;
+                FaultReason faultreason = new FaultReason("Error in member service");
+                string ErrorMessage = "";
+                string ErrorDetail = "ErrorMessage: " + ex.Message;
+                throw new FaultException<ServiceFault>(new ServiceFault(ErrorMessage, ErrorDetail), faultreason);
+            }
+
+        }
+
+        
+        public string resetpasswordcustom(ProfileModel model)
+        {
+
+            try
+            {
+
+                return this.ResetPasswordCustom(model.email, model.securityanswer).Result;
+               
+              
             }
             catch (Exception ex)
             {
@@ -807,45 +845,69 @@ namespace Anewluv.Services.Authentication
 
         }
 
+
+        //TO DO validate security answer maybe
         //handles reseting password duties.  First verifys that security uqestion was correct for the profile ID, the generated a password
         // using the local generatepassword method the send the encyrpted passwoerd and profile ID to the dating service so it can be updated in the DB
         //finally returns the new password to the calling functon or an empty string if failure.
-        public string ResetPasswordCustom(int profileid)
+        public async Task<string> ResetPasswordCustom(string emailaddress,string securityanswer)
         {
 
-          //  using (var db = _unitOfWorkAsync)
-            {
-                //db.IsAuditEnabled = false; //do not audit on adds
-             //   using (var transaction = db.BeginTransaction())
-                {
+       
                     try
                     {
-                        //  if (securityquestionID == null) return "";
+                        var task = Task.Factory.StartNew(() =>
+                       {
+                            // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
+                            var profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = emailaddress });
+                            var generatedpassword = "";
+                            if (profile != null)
+                            {
+                                //we have the generated password now update the user's account with new password
 
-                        // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
-                        var username =  _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = Convert.ToInt16(profileid) }).username;
-                        var generatedpassword = "";
-                        if (username != "")
-                        {
-                            //we have the generated password now update the user's account with new password
+                                generatedpassword = GeneratePassword();
+                                //AnewluvContext AnewluvContext  = new AnewluvContext();
 
-                            generatedpassword = GeneratePassword();
-                            //AnewluvContext AnewluvContext  = new AnewluvContext();
+                                bool dd=  updatepassword(new ProfileModel { profileid = profile.id }, Encryption.encryptString(generatedpassword));
 
-                            //TO DO add method to 
-                          //  using (var tempdb = AnewluvContext)
-                            //{
-                              //  MemberService MemberService = new MemberService(tempdb);
-                              //  MemberService.updatepassword(new ProfileModel { profileid = Convert.ToInt16(profileid) }, Encryption.encryptString(generatedpassword));
-                          //  }
 
-                           bool dd=  updatepassword(new ProfileModel { profileid = Convert.ToInt16(profileid) }, Encryption.encryptString(generatedpassword));
+                                var d2 = templatebodyenum.MemberPasswordChangeMemberNotification.ToDescription();
+                                var d3 = templatesubjectenum.MemberPasswordChangedAdminNotification.ToDescription();
 
-                            //'reset the password 
-                            return generatedpassword;
-                        }
-                        // throw new NotImplementedException();
-                        return "";
+                                //member 
+                                var EmailViewModel = new EmailViewModel
+                                {
+                                    userEmailViewModel = new EmailModel
+                                    {
+                                        templateid = (int)templateenum.MemberPasswordChangeMemberNotification,
+                                        messagetypeid = (int)messagetypeenum.UserUpdate,
+                                        addresstypeid = (int)addresstypeenum.SiteUser, 
+                                        emailaddress = profile.emailaddress,
+                                        username =    profile.screenname,
+                                       // body = string.Format(d2,profile.screenname,profile.username,generatedpassword),
+                                        subject = templatesubjectenum.MemberPasswordChangeMemberNotification.ToDescription()
+                                    },
+                                    adminEmailViewModel = new EmailModel
+                                    {
+                                        templateid = (int)templateenum.MemberPasswordChangedAdminNotification,
+                                    //    body =  string.Format (d3,profile.username,profile.emailaddress),
+                                        messagetypeid = (int)messagetypeenum.SysAdminUpdate,
+                                        addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                        subject = templatesubjectenum.MemberPasswordChangedAdminNotification.ToDescription()
+                                    }
+                                };
+
+                                //this sends both admin and user emails  
+                                Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
+
+                                return "true";
+                            }
+                            // throw new NotImplementedException();
+                       
+                           return "false";
+                         
+                         });
+                        return await task.ConfigureAwait(false);
 
                     }
                     catch (Exception ex)
@@ -867,8 +929,8 @@ namespace Anewluv.Services.Authentication
                     {
                        // Api.DisposeMemberService();
                     }
-                }
-            }
+                
+            
         }
 
         //updates the profile with a password that is presumed to be already encyrpted
@@ -1907,8 +1969,6 @@ namespace Anewluv.Services.Authentication
         }
 
 
-
-
         #region "private methods for reuse or other async calls"
 
         private Guid? getcurrentapikeybyprofileid(int profileid,IUnitOfWorkAsync db)
@@ -2075,13 +2135,6 @@ namespace Anewluv.Services.Authentication
         {
             throw new NotImplementedException();
         }
-
-
-
-
-
-
-
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
         {

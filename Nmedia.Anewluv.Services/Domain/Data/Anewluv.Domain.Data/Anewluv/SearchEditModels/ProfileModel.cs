@@ -77,24 +77,24 @@ namespace Anewluv.Domain.Data.ViewModels
         public List<string> profileids { get; set; }
         [DataMember]
         public MemberSearchViewModel modeltomap { get; set; }
-        [DataMember]
+       [DataMember]
         public List<MemberSearchViewModel> modelstomap { get; set; }
     
 
         //added abitlity to add notes 
-        [DataMember]
+  //      [DataMember]
         public string note { get; set; }
         //acdded action to the body
-        [DataMember]
-        public actiontypeEnum actiontype { get; set; }
+   //     [DataMember]
+        public int? actiontypeid { get; set; }
         
   
 
 
         //search stuff for mail
-        [DataMember]
-        public mailfoldertypeEnum mailboxfoldertype { get; set; }  //folder types to retrive , only one folder per call for now
-        [DataMember]
+      //  [DataMember]
+        public int? mailboxfoldertypeid { get; set; }  //folder types to retrive , only one folder per call for now
+     //   [DataMember]
         public MailViewModel mailviewmodel { get; set; } //mail being sent along with all relevant data 
        
 

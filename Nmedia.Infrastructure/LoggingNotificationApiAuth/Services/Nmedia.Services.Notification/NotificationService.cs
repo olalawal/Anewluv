@@ -13,6 +13,7 @@ using Nmedia.Infrastructure.Domain.Data.log;
 using Nmedia.Infrastructure.Domain.Data.Notification;
 
 using System.Net.Mail;
+using SendGrid;
 
 using System.Configuration;
 using Nmedia.Infrastructure;
@@ -190,8 +191,7 @@ namespace Nmedia.Services.Notification
         /// <param name="addresstype"></param>
         /// <param name="callback"></param>
         /// <param name="asyncState"></param>
-        /// <returns></returns>
-        // public IAsyncResult 
+        /// <returns></returns>     
         public async Task  senderrormessage(log error, string systemaddresstype)
         {
 
@@ -276,7 +276,7 @@ namespace Nmedia.Services.Notification
         }
 
 
-        public async Task sendmessagebytemplate(EmailViewModel model)
+        public async Task<string> sendmessagebytemplate(EmailViewModel model)
         {
 
            // EmailViewModel viewmodel = new EmailViewModel();
@@ -299,34 +299,31 @@ namespace Nmedia.Services.Notification
                         {
 
                            // var templateenum = (templateenum)Enum.Parse(typeof(templateenum), model.templateid);
-
-
                             //Id's messed up in DB use the first 
-                            dynamic systemsenderaddress = (from x in (_unitOfWorkAsync.Repository<systemaddress>().Queryable().ToList()) select x).FirstOrDefault();
+                            //6	1	Anewluv@sendmail.com	NULL	smtp.sendgrid.net	olawal	azure_b5dd8d41de89841c3093bbb13c07425d@azure.com	kw8LHWnK9rnH7zQ	True	2015-04-20 00:00:00.000	NULL               
+                            dynamic systemsenderaddress = _unitOfWorkAsync.Repository<systemaddress>().Query(a=>a.id == (int)systemaddresseenum.SendGridSMTPrelay).Select().FirstOrDefault();
                             message message = new message();
                             //11-29-2013 get the template path from web config
                             var TemplatePath = ConfigurationManager.AppSettings["razortemplatefilelocation"];
 
                             //member part
                             //************************************************************************
-                            lu_template template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == model.userEmailViewModel.templateid)) select x).FirstOrDefault();                             
+                            lu_template template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.userEmailViewModel.templateid).Include(z=>z.filename).Select().FirstOrDefault();  
                             lu_messagetype messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id ==  model.userEmailViewModel.messagetypeid )) select x).FirstOrDefault();
                             lu_addresstype addresstype = (from x in (_unitOfWorkAsync.Repository<lu_addresstype>().Queryable().ToList().Where(f => f.id == model.userEmailViewModel.addresstypeid)) select x).FirstOrDefault(); 
 
                          
                             ICollection<address> addresses = new List<address>();
-
                             //create the user address
-                            addresses.Add(getorcreateaddaddress(model,_unitOfWorkAsync));
-                        
+                            addresses.Add(getorcreateaddaddress(model,_unitOfWorkAsync));                       
 
                             //the member message created and sent here
                             message = (message.Create(c =>
                             {
 
                                 c.id = model.userEmailViewModel.templateid;
-                                c.template = template;
-                                c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
+                                c.template_id = template.id;
+                                c.messagetype_id = messagetype.id; //(int)messagetypeenum.DeveloperError;
                                 c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
                                 c.subject = model.userEmailViewModel.subject;
                                 c.recipients = addresses;
@@ -344,7 +341,7 @@ namespace Nmedia.Services.Notification
                          
                             //send admin email here
                             //************************************************************
-                             template = (from x in (_unitOfWorkAsync.Repository<lu_template>().Queryable().ToList().Where(f => f.id == model.adminEmailViewModel.templateid)) select x).FirstOrDefault();
+                            template = _unitOfWorkAsync.Repository<lu_template>().Query(f => f.id == model.adminEmailViewModel.templateid).Include(z => z.filename).Select().FirstOrDefault(); 
                              messagetype = (from x in (_unitOfWorkAsync.Repository<lu_messagetype>().Queryable().ToList().Where(f => f.id == model.adminEmailViewModel.messagetypeid)) select x).FirstOrDefault();
                              addresstype = (from x in (_unitOfWorkAsync.Repository<lu_addresstype>().Queryable().ToList().Where(f => f.id == model.adminEmailViewModel.addresstypeid)) select x).FirstOrDefault(); 
 
@@ -356,8 +353,8 @@ namespace Nmedia.Services.Notification
                              {
 
                                  c.id = model.adminEmailViewModel.templateid;
-                                 c.template = template;
-                                 c.messagetype = messagetype; //(int)messagetypeenum.DeveloperError;
+                                 c.template_id = template.id;
+                                 c.messagetype_id = messagetype.id;  //(int)messagetypeenum.DeveloperError;
                                  c.body = TemplateParser.RazorFileTemplate(template.filename.description, ref model, TemplatePath); // c.template == null ? TemplateParser.RazorFileTemplate("", ref error) :                                                            
                                  c.subject = model.adminEmailViewModel.subject;
                                  c.recipients = addresses;
@@ -376,7 +373,7 @@ namespace Nmedia.Services.Notification
 
                         });
                         // return task ;
-
+                        return null;
                         //return new CompletedAsyncResult<EmailModel>(returnmodel);
                     }
                     catch (Exception ex)
@@ -1318,6 +1315,8 @@ namespace Nmedia.Services.Notification
         private bool sendemail(message message)
         {
             bool isEmailSendSuccessfully = false;
+
+
             try
             {
                 //SmtpClient oSmtpClient = new SmtpClient();
@@ -1326,6 +1325,9 @@ namespace Nmedia.Services.Notification
 
                 foreach (address recip_loopVariable in message.recipients)
                 {
+                    // Create the email object first, then add the properties.
+                    var myMessage = new SendGridMessage();
+
                     var recip = recip_loopVariable;
                     System.Net.Mail.MailMessage mailMessage = new System.Net.Mail.MailMessage(FromAddress, recip_loopVariable.emailaddress);
                     mailMessage.IsBodyHtml = true;

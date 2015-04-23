@@ -70,6 +70,10 @@
       <Project>{efc502ae-dd76-4278-8738-dd0b1f55a724}</Project>
       <Name>Anewluv.Services.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure.Mvc\Nmedia.Infrastructure.Mvc.csproj">
+      <Project>{9b837d01-53fa-4af3-a6c3-fc854a75c6db}</Project>
+      <Name>Nmedia.Infrastructure.Mvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Common\NET\Shared\Nmedia.Infrastructure\Nmedia.Infrastructure.csproj">
       <Project>{d0fa8aa1-5a17-4c42-a92f-f1266cd01d7c}</Project>
       <Name>Nmedia.Infrastructure</Name>

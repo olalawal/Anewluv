@@ -241,6 +241,8 @@ namespace Anewluv.Services.Messaging
                                     //TO DO use activity stuff to manage this
                                    //first check the sent qotat for this user
                                     var profile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.profileid.Value});
+                                    var recipientprofile = _unitOfWorkAsync.Repository<profile>().getprofilebyprofileid(new ProfileModel { profileid = model.recipeintprofileid.Value});
+                                    //get the recipeints inbox
                                    
                                      if (profile.dailsentmessagequota.Value > 5)
                                      {
@@ -249,8 +251,9 @@ namespace Anewluv.Services.Messaging
                                      }
 
                                     // get the folderr details
-                                     mailboxfolder mailboxfolder  = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == model.mailboxfolderid && u.profile_id == model.profileid.Value).FirstOrDefault();
-                                    if (mailboxfolder !=null)
+                                     mailboxfolder sendermailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == (int)mailfoldertypeEnum.Sent && u.profile_id == model.profileid.Value).FirstOrDefault();
+                                     mailboxfolder recipientmailboxfolder = _unitOfWorkAsync.Repository<mailboxfolder>().Queryable().Where(u => u.id == (int)mailfoldertypeEnum.Inbox && u.profile_id == model.recipeintprofileid.Value).FirstOrDefault();
+                                     if (sendermailboxfolder != null | recipientmailboxfolder !=null)
                                     {
                                         //create the message and save it
                                         var newmailboxmessage = new mailboxmessage
@@ -261,17 +264,25 @@ namespace Anewluv.Services.Messaging
                                             recipient_id = model.recipeintprofileid.Value,
                                             sender_id = model.profileid.Value
                                         };
-                                       _unitOfWorkAsync.Repository<mailboxmessage>().Insert(newmailboxmessage);
+                                    
+                                        _unitOfWorkAsync.Repository<mailboxmessage>().Insert(newmailboxmessage);
 
-                                        //create the message folder and save it 
+                                        //add it to to senders sent box
                                        var newmailboxmessagesfolder = new mailboxmessagefolder
                                        {
                                            mailboxmessage_id = newmailboxmessage.id,
-                                           mailboxfolder_id = mailboxfolder.id
+                                           mailboxfolder_id = sendermailboxfolder.id
 
                                        };
                                        _unitOfWorkAsync.Repository<mailboxmessagefolder>().Insert(newmailboxmessagesfolder);
+                                        //add it to recipients inbox
+                                       newmailboxmessagesfolder = new mailboxmessagefolder
+                                       {
+                                           mailboxmessage_id = newmailboxmessage.id,
+                                           mailboxfolder_id = recipientmailboxfolder.id
 
+                                       };                                     
+                                       _unitOfWorkAsync.Repository<mailboxmessagefolder>().Insert(newmailboxmessagesfolder);
 
                                        // Update database
                                        // _datingcontext.ObjectStateManager.ChangeObjectState(PhotoModify, EntityState.Modified);
@@ -291,12 +302,14 @@ namespace Anewluv.Services.Messaging
                                                addresstypeid = (int)addresstypeenum.SiteUser,
                                                emailaddress = newmailboxmessage.recipientprofilemetadata.profile.emailaddress,
                                                username = newmailboxmessage.recipientprofilemetadata.profile.screenname,
+                                               body = string.Format(templatebodyenum.MemberRecivedEmailMessageMemberNotification.ToDescription(), recipientprofile.screenname, profile.screenname, profile.screenname),
                                                subject = templatesubjectenum.MemberRecivedEmailMessageMemberNotification.ToDescription()
                                            },
                                                adminEmailViewModel = new EmailModel {
                                                templateid = (int)templateenum.MemberRecivedEmailMessageAdminNotification,
                                                messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                                                addresstypeid = (int)addresstypeenum.SystemAdmin,
+                                               body = string.Format(templatebodyenum.MemberRecivedEmailMessageAdminNotification.ToDescription(), recipientprofile.emailaddress, profile.emailaddress),
                                                subject =templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
                                            }
                                        };

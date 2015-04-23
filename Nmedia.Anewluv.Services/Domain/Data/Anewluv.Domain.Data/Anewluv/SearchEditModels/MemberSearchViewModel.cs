@@ -17,7 +17,7 @@ namespace Anewluv.Domain.Data.ViewModels
     public class MemberSearchViewModel
     {
         //added stuff for photo VMS
-           [DataMember]
+          [DataMember]
         public PhotoViewModel profilephotos { get; set; }
         //added stuff from visiblity table
            public PhotoEditViewModel profileeditphotos { get; set; }
@@ -67,14 +67,12 @@ namespace Anewluv.Domain.Data.ViewModels
          [DataMember]
          public bool? online { get; set; } //not filled in yet          
          [DataMember]
-         public bool hasgalleryphoto { get; set; }
-        
-         [DataMember]
+         public bool hasgalleryphoto { get; set; }        
+       //  [DataMember]
          public PhotoViewModel galleryphoto { get; set; }
-
-           [DataMember]
+         //  [DataMember]
          public PhotoSearchResultsViewModel photosearchresults { get; set; }
-           [DataMember]
+       
          public photoconversion galleryphotoconverted { get; set; }
           [DataMember]
          public string countryname { get; set; }
@@ -117,6 +115,7 @@ namespace Anewluv.Domain.Data.ViewModels
         //4-28-1added normalized screen name that replaces special chars , for now it just trims out spaces, update it to do more later
         //TO DO this is how we synch up the screen name with what is in chat since screen names can have spaces and UserNames and Identity can't
         
+       
         public string screennamenormalized
         {
             get
@@ -142,7 +141,7 @@ namespace Anewluv.Domain.Data.ViewModels
                 ;
             }
         }
-           [DataMember]
+         [DataMember]
         public int? age
         {
             get
@@ -162,7 +161,7 @@ namespace Anewluv.Domain.Data.ViewModels
         public Guid ViewingPhotoID { get; set; }
 
         //addded handling to chop the value i.e trim it using the extentionmethod automatically on a get
-        [DataMember]
+       [DataMember]
         public string MyCatchyIntroLineQuickSearch
         {
             get

@@ -56,7 +56,7 @@ namespace Nmedia.Services.Contracts
          //temporary method for use by designer to get the message information formated for them
         [OperationContract(AsyncPattern = true), FaultContractAttribute(typeof(ServiceFault), Action = "http://Schemas.Testws.Medtox.com")]
         [WebInvoke(UriTemplate = "/sendmessagebytemplate", ResponseFormat = WebMessageFormat.Json, BodyStyle =WebMessageBodyStyle.Bare)]
-        Task sendmessagebytemplate(EmailViewModel model);
+        Task<string> sendmessagebytemplate(EmailViewModel model);
 
        
 

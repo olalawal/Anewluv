@@ -153,7 +153,7 @@ namespace Anewluv.Services.MemberActions
                  var task = Task.Factory.StartNew(() =>
                  {
 
-                     return memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontype).Count();
+                     return memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Count();
 
                  });
 
@@ -196,7 +196,7 @@ namespace Anewluv.Services.MemberActions
                  {
 
 
-                     return memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype).Count();
+                     return memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Count();
 
 
                  });
@@ -237,7 +237,7 @@ namespace Anewluv.Services.MemberActions
              {
                  var task = Task.Factory.StartNew(() =>
                  {
-                    return memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype, true).Count();                    
+                    return memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value, true).Count();                    
 
 
                  });
@@ -291,7 +291,7 @@ namespace Anewluv.Services.MemberActions
 
                         
 
-                           var interests = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db,model.actiontype).Select
+                           var interests = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db,model.actiontypeid.Value).Select
                             (f=>new MemberSearchViewModel 
                                                 {
                                                     interestdate = f.creationdate,
@@ -378,7 +378,7 @@ namespace Anewluv.Services.MemberActions
                      if (model.numberperpage == null | model.numberperpage == 0) model.numberperpage = 4;
 
 
-                     var whoisinterestedinme = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype).Select
+                     var whoisinterestedinme = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Select
                          (f => new MemberSearchViewModel
                          {
                              interestdate = f.creationdate,
@@ -454,7 +454,7 @@ namespace Anewluv.Services.MemberActions
                      int? pageint = model.page;
                      int? numberperpageint = model.numberperpage;
 
-                     var whoisinterestedinmenew = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype, true).Select
+                     var whoisinterestedinmenew = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value, true).Select
                       (f => new MemberSearchViewModel
                       {
                           interestdate = f.creationdate,
@@ -580,7 +580,7 @@ namespace Anewluv.Services.MemberActions
                  var task = Task.Factory.StartNew(() =>
                  {
 
-                     return memberactionsextentions.getmyactionbyprofileidandactiontype(model, db,model.actiontype) 
+                     return memberactionsextentions.getmyactionbyprofileidandactiontype(model, db,model.actiontypeid.Value) 
                          .Any(r => r.id == model.targetprofileid);
 
 
@@ -634,7 +634,7 @@ namespace Anewluv.Services.MemberActions
 
                             //check  interest first  
                             //if this was a interest being restored just do that part
-                            var existinginterest =  memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype)
+                            var existinginterest =  memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value)
                             .Where (r => r.id == model.targetprofileid).FirstOrDefault();
 
                            
@@ -659,7 +659,7 @@ namespace Anewluv.Services.MemberActions
 
                                 newaction.creator_profile_id = model.profileid.Value;
                                 newaction.target_profile_id = model.targetprofileid.GetValueOrDefault();
-                                newaction.actiontype_id = (int)model.actiontype;
+                                newaction.actiontype_id = (int)model.actiontypeid;
                                 //TO DO add notes if posible
                                 if (model.note !="")
                                 {
@@ -730,7 +730,7 @@ namespace Anewluv.Services.MemberActions
 
                          //   var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = memberactionsextentions.getmyactionbyprofileidandactiontype(model,db,model.actiontype).Where(p => p.id == model.targetprofileid).FirstOrDefault();
+                            var interest = memberactionsextentions.getmyactionbyprofileidandactiontype(model,db,model.actiontypeid.Value).Where(p => p.id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                               if (interest != null)
@@ -795,7 +795,7 @@ namespace Anewluv.Services.MemberActions
                         {
 
 
-                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype).Where(p => p.id == model.targetprofileid).FirstOrDefault();
+                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             if (interest != null)
@@ -860,12 +860,12 @@ namespace Anewluv.Services.MemberActions
                         var task = Task.Factory.StartNew(() =>
                         {
                             //DO not allow to remove blocks
-                            if ((model.actiontype.ToDescription().ToUpper() == "BLOCK")) return;
+                            if ((model.actiontypeid  == (int)actiontypeEnum.Block)) return;
 
 
                             //  var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model,db,model.actiontype).Where(p => p.id == model.targetprofileid ).FirstOrDefault();
+                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model,db,model.actiontypeid.Value).Where(p => p.id == model.targetprofileid ).FirstOrDefault();
                             //update the profile status to 2
 
                             if (interest != null)
@@ -936,7 +936,7 @@ namespace Anewluv.Services.MemberActions
 
                            // var targetid = Convert.ToInt32(interestprofile_id);
 
-                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontype).Where(p => p.id == model.targetprofileid).FirstOrDefault();
+                            var interest = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, model.actiontypeid.Value).Where(p => p.id == model.targetprofileid).FirstOrDefault();
                             //update the profile status to 2
 
                             if (interest != null)
@@ -1143,22 +1143,22 @@ namespace Anewluv.Services.MemberActions
                     {
 
                         //interest
-                        MemberActions.whoiaminterestedintcount = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db,actiontypeEnum.Interest).Count();
-                        MemberActions.interestcount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontypeEnum.Interest).Count();
-                        MemberActions.interestnewcount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontypeEnum.Interest,true).Count();
+                        MemberActions.whoiaminterestedintcount = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db,(int)actiontypeEnum.Interest).Count();
+                        MemberActions.interestcount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, (int)actiontypeEnum.Interest).Count();
+                        MemberActions.interestnewcount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, (int)actiontypeEnum.Interest, true).Count();
 
                         //peek
-                        MemberActions.whoipeekedatcount = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, actiontypeEnum.Peek).Count();
-                        MemberActions.peekcount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontypeEnum.Peek).Count();
-                        MemberActions.peeknewcount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontypeEnum.Peek,true).Count();
+                        MemberActions.whoipeekedatcount = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, (int)actiontypeEnum.Peek).Count();
+                        MemberActions.peekcount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, (int)actiontypeEnum.Peek).Count();
+                        MemberActions.peeknewcount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, (int)actiontypeEnum.Peek, true).Count();
 
                         //like
-                        MemberActions.whoilikecount = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, actiontypeEnum.Like).Count();
-                        MemberActions.likecount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontypeEnum.Like).Count();
-                        MemberActions.likenewcount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, actiontypeEnum.Like,true).Count();
+                        MemberActions.whoilikecount = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, (int)actiontypeEnum.Like).Count();
+                        MemberActions.likecount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, (int)actiontypeEnum.Like).Count();
+                        MemberActions.likenewcount = memberactionsextentions.getotheractionbyprofileidandactiontype(model, db, (int)actiontypeEnum.Like, true).Count();
 
                         //block
-                        MemberActions.blockcount = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, actiontypeEnum.Block).Count();
+                        MemberActions.blockcount = memberactionsextentions.getmyactionbyprofileidandactiontype(model, db, (int)actiontypeEnum.Block).Count();
                
 
                         //TO do add this to the mail service as a separate call
