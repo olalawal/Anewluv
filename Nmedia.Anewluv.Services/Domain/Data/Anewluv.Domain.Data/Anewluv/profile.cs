@@ -22,6 +22,8 @@ namespace Anewluv.Domain.Data
         public string emailaddress { get; set; }
         public string screenname { get; set; }
         public string activationcode { get; set; }
+        public string passwordresettoken { get; set; }
+        public DateTime? passwordresetwindow { get; set; }
         public Nullable<int> dailsentmessagequota { get; set; }
         public Nullable<int> dailysentemailquota { get; set; }
         public Nullable<byte> forwardmessages { get; set; }

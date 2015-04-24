@@ -78,6 +78,10 @@
     <Compile Include="Migrations\201504030047562_profiledata_profileidremoveal.Designer.cs">
       <DependentUpon>201504030047562_profiledata_profileidremoveal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504240549286_addedpasswordtoken.cs" />
+    <Compile Include="Migrations\201504240549286_addedpasswordtoken.Designer.cs">
+      <DependentUpon>201504240549286_addedpasswordtoken.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.cs" />
     <Compile Include="Migrations\AnewluvMigrations\201503080503290_first.Designer.cs">
       <DependentUpon>201503080503290_first.cs</DependentUpon>
@@ -222,6 +226,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504030047562_profiledata_profileidremoveal.resx">
       <DependentUpon>201504030047562_profiledata_profileidremoveal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504240549286_addedpasswordtoken.resx">
+      <DependentUpon>201504240549286_addedpasswordtoken.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\AnewluvMigrations\201503080503290_first.resx">
       <DependentUpon>201503080503290_first.cs</DependentUpon>

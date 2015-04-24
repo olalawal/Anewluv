@@ -35,7 +35,19 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
      [DataMember]
      public string username { get; set; }  //Personal user updates strored here
      [DataMember]
+     public string targetscreename { get; set; }  //Personal user updates strored here
+     [DataMember]
+     public string screename { get; set; }  //Personal user updates strored here
+     [DataMember]
      public string userlogon { get; set; }  //Personal user updates strored here
+     [DataMember]
+     public string passwordtoken { get; set; }  //Personal user updates strored here
+
+     [DataMember]
+     public string profileid1 { get; set; }  //Personal user updates strored here
+     [DataMember]
+     public string profileid2 { get; set; }  //Personal user updates strored here
+        
      //[DataMember]
     // public int? addresstypeid { get; set; }  //Personal user updates strored here
 

@@ -68,7 +68,7 @@ namespace Anewluv.Domain.Data.ViewModels
          public bool? online { get; set; } //not filled in yet          
          [DataMember]
          public bool hasgalleryphoto { get; set; }        
-       //  [DataMember]
+        [DataMember]
          public PhotoViewModel galleryphoto { get; set; }
          //  [DataMember]
          public PhotoSearchResultsViewModel photosearchresults { get; set; }

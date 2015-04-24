@@ -25,14 +25,14 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
             try
             {
                // this.promotionobjects = new List<promotionobject>();
-                this.userEmailViewModel = new EmailModel();
+                this.memberEmailViewModel = new EmailModel();
                 this.adminEmailViewModel = new EmailModel();
-                this.messagetype = new lu_messagetype();
-                this.emailmatches = new List<MemberSearchViewModel>();
-                this.FeaturedMember = new MemberSearchViewModel();
-                this.MembersViewModel = new MembersViewModel();
-                this.contact = new MemberSearchViewModel();
-                this.template = new lu_template();
+             //   this.messagetype = new lu_messagetype();
+             //   this.emailmatches = new List<MemberSearchViewModel>();
+             //   this.FeaturedMember = new MemberSearchViewModel();
+             //   this.MembersViewModel = new MembersViewModel();
+             //   this.contact = new MemberSearchViewModel();
+             //   this.template = new lu_template();
             }
             catch (Exception ex)
             {
@@ -43,11 +43,9 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
      
         [DataMember]
-        public EmailModel userEmailViewModel { get; set; }
+        public EmailModel memberEmailViewModel { get; set; }
         [DataMember]
-        public EmailModel adminEmailViewModel { get; set; } 
-       // [DataMember]
-     //   public EmailModel adminEmailViewModel { get; set; }
+        public EmailModel adminEmailViewModel { get; set; }    
         [DataMember]
         public MembersViewModel MembersViewModel { get; set; }  //lits this members data    
         [DataMember]

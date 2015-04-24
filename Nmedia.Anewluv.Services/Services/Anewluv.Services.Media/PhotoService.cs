@@ -641,21 +641,21 @@ namespace Anewluv.Services.Media
                                 //member 
                                 var EmailViewModel = new EmailViewModel
                                 {
-                                    userEmailViewModel = new EmailModel
+                                    memberEmailViewModel = new EmailModel
                                     {
                                         templateid = (int)templateenum.MemberPhotoRejectedMemberNotification,
                                         messagetypeid = (int)messagetypeenum.UserUpdate,
                                         addresstypeid = (int)addresstypeenum.SiteUser,
                                         emailaddress =PhotoModify.profilemetadata.profile.emailaddress,
-                                        username = PhotoModify.profilemetadata.profile.screenname,
-                                        subject = templatesubjectenum.MemberPhotoRejectedMemberNotification.ToDescription()
+                                        screename = PhotoModify.profilemetadata.profile.screenname,
+                                        //subject = templatesubjectenum.MemberPhotoRejectedMemberNotification.ToDescription()
                                     },
                                     adminEmailViewModel = new EmailModel
                                     {
                                         templateid = (int)templateenum.MemberPhotoRejectedAdminNotification,
                                         messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                                         addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                        subject = templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
+                                      //  subject = templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
                                     }
                                 };
 
@@ -699,7 +699,7 @@ namespace Anewluv.Services.Media
                                         templateid = (int)templateenum.MemberPhotoApprovedAdminNotification,
                                         messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                                         addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                        subject = templatesubjectenum.MemberPhotoApprovedAdminNotification.ToDescription()
+                                       // subject = templatesubjectenum.MemberPhotoApprovedAdminNotification.ToDescription()
                                     }
                                 };
 
@@ -864,8 +864,8 @@ namespace Anewluv.Services.Media
                                         {
                                             templateid = (int)templateenum.MemberPhotoUploadedAdminNotification,
                                             messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                            addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                            subject = templatesubjectenum.MemberPhotoUploadedAdminNotification.ToDescription()
+                                            addresstypeid = (int)addresstypeenum.SystemAdmin//,
+                                          //  subject = templatesubjectenum.MemberPhotoUploadedAdminNotification.ToDescription()
                                         }
                                     };
                                     Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);
@@ -984,12 +984,12 @@ namespace Anewluv.Services.Media
                                 var EmailViewModel = new EmailViewModel
                                 {
 
-                                    adminEmailViewModel = new EmailModel
+                                     adminEmailViewModel  = new EmailModel
                                     {
                                         templateid = (int)templateenum.MemberPhotoUploadedAdminNotification,
                                         messagetypeid = (int)messagetypeenum.SysAdminUpdate,
-                                        addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                        subject = templatesubjectenum.MemberPhotoUploadedAdminNotification.ToDescription()
+                                        addresstypeid = (int)addresstypeenum.SystemAdmin
+                                       // subject = templatesubjectenum.MemberPhotoUploadedAdminNotification.ToDescription()
                                     }
                                 };
                                 Api.AsyncCalls.sendmessagebytemplate(EmailViewModel);

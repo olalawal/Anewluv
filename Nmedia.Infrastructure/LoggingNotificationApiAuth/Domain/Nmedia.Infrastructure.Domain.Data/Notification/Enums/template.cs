@@ -16,7 +16,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
     /// </summary>
     /// 
     [DataContract]
-    public enum templateenum : int
+    public  enum templateenum : int
     {
        
         [Description("Generic error message")]

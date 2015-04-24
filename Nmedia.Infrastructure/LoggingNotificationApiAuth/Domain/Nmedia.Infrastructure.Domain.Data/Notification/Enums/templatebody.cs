@@ -32,7 +32,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberContactUsAdminMessage = 3,
        
         //profile created
-        [Description("Dear <b>{0}</b> ,<p></p> Thank you for creating a profile at <a href=\"www.anewluv.com\">Anewluv.com </a> <p></p><a href=\"www.anewluv.com\">Anewluv.com </a>   provides a new and refereshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> So get started today!  Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page </b> </br> Your user name is: <b> {1} </b> and Your activation code is:  <b>  {2} </b>  <p></p>  - The AnewLuv.com Team <p></p>  ")]
+        [Description("Dear <b>{0}</b> ,<p></p> Thank you for creating a profile at <a href=\"www.anewluv.com\">Anewluv.com </a> <p></p><a href=\"www.anewluv.com\">Anewluv.com </a>   provides a new and refereshing way to  meet people from all walks of life.  <p></p> You have <b> FREE </b> access to our exclusive geo-targeting system to link up with members from all around the world! <p></p>  you can easily search for members any distance from you and you will always get acurate REAL results unlike some other websites.  <p></p> Our system spans  hundreds of countries all around the world.  <p></p> We are also adding new features every month <p></p> So get started today!  Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page</br> Your activation code is:  <b>  {2} </b> <p></p><a href=\'http://www.AnewLuv.com/Account/LogOn/?activationcode ={1}'>Activiate your account on www.Anewluv.com</a><p></p> ")]
         [EnumMember]
         MemberCreatedMemberNotification = 4,
         [Description("A new profile for the user <b>{0}</b> with email  <b>{1}</b>  has been created on AnewLuv.com")]
@@ -48,7 +48,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
         MemberCreatedJainRanOrOpenIDAdminNotification = 7,
 
         //member password change notificaion
-        [Description("Dear {0} ,<p></p> Your account and password has been recovered on AnewLuv.com , Your Username is <b> {1} </b>  and your new password is <b> {2} </b>,  You can now log in to your account at </br><p></p> <b><a href=\"http://www.AnewLuv.com/Account/LogOn/?ProfileID={3}\" >Log on to your Account on www.Anewluv.com</a></b>")]
+        [Description( "Dear {0} ,<p></p> You have initated an Account recovery on AnewLuv.com , Your Username is <b> {1} </b> You can reset your password within the next 30 minutes by clicking this reset link <br><a href=\'http://www.AnewLuv.com/Account/PasswordReset/?token={2}/'>Reset your password on www.Anewluv.com</a>")]
         [EnumMember]
         MemberPasswordChangeMemberNotification = 8,
         [Description("An Account has been recovered on Anewluv.com by the user <b>{0}</b> with email :<b>{1}</b>")]
@@ -66,7 +66,7 @@ namespace Nmedia.Infrastructure.Domain.Data.Notification
 
 
         //Activation code recovered 
-        [Description("Dear {0} ,<p></p>   Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page </b> </br> Your user name is: <b> {1} </b> and Your activation code is:  <b>  {2} </b>  <p></p>  - The AnewLuv.com Team <p></p>  ")]
+        [Description("Dear {0} ,<p></p>You have recovered you activation code on AnewLuv.com </br>  Please click on the link below to activate your profile. <b>If you are unable to activate your profile with the provided link, try copying the activation code directly from this email and pasting it into the activation code box on our activation page</br><p></p><a href=\'http://www.AnewLuv.com/Account/LogOn/?activationcode={1}'>Activiate your account on www.Anewluv.com</a><p></p>")]
         [EnumMember]
         MemberActivationCodeRecoveredMemberNotification = 12,
         [Description("A Profile ActivationCode for the user {0} with email address : {1} has been recovered on AnewLuv.com")]

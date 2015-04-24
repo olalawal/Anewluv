@@ -295,22 +295,24 @@ namespace Anewluv.Services.Messaging
                                         //member 
                                        var EmailViewModel = new EmailViewModel
                                        {
-                                           userEmailViewModel = new EmailModel
+                                           memberEmailViewModel = new EmailModel
                                            {
                                                templateid = (int)templateenum.MemberRecivedEmailMessageMemberNotification,
                                                messagetypeid = (int)messagetypeenum.UserUpdate,                                           
                                                addresstypeid = (int)addresstypeenum.SiteUser,
                                                emailaddress = newmailboxmessage.recipientprofilemetadata.profile.emailaddress,
-                                               username = newmailboxmessage.recipientprofilemetadata.profile.screenname,
-                                               body = string.Format(templatebodyenum.MemberRecivedEmailMessageMemberNotification.ToDescription(), recipientprofile.screenname, profile.screenname, profile.screenname),
-                                               subject = templatesubjectenum.MemberRecivedEmailMessageMemberNotification.ToDescription()
+                                               targetscreename = newmailboxmessage.recipientprofilemetadata.profile.screenname,
+                                               screename = profile.screenname,
+
+                                               //body = string.Format(templatebodyenum.MemberRecivedEmailMessageMemberNotification.ToDescription(), recipientprofile.screenname, profile.screenname, profile.screenname),
+                                               //subject = templatesubjectenum.MemberRecivedEmailMessageMemberNotification.ToDescription()
                                            },
                                                adminEmailViewModel = new EmailModel {
                                                templateid = (int)templateenum.MemberRecivedEmailMessageAdminNotification,
                                                messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                                                addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                               body = string.Format(templatebodyenum.MemberRecivedEmailMessageAdminNotification.ToDescription(), recipientprofile.emailaddress, profile.emailaddress),
-                                               subject =templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
+                                              // body = string.Format(templatebodyenum.MemberRecivedEmailMessageAdminNotification.ToDescription(), recipientprofile.emailaddress, profile.emailaddress),
+                                              // subject =templatesubjectenum.MemberRecivedEmailMessageAdminNotification.ToDescription()
                                            }
                                        };
                                       

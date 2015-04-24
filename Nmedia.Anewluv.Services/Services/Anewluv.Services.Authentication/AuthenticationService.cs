@@ -36,6 +36,7 @@ using Nmedia.Infrastructure.Domain.Data.Apikey.DTOs;
 using Nmedia.Infrastructure.Domain.Data.Apikey;
 using Repository.Pattern.UnitOfWork;
 using Nmedia.Infrastructure.Domain.Data.Notification;
+using Nmedia.Infrastructure.Helpers;
 
 
 
@@ -815,12 +816,9 @@ namespace Anewluv.Services.Authentication
         
         public string resetpasswordcustom(ProfileModel model)
         {
-
             try
             {
-
-                return this.ResetPasswordCustom(model.email, model.securityanswer).Result;
-               
+                return this.ResetPasswordCustom(model.email, model.securityanswer).Result;             
               
             }
             catch (Exception ex)
@@ -859,33 +857,43 @@ namespace Anewluv.Services.Authentication
                         var task = Task.Factory.StartNew(() =>
                        {
                             // var username = datingService.ValidateSecurityAnswerIsCorrect(profileid, securityquestionID.GetValueOrDefault(), answer);
-                            var profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = emailaddress });
-                            var generatedpassword = "";
+                            var profile =  _unitOfWorkAsync.Repository<profile>().getprofilebyemailaddress(new ProfileModel { email = emailaddress });                            
                             if (profile != null)
                             {
                                 //we have the generated password now update the user's account with new password
 
-                                generatedpassword = GeneratePassword();
+                                //generatedpassword = GeneratePassword();
                                 //AnewluvContext AnewluvContext  = new AnewluvContext();
+                                Guid guid = Guid.NewGuid();
+                                ShortGuid sguid1 = guid; // implicitly cast the guid as a shortguid
 
-                                bool dd=  updatepassword(new ProfileModel { profileid = profile.id }, Encryption.encryptString(generatedpassword));
 
+                                if (profile.status_id != (int)profilestatusEnum.ResetingPassword && (profile.passwordresetwindow!=null && profile.passwordresetwindow > DateTime.Now))
+                                {
+                                    bool dd = enablepasswordreset(new ProfileModel { profileid = profile.id }, sguid1);
+                                }
+                                else
+                                {
 
-                                var d2 = templatebodyenum.MemberPasswordChangeMemberNotification.ToDescription();
-                                var d3 = templatesubjectenum.MemberPasswordChangedAdminNotification.ToDescription();
+                                  //  return "password is already in reset satatus";
 
+                                }
+
+                            
                                 //member 
                                 var EmailViewModel = new EmailViewModel
                                 {
-                                    userEmailViewModel = new EmailModel
+                                    memberEmailViewModel = new EmailModel
                                     {
                                         templateid = (int)templateenum.MemberPasswordChangeMemberNotification,
                                         messagetypeid = (int)messagetypeenum.UserUpdate,
                                         addresstypeid = (int)addresstypeenum.SiteUser, 
                                         emailaddress = profile.emailaddress,
-                                        username =    profile.screenname,
+                                        screename = profile.screenname,
+                                        username =profile.username,
+                                        passwordtoken = sguid1
                                        // body = string.Format(d2,profile.screenname,profile.username,generatedpassword),
-                                        subject = templatesubjectenum.MemberPasswordChangeMemberNotification.ToDescription()
+                                       // subject = templatesubjectenum.MemberPasswordChangeMemberNotification.ToDescription()
                                     },
                                     adminEmailViewModel = new EmailModel
                                     {
@@ -893,7 +901,7 @@ namespace Anewluv.Services.Authentication
                                     //    body =  string.Format (d3,profile.username,profile.emailaddress),
                                         messagetypeid = (int)messagetypeenum.SysAdminUpdate,
                                         addresstypeid = (int)addresstypeenum.SystemAdmin,
-                                        subject = templatesubjectenum.MemberPasswordChangedAdminNotification.ToDescription()
+                                        //subject = templatesubjectenum.MemberPasswordChangedAdminNotification.ToDescription()
                                     }
                                 };
 
@@ -970,6 +978,50 @@ namespace Anewluv.Services.Authentication
             }
 
          }
+
+        //updates the profile with a password that is presumed to be already encyrpted
+        private bool enablepasswordreset(ProfileModel model, ShortGuid shortguid)
+        {
+
+            //// 
+            {
+                // ////do not audit on adds
+                //   using (var transaction = db.BeginTransaction())
+                {
+                    try
+                    {
+
+
+                        var profilerepo = _unitOfWorkAsync.Repository<profile>();
+                        var myProfile = profilerepo.getprofilebyprofileid(model);
+                        //update the profile status to 2
+                        myProfile.status_id = (int)profilestatusEnum.ResetingPassword;
+                        myProfile.passwordresettoken  = shortguid;
+                        myProfile.passwordresetwindow = DateTime.Now.AddMinutes(30);
+                        myProfile.passwordchangeattempts = myProfile.passwordchangeattempts + 1;
+                        myProfile.modificationdate = DateTime.Now;
+                       // myProfile.passwordChangeddate = DateTime.Now;
+                       // myProfile.passwordchangecount = (myProfile.passwordchangecount == null) ? 1 : myProfile.passwordchangecount + 1;
+                        //handele the update using EF
+                        //  _unitOfWorkAsync.Repository<Country_PostalCode_List>().profiles.AttachAsModified(myProfile, this.ChangeSet.GetOriginal(myProfile));
+                        profilerepo.Update(myProfile);
+                        var i = _unitOfWorkAsync.SaveChanges();
+                        // transaction.Commit();
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
+
+                        //throw convertedexcption;
+                    }
+                }
+            }
+
+        }
+
 
         public string resetpassword(string profileid, string answer)
         {
@@ -2069,7 +2121,6 @@ namespace Anewluv.Services.Authentication
             bool result = await returnedTaskTResult;
             return result;
         }
-
 
 
         #endregion

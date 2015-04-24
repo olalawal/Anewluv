@@ -60,7 +60,7 @@ PM>  Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructu
 PM>   Update-database -f -verbose -ConfigurationTypeName "WellsFargo.Infrastructure.Domain.Logging.Migrations.Configuration"
 2)
 to run a specific migration 
-     Update-database -TargetMigration  "201503170312568_new" -ConfigurationTypeName "Anewluv.Domain.Migrations.AnewluvMigrations.Configuration"
+    Update-database -TargetMigration  "201504240549286_addedpasswordtoken" -ConfigurationTypeName "Anewluv.Domain.Migrations.Configuration"
 PM>  Update-database -TargetMigration "201306051636172_InitialMigrations" -ConfigurationTypeName "Configuration"
 or
 Update-Initial Catalog= -TargetMigration "201311082150226_addedEnviroment" -ConfigurationTypeName "Configurationlog"
